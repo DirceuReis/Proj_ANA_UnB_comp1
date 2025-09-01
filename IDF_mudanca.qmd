@@ -1,0 +1,7 @@
+---
+title: "Impactos das Mudanças Climáticas nas curvas Intensidade-Duração-Frequência"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_impactos_mudancas.bib
+nocite: |
+  @*
+---

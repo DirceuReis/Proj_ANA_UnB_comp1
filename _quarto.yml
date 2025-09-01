@@ -1,0 +1,40 @@
+project:
+  type: website
+
+website:
+  title: "Proj. IDF Brasil ANA/UnB"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+    right:
+      - text: "Documentos"
+        menu:
+          - href: distr_chuva_intensa.qmd
+            text: Modelagem probabilística de cuhvas intensas
+          - href: IDF_basico.qmd 
+            text: IDF básico
+          - href: desagregacao_temporal.qmd
+            text: Desagregacao temporal
+          - href: IDF_regional.qmd
+            text: Modelos Regionais
+          - href: IDF_mudanca.qmd
+            text: IDF e as mudanças do clima
+      #- text: "Tutoriais"
+      #  menu: 
+      #    - href: tutorial/rs_subdaily_read_hdf_all.qmd
+      #      text: Leitura de arquivo hdf
+      - href: Blog/index.qmd
+        text: Blog
+      - href: links.qmd
+        text: links
+
+format:
+  html:
+    theme: zephyr
+    css: styles.css
+    toc: true
+
+editor: visual
+

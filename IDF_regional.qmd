@@ -1,0 +1,7 @@
+---
+title: "Regionalização das curvas Intensidade-Duração-Frequência"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_modelo_regional.bib
+nocite: |
+  @*
+---

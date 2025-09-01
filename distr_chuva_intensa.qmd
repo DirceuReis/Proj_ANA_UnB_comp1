@@ -1,0 +1,7 @@
+---
+title: "Modelos probabilísticos de chuvas intensas"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_modelos.bib
+nocite: |
+  @*
+---
