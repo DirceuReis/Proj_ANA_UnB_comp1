@@ -300,8 +300,29 @@ f(x,t) = \frac{1}{\sigma(x,t)}
 \]</span> <span class="math display">\[
 \text{Forma:} \quad \xi(x) = C_{0}
 \]</span> Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - <em>Global Warming Level</em>). A forma da distribuição foi mantida constante (parâmetro <span class="math inline">\(\xi\)</span> fixo) para evitar instabilidade.</p>
+<p><strong>1.3. Regionalização</strong></p>
+<p>Como o número de estações diárias e subdiárias varia significativamente, a regionalização foi realizada separadamente para durações inferiores a 24 horas e para durações iguais ou superiores a 24 horas. Para cada estação dentro da área do projeto (estação-alvo), foram identificadas todas as estações dentro de um raio de 160 km (estações regionais).</p>
+<p>As estações foram agrupadas considerando semelhanças de atributos como:</p>
+<ul>
+<li>Distância;</li>
+<li>Diferenças de valores entre MAM e MAP;</li>
+<li>Elevação e obstáculos orográficos (se uma estação regional está separada da estação alvo por um terreno complexo); e</li>
+<li>Testes estatísticos entre distribuições (os testes Qui-quadrado e Kolmogorov-Smirnov de duas amostras foram usados para avaliar o grau de similaridade nas distribuições entre as estações alvo e regionais).</li>
+</ul>
+<p>Foi aplicado um esquema de pesos com função Kernel para atribuir relevância a cada estação regional. Onde, 0 indica nenhuma semelhança entre as estações e 1 indica que estão geograficamente perto e que possuem semelhanças nos atributos da preciptação.</p>
+<p><strong>1.4. Covariáveis espaciais e temporais</strong></p>
+<p>As covariáveis espaciais e temporais foram utilizadas para calcular os parâmetros de localização e escala da distribuição GEV. Foram testadas várias covariáveis espacias em grade (elevação, MAP, MAM, dentre outras), o MAM teve o melhor desempenho em todas as durações. Para o Volume 1, o GWL foi selecionado como a covariável temporal, definida como a anomalia da temperatura global média móvel de 30 anos em relação ao período pré-industrial (1851 – 1900).</p>
+<p><strong>1.5. Interpolação para grade</strong></p>
+<p>As estimativas em estações foram interpoladas para uma grade de 30 segundos de arco (~0,9 x 0,6 km) usando interpolação cúbica monotônica baseada na razão entre precipitação e MAM. As estimativas de MAM em grade são então multiplicadas pelas razões em grades correspondentes para criar estimativas de frequência de precipitação em grade. Para garantir a consistência nas estimativas em todas as durações e frequências (por exemplo, a estimativa de 24 horas deve ser igual ou superior à estimativa de 12 horas), foram realizadas verificações de consistência internas baseadas na duração e, em casos raros, ajustadas conforme necessário.</p>
+<p><strong>1.6. Intervalos de confiança</strong></p>
+<p>Foi utilizada uma simulação de Monte Carlo que considera a dependência entre estações para estimar intervalos de confiança de 90% em curvas de frequência de precipitação baseadas em AMS. O método consiste em adicionar perturbações aos parâmetros da distribuição GEV-MLE com base na variabilidade regional. O processo é repetido mil vezes, permitindo capturar incertezas estatísticas e estocásticas. Os limites inferior e superior do intervalo de confiança são definidos pelos percentis de 5% e 95% das distribuições simuladas. É destacado no texto que essa abordagem é semelhante à usada nos volumes do NOAA Atlas 14, porém com duas diferenças principais: 1) as estimativas do intervalo de confiança do Atlas 15 levam em conta a incerteza nos parâmetros GEV-MLE, enquanto as estimativas do Atlas 14 levam em conta a incerteza nos L-momentos; 2) a dependência entre estações para cada região foi expressa como uma função da distância no Atlas 15, em contraste com o Atlas 14, onde foi assumido que era uniforme em toda a região.</p>
+<p><strong>1.7. Avaliação do modelo</strong></p>
+<p>Foi realizada uma comparação entre modelos estacionário e não estacionário usando AICs e teste de razão de verossimilhança. A não estacionariedade mostrou melhor desempenho em regiões com tendências de mudança nas chuvas extremas.</p>
+<p><strong>1.8. Saídas</strong></p>
+<p>Estimativa de precipitação e IC 90% em grade para todas as durações e AEP’s para o ano base de 2023.</p>
+<p><img src="figuras/guidelines_fluxograma_eua_1.jpg" class="img-fluid" alt="Fluxograma da metodologia do Volume 1 do NOAA 15"> Figura 1. Fluxograma da metodologia do Volume 1 do NOAA 15</p>
+<p><strong>2. Metodologia do Volume 2 - Projeções futuras com modelos climáticos</strong></p>
 </div>
-<p>Essa é uma das fotmas de plotar uma figura: <img src="figuras/guidelines_fluxograma_eua_1.jpg" class="img-fluid" alt="Fluxograma_EUA_Vol1">.</p>
 <p>Esta é outra forma de plotar figuras <a href="#fig-fluxograma-eua" class="quarto-xref">Figure&nbsp;1</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/guidelines_fluxograma_eua_2.jpg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
