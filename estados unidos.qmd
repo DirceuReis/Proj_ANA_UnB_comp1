@@ -1,0 +1,15 @@
+---
+title: "Desagregação temporal das chuvas intensas"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_desagregacao.bib
+nocite: |
+  @*
+---
+
+## Noção de invariância de escala
+
+Uma função qualquer $f(x)$ possui a propiedade de ser invariante de escala se ela for proporcional a $f(\lambda x)$, ou seja
+
+$$
+f(x) = C(\lambda)f(\lambda x)
+$$ em que $C(\lambda)$ é uma constante de proporcionalidade que depende apenas do fator de escala $\lambda$.
