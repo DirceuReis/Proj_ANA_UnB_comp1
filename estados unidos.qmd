@@ -6,10 +6,18 @@ nocite: |
   @*
 ---
 
-## Noção de invariância de escala
+## Guideline Estados Unidos
 
-Uma função qualquer $f(x)$ possui a propiedade de ser invariante de escala se ela for proporcional a $f(\lambda x)$, ou seja
+Fluxograma Metodologia Estados Unidos Volume 1:
 
-$$
-f(x) = C(\lambda)f(\lambda x)
-$$ em que $C(\lambda)$ é uma constante de proporcionalidade que depende apenas do fator de escala $\lambda$.
+Essa é uma das fotmas de plotar uma figura: ![Fluxograma_EUA_Vol1](figuras/guidelines_fluxograma_eua_1.jpg).
+
+Esta é outra forma de plotar figuras @fig-fluxograma-eua.
+
+```{r figura}
+#| echo: true
+#| fig-cap: "Legenda figura"
+#| label: fig-fluxograma-eua
+
+knitr::include_graphics("figuras/guidelines_fluxograma_eua_2.jpg")
+```

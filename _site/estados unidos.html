@@ -8,7 +8,7 @@
 
 <meta name="author" content="Dirceu S. Reis Jr.">
 
-<title>Proj. IDF Brasil ANA/UnB - Regionalização das curvas Intensidade-Duração-Frequência</title>
+<title>Proj. IDF Brasil ANA/UnB - Desagregação temporal das chuvas intensas</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -166,14 +200,20 @@ div.csl-indent {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#guideline-estados-unidos" id="toc-guideline-estados-unidos" class="nav-link active" data-scroll-target="#guideline-estados-unidos">Guideline Estados Unidos</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Regionalização das curvas Intensidade-Duração-Frequência</h1>
+<h1 class="title">Desagregação temporal das chuvas intensas</h1>
 </div>
 
 
@@ -196,24 +236,54 @@ div.csl-indent {
 </header>
 
 
+<section id="guideline-estados-unidos" class="level2">
+<h2 class="anchored" data-anchor-id="guideline-estados-unidos">Guideline Estados Unidos</h2>
+<p>Fluxograma Metodologia Estados Unidos Volume 1:</p>
+<p>Essa é uma das fotmas de plotar uma figura: <img src="figuras/guidelines_fluxograma_eua_1.jpg" class="img-fluid" alt="Fluxograma_EUA_Vol1">.</p>
+<p>Esta é outra forma de plotar figuras <a href="#fig-fluxograma-eua" class="quarto-xref">Figure&nbsp;1</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/guidelines_fluxograma_eua_2.jpg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-fluxograma-eua" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fluxograma-eua-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/guidelines_fluxograma_eua_2.jpg" class="img-fluid figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fluxograma-eua-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Legenda figura
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Abreu.2022" class="csl-entry" role="listitem">
+Abreu, Marcel Carvalho, Roberto Avelino Cecílio, Fernando Falco Pruski, Laura Thebit de Almeida, Gérson Rodrigues dos Santos, Sidney Sara Zanetti, Silvio Bueno Pereira, and Demetrius David da Silva. 2022. <span>“<span class="nocase">Daily Rainfall Disaggregation to Estimate the Intensity-Duration-Frequency Relationship in Minas Gerais State, Brazil</span>.”</span> <em>Brazilian Archives of Biology and Technology</em> 65: e20210694. <a href="https://doi.org/10.1590/1678-4324-2022210694">https://doi.org/10.1590/1678-4324-2022210694</a>.
+</div>
 <div id="ref-Aguilar.2020" class="csl-entry" role="listitem">
 Aguilar, Milena Guerra de, and Veber Afonso Figueiredo Costa. 2020. <span>“<span class="nocase">A regional similarity-based approach for sub-daily rainfall nonparametric generation</span>.”</span> <em>RBRH</em> 25: e5. <a href="https://doi.org/10.1590/2318-0331.252020190054">https://doi.org/10.1590/2318-0331.252020190054</a>.
 </div>
-<div id="ref-Alila.2000" class="csl-entry" role="listitem">
-Alila, Younes. 2000. <span>“<span class="nocase">Regional rainfall depth‐duration‐frequency equations for Canada</span>.”</span> <em>Water Resources Research</em> 36 (7): 1767–78. <a href="https://doi.org/10.1029/2000wr900046">https://doi.org/10.1029/2000wr900046</a>.
+<div id="ref-Baldassarre.2006" class="csl-entry" role="listitem">
+Baldassarre, G. Di, A. Brath, and A. Montanari. 2006. <span>“<span class="nocase">Reliability of different depth‐duration‐frequency equations for estimating short‐duration design storms</span>.”</span> <em>Water Resources Research</em> 42 (12). <a href="https://doi.org/10.1029/2006wr004911">https://doi.org/10.1029/2006wr004911</a>.
 </div>
-<div id="ref-Amin.2024" class="csl-entry" role="listitem">
-Amin, Bushra, András Bárdossy, and Uwe Haberlandt. 2024. <span>“<span class="nocase">Uncertainty Quantification of Theoretical Consistent Intensity Duration Frequency (IDF) Curves of Rainfall Intensity</span>.”</span> <a href="https://doi.org/10.5194/egusphere-egu24-15926">https://doi.org/10.5194/egusphere-egu24-15926</a>.
+<div id="ref-Barbosa.2023gyg" class="csl-entry" role="listitem">
+Barbosa, Alan de Gois, and Veber A. F. Costa. 2023b. <span>“<span class="nocase">A review on the scaling properties in maximum rainfall marginal distributions: theoretical background, probabilistic modeling, and recent developments</span>.”</span> <em>Stochastic Environmental Research and Risk Assessment</em> 37 (12): 4541–53. <a href="https://doi.org/10.1007/s00477-023-02546-6">https://doi.org/10.1007/s00477-023-02546-6</a>.
+</div>
+<div id="ref-Barbosa.2023" class="csl-entry" role="listitem">
+———. 2023a. <span>“<span class="nocase">A review on the scaling properties in maximum rainfall marginal distributions: theoretical background, probabilistic modeling, and recent developments</span>.”</span> <em>Stochastic Environmental Research and Risk Assessment</em> 37 (12): 4541–53. <a href="https://doi.org/10.1007/s00477-023-02546-6">https://doi.org/10.1007/s00477-023-02546-6</a>.
 </div>
 <div id="ref-Basso.2016" class="csl-entry" role="listitem">
 Basso, Raviel Eurico, Daniel Gustavo Allasia, Rutinéia Tassi, and Karine Pickbrenner. 2016. <span>“<span class="nocase">Review of the high intensity rainfall zones of Brazil</span>.”</span> <em>Engenharia Sanitaria e Ambiental</em> 21 (04): 635–41. <a href="https://doi.org/10.1590/s1413-41522016133691">https://doi.org/10.1590/s1413-41522016133691</a>.
 </div>
-<div id="ref-Blanchet.2016" class="csl-entry" role="listitem">
+<div id="ref-Benestad.2021" class="csl-entry" role="listitem">
+Benestad, Rasmus E, Julia Lutz, Anita Verpe Dyrrdal, Jan Erik Haugen, Kajsa M Parding, and Andreas Dobler. 2021. <span>“<span class="nocase">Testing a simple formula for calculating approximate intensity-duration-frequency curves</span>.”</span> <em>Environmental Research Letters</em> 16 (4): 044009. <a href="https://doi.org/10.1088/1748-9326/abd4ab">https://doi.org/10.1088/1748-9326/abd4ab</a>.
+</div>
+<div id="ref-Blancheti5" class="csl-entry" role="listitem">
 Blanchet, J., D. Ceresetti, G. Molinié, and J.-D. Creutin. 2016. <span>“<span class="nocase">A regional GEV scale-invariant framework for Intensity–Duration–Frequency analysis</span>.”</span> <em>Journal of Hydrology</em> 540: 82–95. <a href="https://doi.org/10.1016/j.jhydrol.2016.06.007">https://doi.org/10.1016/j.jhydrol.2016.06.007</a>.
 </div>
 <div id="ref-Bonaccorso.2020" class="csl-entry" role="listitem">
@@ -222,32 +292,50 @@ Bonaccorso, Brunella, Giuseppina Brigandì, and Giuseppe T. Aronica. 2020. <span
 <div id="ref-Borga.2005" class="csl-entry" role="listitem">
 Borga, Marco, Claudia Vezzani, and Giancarlo Dalla Fontana. 2005. <span>“<span class="nocase">Regional Rainfall Depth–Duration–Frequency Equations for an Alpine Region</span>.”</span> <em>Natural Hazards</em> 36 (1-2): 221–35. <a href="https://doi.org/10.1007/s11069-004-4550-y">https://doi.org/10.1007/s11069-004-4550-y</a>.
 </div>
-<div id="ref-Bracken.2016" class="csl-entry" role="listitem">
-Bracken, C., B. Rajagopalan, L. Cheng, W. Kleiber, and S. Gangopadhyay. 2016. <span>“<span class="nocase">Spatial Bayesian hierarchical modeling of precipitation extremes over a large domain</span>.”</span> <em>Water Resources Research</em> 52 (8): 6643–55. <a href="https://doi.org/10.1002/2016wr018768">https://doi.org/10.1002/2016wr018768</a>.
+<div id="ref-Burlando.1996" class="csl-entry" role="listitem">
+Burlando, Paolo, and Renzo Rosso. 1996. <span>“<span class="nocase">Scaling and muitiscaling models of depth-duration-frequency curves for storm precipitation</span>.”</span> <em>Journal of Hydrology</em> 187 (1-2): 45–64. <a href="https://doi.org/10.1016/s0022-1694(96)03086-7">https://doi.org/10.1016/s0022-1694(96)03086-7</a>.
 </div>
-<div id="ref-Brath.2003" class="csl-entry" role="listitem">
-Brath, Armando, Attilio Castellarin, and Alberto Montanari. 2003. <span>“<span class="nocase">Assessing the reliability of regional depth‐duration‐frequency equations for gaged and ungaged sites</span>.”</span> <em>Water Resources Research</em> 39 (12). <a href="https://doi.org/10.1029/2003wr002399">https://doi.org/10.1029/2003wr002399</a>.
-</div>
-<div id="ref-Cooley.2012" class="csl-entry" role="listitem">
-Cooley, Daniel, Richard A. Davis, and Philippe Naveau. 2012. <span>“<span class="nocase">Approximating the conditional density given large observed values via a multivariate extremes framework, with application to environmental data</span>.”</span> <em>The Annals of Applied Statistics</em> 6 (4): 1406–29. <a href="https://doi.org/10.1214/12-aoas554">https://doi.org/10.1214/12-aoas554</a>.
+<div id="ref-Cannon.2018" class="csl-entry" role="listitem">
+Cannon, Alex J, and Silvia Innocenti. 2018. <span>“<span class="nocase">Projected intensification of sub-daily and daily rainfall extremes in convection-permitting climate model simulations over North America: Implications for future Intensity–Duration–Frequency curves</span>.”</span> <a href="https://doi.org/10.5194/nhess-2018-290">https://doi.org/10.5194/nhess-2018-290</a>.
 </div>
 <div id="ref-Cooley.2010" class="csl-entry" role="listitem">
 Cooley, Daniel, and Stephan R. Sain. 2010. <span>“<span class="nocase">Spatial Hierarchical Modeling of Precipitation Extremes From a Regional Climate Model</span>.”</span> <em>Journal of Agricultural, Biological, and Environmental Statistics</em> 15 (3): 381–402. <a href="https://doi.org/10.1007/s13253-010-0023-9">https://doi.org/10.1007/s13253-010-0023-9</a>.
 </div>
+<div id="ref-Courty.2019" class="csl-entry" role="listitem">
+Courty, Laurent G, Robert L Wilby, John K Hillier, and Louise J Slater. 2019. <span>“<span class="nocase">Intensity-duration-frequency curves at the global scale</span>.”</span> <em>Environmental Research Letters</em> 14 (8): 084045. <a href="https://doi.org/10.1088/1748-9326/ab370a">https://doi.org/10.1088/1748-9326/ab370a</a>.
+</div>
+<div id="ref-Creaco.2024" class="csl-entry" role="listitem">
+Creaco, Enrico. 2024. <span>“<span class="nocase">Scaling models of intensity–duration–frequency (IDF) curves based on adjusted design event durations</span>.”</span> <em>Journal of Hydrology</em> 632: 130847. <a href="https://doi.org/10.1016/j.jhydrol.2024.130847">https://doi.org/10.1016/j.jhydrol.2024.130847</a>.
+</div>
+<div id="ref-Fowler.2024" class="csl-entry" role="listitem">
+Fowler, Hayley, Amy Green, Elizabeth Lewis, David Pritchard, Stephen Blenkinsop, Luis Patino Velasquez, and Anna Whitford. 2024. <span>“<span class="nocase">Unveiling global sub-daily precipitation extremes: Insights and development of the INTENSE Project&amp;#160;</span>”</span> <a href="https://doi.org/10.5194/egusphere-egu24-19552">https://doi.org/10.5194/egusphere-egu24-19552</a>.
+</div>
 <div id="ref-Ghanmi.2016" class="csl-entry" role="listitem">
 Ghanmi, Hanen, Zoubeida Bargaoui, and Cécile Mallet. 2016. <span>“<span class="nocase">Estimation of intensity-duration-frequency relationships according to the property of scale invariance and regionalization analysis in a Mediterranean coastal area</span>.”</span> <em>Journal of Hydrology</em> 541: 38–49. <a href="https://doi.org/10.1016/j.jhydrol.2016.07.002">https://doi.org/10.1016/j.jhydrol.2016.07.002</a>.
+</div>
+<div id="ref-Gnecco.2023" class="csl-entry" role="listitem">
+Gnecco, Ilaria, Anna Palla, Paolo La Barbera, Giorgio Roth, and Francesca Giannoni. 2023. <span>“<span class="nocase">Defining intensity–duration–frequency curves at short durations: a methodological framework</span>.”</span> <em>Hydrological Sciences Journal</em> 68 (11): 1499–1512. <a href="https://doi.org/10.1080/02626667.2023.2224002">https://doi.org/10.1080/02626667.2023.2224002</a>.
 </div>
 <div id="ref-Gu.2022" class="csl-entry" role="listitem">
 Gu, Xuezhi, Lei Ye, Qian Xin, Chi Zhang, Fanzhang Zeng, Sofia D. Nerantzaki, and Simon Michael Papalexiou. 2022. <span>“<span class="nocase">Extreme Precipitation in China: A Review on Statistical Methods and Applications</span>.”</span> <em>Advances in Water Resources</em> 163: 104144. <a href="https://doi.org/10.1016/j.advwatres.2022.104144">https://doi.org/10.1016/j.advwatres.2022.104144</a>.
 </div>
-<div id="ref-Haddad.2015" class="csl-entry" role="listitem">
-Haddad, Khaled, Fiona Johnson, Ataur Rahman, Janice Green, and George Kuczera. 2015. <span>“<span class="nocase">Comparing three methods to form regions for design rainfall statistics: Two case studies in Australia</span>.”</span> <em>Journal of Hydrology</em> 527: 62–76. <a href="https://doi.org/10.1016/j.jhydrol.2015.04.043">https://doi.org/10.1016/j.jhydrol.2015.04.043</a>.
+<div id="ref-Guerreiro.2024ji" class="csl-entry" role="listitem">
+Guerreiro, Selma B., Stephen Blenkinsop, Elizabeth Lewis, David Pritchard, Amy Green, and Hayley J. Fowler. 2024. <span>“<span class="nocase">Unravelling the complex interplay between daily and sub-daily rainfall extremes in different climates</span>.”</span> <em>Weather and Climate Extremes</em> 46: 100735. <a href="https://doi.org/10.1016/j.wace.2024.100735">https://doi.org/10.1016/j.wace.2024.100735</a>.
 </div>
-<div id="ref-Haddad.2012" class="csl-entry" role="listitem">
-Haddad, Khaled, and Ataur Rahman. 2012. <span>“<span class="nocase">Regional flood frequency analysis in eastern Australia: Bayesian GLS regression-based methods within fixed region and ROI framework – Quantile Regression vs. Parameter Regression Technique</span>.”</span> <em>Journal of Hydrology</em> 430: 142–61. <a href="https://doi.org/10.1016/j.jhydrol.2012.02.012">https://doi.org/10.1016/j.jhydrol.2012.02.012</a>.
+<div id="ref-Guerreiro.2024" class="csl-entry" role="listitem">
+Guerreiro, Selma de Brito, Stephen Blenkinsop, Elizabeth Lewis, David Pritchard, Amy Charlotte Green, and Hayley J Fowler. 2024. <span>“<span class="nocase">Unravelling the Complex Interplay between Daily and Sub-Daily Rainfall Extremes in Different Climates</span>.”</span> <a href="https://doi.org/10.2139/ssrn.4749709">https://doi.org/10.2139/ssrn.4749709</a>.
 </div>
-<div id="ref-Haddad.2011" class="csl-entry" role="listitem">
-Haddad, K., A. Rahman, and J. Green. 2011. <span>“<span class="nocase">Design rainfall estimation in Australia: a case study using L moments and Generalized Least Squares Regression</span>.”</span> <em>Stochastic Environmental Research and Risk Assessment</em> 25 (6): 815–25. <a href="https://doi.org/10.1007/s00477-010-0443-7">https://doi.org/10.1007/s00477-010-0443-7</a>.
+<div id="ref-Gupta.1990" class="csl-entry" role="listitem">
+Gupta, Vijay K., and Ed Waymire. 1990. <span>“<span class="nocase">Multiscaling properties of spatial rainfall and river flow distributions</span>.”</span> <em>Journal of Geophysical Research: Atmospheres</em> 95 (D3): 1999–2009. <a href="https://doi.org/10.1029/jd095id03p01999">https://doi.org/10.1029/jd095id03p01999</a>.
+</div>
+<div id="ref-Innocenti.2017" class="csl-entry" role="listitem">
+Innocenti, Silvia, Alain Mailhot, and Anne Frigon. 2017. <span>“<span class="nocase">Simple scaling of extreme precipitation in North America</span>.”</span> <em>Hydrology and Earth System Sciences</em> 21 (11): 5823–46. <a href="https://doi.org/10.5194/hess-21-5823-2017">https://doi.org/10.5194/hess-21-5823-2017</a>.
+</div>
+<div id="ref-Koutsoyiannis.1993" class="csl-entry" role="listitem">
+Koutsoyiannis, Demetris, and Efi Foufoula‐Georgiou. 1993. <span>“<span class="nocase">A scaling model of a storm hyetograph</span>.”</span> <em>Water Resources Research</em> 29 (7): 2345–61. <a href="https://doi.org/10.1029/93wr00395">https://doi.org/10.1029/93wr00395</a>.
+</div>
+<div id="ref-Langousis.2007" class="csl-entry" role="listitem">
+Langousis, Andreas, and Daniele Veneziano. 2007. <span>“<span class="nocase">Intensity‐duration‐frequency curves from scaling representations of rainfall</span>.”</span> <em>Water Resources Research</em> 43 (2). <a href="https://doi.org/10.1029/2006wr005245">https://doi.org/10.1029/2006wr005245</a>.
 </div>
 <div id="ref-Le.2018" class="csl-entry" role="listitem">
 Le, Phuong Dong, Michael Leonard, and Seth Westra. 2018. <span>“<span class="nocase">Modeling Spatial Dependence of Rainfall Extremes Across Multiple Durations</span>.”</span> <em>Water Resources Research</em> 54 (3): 2233–48. <a href="https://doi.org/10.1002/2017wr022231">https://doi.org/10.1002/2017wr022231</a>.
@@ -258,38 +346,65 @@ Le, Phuong Dong, Michael Leonard, and Seth Westra. 2018. <span>“<span class="n
 <div id="ref-Lima.2018" class="csl-entry" role="listitem">
 Lima, Carlos H. R., Hyun-Han Kwon, and Yong-Tak Kim. 2018. <span>“<span class="nocase">A local-regional scaling-invariant Bayesian GEV model for estimating rainfall IDF curves in a future climate</span>.”</span> <em>Journal of Hydrology</em> 566: 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
 </div>
-<div id="ref-Meis.2024" class="csl-entry" role="listitem">
-Meis, Melanie, Mariela Sued, Ramiro I. Saurral, and Patricia Menéndez. 2024. <span>“<span class="nocase">A novel statistically-based approach to regionalize extreme precipitation events using temperature data</span>.”</span> <em>Natural Hazards</em> 120 (15): 14785–807. <a href="https://doi.org/10.1007/s11069-024-06805-9">https://doi.org/10.1007/s11069-024-06805-9</a>.
+<div id="ref-Lovejoy.1985" class="csl-entry" role="listitem">
+Lovejoy, S., and D. Schertzer. 1985. <span>“<span class="nocase">Generalized Scale Invariance in the Atmosphere and Fractal Models of Rain</span>.”</span> <em>Water Resources Research</em> 21 (8): 1233–50. <a href="https://doi.org/10.1029/wr021i008p01233">https://doi.org/10.1029/wr021i008p01233</a>.
+</div>
+<div id="ref-Lovejoy.1986" class="csl-entry" role="listitem">
+———. 1986. <span>“<span class="nocase">Scale Invariance, Symmetries, Fractals, and Stochastic Simulations of Atmospheric Phenomena</span>.”</span> <em>Bulletin of the American Meteorological Society</em> 67 (1): 21–32. <a href="https://doi.org/10.1175/1520-0477(1986)067<0021:sisfas>2.0.co;2">https://doi.org/10.1175/1520-0477(1986)067&lt;0021:sisfas&gt;2.0.co;2</a>.
+</div>
+<div id="ref-Mandelbrot.1968" class="csl-entry" role="listitem">
+Mandelbrot, Benoit B., and James R. Wallis. 1968. <span>“<span class="nocase">Noah, Joseph, and Operational Hydrology</span>.”</span> <em>Water Resources Research</em> 4 (5): 909–18. <a href="https://doi.org/10.1029/wr004i005p00909">https://doi.org/10.1029/wr004i005p00909</a>.
+</div>
+<div id="ref-Mascaro.2020" class="csl-entry" role="listitem">
+Mascaro, Giuseppe. 2020. <span>“<span class="nocase">Comparison of Local, Regional, and Scaling Models for Rainfall Intensity–Duration–Frequency Analysis</span>.”</span> <em>Journal of Applied Meteorology and Climatology</em> 59 (9): 1519–36. <a href="https://doi.org/10.1175/jamc-d-20-0094.1">https://doi.org/10.1175/jamc-d-20-0094.1</a>.
+</div>
+<div id="ref-Menabde.1997" class="csl-entry" role="listitem">
+Menabde, Merab, Daniel Harris, Alan Seed, Geoff Austin, and David Stow. 1997. <span>“<span class="nocase">Multiscaling properties of rainfall and bounded random cascades</span>.”</span> <em>Water Resources Research</em> 33 (12): 2823–30. <a href="https://doi.org/10.1029/97wr02006">https://doi.org/10.1029/97wr02006</a>.
+</div>
+<div id="ref-Menabde.1999" class="csl-entry" role="listitem">
+Menabde, Merab, Alan Seed, and Geoff Pegram. 1999. <span>“<span class="nocase">A simple scaling model for extreme rainfall</span>.”</span> <em>Water Resources Research</em> 35 (1): 335–39. <a href="https://doi.org/10.1029/1998wr900012">https://doi.org/10.1029/1998wr900012</a>.
 </div>
 <div id="ref-Nguyen.1998" class="csl-entry" role="listitem">
 Nguyen, V. T. V., T. D. Nguyen, and H. Wang. 1998. <span>“<span class="nocase">Regional estimation of short duration rainfall extremes</span>.”</span> <em>Water Science and Technology</em> 37 (11): 15–19. <a href="https://doi.org/10.2166/wst.1998.0425">https://doi.org/10.2166/wst.1998.0425</a>.
 </div>
-<div id="ref-Parding.2023" class="csl-entry" role="listitem">
-Parding, Kajsa Maria, Rasmus Emil Benestad, Anita Verpe Dyrrdal, and Julia Lutz. 2023. <span>“<span class="nocase">A principal-component-based strategy for regionalisation of precipitation intensity–duration–frequency (IDF) statistics</span>.”</span> <em>Hydrology and Earth System Sciences</em> 27 (20): 3719–32. <a href="https://doi.org/10.5194/hess-27-3719-2023">https://doi.org/10.5194/hess-27-3719-2023</a>.
+<div id="ref-Papalexiou.2018" class="csl-entry" role="listitem">
+Papalexiou, Simon Michael, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">A Diagnostic Framework for Understanding Climatology of Tails of Hourly Precipitation Extremes in the United States</span>.”</span> <em>Water Resources Research</em> 54 (9): 6725–38. <a href="https://doi.org/10.1029/2018wr022732">https://doi.org/10.1029/2018wr022732</a>.
 </div>
-<div id="ref-Poschlod.2024" class="csl-entry" role="listitem">
-Poschlod, B., and J. Koh. 2024. <span>“<span class="nocase">Convection‐Permitting Climate Models Can Support Observations to Generate Rainfall Return Levels</span>.”</span> <em>Water Resources Research</em> 60 (4). <a href="https://doi.org/10.1029/2023wr035159">https://doi.org/10.1029/2023wr035159</a>.
+<div id="ref-Papalexiou.2018h3" class="csl-entry" role="listitem">
+Papalexiou, Simon Michael, Yannis Markonis, Federico Lombardo, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">Precise Temporal Disaggregation Preserving Marginals and Correlations (DiPMaC) for Stationary and Nonstationary Processes</span>.”</span> <em>Water Resources Research</em> 54 (10): 7435–58. <a href="https://doi.org/10.1029/2018wr022726">https://doi.org/10.1029/2018wr022726</a>.
 </div>
-<div id="ref-Renard.2011" class="csl-entry" role="listitem">
-Renard, B. 2011. <span>“<span class="nocase">A Bayesian hierarchical approach to regional frequency analysis</span>.”</span> <em>Water Resources Research</em> 47 (11). <a href="https://doi.org/10.1029/2010wr010089">https://doi.org/10.1029/2010wr010089</a>.
+<div id="ref-Qin.2024" class="csl-entry" role="listitem">
+Qin, Xiaosheng, and Chao Dai. 2024. <span>“<span class="nocase">Investigation of rainfall disaggregation with flexible timescales based on point process models</span>.”</span> <em>Journal of Hydrology</em> 634: 131101. <a href="https://doi.org/10.1016/j.jhydrol.2024.131101">https://doi.org/10.1016/j.jhydrol.2024.131101</a>.
+</div>
+<div id="ref-Requena.2021" class="csl-entry" role="listitem">
+Requena, Ana I., Truong-Huy Nguyen, Donald H. Burn, Paulin Coulibaly, and Van-Thanh-Van Nguyen. 2021. <span>“<span class="nocase">A temporal downscaling approach for sub-daily gridded extreme rainfall intensity estimation under climate change</span>.”</span> <em>Journal of Hydrology: Regional Studies</em> 35: 100811. <a href="https://doi.org/10.1016/j.ejrh.2021.100811">https://doi.org/10.1016/j.ejrh.2021.100811</a>.
 </div>
 <div id="ref-Rodrigues.2023" class="csl-entry" role="listitem">
 Rodrigues, Guilherme, Wilson Fernandes, Veber Costa, and Eber Pinto. 2023. <span>“<span class="nocase">Utilizing the Scale Invariance Principle for Deriving a Regional Intensity-Duration-Frequency Relationship in the Metropolitan Region of Belo Horizonte, Brazil</span>.”</span> <em>Journal of Hydrologic Engineering</em> 28 (7): 05023010. <a href="https://doi.org/10.1061/jhyeff.heeng-5934">https://doi.org/10.1061/jhyeff.heeng-5934</a>.
 </div>
-<div id="ref-Sharkey.2019" class="csl-entry" role="listitem">
-Sharkey, Paul, and Hugo C. Winter. 2019. <span>“<span class="nocase">A Bayesian spatial hierarchical model for extreme precipitation in Great Britain</span>.”</span> <em>Environmetrics</em> 30 (1). <a href="https://doi.org/10.1002/env.2529">https://doi.org/10.1002/env.2529</a>.
-</div>
-<div id="ref-Silva.2021" class="csl-entry" role="listitem">
-Silva, Daniele Feitoza, Slobodan P. Simonovic, Andre Schardong, and Joel Avruch Goldenfum. 2021. <span>“<span class="nocase">Assessment of non-stationary IDF curves under a changing climate: Case study of different climatic zones in Canada</span>.”</span> <em>Journal of Hydrology: Regional Studies</em> 36: 100870. <a href="https://doi.org/10.1016/j.ejrh.2021.100870">https://doi.org/10.1016/j.ejrh.2021.100870</a>.
-</div>
-<div id="ref-Simonovic.2017" class="csl-entry" role="listitem">
-Simonovic, Slobodan P., Andre Schardong, and Dan Sandink. 2017. <span>“<span class="nocase">Mapping Extreme Rainfall Statistics for Canada under Climate Change Using Updated Intensity-Duration-Frequency Curves</span>.”</span> <em>Journal of Water Resources Planning and Management</em> 143 (3): 04016078. <a href="https://doi.org/10.1061/(asce)wr.1943-5452.0000725">https://doi.org/10.1061/(asce)wr.1943-5452.0000725</a>.
+<div id="ref-Sane.2018" class="csl-entry" role="listitem">
+Sane, Youssouph, Geremy Panthou, Ansoumana Bodian, Theo Vischel, Thierry Lebel, Honore Dacosta, Guillaume Quantin, et al. 2018. <span>“<span class="nocase">Intensity–duration–frequency (IDF) rainfall curves in Senegal</span>.”</span> <em>Natural Hazards and Earth System Sciences</em> 18 (7): 1849–66. <a href="https://doi.org/10.5194/nhess-18-1849-2018">https://doi.org/10.5194/nhess-18-1849-2018</a>.
 </div>
 <div id="ref-Stephenson.2016" class="csl-entry" role="listitem">
 Stephenson, Alec G., Eric A. Lehmann, and Aloke Phatak. 2016. <span>“<span class="nocase">A max-stable process model for rainfall extremes at different accumulation durations</span>.”</span> <em>Weather and Climate Extremes</em> 13: 44–53. <a href="https://doi.org/10.1016/j.wace.2016.07.002">https://doi.org/10.1016/j.wace.2016.07.002</a>.
 </div>
+<div id="ref-Tayşi.2021" class="csl-entry" role="listitem">
+Tayşi, H, and M Özger. 2021. <span>“<span class="nocase">Disaggregation of future GCMs to generate IDF curves for the assessment of urban floods</span>.”</span> <em>Journal of Water and Climate Change</em> 13 (2): 684–706. <a href="https://doi.org/10.2166/wcc.2021.241">https://doi.org/10.2166/wcc.2021.241</a>.
+</div>
+<div id="ref-Vorobevskii.2023" class="csl-entry" role="listitem">
+Vorobevskii, Ivan, Jeongha Park, Dongkyun Kim, Klemens Barfus, and Rico Kronenberg. 2023. <span>“<span class="nocase">Simulating sub-hourly rainfall data for current and future periods using two statistical disaggregation models: case studies from Germany and South Korea</span>.”</span> <em>Hydrology and Earth System Sciences</em> 28 (2): 391–416. <a href="https://doi.org/10.5194/hess-28-391-2024">https://doi.org/10.5194/hess-28-391-2024</a>.
+</div>
+<div id="ref-Vyver.2018" class="csl-entry" role="listitem">
+Vyver, Hans Van de. 2018. <span>“<span class="nocase">A multiscaling‐based intensity–duration–frequency model for extreme precipitation</span>.”</span> <em>Hydrological Processes</em> 32 (11): 1635–47. <a href="https://doi.org/10.1002/hyp.11516">https://doi.org/10.1002/hyp.11516</a>.
+</div>
 <div id="ref-Wang.2024" class="csl-entry" role="listitem">
 Wang, Zijie, Robert L. Wilby, and Dapeng Yu. 2024. <span>“<span class="nocase">Spatial and temporal scaling of extreme rainfall in the United Kingdom</span>.”</span> <em>International Journal of Climatology</em> 44 (1): 286–304. <a href="https://doi.org/10.1002/joc.8330">https://doi.org/10.1002/joc.8330</a>.
+</div>
+<div id="ref-Yeo.2022" class="csl-entry" role="listitem">
+Yeo, Myeong-Ho, Van-Thanh-Van Nguyen, Yong Sang Kim, and Theodore A. Kpodonu. 2022. <span>“<span class="nocase">An Integrated Extreme Rainfall Modeling Tool (SDExtreme) for Climate Change Impacts and Adaptation</span>.”</span> <em>Water Resources Management</em> 36 (9): 3153–79. <a href="https://doi.org/10.1007/s11269-022-03194-1">https://doi.org/10.1007/s11269-022-03194-1</a>.
+</div>
+<div id="ref-Yeo.2021" class="csl-entry" role="listitem">
+Yeo, Myeong‐Ho, Van‐Thanh‐Van Nguyen, and Theodore A. Kpodonu. 2021. <span>“<span class="nocase">Characterizing extreme rainfalls and constructing confidence intervals for IDF curves using Scaling‐GEV distribution model</span>.”</span> <em>International Journal of Climatology</em> 41 (1): 456–68. <a href="https://doi.org/10.1002/joc.6631">https://doi.org/10.1002/joc.6631</a>.
 </div>
 <div id="ref-Yu.2004" class="csl-entry" role="listitem">
 Yu, Pao-Shan, Tao-Chang Yang, and Chin-Sheng Lin. 2004. <span>“<span class="nocase">Regional rainfall intensity formulas based on scaling property of rainfall</span>.”</span> <em>Journal of Hydrology</em> 295 (1-4): 108–23. <a href="https://doi.org/10.1016/j.jhydrol.2004.03.003">https://doi.org/10.1016/j.jhydrol.2004.03.003</a>.
