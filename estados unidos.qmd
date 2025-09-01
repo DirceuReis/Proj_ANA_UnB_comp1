@@ -84,9 +84,11 @@ Foi realizada uma comparação entre modelos estacionário e não estacionário 
 **1.8. Saídas**
 
 Estimativa de precipitação e IC 90% em grade para todas as durações e AEP's para o ano base de 2023.
-:::
 
-![Fluxograma da metodologia do Volume 1 do NOAA 15](figuras/guidelines_fluxograma_eua_1.jpg) Figura 1. Fluxograma da metodologia do Volume 1 do NOAA 15
+![Fluxograma da metodologia do Volume 1 do NOAA 15](figuras/guidelines_fluxograma_eua_1.jpg) Figura 1. Fluxograma da metodologia do Volume 1 do NOAA 15 
+
+**2. Metodologia do Volume 2 - Projeções futuras com modelos climáticos**
+:::
 
 Esta é outra forma de plotar figuras @fig-fluxograma-eua.
 
