@@ -8,7 +8,50 @@ nocite: |
 
 ## Guideline Estados Unidos
 
-Fluxograma Metodologia Estados Unidos Volume 1:
+Documento: **NOAA Atlas 15 Pilot: Technical Report**
+
+::: {style="text-align: justify;"}
+O relatório é dividido em duas partes: (1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas e (2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.
+
+**1. Metodologia do Volume 1 - Estimativas históricas não estacionárias**
+
+**1.1. Conjunto de dados relevantes**
+
+O relatório utilizou dados produzidos e/ou adquiridos a partir do Atlas 14 (Vol. 12):
+
+-   Metadados para estações diárias e subdiárias em Montana e um buffer aproximado de 30 km;
+-   Dados de precipitação: Série Máxima Anual (AMS) com controle de qualidade, durante períodos de 60 minutos, 6 horas, 24 horas, 4 dias e 10 dias para essas estações;
+-   Dados de Precipitação: Média Anual Máxima (MAM) e precipitação média anual em grade com resolução de 30 segundos de arco, originalmente obtidos do Grupo PRISM (*Parameter-Elevation Regressions on Independent Slopes Model*) da Universidade Estadual do Oregon.
+
+Além disso, foram coletados os seguintes dados:
+
+-   Anomalias anuais da temperatura global próxima à superfície para 1850-2023 dos Centros Nacionais de Informação Ambiental da NOAA;
+-   Grades do modelo digital de elevação (DEM) da Missão Topográfica do Radar *Shuttle* (SRTM90) de 90 metros da NASA.
+
+**1.2. Distribuição estatística**
+
+A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional com Máxima Verossimilhança (MLE). A distribuição Kappa de 4 parâmetros também foi testada como uma distribuição alternativa.
+
+A função de distribuição de probabilidade GEV não estacionária:
+
+$$
+f(x,t) = \frac{1}{\sigma(x,t)} 
+\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
+\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)
+$$
+
+onde $\mu$, $\sigma$, e $\xi$, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros são definidos da seguinte forma:
+
+$$
+\text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
+$$
+
+$$ 
+\text{Escala: } \quad \sigma(x,t) = b_{1} \times MAM(x)\,[1+b_{2} \times GWL(t)]
+$$ $$
+\text{Forma:} \quad \xi(x) = C_{0}
+$$ Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
+:::
 
 Essa é uma das fotmas de plotar uma figura: ![Fluxograma_EUA_Vol1](figuras/guidelines_fluxograma_eua_1.jpg).
 
