@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -289,7 +255,7 @@ window.Quarto = {
 <p><span class="math display">\[
 f(x,t) = \frac{1}{\sigma(x,t)}
 \left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
-\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)
+\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)                                                                                     
 \]</span></p>
 <p>onde <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>, e <span class="math inline">\(\xi\)</span>, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros são definidos da seguinte forma:</p>
 <p><span class="math display">\[
@@ -322,22 +288,25 @@ f(x,t) = \frac{1}{\sigma(x,t)}
 <p>Estimativa de precipitação e IC 90% em grade para todas as durações e AEP’s para o ano base de 2023.</p>
 <p><img src="figuras/guidelines_fluxograma_eua_1.jpg" class="img-fluid" alt="Fluxograma da metodologia do Volume 1 do NOAA 15"> Figura 1. Fluxograma da metodologia do Volume 1 do NOAA 15</p>
 <p><strong>2. Metodologia do Volume 2 - Projeções futuras com modelos climáticos</strong></p>
-</div>
-<p>Esta é outra forma de plotar figuras <a href="#fig-fluxograma-eua" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/guidelines_fluxograma_eua_2.jpg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-fluxograma-eua" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-fluxograma-eua-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/guidelines_fluxograma_eua_2.jpg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fluxograma-eua-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Legenda figura
-</figcaption>
-</figure>
-</div>
-</div>
+<p><strong>2.1. Conjunto de dados relevantes</strong></p>
+<p>Dois conjuntos de dados gerados por <em>downscaling</em> estatístico, LOCA2 e STAR-ESDM, foram utilizados para derivar fatores de ajuste aplicáveis a durações diárias de precipitação em cenários futuros. Ambos são baseados em projeções do CMIP6 (<em>Coupled Model Intercomparison Project Phase 6</em>). Para os dados subdiários foi utilizado o conjunto NA-CORDEX, que reúne simulações CMIP5 com <em>downscaling</em> dinâmico, para investigar a relação entre fatores de ajuste diários e subdiários. Foram analisadas sete simulações, combinando quatro modelos climáticos globais (GCMs) do CMIP5 com três modelos climáticos regionais (RCMs) selecionados.</p>
+<p><strong>2.2. Fatores de ajuste</strong></p>
+<p>Os parâmetros de distribuição GEV para o Volume 2 foram estimados usando valores AMS em grade extraídos do LOCA2 e do STAR-ESDM. Os parâmetros de localização, escala e forma, que são calculados de maneira semelhante ao Volume 1, são, portanto, identificados para cada célula da grade dentro do domínio e para cada um dos 32 conjuntos para durações diárias e mais longas durante o período de 1950 a 2100. As distribuições GEV resultantes foram usadas para gerar estimativas de frequência de precipitação em resoluções de células de grade nativas para cada modelo estatístico. Assim, enquanto as estimativas do Volume 1 se originam em locais de estações, com um valor por duração e AEP, as estimativas do Volume 2 se originam em uma grade, com 32 valores (um de cada conjunto de modelos) por duração e AEP. Uma vez obtidas as estimativas absolutas de frequência de precipitação para cada GWL (1,5 - 5 °C), suas mudanças, em relação ao ano base de 2023, foram computadas. As estimativas de frequência de precipitação são geradas para o presente (2023) e, em seguida, novamente para um momento futuro quando os GCMs atingirem 3 °C. Para cada nível de aquecimento, calcular:</p>
+<p><span class="math display">\[
+AF = \frac{PF_{fut} - PF_{2023}}{PF_{2003}} \times 100\%
+\]</span></p>
+<p><strong>2.3. Revisão dos fatores de ajuste subdiários</strong></p>
+<p>Devido ao tamanho reduzido das amostras subdiárias, em vez de utilizar diretamente os fatores de ajuste extraídos das simulações de modelos climáticos dinâmicos, foram aplicadas suas relações relativas com os fatores diários, que possuem amostras mais robustas. Isso permitiu aproveitar os processos físicos dos modelos de alta resolução, como os do NA-CORDEX, mantendo a consistência entre diferentes durações e evitando distorções que poderiam surgir do uso direto dos dados subdiários</p>
+<p><strong>2.4. Aplicação dos fatores de ajuste</strong></p>
+<p>Uma vez calculados os fatores de ajuste diários e subdiários na estrutura GWL, estes foram transferidos para a estrutura de cenários, mapeando-os para décadas individuais entre 2030 e 2100, segundo os modelos SSP2-4.5 e SSP5-8.5. Para esse mapeamento, foram obtidos os GWLs médios multimodelo por década em cada cenário. Os fatores de ajuste e seus intervalos de confiança em grade foram identificados nos dois GWLs mais próximos de cada década e cenário, sendo os valores intermediários obtidos por interpolação temporal.</p>
+<p>Em seguida, espacialmente, os fatores foram suavizados por meio de um filtro gaussiano para reduzir ruídos locais e, posteriormente, foram interpolados em grade contínua com interpolação cúbica monótonica, assegurando transições suaves e consistentes entre células vizinhas.</p>
+<p>As estimativas de frequência de precipitação futura (PFVOL2) foram finalmente desenvolvidas aplicando esses fatores de ajuste (AFs) resultantes, conforme definidos tanto na estrutura GWL quanto na estrutura de cenários, às estimativas do Volume 1 (PFVOL1). Especificamente, para cada duração:</p>
+<p><span class="math display">\[
+PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)                        
+\]</span></p>
+<p>Onde, os valores de AF são funções do espaço 𝑥 e do tempo 𝑡, dependentes do GWL, dos cenários de emissões e do AEP.</p>
+<p>O termo multiplicativo é baseado em um fator de ajuste que expressa (em unidades percentuais) a mudança relativa no futuro a partir da linha de base do PFVOL1, que representa o ano de 2023. Assim, os valores finais do PFVOL2 representam estimativas futuras de precipitação para as mesmas durações e AEPs do PFVOL1, mas também são funções da temperatura global (estrutura do GWL) e do tempo.</p>
+<p><img src="figuras/guidelines_fluxograma_eua_2.jpg" class="img-fluid" alt="Fluxograma da metodologia do Volume 2 do NOAA 15"> Figura 2. Fluxograma da metodologia do Volume 2 do NOAA 15</p>
 </div>
 
 
