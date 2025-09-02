@@ -1,0 +1,31 @@
+---
+title: "Guideline Canadá"
+author: Bruno Pereira.
+bibliography: referencias/ref_desagregacao.bib
+nocite: |
+  @*
+---
+
+Documento: **A web-based tool for the development of Intensity Duration Frequency curves under changing climate**
+
+Environmental Modelling & Software. Simonović et al., 2016.
+
+::: {style="text-align: justify;"}
+**1. Descrição da Metodologia**
+
+O estudo apresenta a ferramenta IDF_CC, desenvolvida com o objetivo de atualizar curvas Intensidade-Duração-Frequência (IDF) considerando os efeitos das mudanças climáticas. A metodologia envolve técnicas de ajuste estatístico de extremos e métodos de *downscaling* espacial e temporal aplicados às projeções de modelos climáticos globais (GCMs).
+
+**1.1 Curvas de Intensidade-Duração-Frequência**
+
+Inicialmente, destaca-se que foram utilizados dados subdiários de precipitação das estações pluviométricas de diferentes intervalos de tempo (5, 10, 15 e 30 minutos e 1, 2, 6, 12 e 24 horas). A ferramenta IDF_CC adota a distribuição Gumbel para ajustar a precipitação máxima anual (AMP) em todo o Canadá. O método dos momentos foi utilizado para estimar os parâmetros da distribuição Gumbel.
+
+**1.2. *Downscaling* espacial e temporal da precipitação**
+
+$$
+f(x,t) = \frac{1}{\sigma(x,t)} 
+\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
+\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)                                                                                     
+$$
+
+![Fluxograma da metodologia aplicada no Canadá](figuras/guidelines_fluxograma_canada.jpg) Figura 1. Fluxograma da metodologia aplicada no Canadá
+:::
