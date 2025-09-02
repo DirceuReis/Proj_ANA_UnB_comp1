@@ -1,6 +1,6 @@
 ---
-title: "Desagregação temporal das chuvas intensas"
-author: Dirceu S. Reis Jr.
+title: "Guideline Estados Unidos"
+author: Bruno Pereira.
 bibliography: referencias/ref_desagregacao.bib
 nocite: |
   @*
