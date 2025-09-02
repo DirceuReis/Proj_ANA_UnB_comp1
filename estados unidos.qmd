@@ -6,8 +6,6 @@ nocite: |
   @*
 ---
 
-## Guideline Estados Unidos
-
 Documento: **NOAA Atlas 15 Pilot: Technical Report**
 
 ::: {style="text-align: justify;"}
