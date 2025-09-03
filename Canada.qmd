@@ -64,4 +64,34 @@ x_{N,\max}^{STN,5\min} & x_{N,\max}^{STN,10\min} & \cdots & x_{N,\max}^{STN,24hr
 $$
 
 Onde, $x_{i,\max}^{STN,j}$ é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e N é o número total de anos.
+
+(ii) Extrair os máximos diários (24 horas) para o período base histórico
+do modelo GCM selecionado
+
+$$
+X^{GCM}_{\text{max}} =
+\begin{bmatrix}
+X^{GCM}_{1,\text{max}} \\
+X^{GCM}_{2,\text{max}} \\
+X^{GCM}_{3,\text{max}} \\
+\vdots \\
+X^{GCM}_{N,\text{max}}
+\end{bmatrix}
+\tag{2}
+$$
+Onde, $X_{i,\max}^{GCM}$ representa a precipitação diária máxima do modelo GCM no i-ésimo ano e $N$ é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).
+
+(iii) Extrair máximos diários dos Cenários RCP (i, (iii) Extrair máximos diários dos Cenários RCP (ou seja, RCP2.6, RCP4.5, RCP8.5) para o modelo GCM selecionado:
+
+$$
+X^{GCM,Fut}_{\text{max}} =
+\begin{bmatrix}
+X^{GCM,RCP26}_{1,\text{max}} & X^{GCM,RCP45}_{1,\text{max}} & X^{GCM,RCP85}_{1,\text{max}} \\
+X^{GCM,RCP26}_{2,\text{max}} & X^{GCM,RCP45}_{2,\text{max}} & X^{GCM,RCP85}_{2,\text{max}} \\
+X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\text{max}} \\
+\vdots & \vdots & \vdots \\
+X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
+\end{bmatrix}
+\tag{3}
+$$
 :::
