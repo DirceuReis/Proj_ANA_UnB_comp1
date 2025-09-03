@@ -21,11 +21,47 @@ Inicialmente, destaca-se que foram utilizados dados subdiários de precipitaçã
 
 **1.2. *Downscaling* espacial e temporal da precipitação**
 
-$$
-f(x,t) = \frac{1}{\sigma(x,t)} 
-\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
-\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)                                                                                     
-$$
+Para atualizar as curvas IDF foi adotado o método *Equidistant Quantile Matching* (EQM), desenvolvido por Srivastav et al. (2014b). Esse método realiza o *downscaling temporal* (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do *downscaling espacial* da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).
+
+O EQM é aplicado diretamente à AMP para estabelecer as relações estatísticas entre as AMPs dos dados de precipitação gerados pelo GCM e os dados observados (históricos) subdiários em vez de usar registros completos de precipitação diária.
+
+O processo de EQM ocorre em três etapas principais:
+
+1.  *Downscaling* espacial;
+
+2.  *Downscaling* temporal; e
+
+3.  Atualização das curvas IDF: Combinação das duas relações anteriores para gerar as curvas IDF ajustadas aos cenários climáticos futuros.
+
+A descrição completa do método EQM está na subseção 1.4
 
 ![Fluxograma da metodologia aplicada no Canadá](figuras/guidelines_fluxograma_canada.jpg) Figura 1. Fluxograma da metodologia aplicada no Canadá
+
+**1.3 Interface Web do IDF_CC Tool**
+
+A ferramenta está dividida em três principais eixos: interface do usuário, modelos matemáticos e banco de dados. O sistema de gerenciamento de banco de dados (DBMS) utilizado é a versão mais recente do Microsoft SQL Server™ (MSSQL).
+
+É necessário um cadastro simples para ter acesso a todas as funcionalidades da ferramenta. Após o login, o usuário pode escolher se deseja criar a IDF para uma região ou selecionar uma estação meteorológica específica. Após essa escolha, é exibida uma nova aba com os dados básicos da região ou da estação (ID, número de anos, arquivos complementares). Nessa nova aba, pode-se optar por criar a IDF com base em dados históricos ou sob mudanças climáticas.
+
+No primeiro caso, o gráfico de IDF é gerado a partir de uma distribuição GEV ou Gumbel, a critério do usuário, sendo possível acessar a tabela com os dados gerados e as equações de interpolação (ou seja, os coeficientes A, B, C e t₀ para o cálculo da intensidade). No caso da IDF sob mudanças climáticas, o usuário deve escolher um intervalo de tempo de, no mínimo, 30 anos, entre 2015 e 2100, e selecionar entre as distribuições GEV e Gumbel. Em seguida, é necessário escolher o modelo climático, entre o CMIP6 e o CMIP5.
+
+Para cada modelo, é possível selecionar o conjunto de multimodelo (selecionando todos ou personalizando). Após essas escolhas, basta clicar no botão "Continuar" para acessar as curvas IDF's, tabelas, equações de interpolação e o boxplot das incertezas para os três cenários de emissão e concentração (SSP1.26, SSP2.45 e SSP5.85).
+
+**1.4 Descrição do método EQM**
+
+(i) Extrair máximos subdiários dos dados observados em um determinado local (ou seja, máximos de 5 minutos, 10 minutos, 15 minutos, 1 hora, 2 horas, 6 horas, 12 horas, 24 horas de dados de precipitação):
+
+$$
+X_{\max}^{STN} =
+\begin{bmatrix}
+x_{1,\max}^{STN,5\min} & x_{1,\max}^{STN,10\min} & \cdots & x_{1,\max}^{STN,24hr} \\
+x_{2,\max}^{STN,5\min} & x_{2,\max}^{STN,10\min} & \cdots & x_{2,\max}^{STN,24hr} \\
+x_{3,\max}^{STN,5\min} & x_{3,\max}^{STN,10\min} & \cdots & x_{3,\max}^{STN,24hr} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{N,\max}^{STN,5\min} & x_{N,\max}^{STN,10\min} & \cdots & x_{N,\max}^{STN,24hr}
+\end{bmatrix}
+\tag{1}
+$$
+
+Onde, $x_{i,\max}^{STN,j}$ é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e N é o número total de anos.
 :::
