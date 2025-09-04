@@ -241,14 +241,8 @@ window.Quarto = {
 <li><p><em>Downscaling</em> temporal; e</p></li>
 <li><p>Atualização das curvas IDF: Combinação das duas relações anteriores para gerar as curvas IDF ajustadas aos cenários climáticos futuros.</p></li>
 </ol>
-<p>A descrição completa do método EQM está na subseção 1.4</p>
-<p><img src="figuras/guidelines_fluxograma_canada.jpg" class="img-fluid" alt="Fluxograma da metodologia aplicada no Canadá"> Figura 1. Fluxograma da metodologia aplicada no Canadá</p>
-<p><strong>1.3 Interface Web do IDF_CC Tool</strong></p>
-<p>A ferramenta está dividida em três principais eixos: interface do usuário, modelos matemáticos e banco de dados. O sistema de gerenciamento de banco de dados (DBMS) utilizado é a versão mais recente do Microsoft SQL Server™ (MSSQL).</p>
-<p>É necessário um cadastro simples para ter acesso a todas as funcionalidades da ferramenta. Após o login, o usuário pode escolher se deseja criar a IDF para uma região ou selecionar uma estação meteorológica específica. Após essa escolha, é exibida uma nova aba com os dados básicos da região ou da estação (ID, número de anos, arquivos complementares). Nessa nova aba, pode-se optar por criar a IDF com base em dados históricos ou sob mudanças climáticas.</p>
-<p>No primeiro caso, o gráfico de IDF é gerado a partir de uma distribuição GEV ou Gumbel, a critério do usuário, sendo possível acessar a tabela com os dados gerados e as equações de interpolação (ou seja, os coeficientes A, B, C e t₀ para o cálculo da intensidade). No caso da IDF sob mudanças climáticas, o usuário deve escolher um intervalo de tempo de, no mínimo, 30 anos, entre 2015 e 2100, e selecionar entre as distribuições GEV e Gumbel. Em seguida, é necessário escolher o modelo climático, entre o CMIP6 e o CMIP5.</p>
-<p>Para cada modelo, é possível selecionar o conjunto de multimodelo (selecionando todos ou personalizando). Após essas escolhas, basta clicar no botão “Continuar” para acessar as curvas IDF’s, tabelas, equações de interpolação e o boxplot das incertezas para os três cenários de emissão e concentração (SSP1.26, SSP2.45 e SSP5.85).</p>
-<p><strong>1.4 Descrição do método EQM</strong></p>
+<p><strong>1.3 Descrição do método EQM</strong></p>
+<p>A descrição, aqui inserida, é a mesma encontrada no anexo do artigo de Simonović et al., 2016.</p>
 <ol type="i">
 <li>Extrair máximos subdiários dos dados observados em um determinado local (ou seja, máximos de 5 minutos, 10 minutos, 15 minutos, 1 hora, 2 horas, 6 horas, 12 horas, 24 horas de dados de precipitação):</li>
 </ol>
@@ -291,7 +285,65 @@ X^{GCM,RCP26}_{3,\text{max}} &amp; X^{GCM,RCP45}_{3,\text{max}} &amp; X^{GCM,RCP
 X^{GCM,RCP26}_{N_F,\text{max}} &amp; X^{GCM,RCP45}_{N_F,\text{max}} &amp; X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
 \tag{3}
-\]</span></p>
+\]</span> Onde, <span class="math inline">\(X_{\max}^{GCM,Fut}\)</span> representa a precipitação diária máxima para os cenários futuros considerad; e <span class="math inline">\(N_F\)</span> é o número total de anos considerados para o período futuro</p>
+<ol start="4" type="i">
+<li>Ajustar uma distribuição de probabilidade aos máximos diários do modelo GCM (cada uma das séries de máximos subdiários para os dados observados e máximos diários para os cenários futuros).</li>
+</ol>
+<p><span class="math display">\[
+PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
+\tag{4}
+\]</span> <span class="math display">\[
+PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
+\tag{5}
+\]</span> <span class="math display">\[
+PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
+\tag{6}
+\]</span> Onde, <span class="math inline">\(PDF\)</span> representa a função de distribuição de probabilidade, $f()% é a função, <span class="math inline">\(\theta\)</span> é o parâmetro da distribuição ajustada.</p>
+<ol start="22" type="a">
+<li>A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM <span class="math inline">\(Y_{max,j}^{GCM}\)</span> usando o princípio do mapeamento baseado em quantis. Trata-se de um <em>downscalig</em> espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:</li>
+</ol>
+<p><span class="math display">\[
+Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
+\tag{7}
+\]</span> Onde, <span class="math inline">\(Y_{max,j}^{STN}\)</span> é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; <span class="math inline">\(CDF\)</span> significa função de distribuição de probabilidade cumulativa; e <span class="math inline">\(invCDF\)</span> significa CDF inversa.</p>
+<ol start="6" type="i">
+<li>Estabelecer uma relação estatística semelhante de mapeamento quantílico que modele a mudança entre os máximos atuais do GCM e os máximos futuros do GCM. Trata-se de um <em>downscaling</em> temporal dos dados das simulações projetadas do GCM dos máximos diários para o GCM diário de referência:</li>
+</ol>
+<p><span class="math display">\[
+Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
+\tag{8}
+\]</span> Onde, <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> é a correspondência quantílica entre o período de referência e o período de projeção.</p>
+<ol start="7" type="i">
+<li>Encontre uma função apropriada para relacionar <span class="math inline">\(Y_{max,j}^{STN}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:</li>
+</ol>
+<p><span class="math display">\[
+Y_{max,j}^{STN} = f(X_{max}^{GCM})
+\tag{9}
+\]</span> <span class="math display">\[
+Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
+\tag{10}
+\]</span> (viii) Encontre uma função apropriada para relacionar <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>:</p>
+<p><span class="math display">\[
+Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
+\tag{11}
+\]</span> <span class="math display">\[
+Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
+\tag{12}
+\]</span> (ix) Para gerar dados subdiários máximos futuros, combine as equações acima em:</p>
+<p><span class="math display">\[
+X^{STN, future}_{\max,j}
+= a_{1} \times
+\left[
+\frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}}
+\right]
++ b_{1} \tag{13}
+\]</span> (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.</p>
+<p><img src="figuras/guidelines_fluxograma_canada.jpg" class="img-fluid" alt="Fluxograma da metodologia aplicada no Canadá"> Figura 1. Fluxograma da metodologia aplicada no Canadá</p>
+<p><strong>1.4 Interface Web do IDF_CC Tool</strong></p>
+<p>A ferramenta está dividida em três principais eixos: interface do usuário, modelos matemáticos e banco de dados. O sistema de gerenciamento de banco de dados (DBMS) utilizado é a versão mais recente do Microsoft SQL Server™ (MSSQL).</p>
+<p>É necessário um cadastro simples para ter acesso a todas as funcionalidades da ferramenta. Após o login, o usuário pode escolher se deseja criar a IDF para uma região ou selecionar uma estação meteorológica específica. Após essa escolha, é exibida uma nova aba com os dados básicos da região ou da estação (ID, número de anos, arquivos complementares). Nessa nova aba, pode-se optar por criar a IDF com base em dados históricos ou sob mudanças climáticas.</p>
+<p>No primeiro caso, o gráfico de IDF é gerado a partir de uma distribuição GEV ou Gumbel, a critério do usuário, sendo possível acessar a tabela com os dados gerados e as equações de interpolação (ou seja, os coeficientes A, B, C e t₀ para o cálculo da intensidade). No caso da IDF sob mudanças climáticas, o usuário deve escolher um intervalo de tempo de, no mínimo, 30 anos, entre 2015 e 2100, e selecionar entre as distribuições GEV e Gumbel. Em seguida, é necessário escolher o modelo climático, entre o CMIP6 e o CMIP5.</p>
+<p>Para cada modelo, é possível selecionar o conjunto de multimodelo (selecionando todos ou personalizando). Após essas escolhas, basta clicar no botão “Continuar” para acessar as curvas IDF’s, tabelas, equações de interpolação e o boxplot das incertezas para os três cenários de emissão e concentração (SSP1.26, SSP2.45 e SSP5.85).</p>
 </div>
 
 
