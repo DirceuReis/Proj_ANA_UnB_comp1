@@ -1,6 +1,6 @@
 ---
 title: "Guideline Australia"
-author: Bruno Pereira e Tomás Aquino.
+author: Bruno Pereira e Tomás Quezado.
 bibliography: referencias/ref_desagregacao.bib
 nocite: |
   @*
