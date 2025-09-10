@@ -8,20 +8,88 @@ nocite: |
 
 Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation***.
 
-
 ::: {style="text-align: justify;"}
 **1. Descrição da Metodologia**
 
-O estudo apresenta a metodologia para estimar a frequência de chuvas intensas no Reino Unido, em diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos). 
+O estudo apresenta a metodologia para estimar a frequência de chuvas intensas no Reino Unido, em diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos).
 
 **1.1. Dados utilizados**
 
-Os dados de precipitação foram obtidos através de diversas instituições, como: *Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland* (DANI), *Irish Met Service* e a base de dados do PEPR do *Institute of Hydrology*.*
+Os dados de precipitação foram obtidos através de diversas instituições, como: *Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland* (DANI), *Irish Met Service* e a base de dados do PEPR do *Institute of Hydrology*.\*
 
-Os dados são oriundos de cerca de 6106 estações com registros diários com pelo menos 10 anos de dados e cerca de 375 estações com registros sub-diários (horárias) (registros de pluviômetros automáticos, tipping bucket e sifão inclinável, com pelo menos 9 anos de máximos anuais).
+Os dados foram provenientes de 6106 estações com registros diários com pelo menos 10 anos de dados e de 375 estações com registros sub-diários (horárias) (registros de pluviômetros automáticos, *tipping bucket* e sifão inclinável, com pelo menos 9 anos de máximos anuais).
 
-Foram descartados os anos que apresentaram mais de 25% de dados faltosos. Alguns máximos anuais foram corrigidos ou excluídos por erros de leitura, falhas técnicas ou dados suspeitos (ex.: acumulações em pluviômetros de balde, períodos em que o pluviômetro não funcionava, ou totais incoerentes com estações vizinhas).
+Descartaram-se os anos que apresentaram mais de 25% de dados faltosos. Alguns máximos anuais precisaram ser corrigidos ou excluídos por erros de leitura, falhas técnicas ou dados suspeitos (ex.: acumulações em pluviômetros de balde, períodos em que o pluviômetro não funcionava, ou totais incoerentes com estações vizinhas).
 
+**1.2 Série de máximos anuais e índice de referência** 
+
+A série de máximos anuais (AM) foi extraída em diferentes durações (1h, 2h, 6, 12, 1d, 2, 4d e 8d) e foi a base para a análise estatítica e a mediana da série AM (RMED) foi escolhida como o índice de referência (*Index Rainfall*) e calculada separadamente para cada duração.
+
+**1.3 Mapeamento da RMED** 
+
+O RMED foi interpolado em uma malha de 1 km sobre o Reino Unido. Para isso, o método de geo-regressão (regressão + krikagem residual) foi utilizado com covariáveis topográficas:
+
+- Elevação;
+
+- Distância do mar (média em km até a Costa);
+
+- Barreiras orográficas;
+
+- Continentalidade (Distância até Lille, França);
+
+- Latitude e Longitude e 
+
+- Fatores regionais adicionais.
+
+**descrever a geo-regressão**
+
+As séries foram padronizadas dividindo o AM pelo RMED local, isso permitiu a comparação e análise regional.
+
+**1.4 Derivação das curvas de crescimento (*Growth Curves*)** 
+
+Foi aplicado o método FORGEX(*Focused Rainfall Growth curve Extension*), que foi desenvolvido especificamente para o estudo. O FORGEX ajusta as distribuições estatísticas das séries padronizadas para obter as curvas de crescimento (relação entre a chuva de retorno T anos e o índice RMED).
+
+Sendo baseado na GEV:
+
+$$
+F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\}, 
+\quad 1 + \xi \left( \frac{x - \mu}{\sigma} \right) > 0
+$$
+
+Onde, $\mu$ é o parâmetro de localização; $\sigma > 0$ é a escala e $\xi$ é a forma.Gumbel ocorre se $xi \to 0$.
+
+Os parâmetros são estimados por máxima verossimilhança (MLE).
+
+A frequência é expressa em termos da variável reduzida de Gumbel:
+
+$$
+y = - ln(-ln(1-p))
+$$ 
+
+onde $p =$ probabilidade de não-exedência.
+
+O FORGEX didive os dados em faixas de retorno (*slices*). Dentro de cada faixa (*y-slice*), os parâmetros são ajustados separadamente e depois suavizados.
+
+**1.5 Construção do Modelo DDF (*Depth-Duration-Frequency*)**
+
+A construção do modelo integra as curvas de crescimento e o RMED em um modelo matemático único que relaciona intensidade, duração e frequência.
+
+$$
+\ln R(D,y) =
+\begin{cases}
+(cy + d_1)\ln D + (ey+f), & D \leq 12h \\\\
+\ln R_{12} + (cy + d_2)(\ln D - \ln 12), & 12h < D \leq 48h \\\\
+\ln R_{48} + (cy + d_3)(\ln D - \ln 48), & D > 48h
+\end{cases}
+$$
+
+O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade.
+
+Os limites de confiação foram estimados via *bootstrap* para avaliar a incerteza das curvas de crescimento.
+
+**1.6 Saídas** 
+
+Mapas nacionais de RMED, curvas de crescimento e chuvas de projeto.
 
 ![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 1. Fluxograma da metodologia aplicada na Austrália
-
+:::
