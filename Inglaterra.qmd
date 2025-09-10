@@ -1,0 +1,27 @@
+---
+title: "Guideline Inglaterra"
+author: Bruno Pereira.
+bibliography: referencias/ref_desagregacao.bib
+nocite: |
+  @*
+---
+
+Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation***.
+
+
+::: {style="text-align: justify;"}
+**1. Descrição da Metodologia**
+
+O estudo apresenta a metodologia para estimar a frequência de chuvas intensas no Reino Unido, em diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos). 
+
+**1.1. Dados utilizados**
+
+Os dados de precipitação foram obtidos através de diversas instituições, como: *Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland* (DANI), *Irish Met Service* e a base de dados do PEPR do *Institute of Hydrology*.*
+
+Os dados são oriundos de cerca de 6106 estações com registros diários com pelo menos 10 anos de dados e cerca de 375 estações com registros sub-diários (horárias) (registros de pluviômetros automáticos, tipping bucket e sifão inclinável, com pelo menos 9 anos de máximos anuais).
+
+Foram descartados os anos que apresentaram mais de 25% de dados faltosos. Alguns máximos anuais foram corrigidos ou excluídos por erros de leitura, falhas técnicas ou dados suspeitos (ex.: acumulações em pluviômetros de balde, períodos em que o pluviômetro não funcionava, ou totais incoerentes com estações vizinhas).
+
+
+![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 1. Fluxograma da metodologia aplicada na Austrália
+
