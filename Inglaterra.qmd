@@ -21,31 +21,31 @@ Os dados foram provenientes de 6106 estações com registros diários com pelo m
 
 Descartaram-se os anos que apresentaram mais de 25% de dados faltosos. Alguns máximos anuais precisaram ser corrigidos ou excluídos por erros de leitura, falhas técnicas ou dados suspeitos (ex.: acumulações em pluviômetros de balde, períodos em que o pluviômetro não funcionava, ou totais incoerentes com estações vizinhas).
 
-**1.2 Série de máximos anuais e índice de referência** 
+**1.2 Série de máximos anuais e índice de referência**
 
 A série de máximos anuais (AM) foi extraída em diferentes durações (1h, 2h, 6, 12, 1d, 2, 4d e 8d) e foi a base para a análise estatítica e a mediana da série AM (RMED) foi escolhida como o índice de referência (*Index Rainfall*) e calculada separadamente para cada duração.
 
-**1.3 Mapeamento da RMED** 
+**1.3 Mapeamento da RMED**
 
 O RMED foi interpolado em uma malha de 1 km sobre o Reino Unido. Para isso, o método de geo-regressão (regressão + krikagem residual) foi utilizado com covariáveis topográficas:
 
-- Elevação;
+-   Elevação;
 
-- Distância do mar (média em km até a Costa);
+-   Distância do mar (média em km até a Costa);
 
-- Barreiras orográficas;
+-   Barreiras orográficas;
 
-- Continentalidade (Distância até Lille, França);
+-   Continentalidade (Distância até Lille, França);
 
-- Latitude e Longitude e 
+-   Latitude e Longitude e
 
-- Fatores regionais adicionais.
+-   Fatores regionais adicionais.
 
 **descrever a geo-regressão**
 
 As séries foram padronizadas dividindo o AM pelo RMED local, isso permitiu a comparação e análise regional.
 
-**1.4 Derivação das curvas de crescimento (*Growth Curves*)** 
+**1.4 Derivação das curvas de crescimento (*Growth Curves*)**
 
 Foi aplicado o método FORGEX(*Focused Rainfall Growth curve Extension*), que foi desenvolvido especificamente para o estudo. O FORGEX ajusta as distribuições estatísticas das séries padronizadas para obter as curvas de crescimento (relação entre a chuva de retorno T anos e o índice RMED).
 
@@ -64,7 +64,7 @@ A frequência é expressa em termos da variável reduzida de Gumbel:
 
 $$
 y = - ln(-ln(1-p))
-$$ 
+$$
 
 onde $p =$ probabilidade de não-exedência.
 
@@ -87,7 +87,7 @@ O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajus
 
 Os limites de confiação foram estimados via *bootstrap* para avaliar a incerteza das curvas de crescimento.
 
-**1.6 Saídas** 
+***1.6 Saídas***
 
 Mapas nacionais de RMED, curvas de crescimento e chuvas de projeto.
 
