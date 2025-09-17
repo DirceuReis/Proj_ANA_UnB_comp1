@@ -42,49 +42,361 @@ A metodologia de isozonas é uma abordagem de regionalização que se baseia no 
 
 Décadas mais tarde, Basso et al. (2016) revisitaram e atualizaram o zoneamento de Torrico com base em cerca de mil equações IDF disponíveis no Brasil. Consideraram-se apenas ajustes provenientes de pluviogramas (descartando relações gerais entre durações) e, havendo múltiplas IDFs por localidade, optou-se pela mais recente. O período de retorno de referência para comparação foi T=10 anos, usual em macrodrenagem urbana. No processo de rezoneamento, as intensidades e as relações entre durações obtidas a partir das IDF atuais foram comparadas às estimadas por Torrico (1974) com ênfase em \$\$r1h,24h​\$\$, apoiando-se em mapas climáticos nacionais para áreas com baixa densidade de dados e verificando a homogeneidade intra-zona por estatísticas descritivas. O resultado foi um conjunto de novas isozonas e coeficientes regionais de desagregação $rτh,24h​$,​ para T=10 anos.
 
-Além de coeficientes e isozonas, há uma vertente importante de equações paramétricas DDF/IDF. Baldassarre et al. (2006) testaram a confiabilidade de 7 formas DDF (2–3 parâmetros) calibradas por mínimos quadrados com dados de 1, 3, 6, 12 e 24 h e extrapoladas para 5–45 min. A análise estatística direta usou a distribuição de Gumbel, que mostrou tendência a subestimar profundidades para TR altos. O estudo ilustra a sensibilidade à forma da equação e os riscos de extrapolar para durações curtas fora do intervalo de calibração, motivando o uso de formulações que imponham consistência entre durações quando possível (Baldassarre et al., 2006).
+Além de coeficientes e isozonas, há uma vertente importante de equações paramétricas DDF/IDF. Baldassarre et al. (2006) realizaram um estudo para testar a confiabilidade de sete diferentes curvas DDF (quatro com dois parâmetros e três com três parâmetros). Essas curvas foram calibradas utilizando o método dos mínimos quadrados com dados de precipitação observados referentes a durações mais longas (1, 3, 6, 12 e 24 horas). Após a calibração, as curvas DDF foram extrapoladas para estimar as profundidades de precipitação de projeto para durações mais curtas, especificamente 15, 20, 30 e 45 minutos. Para avaliar a precisão dessas estimativas extrapoladas, elas foram comparadas com os quantis de precipitação obtidos pelo ajuste direto da distribuição de Gumbel aos dados observados em cada duração. Embora a distribuição de Gumbel tenha sido considerado um ajuste aceitável para os dados utilizados no estudo e tenha tido sua adequação verificada por testes de L-momentos e Kolmogorov-Smirnov, o artigo menciona que estudos recentes apontaram que a distribuição de Gumbel pode subestimar a profundidade de precipitação de projeto para grandes períodos de retorno. O estudo ilustra a sensibilidade à forma da equação e os riscos de extrapolar para durações curtas fora do intervalo de calibração, motivando o uso de formulações que imponham consistência entre durações quando possível (Baldassarre et al. 2006)
 
 2.  **Modelos de Processos Pontuais**
 
-A modelagem estocástica da precipitação horária fundamenta-se, em geral, em modelos de processo pontual, com destaque para os de Bartlett-Lewis e Neyman-Scott. A ampla discussão desses modelos na literatura foi impulsionada pelos trabalhos de Rodriguez-Iturbe et al. (1987, 1988), no campo dos processos pontuais estocásticos. Em linhas gerais, esses modelos paramétricos utilizam estruturas de agrupamento de Poisson para desagregar a precipitação de resolução mais grosseira, ainda que apresentem limitações ao subestimar valores de retorno associados a extremos, motivando o surgimento de alternativas mais sofisticadas para melhorar sua representação estatística.
+A modelagem estocástica da precipitação em alta resolução temporal apoia-se, classicamente, na Teoria do Processo Pontual, que permite representar tanto a ocorrência de eventos quanto suas “posições” no tempo (e no espaço). Em particular, o Processo de Poisson é atrativo porque suas hipóteses de estacionariedade, não-multiplicidade e independência, isto é, $P\{\text{evento em }(t,t+\Delta t)\}\approx
+\lambda\,\Delta t$, probabilidade desprezível de múltiplas chegadas em $\Delta t$ e independência entre contagens em intervalos disjuntos, são compatíveis com propriedades essenciais da precipitação.
 
-No modelo original de Bartlett-Lewis, proposto por Rodriguez-Iturbe et al. (1987), as tempestades chegam segundo um processo de Poisson com taxa 𝜆; cada tempestade ativa um processo interno de origens de células com taxa 𝛽; as chegadas de células cessam após um tempo aleatório exponencial com parâmetro 𝛾; cada célula tem duração exponencial com parâmetro 𝜂; e a intensidade uniforme do pulso retangular é exponencial com média $\mu_{x}$. Esses cinco parâmetros (𝛽,𝛾,μx,𝜂,𝜆) controlam, respectivamente, a taxa de geração de células, o desligamento do mecanismo de geração, a escala média da intensidade, a escala média da duração e a taxa de chegada de tempestades, sendo suficientes para reproduzir média, variância, intermitência e autocorrelação de curto prazo. Pouco depois, Rodriguez-Iturbe et al. (1988) propuseram o Modified Bartlett–Lewis Rectangular Pulse Model (MBLRPM), no qual a duração característica 𝜂 varia entre tempestade segundo uma distribuição Gama (por exemplo, Gama (α, escala = 1/ν), equivalente a taxa ν).  Ao mesmo tempo, impõe-se o escalonamento β = κ η e γ = ω η, de modo que as razões adimensionais κ = β/η e ω = γ/η permaneçam constantes. Nessa formulação, o modelo passa a ter seis parâmetros (𝛼,𝑤,𝜇𝑥,𝑘,𝜆,𝜈).
+Dentro desse arcabouço, consolidaram-se duas famílias: (i) modelos simples baseados em Poisson (p. ex., Poisson Ruído Branco e Poisson de Pulsos Retangulares), que representam a chuva como uma sequência de pulsos com alturas e durações aleatórias; e (ii) processos pontuais de agrupamento, notadamente Neyman–Scott e Bartlett–Lewis, capazes de reproduzir estatísticas de primeira e segunda ordem em ampla faixa de agregações (Rodriguez-Iturbe et al., 1987). A distinção estrutural entre os dois últimos é sutil: no Neyman–Scott as células são deslocadas do instante de origem do evento; no Bartlett–Lewis há uma célula no próprio ponto de origem do evento. Em avaliações clássicas (Denver/Boston), ambos reproduzem bem média, variância e autocorrelação, mas tendem a distorcer a proporção de tempos secos se mal calibrados (Rodriguez-Iturbe et al., 1987).
 
-Koutsoyiannis & Onof (2001) implementaram essas famílias no HYETOS, uma ferramenta amplamente utilizada como motor estocástico para desagregação e geração sintética de chuvas. Para resoluções temporais mais finas (1 a 5 minutos), aplica variantes como o BLRPRx. Este modelo, ao introduzir uma dependência entre a intensidade e a duração da célula de chuva, frequentemente melhora a representação da assimetria, da proporção de períodos secos e dos extremos, quando comparado a variantes mais simples. Em aplicações recentes, Tayşi & Özger (2022) utilizaram o modelo HYETOS para a desagregação de precipitações, destacando sua relevância em contextos práticos. O trabalho projeta curvas IDF sub-horárias a partir de 4 GCMs (RCP4.5/8.5) e desagrega a chuva diária com HYETOS calibrado em dados horários observados, preservando padrões históricos. Em seguida, compara as curvas IDF históricas com as futuras para avaliar mudanças esperadas na intensidade-duração-frequência.
+O modelo de Pulsos Retangulares de Bartlett–Lewis original (Rodriguez-Iturbe et al., 1987) baseia-se nas seguintes hipóteses: (1) as origens dos episódios chuvosos $t_i$​ seguem um processo de Poisson com taxa $\lambda$; (2) dentro de cada episódio $i$, as origens das células $t_{ij}$​ seguem um processo de Poisson com taxa $\beta$; (3) o nascimento de células no episódio $i$ cessa após um tempo $v_i$​ com distribuição exponencial de parâmetro $\gamma$; (4) cada célula tem duração $w_{ij}$​ com distribuição exponencial de parâmetro $\eta$; e (5) cada célula possui intensidade uniforme $X_{ij}$​ com distribuição especificada. Neste arcabouço, a desagregação temporal é tratada como geração estocástica em passo fino (p.ex., horário ou sub-horário): calibra-se o modelo com estatísticas observadas em escalas mais grossas e simula-se a sequência de pulsos; ao agregar a série simulada, recuperam-se as estatísticas-alvo nas escalas de 1–24 h.
 
-Mais recentemente, Qin & Dai (2024) propuseram o Modelagem por Processos Pontuais e Desagregação da Precipitação (Point-Process Modelling and Rainfall Disaggregation – PPMRD) e compararam seis modelos (BLRP5, BLRP6, BLRP6x, BLRP7, NSRP5, NSRP6) em Singapura, avaliando múltiplos esquemas de desagregação (24 h para 5 min; 3 h para 5 min; 24 h para 1 h; 6 h para1 h). A formulação do modelo BLRP7 obteve o melhor desempenho global, e os autores recomendam ensembles para explicitar a incerteza inerente à natureza estocástica da chuva. Em paralelo, Vorobevskii et al. (2023) compararam um modelo condicional (WayDown, que conserva a soma diária via cadeia de Markov e cópulas) com um gerador incondicional (LetItRain, duplo Poisson), usando pluviômetros e radar em passo de 10 min; observaram que o WayDown tende a reproduzir melhor a mediana das estatísticas, enquanto o LetItRain fornece maior variabilidade de cenários. Ambos podem superestimar extremos até certo limiar e subestimar acima dele, explicitando o trade-off entre conservação de massa diária e liberdade estatística intradiária.
+Para ampliar a flexibilidade multiescala e melhorar a representação dos períodos secos/úmidos, Rodriguez-Iturbe et al. (1988) propuseram o Modified Bartlett–Lewis Rectangular Pulse Model (MBLPRM). Na versão modificada, $\eta$ varia aleatoriamente de episódio para episódio segundo uma distribuição Gama com parâmetro de forma $\alpha$ e escala $\nu$. Em seguida, $\beta$ e $\gamma$ também passam a variar de modo que as razões $\kappa := \beta/\eta$ e $\phi := \gamma/\eta$ permaneçam constantes. A intensidade $X_{ij}$​ costuma ser modelada como exponencial com parâmetro $1/\mu_x$​; alternativamente, pode-se adotar uma Gama de dois parâmetros com média $\mu_x$​ e desvio-padrão $\sigma_x$​. Assim, na forma mais simplificada o modelo usa cinco parâmetros $(\lambda, \beta, \gamma, \eta, \mu_x)$ (ou, de forma equivalente, $\lambda, \kappa, \phi, \eta, \mu_x$​), e, na versão modificada, sete parâmetros: $\lambda, \kappa, \phi, \alpha, \nu, \mu_x, \sigma_x$.
+
+Koutsoyiannis & Onof (2001) implementam no HYETOS uma desagregação condicionada acoplada ao processo de Bartlett–Lewis. O procedimento inicia gerando, via Bartlett–Lewis, uma sequência longa o suficiente para conter um bloco de $𝐿$ dias úmidos seguido por um ou mais dias secos; identificada essa sequência, são geradas as intensidades das células e computados os totais diários sintéticos correspondentes. A aceitação do bloco é decidida por uma medida de distância entre os totais diários gerados e os observados; se a distância exceder um limite 𝑑𝑎, o algoritmo repete a amostragem, e, caso atinja limites de repetição, subdivide o bloco em sub-blocos menores que são desagregados independentemente e depois reunidos. Para garantir adição exata entre escalas, o HYETOS aplica um ajuste proporcional aos hietogramas de passo fino: os valores simulados $eX_s$​ são reescalados por $\sum Z_i / \sum eZ_i$​ de modo que as somas sub-horárias coincidam exatamente com o total diário $Z_i$ do bloco. Essa transformação preserva zeros, mantém propriedades de distribuição gama sob hipóteses adequadas e é preferível a ajustes lineares em séries com alta intermitência e assimetria; quando combinada com o esquema de repetições, reduz vieses em estatísticas que não são impostas explicitamente.
+
+Kossieris et al. (2018) generalizam esse arcabouço no HyetosMinute, estendendo a desagregação para escalas sub-horárias até 1 minuto e incorporando variantes do Bartlett–Lewis que aumentam a variabilidade intradiária, como o modelo com parâmetro de intensidade randomizado e a versão que impõe dependência entre intensidade e duração da célula. A plataforma também integra um algoritmo de estimação EAS2 (Evolutionary Annealing–Simplex) para ajuste de parâmetros do Bartlett–Lewis, e opera tanto em modo teste (com séries históricas completas) quanto em modo operacional (apenas diários), mantendo as mesmas etapas de ajuste proporcional e repetição/aceitação. Em estudo de caso, os autores mostram que as séries desagregadas por HyetosMinute reproduzem bem as estatísticas observadas e melhoram assimetria, proporção de períodos secos e dos extremos quando usada a variante com intensidade randomizada/dependente. Em aplicações recentes, Tayşi & Özger (2022) utilizaram o modelo HYETOS para a desagregação de precipitações, destacando sua relevância em contextos práticos. O trabalho projeta curvas IDF sub-horárias a partir de 4 GCMs (RCP4.5/8.5) e desagrega a chuva diária com HYETOS calibrado em dados horários observados, preservando padrões históricos. Em seguida, compara as curvas IDF históricas com as futuras para avaliar mudanças esperadas na intensidade-duração-frequência.
+
+Mais recentemente, Qin & Dai (2024) propuseram o Modelagem por Processos Pontuais e Desagregação da Precipitação (Point-Process Modelling and Rainfall Disaggregation – PPMRD) que utiliza diversos modelos de processo pontual e procedimentos de ajuste, baseados no trabalho de Kossieris et al. (2018), para gerar e desagregar dados de precipitação. A premissa é que um gerador (processo pontual) bem parametrizado reproduz as estatísticas observadas em um conjunto de escalas “verificadas”; a desagregação deve, então, operar entre escalas superior e inferior escolhidas dentre essas escalas. Na seleção do gerador, comparam-se seis processos pontuais (BLRP5, BLRP6 com $𝜂∼Gama$, BLRP6x com dependência intensidade–duração, BLRP7 com intensidade Gama, NSRP5, NSRP6) ajustados mensalmente por otimização global, minimizando erros relativos entre estatísticas simuladas e observadas em várias escalas (média, variância, probabilidade de seco, assimetria) e avaliando extremos via Gumbel. O gerador é escolhido pelo desempenho agregado nessas métricas. A desagregação no PPMRD generaliza o esquema tipo HYETOS: em vez de “dias úmidos”, trabalha-se com sequências úmidas com nível superior (p.ex., blocos 3 h, 6 h ou 24 h), separadas por pelo menos um intervalo seco. Para cada sequência úmida, o gerador produz a série em passo fino; essa série é agregada de volta à escala superior e comparada ao registro observado por um critério de erro descrito pela equação:
+
+$$
+\[E=\max\left\{\sqrt{\sum_{l=1}^{L}\left(\frac{P_s(l)-P_o(l)}{P_o(l)}\right)^{2}},\;\sqrt{\sum_{l=1}^{L}\left(\frac{P_o(l)-P_s(l)}{P_s(l)}\right)^{2}}\right\}\]
+$$
+
+onde $l$ é o índice da série úmida no nível superior e $L$ é o comprimento total; $P_s$​ e $P_o$​ são, respectivamente, as séries de precipitação no nível superior sintética e observada. Sequências longas são segmentadas de forma controlada: define-se previamente um comprimento máximo **Umax** por mês, a partir de um procedimento que cresce o comprimento $l$ de uma sequência típica, gera ensembles e observa o percentil $p$ do erro $E_p(l)$ até ultrapassar um limiar $E_{th}$​; então fixa-se $U_{max}=l^*-1$. Caso uma sequência exceda $U_{max}$​, ela é dividida aleatoriamente em sub-sequências com comprimentos entre 1 e \$U\_{max}\$​, processadas independentemente e, ao final, reunidas. Por fim, aplica-se o ajuste proporcional clássico para garantir coincidência exata entre o total agregado do sintético e o total observado na escala superior. O uso de ensembles é recomendado para lidar com a incerteza inerente ao caráter estocástico e aos efeitos de fronteira impostos pela série superior.
+
+Em paralelo, Vorobevskii et al. (2023) compararam um modelo condicional (WayDown, que conserva a soma diária via cadeia de Markov e cópulas) com um gerador incondicional (LetItRain, duplo Poisson). WayDown é um modelo condicional de desagregação de precipitação, disponibilizado como pacote R. Para cada dia da série de entrada (observado ou projetado), o método seleciona, no conjunto de referência de alta resolução do mesmo mês, eventos com somas diárias semelhantes. A partir desse subconjunto, estima-se uma cadeia de Markov de dois estados (chuva/não-chuva), usada para amostrar a série binária a 5 min (ou outra resolução). Dados os intervalos “úmidos” da série binária, as alturas são amostradas em dois passos: o primeiro valor de cada sub-evento é extraído da amostra observada com pesos empíricos condicionados ao total diário e ao mês; os valores subsequentes são amostrados por uma cópula beta empírica bivariada, impondo dependência de defasagem 1 (lag-1) entre intensidades consecutivas. A soma diária da série desagregada é então comparada ao valor diário alvo; se o erro relativo absoluto ficar abaixo de um limiar (padrão 10%; para totais muito pequenos, p.ex. \< 1 mm, admite-se limiar maior para reduzir custo computacional), aplica-se uma correção proporcional (valores maiores recebem ajuste maior) para garantir coincidência exata. Caso contrário, repete-se a amostragem de intensidades para a mesma série binária; após \~30 tentativas sem sucesso, uma nova série binária é amostrada e o processo recomeça. Para consistência entre dias, o último valor do dia anterior é considerado ao amostrar o início do dia corrente (transição evento-a-evento). O método foi testado com resoluções de 1, 5, 10 e 30 min, com bom desempenho computacional.
+
+O LetItRain é um gerador incondicional de séries de precipitação que estende os modelos de clusters de Poisson (Neyman–Scott/Bartlett–Lewis). Assume chegadas de episódios segundo Poisson e distribuições para a duração do episódio e para as propriedades das células (chegada, duração, intensidade). Para superar a tendência clássica de subestimar extremos, incorpora quatro melhorias: (i) calibração visando momentos de 1ª a 3ª ordem das séries observadas; (ii) relação inversa entre duração e intensidade da célula, reforçando picos de curta duração; (iii) intensidade celular com distribuição Gama; (iv) dois algoritmos de embaralhamento (“shuffling”) que reproduzem autocorrelação de episódios e eventos persistentes. Para aplicações a cenários futuros, o fluxo é mensal: estatísticas de referência (média, variância, covariância, assimetria e proporção de períodos úmidos) são computadas em múltiplas agregações (10–960 min); regressões entre estatísticas (p.ex., média–variância, média–proporção úmida; e relações entre variâncias/proporções em diferentes agregações) são ajustadas; calcula-se um fator de mudança para a média diária (razão futuro/histórico), usado em conjunto com um gerador climático diário (p.ex., LARS-WG) para ancorar a média de 10 min no futuro; as estatísticas futuras para cada agregação são então derivadas via essas regressões (covariância e assimetria podem ser herdadas do clima atual quando a sensibilidade é fraca e faltam relações estáveis). Com esse conjunto estatístico, o modelo é calibrado e gera séries sub-horárias futuras preservando propriedades observadas e extremos em ampla faixa temporal. Os autores observaram que o WayDown tende a reproduzir melhor a mediana das estatísticas, enquanto o LetItRain fornece maior variabilidade de cenários. Ambos podem superestimar extremos até certo limiar e subestimar acima dele, explicitando o trade-off entre conservação de massa diária e liberdade estatística intradiária.
 
 3.  **Modelos Baseados em Invariância de Escala / Autossemelhança / Fractais**
 
-A formação conceitual da invariância de escala em séries hidroclimáticas desponta em Mandelbrot & Wallis (1968), que evidenciaram variabilidade multiescalar e dependência de longa duração ao reexaminar o efeito de Hurst. Na atmosfera, Lovejoy & Schertzer (1985; 1986) formalizaram a invariância de escala generalizada e os modelos multifractais para campos precipitação/atmosfera, estabelecendo uma descrição matemática da autossimilaridade e da multiescala. Em hidrologia, essa base foi trazida para a prática por Koutsoyiannis & Foufoula-Georgiou (1993), ao um modelo de *simple scaling* para a intensidade intra-tempestade que, analítica e empiricamente, reproduz de forma consistente hietogramas de diferentes durações/profundidades com poucos parâmetros. Esse modelo é coerente com as curvas de massa usadas em projeto, ao contrário de modelos estacionários de intensidade, que não capturam essa dependência com a duração. Ainda, Burlando & Rosso (1996) mostraram que as formas empíricas de IDF/DDF são manifestações macroscópicas de propriedades de escala (simple e multiescala).
+A ideia de invariância de escala em séries hidroclimáticas consolidou-se com Mandelbrot & Wallis (1968), ao reinterpretar o efeito de Hurst como auto-semelhança estatística: reescalando o tempo, certas estatísticas preservam a forma por leis de potência. Para agregações de tamanho $s$ vale $\mathrm{Var}[X_s]\propto s^{2H}$ e o estatístico rescaled-range satisfaz $R/S \propto s^{H}$, com $0.5<H<1$ indicando dependência de longa duração. No domínio espectral, a densidade segue aproximadamente $S(f)\sim f^{-\beta}$ com $\beta=2H-1$, e no domínio do tempo a autocovariância decai como lei de potência $\gamma(k)\sim k^{2H-2}$. Essa estrutura é compatível com modelos auto-semelhantes (p.ex., movimento browniano fracionário/ruído fracionário) e implica variabilidade multiescalar persistente.
 
-Historicamente, muitas curvas IDF foram obtidas ajustando-se, para cada duração 𝐷, uma distribuição aos máximos (AMAX) e, em seguida, uma fórmula IDF aos quantis resultantes, de forma independente por duração.  A implementação é simples e difundida; porém, esse procedimento “duração a duração” propaga incertezas e pode introduzir incoerências físicas, como oscilações locais e interseções entre curvas de durações distintas  (Koutsoyiannis et al., 1998).  Para contornar essas limitações, Koutsoyiannis et al. (1998) propuseram uma formulação unificada, coerente com a teoria de extremos e com restrições de escala entre durações.  Em paralelo, Menabde et al. (1997; 1999) mostraram que a variação estatística com a duração pode ser expressa por relações de escala, incluindo cascatas aleatórias e *simple scaling* para extremos, abrindo caminho para um arcabouço fractal na construção de IDFs.
+Lovejoy & Schertzer (1985) formulam a invariância de escala generalizada (GSI), na qual as estatísticas atmosféricas em diferentes escalas se relacionam por uma transformação de ampliação anisotrópica com estratificação e rotação, e não por autossemelhança isotrópica simples. Dessa formulação decorre como resultado central a lei espectral de potência
 
-Consolidando esse avanço, Gupta & Waymire (1999) estabeleceram a base teórica do multiescalonamento (*multiscaling*) em hidrologia ao demonstrar que (i) momentos de precipitação espacial e vazões exibem linearidade em gráficos log–log com a escala e que (ii) a inclinação desses gráficos varia de forma côncava com a ordem do momento. Para explicar tais regularidades, propuseram uma classe de processos multiplicativos contínuos com invariância das distribuições sob reescalonamento aleatório, caracterizando o multiescalonamento em sentido estrito. Esse arcabouço fornece o fundamento matemático de modelos multifractais/cascatas aplicados posteriormente à chuva e à vazão e sustenta, de modo formal, extensões além do *simple scaling*.
+$$
+E(k)\propto
+k^{-\beta}\quad\text{com}\quad \beta=2H+1
+$$
 
-O princípio matemático central é que momentos de intensidades (ou acumulados) escalam com a duração segundo leis de potência. Seja 𝐼(𝑑) a intensidade média em duração 𝑑; então:
+a qual vincula diretamente o expoente espectral $\beta$ ao expoente de escala $H$ e organiza a variabilidade multiescala da chuva. Essa anisotropia é formalizada por uma métrica elíptica de dimensão efetiva intermediária, explicando a ocorrência de bandas e aglomerados em múltiplas escalas. Lovejoy e Schertzer (1986) consolidam a GSI ao mostrar que a anisotropia gravitacional persiste em todas as escalas, de modo que as estruturas tornam-se mais “achatadas” com o aumento de escala, mas nunca estritamente bidimensionais.
 
-$\mathbb{E}[I(d)^q] \propto d^{\kappa(q)}$
+Em hidrologia, essa base foi trazida para a prática por Koutsoyiannis & Foufoula-Georgiou (1993), ao proporem um modelo de escala simples para a intensidade intra-tempestade que, analítica e empiricamente, reproduz de forma consistente hietogramas de diferentes durações/profundidades com poucos parâmetros. O artigo propõe um modelo de escalonamento para hietogramas de episódios chuvosos em que a intensidade instantânea $s(t,D)$ dentro de um episódio de duração $D$ é auto-semelhante:
 
-onde κ(q) é uma função do momento de ordem q. No caso mais simples (*simple scaling*), κ(q) é uma função linear de q, o que implica que a relação estatística entre diferentes escalas de tempo pode ser descrita por um único expoente de escala. Esta propriedade sugere que os processos que governam a chuva exibem uma forma de auto-semelhança onde o padrão observado em uma escala se repete estatisticamente em outras escalas. Em multiescala/multifractalidade, 𝜅(𝑞) é côncava e não linear, permitindo que diferentes regimes (chuvas fracas/fortes) escalem de forma distinta (Burlando & Rosso, 1996; Menabde et al., 1999; Nguyen, 2004).
+$$
+\{s(t,D)\}\
+\overset{d}{=}\ A^{-H}\,s(At,AD)
+$$
 
-A fusão do princípio de escala com a Teoria dos Valores Extremos (EVT) produz os modelos GEV-scaling (ou GUM/GEV com scaling). A GEV para máximos anuais tem função de distribuição
+ou, de forma equivalente,
+
+$$
+\{s(t,D)\}\
+\overset{d}{=}\ D^{H}\,s\!\left(\tfrac{t}{D},1\right)
+$$
+
+(\$H\$ aqui é o expoente intra-evento; distinto do “H de Hurst” global). Daí seguem leis de potência para os momentos: a média da intensidade escala como $E[s]=c_1 D^{H}$ e a covariância como $D^{2H}$ vezes uma função do defasagem normalizada $r/D$. Para o acumulado $h(t,D)=\int_0^{t}s\,\mathrm{d}u$, a auto-semelhança tem expoente $H+1$, implicando
+
+$$
+E[h(D,D)]=c_1 D^{H+1},Var[h(D,D)]=c_2 D^{2(H+1)}
+$$
+
+de modo que o coeficiente de variação do total do episódio é constante com $D$. Para a desagregação em passo fixo $\Delta$, os incrementos $\Delta(i,D)=\int_{(i-1)\Delta}^{i\Delta}s\,\mathrm{d}u$ herdam o escalonamento: $E[X_\Delta]=c_1\,(\Delta/D)\,D^H$ e $\mathrm{Var}[X_\Delta]\propto D^{2(H+1)}$ vezes uma função de $\rho=\Delta/D$ . Desta forma, a autocorrelação dos incrementos depende apenas de $\rho$ (e do lag normalizado), não de $D$ nem de $H$. Esse modelo é coerente com as curvas de massa usadas em projeto, ao contrário de modelos estacionários de intensidade, que não capturam essa dependência com a duração.
+
+Burlando & Rosso (1996) constroem um arcabouço para curvas profundidade–duração–frequência (DDF) a partir da hipótese de invariância de escala. A ideia central é estimar conjuntamente (i) o expoente de escala $n$ que governa a média e (ii) uma função de dissipação $\psi_\zeta$ que descreve o crescimento dos momentos de ordem $\zeta$ (multiescala), primeiro em um esquema livre de distribuição e, em seguida, com uma modelagem lognormal (LN2) parcimoniosa.
+
+No caso de escala simples (wide-sense) entre um corte interno $T_i$ e as durações $T$ de interesse, a média e a variância de máximos anuais obedecem leis de potência de $T$; disso decorre que o coeficiente de variação e, mais geralmente, os momentos adimensionais (assimetria e curtose) não dependem de $T$. Esse resultado leva a uma família invariante à escala de DDF:
+
+$$h_q(T)=a_1\left(1+V K_q\right)\,T^n$$\
+em que $K_q$ é o fator de crescimento de frequência e $a_1,V,n$ são parâmetros de escala (com $a_1$ relacionado ao nível de referência $T_i$). Além disso, os autores mostram como a prática comum de ajustar $h_q(T)=A_q T^{m_q}$ pode ser fundamentada: sob escala simples estrita, o expoente $m_q$ não deve depender de $q$, pois os quantis escalam como os momentos.
+
+Como os dados reais frequentemente exibem multiescalamento, Burlando & Rosso (1996) introduzem a função de dissipação $\psi_\zeta$​ e especializam o arcabouço com a distribuição lognormal (LN2). Para LN2, os autores demonstram que $\psi_\zeta$​ é convexa (condição necessária à dissipação) e derivam expressões fechadas para $\mu_{\ln H_T}$​​ e $\sigma_{\ln H_T}$​, que implicam uma forma multiescalar explícita para $h_q(T)$. No limite $\varphi_2\!=\!1$, o modelo multiescalar degenera para a forma de escala simples acima, garantindo consistência. Esses vínculos de escala impõem consistência entre durações, o que é diretamente útil à desagregação temporal.
+
+Menabde et al. (1997) formalizam a invariância de escala da chuva em termos de leis de potência para segunda ordem e para famílias de momentos. Para um campo unidimensional $R(t)$, assumindo estacionariedade de segunda ordem, adotam-se $C(\tau) \propto \tau{-\mu}\quad\text{e}\quad E(f) \propto f{-\beta}$, com $C$ a autocorrelação e $E$ o espectro; em séries pluviométricas observadas é frequente $\beta>1$, fato que os cascatas multiplicativas não-limitadas (p.ex., o $\alpha$-model canônico) não reproduzem diretamente. Para caracterizar multiescalamento, utilizam-se ainda os expoentes $K(q)$ e $\zeta(q)$: $\langle g_t(\tau)q\rangle \propto (t/T){-K(q)}, \qquad \langle|R(t+\tau)-R(t)|{,q}\rangle \propto (\tau/T){,\zeta(q)}$, ligados pela relação teórica $K(q)+\zeta(q)=\zeta(1)$. Como $\beta>1$ pode impedir o escalonamento direto dos momentos do campo “bruto”, recomenda-se estimar $\zeta(q)$ em gradientes absolutos ou aplicar um filtro lei-de-potência antes de $K(q)$. Para contornar a limitação $\beta<1$ dos modelos não-limitados, os autores introduzem uma cascata $\alpha$ limitada em que os pesos $W_k$​ dependem do nível $k$, convergem a 1 nas escalas finas e mantêm $\mathbb{E}[W_k]=1$. Essa construção conserva a média e leva assintoticamente a $\beta \to 1+2H$. Os parâmetros são estimados via o cociente de segundos momentos $F_n=M_{n+1}/M_n$​, que obedece
+
+$$log_2(F_n-1)=c-2nH$$permitindo extrair $H$ (declive) e $p_1$​ (intercepto). Ajustada a dados de alta resolução, a cascata reproduz $\beta>1$, a curva $K(q)$ e a intermitência observada, gerando séries sub-horárias realistas. Para desagregação temporal, essa cascata funciona como gerador multiescala que preserva a estrutura de potência entre escalas ($\beta, K(q), \zeta(q)$) e pode ser condicionada a totais na escala superior por ajuste proporcional; ao contrário das cascatas não-limitadas, dispensa pós-filtragem para corrigir $\beta$.
+
+Koutsoyiannis et al. (1998) estabelecem um arcabouço matemático para IDF que separa, de forma teoricamente consistente, a dependência em duração e em frequência. Propõem a relação geral
+
+$$i(T,d)=\frac{a(T)}{b(d)}$$
+
+com uma forma parsimoniosa para a componente de duração
+
+$$
+b(d)=(d+\theta)^{\eta},\qquad
+\theta>0,\;0<\eta<1
+$$
+
+a qual garante monotonicidade do acumulado $h=i\,d$ e evita interseções entre curvas para diferentes $T$. Mostram ainda que termos adicionais no denominador são desnecessários $(b(d)=(d+\theta)^{\eta})$ com erro de aproximação pequeno), e que $\eta$ e $\theta$ podem ser mantidos constantes em $T$, deixando toda a dependência de frequência para $a(T)$.
+
+A componente de frequência é derivada diretamente da distribuição dos máximos, evitando formas empíricas. Definem $Y:=I(d)\,b(d)$ e obtêm
+
+$$
+a(T)=F_Y^{-1}(1-1/T)
+$$
+
+de modo que $a(T)$ coincide com o quantil de ordem $1−1/T$ da variável $Y$. Para a Gumbel:
+
+$$
+a(T)=\Xi\Big\{\phi-\ln\!\big[-\ln(1-1/T)\big]\Big\}
+$$
+
+enquanto para a GEV obtém-se
+
+$$
+a(T)=X'\Big\{\phi'+\big[-\ln(1-1/T)\big]^{-\xi}\Big\}
+$$
+
+sendo $(\Xi,\phi)$ e $(X',\phi',\xi)$ parâmetros de escala/localização (e forma, na GEV).
+
+Quanto à estimação, os autores propõem um procedimento robusto em duas etapas: primeiro, estimam $\eta$ e $\theta$ maximizando a identidade de distribuição entre os grupos $Y_j=I(d_j)\,b(d_j)$; depois, ajustam os parâmetros da distribuição escolhida para $Y$ e computam $a(T)$ via o quantil teórico. Esse desenho evita a subjetividade de ajustar $a(T)$ por formas empíricas e é compatível com a formulação separável acima.
+
+Em termos de consistência multiescala e desagregação temporal, o formato separável $i(T,d)=a(T)/(d+\theta)^{\eta}$ atua como uma lei de escala em duração: preservar $\eta$ e $\theta$ ao longo de $T$ impõe coerência entre durações e fornece uma referência para algoritmos de downscaling condicionados por totais na escala superior (p.ex., ajuste proporcional), pois a mesma função $b(d)$ controla a transferência dos máximos entre escalas.
+
+Menabde et al. (1999) aplicam a hipótese de simples escala à descrição IDF dos máximos anuais da intensidade média de chuva em janela de duração $d$. Seja $I_d$​ o máximo anual da média móvel $R_d(t)=\frac{1}{d}\int_{t-d/2}^{t+d/2}R(u)\,du$. A escala simples em sentido estrito é postulada como
+
+$$
+I_d\ \overset{d}{=}\
+\left(\frac{d}{D}\right)^{-\eta}\,I_D
+$$
+
+o que implica, em termos de distribuição acumulada,
+
+$$
+F_d(i)=F_0\!\left(\left(\frac{d}{D}\right)^{\eta}i\right)
+$$
+
+e, em sentido amplo, momentos que satisfazem
+
+$$
+\mathbb{E}\!\left[I_d^{\,q}\right]=f(q)\,d^{-\eta
+q}
+$$
+
+Nessa estrutura, ao assumir que a CDF dos extremos tem forma padronizada $F\!\left(\frac{i-\mu_d}{\sigma_d}\right)$ (p.ex., EV1/Gumbel), os parâmetros locação e escala obedecem leis de potência em $d$, $\mu_d\propto d^{-\eta}$ e $\sigma_d\propto d^{-\eta}$, e a relação IDF resultante é
+
+$$
+i(d,T)=\frac{\mu_d-\sigma_d\;\ln\!\big\{-\ln(1-1/T)\big\}}{d^{\,0}}\;=\;\frac{\mu-\sigma\,\ln\!\big\{-\ln(1-1/T)\big\}}{d^{\,\eta}}
+$$
+
+válida, empiricamente, de 30 min a 24 h (e, em alguns casos, até 48 h). Além disso, para fixo $T$, os quantis escalam entre durações por
+
+$$
+i_d(T)=\left(\frac{d}{D}\right)^{-\eta}i_D(T)
+$$
+
+As verificações com as séries mostram linearidade log–log dos momentos e dos parâmetros $(\mu_d,\sigma_d)$ com declives consistentes $(\eta\approx 0,65–0,780)$; a Gumbel ajusta bem as CDFs dos máximos ao longo das durações na faixa de escala observada. Como $i_d(T)$ e $(\mu_d,\sigma_d)$ obedecem leis de potência em $d$, pode-se transferir quantis entre durações sem recorrer a geradores complexos: estima-se $(\mu,\sigma)$ em 24 h a partir de séries diárias longas, estima-se $\eta$ com uma curta série subdiária local/regional, e então obtêm-se quantis para $d<24$ via $i_d(T)=(d/24\mathrm{h})^{-\eta}i_{24\mathrm{h}}(T)$ ou diretamente pela fórmula IDF acima. Essa coerência multiescala fornece um mapeamento determinístico útil para downscaling de extremos de durações subdiárias a partir de informação diária, mantendo a consistência entre durações exigida por DDF/IDF baseadas em invariância de escala.
+
+Consolidando esse avanço, Gupta & Waymire (1999) estabeleceram a base teórica do multiescalonamento (*multiscaling*) em hidrologia ao demonstrar que (i) momentos de precipitação e vazões exibem linearidade em gráficos log–log com a escala $\lambda$ e que (ii) a inclinação desses gráficos varia de forma côncava com a ordem do momento ($h$). Em escala simples (wide sense), os momentos condicionados seguem
+
+$$
+\log
+m_h(\lambda)=a_h+\,\theta_h\,\log \lambda
+$$
+
+onde $m_h(\lambda)$ é o momento de ordem $h$ da precipitação acumulada, $a_h$ é intercepto logarítmico na lei de escala simples e $\theta_h$ é o expoente de escala. No multiescalamento (wide sense) a relação geral é
+
+$$
+\log
+m_h(\lambda)=s(h)\,\log \lambda+\log m_h(1)
+$$
+
+com $s(h)$ não linear e côncava, capturando a intensificação de variabilidade ao ir para escalas menores e implicando irreversibilidade de escala (a lei vale para \$\\lambda\<1\$, mas não simultaneamente para \$\\lambda\>1\$). Esse arcabouço fornece o fundamento matemático de modelos multifractais/cascatas aplicados posteriormente à chuva e à vazão e sustenta, de modo formal, extensões além da escala simples.
+
+A fusão do princípio de escala com a Teoria dos Valores Extremos (EVT) produz os modelos GEV-scaling (ou GUM/GEV com scaling). Nguyen et al. (1998) introduzem uma metodologia para estimar extremos de curta duração (p.ex., 1 h) em locais com dados apenas de duração mais longa (p.ex., diário), ancorada em invariância de escala e na distribuição GEV dos máximos. A noção de escala simples é formulada pela relação de escalonamento
+
+$$
+f(x)=C(\lambda)\,f(\lambda
+x)\;\;\Rightarrow\;\;f(x)=x^{\beta(k)}f(1)
+$$
+
+Observe que, se o expoente $\beta(k)$ não for uma função linear de $k$, nesses casos diz-se que o processo apresenta multiescalamento (“multiscaling”). Na prática, trabalha-se com séries de máximos anuais em várias durações e verifica-se regressão linear log–log dos momentos vs. duração para identificar o(s) regime(s) de escala.
+
+A GEV é adotada para modelar a distribuição dos máximos com parâmetros de localização $\mu$, escala $\sigma$ e forma $\xi$)
 
 $$ G(z;\mu,\sigma,\xi) = \exp\left( -\left[1+\xi\,\frac{z-\mu}{\sigma}\right]^{-1/\xi} \right), \qquad 1+\xi,\frac{z-\mu}{\sigma}>0,  \sigma>0. $$
 
-com parâmetros de localização 𝜇, escala 𝜎 \> 0 e forma 𝜉 (Coles, 2001).
+A distribuição de valores extremos generalizada (GEV) tem se mostrado capaz de modelar bem os máximos anuais de precipitação. Estudos como o de Nguyen et al. (1998) combinaram GEV e a invariância para estimar para estimar a distribuição de precipitações extremas de curta duração (por exemplo, 1 hora) em locais onde não existem dados para o intervalo de tempo de interesse, mas onde há disponibilidade de dados de precipitação de maior duração (por exemplo, 1 dia), caracterizando os chamados locais parcialmente monitorados.
 
-A distribuição de valores extremos generalizada (GEV) tem se mostrado capaz de modelar bem os máximos anuais de precipitação. Estudos como o de Nguyen et al. (1998) combinaram GEV e a invariância para estimar para estimar a distribuição de precipitações extremas de curta duração (por exemplo, 1 hora) em locais onde não existem dados para o intervalo de tempo de interesse, mas onde há disponibilidade de dados de precipitação de maior duração (por exemplo, 1 dia), caracterizando os chamados locais parcialmente monitorados. Yu et al. (2004) formularam equações regionais baseadas na invariância de escala da precipitação, como a maioria dos parâmetros nas fórmulas de escalonamento IDF pode ser estimada a partir das séries anuais de máximos diários de 1 dia, esses parâmetros foram regionalizados com base na relação entre o expoente de escala e a média das precipitações máximas anuais de 1 dia. Borga et al. (2005) aplicam *simple scaling* a máximos anuais em múltiplas durações para derivar DDF regionais numa região alpina do NE da Itália (rede densa de postos), usando Gumbel. Mostram que, para durações \< 60 min, as razões profundidade–duração (t vs. 60 min) são praticamente independentes do período de retorno e da localização, facilitando transferência entre durações e regionalização. Langousis & Veneziano (2007) estimam IDFs com três modelos de invariância de escala multifractal local: um processo interior multifractal para as flutuações de alta frequência (intra-tempestade) e um exterior para as grandes escalas. A calibração usa apenas marginais/momentos por duração, resultando em poucos parâmetros, robustez a outliers e uso com séries curtas. Em 24 anos de dados de Florença, os modelos reproduziram as IDFs e extrapolaram bem para grandes T.
+Em Yu et al (2004), a desagregação estatística de extremos é estruturada sobre o princípio de invariância de escala simples (Menabde et al., 1999), já estabelecido na literatura de escalonamento de máximos: se $I_d$​ é o máximo anual de intensidade na duração $d$, então $I_{\ell d}\overset{d}{=}\ell^{\,b}I_d$​, com $b$ o expoente de escala (tipicamente negativo). Com base nessa formulação, os autores ajustam EV1/Gumbel pelo método dos momentos ponderados por probabilidade (PMW) na duração de referência (24 h ou 1 dia), estimando os parâmetros de localização e escala $(m_d,a_d)$ e transportando-os entre durações pela mesma lei de potência,$m_{\ell d}=\ell^{\,b}m_d$ e $a_{\ell d}=\ell^{\,b}a_d$; como consequência, os quantis por período de retorno $i_T(d)=m_d+a_d\,\hat y$​ (com $\hat y=-\ln\{-\ln(1-1/T)\}$) escalam como $i_T(\ell d)=\ell^{\,b}i_T(d)$, permitindo estimar extremos sub-diários mesmo quando só há dados diários longos na base. Os autores quantificam a diferença sistemática entre máximos de 24 h e de 1 dia de calendário e introduzem um fator de correção único $d_c\approx1{,}112$ para transportar $(m,a)$ e quantis entre essas duas bases, viabilizando o uso direto de séries diárias. Em seguida, mostram que o escalonamento é por trechos e incorporam pontos de ruptura (4 h ou 8 h), com continuidade garantida pela transformação dos parâmetros de 24 h para 4 h ou 8 h antes de prosseguir o reescalonamento. Por fim, classificam as estações em regiões homogêneas de escala e regionalizam o expoente $b$ como função de uma variável climática simples, como a média do máximo anual diário, resultando em fórmulas IDF piecewise e escaláveis que podem ser aplicadas onde só há chuva diária. \### LEVAR PARA A REGIONALIZAÇÃO
 
-Outros estudos expandiram essas aplicações. Blanchet et al. (2016) desenvolveram uma estrutura regional para máximos anuais GEV com invariância de escala entre durações, permitindo estimar IDFs mesmo onde só há dados diários. Em paralelo, Ghanmi et al. (2016) utilizaram momentos ponderados pela probabilidade (PWM) em um enquadramento regional para a curva IDF, explorando a robustez dos PWMs a caudas pesadas e sua boa performance em amostras curtas. Innocenti et al. (2017) avançaram na análise da variabilidade espacial dos expoentes de *simple scaling* com base em escalas de momentos, quantificando como o expoente de escala muda no espaço e destacando implicações para transferência/interpolação de relações IDF. Sane et al. (2018), por sua vez, confirmaram um regime único de *simple scaling* para extremos na África tropical, mostrando que um único expoente pode explicar, com boa aderência, a dependência com a duração em múltiplos sítios, o que reforça a parcimônia do SS nessa região.
+Borga et al. (2005) aplicam a invariância de escala a séries de máximos anuais de profundidade de chuva em múltiplas durações para derivar uma DDF simples em rede densa nos Alpes italianos. Partem da relação de escala simple em sentido estrito para o máximo anual de duração $D$, $H(D)$:
 
-Van de Vyver (2018) propõe um modelo IDF multiescala que generaliza o *simple scaling*. ao admitir expoentes de escala distintos para μ (posição) e σ (escala) dos máximos anuais, mantendo GEV como lei de extremos. A estimação e seleção ocorrem em um framework Bayesiano, com critérios de comparação que indicam melhor desempenho e controle de complexidade (sem *overfitting*) em relação ao *simple scaling* quando os dados sugerem comportamento multiescala. Cannon & Innocenti (2018) avaliam mudanças projetadas em IDFs na América do Norte usando com base em dados subdiários e diários de simulações de modelos climáticos *convection-permitting* sob pseudo-aquecimento global para os períodos histórico e final do século XXI. Para contornar integrações curtas, aplicam um modelo GEV *simple scaling* (GEVSS) para 1–24 h, validam os extremos sub-horários simulados contra observações *in situ* e dois produtos em grades de alta resolução, e inferem mudanças nos parâmetros via Taxa de Descobertas Falsas Bayesiana (FDR Bayesiana). Encontram aumentos significativos e extensos na localização (\>99% dos pontos), escala (\>88%) e no expoente de escala (\>39%), resultando em IDFs mais altas e, em geral, mais íngremes (maiores ganhos em durações curtas; exceções relativas no leste dos EUA). Courty et al. (2019). apresentam o primeiro conjunto global de parâmetros GEV para 1–360 h em \~31 km de resolução (PXR-2) e mostram que 𝜇 e 𝜎 escalam de forma robusta com a duração (R² \> 0,88). Com base nisso, propõem uma fórmula IDF universal (PXR-4) e verificam, com ERA5 e pluviômetros MIDAS (Reino Unido e cidades globais), que as intensidades estimadas ficam ±20% das de PXR-2 para 2–360 h. Para estabilizar extrapolações, adotam 𝜅 = −0,114 (parâmetro de forma da GEV) globalmente, apoiados em evidências de que esse valor é praticamente independente de duração e localização.
+$$
+H(kD)\
+\overset{d}{=}\ k^{\,n}\,H(D)
+$$
 
-Ainda, Mascaro et al. (2020) avaliam como a densidade da rede condiciona IDFs, usando 223 estações subdiárias no Arizona, AMAX de 30 min–24 h e cinco modelos GEV (dois locais, um regional, dois de *scaling*). A validação via *cross-validation* com *bootstrap* de Monte Carlo compara acurácia e incerteza sob cenários de disponibilidade (𝑁𝑡,𝑁24ℎ). Até 𝑇≈30 anos, os modelos têm desempenho semelhante; com 𝑁𝑡\>10, esquemas locais/regionais são mais acurados. Quando 𝑁𝑡≤5 e 𝑁24ℎ≥10, *simple scaling* reduz substancialmente a incerteza ao transferir informação diária para durações menores. Para extrapolações a grandes 𝑇, recomenda-se corrigir o viés em 𝜉.  Yeo et al. (2021) avaliaram três métodos de ajuste GEV baseados em invariância de escala para desagregar máximos anuais diários em resoluções subdiárias (5 a 60 minutos). Benestad et al. (2021), por sua vez, testaram uma fórmula simples de IDF com apenas um parâmetro (𝜁), derivada de princípios e aproximações matemáticas e calibrada em 14 sítios de Oslo (níveis de retorno de 10 anos) e validada em estações independentes na Noruega. A abordagem usa somente dados de 24 h como entrada e atua como um downscaling temporal por lei de potência entre escalas.
+onde $k>0$ é o fator de reescala temporal, $n$ o expoente de escala. Sobre essa base, os autores formulam uma DDF Gumbel escalável. Para Gumbel (EV1), o quantil de período de retorno $T$ na duração $d$ é
 
-Apesar do embasamento teórico consolidado há décadas (Burlando & Rosso, 1996), impedimentos práticos, sobretudo a escassez de dados de longa duração, limitaram aplicações regionais por muito tempo.  Barbosa e Costa (2023) discutem o uso de modelos de *simple scaling* apoiados na teoria de valor extremo e em leis de escala, ressaltando sua parcimônia e maior precisão em estimativas de precipitações intensas de curta duração. Em contexto brasileiro, Rodrigues et al. (2023) discutiram uma relação regional de IDF baseada no princípio de invariância de escala e a aplicaram a postos monitorados da região metropolitana de Belo Horizonte. Os resultados mostraram que um único expoente regional de escala, obtido a partir da média das estimativas em postos de treinamento, foi suficientemente preciso (erro absoluto médio de 15%) para descrever o comportamento probabilístico de chuvas extremas em diversas durações subdiárias. Além disso, as estimativas de quantis derivadas do modelo apresentaram desempenho semelhante ao de métodos de regionalização mais complexos, indicando que o princípio de invariância de escala pode ser uma ferramenta parcimoniosa e eficaz para a análise de frequência de chuvas extremas em áreas com escassez de dados.
+$$
+h_T(d)=\lambda(d)\Big[1-\tfrac{CV(d)}{\sqrt{6}}\big(\gamma+y_T\big)\Big],
+\quad y_T=\ln\!\ln\!\frac{T}{T-1}
+$$
 
-Mais recentemente, Wang et al. (2024) aplicaram um modelo unificado de intensidades extremas no Reino Unido, integrando registros diários, fatores geográficos e regiões homogêneas de precipitação, utilizando a distribuição Gumbel (EV1). Em conjunto, esses estudos consolidam a invariância de escala como uma ferramenta robusta e versátil para análise e regionalização de IDFs. Gnecco et al. (2023) propõem um arcabouço metodológico para definir IDFs em durações sub-horárias, introduzindo formas híbridas: uma com curvatura no domínio sub-horário e uma lei de potência para o domínio super-horário, de modo a maximizar a informação conjunta das duas faixas. As propostas são comparadas a duas formas clássicas (potência pura e curvatura derivada) calibradas apenas com dados \> 1 h. Ao considerar explicitamente a diferença de comprimento amostral entre séries sub-horárias e canônicas, os modelos híbridos capturam diferenças de comportamento entre domínios e fornecem o melhor indicador de confiabilidade nos períodos de retorno analisados. Creaco (2024) propõe modelos de escala que produzem uma única IDF válida de \<1 h a 24 h, com o conceito de “durações de projeto ajustadas” para fazer a invariância de escala (simples e múltipla) aderir melhor aos dados. A parametrização em duas fases busca iterativamente o tamanho do ajuste, obtém os demais parâmetros em cascata e depois refina por otimização local, acomodando níveis de confiança distintos conforme o comprimento amostral em cada duração. Em quatro estudos de caso europeus (Helsingborg, Frauenwald, Pavia e Erice), a estrutura ajustou bem os quantis de extremos abaixo e acima de 1 h, oferecendo alternativa parcimoniosa quando o *simple scaling* puro apresenta desvios e aproximando o desempenho ao de modelos multiescala.
+onde $\lambda(d)=\mathbb{E}[H(d)]$ é a média na duração $d$, $CV(d)$ é o coeficiente de variação, $\gamma\simeq0{,}5772$ é a constante de Euler e $y_T$ é a variável reduzida de Gumbel. Substituindo as leis de escala $\lambda(d)=a_{1},d^{,n}$ e $CV(d)=CV$ obtém-se a DDF de simple scaling
+
+$$
+h_T(d)=a_{1}\Big[1-\tfrac{CV}{\sqrt{6}}\big(\gamma+y_T\big)\Big]\,d^{\,n}
+$$
+
+Os autores mostram que, para durações \< 60 min, as razões profundidade–duração (t vs. 60 min) são praticamente independentes do período de retorno e da localização, facilitando transferência entre durações e regionalização. Ainda, para validar regionalmente as curvas geradas por krigagem dos parâmetros, empregam ainda um teste de excedências por quantis-alvo (à la Buishand): contam excedências observadas de $h_T$ e comparam com o número esperado $( 1 / 𝑇 )$ por estação-ano. Esses dois elementos, regionalização via krigagem dos parâmetros de uma DDF escalável e validação por contagem de excedências, constituem as inovações do trabalho ao arcabouço de escala já existente.
+
+Em contraste com as formulações paramétricas clássicas de IDF e com usos diretos de Gumbel/GEV, Langousis & Veneziano (2007) constroem as curvas IDF a partir de modelos de chuva localmente multifractais, nos quais a dependência em duração e em frequência emerge do próprio gerador estocástico e não é imposta por uma forma IDF pré-definida. A inovação central é a decomposição em processo exterior (escala de “episódio” $D$) e processo interior multifractal beta-lognormal, com função de momentos $K(q)=C_b\,(q-1)+C_{\ln}\,(q^2-q)$. Em vez de ajustar extremos anuais por uma distribuição de valores extremos e depois “dar forma” à IDF, os autores estimam os parâmetros $(C_b,C_{\ln})$ e do exterior $(D,I_D)$, e derivam os quantis $i_{d,T}$​ via a distribuição do máximo $M_d$​ no interior de $D$, usando a fatoração de “dressing” $I_d \overset{d}{=} I_D^{0}\,A_{r_Z}$​​ e aproximações analíticas para o fator $Z$, o que permite calcular $i_{d,T}$​ sem Monte Carlo pesado e sem supor separabilidade estrita em $d$ e $T$. Diferentemente de abordagens que regionalizam quantis ou ajustam formas IDF por potência, o trabalho apresenta três variantes com crescente parcimônia para o processo exterior: (i) “tempestades” i.i.d. com $D$ e intensidade média $I_D$​ aleatórias; (ii) janelas contíguas de duração fixa $D$ com intensidade aleatória; e (iii) $D$ e $I_D$​ determinísticos, deixando toda a variabilidade para a cascata multifractal. Em aplicação a 24 anos de dados contínuos de Florença, as IDFs resultantes são robustas a outliers e estáveis com séries curtas (segmentos de 4 anos), além de reproduzirem curvaturas log–log observadas sem exigir pós-ajustes espectrais, algo que diferencia nitidamente esse enquadramento multifractal de métodos paramétricos e de IDFs de escala simples usadas anteriormente.
+
+Outros estudos expandiram essas aplicações. Blanchet et al. (2016) propõem um enquadramento regional de curvas IDF em que os máximos de precipitação agregados em duração $D$ seguem uma GEV cujos parâmetros obedecem a um escalonamento simples ao longo de $D$. As duas hipóteses‐chave são: (i) extremos diários são GEV (justificado por EVT) e (ii) máximos agregados em durações dentro de um intervalo “escala‐invariante” satisfazem relações de potência. A partir disso, escrevem um modelo GEV em que, tomando uma duração de referência $D_0$​, a localização e a escala variam como
+
+$$
+\mu_D=\Big(\tfrac{D}{D_0}\Big)^{-H}
+\, \mu_0,\qquad \sigma_D=\Big(\tfrac{D}{D_0}\Big)^{-H} \, \sigma_0
+$$
+
+enquanto a forma permanece constante $\xi_D = n$. Aqui $H$ é o expoente de escala (declive log–log dos parâmetros vs. duração), $\mu_0$ e $\sigma_0$ são, respectivamente, a localização e a escala na duração $D_0$, $n$ é o parâmetro de forma comum a todas as durações e $D$ é a duração alvo. Esse modelo é calibrado localmente com séries de máximos diários agregados até semana, no intervalo onde a suposição de simples escalonamento é suportada pelos dados. Em seguida, os vetores $(H,\mu_0,\sigma_0,n)$ são espacializados para produzir um modelo regional, permitindo construir IDFs de diferentes durações. Um ponto metodológico importante é a estimação conjunta, por máxima verossimilhança, dos quatro parâmetros por estação, assumindo independência entre durações, com correção tipo *sandwich* para a variância assintótica sob verossimilhança. Os autores corrigem o efeito da frequência de medição ao passar de máximos diários (1/24 h) para máximos horários (1/h). Eles discutem duas rotas: (a) um fator de Hershfield $a(D)≥1$, que implica
+
+$$
+I^{(1)}_D
+\overset{d}{=} a(D)\, I^{(24)}_D
+$$
+
+e (b) uma correção de EVT à la Robinson–Tawn que liga diretamente as funções de distribuição,
+
+$$\Pr\{I^{(1)}_D\le
+x\} \approx \Pr\{I^{(24)}_D\le x\}^{\,a(D)}
+$$
+
+onde $I^{(24)}_D$​ e $I^{(1)}_D$​ são os máximos com frequência de amostragem de \$1/24\$ h e \$1\$ h, respectivamente, e $a(D)$ depende dos índices extremos das duas séries. Ao incorporar $a(D)$ nos parâmetros da GEV horário, o modelo se afasta do simples escalonamento e passa a reproduzir sistematicamente o ganho de intensidade quando a janela de medição é afinada, habilitando IDFs horárias mesmo com rede horária muito esparsa.
+
+Em paralelo, Ghanmi et al. (2016) utilizaram a invariância de escala simples em séries de máximos anuais de intensidade para durações de 5 min a 24 h em 15 pluviômetros no norte da Tunísia, combinando-a com GEV–EV1 (Gumbel) e PWMs para construir IDF e, em seguida, IDAF regionais usando a rede diária muito mais densa. A hipótese central é o escala simple para intensidades máximas $I_d$​ entre uma duração alvo $d$ e uma duração de referência $D$ (típico: $D=24 h$):
+
+$$
+I_d \overset{d}{=}
+k^{\,\kappa} I_D,\qquad k=\frac{d}{D}
+$$
+
+o que implica, para momentos (ou PWMs) de ordem $q$, $\mathbb{E}[I_d^{\,q}] = k^{\,\kappa(q)}\mathbb{E}[I_D^{\,q}]$ e, em escala simples, $\kappa(q)=q\,\kappa_1$​. Os expoentes $\kappa(q)$ são estimados como declividades de regressões $\log M_q$ vs. $\log k$ (PWMs $q=0\ldots4$). Admitindo a distribuição Gumbel para os máximos anuais, os parâmetros entre durações se ligam por leis de potência $\ell_d=k^{\kappa}\ell_D,\ r_d=k^{\kappa}r_D$​ e o quantil de retorno $T$ segue:
+
+$$
+I_{T,d}=\Big(\tfrac{d}{D}\Big)^{\kappa}\!\Big[\ell_D+r_D\,\ln\!\big(-\ln(1-1/T)\big)\Big]
+$$
+
+com extensão por trechos quando há quebra de escala em $d_r$​: usa-se $\kappa_1$​ para $d<d_r$​ e $\kappa_2$​ para $d>d_r$​, assegurando continuidade em $d_r$​. Para regionalizar as IDFs numa sub-região (Grande Tunis) com 41 postos diários, os autores transferem os expoentes de escala por regressões com proxies diárias: média, mediana e, sobretudo, o percentil 90% do máximo diário anual $P90\%$, que apresentou melhor desempenho. Os autores discutem a limitação de cauda da Gumbel, mas destacam a utilidade operacional do arranjo escala simples + PWM + regionalização por $P90\%$ em rede diária densa e rede horária esparsa.
+
+Sane et al. (2018) constroem curvas IDF para o Senegal comparando duas formulações baseadas em invariância de escala acoplada à teoria de valores extremos. Ambas assumem que, para cada duração $D$, a intensidade extrema \$I(D)% segue uma GEV com parâmetros que escalam via uma função $b(D)$: $\mu(D)=\mu_0​b(D)$, $\sigma(D)=\sigma_0\,b(D)$ e $\xi$ fixo, de modo que o quantil de período de retorno $T$ é $i_T(D)=F^{-1}_{\text{GEV}}(D_0,1-1/T)\,b(D)$, com $D_0$​ uma duração de referência. Os autores adotam a formulação de Koutsoyiannis et al. (1988) para IDF, usando o escalonamento $b(D)=(D+\theta)^{\eta}$ e estimando os parâmetros {${\mu_0,\sigma_0,\xi,\eta,\theta}$} via GEV. Além de calibrar e validar as duas IDFs com testes de aderência e métricas de quantis, o estudo quantifica a incerteza separando a parcela devida ao ajuste da GEV de 24 h da parcela devida à própria escala $b(D)$, apresentando envelopes de confiança de 90% em vários postos; também mapeia parâmetros e níveis de retorno para tornar as curvas IDF acessíveis no país. Em síntese, a contribuição específica é formalizar e comparar, num mesmo arcabouço, a IDF com deslocamento $\theta$ de Koutsoyiannis e a simple scaling, com inferência em dois passos guiada por igualdade-em-distribuição e avaliação explícita das incertezas de GEV versus escalonamento.
+
+Van de Vyver (2018) propõe um modelo IDF fundado em multiescalonamento dos máximos anuais, estendendo a “escala simples + GEV” clássico. Em vez de impor separabilidade $i_T(d)=a(T)\,b(d)$, o autor assume que, para a GEV dos máximos de duração $d$, os parâmetros locação e escala têm expoentes de escala distintos:
+
+$$
+\mu(d)=d^{-\eta_1}\,\mu,\qquad
+\sigma(d)=d^{-\eta_2}\,\sigma,\qquad \xi=\text{constante},\;\; 0<\eta_1\le
+\eta_2
+$$
+
+o que leva a uma IDF não separável em $d$ e $T$:
+
+$$
+i_T(d)=d^{-\eta_1}\!\left[\mu-\frac{d^{-\eta_2}\sigma}{\xi}\Big\{1-\big(-\ln(1-1/T)\big)^{-\xi}\Big\}\right]
+$$
+
+No limite de simple scaling, recupera-se $\eta_1=\eta_2=\eta$ e a forma separável usual. A estimação é feita em um framework Bayesiano, com critérios de comparação que indicam melhor desempenho e controle de complexidade (sem *overfitting*) em relação ao *simple scaling* quando os dados sugerem comportamento multiescala. \### Levar para a parte Bayesiana.
+
+Cannon & Innocenti (2018) avaliam mudanças projetadas em IDFs na América do Norte usando com base em dados subdiários e diários de simulações de modelos climáticos *convection-permitting* sob pseudo-aquecimento global para os períodos histórico e final do século XXI. Para contornar integrações curtas, aplicam um modelo GEV $(\mu_0,\sigma_0,\xi)$; com escala simples, os parâmetros para qualquer $D\in[1,24]$ h obedecem $\mu_D=(D/D_0)^{-H}\mu_0$, $\sigma_D=(D/D_0)^{-H}\sigma_0$ e $\xi_D=\xi$, produzindo a IDF
+
+$$
+i_{D,T}=\Big(\tfrac{D}{D_0}\Big)^{-H}\!\Big\{\mu_0-\frac{\sigma_0}{\xi}\big[1-\{-\ln(1-1/T)\}^{-\xi}\big]\Big\}
+$$
+
+Aqui, $\mu_0$​ e $\sigma_0$​ controlam o “deslocamento” vertical das IDFs, $\xi$ a cauda, e $H$ a inclinação comum em log–log; $T$ é o período de retorno. A inferência é Bayesiana (MCMC) com seleção de mudanças via False Discovery Rate Bayesiano, e o ajuste é avaliado contra
+IDFs observadas (ECCC) e grades observacionais (CMORPH/MSWEP). O modelo mostrou
+boa confiabilidade para ≥10–15 min e permite extrapolar de 1 h a sub-horas com cautela. Encontram aumentos significativos e extensos na localização (\>99% dos pontos), escala (\>88%) e no expoente de escala (\>39%), resultando em IDFs mais altas e, em geral, mais íngremes (maiores ganhos em durações curtas; exceções relativas no leste dos EUA). \### Bayesiano
+
+Courty et al. (2019) constroem um arcabouço global de IDF a partir do ERA5 (1–360 h, \~31 km), mostrando que os parâmetros da GEV para máximos anuais escalam com a duração por leis de potência e disponibilizando dois conjuntos: PXR-2 (mapas de $\mu_d,\sigma_d$​ para 19 durações) e PXR-4 (parâmetros de escala das leis de potência), com forma fixa $\kappa=-0{,}114$ e estimação por PWMs. A principal contribuição metodológica é formalizar uma IDF contínua em duração que “empresta força” entre escalas via o escalonamento independente de $\mu$ e $\sigma$:
+
+$$
+\mu_d =
+a\,d^{\alpha},\qquad \sigma_d=b\,d^{\beta},\qquad i_{d,T}=\mu_d+\sigma_d\,y_T
+$$
+
+onde $d$ é a duração (h), $i_{d,T}$,​ é o quantil (mm $h^{-1}$) para período de retorno $T$, e $y_T=\frac{\{-\ln(1-1/T)\}^{-\kappa}-1}{\kappa}$​ é a variável reduzida da GEV (com $\kappa$). 𝜇 e 𝜎 escalam de forma robusta com a duração (R² \> 0,88). Com base nisso, propõem uma fórmula IDF universal (PXR-4) e verificam, com ERA5 e pluviômetros MIDAS (Reino Unido e cidades globais), que as intensidades estimadas ficam ±20% das de PXR-2 para 2–360 h. Para estabilizar extrapolações, adotam 𝜅 = −0,114 (parâmetro de forma da GEV) globalmente, apoiados em evidências de que esse valor é praticamente independente de duração e localização.
+
+Ainda, Mascaro et al. (2020) compara, em 223 pluviômetros (30 min–24 h) no Arizona, cinco modelos de IDF — dois locais (At-site; At-site com correção de viés em $\xi$), um regional (index-flood de Hosking–Wallis) e dois de escala simples (um local, Sc, e um regional novo, RegSc). Mostra evidência robusta de simple scaling entre 24 h e 30 min e propõe o RegSc combinando crescimento regional com escala: sob $I_t \overset{d}{=}(t/t_0)^{-h}I_{t_0}$, a curva de crescimento é única em $t$ e
+
+$$
+i_{T,t}=x_{t_0}\,(t/t_0)^{-h}\,i^{\text{GC}}_{T,t_0},\qquad
+\mu_t=(t/t_0)^{-h}\mu_{t_0},\ \ \sigma_t=(t/t_0)^{-h}\sigma_{t_0}
+$$
+
+com $\mu,\sigma,\xi$ da GEV e $h$ comum às durações. Em cross-validation com bootstrapping, todos os modelos têm acurácia similar até $T\le 30$ anos; para $T$ altos, At-siteBC
+reduz viés (cauda mais pesada). Quando há poucos medidores sub-diários $(N_t\!\le\!5)$
+mas muitos diários $(N_{24h}\!\ge\!10)$, os modelos de escala (Sc/RegSc) superam os demais e a incerteza cai acentuadamente (p.ex., largura do $IC_{90\%}$​ e RMSE diminuem). O desempenho depende de captar o controle orográfico sobre $\mu,\sigma$ (forte), enquanto $\xi$ e $h$ pouco variam espacialmente.
+
+Yeo et al (2021) apresentam um esquema de desagregação temporal baseado em invariância de escala que chamam de Scaling-GEV. Partem da hipótese de escala simples para máximos anuais (AMPs), pela qual os parâmetros da GEV em duas durações $t$ e $\lambda t$ satisfazem $\kappa(\lambda t)=\kappa(t)$ (forma constante), $\alpha(\lambda t)=\lambda^{\beta}\alpha(t)$ e $\sigma(\lambda t)=\lambda^{\beta}\sigma(t)$ (escala e localização com lei de potência), implicando $X_{\tau}(\lambda t)=\lambda^{\beta}X_{\tau}(t)$ para o quantil de retorno $\tau$. Aqui, $\xi$ é o parâmetro de forma, $\alpha$ o de escala, $\sigma$ o de localização, $\beta$ o expoente de escala, $\lambda$ a razão de durações e $X_{\tau}$​ o quantil; a verificação do escalonamento é feita via momentos não centrais $\mu_k(t)=t^{\beta(k)}b(k)$. Com essa estrutura, os autores propõem três rotas de estimação para a GEV subdiária a partir de AMPs diárias: SLmom (estima $\mu,\sigma,\xi$ por L-momentos após reescalar quantis), S1NCM (usa apenas $\mu_1$​ para obter $\lambda^{\beta}$ e transporta $\mu,\sigma$, mantendo $\xi$ constante) e S3NCM (usa $\mu_1,\mu_2,\mu_3$​ e resolve numericamente $\xi$). Em aplicações a Dorval (Canadá) e Seul (Coreia), identificam dois regimes de duração com pontos de ruptura (≈30 min e 90 min, respectivamente) e mostram que S3NCM é, em geral, o mais acurado para durações subdiárias, enquanto SLmom tende a ir melhor nas mais longas. Como contribuição adicional, introduzem um bootstrap modificado que constrói intervalos de confiança de 95% para IDFs usando somente AMPs diárias: reamostram as AMPs de 1 dia, propagam a incerteza via relações de scaling para as durações curtas e fecham os limites com a inversa da GEV.
+
+Benestad et al. (2021) propõem uma fórmula simples para estimar IDFs subdiárias usando apenas dados diários (24 h) e dois indicadores facilmente observáveis: a média em dias chuvosos $\mu$ e a frequência de dias chuvosos $f_w$​. Partindo de uma aproximação exponencial para a cauda moderada da chuva diária e de um fator corretivo $\alpha$ (que ajusta a discrepância entre a cauda observada e a exponencial), os autores estendem o raciocínio para escalas subdiárias assumindo lei de potência em duração. O resultado é a expressão prática
+
+$$
+x_L=\alpha\,\mu\left(\frac{L}{24}\right)^{\zeta}\!\ln\!\big[f_w\,\tau\big]
+$$
+
+em que $x_L$​ é o nível de retorno na duração $L$ (h) para período de retorno $\tau$, $\zeta$ é o expoente de escala temporal estimado como a inclinação da regressão $\log x_L$​ versus $\log(L/24)$, e $\alpha$ pode vir da calibração diária (os autores discutem ainda sua dependência com $\tau$). Essa forma funciona como um downscaling temporal analítico: transfere informação do diário para o sub-diário sem ajustar EV/GEV em cada duração, explorando que $\mu$ e $f_w$​ já capturam não-estacionariedade climática. Metodologicamente, o estudo calibra $\zeta$ a partir de IDFs observadas em 14 postos de Oslo via regressão log–log, mostra que o termo $(L/24)^{\zeta}$ domina a variação com $L$ frente a $\ln[f_w\tau]$, e valida a fórmula em postos independentes no país (desempenho bom para $T=10$ anos; desempenho decai em $T$ muito altos, onde $\alpha$ cresce e a curvatura da IDF real exibe “quebras”). Em contraste com esquemas clássicos, a expressão explicita $\mu$ e $f_w$ na IDF, conectando diretamente a forma da curva à climatologia local de intensidade média e frequência de chuva — o que a torna útil onde faltam séries sub-horárias e para cenários futuros se \$\mu\$ e $f_w$ puderem ser projetados.
+
+Apesar do embasamento teórico consolidado há décadas (Burlando & Rosso, 1996), impedimentos práticos, sobretudo a escassez de dados de longa duração, limitaram aplicações regionais por muito tempo. Barbosa e Costa (2023) fazem uma revisão de estado da arte sobre invariância de escala em máximos de chuva, organizando o tema do ponto de vista teórico, inferencial e aplicado. O artigo sistematiza o formalismo básico — escalonamento entre durações $d<D$
+
+$$
+I_d
+\;\overset{d}{=}\; \Big(\tfrac{d}{D}\Big)^{-\gamma}\
+$$
+
+e a consequência para momentos não centrais,
+
+$$
+\mathbb{E}\!\left[I_d^{\,q}\right]
+= \Big(\tfrac{d}{D}\Big)^{-\gamma_q}\,\mathbb{E}\!\left[I_D^{\,q}\right]
+$$
+
+destacando a escala simples $(\gamma_q=q\,\gamma)$ versus multiescalonamento (curvatura de $\gamma_q$​) e os diagnósticos práticos em gráficos log–log (momentos vs. duração). Mostram ainda que, sob simple scaling, razões de variabilidade como o CV permanecem invariantes com $d$, o que explica a parcimônia de modelos IDF escaláveis. No plano probabilístico, a revisão discute por que GEV é preferível à Gumbel para caudas pesadas e compatível com a hipótese de escala comum do parâmetro de forma; revisita usos históricos de Gumbel e lognormal e alerta para vieses de cauda e inconsistências de escala. Na prática, cobre procedimentos de estimação (momentos/PWM, máxima verossimilhança, Bayes) e identificação de regimes com quebras entre faixas de duração operacionais (p.ex., 1–24 h). Em contexto brasileiro, Rodrigues et al. (2023) discutiram uma relação regional de IDF baseada no princípio de invariância de escala e a aplicaram a postos monitorados da região metropolitana de Belo Horizonte. Os resultados mostraram que um único expoente regional de escala, obtido a partir da média das estimativas em postos de treinamento, foi suficientemente preciso (erro absoluto médio de 15%) para descrever o comportamento probabilístico de chuvas extremas em diversas durações subdiárias. Além disso, as estimativas de quantis derivadas do modelo apresentaram desempenho semelhante ao de métodos de regionalização mais complexos, indicando que o princípio de invariância de escala pode ser uma ferramenta parcimoniosa e eficaz para a análise de frequência de chuvas extremas em áreas com escassez de dados.
+
+Gnecco et al. (2023) propõem duas novas formulações de curvas IDF (IDF3 e IDF4) que impõem potência nas durações supra-horárias e permitem uma curvatura específica nas sub-horárias, de modo a conciliar a informação de ambos os domínios e o desbalanceamento típico de comprimentos de série (longas no supra-horário, curtas no sub-horário). As novas formas são consistentes com invariância de escala e são calibradas usando máximos anuais de 5–50 min e 1–24 h de 13 postos na Ligúria (1930–2018), com controle de qualidade e séries de comprimentos distintos $N_{\text{sub-hourly}}$ e $N_{\text{super-hourly}}$. Para benchmark, os autores também ajustam: (i) IDF1, uma potência simples $i_T(d)=a_T,d^{-b_T}$ ajustada por regressão dos quantis estimados diretamente nas durações canônicas; e (ii) IDF2, a forma de três parâmetros com curvatura de Koutsoyiannis et al. (1998), também ajustada apenas com os quantis supra-horários. Essas curvas de referência, por dependerem só do domínio canônico, tiram partido do maior $N_{\text{super-hourly}}$. As IDF3/IDF4 são definidas sob o postulado de invariância de escala: os parâmetros de escala $a_1$ e o expoente $n$ são estimados no supra-horário, enquanto o bloco sub-horário introduz $i_0$ (intensidade finita quando $d\to0$), além de BBB e $\beta$ para modular, respectivamente, o ponto de inflexão e a inclinação da parte aproximadamente linear em log–log; a dependência no período de retorno fica condensada em um fator de crescimento de frequência $K(T)$, de acordo com a teoria de escala. Assim, a parte de escala (média vs. duração) é separada da parte de frequência $K(T)$.
+
+A diferença entre IDF3 e IDF4 está nas condições de acoplamento em 1 h: a IDF3 impõe continuidade e derivabilidade na transição sub↔supra-horária, o que reduz o número de parâmetros sub-horários livres (fica essencialmente $B$ a estimar, com $\beta$ restrito a $0<\beta\le1$); já a IDF4 exige apenas continuidade em 1 h, mantendo maior liberdade no sub-horário. No conjunto de dados da Ligúria, as novas curvas melhoram a confiabilidade das estimativas em toda a faixa de durações, com ênfase no sub-horário, justamente por combinar a robustez estatística do supra-horário com a informação específica das durações curtas; o estudo também discute como a forma da IDF influencia o hidrograma de projeto e, portanto, a seleção da formulação é relevante para engenharia.
+
+Mais recentemente, Wang et al. (2024) aplicaram um modelo unificado de intensidades extremas no Reino Unido, integrando registros diários, fatores geográficos e regiões homogêneas de precipitação, utilizando a distribuição Gumbel (EV1). O estudo parte da hipótese de simple scaling nos máximos anuais e estima um expoente de escala $\beta$ a partir de séries agregadas de 1–30 dias, para então transferir intensidades entre durações via
+
+$$
+i_{d,T}\;=\;\Big(\tfrac{d}{D}\Big)^{\beta}\
+$$
+
+onde $i_{d,T}$​ é o quantil (intensidade) para duração $d$ e período de retorno $T$, $D$ é uma duração de referência (p.ex., diária) e $\beta$ controla a inclinação log–log da IDF. A verificação da invariância usa momentos de ordem $q$:
+
+$$
+\big(i_{d,T}\big)^{q}
+\;=\;\Big(\tfrac{d}{D}\Big)^{K(q)} \big(i_{D,T}\big)^{q},\qquad K(q)=\beta\,q \
+\ \text{(simple scaling)}
+$$
+
+e o ajuste dos extremos em cada duração emprega EV1/Gumbel (também testando GEV a 3 parâmetros), o que permite obter $i_{D,T}$​ e, via a relação acima, reconstruir $i_{d,T}$​
+nas durações subdiárias. Aqui, $d,D$ são durações (h ou dias), $T$ é o
+período de retorno, $q$ a ordem do momento, $K(q)$ a função de escala dos
+momentos e $\beta$ o expoente estimado como declive de $K(q)$ vs. $q$. Para espacializar $\beta$ e torná-lo previsível em locais sem medição subdiária, os autores modelam $\beta$ como função de variáveis geográficas (latitude, longitude, altitude, distância à costa) condensadas por PCA, além de regiões pluviometricamente homogêneas (classificações HadUKP e Jones) codificadas via dummies. O modelo dummy regression com PCs explica de \~64% (HadUKP) a \~73% (Jones) da variância de $\beta$; longitude emerge como preditor dominante, e há estabilidade temporal de $\beta$ verificada com janelas móveis e teste de Pettitt (98/102 séries sem ruptura), embora com sazonalidade marcada: $\beta$ mais negativo no verão, refletindo escalonamento mais íngreme nas durações curtas.
+
+Creaco (2024) propõe uma formulação parcimoniosa de IDF válida simultaneamente para durações sub-horárias e supra-horárias ao introduzir a duração ajustada $T=t+c$(\$c\>0\$, tipicamente \< 1 h). Sob simple scaling, impõe-se $iTi_{\lambda T}\overset{d}{=}\lambda^{n} i_T$​, o que leva a $\mathbb{E}[i_t]=a_1\,(t+c)^{n}$ e, incorporando um fator de frequência $K_P$​ (com distribuição GEV) e o coeficiente de variação $V$, obtém-se diretamente a família de IDFs
+
+$$
+i_t(P)=a_1\,\big(1+V\,K_P\big)\,(t+c)^{n}
+$$
+
+na prática uma versão escala-invariante da curva de três parâmetros $i_t=p_1\,(t+p_3)^{p_2}$​
+onde $\{a_1,n,c,V\}$ substituem $\{p_1,p_2,p_3\}$ e o nível de retorno entra via $K_P$​. Aqui, ttt é a duração “real”, $c$ corrige o viés de curta duração, $n$ é o expoente de escala, $a_1$​ é o parâmetro de nível, $V$ o CV e $K_P\sim\text{GEV}(\mu,\sigma,\xi)$ padronizado (média 0, desvio 1). Em multiple scaling, a variabilidade de segunda ordem é relaxada introduzindo $\phi_2$​ e $a_2$​,
+resultando em
+
+$$
+i_t(P)=a_1\!\left[1+K_P\,\sqrt{\Big(\tfrac{a_2}{a_1^2}\Big)(t+c)^{2n}(\phi_2-1)-1}\
+\right](t+c)^{n}
+$$
+
+que equivale a permitir $V$ dependente de $t$ via $(t+c)^{2n}(\phi_2-1)$. A novidade principal é usar $T=t+c$ dentro da teoria de escala para obter uma única estrutura IDF coerente de 10 min a 24 h, em vez de emparelhar duas curvas (sub-h e supra-h) ou ajustar uma forma de três parâmetros separadamente para cada $T$. A estimação é feita em duas fases. Primeiro, busca-se $c$ iterativamente minimizando o erro absoluto relativo entre as IDFs do modelo e os quantis obtidos por EV (no estudo, Gumbel para $i_t$​ devido a amostras curtas), enquanto $a_1$​ e $n$ vêm de regressão log–log de $\mathbb{E}[i_t]$ vs. $t+c$, $V$ do CV médio e $(\mu,\sigma,\xi)$ de $K_P$​ por momentos. Depois, um refinamento local (SQP) minimiza o erro ponderado, permitindo pesos por duração para dar mais confiança às séries longas (tipicamente ≥ 1 h) quando as sub-horárias são curtas/ruidosas. Aplicações em quatro casos europeus mostram bom ajuste em 10 min–24 h; o multiple scaling melhora marginalmente em dois locais, embora $\phi_2\approx1$ na prática, e a inclusão de $c>0$ corrige os vieses típicos da hipótese tradicional $c=0$ na vizinhança de 0,5–1 h. Os autores também evidenciam que, pelas amostras disponíveis, $\xi$ tende a 0 (Gumbel), coerente com o uso de quantis Gumbel na calibração, sem prejuízo da estrutura geral baseada na GEV de $K_P$​. Em síntese, o trabalho estende a invariância de escala para uma curva de três parâmetros com duração ajustada, fornece um procedimento de calibração robusto e reduz a parametrização necessária para múltiplos períodos de retorno mantendo consistência estatística entre durações.
 
 4.  **Técnicas Não Paramétricas / Reamostragem**
 
