@@ -237,7 +237,7 @@ window.Quarto = {
 <p>Foram descartados os anos em que mais de 25% dos registros apresentavam falhas. Além disso, alguns máximos anuais foram corrigidos ou excluídos devido a erros de leitura, falhas técnicas ou dados suspeitos (por exemplo: acumulações indevidas em pluviômetros de balde, períodos de falha do equipamento ou totais inconsistentes com estações vizinhas).</p>
 <p><strong>1.2 Série de máximos anuais e índice de referência</strong></p>
 <p>A partir dos registros foram extraídas as séries de máximos anuais (AM) em diferentes duraçõe (1h, 2h, 6, 12, 1d, 2, 4d e 8d). Essas séries constituíram a base para a análise estatística.</p>
-<p>A mediana da série AMAX (RMED) foi definida como índice de referência (<em>Index Rainfall</em>) e calculada separadamente para cada duração.</p>
+<p>A mediana da série AM (RMED) foi definida como índice de referência (<em>Index Rainfall</em>) e calculada separadamente para cada duração.</p>
 <p><strong>1.3 Mapeamento da RMED</strong></p>
 <p>O RMED foi interpolado em uma malha regular de 1 km sobre o território do Reino Unido, utilizando-se o método de geo-regressão.</p>
 <p>Esse procedimento combina:</p>
@@ -251,12 +251,14 @@ window.Quarto = {
 <p><span class="math display">\[
 F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\},
 \quad 1 + \xi \left( \frac{x - \mu}{\sigma} \right) &gt; 0
+\tag{1}
 \]</span></p>
-<p>Onde, <span class="math inline">\(\mu\)</span> é o parâmetro de localização; <span class="math inline">\(\sigma &gt; 0\)</span> é a escala e <span class="math inline">\(\xi\)</span> é a forma.Gumbel ocorre se <span class="math inline">\(xi \to 0\)</span>.</p>
+<p>Onde, <span class="math inline">\(\mu\)</span> é o parâmetro de localização; <span class="math inline">\(\sigma &gt; 0\)</span> é a escala e <span class="math inline">\(\xi\)</span> é a forma. Gumbel ocorre se <span class="math inline">\(xi \to 0\)</span>.</p>
 <p>Os parâmetros são estimados por máxima verossimilhança (MLE).</p>
 <p>A frequência é expressa em termos da variável reduzida de Gumbel:</p>
 <p><span class="math display">\[
 y = - ln(-ln(1-p))
+\tag{2}
 \]</span></p>
 <p>onde <span class="math inline">\(p =\)</span> probabilidade de não-exedência.</p>
 <p>O FORGEX divide os dados em faixas de retorno (<em>y-slices</em>). Dentro de cada faixa, os parâmetros da GEV são ajustados separadamente e posteriormente suavizados, garantindo consistência da curva resultante.</p>
@@ -269,6 +271,7 @@ y = - ln(-ln(1-p))
 \ln R_{12} + (cy + d_2)(\ln D - \ln 12), &amp; 12h &lt; D \leq 48h \\\\
 \ln R_{48} + (cy + d_3)(\ln D - \ln 48), &amp; D &gt; 48h
 \end{cases}
+\tag{3}
 \]</span></p>
 <p>O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade de 1 km.</p>
 <p>Os limites de confiação foram estimados via <em>bootstrap</em> para avaliar a incerteza das curvas de crescimento.</p>
@@ -284,7 +287,7 @@ y = - ln(-ln(1-p))
 <li>No FEH, Vol 2 a depedência espacial era tratada de forma simplificada e constante, sou seja, assumia-se um certo grau de correlação espacial entre pluviômetros, independentemente da raridade do evento. Nos relatórios |<em>Long Return Period Rainfall</em> a dependência entre estações varia com o período de retorno: Para eventos comuns (baixo período de retorno) há uma forte dependência, ou seja, chuvas intensas costumam ocorrer em várias estações próximas ao mesmo tempo; para eventos raros (período de retorno alto) há menor depedência, ou seja, eventos muito extremos são mais localizados e não atingem grandes áreas com a mesma intensidade;</li>
 <li>As estimativas acima de 1000 anos frequentemente excediam o PMP (<em>Probable Maximum Precipitation</em>); na atualização, as curvas foram ajustadas para crescer de forma mais realista, mantendo consistência com o PMP e com eventos observados.</li>
 </ul>
-<p><img src="figuras/guidelines_fluxograma_australia.jpg" class="img-fluid" alt="Fluxograma da metodologia aplicada na Austrália"> Figura 1. Fluxograma da metodologia aplicada na Austrália (Baseado no FEH, 99)</p>
+<p><img src="figuras/guidelines_fluxograma_inglaterra.png" class="img-fluid" alt="Fluxograma da metodologia aplicada na Inglaterra"> Figura 1. Fluxograma da metodologia aplicada na Inglaterra (Baseado no FEH, 99)</p>
 <div style="margin-top:1em;">
 
 </div>
@@ -339,7 +342,7 @@ x_{3,\max}^{STN,5\min} &amp; x_{3,\max}^{STN,10\min} &amp; \cdots &amp; x_{3,\ma
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 x_{N,\max}^{STN,5\min} &amp; x_{N,\max}^{STN,10\min} &amp; \cdots &amp; x_{N,\max}^{STN,24hr}
 \end{bmatrix}
-\tag{1}
+\tag{4}
 \]</span></p>
 <p>Onde, <span class="math inline">\(x_{i,\max}^{STN,j}\)</span> é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e N é o número total de anos.</p>
 <ol start="2" type="i">
@@ -354,8 +357,9 @@ X^{GCM}_{3,\text{max}} \\
 \vdots \\
 X^{GCM}_{N,\text{max}}
 \end{bmatrix}
-\tag{2}
-\]</span> Onde, <span class="math inline">\(X_{i,\max}^{GCM}\)</span> representa a precipitação diária máxima do modelo GCM no i-ésimo ano e <span class="math inline">\(N\)</span> é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).</p>
+\tag{5}
+\]</span></p>
+<p>Onde, <span class="math inline">\(X_{i,\max}^{GCM}\)</span> representa a precipitação diária máxima do modelo GCM no i-ésimo ano e <span class="math inline">\(N\)</span> é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).</p>
 <ol start="3" type="i">
 <li>Extrair máximos diários dos Cenários RCP (i, (iii) Extrair máximos diários dos Cenários RCP (ou seja, RCP2.6, RCP4.5, RCP8.5) para o modelo GCM selecionado:</li>
 </ol>
@@ -368,60 +372,78 @@ X^{GCM,RCP26}_{3,\text{max}} &amp; X^{GCM,RCP45}_{3,\text{max}} &amp; X^{GCM,RCP
 \vdots &amp; \vdots &amp; \vdots \\
 X^{GCM,RCP26}_{N_F,\text{max}} &amp; X^{GCM,RCP45}_{N_F,\text{max}} &amp; X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
-\tag{3}
-\]</span> Onde, <span class="math inline">\(X_{\max}^{GCM,Fut}\)</span> representa a precipitação diária máxima para os cenários futuros considerad; e <span class="math inline">\(N_F\)</span> é o número total de anos considerados para o período futuro</p>
+\tag{6}
+\]</span></p>
+<p>Onde, <span class="math inline">\(X_{\max}^{GCM,Fut}\)</span> representa a precipitação diária máxima para os cenários futuros considerad; e <span class="math inline">\(N_F\)</span> é o número total de anos considerados para o período futuro</p>
 <ol start="4" type="i">
 <li>Ajustar uma distribuição de probabilidade aos máximos diários do modelo GCM (cada uma das séries de máximos subdiários para os dados observados e máximos diários para os cenários futuros).</li>
 </ol>
 <p><span class="math display">\[
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
-\tag{4}
-\]</span> <span class="math display">\[
+\tag{7}
+\]</span></p>
+<p><span class="math display">\[
 PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
-\tag{5}
-\]</span> <span class="math display">\[
+\tag{8}
+\]</span></p>
+<p><span class="math display">\[
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
-\tag{6}
-\]</span> Onde, <span class="math inline">\(PDF\)</span> representa a função de distribuição de probabilidade, $f()% é a função, <span class="math inline">\(\theta\)</span> é o parâmetro da distribuição ajustada.</p>
+\tag{9}
+\]</span></p>
+<p>Onde, <span class="math inline">\(PDF\)</span> representa a função de distribuição de probabilidade, $f()% é a função, <span class="math inline">\(\theta\)</span> é o parâmetro da distribuição ajustada.</p>
 <ol start="22" type="a">
 <li>A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM <span class="math inline">\(Y_{max,j}^{GCM}\)</span> usando o princípio do mapeamento baseado em quantis. Trata-se de um <em>downscalig</em> espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:</li>
 </ol>
 <p><span class="math display">\[
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
-\tag{7}
-\]</span> Onde, <span class="math inline">\(Y_{max,j}^{STN}\)</span> é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; <span class="math inline">\(CDF\)</span> significa função de distribuição de probabilidade cumulativa; e <span class="math inline">\(invCDF\)</span> significa CDF inversa.</p>
+\tag{10}
+\]</span></p>
+<p>Onde, <span class="math inline">\(Y_{max,j}^{STN}\)</span> é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; <span class="math inline">\(CDF\)</span> significa função de distribuição de probabilidade cumulativa; e <span class="math inline">\(invCDF\)</span> significa CDF inversa.</p>
 <ol start="6" type="i">
 <li>Estabelecer uma relação estatística semelhante de mapeamento quantílico que modele a mudança entre os máximos atuais do GCM e os máximos futuros do GCM. Trata-se de um <em>downscaling</em> temporal dos dados das simulações projetadas do GCM dos máximos diários para o GCM diário de referência:</li>
 </ol>
 <p><span class="math display">\[
 Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
-\tag{8}
-\]</span> Onde, <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> é a correspondência quantílica entre o período de referência e o período de projeção.</p>
+\tag{11}
+\]</span></p>
+<p>Onde, <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> é a correspondência quantílica entre o período de referência e o período de projeção.</p>
 <ol start="7" type="i">
 <li>Encontre uma função apropriada para relacionar <span class="math inline">\(Y_{max,j}^{STN}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:</li>
 </ol>
 <p><span class="math display">\[
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
-\tag{9}
-\]</span> <span class="math display">\[
+\tag{12}
+\]</span></p>
+<p><span class="math display">\[
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
-\tag{10}
-\]</span> (viii) Encontre uma função apropriada para relacionar <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>:</p>
+\tag{13}
+\]</span></p>
+<ol start="8" type="i">
+<li>Encontre uma função apropriada para relacionar <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>:</li>
+</ol>
 <p><span class="math display">\[
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
-\tag{11}
-\]</span> <span class="math display">\[
+\tag{14}
+\]</span></p>
+<p><span class="math display">\[
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
-\tag{12}
-\]</span> (ix) Para gerar dados subdiários máximos futuros, combine as equações acima em:</p>
+\tag{15}
+\]</span></p>
+<ol start="9" type="i">
+<li>Para gerar dados subdiários máximos futuros, combine as equações acima em:</li>
+</ol>
 <p><span class="math display">\[
 X^{STN, future}_{\max,j}
 = a_{1} \times
 \left[
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}}
 \right]
-+ b_{1} \tag{13}
-\]</span> (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.</p>
++ b_{1}
+\tag{16}
+\]</span></p>
+<ol start="24" type="a">
+<li>Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.</li>
+</ol>
 <p><img src="figuras/guidelines_fluxograma_canada.jpg" class="img-fluid" alt="Fluxograma da metodologia aplicada no Canadá"> Figura 3. Fluxograma da metodologia aplicada no Canadá</p>
 <p><strong>3.4 Interface Web do IDF_CC Tool</strong></p>
 <p>A ferramenta está dividida em três principais eixos: interface do usuário, modelos matemáticos e banco de dados. O sistema de gerenciamento de banco de dados (DBMS) utilizado é a versão mais recente do Microsoft SQL Server™ (MSSQL).</p>
@@ -453,16 +475,21 @@ X^{STN, future}_{\max,j}
 <p><span class="math display">\[
 f(x,t) = \frac{1}{\sigma(x,t)}
 \left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
-\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)                                                                                     
+\exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)
+\tag{17}
 \]</span></p>
 <p>onde <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>, e <span class="math inline">\(\xi\)</span>, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros são definidos da seguinte forma:</p>
 <p><span class="math display">\[
 \text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
+\tag{18}
 \]</span></p>
 <p><span class="math display">\[
 \text{Escala: } \quad \sigma(x,t) = b_{1} \times MAM(x)\,[1+b_{2} \times GWL(t)]
-\]</span> <span class="math display">\[
+\tag{19}
+\]</span></p>
+<p><span class="math display">\[
 \text{Forma:} \quad \xi(x) = C_{0}
+\tag{20}
 \]</span> Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - <em>Global Warming Level</em>). A forma da distribuição foi mantida constante (parâmetro <span class="math inline">\(\xi\)</span> fixo) para evitar instabilidade.</p>
 <p><strong>4.3. Regionalização</strong></p>
 <p>Como o número de estações diárias e subdiárias varia significativamente, a regionalização foi realizada separadamente para durações inferiores a 24 horas e para durações iguais ou superiores a 24 horas. Para cada estação dentro da área do projeto (estação-alvo), foram identificadas todas as estações dentro de um raio de 160 km (estações regionais).</p>
@@ -492,6 +519,7 @@ f(x,t) = \frac{1}{\sigma(x,t)}
 <p>Os parâmetros de distribuição GEV para o Volume 2 foram estimados usando valores AMS em grade extraídos do LOCA2 e do STAR-ESDM. Os parâmetros de localização, escala e forma, que são calculados de maneira semelhante ao Volume 1, são, portanto, identificados para cada célula da grade dentro do domínio e para cada um dos 32 conjuntos para durações diárias e mais longas durante o período de 1950 a 2100. As distribuições GEV resultantes foram usadas para gerar estimativas de frequência de precipitação em resoluções de células de grade nativas para cada modelo estatístico. Assim, enquanto as estimativas do Volume 1 se originam em locais de estações, com um valor por duração e AEP, as estimativas do Volume 2 se originam em uma grade, com 32 valores (um de cada conjunto de modelos) por duração e AEP. Uma vez obtidas as estimativas absolutas de frequência de precipitação para cada GWL (1,5 - 5 °C), suas mudanças, em relação ao ano base de 2023, foram computadas. As estimativas de frequência de precipitação são geradas para o presente (2023) e, em seguida, novamente para um momento futuro quando os GCMs atingirem 3 °C. Para cada nível de aquecimento, calcular:</p>
 <p><span class="math display">\[
 AF = \frac{PF_{fut} - PF_{2023}}{PF_{2003}} \times 100\%
+\tag{21}
 \]</span></p>
 <p><strong>5.3. Revisão dos fatores de ajuste subdiários</strong></p>
 <p>Devido ao tamanho reduzido das amostras subdiárias, em vez de utilizar diretamente os fatores de ajuste extraídos das simulações de modelos climáticos dinâmicos, foram aplicadas suas relações relativas com os fatores diários, que possuem amostras mais robustas. Isso permitiu aproveitar os processos físicos dos modelos de alta resolução, como os do NA-CORDEX, mantendo a consistência entre diferentes durações e evitando distorções que poderiam surgir do uso direto dos dados subdiários</p>
@@ -500,7 +528,8 @@ AF = \frac{PF_{fut} - PF_{2023}}{PF_{2003}} \times 100\%
 <p>Em seguida, espacialmente, os fatores foram suavizados por meio de um filtro gaussiano para reduzir ruídos locais e, posteriormente, foram interpolados em grade contínua com interpolação cúbica monótonica, assegurando transições suaves e consistentes entre células vizinhas.</p>
 <p>As estimativas de frequência de precipitação futura (PFVOL2) foram finalmente desenvolvidas aplicando esses fatores de ajuste (AFs) resultantes, conforme definidos tanto na estrutura GWL quanto na estrutura de cenários, às estimativas do Volume 1 (PFVOL1). Especificamente, para cada duração:</p>
 <p><span class="math display">\[
-PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)                        
+PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)
+\tag{22}
 \]</span></p>
 <p>Onde, os valores de AF são funções do espaço 𝑥 e do tempo 𝑡, dependentes do GWL, dos cenários de emissões e do AEP.</p>
 <p>O termo multiplicativo é baseado em um fator de ajuste que expressa (em unidades percentuais) a mudança relativa no futuro a partir da linha de base do PFVOL1, que representa o ano de 2023. Assim, os valores finais do PFVOL2 representam estimativas futuras de precipitação para as mesmas durações e AEPs do PFVOL1, mas também são funções da temperatura global (estrutura do GWL) e do tempo.</p>
