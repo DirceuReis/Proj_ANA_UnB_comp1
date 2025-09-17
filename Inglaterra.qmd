@@ -6,50 +6,42 @@ nocite: |
   @*
 ---
 
-Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation***.
+Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation, (1999)***.
 
 ::: {style="text-align: justify;"}
 **1. Descrição da Metodologia**
 
-O estudo apresenta a metodologia para estimar a frequência de chuvas intensas no Reino Unido, em diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos).
+O estudo apresenta a metodologia adotada para a estimativa da frequência de chuvas intensas no Reino Unido, abrangendo diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos).
 
 **1.1. Dados utilizados**
 
-Os dados de precipitação foram obtidos através de diversas instituições, como: *Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland* (DANI), *Irish Met Service* e a base de dados do PEPR do *Institute of Hydrology*.\*
+Os dados pluviométricos foram obtidos junto a diferentes instituições, incluindo o *Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland* (DANI), *Irish Met Service* e a base de dados do PEPR do *Institute of Hydrology*.\*
 
-Os dados foram provenientes de 6106 estações com registros diários com pelo menos 10 anos de dados e de 375 estações com registros sub-diários (horárias) (registros de pluviômetros automáticos, *tipping bucket* e sifão inclinável, com pelo menos 9 anos de máximos anuais).
+A base de dados utilizada compreendeu: - 6106 estações com registros diários, cada uma com pelo menos 10 anos de dados; - 375 estações com registros subdiários (horários), provenientes de pluviômetros automáticos *tipping bucket* e de sifão inclinável, cada uma com no mínimo 9 anos de séries de máximos anuais.
 
-Descartaram-se os anos que apresentaram mais de 25% de dados faltosos. Alguns máximos anuais precisaram ser corrigidos ou excluídos por erros de leitura, falhas técnicas ou dados suspeitos (ex.: acumulações em pluviômetros de balde, períodos em que o pluviômetro não funcionava, ou totais incoerentes com estações vizinhas).
+Foram descartados os anos em que mais de 25% dos registros apresentavam falhas. Além disso, alguns máximos anuais foram corrigidos ou excluídos devido a erros de leitura, falhas técnicas ou dados suspeitos (por exemplo: acumulações indevidas em pluviômetros de balde, períodos de falha do equipamento ou totais inconsistentes com estações vizinhas).
 
-**1.2 Série de máximos anuais e índice de referência** 
+**1.2 Série de máximos anuais e índice de referência**
 
-A série de máximos anuais (AM) foi extraída em diferentes durações (1h, 2h, 6, 12, 1d, 2, 4d e 8d) e foi a base para a análise estatítica e a mediana da série AM (RMED) foi escolhida como o índice de referência (*Index Rainfall*) e calculada separadamente para cada duração.
+A partir dos registros foram extraídas as séries de máximos anuais (AM) em diferentes duraçõe (1h, 2h, 6, 12, 1d, 2, 4d e 8d). Essas séries constituíram a base para a análise estatística.
 
-**1.3 Mapeamento da RMED** 
+A mediana da série AMAX (RMED) foi definida como índice de referência (*Index Rainfall*) e calculada separadamente para cada duração.
 
-O RMED foi interpolado em uma malha de 1 km sobre o Reino Unido. Para isso, o método de geo-regressão (regressão + krikagem residual) foi utilizado com covariáveis topográficas:
+**1.3 Mapeamento da RMED**
 
-- Elevação;
+O RMED foi interpolado em uma malha regular de 1 km sobre o território do Reino Unido, utilizando-se o método de geo-regressão.
 
-- Distância do mar (média em km até a Costa);
+Esse procedimento combina:
 
-- Barreiras orográficas;
+-   Uma regressão múltipla entre RMED e variáveis fisiográficas (elevação, distância média ao mar, barreiras orográficas, continentalidade – distância a Lille/França, latitude, longitude); • Seguida pela aplicação de krigagem dos resíduos para capturar padrões locais não explicados pela regressão.
 
-- Continentalidade (Distância até Lille, França);
+As séries de AM foram padronizadas pela razão entre o valor observado e o RMED local, o que permitiu a comparação entre estações e a análise em escala regional.
 
-- Latitude e Longitude e 
+**1.4 Derivação das curvas de crescimento (*Growth Curves*)**
 
-- Fatores regionais adicionais.
+A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (*Focused Rainfall Growth Curve Extension*), desenvolvido especificamente para o FEH. O FORGEX ajusta distribuições estatísticas às séries padronizadas, obtendo assim a relação entre a precipitação associada a um período de retorno T e o índice RMED.
 
-**descrever a geo-regressão**
-
-As séries foram padronizadas dividindo o AM pelo RMED local, isso permitiu a comparação e análise regional.
-
-**1.4 Derivação das curvas de crescimento (*Growth Curves*)** 
-
-Foi aplicado o método FORGEX(*Focused Rainfall Growth curve Extension*), que foi desenvolvido especificamente para o estudo. O FORGEX ajusta as distribuições estatísticas das séries padronizadas para obter as curvas de crescimento (relação entre a chuva de retorno T anos e o índice RMED).
-
-Sendo baseado na GEV:
+O ajuste baseia-se na distribuição de valores extremos generalizada (GEV):
 
 $$
 F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\}, 
@@ -64,15 +56,15 @@ A frequência é expressa em termos da variável reduzida de Gumbel:
 
 $$
 y = - ln(-ln(1-p))
-$$ 
+$$
 
 onde $p =$ probabilidade de não-exedência.
 
-O FORGEX didive os dados em faixas de retorno (*slices*). Dentro de cada faixa (*y-slice*), os parâmetros são ajustados separadamente e depois suavizados.
+O FORGEX divide os dados em faixas de retorno (*y-slices*). Dentro de cada faixa, os parâmetros da GEV são ajustados separadamente e posteriormente suavizados, garantindo consistência da curva resultante.
 
 **1.5 Construção do Modelo DDF (*Depth-Duration-Frequency*)**
 
-A construção do modelo integra as curvas de crescimento e o RMED em um modelo matemático único que relaciona intensidade, duração e frequência.
+A integração do RMED com as curvas de crescimento deu origem a um modelo paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.
 
 $$
 \ln R(D,y) =
@@ -83,13 +75,26 @@ $$
 \end{cases}
 $$
 
-O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade.
+O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade de 1 km.
 
 Os limites de confiação foram estimados via *bootstrap* para avaliar a incerteza das curvas de crescimento.
 
-**1.6 Saídas** 
+**1.6 Saídas**
 
-Mapas nacionais de RMED, curvas de crescimento e chuvas de projeto.
+A metodologia resultou na elaboração de:
 
-![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 1. Fluxograma da metodologia aplicada na Austrália
+• mapas nacionais de RMED para diferentes durações, • curvas de crescimento regionais, • chuvas de projeto (DDF) consistentes para todo o Reino Unido.
+
+**1.7 Atualizações da Metodologia**
+
+Documentos: *Reservoir Safety – Long Return Period Rainfall Volume 1 Technical Report (Part 1 and 2)*
+
+Em 2013 a *Environment Agency* e o *Departament for Envionment Food and Rural Affairs* publicaram os volumes 1 e 2 do referido documento que possuem atualizações para a metodologia. Assim, destacam-se as seguintes mundanças:
+
+-   Expansão da base de dados de estações horárias de 375 para 968;
+-   Novo índice de referência que combina RMED, SAAR (*Standard Average Annual Rainfall*) e *northing* (coordenada N-S), reduzindo a variabilidade espacial residual;
+-   No FEH, Vol 2 a depedência espacial era tratada de forma simplificada e constante, sou seja, assumia-se um certo grau de correlação espacial entre pluviômetros, independentemente da raridade do evento. Nos relatórios \|*Long Return Period Rainfall* a dependência entre estações varia com o período de retorno: Para eventos comuns (baixo período de retorno) há uma forte dependência, ou seja, chuvas intensas costumam ocorrer em várias estações próximas ao mesmo tempo; para eventos raros (período de retorno alto) há menor depedência, ou seja, eventos muito extremos são mais localizados e não atingem grandes áreas com a mesma intensidade;
+-   As estimativas acima de 1000 anos frequentemente excediam o PMP (*Probable Maximum Precipitation*); na atualização, as curvas foram ajustadas para crescer de forma mais realista, mantendo consistência com o PMP e com eventos observados.
+
+![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 1. Fluxograma da metodologia aplicada na Austrália (Baseado no FEH, 99)
 :::

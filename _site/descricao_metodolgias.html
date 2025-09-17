@@ -8,7 +8,7 @@
 
 <meta name="author" content="Bruno Pereira.">
 
-<title>Guideline Inglaterra – Proj. IDF Brasil ANA/UnB</title>
+<title>Revisão de Metodologias de Estimativa de Chuvas Intensas – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -194,15 +194,21 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#comparação-de-abordagens" id="toc-comparação-de-abordagens" class="nav-link active" data-scroll-target="#comparação-de-abordagens">Comparação de Abordagens</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Guideline Inglaterra</h1>
+<h1 class="title">Revisão de Metodologias de Estimativa de Chuvas Intensas</h1>
 </div>
 
 
@@ -225,68 +231,108 @@ window.Quarto = {
 </header>
 
 
-<p>Documento: <strong><em>Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation, (1999)</em></strong>.</p>
 <div style="text-align: justify;">
-<p><strong>1. Descrição da Metodologia</strong></p>
-<p>O estudo apresenta a metodologia adotada para a estimativa da frequência de chuvas intensas no Reino Unido, abrangendo diferentes durações (de 1 hora a 8 dias) e períodos de retorno (de 2 a 1000 anos).</p>
-<p><strong>1.1. Dados utilizados</strong></p>
-<p>Os dados pluviométricos foram obtidos junto a diferentes instituições, incluindo o <em>Met Office, Environment Agency, Scottish Environmental Protection Agency, Department of Agriculture for Northern Ireland</em> (DANI), <em>Irish Met Service</em> e a base de dados do PEPR do <em>Institute of Hydrology</em>.*</p>
-<p>A base de dados utilizada compreendeu: - 6106 estações com registros diários, cada uma com pelo menos 10 anos de dados; - 375 estações com registros subdiários (horários), provenientes de pluviômetros automáticos <em>tipping bucket</em> e de sifão inclinável, cada uma com no mínimo 9 anos de séries de máximos anuais.</p>
-<p>Foram descartados os anos em que mais de 25% dos registros apresentavam falhas. Além disso, alguns máximos anuais foram corrigidos ou excluídos devido a erros de leitura, falhas técnicas ou dados suspeitos (por exemplo: acumulações indevidas em pluviômetros de balde, períodos de falha do equipamento ou totais inconsistentes com estações vizinhas).</p>
-<p><strong>1.2 Série de máximos anuais e índice de referência</strong></p>
-<p>A partir dos registros foram extraídas as séries de máximos anuais (AM) em diferentes duraçõe (1h, 2h, 6, 12, 1d, 2, 4d e 8d). Essas séries constituíram a base para a análise estatística.</p>
-<p>A mediana da série AMAX (RMED) foi definida como índice de referência (<em>Index Rainfall</em>) e calculada separadamente para cada duração.</p>
-<p><strong>1.3 Mapeamento da RMED</strong></p>
-<p>O RMED foi interpolado em uma malha regular de 1 km sobre o território do Reino Unido, utilizando-se o método de geo-regressão.</p>
-<p>Esse procedimento combina:</p>
-<ul>
-<li>Uma regressão múltipla entre RMED e variáveis fisiográficas (elevação, distância média ao mar, barreiras orográficas, continentalidade – distância a Lille/França, latitude, longitude); • Seguida pela aplicação de krigagem dos resíduos para capturar padrões locais não explicados pela regressão.</li>
-</ul>
-<p>As séries de AM foram padronizadas pela razão entre o valor observado e o RMED local, o que permitiu a comparação entre estações e a análise em escala regional.</p>
-<p><strong>1.4 Derivação das curvas de crescimento (<em>Growth Curves</em>)</strong></p>
-<p>A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (<em>Focused Rainfall Growth Curve Extension</em>), desenvolvido especificamente para o FEH. O FORGEX ajusta distribuições estatísticas às séries padronizadas, obtendo assim a relação entre a precipitação associada a um período de retorno T e o índice RMED.</p>
-<p>O ajuste baseia-se na distribuição de valores extremos generalizada (GEV):</p>
+<p>O desenvolvimento de metodologias para estimar chuvas intensas acompanha a evolução dos bancos de dados pluviométricos, dos métodos estatísticos de análise de extremos e da incorporação de cenários de mudanças climáticas em estudos hidrológicos. As abordagens do Canadá, Estados Unidos, Austrália e Reino Unido representam diferentes momentos desse processo, refletindo desde técnicas mais simples baseadas em estacionariedade até modelos não estacionários com integração de projeções climáticas.</p>
+<p>A modelagem estatística dos máximos anuais de precipitação é tradicionalmente realizada com distribuições de extremos. A mais geral é a distribuição de valores extremos generalizada (GEV):</p>
 <p><span class="math display">\[
-F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\},
-\quad 1 + \xi \left( \frac{x - \mu}{\sigma} \right) &gt; 0
+F(x) = \exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-\frac{1}{\xi}}\right\}, \quad 1+\xi\left(\frac{x-\mu}{\sigma}\right) &gt; 0
 \]</span></p>
-<p>Onde, <span class="math inline">\(\mu\)</span> é o parâmetro de localização; <span class="math inline">\(\sigma &gt; 0\)</span> é a escala e <span class="math inline">\(\xi\)</span> é a forma.Gumbel ocorre se <span class="math inline">\(xi \to 0\)</span>.</p>
-<p>Os parâmetros são estimados por máxima verossimilhança (MLE).</p>
-<p>A frequência é expressa em termos da variável reduzida de Gumbel:</p>
+<p>em que <span class="math inline">\(\mu\)</span> é o parâmetro de localização, <span class="math inline">\(\sigma\)</span> o parâmetro de escala e <span class="math inline">\(\xi\)</span> o parâmetro de forma. Quando <span class="math inline">\(\xi \to 0\)</span>, obtém-se a distribuição de Gumbel:</p>
 <p><span class="math display">\[
-y = - ln(-ln(1-p))
+F(x) = \exp\left\{-\exp\left[-\left(\frac{x-\mu}{\sigma}\right)\right]\right\}
 \]</span></p>
-<p>onde <span class="math inline">\(p =\)</span> probabilidade de não-exedência.</p>
-<p>O FORGEX divide os dados em faixas de retorno (<em>y-slices</em>). Dentro de cada faixa, os parâmetros da GEV são ajustados separadamente e posteriormente suavizados, garantindo consistência da curva resultante.</p>
-<p><strong>1.5 Construção do Modelo DDF (<em>Depth-Duration-Frequency</em>)</strong></p>
-<p>A integração do RMED com as curvas de crescimento deu origem a um modelo paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.</p>
+<p>Além disso, para séries <em>peaks-over-threshold</em>, emprega-se frequentemente a <em>Generalized Pareto</em> (GPA):</p>
 <p><span class="math display">\[
-\ln R(D,y) =
-\begin{cases}
-(cy + d_1)\ln D + (ey+f), &amp; D \leq 12h \\\\
-\ln R_{12} + (cy + d_2)(\ln D - \ln 12), &amp; 12h &lt; D \leq 48h \\\\
-\ln R_{48} + (cy + d_3)(\ln D - \ln 48), &amp; D &gt; 48h
-\end{cases}
+F(x) = 1-\left(1+\xi \frac{x-\mu}{\sigma}\right)^{-1/\xi}, \quad 1+\xi \frac{x-\mu}{\sigma} &gt; 0
 \]</span></p>
-<p>O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade de 1 km.</p>
-<p>Os limites de confiação foram estimados via <em>bootstrap</em> para avaliar a incerteza das curvas de crescimento.</p>
-<p><strong>1.6 Saídas</strong></p>
-<p>A metodologia resultou na elaboração de:</p>
-<p>• mapas nacionais de RMED para diferentes durações, • curvas de crescimento regionais, • chuvas de projeto (DDF) consistentes para todo o Reino Unido.</p>
-<p><strong>1.7 Atualizações da Metodologia</strong></p>
-<p>Documentos: <em>Reservoir Safety – Long Return Period Rainfall Volume 1 Technical Report (Part 1 and 2)</em></p>
-<p>Em 2013 a <em>Environment Agency</em> e o <em>Departament for Envionment Food and Rural Affairs</em> publicaram os volumes 1 e 2 do referido documento que possuem atualizações para a metodologia. Assim, destacam-se as seguintes mundanças:</p>
-<ul>
-<li>Expansão da base de dados de estações horárias de 375 para 968;</li>
-<li>Novo índice de referência que combina RMED, SAAR (<em>Standard Average Annual Rainfall</em>) e <em>northing</em> (coordenada N-S), reduzindo a variabilidade espacial residual;</li>
-<li>No FEH, Vol 2 a depedência espacial era tratada de forma simplificada e constante, sou seja, assumia-se um certo grau de correlação espacial entre pluviômetros, independentemente da raridade do evento. Nos relatórios |<em>Long Return Period Rainfall</em> a dependência entre estações varia com o período de retorno: Para eventos comuns (baixo período de retorno) há uma forte dependência, ou seja, chuvas intensas costumam ocorrer em várias estações próximas ao mesmo tempo; para eventos raros (período de retorno alto) há menor depedência, ou seja, eventos muito extremos são mais localizados e não atingem grandes áreas com a mesma intensidade;</li>
-<li>As estimativas acima de 1000 anos frequentemente excediam o PMP (<em>Probable Maximum Precipitation</em>); na atualização, as curvas foram ajustadas para crescer de forma mais realista, mantendo consistência com o PMP e com eventos observados.</li>
-</ul>
-<p><img src="figuras/guidelines_fluxograma_australia.jpg" class="img-fluid" alt="Fluxograma da metodologia aplicada na Austrália"> Figura 1. Fluxograma da metodologia aplicada na Austrália (Baseado no FEH, 99)</p>
+<p>No Canadá, a metodologia IDF_CC (Simonović et al., 2016) utiliza a distribuição de Gumbel, ajustada pelo método dos momentos, e inova ao aplicar o <em>Equidistant Quantile Mapping (EQM)</em>. Essa técnica ajusta quantis observados e simulados, garantindo consistência entre registros subdiários e projeções climáticas diárias de modelos globais. O mapeamento é dado por:</p>
+<p><span class="math display">\[
+X_{futuro} = F_{obs}^{-1}\left(F_{mod}(X_{mod})\right)
+\]</span></p>
+<p>onde <span class="math inline">\(F_{obs}\)</span> é a função distribuição acumulada observada, <span class="math inline">\(F_{mod}\)</span> a simulada e <span class="math inline">\(X_{mod}\)</span> o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.</p>
+<p>Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV não estacionária, estimada por máxima verossimilhança (MLE) com o uso de covariáveis. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:</p>
+<p><span class="math display">\[
+\mu(s,t) = \beta_0 + \beta_1 \cdot \text{MAP}(s) + \beta_2 \cdot \text{DEM}(s) + \beta_3 \cdot \text{GWL}(t)
+\]</span></p>
+<p>em que MAP é a precipitação média anual, DEM a altitude e GWL o nível de aquecimento global. A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções kernel, e a interpolação final é feita em grade de alta resolução (30 segundos de arco) por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.</p>
+<p>Na Austrália, o <em>Australian Rainfall and Runoff</em> (ARR 2019) destaca-se pela robustez estatística e pela amplitude da base de dados. A distribuição GEV é aplicada às séries anuais, e a GPA às séries <em>peaks-over-threshold</em>, com parâmetros estimados por L-momentos, técnica reconhecida por sua estabilidade em amostras curtas. Para séries subdiárias, utiliza-se ainda o método BGLSR (<em>Bayesian Generalized Least Squares Regression</em>).</p>
+<p>A regionalização segue o conceito de Região de Influência (ROI), no qual cada estação é associada a um grupo mínimo de estações semelhantes até alcançar pelo menos 500 anos combinados de observações. A interpolação é realizada pelo modelo <em>ANUSPLIN</em>, que utiliza <em>splines</em> de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.</p>
+<p>No Reino Unido, o <em>Flood Estimation Handbook</em> (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações anuais máximas):</p>
+<p><span class="math display">\[
+X' = \frac{X}{RMED}
+\]</span></p>
+<p>Essa padronização possibilitou a aplicação do método FORGEX, no qual as distribuições de extremos são ajustadas às séries padronizadas por máxima verossimilhança (MLE). A regionalização é obtida por regressões geoestatísticas com variáveis explicativas (latitude, longitude e altitude), e a espacialização final dos resíduos é realizada por krigagem. O produto consiste em superfícies nacionais dos parâmetros padronizados e do índice RMED, a partir das quais podem ser derivadas curvas IDF locais. Apesar de inovador, o método é estacionário e não considera os efeitos das mudanças climáticas.</p>
+<p>De forma geral, observa-se que as metodologias evoluíram de modelos estacionários, como no caso do Reino Unido e da Austrália, para abordagens que incorporam explicitamente a não estacionariedade climática, como no Canadá e, sobretudo, nos Estados Unidos. Enquanto o IDF_CC aposta na simplicidade do EQM aliado à distribuição de <em>Gumbel</em>, o NOAA Atlas 15 se destaca pela integração entre GEV não estacionária, covariáveis e múltiplos cenários de projeção climática.</p>
+<p>Já o ARR 2019 consolida técnicas estatísticas robustas, como L-momentos e ROI, aplicadas a uma base de dados extensa, e o FEH contribuiu historicamente ao introduzir padronizações que serviram de referência para métodos subsequentes. O denominador comum entre todas as metodologias é a disponibilização de produtos finais em grade, que permitem a aplicação prática em escala nacional, embora apenas as metodologias canadense e estadunidense integrem explicitamente os cenários de mudanças climáticas.</p>
 </div>
+<section id="comparação-de-abordagens" class="level2">
+<h2 class="anchored" data-anchor-id="comparação-de-abordagens">Comparação de Abordagens</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>ABORDAGEM</th>
+<th>AUSTRÁLIA</th>
+<th>CANADÁ</th>
+<th>ESTADOS UNIDOS</th>
+<th>REINO UNIDO (FEH Vol. 2)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Séries de precipitação</strong></td>
+<td>Subdiárias e diárias</td>
+<td>Subdiárias</td>
+<td>Subdiárias e diárias</td>
+<td>Subdiárias e diárias</td>
+</tr>
+<tr class="even">
+<td><strong>Distribuição de probabilidades</strong></td>
+<td>GEV</td>
+<td>Gumbel</td>
+<td>GEV</td>
+<td>Gumbel e GEV (para modelo DDF)</td>
+</tr>
+<tr class="odd">
+<td><strong>Estimador</strong></td>
+<td>L-momentos</td>
+<td>Método dos momentos</td>
+<td>L-momentos</td>
+<td>L-momentos</td>
+</tr>
+<tr class="even">
+<td><strong>Regionalização</strong></td>
+<td>Regressão GLS Bayesiana</td>
+<td>Natural Neighbor</td>
+<td>RFA</td>
+<td>Georegressão + Kriging com covariáveis topográficas</td>
+</tr>
+<tr class="odd">
+<td><strong>Produto em grade</strong></td>
+<td>ANUSPLIN (splines p/ interpolar dados)</td>
+<td>Mapas IDF (IDWS)</td>
+<td>PFVOL1/2: Interpolação cúbica monotônica</td>
+<td>Grade 1 km: mapas digitais de RMED e parâmetros DDF</td>
+</tr>
+<tr class="even">
+<td><strong>Resumo</strong></td>
+<td>Dados subdiários usados p/ gerar equações de regressão linear com covariáveis (chuvas e fisiografia). Estimativas de média, L-CV, L-assimetria. Aplicadas a estações diárias e subdiárias. Abordagem Hosking &amp; Wallis (1993) para L-momentos regionais.</td>
+<td>Dados subdiários + projeções de 24 GCMs (IDF_CC Tool). Distribuição Gumbel, método dos momentos. Interpolação Natural Neighbor. Downscaling EQM.</td>
+<td>Vol. 1: dados diários/subdiários NOAA NCEI + parceiros. AMS extraída p/ diferentes durações, ajustada à GEV via L-momentos. Locais sem obs: RFA + regressão dos parâmetros da GEV c/ covariáveis. Produto final em grade (0,1°) com interpolação cúbica monotônica.</td>
+<td>AMS para 1h–8d, índice RMED (chuva máxima mediana). Interpolação em grade 1 km com georegressão + topografia. Curvas de crescimento derivadas via FORGEX. Resultados integrados em modelo DDF, consistente até 10.000 anos. Produtos: mapas digitais e parâmetros de chuva de projeto.</td>
+</tr>
+</tbody>
+</table>
 
 
 
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Abreu.2022" class="csl-entry" role="listitem">
