@@ -1,7 +1,7 @@
 ---
-title: "Guideline Canadá"
+title: "Guidelines"
 author: Bruno Pereira.
-bibliography: referencias/ref_desagregacao.bib
+bibliography: referencias/ref_metodologias_chuva.bib
 nocite: |
   @*
 ---
