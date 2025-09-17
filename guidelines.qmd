@@ -1,7 +1,7 @@
 ---
 title: "Guidelines"
 author: Bruno Pereira.
-bibliography: referencias/ref_metodologias_chuva.bib
+bibliography: referencias/ref_metodologias_chuvas.bib
 nocite: |
   @*
 ---
