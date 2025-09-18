@@ -285,35 +285,7 @@ com extensão por trechos quando há quebra de escala em $d_r$​: usa-se $\eta_
 
 Sane et al. (2018) constroem curvas IDF para o Senegal comparando duas formulações baseadas em invariância de escala acoplada à teoria de valores extremos. Ambas assumem que, para cada duração $D$, a intensidade extrema $I(D)$ segue uma GEV com parâmetros que escalam via uma função $b(D)$: $\mu(D)=\mu_0​b(D)$, $\sigma(D)=\sigma_0\,b(D)$ e $\xi$ fixo, de modo que o quantil de período de retorno $T$ é $i_T(D)=F^{-1}_{\text{GEV}}(D_0,1-1/T)\,b(D)$, com $D_0$​ uma duração de referência. Os autores adotam a formulação de Koutsoyiannis et al. (1988) para IDF, usando o escalonamento $b(D)=(D+\theta)^{\eta}$ e estimando os parâmetros {${\mu_0,\sigma_0,\xi,\eta,\theta}$} via GEV. Além de calibrar e validar as duas IDFs com testes de aderência e métricas de quantis, o estudo quantifica a incerteza separando a parcela devida ao ajuste da GEV de 24 h da parcela devida à própria escala $b(D)$, apresentando envelopes de confiança de 90% em vários postos; também mapeia parâmetros e níveis de retorno para tornar as curvas IDF acessíveis no país.
 
-<<<<<<< HEAD
-Van de Vyver (2018) propõe um modelo IDF fundado em multiescalonamento dos máximos anuais, estendendo a “escala simples + GEV” clássico. Em vez de impor separabilidade $i_T(d)=a(T)\,b(d)$, o autor assume que, para a GEV dos máximos de duração $d$, os parâmetros locação e escala têm expoentes de escala distintos:
-
-$$
-\mu(d)=d^{-\eta_1}\,\mu,\qquad
-\sigma(d)=d^{-\eta_2}\,\sigma,\qquad \xi=\text{constante},\;\; 0<\eta_1\le
-\eta_2
-$$
-
-o que leva a uma IDF não separável em $d$ e $T$:
-
-$$
-i_T(d)=d^{-\eta_1}\!\left[\mu-\frac{d^{-\eta_2}\sigma}{\xi}\Big\{1-\big(-\ln(1-1/T)\big)^{-\xi}\Big\}\right]
-$$
-
-No limite de simple scaling, recupera-se $\eta_1=\eta_2=\eta$ e a forma separável usual. A estimação é feita em um framework Bayesiano, com critérios de comparação que indicam melhor desempenho e controle de complexidade (sem *overfitting*) em relação ao *simple scaling* quando os dados sugerem comportamento multiescala. \### Levar para a parte Bayesiana.
-
-Cannon & Innocenti (2018) avaliam mudanças projetadas em IDFs na América do Norte usando com base em dados subdiários e diários de simulações de modelos climáticos *convection-permitting* sob pseudo-aquecimento global para os períodos histórico e final do século XXI. Para contornar integrações curtas, aplicam um modelo GEV $(\mu_0,\sigma_0,\xi)$; com escala simples, os parâmetros para qualquer $D\in[1,24]$ h obedecem $\mu_D=(D/D_0)^{-H}\mu_0$, $\sigma_D=(D/D_0)^{-H}\sigma_0$ e $\xi_D=\xi$, produzindo a IDF
-
-$$
-i_{D,T}=\Big(\tfrac{D}{D_0}\Big)^{-H}\!\Big\{\mu_0-\frac{\sigma_0}{\xi}\big[1-\{-\ln(1-1/T)\}^{-\xi}\big]\Big\}
-$$
-
-Aqui, $\mu_0$​ e $\sigma_0$​ controlam o “deslocamento” vertical das IDFs, $\xi$ a cauda, e $H$ a inclinação comum em log–log; $T$ é o período de retorno. A inferência é Bayesiana (MCMC) com seleção de mudanças via False Discovery Rate Bayesiano, e o ajuste é avaliado contra IDFs observadas (ECCC) e grades observacionais (CMORPH/MSWEP). O modelo mostrou boa confiabilidade para ≥10–15 min e permite extrapolar de 1 h a sub-horas com cautela. Encontram aumentos significativos e extensos na localização (\>99% dos pontos), escala (\>88%) e no expoente de escala (\>39%), resultando em IDFs mais altas e, em geral, mais íngremes (maiores ganhos em durações curtas; exceções relativas no leste dos EUA). \### Bayesiano
-
-Courty et al. (2019) constroem um arcabouço global de IDF a partir do ERA5 (1–360 h, \~31 km), mostrando que os parâmetros da GEV para máximos anuais escalam com a duração por leis de potência e disponibilizando dois conjuntos: PXR-2 (mapas de $\mu_d,\sigma_d$​ para 19 durações) e PXR-4 (parâmetros de escala das leis de potência), com forma fixa $\kappa=-0{,}114$ e estimação por PWMs. A principal contribuição metodológica é formalizar uma IDF contínua em duração que “empresta força” entre escalas via o escalonamento independente de $\mu$ e $\sigma$:
-=======
 Courty et al. (2019) constroem um arcabouço global de IDF a partir do ERA5 (1–360 h, \~31 km), mostrando que os parâmetros da GEV para máximos anuais escalam com a duração por leis de potência e disponibilizando dois conjuntos: PXR-2 (mapas de $\mu_d,\sigma_d$​ para 19 durações) e PXR-4 (parâmetros de escala das leis de potência), com forma fixa $\xi=-0{,}114$ e estimação por PWMs. A principal contribuição metodológica é formalizar uma IDF contínua em duração que “empresta força” entre escalas via o escalonamento independente de $\mu$ e $\sigma$:
->>>>>>> a268c8da179f676a74b892686a9d5d51eda1aa3f
 
 $$
 \mu_d =
@@ -329,11 +301,7 @@ i_{T,d}=x_{d_0}\,(d/d_0)^{-\eta}\,i^{\text{GC}}_{T,d_0},\qquad
 \mu_d=(d/d_0)^{-\eta}\mu_{d_0},\ \ \sigma_d=(d/d_0)^{-\eta}\sigma_{d_0}
 $$
 
-<<<<<<< HEAD
-com $\mu,\sigma,\xi$ da GEV e $h$ comum às durações. Em cross-validation com bootstrapping, todos os modelos têm acurácia similar até $T\le 30$ anos; para $T$ altos, At-siteBC reduz viés (cauda mais pesada). Quando há poucos medidores sub-diários $(N_t\!\le\!5)$ mas muitos diários $(N_{24h}\!\ge\!10)$, os modelos de escala (Sc/RegSc) superam os demais e a incerteza cai acentuadamente (p.ex., largura do $IC_{90\%}$​ e RMSE diminuem). O desempenho depende de captar o controle orográfico sobre $\mu,\sigma$ (forte), enquanto $\xi$ e $h$ pouco variam espacialmente.
-=======
 com $\mu,\sigma,\xi$ da GEV e $\eta$ comum às durações. Em cross-validation com bootstrapping, todos os modelos têm acurácia similar até $T\le 30$ anos; para $T$ altos, At-siteBC reduz viés (cauda mais pesada). Quando há poucos medidores sub-diários $(N_t\!\le\!5)$ mas muitos diários $(N_{24h}\!\ge\!10)$, os modelos de escala (Sc/RegSc) superam os demais e a incerteza cai acentuadamente (p.ex., largura do $IC_{90\%}$​ e RMSE diminuem). O desempenho depende de captar o controle orográfico sobre $\mu,\sigma$ (forte), enquanto $\xi$ e $\eta$ pouco variam espacialmente.
->>>>>>> a268c8da179f676a74b892686a9d5d51eda1aa3f
 
 Yeo et al (2021) apresentam um esquema de desagregação temporal baseado em invariância de escala que chamam de Scaling-GEV. Partem da hipótese de escala simples para máximos anuais (AMPs), pela qual os parâmetros da GEV em duas durações $d$ e $\lambda d$ satisfazem $\xi(\lambda d)=\xi(d)$ (forma constante), $\mu(\lambda d)=\lambda^{-\eta}\mu(d)$ e $\sigma(\lambda d)=\lambda^{-\eta}\sigma(d)$ (escala e localização com lei de potência). Com essa estrutura, os autores propõem três rotas de estimação para a GEV subdiária a partir de AMPs diárias: SLmom (estima $\mu,\sigma,\xi$ por L-momentos após reescalar quantis), S1NCM (usa apenas $\mu_1$​ para obter $\lambda^{-\eta}$ e transporta $\mu,\sigma$, mantendo $\xi$ constante) e S3NCM (usa $\mu_1,\mu_2,\mu_3$​ e resolve numericamente $\xi$). Em aplicações a Dorval (Canadá) e Seul (Coreia), identificam dois regimes de duração com pontos de ruptura (≈30 min e 90 min, respectivamente) e mostram que S3NCM é, em geral, o mais acurado para durações subdiárias, enquanto SLmom tende a ir melhor nas mais longas. Como contribuição adicional, introduzem um bootstrap modificado que constrói intervalos de confiança de 95% para IDFs usando somente AMPs diárias: reamostram as AMPs de 1 dia, propagam a incerteza via relações de scaling para as durações curtas e fecham os limites com a inversa da GEV.
 
@@ -395,11 +363,7 @@ $$
 \ \text{(simple scaling)}
 $$
 
-<<<<<<< HEAD
-e o ajuste dos extremos em cada duração emprega EV1/Gumbel (também testando GEV a 3 parâmetros), o que permite obter $i_{D,T}$​ e, via a relação acima, reconstruir $i_{d,T}$​ nas durações subdiárias. Aqui, $d,D$ são durações (h ou dias), $T$ é o período de retorno, $q$ a ordem do momento, $K(q)$ a função de escala dos momentos e $\beta$ o expoente estimado como declive de $K(q)$ vs. $q$. Para espacializar $\beta$ e torná-lo previsível em locais sem medição subdiária, os autores modelam $\beta$ como função de variáveis geográficas (latitude, longitude, altitude, distância à costa) condensadas por PCA, além de regiões pluviometricamente homogêneas (classificações HadUKP e Jones) codificadas via dummies. O modelo dummy regression com PCs explica de \~64% (HadUKP) a \~73% (Jones) da variância de $\beta$; longitude emerge como preditor dominante, e há estabilidade temporal de $\beta$ verificada com janelas móveis e teste de Pettitt (98/102 séries sem ruptura), embora com sazonalidade marcada: $\beta$ mais negativo no verão, refletindo escalonamento mais íngreme nas durações curtas.
-=======
 e o ajuste dos extremos em cada duração emprega EV1/Gumbel (também testando GEV a 3 parâmetros), o que permite obter $i_{D,T}$​ e, via a relação acima, reconstruir $i_{d,T}$​ nas durações subdiárias. Aqui, $d,D$ são durações (h ou dias), $T$ é o período de retorno, $q$ a ordem do momento, $K(q)$ a função de escala dos momentos e $-\eta$ o expoente estimado como declive de $K(q)$ vs. $q$. <!--#Para espacializar $\beta$ e torná-lo previsível em locais sem medição subdiária, os autores modelam $\beta$ como função de variáveis geográficas (latitude, longitude, altitude, distância à costa) condensadas por PCA, além de regiões pluviometricamente homogêneas (classificações HadUKP e Jones) codificadas via dummies. O modelo dummy regression com PCs explica de ~64% (HadUKP) a ~73% (Jones) da variância de $\beta$; longitude emerge como preditor dominante, e há estabilidade temporal de $\beta$ verificada com janelas móveis e teste de Pettitt (98/102 séries sem ruptura), embora com sazonalidade marcada: $\beta$ mais negativo no verão, refletindo escalonamento mais íngreme nas durações curtas.-->
->>>>>>> a268c8da179f676a74b892686a9d5d51eda1aa3f
 
 Creaco (2024) propõe uma formulação parcimoniosa de IDF válida simultaneamente para durações sub-horárias e supra-horárias ao introduzir a duração ajustada $T=t+c$($c>0$, tipicamente \< 1 h). Sob simple scaling, impõe-se $iTi_{\lambda T}\overset{d}{=}\lambda^{-\eta} i_T$​, o que leva a $\mathbb{E}[i_t]=a_1\,(t+c)^{-\eta}$ e, incorporando um fator de frequência $K_P$​ (com distribuição GEV) e o coeficiente de variação $V$, obtém-se diretamente a família de IDFs
 
@@ -407,11 +371,7 @@ $$
 i_t(P)=a_1\,\big(1+V\,K_P\big)\,(t+c)^{-\eta}
 $$
 
-<<<<<<< HEAD
-na prática uma versão escala-invariante da curva de três parâmetros $i_t=p_1\,(t+p_3)^{p_2}$​ onde $\{a_1,n,c,V\}$ substituem $\{p_1,p_2,p_3\}$ e o nível de retorno entra via $K_P$​. Aqui, ttt é a duração “real”, $c$ corrige o viés de curta duração, $n$ é o expoente de escala, $a_1$​ é o parâmetro de nível, $V$ o CV e $K_P\sim\text{GEV}(\mu,\sigma,\xi)$ padronizado (média 0, desvio 1). Em multiple scaling, a variabilidade de segunda ordem é relaxada introduzindo $\phi_2$​ e $a_2$​, resultando em
-=======
 na prática uma versão escala-invariante da curva de três parâmetros $i_t=p_1\,(t+p_3)^{p_2}$​ onde $\{a_1,\eta,c,V\}$ substituem $\{p_1,p_2,p_3\}$ e o nível de retorno entra via $K_P$​. Aqui, $t$ é a duração “real”, $c$ corrige o viés de curta duração, $\eta$ é o expoente de escala, $a_1$​ é o parâmetro de nível, $V$ o CV e $K_P\sim\text{GEV}(\mu,\sigma,\xi)$ padronizado (média 0, desvio 1). Em multiple scaling, a variabilidade de segunda ordem é relaxada introduzindo $\phi_2$​ e $a_2$​, resultando em
->>>>>>> a268c8da179f676a74b892686a9d5d51eda1aa3f
 
 $$
 i_t(P)=a_1\!\left[1+K_P\,\sqrt{\Big(\tfrac{a_2}{a_1^2}\Big)(t+c)^{2-\eta}(\phi_2-1)-1}\
