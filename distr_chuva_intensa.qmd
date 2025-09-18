@@ -5,3 +5,21 @@ bibliography: referencias/ref_modelos.bib
 nocite: |
   @*
 ---
+## Principais distribuições utilizadas
+
+Introduzir a questão da necessidade de se relacionar probabilidade de excedência com magnitude das precipitações para fins de engenharia;
+
+Mencionar a possibilidade de se analisar os extremos de duas foromas distintas: via séries parciais e via máximos anuais;
+
+Falar de uma maneira geral sobre as ditribuições, dando exemplos de uso de cada uma delas. 
+
+## As distribuições de extremos
+
+### A teoria de valores extremos
+
+INtroduzir o conceito de máximo de um conjunto de variáveis aleatórias e explicr a ideia de que a distribuição desses máximos converge para uma das 3 distribuições de extremos: Gimbel, Frechet e Weibull reversa. Ver discussão na seção 2 de Papalexious e Koutsoyiannis (2013).
+
+### Justificativa para uso da GEV
+
+### A questão do parâmetro do forma
+
