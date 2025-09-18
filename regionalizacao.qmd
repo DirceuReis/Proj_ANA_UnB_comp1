@@ -1,0 +1,61 @@
+---
+title: "Regionalização"
+author: Larissa Rolim
+format: html
+---
+
+# Regionalização
+
+As metodologias de regionalização podem ser classificadas de diversas formas, dependendo dos princípios subjacentes, das técnicas estatísticas empregadas e do objetivo da regionalização. Uma classificação abrangente seria a seguinte:
+
+1.  **Análise de Frequência Regional e Regionalização**: Focada em métodos e comparações de regionalização de estatísticas de precipitação, incluindo a formação de regiões homogêneas e a aplicação de regressões.
+
+O trabalho de Alila (2000) trata a regionalização de chuvas intensas com o objetivo de obter equações RDDF (regional depth–duration–frequency) aplicáveis em locais sem medição sub-horária. Parte-se de estimativas locais $R_d^T$​ (profundidade de chuva de duração $d$ e período de retorno $T$) obtidas por GEV via L-momentos em um arranjo hierárquico (HRGEV) — L-média no sítio, L-CV em sub-regiões e L-assimetria à escala regional — e, com essa base, constroem-se duas relações regionais que desacoplam a variação com a duração e com a frequência. Na dimensão duração, toma-se 60 min como referência e ajusta-se, para $d<60$ min, uma lei quase linear que na prática resulta em um fator puramente de duração:
+
+$$ R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d<60\ \text{min}) $$
+
+o que implica que o DDR $(=R_d^T/R_{60}^T)$ para $d<60$ min é aproximadamente independente de $T$ e da localização. Na dimensão frequência, para cada duração fixa $d$, modela-se a razão DFR $(=R_d^T/R_d^{10\ \text{yr}})$ como função logarítmica da precipitação média anual da região ($\mathrm{MAP}$, em mm):
+
+$$ \frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152. $$
+
+Combinando ambas as peças e ancorando em 60 min obtém-se, para a própria duração de referência,
+
+$$ R_{60}^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}} $$
+
+e, propagando para $d<60$ min,
+
+$$ R_d^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\;\big(0.183\,d^{0.433}\big) $$
+
+Para $d=120$ min o autor identifica dois regimes segundo a umidade regional e introduz um leve ajuste:
+
+$$ R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big) $$
+
+se $\mathrm{MAP}\le1200$ mm . Em síntese, a regionalização de Alila (2000) separa: (i) um escalonamento por duração ancorado em 60 min (via $0.183\,d^{0.433}$) e (ii) um escalonamento por frequência mediado por $\mathrm{MAP}$ (via $c(T),e(T)$.
+
+O trabalho de Basso et al. (2016) reavalia e atualiza a regionalização de chuvas intensas no Brasil originalmente proposta por Torrico (1974). A lógica de regionalização é baseada nas relações entre durações (coeficientes de desagregação) derivadas de curvas IDF obtidas de séries pluviográficas. Em Torrico, a identificação de isozonas decorreu da observação, em papel de probabilidade de Hershfield–Wilson, de que as semirretas “altura vs. duração” para 1 h e 24 h interceptavam o eixo das ordenadas em pontos semelhantes dentro de certas áreas. Partindo dessa base, Basso et al. (2016) montam um banco de \~1000 estações com equações IDF atuais (priorizando a versão mais recente quando há múltiplas para o mesmo local e excluindo relações derivadas apenas de fórmulas gerais), padronizam a comparação em TR = 10 anos (com base em recomendações usuais de drenagem urbana e na relativa estabilidade dos coeficientes com TR) e extraem para cada posto $r_{1\mathrm{h}24\mathrm{h}}$​ e demais razões $r_{\mathrm{min},24\mathrm{h}}$​. Essas razões são então espacializadas por ferramentas de geomática e análise visual para compor um novo zoneamento; em regiões com poucos dados (Norte e Centro-Oeste) a delimitação é assistida por mapas de unidades climáticas e pelo Atlas Pluviométrico (CPRM). Como verificação, os autores mostram que a forma geral das isozonas de Torrico é em grande parte preservada, com exceção notável da isozona continental (E), mas os valores dos coeficientes mudaram substancialmente em várias áreas. O artigo então propõe novas isozonas (mapa e nomenclatura atualizada) e publica tabelas de coeficientes de desagregação médios por isozona para TR=10 anos (com baixa dispersão interna, diferença máxima ≈ 2,24 p.p.), salientando que representam comportamentos médios regionais e não capturam microclimas locais.
+
+1.  **Modelagem de Extremos Espaciais e Hierárquicos (MEEH)**: Esta classe abrange estudos que utilizam modelos estatísticos avançados para analisar extremos de precipitação em um contexto espacial. Isso inclui modelos hierárquicos Bayesianos, processos max-estáveis, e modelos GEV (Generalized Extreme Value) espaciais, focando na dependência espacial e na quantificação da incerteza.
+
+Amin et al. (2024) regionaliza curvas IDF teoricamente consistentes estimando, em cada posto, extremos anuais para várias durações (de 5 min a 16 dias) e realizando uma análise local de extremos. Em seguida, usa Krigagem com Deriva Externa (KED) para interpolar os sete parâmetros do modelo IDF consistente em toda a região; a ênfase é que nenhum parâmetro é mantido constante espacialmente. A partir dos parâmetros regionalizados, recuperam-se os quantis (IDF) para cada posto, duração e período de retorno. A incerteza é decomposta em três componentes do processo de regionalização: (i) estimação local dos parâmetros (ligada ao ajuste de extremos em cada sítio), (ii) estimação do variograma usado na krigagem, e (iii) estimação espacial dos parâmetros (interpolação via KED). Cada componente é avaliado em termos de acurácia (erro esperado) e precisão (largura do IC-95%). Para quantificar, o trabalho emprega bootstrap não paramétrico (para a parte local) e simulações geoestatísticas; especificamente, escolhe Conditional Sequential Gaussian (CSG) por gerar muitas simulações equiprováveis e por evidências recentes de boa acurácia. São feitas 100 realizações em cada componente e, depois, simulações combinadas para propagar a incerteza até as curvas IDF finais. Os resultados indicam que a fonte dominante de incerteza é a estimação espacial (interpolação dos parâmetros), seguida da estimação local; a incerteza do variograma tem impacto pequeno na incerteza total das IDFs. A integração de simulações espaciais com reamostragem local forneceu estimativas realistas da incerteza em postos amostrados; em não amostrados, a acurácia cai conforme diminuem densidade e proximidade das estações vizinhas. Como ordem de grandeza, os intervalos de tolerância típicos ficam entre ±0,9–4,2 mm/h para baixas recorrências (\< 5 anos) e ±2,2–5,5 mm/h para altas recorrências (\> 50 anos); durações muito curtas (5 min) apresentam incertezas relativamente maiores.
+
+1.  **Modelagem de Escala e IDF/DDF (MEIDF)**: Dedicada ao desenvolvimento e aplicação de propriedades de escala (simples, multiescala) para derivar relações de Intensidade-Duração-Frequência (IDF) ou Profundidade-Duração-Frequência (DDF), frequentemente incluindo desagregação e ajuste à frequência de medição.
+
+A regionalização em Aguilar & Costa (2020) parte da hipótese de similaridade hidrológica regional: para dias chuvosos, a distribuição conjunta entre um atributo subdiário (associado a uma duração $m$) e o total diário é aproximadamente a mesma no posto-alvo e em um conjunto de postos vizinhos, permitindo transferência de informação para desagregar a chuva diária via KNN-MOF. Essa hipótese é explicitada ao definir “fragmentos” subdiários como vetores contendo a sequência subdiária agregada à duração mmm e normalizada pelo total diário do próprio dia, que depois serão reescalados pelo total diário do alvo:
+
+$$ fr^{(s)}_{i,m}=X^{(s)}_{i,m}/\sum_m X^{(s)}_{i,m} $$
+
+onde $X^{(s)}_{i,m}$ denota a chuva subdiária (na resolução de $m$ minutos) no dia $i$. A identificação de “vizinhos hidrologicamente similares” é feita testando, para cada par de estações, a igualdade das distribuições conjuntas $(\text{atributo}, \text{chuva diária})$ por meio do teste Kolmogorov–Smirnov de duas amostras (2D2S KS) ao nível de 5%, comparando a distribuição conjunta de cada atributo com o total diário. Os atributos hidrológicos empregados (computados para 60, 180 e 360 min) são: intensidade máxima (por duração) normalizada pelo total diário, fração de zeros, e timing da intensidade máxima.
+
+Com o rótulo $u$ obtido por meio do teste Kolmogorov–Smirnov, ajusta-se uma regressão logística que modela $\Pr(u=1)=logit(z)$ a partir de preditores físicos definidos por diferenças absolutas de latitude, longitude, elevação e pelo produto das diferenças de latitude e longitude (proxy de distância euclidiana). Formalmente,
+
+$\Pr(u=1)=logit(z)=\frac{e^{z}}{1+e^{z}},\qquad z=\beta_0+\beta_1\nu_1+\beta_2\nu_2+\beta_3\nu_3+\beta_4\nu_4$
+
+com o vetor $\beta$ englobando os coeficientes de regressão e o vetor $\nu$ os preditores delineados anteriormente. Em seguida, os vizinhos/regiões doadoras são ranqueados pelas maiores probabilidades previstas $\Pr(u=1)$ (combinando as três métricas hidrológicas e respeitando a sazonalidade). A geração subdiária diária-a-diária no posto-alvo procede como um reprocessador não-paramétrico regional onde para cada dia chuvoso no alvo, selecionam-se candidatos nos postos doadores dentro de uma janela sazonal móvel (± \~15 dias), condicionando ao estado úmido/seco nos dias adjacentes, e então ranqueando os $k$ mais próximos pelo desvio absoluto entre totais diários. O fragmento final é sorteado com probabilidade decrescente no ranque $j$,
+
+$$P(j)=\frac{1/j}{\sum_{i=1}^{k}1/i}$$ e depois escalado pelo total diário observado do alvo. Assim, a etapa de regionalização (via KS 2D → logística) define o conjunto e os pesos dos doadores; a etapa KNN-MOF faz a amostragem condicionada e o reescalonamento para obter a série subdiária. Em termos operacionais, os autores aplicam o esquema a 40 estações nas bacias dos rios Doce e São Francisco, para durações de 60, 180 e 360 min, mostrando que a regionalização possibilita desagregação coerente das estatísticas subdiárias e comportamento de máximos anuais, mesmo sob disponibilidade limitada de séries subdiárias locais.
+
+1.  **Impacto de Mudanças Climáticas e Não Estacionariedade (IMCN)**: Artigos que investigam os efeitos das mudanças climáticas nos extremos de precipitação, o desenvolvimento de curvas IDF não estacionárias e o uso de modelos climáticos para projeções futuras e correção de viés.
+
+2.  **Análise de Co-variabilidade e Multivariada (ACMV)**: Estudos que exploram a relação entre precipitação extrema e outras variáveis climáticas (como temperatura), ou que desenvolvem métodos multivariados, incluindo regressão quantílica e cópulas.
+
+\
