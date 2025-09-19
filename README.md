@@ -3,7 +3,8 @@
 ## Resolução de conflitos
 
 ### Problema: 
-git pull -> conflito no `merge` de arquivos
+`git pull` -> conflito no `merge` de arquivos.
+
 **Resolução**: paciência e calma, leia primeiro a mensagem de erro.
 ```{bash}
 git status                     # mostra quais são os problemas
