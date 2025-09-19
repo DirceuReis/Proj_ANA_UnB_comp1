@@ -2,7 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
+<<<<<<< HEAD
 <meta name="generator" content="quarto-1.5.57">
+=======
+<meta name="generator" content="quarto-1.6.42">
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,10 +40,17 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<<<<<<< HEAD
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+=======
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-299fde5381b5a602aab895950093955a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -217,6 +228,7 @@ window.Quarto = {
 <ol type="1">
 <li><strong>Análise de Frequência Regional e Regionalização</strong>: Focada em métodos e comparações de regionalização de estatísticas de precipitação, incluindo a formação de regiões homogêneas e a aplicação de regressões.</li>
 </ol>
+<<<<<<< HEAD
 <p>O trabalho de Alila (2000) trata a regionalização de chuvas intensas com o objetivo de obter equações RDDF (regional depth–duration–frequency) aplicáveis em locais sem medição sub-horária. Parte-se de estimativas locais <span class="math inline">\(R_d^T\)</span> (profundidade de chuva de duração <span class="math inline">\(d\)</span> e período de retorno <span class="math inline">\(T\)</span>) obtidas por GEV via L-momentos em um arranjo hierárquico (HRGEV) — L-média no sítio, L-CV em sub-regiões e L-assimetria à escala regional — e, com essa base, constroem-se duas relações regionais que desacoplam a variação com a duração e com a frequência. Na dimensão duração, toma-se 60 min como referência e ajusta-se, para <span class="math inline">\(d&lt;60\)</span> min, uma lei quase linear que na prática resulta em um fator puramente de duração:</p>
 <p><span class="math display">\[R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d&lt;60\ \text{min})\]</span></p>
 <p>o que implica que o DDR <span class="math inline">\((=R_d^T/R_{60}^T)\)</span> para <span class="math inline">\(d&lt;60\)</span> min é aproximadamente independente de <span class="math inline">\(T\)</span> e da localização. Na dimensão frequência, para cada duração fixa <span class="math inline">\(d\)</span>, modela-se a razão DFR <span class="math inline">\((=R_d^T/R_d^{10\ \text{yr}})\)</span> como função logarítmica da precipitação média anual da região (<span class="math inline">\(\mathrm{MAP}\)</span>, em mm):</p>
@@ -229,6 +241,20 @@ window.Quarto = {
 <p><span class="math display">\[R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big)\]</span></p>
 <p>se <span class="math inline">\(\mathrm{MAP}\le1200\)</span> mm . Em síntese, a regionalização de Alila (2000) separa: (i) um escalonamento por duração ancorado em 60 min (via <span class="math inline">\(0.183\,d^{0.433}\)</span>) e (ii) um escalonamento por frequência mediado por <span class="math inline">\(\mathrm{MAP}\)</span> (via <span class="math inline">\(c(T),e(T)\)</span>.</p>
 <p>O trabalho de Basso et al.&nbsp;(2016) reavalia e atualiza a regionalização de chuvas intensas no Brasil originalmente proposta por Torrico (1974). A lógica de regionalização é baseada nas relações entre durações (coeficientes de desagregação) derivadas de curvas IDF obtidas de séries pluviográficas. Em Torrico, a identificação de isozonas decorreu da observação, em papel de probabilidade de Hershfield–Wilson, de que as semirretas “altura vs.&nbsp;duração” para 1 h e 24 h interceptavam o eixo das ordenadas em pontos semelhantes dentro de certas áreas. Partindo dessa base, Basso et al.&nbsp;(2016) montam um banco de ~1000 estações com equações IDF atuais (priorizando a versão mais recente quando há múltiplas para o mesmo local e excluindo relações derivadas apenas de fórmulas gerais), padronizam a comparação em TR = 10 anos (com base em recomendações usuais de drenagem urbana e na relativa estabilidade dos coeficientes com TR) e extraem para cada posto <span class="math inline">\(r_{1\mathrm{h}24\mathrm{h}}\)</span> e demais razões <span class="math inline">\(r_{\mathrm{min},24\mathrm{h}}\)</span>. Essas razões são então espacializadas por ferramentas de geomática e análise visual para compor um novo zoneamento; em regiões com poucos dados (Norte e Centro-Oeste) a delimitação é assistida por mapas de unidades climáticas e pelo Atlas Pluviométrico (CPRM). Como verificação, os autores mostram que a forma geral das isozonas de Torrico é em grande parte preservada, com exceção notável da isozona continental (E), mas os valores dos coeficientes mudaram substancialmente em várias áreas. O artigo então propõe novas isozonas (mapa e nomenclatura atualizada) e publica tabelas de coeficientes de desagregação médios por isozona para TR=10 anos (com baixa dispersão interna, diferença máxima ≈ 2,24 p.p.), salientando que representam comportamentos médios regionais e não capturam microclimas locais.</p>
+=======
+<p>O trabalho de Alila (2000) trata a regionalização de chuvas intensas com o objetivo de obter equações RDDF (regional depth–duration–frequency) aplicáveis em locais sem medição sub-horária. Parte-se de estimativas locais <span class="math inline">\(R_d^T\)</span>​ (profundidade de chuva de duração <span class="math inline">\(d\)</span> e período de retorno <span class="math inline">\(T\)</span>) obtidas por GEV via L-momentos em um arranjo hierárquico (HRGEV) — L-média no sítio, L-CV em sub-regiões e L-assimetria à escala regional — e, com essa base, constroem-se duas relações regionais que desacoplam a variação com a duração e com a frequência. Na dimensão duração, toma-se 60 min como referência e ajusta-se, para <span class="math inline">\(d&lt;60\)</span> min, uma lei quase linear que na prática resulta em um fator puramente de duração:</p>
+<p><span class="math display">\[ R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d&lt;60\ \text{min}) \]</span></p>
+<p>o que implica que o DDR <span class="math inline">\((=R_d^T/R_{60}^T)\)</span> para <span class="math inline">\(d&lt;60\)</span> min é aproximadamente independente de <span class="math inline">\(T\)</span> e da localização. Na dimensão frequência, para cada duração fixa <span class="math inline">\(d\)</span>, modela-se a razão DFR <span class="math inline">\((=R_d^T/R_d^{10\ \text{yr}})\)</span> como função logarítmica da precipitação média anual da região (<span class="math inline">\(\mathrm{MAP}\)</span>, em mm):</p>
+<p><span class="math display">\[ \frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152. \]</span></p>
+<p>Combinando ambas as peças e ancorando em 60 min obtém-se, para a própria duração de referência,</p>
+<p><span class="math display">\[ R_{60}^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}} \]</span></p>
+<p>e, propagando para <span class="math inline">\(d&lt;60\)</span> min,</p>
+<p><span class="math display">\[ R_d^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\;\big(0.183\,d^{0.433}\big) \]</span></p>
+<p>Para <span class="math inline">\(d=120\)</span> min o autor identifica dois regimes segundo a umidade regional e introduz um leve ajuste:</p>
+<p><span class="math display">\[ R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big) \]</span></p>
+<p>se <span class="math inline">\(\mathrm{MAP}\le1200\)</span> mm . Em síntese, a regionalização de Alila (2000) separa: (i) um escalonamento por duração ancorado em 60 min (via <span class="math inline">\(0.183\,d^{0.433}\)</span>) e (ii) um escalonamento por frequência mediado por <span class="math inline">\(\mathrm{MAP}\)</span> (via <span class="math inline">\(c(T),e(T)\)</span>.</p>
+<p>O trabalho de Basso et al.&nbsp;(2016) reavalia e atualiza a regionalização de chuvas intensas no Brasil originalmente proposta por Torrico (1974). A lógica de regionalização é baseada nas relações entre durações (coeficientes de desagregação) derivadas de curvas IDF obtidas de séries pluviográficas. Em Torrico, a identificação de isozonas decorreu da observação, em papel de probabilidade de Hershfield–Wilson, de que as semirretas “altura vs.&nbsp;duração” para 1 h e 24 h interceptavam o eixo das ordenadas em pontos semelhantes dentro de certas áreas. Partindo dessa base, Basso et al.&nbsp;(2016) montam um banco de ~1000 estações com equações IDF atuais (priorizando a versão mais recente quando há múltiplas para o mesmo local e excluindo relações derivadas apenas de fórmulas gerais), padronizam a comparação em TR = 10 anos (com base em recomendações usuais de drenagem urbana e na relativa estabilidade dos coeficientes com TR) e extraem para cada posto <span class="math inline">\(r_{1\mathrm{h}24\mathrm{h}}\)</span>​ e demais razões <span class="math inline">\(r_{\mathrm{min},24\mathrm{h}}\)</span>​. Essas razões são então espacializadas por ferramentas de geomática e análise visual para compor um novo zoneamento; em regiões com poucos dados (Norte e Centro-Oeste) a delimitação é assistida por mapas de unidades climáticas e pelo Atlas Pluviométrico (CPRM). Como verificação, os autores mostram que a forma geral das isozonas de Torrico é em grande parte preservada, com exceção notável da isozona continental (E), mas os valores dos coeficientes mudaram substancialmente em várias áreas. O artigo então propõe novas isozonas (mapa e nomenclatura atualizada) e publica tabelas de coeficientes de desagregação médios por isozona para TR=10 anos (com baixa dispersão interna, diferença máxima ≈ 2,24 p.p.), salientando que representam comportamentos médios regionais e não capturam microclimas locais.</p>
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
 <ol type="1">
 <li><strong>Modelagem de Extremos Espaciais e Hierárquicos (MEEH)</strong>: Esta classe abrange estudos que utilizam modelos estatísticos avançados para analisar extremos de precipitação em um contexto espacial. Isso inclui modelos hierárquicos Bayesianos, processos max-estáveis, e modelos GEV (Generalized Extreme Value) espaciais, focando na dependência espacial e na quantificação da incerteza.</li>
 </ol>
@@ -237,7 +263,11 @@ window.Quarto = {
 <li><strong>Modelagem de Escala e IDF/DDF (MEIDF)</strong>: Dedicada ao desenvolvimento e aplicação de propriedades de escala (simples, multiescala) para derivar relações de Intensidade-Duração-Frequência (IDF) ou Profundidade-Duração-Frequência (DDF), frequentemente incluindo desagregação e ajuste à frequência de medição.</li>
 </ol>
 <p>A regionalização em Aguilar &amp; Costa (2020) parte da hipótese de similaridade hidrológica regional: para dias chuvosos, a distribuição conjunta entre um atributo subdiário (associado a uma duração <span class="math inline">\(m\)</span>) e o total diário é aproximadamente a mesma no posto-alvo e em um conjunto de postos vizinhos, permitindo transferência de informação para desagregar a chuva diária via KNN-MOF. Essa hipótese é explicitada ao definir “fragmentos” subdiários como vetores contendo a sequência subdiária agregada à duração mmm e normalizada pelo total diário do próprio dia, que depois serão reescalados pelo total diário do alvo:</p>
+<<<<<<< HEAD
 <p><span class="math display">\[fr^{(s)}_{i,m}=X^{(s)}_{i,m}/\sum_m X^{(s)}_{i,m}\]</span></p>
+=======
+<p><span class="math display">\[ fr^{(s)}_{i,m}=X^{(s)}_{i,m}/\sum_m X^{(s)}_{i,m} \]</span></p>
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
 <p>onde <span class="math inline">\(X^{(s)}_{i,m}\)</span> denota a chuva subdiária (na resolução de <span class="math inline">\(m\)</span> minutos) no dia <span class="math inline">\(i\)</span>. A identificação de “vizinhos hidrologicamente similares” é feita testando, para cada par de estações, a igualdade das distribuições conjuntas <span class="math inline">\((\text{atributo}, \text{chuva diária})\)</span> por meio do teste Kolmogorov–Smirnov de duas amostras (2D2S KS) ao nível de 5%, comparando a distribuição conjunta de cada atributo com o total diário. Os atributos hidrológicos empregados (computados para 60, 180 e 360 min) são: intensidade máxima (por duração) normalizada pelo total diário, fração de zeros, e timing da intensidade máxima.</p>
 <p>Com o rótulo <span class="math inline">\(u\)</span> obtido por meio do teste Kolmogorov–Smirnov, ajusta-se uma regressão logística que modela <span class="math inline">\(\Pr(u=1)=logit(z)\)</span> a partir de preditores físicos definidos por diferenças absolutas de latitude, longitude, elevação e pelo produto das diferenças de latitude e longitude (proxy de distância euclidiana). Formalmente,</p>
 <p><span class="math inline">\(\Pr(u=1)=logit(z)=\frac{e^{z}}{1+e^{z}},\qquad z=\beta_0+\beta_1\nu_1+\beta_2\nu_2+\beta_3\nu_3+\beta_4\nu_4\)</span></p>
@@ -247,6 +277,11 @@ window.Quarto = {
 <li><p><strong>Impacto de Mudanças Climáticas e Não Estacionariedade (IMCN)</strong>: Artigos que investigam os efeitos das mudanças climáticas nos extremos de precipitação, o desenvolvimento de curvas IDF não estacionárias e o uso de modelos climáticos para projeções futuras e correção de viés.</p></li>
 <li><p><strong>Análise de Co-variabilidade e Multivariada (ACMV)</strong>: Estudos que exploram a relação entre precipitação extrema e outras variáveis climáticas (como temperatura), ou que desenvolvem métodos multivariados, incluindo regressão quantílica e cópulas.</p></li>
 </ol>
+<<<<<<< HEAD
+=======
+<p><br>
+</p>
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
 
 
 </section>
@@ -334,8 +369,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+<<<<<<< HEAD
     // For code content inside modals, clipBoardJS needs to be initialized with a container option
     // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+=======
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -446,7 +484,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+<<<<<<< HEAD
       // TODO in 1.5, we should make sure this works without a callout special case
+=======
+>>>>>>> 3643b935c4944538ddea1298377de078135203e7
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
