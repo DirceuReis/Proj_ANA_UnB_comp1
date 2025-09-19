@@ -6,7 +6,7 @@
 `git pull` -> conflito no `merge` de arquivos.
 
 **Resolução**: paciência e calma, leia primeiro a mensagem de erro.
-```{bash}
+```bash
 git status                     # mostra quais são os problemas
 git add <arquivo1 c/ conflito> # adicionar arquivos p/ commit
 git add <arquivo2 c/ conflito> #...
