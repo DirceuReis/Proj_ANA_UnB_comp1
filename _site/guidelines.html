@@ -246,24 +246,12 @@ window.Quarto = {
 </ul>
 <p>As séries de AM foram padronizadas pela razão entre o valor observado e o RMED local, o que permitiu a comparação entre estações e a análise em escala regional.</p>
 <p><strong>1.4 Derivação das curvas de crescimento (<em>Growth Curves</em>)</strong></p>
-<p>A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (<em>Focused Rainfall Growth Curve Extension</em>), desenvolvido especificamente para o FEH. O FORGEX ajusta distribuições estatísticas às séries padronizadas, obtendo assim a relação entre a precipitação associada a um período de retorno T e o índice RMED.</p>
-<p>O ajuste baseia-se na distribuição de valores extremos generalizada (GEV):</p>
-<p><span class="math display">\[
-F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\},
-\quad 1 + \xi \left( \frac{x - \mu}{\sigma} \right) &gt; 0
-\tag{1}
-\]</span></p>
-<p>Onde, <span class="math inline">\(\mu\)</span> é o parâmetro de localização; <span class="math inline">\(\sigma &gt; 0\)</span> é a escala e <span class="math inline">\(\xi\)</span> é a forma. Gumbel ocorre se <span class="math inline">\(xi \to 0\)</span>.</p>
-<p>Os parâmetros são estimados por máxima verossimilhança (MLE).</p>
-<p>A frequência é expressa em termos da variável reduzida de Gumbel:</p>
-<p><span class="math display">\[
-y = - ln(-ln(1-p))
-\tag{2}
-\]</span></p>
-<p>onde <span class="math inline">\(p =\)</span> probabilidade de não-exedência.</p>
-<p>O FORGEX divide os dados em faixas de retorno (<em>y-slices</em>). Dentro de cada faixa, os parâmetros da GEV são ajustados separadamente e posteriormente suavizados, garantindo consistência da curva resultante.</p>
+<p>A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (<em>Focused Rainfall Growth Curve Extension</em>), desenvolvido especificamente para o FEH. O FORGEX deriva empiricamente as curvas de crescimento a partir das séries de máximos anuais padronizadas pela razão R/RMED, representadas na escala reduzida de Gumbel.</p>
+<p>O método utiliza a divisão dos dados em faixas de retorno (y-slices) e ajusta segmentos lineares por mínimos quadrados, aplicando suavização para garantir consistência entre diferentes períodos de retorno.</p>
+<p>Diferentemente de abordagens paramétricas (como GEV ou Gumbel), o FORGEX não assume uma distribuição de probabilidade fixa; a curva é construída de forma a seguir o comportamento observado nos dados.</p>
+<p>A incerteza foi avaliada por meio de reamostragem bootstrap, gerando intervalos de confiança para as curvas resultantes.</p>
 <p><strong>1.5 Construção do Modelo DDF (<em>Depth-Duration-Frequency</em>)</strong></p>
-<p>A integração do RMED com as curvas de crescimento deu origem a um modelo paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.</p>
+<p>A integração do RMED com as curvas de crescimento deu origem a um modelo empírico-paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.</p>
 <p><span class="math display">\[
 \ln R(D,y) =
 \begin{cases}
@@ -273,8 +261,8 @@ y = - ln(-ln(1-p))
 \end{cases}
 \tag{3}
 \]</span></p>
-<p>O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade de 1 km.</p>
-<p>Os limites de confiação foram estimados via <em>bootstrap</em> para avaliar a incerteza das curvas de crescimento.</p>
+<p>O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados separadamente paracada ponto da grade de 1 km.</p>
+<p>A incerteza associada às curvas de crescimento foi avaliada por reamostragem <em>bootstrap</em>, permitindo a construção de intervalos de confiança para diferentes períodos de retorno e durações.</p>
 <p><strong>1.6 Saídas</strong></p>
 <p>A metodologia resultou na elaboração de:</p>
 <p>• mapas nacionais de RMED para diferentes durações, • curvas de crescimento regionais, • chuvas de projeto (DDF) consistentes para todo o Reino Unido.</p>
@@ -470,7 +458,7 @@ X^{STN, future}_{\max,j}
 <li>Grades do modelo digital de elevação (DEM) da Missão Topográfica do Radar <em>Shuttle</em> (SRTM90) de 90 metros da NASA.</li>
 </ul>
 <p><strong>4.2. Distribuição estatística</strong></p>
-<p>A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional com Máxima Verossimilhança (MLE). A distribuição Kappa de 4 parâmetros também foi testada como uma distribuição alternativa.</p>
+<p>A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método dos L-momentos. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15</p>
 <p>A função de distribuição de probabilidade GEV não estacionária:</p>
 <p><span class="math display">\[
 f(x,t) = \frac{1}{\sigma(x,t)}
