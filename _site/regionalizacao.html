@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Dirceu S. Reis Jr.">
+<meta name="author" content="Larissa Rolim">
 
-<title>Modelos probabilísticos de chuvas intensas – Proj. IDF Brasil ANA/UnB</title>
+<title>Regionalização – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,27 +21,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -88,6 +68,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -170,14 +179,7 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#principais-distribuições-utilizadas" id="toc-principais-distribuições-utilizadas" class="nav-link" data-scroll-target="#principais-distribuições-utilizadas">Principais distribuições utilizadas</a></li>
-  <li><a href="#as-distribuições-de-extremos" id="toc-as-distribuições-de-extremos" class="nav-link" data-scroll-target="#as-distribuições-de-extremos">As distribuições de extremos</a>
-  <ul class="collapse">
-  <li><a href="#a-teoria-de-valores-extremos" id="toc-a-teoria-de-valores-extremos" class="nav-link" data-scroll-target="#a-teoria-de-valores-extremos">A teoria de valores extremos</a></li>
-  <li><a href="#justificativa-para-uso-da-gev" id="toc-justificativa-para-uso-da-gev" class="nav-link" data-scroll-target="#justificativa-para-uso-da-gev">Justificativa para uso da GEV</a></li>
-  <li><a href="#a-questão-do-parâmetro-do-forma" id="toc-a-questão-do-parâmetro-do-forma" class="nav-link" data-scroll-target="#a-questão-do-parâmetro-do-forma">A questão do parâmetro do forma</a></li>
-  </ul></li>
+  <li><a href="#regionalização" id="toc-regionalização" class="nav-link active" data-scroll-target="#regionalização">Regionalização</a></li>
   </ul>
 </nav>
     </div>
@@ -186,7 +188,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelos probabilísticos de chuvas intensas</h1>
+<h1 class="title">Regionalização</h1>
 </div>
 
 
@@ -196,7 +198,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Dirceu S. Reis Jr. </p>
+             <p>Larissa Rolim </p>
           </div>
   </div>
     
@@ -209,118 +211,47 @@ div.csl-indent {
 </header>
 
 
-<section id="introdução" class="level2">
-<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
-</section>
-<section id="principais-distribuições-utilizadas" class="level2">
-<h2 class="anchored" data-anchor-id="principais-distribuições-utilizadas">Principais distribuições utilizadas</h2>
-<p>Introduzir a questão da necessidade de se relacionar probabilidade de excedência com magnitude das precipitações para fins de engenharia;</p>
-<p>Mencionar a possibilidade de se analisar os extremos de duas foromas distintas: via séries parciais e via máximos anuais;</p>
-<p>Falar de uma maneira geral sobre as ditribuições, dando exemplos de uso de cada uma delas.</p>
-</section>
-<section id="as-distribuições-de-extremos" class="level2">
-<h2 class="anchored" data-anchor-id="as-distribuições-de-extremos">As distribuições de extremos</h2>
-<section id="a-teoria-de-valores-extremos" class="level3">
-<h3 class="anchored" data-anchor-id="a-teoria-de-valores-extremos">A teoria de valores extremos</h3>
-<p>INtroduzir o conceito de máximo de um conjunto de variáveis aleatórias e explicr a ideia de que a distribuição desses máximos converge para uma das 3 distribuições de extremos: Gimbel, Frechet e Weibull reversa. Ver discussão na seção 2 de Papalexious e Koutsoyiannis (2013).</p>
-</section>
-<section id="justificativa-para-uso-da-gev" class="level3">
-<h3 class="anchored" data-anchor-id="justificativa-para-uso-da-gev">Justificativa para uso da GEV</h3>
-</section>
-<section id="a-questão-do-parâmetro-do-forma" class="level3">
+<section id="regionalização" class="level1">
+<h1>Regionalização</h1>
+<p>As metodologias de regionalização podem ser classificadas de diversas formas, dependendo dos princípios subjacentes, das técnicas estatísticas empregadas e do objetivo da regionalização. Uma classificação abrangente seria a seguinte:</p>
+<ol type="1">
+<li><strong>Análise de Frequência Regional e Regionalização</strong>: Focada em métodos e comparações de regionalização de estatísticas de precipitação, incluindo a formação de regiões homogêneas e a aplicação de regressões.</li>
+</ol>
+<p>O trabalho de Alila (2000) trata a regionalização de chuvas intensas com o objetivo de obter equações RDDF (regional depth–duration–frequency) aplicáveis em locais sem medição sub-horária. Parte-se de estimativas locais <span class="math inline">\(R_d^T\)</span> (profundidade de chuva de duração <span class="math inline">\(d\)</span> e período de retorno <span class="math inline">\(T\)</span>) obtidas por GEV via L-momentos em um arranjo hierárquico (HRGEV) — L-média no sítio, L-CV em sub-regiões e L-assimetria à escala regional — e, com essa base, constroem-se duas relações regionais que desacoplam a variação com a duração e com a frequência. Na dimensão duração, toma-se 60 min como referência e ajusta-se, para <span class="math inline">\(d&lt;60\)</span> min, uma lei quase linear que na prática resulta em um fator puramente de duração:</p>
+<p><span class="math display">\[R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d&lt;60\ \text{min})\]</span></p>
+<p>o que implica que o DDR <span class="math inline">\((=R_d^T/R_{60}^T)\)</span> para <span class="math inline">\(d&lt;60\)</span> min é aproximadamente independente de <span class="math inline">\(T\)</span> e da localização. Na dimensão frequência, para cada duração fixa <span class="math inline">\(d\)</span>, modela-se a razão DFR <span class="math inline">\((=R_d^T/R_d^{10\ \text{yr}})\)</span> como função logarítmica da precipitação média anual da região (<span class="math inline">\(\mathrm{MAP}\)</span>, em mm):</p>
+<p><span class="math display">\[\frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152\]</span></p>
+<p>Combinando ambas as peças e ancorando em 60 min obtém-se, para a própria duração de referência,</p>
+<p><span class="math display">\[R_{60}^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\]</span></p>
+<p>e, propagando para <span class="math inline">\(d&lt;60\)</span> min,</p>
+<p><span class="math display">\[R_d^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\;\big(0.183\,d^{0.433}\big)\]</span></p>
+<p>Para <span class="math inline">\(d=120\)</span> min o autor identifica dois regimes segundo a umidade regional e introduz um leve ajuste:</p>
+<p><span class="math display">\[R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big)\]</span></p>
+<p>se <span class="math inline">\(\mathrm{MAP}\le1200\)</span> mm . Em síntese, a regionalização de Alila (2000) separa: (i) um escalonamento por duração ancorado em 60 min (via <span class="math inline">\(0.183\,d^{0.433}\)</span>) e (ii) um escalonamento por frequência mediado por <span class="math inline">\(\mathrm{MAP}\)</span> (via <span class="math inline">\(c(T),e(T)\)</span>.</p>
+<p>O trabalho de Basso et al.&nbsp;(2016) reavalia e atualiza a regionalização de chuvas intensas no Brasil originalmente proposta por Torrico (1974). A lógica de regionalização é baseada nas relações entre durações (coeficientes de desagregação) derivadas de curvas IDF obtidas de séries pluviográficas. Em Torrico, a identificação de isozonas decorreu da observação, em papel de probabilidade de Hershfield–Wilson, de que as semirretas “altura vs.&nbsp;duração” para 1 h e 24 h interceptavam o eixo das ordenadas em pontos semelhantes dentro de certas áreas. Partindo dessa base, Basso et al.&nbsp;(2016) montam um banco de ~1000 estações com equações IDF atuais (priorizando a versão mais recente quando há múltiplas para o mesmo local e excluindo relações derivadas apenas de fórmulas gerais), padronizam a comparação em TR = 10 anos (com base em recomendações usuais de drenagem urbana e na relativa estabilidade dos coeficientes com TR) e extraem para cada posto <span class="math inline">\(r_{1\mathrm{h}24\mathrm{h}}\)</span> e demais razões <span class="math inline">\(r_{\mathrm{min},24\mathrm{h}}\)</span>. Essas razões são então espacializadas por ferramentas de geomática e análise visual para compor um novo zoneamento; em regiões com poucos dados (Norte e Centro-Oeste) a delimitação é assistida por mapas de unidades climáticas e pelo Atlas Pluviométrico (CPRM). Como verificação, os autores mostram que a forma geral das isozonas de Torrico é em grande parte preservada, com exceção notável da isozona continental (E), mas os valores dos coeficientes mudaram substancialmente em várias áreas. O artigo então propõe novas isozonas (mapa e nomenclatura atualizada) e publica tabelas de coeficientes de desagregação médios por isozona para TR=10 anos (com baixa dispersão interna, diferença máxima ≈ 2,24 p.p.), salientando que representam comportamentos médios regionais e não capturam microclimas locais.</p>
+<ol type="1">
+<li><strong>Modelagem de Extremos Espaciais e Hierárquicos (MEEH)</strong>: Esta classe abrange estudos que utilizam modelos estatísticos avançados para analisar extremos de precipitação em um contexto espacial. Isso inclui modelos hierárquicos Bayesianos, processos max-estáveis, e modelos GEV (Generalized Extreme Value) espaciais, focando na dependência espacial e na quantificação da incerteza.</li>
+</ol>
+<p>Amin et al.&nbsp;(2024) regionaliza curvas IDF teoricamente consistentes estimando, em cada posto, extremos anuais para várias durações (de 5 min a 16 dias) e realizando uma análise local de extremos. Em seguida, usa Krigagem com Deriva Externa (KED) para interpolar os sete parâmetros do modelo IDF consistente em toda a região; a ênfase é que nenhum parâmetro é mantido constante espacialmente. A partir dos parâmetros regionalizados, recuperam-se os quantis (IDF) para cada posto, duração e período de retorno. A incerteza é decomposta em três componentes do processo de regionalização: (i) estimação local dos parâmetros (ligada ao ajuste de extremos em cada sítio), (ii) estimação do variograma usado na krigagem, e (iii) estimação espacial dos parâmetros (interpolação via KED). Cada componente é avaliado em termos de acurácia (erro esperado) e precisão (largura do IC-95%). Para quantificar, o trabalho emprega bootstrap não paramétrico (para a parte local) e simulações geoestatísticas; especificamente, escolhe Conditional Sequential Gaussian (CSG) por gerar muitas simulações equiprováveis e por evidências recentes de boa acurácia. São feitas 100 realizações em cada componente e, depois, simulações combinadas para propagar a incerteza até as curvas IDF finais. Os resultados indicam que a fonte dominante de incerteza é a estimação espacial (interpolação dos parâmetros), seguida da estimação local; a incerteza do variograma tem impacto pequeno na incerteza total das IDFs. A integração de simulações espaciais com reamostragem local forneceu estimativas realistas da incerteza em postos amostrados; em não amostrados, a acurácia cai conforme diminuem densidade e proximidade das estações vizinhas. Como ordem de grandeza, os intervalos de tolerância típicos ficam entre ±0,9–4,2 mm/h para baixas recorrências (&lt; 5 anos) e ±2,2–5,5 mm/h para altas recorrências (&gt; 50 anos); durações muito curtas (5 min) apresentam incertezas relativamente maiores.</p>
+<ol type="1">
+<li><strong>Modelagem de Escala e IDF/DDF (MEIDF)</strong>: Dedicada ao desenvolvimento e aplicação de propriedades de escala (simples, multiescala) para derivar relações de Intensidade-Duração-Frequência (IDF) ou Profundidade-Duração-Frequência (DDF), frequentemente incluindo desagregação e ajuste à frequência de medição.</li>
+</ol>
+<p>A regionalização em Aguilar &amp; Costa (2020) parte da hipótese de similaridade hidrológica regional: para dias chuvosos, a distribuição conjunta entre um atributo subdiário (associado a uma duração <span class="math inline">\(m\)</span>) e o total diário é aproximadamente a mesma no posto-alvo e em um conjunto de postos vizinhos, permitindo transferência de informação para desagregar a chuva diária via KNN-MOF. Essa hipótese é explicitada ao definir “fragmentos” subdiários como vetores contendo a sequência subdiária agregada à duração mmm e normalizada pelo total diário do próprio dia, que depois serão reescalados pelo total diário do alvo:</p>
+<p><span class="math display">\[fr^{(s)}_{i,m}=X^{(s)}_{i,m}/\sum_m X^{(s)}_{i,m}\]</span></p>
+<p>onde <span class="math inline">\(X^{(s)}_{i,m}\)</span> denota a chuva subdiária (na resolução de <span class="math inline">\(m\)</span> minutos) no dia <span class="math inline">\(i\)</span>. A identificação de “vizinhos hidrologicamente similares” é feita testando, para cada par de estações, a igualdade das distribuições conjuntas <span class="math inline">\((\text{atributo}, \text{chuva diária})\)</span> por meio do teste Kolmogorov–Smirnov de duas amostras (2D2S KS) ao nível de 5%, comparando a distribuição conjunta de cada atributo com o total diário. Os atributos hidrológicos empregados (computados para 60, 180 e 360 min) são: intensidade máxima (por duração) normalizada pelo total diário, fração de zeros, e timing da intensidade máxima.</p>
+<p>Com o rótulo <span class="math inline">\(u\)</span> obtido por meio do teste Kolmogorov–Smirnov, ajusta-se uma regressão logística que modela <span class="math inline">\(\Pr(u=1)=logit(z)\)</span> a partir de preditores físicos definidos por diferenças absolutas de latitude, longitude, elevação e pelo produto das diferenças de latitude e longitude (proxy de distância euclidiana). Formalmente,</p>
+<p><span class="math inline">\(\Pr(u=1)=logit(z)=\frac{e^{z}}{1+e^{z}},\qquad z=\beta_0+\beta_1\nu_1+\beta_2\nu_2+\beta_3\nu_3+\beta_4\nu_4\)</span></p>
+<p>com o vetor <span class="math inline">\(\beta\)</span> englobando os coeficientes de regressão e o vetor <span class="math inline">\(\nu\)</span> os preditores delineados anteriormente. Em seguida, os vizinhos/regiões doadoras são ranqueados pelas maiores probabilidades previstas <span class="math inline">\(\Pr(u=1)\)</span> (combinando as três métricas hidrológicas e respeitando a sazonalidade). A geração subdiária diária-a-diária no posto-alvo procede como um reprocessador não-paramétrico regional onde para cada dia chuvoso no alvo, selecionam-se candidatos nos postos doadores dentro de uma janela sazonal móvel (± ~15 dias), condicionando ao estado úmido/seco nos dias adjacentes, e então ranqueando os <span class="math inline">\(k\)</span> mais próximos pelo desvio absoluto entre totais diários. O fragmento final é sorteado com probabilidade decrescente no ranque <span class="math inline">\(j\)</span>,</p>
+<p><span class="math display">\[P(j)=\frac{1/j}{\sum_{i=1}^{k}1/i}\]</span> e depois escalado pelo total diário observado do alvo. Assim, a etapa de regionalização (via KS 2D → logística) define o conjunto e os pesos dos doadores; a etapa KNN-MOF faz a amostragem condicionada e o reescalonamento para obter a série subdiária. Em termos operacionais, os autores aplicam o esquema a 40 estações nas bacias dos rios Doce e São Francisco, para durações de 60, 180 e 360 min, mostrando que a regionalização possibilita desagregação coerente das estatísticas subdiárias e comportamento de máximos anuais, mesmo sob disponibilidade limitada de séries subdiárias locais.</p>
+<ol type="1">
+<li><p><strong>Impacto de Mudanças Climáticas e Não Estacionariedade (IMCN)</strong>: Artigos que investigam os efeitos das mudanças climáticas nos extremos de precipitação, o desenvolvimento de curvas IDF não estacionárias e o uso de modelos climáticos para projeções futuras e correção de viés.</p></li>
+<li><p><strong>Análise de Co-variabilidade e Multivariada (ACMV)</strong>: Estudos que exploram a relação entre precipitação extrema e outras variáveis climáticas (como temperatura), ou que desenvolvem métodos multivariados, incluindo regressão quantílica e cópulas.</p></li>
+</ol>
 
 
-
-
-</section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">A questão do parâmetro do forma</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-Amin.2024" class="csl-entry" role="listitem">
-Amin, Bushra, András Bárdossy, and Uwe Haberlandt. 2024. <span>“<span class="nocase">Uncertainty Quantification of Theoretical Consistent Intensity Duration Frequency (IDF) Curves of Rainfall Intensity</span>.”</span> <a href="https://doi.org/10.5194/egusphere-egu24-15926">https://doi.org/10.5194/egusphere-egu24-15926</a>.
-</div>
-<div id="ref-Benestad.2021" class="csl-entry" role="listitem">
-Benestad, Rasmus E, Julia Lutz, Anita Verpe Dyrrdal, Jan Erik Haugen, Kajsa M Parding, and Andreas Dobler. 2021. <span>“<span class="nocase">Testing a simple formula for calculating approximate intensity-duration-frequency curves</span>.”</span> <em>Environmental Research Letters</em> 16 (4): 044009. <a href="https://doi.org/10.1088/1748-9326/abd4ab">https://doi.org/10.1088/1748-9326/abd4ab</a>.
-</div>
-<div id="ref-Cavanaugh.2015" class="csl-entry" role="listitem">
-Cavanaugh, Nicholas R., Alexander Gershunov, Anna K. Panorska, and Tomasz J. Kozubowski. 2015. <span>“<span class="nocase">The probability distribution of intense daily precipitation</span>.”</span> <em>Geophysical Research Letters</em> 42 (5): 1560–67. <a href="https://doi.org/10.1002/2015gl063238">https://doi.org/10.1002/2015gl063238</a>.
-</div>
-<div id="ref-Courty.2019" class="csl-entry" role="listitem">
-Courty, Laurent G, Robert L Wilby, John K Hillier, and Louise J Slater. 2019. <span>“<span class="nocase">Intensity-duration-frequency curves at the global scale</span>.”</span> <em>Environmental Research Letters</em> 14 (8): 084045. <a href="https://doi.org/10.1088/1748-9326/ab370a">https://doi.org/10.1088/1748-9326/ab370a</a>.
-</div>
-<div id="ref-Davison.2015" class="csl-entry" role="listitem">
-Davison, A. C., and R. Huser. 2015. <span>“<span class="nocase">Statistics of Extremes</span>.”</span> <em>Annual Review of Statistics and Its Application</em> 2 (1): 1–33. <a href="https://doi.org/10.1146/annurev-statistics-010814-020133">https://doi.org/10.1146/annurev-statistics-010814-020133</a>.
-</div>
-<div id="ref-Goly.2013" class="csl-entry" role="listitem">
-Goly, Aneesh. 2013. <span>“<span>INFLUENCES OF CLIMATE VARIABILITY AND CHANGE ON PRECIPITATION CHARACTERISTICS AND EXTREMES</span>.”</span> PhD thesis, Florida Atlantic University.
-</div>
-<div id="ref-Goly.2014" class="csl-entry" role="listitem">
-Goly, Aneesh, and Ramesh S. V. Teegavarapu. 2014. <span>“<span class="nocase">Individual and coupled influences of AMO and ENSO on regional precipitation characteristics and extremes</span>.”</span> <em>Water Resources Research</em> 50 (6): 4686–4709. <a href="https://doi.org/10.1002/2013wr014540">https://doi.org/10.1002/2013wr014540</a>.
-</div>
-<div id="ref-Gründemann.2023" class="csl-entry" role="listitem">
-Gründemann, Gaby J., Enrico Zorzetto, Hylke E. Beck, Marc Schleiss, Nick van de Giesen, Marco Marani, and Ruud J. van der Ent. 2023. <span>“<span class="nocase">Extreme precipitation return levels for multiple durations on a global scale</span>.”</span> <em>Journal of Hydrology</em> 621: 129558. <a href="https://doi.org/10.1016/j.jhydrol.2023.129558">https://doi.org/10.1016/j.jhydrol.2023.129558</a>.
-</div>
-<div id="ref-Gu.2022" class="csl-entry" role="listitem">
-Gu, Xuezhi, Lei Ye, Qian Xin, Chi Zhang, Fanzhang Zeng, Sofia D. Nerantzaki, and Simon Michael Papalexiou. 2022. <span>“<span class="nocase">Extreme Precipitation in China: A Review on Statistical Methods and Applications</span>.”</span> <em>Advances in Water Resources</em> 163: 104144. <a href="https://doi.org/10.1016/j.advwatres.2022.104144">https://doi.org/10.1016/j.advwatres.2022.104144</a>.
-</div>
-<div id="ref-Koutsoyiannis.2004" class="csl-entry" role="listitem">
-Koutsoyiannis, Demetris. 2004a. <span>“<span class="nocase">Statistics of extremes and estimation of extreme rainfall: I. Theoretical investigation / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: I. Recherche théorique</span>.”</span> <em>Hydrological Sciences Journal</em> 49 (4): 590. <a href="https://doi.org/10.1623/hysj.49.4.575.54430">https://doi.org/10.1623/hysj.49.4.575.54430</a>.
-</div>
-<div id="ref-Koutsoyiannis.200475" class="csl-entry" role="listitem">
-———. 2004b. <span>“<span class="nocase">Statistics of extremes and estimation of extreme rainfall: II. Empirical investigation of long rainfall records / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: II. Recherche empirique sur de longues séries de précipitations</span>.”</span> <em>Hydrological Sciences Journal</em> 49 (4): 610. <a href="https://doi.org/10.1623/hysj.49.4.591.54424">https://doi.org/10.1623/hysj.49.4.591.54424</a>.
-</div>
-<div id="ref-Koutsoyiannis.2005" class="csl-entry" role="listitem">
-———. 2005. <span>“<span class="nocase">Uncertainty, entropy, scaling and hydrological stochastics. 1. Marginal distributional properties of hydrological processes and state scaling / Incertitude, entropie, effet d’échelle et propriétés stochastiques hydrologiques. 1. Propriétés distributionnelles marginales des processus hydrologiques et échelle d’état</span>.”</span> <em>Hydrological Sciences Journal</em> 50 (3): 404. <a href="https://doi.org/10.1623/hysj.50.3.381.65031">https://doi.org/10.1623/hysj.50.3.381.65031</a>.
-</div>
-<div id="ref-Koutsoyiannis.2006" class="csl-entry" role="listitem">
-———. 2006. <span>“<span class="nocase">An entropic‐stochastic representation of rainfall intermittency: The origin of clustering and persistence</span>.”</span> <em>Water Resources Research</em> 42 (1). <a href="https://doi.org/10.1029/2005wr004175">https://doi.org/10.1029/2005wr004175</a>.
-</div>
-<div id="ref-Merz.2022" class="csl-entry" role="listitem">
-Merz, Bruno, Stefano Basso, Svenja Fischer, David Lun, Günter Blöschl, Ralf Merz, Björn Guse, et al. 2022. <span>“<span class="nocase">Understanding Heavy Tails of Flood Peak Distributions</span>.”</span> <em>Water Resources Research</em> 58 (6). <a href="https://doi.org/10.1029/2021wr030506">https://doi.org/10.1029/2021wr030506</a>.
-</div>
-<div id="ref-Nadarajah.2005" class="csl-entry" role="listitem">
-Nadarajah, Saralees. 2005. <span>“<span class="nocase">Extremes of Daily Rainfall in West Central Florida</span>.”</span> <em>Climatic Change</em> 69 (2-3): 325–42. <a href="https://doi.org/10.1007/s10584-005-1812-y">https://doi.org/10.1007/s10584-005-1812-y</a>.
-</div>
-<div id="ref-Nerantzaki.2022" class="csl-entry" role="listitem">
-Nerantzaki, Sofia D., and Simon Michael Papalexiou. 2022. <span>“<span class="nocase">Assessing extremes in hydroclimatology: A review on probabilistic methods</span>.”</span> <em>Journal of Hydrology</em> 605: 127302. <a href="https://doi.org/10.1016/j.jhydrol.2021.127302">https://doi.org/10.1016/j.jhydrol.2021.127302</a>.
-</div>
-<div id="ref-Nguyen.2019" class="csl-entry" role="listitem">
-Nguyen, Truong-Huy, and Van-Thanh-Van Nguyen. 2019. <span>“<span class="nocase">Decision-Support Tool for Constructing Robust Rainfall IDF Relations in Consideration of Model Uncertainty</span>.”</span> <em>Journal of Hydrologic Engineering</em> 24 (7): 06019004. <a href="https://doi.org/10.1061/(asce)he.1943-5584.0001802">https://doi.org/10.1061/(asce)he.1943-5584.0001802</a>.
-</div>
-<div id="ref-Overeem.2008" class="csl-entry" role="listitem">
-Overeem, Aart, Adri Buishand, and Iwan Holleman. 2008. <span>“<span class="nocase">Rainfall depth-duration-frequency curves and their uncertainties</span>.”</span> <em>Journal of Hydrology</em> 348 (1-2): 124–34. <a href="https://doi.org/10.1016/j.jhydrol.2007.09.044">https://doi.org/10.1016/j.jhydrol.2007.09.044</a>.
-</div>
-<div id="ref-Papalexiou.2018" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">A Diagnostic Framework for Understanding Climatology of Tails of Hourly Precipitation Extremes in the United States</span>.”</span> <em>Water Resources Research</em> 54 (9): 6725–38. <a href="https://doi.org/10.1029/2018wr022732">https://doi.org/10.1029/2018wr022732</a>.
-</div>
-<div id="ref-Papalexiou.2012" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, and Demetris Koutsoyiannis. 2012. <span>“<span class="nocase">Entropy based derivation of probability distributions: A case study to daily rainfall</span>.”</span> <em>Advances in Water Resources</em> 45: 51–57. <a href="https://doi.org/10.1016/j.advwatres.2011.11.007">https://doi.org/10.1016/j.advwatres.2011.11.007</a>.
-</div>
-<div id="ref-Papalexiou.2013" class="csl-entry" role="listitem">
-———. 2013. <span>“<span class="nocase">Battle of extreme value distributions: A global survey on extreme daily rainfall</span>.”</span> <em>Water Resources Research</em> 49 (1): 187–201. <a href="https://doi.org/10.1029/2012wr012557">https://doi.org/10.1029/2012wr012557</a>.
-</div>
-<div id="ref-Papalexiou.2016" class="csl-entry" role="listitem">
-———. 2016. <span>“<span class="nocase">A global survey on the seasonal variation of the marginal distribution of daily precipitation</span>.”</span> <em>Advances in Water Resources</em> 94: 131–45. <a href="https://doi.org/10.1016/j.advwatres.2016.05.005">https://doi.org/10.1016/j.advwatres.2016.05.005</a>.
-</div>
-<div id="ref-Papalexiou.2018h3" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, Yannis Markonis, Federico Lombardo, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">Precise Temporal Disaggregation Preserving Marginals and Correlations (DiPMaC) for Stationary and Nonstationary Processes</span>.”</span> <em>Water Resources Research</em> 54 (10): 7435–58. <a href="https://doi.org/10.1029/2018wr022726">https://doi.org/10.1029/2018wr022726</a>.
-</div>
-<div id="ref-Pendergrass.2014" class="csl-entry" role="listitem">
-Pendergrass, Angeline G., and Dennis L. Hartmann. 2014. <span>“<span class="nocase">Two Modes of Change of the Distribution of Rain*</span>.”</span> <em>Journal of Climate</em> 27 (22): 8357–71. <a href="https://doi.org/10.1175/jcli-d-14-00182.1">https://doi.org/10.1175/jcli-d-14-00182.1</a>.
-</div>
-<div id="ref-Ragulina.2017" class="csl-entry" role="listitem">
-Ragulina, Galina, and Trond Reitan. 2017. <span>“<span class="nocase">Generalized extreme value shape parameter and its nature for extreme precipitation using long time series and the Bayesian approach</span>.”</span> <em>Hydrological Sciences Journal</em> 62 (6): 863–79. <a href="https://doi.org/10.1080/02626667.2016.1260134">https://doi.org/10.1080/02626667.2016.1260134</a>.
-</div>
-<div id="ref-Serinaldi.2014" class="csl-entry" role="listitem">
-Serinaldi, Francesco, and Chris G. Kilsby. 2014. <span>“<span class="nocase">Rainfall extremes: Toward reconciliation after the battle of distributions</span>.”</span> <em>Water Resources Research</em> 50 (1): 336–52. <a href="https://doi.org/10.1002/2013wr014211">https://doi.org/10.1002/2013wr014211</a>.
-</div>
-<div id="ref-Stephenson.2016" class="csl-entry" role="listitem">
-Stephenson, Alec G., Eric A. Lehmann, and Aloke Phatak. 2016. <span>“<span class="nocase">A max-stable process model for rainfall extremes at different accumulation durations</span>.”</span> <em>Weather and Climate Extremes</em> 13: 44–53. <a href="https://doi.org/10.1016/j.wace.2016.07.002">https://doi.org/10.1016/j.wace.2016.07.002</a>.
-</div>
-<div id="ref-Wilson.2005" class="csl-entry" role="listitem">
-Wilson, P. S., and R. Toumi. 2005. <span>“<span class="nocase">A fundamental probability distribution for heavy rainfall</span>.”</span> <em>Geophysical Research Letters</em> 32 (14): n/a–. <a href="https://doi.org/10.1029/2005gl022465">https://doi.org/10.1029/2005gl022465</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
