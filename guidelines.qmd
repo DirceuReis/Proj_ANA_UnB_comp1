@@ -43,34 +43,17 @@ As séries de AM foram padronizadas pela razão entre o valor observado e o RMED
 
 **1.4 Derivação das curvas de crescimento (*Growth Curves*)**
 
-A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (*Focused Rainfall Growth Curve Extension*), desenvolvido especificamente para o FEH. O FORGEX ajusta distribuições estatísticas às séries padronizadas, obtendo assim a relação entre a precipitação associada a um período de retorno T e o índice RMED.
+A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (*Focused Rainfall Growth Curve Extension*), desenvolvido especificamente para o FEH. O FORGEX deriva empiricamente as curvas de crescimento a partir das séries de máximos anuais padronizadas pela razão R/RMED, representadas na escala reduzida de Gumbel.
 
-O ajuste baseia-se na distribuição de valores extremos generalizada (GEV):
+O método utiliza a divisão dos dados em faixas de retorno (y-slices) e ajusta segmentos lineares por mínimos quadrados, aplicando suavização para garantir consistência entre diferentes períodos de retorno.
 
-$$
-F(x) = \exp \left\{ - \left[ 1 + \xi \left( \frac{x - \mu}{\sigma} \right) \right]^{-1/\xi} \right\}, 
-\quad 1 + \xi \left( \frac{x - \mu}{\sigma} \right) > 0
-\tag{1}
-$$
+Diferentemente de abordagens paramétricas (como GEV ou Gumbel), o FORGEX não assume uma distribuição de probabilidade fixa; a curva é construída de forma a seguir o comportamento observado nos dados.
 
-Onde, $\mu$ é o parâmetro de localização; $\sigma > 0$ é a escala e $\xi$ é a forma. Gumbel ocorre se $xi \to 0$.
-
-Os parâmetros são estimados por máxima verossimilhança (MLE).
-
-A frequência é expressa em termos da variável reduzida de Gumbel:
-
-$$
-y = - ln(-ln(1-p))
-\tag{2}
-$$
-
-onde $p =$ probabilidade de não-exedência.
-
-O FORGEX divide os dados em faixas de retorno (*y-slices*). Dentro de cada faixa, os parâmetros da GEV são ajustados separadamente e posteriormente suavizados, garantindo consistência da curva resultante.
+A incerteza foi avaliada por meio de reamostragem bootstrap, gerando intervalos de confiança para as curvas resultantes.
 
 **1.5 Construção do Modelo DDF (*Depth-Duration-Frequency*)**
 
-A integração do RMED com as curvas de crescimento deu origem a um modelo paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.
+A integração do RMED com as curvas de crescimento deu origem a um modelo empírico-paramétrico DDF, que relaciona profundidade de chuva, duração e frequência.
 
 $$
 \ln R(D,y) =
@@ -82,9 +65,9 @@ $$
 \tag{3}
 $$
 
-O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados em cada ponto da grade de 1 km.
+O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados separadamente paracada ponto da grade de 1 km.
 
-Os limites de confiação foram estimados via *bootstrap* para avaliar a incerteza das curvas de crescimento.
+A incerteza associada às curvas de crescimento foi avaliada por reamostragem *bootstrap*, permitindo a construção de intervalos de confiança para diferentes períodos de retorno e durações.
 
 **1.6 Saídas**
 
@@ -340,7 +323,7 @@ Além disso, foram coletados os seguintes dados:
 
 **4.2. Distribuição estatística**
 
-A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional com Máxima Verossimilhança (MLE). A distribuição Kappa de 4 parâmetros também foi testada como uma distribuição alternativa.
+A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método dos L-momentos. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
 
 A função de distribuição de probabilidade GEV não estacionária:
 
