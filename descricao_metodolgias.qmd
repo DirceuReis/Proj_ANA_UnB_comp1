@@ -7,9 +7,9 @@ nocite: |
 ---
 
 ::: {style="text-align: justify;"}
-O desenvolvimento de metodologias para estimar chuvas intensas acompanha a evolução dos bancos de dados pluviométricos, dos métodos estatísticos de análise de extremos e da incorporação de cenários de mudanças climáticas em estudos hidrológicos. As abordagens do Canadá, Estados Unidos, Austrália e Reino Unido representam diferentes momentos desse processo, refletindo desde técnicas mais simples baseadas em estacionariedade até modelos não estacionários com integração de projeções climáticas.
+O desenvolvimento de metodologias para estimar chuvas intensas acompanha a evolução dos bancos de dados pluviométricos, dos métodos estatísticos de análise de extremos e da incorporação de cenários de mudanças climáticas em estudos hidrológicos. As abordagens do Canadá, Estados Unidos, Austrália e Reino Unido representam diferentes momentos desse processo, refletindo desde técnicas mais simples baseadas em estacionariedade das séries até modelos não estacionários com integração de projeções climáticas.
 
-A modelagem estatística dos máximos anuais de precipitação é tradicionalmente realizada com distribuições de extremos. A mais geral é a distribuição de valores extremos generalizada (GEV):
+A modelagem estatística dos máximos anuais de precipitação é tradicionalmente realizada com distribuições de extremos, sendo a mais geral a "distribuição de valores extremos generalizada" (GEV):
 
 $$
 F(x) = \exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-\frac{1}{\xi}}\right\}, \quad 1+\xi\left(\frac{x-\mu}{\sigma}\right) > 0
@@ -21,7 +21,7 @@ $$
 F(x) = \exp\left\{-\exp\left[-\left(\frac{x-\mu}{\sigma}\right)\right]\right\}
 $$
 
-Além disso, para séries *peaks-over-threshold*, emprega-se frequentemente a *Generalized Pareto* (GPA):
+Além disso, para séries onde se considera os dados a partir de um limiar *peaks-over-threshold*, emprega-se frequentemente a *Generalized Pareto* (GPA):
 
 $$
 F(x) = 1-\left(1+\xi \frac{x-\mu}{\sigma}\right)^{-1/\xi}, \quad 1+\xi \frac{x-\mu}{\sigma} > 0
@@ -35,35 +35,37 @@ $$
 
 onde $F_{obs}$ é a função distribuição acumulada observada, $F_{mod}$ a simulada e $X_{mod}$ o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.
 
-Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via L-momentos e modelados com covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
+Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via L-momentos, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
 
 $$
 \mu(s,t) = \beta_0 + \beta_1 \cdot \text{MAP}(s) + \beta_2 \cdot \text{DEM}(s) + \beta_3 \cdot \text{GWL}(t)
 $$
 
-em que MAP é a precipitação média anual, DEM a altitude e GWL o nível de aquecimento global. A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções kernel, e a interpolação final é feita em grade de alta resolução (30 segundos de arco) por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.
+em que $MAP$ é a precipitação média anual, $DEM$ a altitude e $GWL$ o nível de aquecimento global. A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções *kernel*, e a interpolação final é feita em grade de alta resolução (30 segundos de arco), por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.
 
 Na Austrália, o *Australian Rainfall and Runoff* (ARR 2019) destaca-se pela robustez estatística e pela amplitude da base de dados. A distribuição GEV é aplicada às séries anuais, e a GPA às séries *peaks-over-threshold*, com parâmetros estimados por L-momentos, técnica reconhecida por sua estabilidade em amostras curtas. Para séries subdiárias, utiliza-se ainda o método BGLSR (*Bayesian Generalized Least Squares Regression*). Embora o método principal assuma estacionariedade, o ARR também fornece orientações preliminares para incorporar ajustes de mudanças climáticas (por exemplo, escalonamento por temperatura), ainda que não incluídas formalmente nas curvas IDF oficiais.
 
-A regionalização segue o conceito de Região de Influência (ROI), no qual cada estação é associada a um grupo mínimo de estações semelhantes até alcançar pelo menos 500 anos combinados de observações. A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
+A regionalização segue o conceito de Região de Influência (em inglês “*Region Of Influence*” - ROI), no qual cada estação é associada a um grupo mínimo de estações semelhantes até alcançar pelo menos 500 anos combinados de observações. A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
 
-No Reino Unido, o *Flood Estimation Handbook* (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações anuais máximas):
+No Reino Unido, o *Flood Estimation Handbook* (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações máximas anuais):
 
 $$
 X' = \frac{X}{RMED}
 $$
 
-Essa padronização possibilitou a aplicação do método FORGEX, no qual as distribuições de extremos são ajustadas às séries padronizadas por máxima verossimilhança (MLE). A regionalização é obtida por regressões geoestatísticas com variáveis explicativas (latitude, longitude e altitude), e a espacialização final dos resíduos é realizada por krigagem. O produto consiste em superfícies nacionais dos parâmetros padronizados e do índice RMED, a partir das quais podem ser derivadas curvas IDF locais. Apesar de inovador, o método é estacionário e não considera os efeitos das mudanças climáticas.
+Onde, $X'$ é o valor padronizado (adimensional); $X$ é o valor de precipitação extrema observado (ou projetado) para uma certa duração e $RMED$ é a mediana das precipitações máximas anuais.
 
-De forma geral, observa-se que as metodologias evoluíram de modelos estacionários, como no caso do Reino Unido e da Austrália, para abordagens que incorporam explicitamente a não estacionariedade climática, como no Canadá e, sobretudo, nos Estados Unidos. Enquanto o IDF_CC aposta na simplicidade do EQM aliado à distribuição de *Gumbel*, o NOAA Atlas 15 se destaca pela integração entre GEV não estacionária, covariáveis e múltiplos cenários de projeção climática.
+Essa padronização possibilitou a aplicação do método FORGEX, no qual as distribuições de extremos são ajustadas às séries padronizadas por máxima verossimilhança (MLE). A regionalização é obtida por regressões geoestatísticas com variáveis explicativas (latitude, longitude e altitude), e a espacialização final dos resíduos é realizada por krigagem. O produto consiste em um mapa dos parâmetros padronizados e do índice RMED, a partir das quais podem ser derivadas as curvas IDF locais. Apesar de inovador, o método é estacionário e não considera os efeitos das mudanças climáticas.
 
-Já o ARR 2019 consolida técnicas estatísticas robustas, como L-momentos e ROI, aplicadas a uma base de dados extensa, e o FEH contribuiu historicamente ao introduzir padronizações que serviram de referência para métodos subsequentes. O denominador comum entre todas as metodologias é a disponibilização de produtos finais em grade, que permitem a aplicação prática em escala nacional, embora apenas as metodologias canadense e estadunidense integrem explicitamente os cenários de mudanças climáticas.
+De forma geral, observa-se que as metodologias evoluíram de modelos estacionários, como no caso do Reino Unido e da Austrália, para abordagens que incorporam explicitamente a não estacionariedade climática, como no Canadá e, sobretudo, nos Estados Unidos. Enquanto o modelo canadense considerada a simplicidade do EQM aliado à distribuição de *Gumbel*, o americano se destaca pela integração entre GEV não estacionária, covariáveis e múltiplos cenários de projeção climática.
+
+Já o australiano consolida técnicas estatísticas robustas, como L-momentos e ROI, aplicadas a uma base de dados extensa, e o modelo do Reino Unido contribuiu historicamente ao introduzir padronizações que serviram de referência para métodos subsequentes. O denominador comum entre todas as metodologias é a disponibilização de produtos finais em grade, que permitem a aplicação prática em escala nacional, embora apenas as metodologias canadense e estadunidense integrem explicitamente os cenários de mudanças climáticas.
 :::
 
 ## Comparação de Abordagens
 
 | ABORDAGEM | AUSTRÁLIA | CANADÁ | ESTADOS UNIDOS | INGLATERRA (FEH Vol. 2) |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | **Séries de precipitação** | Subdiárias e diárias | Subdiárias | Subdiárias e diárias | Subdiárias e diárias |
 | **Distribuição de probabilidades** | GEV | Gumbel | GEV | Não paramétrica (FORGEX: curvas empíricas em escala de Gumbel) |
 | **Estimador** | L-momentos | Método dos momentos | L-momentos | Ajuste empírico por mínimos quadrados + suavização (com bootstrap para incerteza) |
