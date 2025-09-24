@@ -13,6 +13,10 @@ nocite: |
 
 <!-- tomas: essa primeira frase se conecta com alguma anterior? alguma referência? -->
 
+<!-- bruno: concordo com o tomas. Esse primeiro parágrafo está "solto" -->
+
+<!-- bruno: acho que os termos em inglês devem ser em itálico. Padroniza com os outros textos. -->
+
 A desagregação temporal é a principal resposta a essa assimetria. O objetivo não é apenas “quebrar” um total diário em partes, mas reconstruir uma dinâmica subdiária plausível, preservando: (i) a massa diária (quando aplicável), (ii) a intermitência (sequência seco–úmido), (iii) a variabilidade intradiária e (iv) as propriedades de extremos. Em outras palavras, busca-se gerar séries subdiárias estatisticamente consistentes com a observação e adequadas ao uso em modelos hidrológicos.
 
 Nesta revisão, organizamos as metodologias de desagregação em classes com base em seus princípios e objetivos:
@@ -416,7 +420,7 @@ $$
 
 que equivale a permitir $V$ dependente de $t$ via $(t+c)^{-2\eta}(\phi_2-1)$. A novidade principal é usar $T=t+c$ dentro da teoria de escala para obter uma única estrutura IDF coerente de 10 min a 24 h, em vez de emparelhar duas curvas (sub-h e supra-h) ou ajustar uma forma de três parâmetros separadamente para cada $T$. A estimação é feita em duas fases. Primeiro, busca-se $c$ iterativamente minimizando o erro absoluto relativo entre as IDFs do modelo e os quantis obtidos por EV (no estudo, Gumbel para $i_t$ devido a amostras curtas), enquanto $a_1$ e $\eta$ vêm de regressão log–log de $\mathbb{E}[i_t]$ vs. $t+c$, $V$ do CV médio e $(\mu,\sigma,\xi)$ de $K_P$ por momentos. Depois, um refinamento local minimiza o erro ponderado, permitindo pesos por duração para dar mais confiança às séries longas (tipicamente ≥ 1 h) quando as sub-horárias são curtas/ruidosas. Aplicações em quatro casos europeus mostram bom ajuste em 10 min–24 h; o multiple scaling melhora marginalmente em dois locais, embora $\phi_2\approx1$ na prática, e a inclusão de $c>0$ corrige os vieses típicos da hipótese tradicional $c=0$ na vizinhança de 0,5–1 h. Os autores também evidenciam que, pelas amostras disponíveis, $\xi$ tende a 0 (Gumbel), coerente com o uso de quantis Gumbel na calibração, sem prejuízo da estrutura geral baseada na GEV de $K_P$. Em síntese, o trabalho estende a invariância de escala para uma curva de três parâmetros com duração ajustada, fornece um procedimento de calibração robusto e reduz a parametrização necessária para múltiplos períodos de retorno mantendo consistência estatística entre durações.
 
-4.  **Técnicas Não Paramétricas / Reamostragem**
+4.  **Técnicas Não Paramétricas / Reamostragem** <!-- bruno: os itens 1. 2. 3. não foram indicados no texto. -->
 
 As técnicas não paramétricas de desagregação geram séries subdiárias por reamostragem de padrões intradiários observados, sem postular uma distribuição específica e preservando o acumulado diário. O método dos fragmentos (MOF) reparte o total diário segundo “fragmentos” subdiários históricos (hietogramas normalizados). No MOF, para uma estação doadora sss, dia $i$ e duração $m$, o fragmento adimensional é definido como
 
