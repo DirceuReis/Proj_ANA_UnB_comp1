@@ -323,7 +323,7 @@ Além disso, foram coletados os seguintes dados:
 
 **4.2. Distribuição estatística**
 
-A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método dos L-momentos. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
+A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método MLE. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
 
 A função de distribuição de probabilidade GEV não estacionária:
 
@@ -349,7 +349,9 @@ $$
 $$
 \text{Forma:} \quad \xi(x) = C_{0}
 \tag{20}
-$$ Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
+$$
+
+Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
 
 **4.3. Regionalização**
 

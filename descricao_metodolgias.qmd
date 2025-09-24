@@ -27,25 +27,64 @@ $$
 F(x) = 1-\left(1+\xi \frac{x-\mu}{\sigma}\right)^{-1/\xi}, \quad 1+\xi \frac{x-\mu}{\sigma} > 0
 $$
 
-No Canadá, a metodologia IDF_CC (Simonović et al., 2016) utiliza a distribuição de Gumbel, ajustada pelo método dos momentos, e inova ao aplicar o *Equidistant Quantile Mapping (EQM)*. Essa técnica ajusta quantis observados e simulados, garantindo consistência entre registros subdiários e projeções climáticas diárias de modelos globais. O mapeamento é dado por:
+No Canadá, a metodologia IDF_CC (Simonović et al., 2016, 2017) parte das AMP (máximos anuais) em cada duração e ajusta Gumbel pelo método dos momentos para obter as IDFs históricas por estação. O sinal climático dos GCMs é então trazido para a localização da estação por reamostragem espacial dos quatro nós de grade mais próximos, usando ponderação inversa do quadrado da distância. A atualização ao clima futuro é feita com *Equidistant Quantile Mapping* (EQM), que normalmente é usada para *downscaling*. Essa técnica ajusta quantis observados e simulados, garantindo consistência entre registros subdiários e projeções climáticas diárias de modelos globais. O mapeamento é dado por:
+
+*Downscalig* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
 
 $$
-X_{futuro} = F_{obs}^{-1}\left(F_{mod}(X_{mod})\right)
+Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
 $$
 
-onde $F_{obs}$ é a função distribuição acumulada observada; $F_{mod}$ a simulada e $X_{mod}$ o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.
+Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; $CDF$ significa função de distribuição de probabilidade cumulativa; e $invCDF$ significa CDF inversa.
 
-Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via L-momentos, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
+*Downscaling* temporal dos dados das simulações projetadas do GCM dos máximos diários para o GCM diário de referência:
 
 $$
-\mu(s,t) = \beta_0 + \beta_1 \cdot \text{MAP}(s) + \beta_2 \cdot \text{DEM}(s) + \beta_3 \cdot \text{GWL}(t)
+Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 $$
 
-em que $MAP$ é a precipitação média anual, $DEM$ a altitude e $GWL$ o nível de aquecimento global. A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções *kernel*, e a interpolação final é feita em grade de alta resolução (30 segundos de arco), por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.
+Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
+
+Para gerar dados subdiários máximos futuros, faz-se a combinação das equações acima:
+
+$$
+X^{STN, future}_{\max,j} 
+= a_{1} \times 
+\left[ 
+\frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
+\right] 
++ b_{1} 
+$$
+O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.
+
+Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via MLE, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
+
+$$
+\text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
+\tag{18}
+$$
+
+$$ 
+\text{Escala: } \quad \sigma(x,t) = b_{1} \times MAM(x)\,[1+b_{2} \times GWL(t)]
+\tag{19}
+$$
+
+$$
+\text{Forma:} \quad \xi(x) = C_{0}
+\tag{20}
+$$ 
+
+Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
+
+A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções *kernel*, e a interpolação final é feita em grade de alta resolução (30 segundos de arco), por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.
+
+O relatório é dividido em duas partes: (1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas e (2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.
 
 Na Austrália, o *Australian Rainfall and Runoff* (ARR 2019) destaca-se pela robustez estatística e pela amplitude da base de dados. A distribuição GEV é aplicada às séries anuais, e a GPA às séries *peaks-over-threshold*, com parâmetros estimados por L-momentos, técnica reconhecida por sua estabilidade em amostras curtas. Para séries subdiárias, utiliza-se ainda o método BGLSR (*Bayesian Generalized Least Squares Regression*). Embora o método principal assuma estacionariedade, o ARR também fornece orientações preliminares para incorporar ajustes de mudanças climáticas (por exemplo, escalonamento por temperatura), ainda que não incluídas formalmente nas curvas IDF oficiais.
 
-A regionalização segue o conceito de Região de Influência (em inglês “*Region Of Influence*” - ROI), no qual cada estação é associada a um grupo mínimo de estações semelhantes até alcançar pelo menos 500 anos combinados de observações. A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
+A regionalização segue o conceito de Região de Influência (em inglês “*Region Of Influence*” - ROI). Para cada estação pluviométrica, define-se uma região circular ao redor dela.Essa região é expandida até incluir um número mínimo de dados (medido em “estações-anos”, geralmente em torno de 500 estações-anos). Os dados dentro da ROI são testados quanto à homogeneidade estatística (usando medidas como o H de Hosking & Wallis) e se a região não for homogênea, remove-se estações “discordantes” até atingir homogeneidade.
+
+A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
 
 No Reino Unido, o *Flood Estimation Handbook* (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações máximas anuais):
 
@@ -68,7 +107,7 @@ Já o australiano consolida técnicas estatísticas robustas, como L-momentos e 
 |---------------|---------------|---------------|---------------|---------------|
 | **Séries de precipitação** | Subdiárias e diárias | Subdiárias | Subdiárias e diárias | Subdiárias e diárias |
 | **Distribuição de probabilidades** | GEV | Gumbel | GEV | Não paramétrica (FORGEX: curvas empíricas em escala de Gumbel) |
-| **Estimador** | L-momentos | Método dos momentos | L-momentos | Ajuste empírico por mínimos quadrados + suavização (com bootstrap para incerteza) |
+| **Estimador** | L-momentos | Método dos momentos | MLE | Ajuste empírico por mínimos quadrados + suavização (com bootstrap para incerteza) |
 | **Regionalização** | Regressão GLS Bayesiana | Natural Neighbor | RFA | Georegressão + Kriging com covariáveis topográficas |
 | **Produto em grade** | ANUSPLIN (splines p/ interpolar dados) | Mapas IDF (IDWS) | PFVOL1/2: Interpolação cúbica monotônica | Grade 1 km: mapas digitais de RMED e parâmetros DDF |
 | **Resumo** | Dados subdiários usados p/ gerar equações de regressão linear com covariáveis (chuvas e fisiografia). Estimativas de média, L-CV, L-assimetria. Aplicadas a estações diárias e subdiárias. Abordagem Hosking & Wallis (1993) para L-momentos regionais. | Dados subdiários + projeções de 24 GCMs (IDF_CC Tool). Distribuição Gumbel, método dos momentos. Interpolação Natural Neighbor. Downscaling EQM. | Vol. 1: dados diários/subdiários NOAA NCEI + parceiros. AMS extraída p/ diferentes durações, ajustada à GEV via L-momentos. Locais sem obs: RFA + regressão dos parâmetros da GEV c/ covariáveis. Produto final em grade (0,1°) com interpolação cúbica monotônica. | AMS para 1h–8d, índice RMED (mediana da série de máximos anuais). Interpolação em grade de 1 km por geo-regressão com covariáveis topográficas. Curvas de crescimento derivadas pelo método FORGEX. Resultados integrados em modelo DDF, consistente até 1000 anos de período de retorno. Produtos: mapas digitais e parâmetros de chuva de projeto. |
