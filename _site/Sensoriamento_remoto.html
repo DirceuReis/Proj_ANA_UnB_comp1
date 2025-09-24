@@ -240,9 +240,9 @@ window.Quarto = {
 <p>O conceito de curvas de Intensidade-Duração-Frequência (IDF) da precipitação é baseado na gestão de águas pluviais e nos projetos de infraestrutura urbanas e hidráulicas, com o intuito de resistir ou prevenir a inundações e eventos extremos de precipitação (Kawara; Elsebaie, 2022). Sua metodologia baseia-se na seleção de maiores chuvas de duração (como por exemplo: 30 minutos) em cada série de dados. E ajustadas as séries máximas anuais históricas (número de anos) de diferentes durações (5 minutos, 10 minutos, 1 hora, 12 horas, 24 horas, 5 dias), e seus resultados são plotadas em formas de gráficos ou equações (Equação 1), com as seguintes variáveis: Intensidade, Duração e Frequência (Martel et al., 2021).</p>
 <p><img src="figuras/i_d_f_exemplo.jpg" class="img-fluid" alt="Fluxograma da metodologia do Volume 2 do NOAA 15"> Figura 1. de um posto pluviômetro em Curitiba e São José dos Pinhais (Fonte: MORA et al., 2024). ::::</p>
 <p>Diante disso, a utilização de modelos de mudanças climáticas para a atualização das curvas IDF, vem se tornando um grande aliado. Shrestha et al.&nbsp;(2017) realizaram um estudo onde utilizaram métodos de desagregação temporal de redução espacial de chuva, para desenvolver IDF futuras sob cenários de mudanças climáticas, na região da Tailândia. Para estimar as curvas de IDF futuras os autores utilizaram dados de precipitação de 3 e 24 horas, nos anos de 1981 a 2010. As curvas IDF projetadas foram para o período de 2011 a 2030 e 2046 a 2065, onde as IDF atuais e futuras mostraram que a intensidade da chuva aumentou sob as mudanças climáticas na maioria das durações das chuvas.</p>
-<p>Statististical inference is one of the main tools in use today (and has been for many years) for describing and making predictions about precipitation extremes and many other hydroclimatic phenomena. Once a sample of these events is gathered, one can assess its behavior by evaluating several different probability distributions and choosing one which best represents it by fitting them to the data, estimating its parameters. The way the set of extremes is put together, however, leads to different possible distributions.</p>
-<p>Probabilistic models that follow the annual maxima approach are usually based on the Extreme Value Theory, ETV (Fisher and Tippett, 1928; Gnedenko, 1943), which states that, when the size of a sample used to draw maxima from tends to infinity and its random variables being independent and identically distributed, the distribution of the normalized random variable Y* = (Y - b)/a converges to one of three asymptotic forms of Extreme Value distributions later combined into a single parametric form called the Generalized Extreme Value (GEV) distribution (von Mises, 1936; Jenkinson, 1955) with location <span class="math inline">\((\mu)\)</span>, scale <span class="math inline">\((\sigma)\)</span> and shape <span class="math inline">\((\xi)\)</span> parameters.</p>
-<p>The ETV is one of the reasons why the GEV distribution is so popular for hydrological extremes. Unknown parent distributions of different types will converge to the GEV depending on its tail type, ultimately affecting which of the three limiting laws based on the shape parameter value (REFERENCIAS?). For <span class="math inline">\(\xi = 0\)</span>, GEV will turn into a Gumbel distribution, for <span class="math inline">\(\xi &gt; 0\)</span>, GEV becomes a Fréchet distribution, and for <span class="math inline">\(\xi &lt; 0\)</span>, it becomes a reverse Weibull. The main issues surrounding the GEVs use are based on <span class="math inline">\(\xi\)</span>.</p>
+<p>A inferência estatística é uma das principais ferramentas utilizadas atualmente (e há muitos anos) para descrever e fazer previsões sobre precipitações extremas e muitos outros fenômenos hidroclimáticos. Uma vez coletada uma amostra desses eventos, é possível avaliar seu comportamento avaliando várias distribuições de probabilidade diferentes e escolhendo aquela que melhor o representa, ajustando-as aos dados e estimando seus parâmetros. A maneira como o conjunto de extremos é organizado, no entanto, leva a diferentes distribuições possíveis.</p>
+<p>Os modelos probabilísticos que seguem a abordagem dos máximos anuais baseiam-se geralmente na Teoria dos Valores Extremos, ETV (Fisher e Tippett, 1928; Gnedenko, 1943), que afirma que, quando a dimensão de uma amostra utilizada para extrair máximos tende para o infinito e as suas variáveis aleatórias são independentes e distribuídas de forma idêntica, a distribuição da variável aleatória normalizada Y* = (Y - b)/a converge para uma das três formas assintóticas das distribuições de Valores Extremos, posteriormente combinadas em uma única forma paramétrica chamada distribuição de Valores Extremos Generalizados (GEV) (von Mises, 1936; Jenkinson, 1955) com parâmetros de localização <span class="math inline">\((\mu)\)</span>, escala <span class="math inline">\((\sigma)\)</span> e forma <span class="math inline">\((\xi)\)</span>.</p>
+<p>A ETV é uma das razões pelas quais a distribuição GEV é tão popular para extremos hidrológicos. Distribuições parentais desconhecidas de diferentes tipos convergirão para a GEV, dependendo do seu tipo de cauda, afetando, em última instância, qual das três leis limitantes com base no valor do parâmetro de forma (REFs?). Para <span class="math inline">\(\xi = 0\)</span>, a GEV se transformará em uma distribuição de Gumbel, para <span class="math inline">\(\xi &gt; 0\)</span>, GEV torna-se uma distribuição de Fréchet, e para <span class="math inline">\(\xi &lt; 0\)</span>, torna-se uma Weibull inversa. As principais questões relacionadas ao uso dos GEVs baseiam-se em <span class="math inline">\(\xi\)</span>.</p>
 <p>A interpolação espacial é o método mais tradicional de transformar chuvas pontuais em chuvas das áreas (Hu et al., 2019). Recomenda-se estações meteorológicas da mesma região ecoclimática e com altitudes semelhantes, sendo caracterizadas como hidrologicamente homogêneas. Assim, quanto mais semelhantes os dados pluviométricos das regiões, mais precisa será os dados de precipitação das lacunas existentes. Geralmente, os métodos de interpolação da precipitação são divididos em duas categorias, na quais são: método de interpolação global, onde utilizam métodos de superfície de tendência e de regressão múltipla, e o métodos de interpolação regional, tendo em sua metodologia a ponderação de distância inversa e o método de krigagem (Zhang et al., 2017).</p>
 <p>A partir da década de 80, a estimativa da precipitação passou a ter avanço com uso do sensoriamento remoto. Inicialmente, as técnicas de sensoriamento remoto e os modelos atmosféricos se mostraram promissores, porém, ainda apresentavam incertezas. Já na década de 90, a estimativa da precipitação pluvial evoluiu, integrando dados de variadas fontes para aprimorar essas estimativas. Recentemente, se tornou umas das técnicas mais importantes para a meteorologia e hidrologia, podendo ser utilizado para as estimativas de precipitações através de integrações de informações de medidores terrestres, recuperação por sensoriamento remoto e estimativas de reanálises da atmosfera (Hu et al., 2019; Beck et al., 2017; Goudenhoofdt; Delobbe, 2009).</p>
 <p>Os radares meteorológicos são capazes de detectar precipitação em um curto período e de forma instantânea. No entanto, é difícil realizar uma análise em uma escala maior, devido ao seu alcance limitado e alto custo (Yu et al., 2022). Já os satélites fornecem um monitoramento em uma boa resolução espacial e temporal, em diferentes pontos geográficos e em altas altitudes (Tang et al., 2021).</p>
@@ -262,17 +262,127 @@ window.Quarto = {
 <p>Já na região Amazônica foi reportada tendências extremas na precipitação e na temperatura, onde os autores reportam que anomalias do Atlantico e Pacífico, como o Niño 4, TNAI, TSAI e ONI, podem afetar negativamente a precipitação e a temperatura na Amazônia (Dos Santos et al., 2023). Com o aumento das anomalias negativas de chuvas nos últimos anos, destacando na região Sudeste brasileira, ocorreu um avanço da seca, sendo considerada grave nas regiões Maranhão e Pernambuco (ANA, 2024). No entanto, devido ao aumento de precipitações extremas teve uma atenuação da seca no norte do Ceará e no sul do Piauí (ANA, 2024).</p>
 <p>Nas últimas décadas, fatores que alteram a precipitação têm sido amplamente estudados. As simulações de modelos climáticos apontam que a precipitação extrema tende a aumentar à medida que os gases de efeito estufa presentes na atmosfera aumentam (Allen; Ingram, 2002).</p>
 </div>
-<p><strong>Referências Bibliográficas</strong></p>
 
 
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-AustralianRainfallRunoff2019" class="csl-entry" role="listitem">
-<em>Australian Rainfall and Runoff: A Guide to Flood Estimation</em>. 2019. Symonston, Australian Capital Territory: Geoscience Australia.
+<div id="ref-Ref1" class="csl-entry" role="listitem">
+<span>“ALLEN, m. R.; INGRAM, w. J. Insight Review Articles 224. [S.l: S.n.]. Disponível Em: &lt;Www.nature.com/Nature&gt;.”</span> n.d.
 </div>
-<div id="ref-simonovicWebbasedToolDevelopment2016" class="csl-entry" role="listitem">
-Simonovic, Slobodan P., Andre Schardong, Dan Sandink, and Roshan Srivastav. 2016. <span>“A Web-Based Tool for the Development of <span>Intensity Duration Frequency</span> Curves Under Changing Climate.”</span> <em>Environmental Modelling &amp; Software</em> 81 (July): 136–53. <a href="https://doi.org/10.1016/j.envsoft.2016.03.016">https://doi.org/10.1016/j.envsoft.2016.03.016</a>.
+<div id="ref-Ref3" class="csl-entry" role="listitem">
+<span>“BECK, h. E. Et Al. MSWEP: 3-Hourly 0.25° Global Gridded Precipitation (1979-2015) by Merging Gauge, Satellite, and Reanalysis Data. Hydrology and Earth System Sciences, v. 21, n. 1, p. 589–615, 30 Jan. 2017.”</span> n.d.
+</div>
+<div id="ref-Ref4" class="csl-entry" role="listitem">
+<span>“BLANCHET, j. Et Al. A Regional GEV Scale-Invariant Framework for Intensity–Duration–Frequency Analysis. Journal of Hydrology, v. 540, p. 82–95, 1 Set. 2016.”</span> n.d.
+</div>
+<div id="ref-Ref5" class="csl-entry" role="listitem">
+<span>“BOLVIN, d. T. Et Al. NASA Global Precipitation Measurement (GPM) Integrated Multi-satellitE Retrievals for GPM (IMERG) Prepared for: Global Precipitation Measurement (GPM) National Aeronautics and Space Administration (NASA).”</span> n.d.
+</div>
+<div id="ref-Ref2" class="csl-entry" role="listitem">
+<span>“CÉLIA DOS SANTOS ALVALÁ, Regina Et Al. Analysis of the Hydrological Disaster Occurred in the State of Rio Grande Do Sul, Brazil in September 2023: Vulnerabilities and Risk Management Capabilities. International Journal of Disaster Risk Reduction, v. 110, 1 Ago. 2024.”</span> n.d.
+</div>
+<div id="ref-Ref6" class="csl-entry" role="listitem">
+<span>“CHEN, j.; BRISSETTE, f. P.; LECONTE, r. Downscaling of Weather Generator Parameters to Quantify Hydrological Impacts of Climate Change. Climate Research, v. 51, n. 3, p. 185–200, 2012.”</span> n.d.
+</div>
+<div id="ref-Ref7" class="csl-entry" role="listitem">
+<span>“Costa, f. F. Da, Rufino, i. A. A., Aragão, r. De, &amp; Filho, r. Da s. R. (2024). Performance Evaluation of Four Remote-Sensing Products Throughout Precipitation Estimation in the State of Paraíba, Northeast Brazil. In Remote Sensing Applications: Society and Environment (Vol. 35). Elsevier b.v. Https://Doi.org/10.1016/j.rsase.2024.101256.”</span> n.d.
+</div>
+<div id="ref-Ref8" class="csl-entry" role="listitem">
+<span>“DOS SANTOS, a. L. M. Et Al. Evaluation of Extreme Precipitation Indices in Brazil’s Semiarid Region from Satellite Data. Atmosphere, v. 13, n. 10, 1 Out. 2022.”</span> n.d.
+</div>
+<div id="ref-Ref33" class="csl-entry" role="listitem">
+<span>“DOS SANTOS, d. F.; MARTINS, f. B.; TORRES, r. R. Impacts of Climate Projections on Water Balance and Implications on Olive Crop in Minas Gerais. Revista Brasileira de Engenharia Agricola e Ambiental, v. 21, n. 2, p. 77–82, 1 Fev. 2017.”</span> n.d.
+</div>
+<div id="ref-Ref9" class="csl-entry" role="listitem">
+<span>“DUAN, Zheng Et Al. Evaluation of Eight High Spatial Resolution Gridded Precipitation Products in Adige Basin (Italy) at Multiple Temporal and Spatial Scales. Science of the Total Environment, v. 573, p. 1536–1553, 15 Dez. 2016.”</span> n.d.
+</div>
+<div id="ref-Ref10" class="csl-entry" role="listitem">
+<span>“Fisher, r. A., &amp; Tippett, l. H. C. (1928). Limiting Forms of the Frequency Distribution of the Largest or Smallest Member of a Sample. Mathematical Proceedings of the Cambridge Philosophical Society, 24(2), 180–190. Https://Doi.org/10.1017/S0305004100015681.”</span> n.d.
+</div>
+<div id="ref-Ref11" class="csl-entry" role="listitem">
+<span>“Ghebreyesus, d. T., &amp; Sharif, h. O. (2021). Development and Assessment of High-Resolution Radar-Based Precipitation Intensity-Duration-Curve (IDF) Curves for the State of Texas. Remote Sensing, 13(15). Https://Doi.org/10.3390/Rs13152890.”</span> n.d.
+</div>
+<div id="ref-Ref12" class="csl-entry" role="listitem">
+<span>“Gnedenko, b. (1943). Sur La Distribution Limite Du Terme Maximum d’une Serie Aleatoire. The Annals of Mathematics, 44(3), 423. Https://Doi.org/10.2307/1968974.”</span> n.d.
+</div>
+<div id="ref-Ref13" class="csl-entry" role="listitem">
+<span>“GOUDENHOOFDT, e.; DELOBBE, l. Hydrology and Earth System Sciences Evaluation of Radar-Gauge Merging Methods for Quantitative Precipitation estimatesHydrol. Earth Syst. Sci. [S.l: S.n.]. Disponível Em: &lt;Www.hydrol-Earth-Syst-Sci.net/13/195/2009/&gt;.”</span> n.d.
+</div>
+<div id="ref-Ref14" class="csl-entry" role="listitem">
+<span>“Gu, x., Ye, l., Xin, q., Zhang, c., Zeng, f., Nerantzaki, s. D., &amp; Papalexiou, s. M. (2022). Extreme Precipitation in China: A Review on Statistical Methods and Applications. In Advances in Water Resources (Vol. 163). Elsevier Ltd. Https://Doi.org/10.1016/j.advwatres.2022.104144.”</span> n.d.
+</div>
+<div id="ref-Ref15" class="csl-entry" role="listitem">
+<span>“Hosseinzadehtalaei, p., Tabari, h., &amp; Willems, p. (2020). Climate Change Impact on Short-Duration Extreme Precipitation and Intensity–Duration–Frequency Curves over Europe. Journal of Hydrology, 590. Https://Doi.org/10.1016/j.jhydrol.2020.125249.”</span> n.d.
+</div>
+<div id="ref-Ref16" class="csl-entry" role="listitem">
+<span>“Jenkinson, a. F. (1955). The Frequency Distribution of the Annual Maximum (or Minimum) Values of Meteorological Elements. Quarterly Journal of the Royal Meteorological Society, 81(348), 158–171. Https://Doi.org/10.1002/Qj.49708134804.”</span> n.d.
+</div>
+<div id="ref-Ref17" class="csl-entry" role="listitem">
+<span>“KAWARA, a. Q.; ELSEBAIE, i. H. Development of Rainfall Intensity, Duration and Frequency Relationship on a Daily and Sub-Daily Basis (Case Study: Yalamlam Area, Saudi Arabia). Water (Switzerland), v. 14, n. 6, 1 Mar. 2022.”</span> n.d.
+</div>
+<div id="ref-Ref18" class="csl-entry" role="listitem">
+<span>“KHADGARAI, s.; KUMAR, v.; PRADHAN, p. K. The Connection Between Extreme Precipitation Variability over Monsoon Asia and Large-Scale Circulation Patterns. Atmosphere, v. 12, n. 11, 1 Nov. 2021.”</span> n.d.
+</div>
+<div id="ref-Ref19" class="csl-entry" role="listitem">
+<span>“KUBOTA, Takuji Et Al. Global Precipitation Map Using Satellite-Borne Microwave Radiometers by the GSMaP Project: Production and Validation. In: Jul. 2007.”</span> n.d.
+</div>
+<div id="ref-Ref20" class="csl-entry" role="listitem">
+<span>“Liang, q., Chen, y., Duan, w., Wang, c., Li, y., Zhu, j. Y., He, g., Wei, w., &amp; Yuan, m. (2025). Temporal and Spatial Changes of Extreme Precipitation and Its Related Large-Scale Climate Mechanisms in the Arid Region of Northwest China During 1961–2022. Journal of Hydrology, 658. Https://Doi.org/10.1016/j.jhydrol.2025.133182.”</span> n.d.
+</div>
+<div id="ref-Ref21" class="csl-entry" role="listitem">
+<span>“LIMA, Ricardo Carvalho de Andrade; BARBOSA, Antonio Vinícius Barros. Natural Disasters, Economic Growth and Spatial Spillovers: Evidence from a Flash Flood in Brazil. Papers in Regional Science, v. 98, n. 2, p. 905–924, 1 Abr. 2019.”</span> n.d.
+</div>
+<div id="ref-Ref22" class="csl-entry" role="listitem">
+<span>“LIU, Zhong Et Al. Tropical Rainfall Measuring Mission (TRMM) Precipitation Data and Services for Research and Applications. Bulletin of the American Meteorological Society, v. 93, n. 9, p. 1317–1325, Set. 2012.”</span> n.d.
+</div>
+<div id="ref-Ref23" class="csl-entry" role="listitem">
+<span>“MARENGO, j. A. Et Al. Flash Floods and Landslides in the City of Recife, Northeast Brazil After Heavy Rain on May 25–28, 2022: Causes, Impacts, and Disaster Preparedness. Weather and Climate Extremes, v. 39, 1 Mar. 2023.”</span> n.d.
+</div>
+<div id="ref-Ref24" class="csl-entry" role="listitem">
+<span>“MORA, a. J. E. V. Et Al. Parameterization of Bernard’s Mathematical Model to Estimate Intensity-Duration-Frequency Curves in the Curitiba and São José Dos Pinhais Sub-Basins Belonging to the Upper Iguaçu River Basin, Brazil. Journal of the Geological Society of India, v. 100, n. 3, p. 434–443, 1 Mar. 2024.”</span> n.d.
+</div>
+<div id="ref-Ref25" class="csl-entry" role="listitem">
+<span>“MUSIE, Mulugeta; SEN, Sumit; SRIVASTAVA, Puneet. Comparison and Evaluation of Gridded Precipitation Datasets for Streamflow Simulation in Data Scarce Watersheds of Ethiopia. Journal of Hydrology, v. 579, 1 Dez. 2019.”</span> n.d.
+</div>
+<div id="ref-Ref26" class="csl-entry" role="listitem">
+<span>“NOOR, m. Et Al. Evaluating Intensity-Duration-Frequency (IDF) Curves of Satellite-Based Precipitation Datasets in Peninsular Malaysia. Atmospheric Research, v. 248, 15 Jan. 2021.”</span> n.d.
+</div>
+<div id="ref-Ref27" class="csl-entry" role="listitem">
+<span>“Overeem, a., Buishand, t. A., &amp; Holleman, i. (2009). Extreme Rainfall Analysis and Estimation of Depth-Duration-Frequency Curves Using Weather Radar. Water Resources Research, 45(10). Https://Doi.org/10.1029/2009WR007869.”</span> n.d.
+</div>
+<div id="ref-Ref28" class="csl-entry" role="listitem">
+<span>“PAN, Xinshun Et Al. Evaluation and Applicability Analysis of GPM Satellite Precipitation over Mainland China. Remote Sensing, v. 15, n. 11, 1 Jun. 2023.”</span> n.d.
+</div>
+<div id="ref-Ref29" class="csl-entry" role="listitem">
+<span>“PAPA, k.-m.; KOUTROULIS, a. G. Evaluation of Precipitation Datasets over Greece. Insights from Comparing Multiple Gridded Products with Observations. Atmospheric Research, v. 315, p. 107888, Abr. 2025.”</span> n.d.
+</div>
+<div id="ref-Ref30" class="csl-entry" role="listitem">
+<span>“PEDREIRA, Altemar l. Et Al. Assessment of Remote Sensing and Re-Analysis Estimates of Regional Precipitation over Mato Grosso, Brazil. Water (Switzerland), v. 13, n. 3, 1 Fev. 2021.”</span> n.d.
+</div>
+<div id="ref-Ref31" class="csl-entry" role="listitem">
+<span>“Peleg, n., Marra, f., Fatichi, s., Paschalis, a., Molnar, p., &amp; Burlando, p. (2018). Spatial Variability of Extreme Rainfall at Radar Subpixel Scale. Journal of Hydrology, 556, 922–933. Https://Doi.org/10.1016/j.jhydrol.2016.05.033.”</span> n.d.
+</div>
+<div id="ref-Ref32" class="csl-entry" role="listitem">
+<span>“RAO, v. Brahmananda Et Al. An Update on the Rainfall Characteristics of Brazil: Seasonal Variations and Trends in 1979-2011. International Journal of Climatology, v. 36, n. 1, p. 291–302, 1 Jan. 2016.”</span> n.d.
+</div>
+<div id="ref-Ref34" class="csl-entry" role="listitem">
+<span>“SONDERMANN, m. Et Al. Climate Change Projections and Impacts on the Eucalyptus Plantation Around the Doce River Basin, in Minas Gerais, Brazil. Climate Services, v. 28, 1 Dez. 2022.”</span> n.d.
+</div>
+<div id="ref-Ref35" class="csl-entry" role="listitem">
+<span>“Sun, q., Miao, c., Duan, q., Ashouri, h., Sorooshian, s., &amp; Hsu, k. L. (2018a). A Review of Global Precipitation Data Sets: Data Sources, Estimation, and Intercomparisons. Reviews of Geophysics, 56(1), 79–107. Https://Doi.org/10.1002/2017RG000574.”</span> n.d.
+</div>
+<div id="ref-Ref36" class="csl-entry" role="listitem">
+<span>“TANG, x. Et Al. Integration of Satellite Precipitation Data and Deep Learning for Improving Flash Flood Simulation in a Poor-Gauged Mountainous Catchment. Remote Sensing, v. 13, n. 24, 1 Dez. 2021.”</span> n.d.
+</div>
+<div id="ref-Ref37" class="csl-entry" role="listitem">
+<span>“Von Mises, r. (1936). La Distribution de La Plus Grande de n Valeurs.”</span> n.d.
+</div>
+<div id="ref-Ref38" class="csl-entry" role="listitem">
+<span>“YAO, j. Et Al. Intensification of Extreme Precipitation in Arid Central Asia. Journal of Hydrology, v. 598, 1 Jul. 2021.”</span> n.d.
+</div>
+<div id="ref-Ref39" class="csl-entry" role="listitem">
+<span>“ZHOU, Ziteng Et Al. Comprehensive Evaluation of Latest GPM Era IMERG and GSMaP Precipitation Products over Mainland China. Atmospheric Research, v. 246, 1 Dez. 2020.”</span> n.d.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
