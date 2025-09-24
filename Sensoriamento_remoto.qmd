@@ -1,6 +1,6 @@
 ---
 title: "Sensoriamento Remoto"
-author: Bruna Dias.
+author: Bruna, Bruno e Tomás.
 bibliography: referencias/referencias_simples_sensoriamento_remoto.bib
 nocite: |
   @*
