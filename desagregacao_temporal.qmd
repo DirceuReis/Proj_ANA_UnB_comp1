@@ -15,7 +15,7 @@ nocite: |
 
 <!-- bruno: concordo com o tomas. Esse primeiro parágrafo está "solto" -->
 
-<!-- bruno: acho que os termos em inglês devem ser em itálico. Padroniza com os outros textos. -->
+<!-- bruno: acho que os termos em inglês podem ficar em itálico. Padroniza com os outros textos. -->
 
 A desagregação temporal é a principal resposta a essa assimetria. O objetivo não é apenas “quebrar” um total diário em partes, mas reconstruir uma dinâmica subdiária plausível, preservando: (i) a massa diária (quando aplicável), (ii) a intermitência (sequência seco–úmido), (iii) a variabilidade intradiária e (iv) as propriedades de extremos. Em outras palavras, busca-se gerar séries subdiárias estatisticamente consistentes com a observação e adequadas ao uso em modelos hidrológicos.
 
