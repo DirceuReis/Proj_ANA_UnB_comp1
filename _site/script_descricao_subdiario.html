@@ -236,115 +236,25 @@ div.csl-indent {
 <div class="cell-output cell-output-stderr">
 <pre><code>Carregando pacotes exigidos: pacman</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pacote 'pacman' foi compilado no R versão 4.4.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Instalando pacote em 'C:/Users/Dirceu/AppData/Local/R/win-library/4.4'
-(como 'lib' não foi especificado)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>instalando a dependência 'assertthat' também</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: não é possível acessar o índice para o repositório http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4:
-  não foi possível abrir a URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4/PACKAGES'</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>pacote 'assertthat' desempacotado com sucesso e somas MD5 verificadas
-pacote 'arrow' desempacotado com sucesso e somas MD5 verificadas
-
-Os pacotes binários baixados estão em
-    C:\Users\Dirceu\AppData\Local\Temp\RtmpszhbCB\downloaded_packages</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-arrow installed</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pacote 'arrow' foi compilado no R versão 4.4.3</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em “scripts/funcoes” foi criada uma função <code>fun_filter_set.R</code>, que combina a função <code>fun_fill_dates.R</code> – que preenche as datas das séries – e a funçãõ <code>fun_filter_set()</code> definida no script <code>script_leitura_subdiario.qmd</code> – que filtra as estações, mantando somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critérios p/ filtrar séries</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>na_accept <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar funções</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">na_accept =</span> na_accept,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">min_years =</span> min_years); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critérios p/ filtrar séries</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>na_accept <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar funções</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">na_accept =</span> na_accept,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">min_years =</span> min_years); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Preenchendo datas...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Instalando pacote em 'C:/Users/Dirceu/AppData/Local/R/win-library/4.4'
-(como 'lib' não foi especificado)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: não é possível acessar o índice para o repositório http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4:
-  não foi possível abrir a URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4/PACKAGES'</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>pacote 'fastmatch' desempacotado com sucesso e somas MD5 verificadas
-
-Os pacotes binários baixados estão em
-    C:\Users\Dirceu\AppData\Local\Temp\RtmpszhbCB\downloaded_packages</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-fastmatch installed
-Instalando pacote em 'C:/Users/Dirceu/AppData/Local/R/win-library/4.4'
-(como 'lib' não foi especificado)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>instalando a dependência 'audio' também</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: não é possível acessar o índice para o repositório http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4:
-  não foi possível abrir a URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4/PACKAGES'</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>pacote 'audio' desempacotado com sucesso e somas MD5 verificadas
-pacote 'beepr' desempacotado com sucesso e somas MD5 verificadas
-
-Os pacotes binários baixados estão em
-    C:\Users\Dirceu\AppData\Local\Temp\RtmpszhbCB\downloaded_packages</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-beepr installed</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pacote 'beepr' foi compilado no R versão 4.4.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Instalando pacote em 'C:/Users/Dirceu/AppData/Local/R/win-library/4.4'
-(como 'lib' não foi especificado)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: não é possível acessar o índice para o repositório http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4:
-  não foi possível abrir a URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.4/PACKAGES'</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>pacote 'pbapply' desempacotado com sucesso e somas MD5 verificadas
-
-Os pacotes binários baixados estão em
-    C:\Users\Dirceu\AppData\Local\Temp\RtmpszhbCB\downloaded_packages</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-pbapply installed</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pacote 'pbapply' foi compilado no R versão 4.4.3</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -360,18 +270,13 @@ Aplicando filtros...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)   max used    (Mb)
-<<<<<<< HEAD
-Ncells  1266875  67.7    2304471  123.1    2304471   123.1
-Vcells 62070586 473.6 1074660806 8199.1 1343325583 10248.8</code></pre>
-=======
-Ncells  1310160  70.0    2458195  131.3    2458195   131.3
-Vcells 62210732 474.7 1074795488 8200.1 1343492979 10250.1</code></pre>
->>>>>>> 2586db61c1605b84057a31a9bd385b9fd2d98e2e
+Ncells  1266876  67.7    2304429  123.1    2304429   123.1
+Vcells 62070614 473.6 1074660833 8199.1 1343325611 10248.8</code></pre>
 </div>
 </div>
 <p><span class="citation" data-cites="Papalexiou.2013">Papalexiou and Koutsoyiannis (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span> apresentam o seguinte conjunto de estatísticas descritivas básicas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/basic_summary_statistics_papalexiou_2013.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/basic_summary_statistics_papalexiou_2013.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-papalexiou-estatisticas" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
