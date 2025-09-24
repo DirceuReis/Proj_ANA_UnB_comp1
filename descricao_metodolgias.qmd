@@ -33,7 +33,7 @@ $$
 X_{futuro} = F_{obs}^{-1}\left(F_{mod}(X_{mod})\right)
 $$
 
-onde $F_{obs}$ é a função distribuição acumulada observada, $F_{mod}$ a simulada e $X_{mod}$ o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.
+onde $F_{obs}$ é a função distribuição acumulada observada; $F_{mod}$ a simulada e $X_{mod}$ o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.
 
 Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via L-momentos, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
 
@@ -65,7 +65,7 @@ Já o australiano consolida técnicas estatísticas robustas, como L-momentos e 
 ## Comparação de Abordagens
 
 | ABORDAGEM | AUSTRÁLIA | CANADÁ | ESTADOS UNIDOS | INGLATERRA (FEH Vol. 2) |
-|----|----|----|----|----|
+|---------------|---------------|---------------|---------------|---------------|
 | **Séries de precipitação** | Subdiárias e diárias | Subdiárias | Subdiárias e diárias | Subdiárias e diárias |
 | **Distribuição de probabilidades** | GEV | Gumbel | GEV | Não paramétrica (FORGEX: curvas empíricas em escala de Gumbel) |
 | **Estimador** | L-momentos | Método dos momentos | L-momentos | Ajuste empírico por mínimos quadrados + suavização (com bootstrap para incerteza) |
