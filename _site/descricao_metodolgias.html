@@ -245,18 +245,45 @@ F(x) = \exp\left\{-\exp\left[-\left(\frac{x-\mu}{\sigma}\right)\right]\right\}
 <p><span class="math display">\[
 F(x) = 1-\left(1+\xi \frac{x-\mu}{\sigma}\right)^{-1/\xi}, \quad 1+\xi \frac{x-\mu}{\sigma} &gt; 0
 \]</span></p>
-<p>No Canadá, a metodologia IDF_CC (Simonović et al., 2016) utiliza a distribuição de Gumbel, ajustada pelo método dos momentos, e inova ao aplicar o <em>Equidistant Quantile Mapping (EQM)</em>. Essa técnica ajusta quantis observados e simulados, garantindo consistência entre registros subdiários e projeções climáticas diárias de modelos globais. O mapeamento é dado por:</p>
+<p>No Canadá, a metodologia IDF_CC (Simonović et al., 2016, 2017) parte das AMP (máximos anuais) em cada duração e ajusta Gumbel pelo método dos momentos para obter as IDFs históricas por estação. O sinal climático dos GCMs é então trazido para a localização da estação por reamostragem espacial dos quatro nós de grade mais próximos, usando ponderação inversa do quadrado da distância. A atualização ao clima futuro é feita com <em>Equidistant Quantile Mapping</em> (EQM), que normalmente é usada para <em>downscaling</em>. Essa técnica ajusta quantis observados e simulados, garantindo consistência entre registros subdiários e projeções climáticas diárias de modelos globais. O mapeamento é dado por:</p>
+<p><em>Downscalig</em> espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:</p>
 <p><span class="math display">\[
-X_{futuro} = F_{obs}^{-1}\left(F_{mod}(X_{mod})\right)
+Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
 \]</span></p>
-<p>onde <span class="math inline">\(F_{obs}\)</span> é a função distribuição acumulada observada, <span class="math inline">\(F_{mod}\)</span> a simulada e <span class="math inline">\(X_{mod}\)</span> o valor do modelo. A espacialização é realizada de forma direta, sem uma regionalização formal, e o produto final consiste em curvas IDF ajustadas em cada estação, projetadas para diferentes cenários de mudanças climáticas.</p>
-<p>Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via L-momentos, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:</p>
+<p>Onde, <span class="math inline">\(Y_{max,j}^{STN}\)</span> é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; <span class="math inline">\(CDF\)</span> significa função de distribuição de probabilidade cumulativa; e <span class="math inline">\(invCDF\)</span> significa CDF inversa.</p>
+<p><em>Downscaling</em> temporal dos dados das simulações projetadas do GCM dos máximos diários para o GCM diário de referência:</p>
 <p><span class="math display">\[
-\mu(s,t) = \beta_0 + \beta_1 \cdot \text{MAP}(s) + \beta_2 \cdot \text{DEM}(s) + \beta_3 \cdot \text{GWL}(t)
+Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 \]</span></p>
-<p>em que <span class="math inline">\(MAP\)</span> é a precipitação média anual, <span class="math inline">\(DEM\)</span> a altitude e <span class="math inline">\(GWL\)</span> o nível de aquecimento global. A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções <em>kernel</em>, e a interpolação final é feita em grade de alta resolução (30 segundos de arco), por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.</p>
+<p>Onde, <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> é a correspondência quantílica entre o período de referência e o período de projeção.</p>
+<p>Para gerar dados subdiários máximos futuros, faz-se a combinação das equações acima:</p>
+<p><span class="math display">\[
+X^{STN, future}_{\max,j}
+= a_{1} \times
+\left[
+\frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}}
+\right]
++ b_{1}
+\]</span> O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.</p>
+<p>Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via MLE, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:</p>
+<p><span class="math display">\[
+\text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
+\tag{18}
+\]</span></p>
+<p><span class="math display">\[
+\text{Escala: } \quad \sigma(x,t) = b_{1} \times MAM(x)\,[1+b_{2} \times GWL(t)]
+\tag{19}
+\]</span></p>
+<p><span class="math display">\[
+\text{Forma:} \quad \xi(x) = C_{0}
+\tag{20}
+\]</span></p>
+<p>Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - <em>Global Warming Level</em>). A forma da distribuição foi mantida constante (parâmetro <span class="math inline">\(\xi\)</span> fixo) para evitar instabilidade.</p>
+<p>A regionalização é construída por regiões homogêneas definidas por similaridade estatística, suavizadas por funções <em>kernel</em>, e a interpolação final é feita em grade de alta resolução (30 segundos de arco), por interpolação cúbica monotônica. O produto é uma grade nacional de intensidades de precipitação para diferentes períodos de retorno e durações, ajustadas para cenários de aquecimento global, acompanhadas por intervalos de confiança obtidos via simulações de Monte Carlo.</p>
+<p>O relatório é dividido em duas partes: (1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas e (2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.</p>
 <p>Na Austrália, o <em>Australian Rainfall and Runoff</em> (ARR 2019) destaca-se pela robustez estatística e pela amplitude da base de dados. A distribuição GEV é aplicada às séries anuais, e a GPA às séries <em>peaks-over-threshold</em>, com parâmetros estimados por L-momentos, técnica reconhecida por sua estabilidade em amostras curtas. Para séries subdiárias, utiliza-se ainda o método BGLSR (<em>Bayesian Generalized Least Squares Regression</em>). Embora o método principal assuma estacionariedade, o ARR também fornece orientações preliminares para incorporar ajustes de mudanças climáticas (por exemplo, escalonamento por temperatura), ainda que não incluídas formalmente nas curvas IDF oficiais.</p>
-<p>A regionalização segue o conceito de Região de Influência (em inglês “<em>Region Of Influence</em>” - ROI), no qual cada estação é associada a um grupo mínimo de estações semelhantes até alcançar pelo menos 500 anos combinados de observações. A interpolação é realizada pelo modelo <em>ANUSPLIN</em>, que utiliza <em>splines</em> de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.</p>
+<p>A regionalização segue o conceito de Região de Influência (em inglês “<em>Region Of Influence</em>” - ROI). Para cada estação pluviométrica, define-se uma região circular ao redor dela.Essa região é expandida até incluir um número mínimo de dados (medido em “estações-anos”, geralmente em torno de 500 estações-anos). Os dados dentro da ROI são testados quanto à homogeneidade estatística (usando medidas como o H de Hosking &amp; Wallis) e se a região não for homogênea, remove-se estações “discordantes” até atingir homogeneidade.</p>
+<p>A interpolação é realizada pelo modelo <em>ANUSPLIN</em>, que utiliza <em>splines</em> de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.</p>
 <p>No Reino Unido, o <em>Flood Estimation Handbook</em> (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações máximas anuais):</p>
 <p><span class="math display">\[
 X' = \frac{X}{RMED}
@@ -304,7 +331,7 @@ X' = \frac{X}{RMED}
 <td><strong>Estimador</strong></td>
 <td>L-momentos</td>
 <td>Método dos momentos</td>
-<td>L-momentos</td>
+<td>MLE</td>
 <td>Ajuste empírico por mínimos quadrados + suavização (com bootstrap para incerteza)</td>
 </tr>
 <tr class="even">

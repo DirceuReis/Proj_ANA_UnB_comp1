@@ -458,7 +458,7 @@ X^{STN, future}_{\max,j}
 <li>Grades do modelo digital de elevação (DEM) da Missão Topográfica do Radar <em>Shuttle</em> (SRTM90) de 90 metros da NASA.</li>
 </ul>
 <p><strong>4.2. Distribuição estatística</strong></p>
-<p>A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método dos L-momentos. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15</p>
+<p>A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método MLE. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15</p>
 <p>A função de distribuição de probabilidade GEV não estacionária:</p>
 <p><span class="math display">\[
 f(x,t) = \frac{1}{\sigma(x,t)}
@@ -478,7 +478,8 @@ f(x,t) = \frac{1}{\sigma(x,t)}
 <p><span class="math display">\[
 \text{Forma:} \quad \xi(x) = C_{0}
 \tag{20}
-\]</span> Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - <em>Global Warming Level</em>). A forma da distribuição foi mantida constante (parâmetro <span class="math inline">\(\xi\)</span> fixo) para evitar instabilidade.</p>
+\]</span></p>
+<p>Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - <em>Global Warming Level</em>). A forma da distribuição foi mantida constante (parâmetro <span class="math inline">\(\xi\)</span> fixo) para evitar instabilidade.</p>
 <p><strong>4.3. Regionalização</strong></p>
 <p>Como o número de estações diárias e subdiárias varia significativamente, a regionalização foi realizada separadamente para durações inferiores a 24 horas e para durações iguais ou superiores a 24 horas. Para cada estação dentro da área do projeto (estação-alvo), foram identificadas todas as estações dentro de um raio de 160 km (estações regionais).</p>
 <p>As estações foram agrupadas considerando semelhanças de atributos como:</p>
