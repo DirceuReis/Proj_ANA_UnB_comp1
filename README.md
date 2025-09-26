@@ -10,6 +10,8 @@
 git status                     # mostra quais são os problemas
 git add <arquivo1 c/ conflito> # adicionar arquivos p/ commit
 git add <arquivo2 c/ conflito> #...
+# Se forem vários arquivos
+git add .
 # os conflitos foram resolvidos, mas o merge não foi concluído ainda (precisa do commit)
 git status                     # ver como está a situação
 git commit -m"mensagem"        # fazer o git commit p/ terminar de fazer o merge e resolver os conflitos
