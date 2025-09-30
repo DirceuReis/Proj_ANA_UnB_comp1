@@ -54,7 +54,9 @@ X^{STN, future}_{\max,j}
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
 \right] 
 + b_{1} 
-$$ O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.
+$$ 
+
+O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.
 
 Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via MLE, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
 
@@ -85,7 +87,7 @@ A regionalização segue o conceito de Região de Influência (em inglês “*Re
 
 A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
 
-Em 2024, houveram revisões do *Australian Rainfall and Runoff* (ARR, 2019), principalmente no capítulo que aborda as questões das mudanças climáticas. O capítulo 6 do livro 1,  fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas (ARR, 2024).
+Em 2024, houve revisões do *Australian Rainfall and Runoff* (ARR, 2019), principalmente no capítulo que aborda questões relacionadas às mudanças climáticas. O capítulo 6 do livro 1,  fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas (ARR, 2024).
 
 No Reino Unido, o *Flood Estimation Handbook* (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações máximas anuais):
 
