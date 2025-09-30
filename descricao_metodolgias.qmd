@@ -54,8 +54,7 @@ X^{STN, future}_{\max,j}
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
 \right] 
 + b_{1} 
-$$
-O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.
+$$ O procedimento é repetido para as durações usuais (5–30 min, 1–24 h) e períodos de retorno (2–100 anos), para cada GCM e cada RCP, produzindo IDFs futuras por estação. Não há um modelo espacial de regionalização entre postos; quando se deseja cobertura contínua, faz-se apenas interpolação direta das estimativas pontuais, de modo que o produto final são curvas IDF atualizadas em cada estação sob diferentes cenários de mudança climática.
 
 Nos Estados Unidos, o NOAA Atlas 15 avança ao adotar a distribuição GEV em uma abordagem regional com parâmetros estimados via MLE, considerando a contribuição de covariáveis. Esse procedimento permite representar explicitamente a não estacionariedade climática, já que variáveis de entrada como o nível de aquecimento global (GWL) estão incluídas no modelo estatístico. A média da distribuição, por exemplo, pode ser representada como função de variáveis geográficas e climáticas:
 
@@ -72,7 +71,7 @@ $$
 $$
 \text{Forma:} \quad \xi(x) = C_{0}
 \tag{20}
-$$ 
+$$
 
 Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
 
@@ -85,6 +84,8 @@ Na Austrália, o *Australian Rainfall and Runoff* (ARR 2019) destaca-se pela rob
 A regionalização segue o conceito de Região de Influência (em inglês “*Region Of Influence*” - ROI). Para cada estação pluviométrica, define-se uma região circular ao redor dela.Essa região é expandida até incluir um número mínimo de dados (medido em “estações-anos”, geralmente em torno de 500 estações-anos). Os dados dentro da ROI são testados quanto à homogeneidade estatística (usando medidas como o H de Hosking & Wallis) e se a região não for homogênea, remove-se estações “discordantes” até atingir homogeneidade.
 
 A interpolação é realizada pelo modelo *ANUSPLIN*, que utiliza *splines* de suavização em latitude, longitude e altitude. O produto final é um conjunto de superfícies em grade cobrindo todo o país, com estimativas de quantis de precipitação para diferentes durações e períodos de retorno, mas sem incorporar projeções de mudanças climáticas, dado que a metodologia assume estacionariedade.
+
+Em 2024, houveram revisões do *Australian Rainfall and Runoff* (ARR, 2019), principalmente no capítulo que aborda as questões das mudanças climáticas. O capítulo 6 do livro 1,  fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas (ARR, 2024).
 
 No Reino Unido, o *Flood Estimation Handbook* (FEH, 1999) introduziu uma inovação metodológica ao padronizar as séries de máximos anuais pelo índice RMED (mediana das precipitações máximas anuais):
 

@@ -7,6 +7,32 @@ nocite: |
 ---
 
 :::::: {style="text-align: justify;"}
+**Lista de Abreviações**
+
+-   **AMS**: *Annual Maximum Series*\
+-   **RMED**: *Median of the Annual Maximum Series*\
+-   **DDF**: *Depth-Duration-Frequency*\
+-   **ROI**: *Region Of Influence*\
+-   **FEH**: *Flood Estimation Handbook*\
+-   **FORGEX**: *Focused Rainfall Growth Curve Extension*\
+-   **IDF**: *Intensity-Duration-Frequency*\
+-   **NOAA**: *National Oceanic and Atmospheric Administration*\
+-   **GEV**: *Generalized Extreme Value Distribution*\
+-   **PMP**: *Probable Maximum Precipitation*\
+-   **ARR**: *Australian Rainfall and Runoff*\
+-   **GPA**: *Generalised Pareto*\
+-   **BGLSR**: *Bayesian Generalised Least Squares Regression*\
+-   **GCMs**: *Modelos Climáticos Globais*\
+-   **AMP**: *Annual Maximum Precipitation*\
+-   **EQM**: *Equidistant Quantile Matching*\
+-   **PF** : *Frequência da Precipitação*\
+-   **MAM**: *Média Anual Máxima\|*\
+-   **GWL**: *Global Warming Level*\
+-   **RCMs**: *Modelos Climáticos Regionais*\
+-   **AF**: *Fatores de Ajuste*\
+-   **MLE**: *Máxima Verossimilhança*\
+-   **PDS**: *Série de Duração Parcial*\
+
 Aqui serão descritas as metodologias adotadas para a estimativa de chuvas extremas na Inglaterra, Austrália, Canadá e Estados Unidos. Os estudos foram desenvolvidos em diferentes contextos e consolidaram diretrizes nacionais para a análise desses eventos em cada país. As metodologias contemplam desde a seleção e o tratamento de dados pluviométricos até a derivação de modelos paramétricos, integrando técnicas estatísticas e métodos de interpolação espacial.
 
 **INGLATERRA**
@@ -37,7 +63,9 @@ O RMED foi interpolado em uma malha regular de 1 km sobre o território do Reino
 
 Esse procedimento combina:
 
--   Uma regressão múltipla entre RMED e variáveis fisiográficas (elevação, distância média ao mar, barreiras orográficas, continentalidade – distância a Lille/França, latitude, longitude); • Seguida pela aplicação de krigagem dos resíduos para capturar padrões locais não explicados pela regressão.
+-   Uma regressão múltipla entre RMED e variáveis fisiográficas (elevação, distância média ao mar, barreiras orográficas, continentalidade – distância a Lille/França, latitude, longitude);
+
+-   Seguida pela aplicação de krigagem dos resíduos para capturar padrões locais não explicados pela regressão.
 
 As séries de AM foram padronizadas pela razão entre o valor observado e o RMED local, o que permitiu a comparação entre estações e a análise em escala regional.
 
@@ -73,7 +101,11 @@ A incerteza associada às curvas de crescimento foi avaliada por reamostragem *b
 
 A metodologia resultou na elaboração de:
 
-• mapas nacionais de RMED para diferentes durações, • curvas de crescimento regionais, • chuvas de projeto (DDF) consistentes para todo o Reino Unido.
+-   Mapas nacionais de RMED para diferentes durações;
+
+-   Curvas de crescimento regionais;
+
+-   Chuvas de projeto (DDF) consistentes para todo o Reino Unido.
 
 **1.7 Atualizações da Metodologia**
 
@@ -119,11 +151,26 @@ Para os postos subdiários (≥ 8 anos), os L-momentos foram calculados diretame
 
 **2.5. Regionalização**
 
-Foi utilizado o método da Região de Influência (ROI), no qual cada estação possui sua própria região definida com base em semelhanças geográficas e climáticas. O tamanho da região foi ajustado para garantir uma quantidade mínima de informação: em média, 8 estações ou 500 anos de dados eram incluídos por região. Assim, dentro de cada ROI, calcularam-se os valores regionais de L-CV e L-assimetria (usando média ponderada pelo comprimento da série em cada estação). Esse procedimento permitiu calcular de forma mais confiável os parâmetros de escala e forma da GEV, a partir de informações combinadas de várias estações.
+Foi utilizado o método da Região de Influência (em inglês “*Region Of Influence*” - ROI), no qual cada estação possui sua própria região definida com base em semelhanças geográficas e climáticas. O tamanho da região foi ajustado para garantir uma quantidade mínima de informação: em média, 8 estações ou 500 anos de dados eram incluídos por região. Assim, dentro de cada ROI, calcularam-se os valores regionais de L-CV e L-assimetria (usando média ponderada pelo comprimento da série em cada estação). Esse procedimento permitiu calcular de forma mais confiável os parâmetros de escala e forma da GEV, a partir de informações combinadas de várias estações.
 
 **2.6. Interpolação espacial**
 
 Os parâmetros da GEV foram interpolados em grade nacional usando ANUSPLIN (*splines*) com latitude, longitude e elevação (a escala de altitude foi exagerada por um fator de 100 para representar a importância que a altitude tem nos padrões de precipitação). Para disponibilizar resultados em locais não monitorados, os parâmetros regionalizados da GEV foram interpolados por meio do *software* ANUSPLIN, que aplica *splines* de suavização em função da latitude, longitude e altitude. Essa etapa produziu superfícies contínuas de parâmetros, permitindo estimar curvas IDF em qualquer ponto do território australiano.
+
+**2.7. Atualização**
+
+Em 2024, houveram revisões do *Australian Rainfall and Runoff* (ARR, 2019), principalmente no capítulo que aborda as questões das mudanças climáticas. O capítulo 6 do livro 1, fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas.
+
+Assim, um dos pontos centrais é a ampliação das incertezas. Se os modelos hidrológicos já envolvem margens de erro significativas, a mudança climática as amplia, tornando essencial a análise de cenários múltiplos, a avaliação de sensibilidade e a comunicação clara dessas incertezas nos estudos e relatórios. Para auxiliar os profissionais, o capítulo apresenta tabelas com fatores de ajuste para diferentes durações de chuva e parâmetros de escoamento, além de cenários de aquecimento global baseados no IPCC. Exemplos práticos ilustram como aplicar esses ajustes na elaboração de projetos (ARR, 2024).
+
+O documento sugere o uso da equação abaixo para o estimativa da produndidade ou intensidade do prepitiação do projeto:
+
+$$
+I_p = I \times \left( 1 + \frac{\alpha}{100} \right)^{\Delta T}
+\tag{4}
+$$
+
+Onde, $I_p$ é a profundidade ou intensidade projetada (atual ou futura) da precipitação de projeto; $\alpha$ (taxas recomendadas de mudança e incerteza associada derivadas de Wasko et al. (2024), apresentadas por grau de mudança na temperatura global (%/°C), ver Tabela 1.6.1 do ARR, 2024; $I$ é a profundidade ou intensidade histórica da precipitação de projeto (por exemplo, do portal IFD 2016 ou estimativas históricas do PMP); $ΔT$ é a estimativa mais atualizada da projeção da temperatura global (terra e oceano) para o período de projeto de interesse e cenário climático selecionado em relação a um período de tempo de referência, ver Tabela 1.6.2 do ARR, 2024.
 
 ![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 2. Fluxograma da metodologia aplicada na Austrália
 
@@ -173,7 +220,7 @@ x_{3,\max}^{STN,5\min} & x_{3,\max}^{STN,10\min} & \cdots & x_{3,\max}^{STN,24hr
 \vdots & \vdots & \ddots & \vdots \\
 x_{N,\max}^{STN,5\min} & x_{N,\max}^{STN,10\min} & \cdots & x_{N,\max}^{STN,24hr}
 \end{bmatrix}
-\tag{4}
+\tag{5}
 $$
 
 Onde, $x_{i,\max}^{STN,j}$ é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e N é o número total de anos.
@@ -189,7 +236,7 @@ X^{GCM}_{3,\text{max}} \\
 \vdots \\
 X^{GCM}_{N,\text{max}}
 \end{bmatrix}
-\tag{5}
+\tag{6}
 $$
 
 Onde, $X_{i,\max}^{GCM}$ representa a precipitação diária máxima do modelo GCM no i-ésimo ano e $N$ é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).
@@ -205,7 +252,7 @@ X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\
 \vdots & \vdots & \vdots \\
 X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
-\tag{6}
+\tag{7}
 $$
 
 Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerad; e $N_F$ é o número total de anos considerados para o período futuro
@@ -214,17 +261,17 @@ Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os c
 
 $$
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
-\tag{7}
-$$
-
-$$
-PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
 \tag{8}
 $$
 
 $$
-PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
+PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
 \tag{9}
+$$
+
+$$
+PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
+\tag{10}
 $$
 
 Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
@@ -233,7 +280,7 @@ Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é 
 
 $$
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
-\tag{10}
+\tag{11}
 $$
 
 Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; $CDF$ significa função de distribuição de probabilidade cumulativa; e $invCDF$ significa CDF inversa.
@@ -242,7 +289,7 @@ Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzi
 
 $$
 Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
-\tag{11}
+\tag{12}
 $$
 
 Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
@@ -251,24 +298,24 @@ Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de 
 
 $$
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
-\tag{12}
+\tag{13}
 $$
 
 $$
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
-\tag{13}
+\tag{14}
 $$
 
 (viii) Encontre uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
 
 $$
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
-\tag{14}
+\tag{15}
 $$
 
 $$
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
-\tag{15}
+\tag{16}
 $$
 
 (ix) Para gerar dados subdiários máximos futuros, combine as equações acima em:
@@ -280,7 +327,7 @@ X^{STN, future}_{\max,j}
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
 \right] 
 + b_{1} 
-\tag{16}
+\tag{17}
 $$
 
 (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
@@ -323,7 +370,7 @@ Além disso, foram coletados os seguintes dados:
 
 **4.2. Distribuição estatística**
 
-A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método MLE. A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
+A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método verossimilhança (MLE). A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
 
 A função de distribuição de probabilidade GEV não estacionária:
 
@@ -331,24 +378,24 @@ $$
 f(x,t) = \frac{1}{\sigma(x,t)} 
 \left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{(\tfrac{1}{\xi(x)} - 1)}
 \exp\!\left( -\left\{ 1 - \xi(x)\,\frac{x - \mu(x,t)}{\sigma(x,t)} \right\}^{\tfrac{1}{\xi(x)}} \right)
-\tag{17}
+\tag{18}
 $$
 
 onde $\mu$, $\sigma$, e $\xi$, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros são definidos da seguinte forma:
 
 $$
 \text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
-\tag{18}
+\tag{19}
 $$
 
 $$ 
 \text{Escala: } \quad \sigma(x,t) = b_{1} \times MAM(x)\,[1+b_{2} \times GWL(t)]
-\tag{19}
+\tag{20}
 $$
 
 $$
 \text{Forma:} \quad \xi(x) = C_{0}
-\tag{20}
+\tag{21}
 $$
 
 Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
@@ -400,7 +447,7 @@ Os parâmetros de distribuição GEV para o Volume 2 foram estimados usando valo
 
 $$
 AF = \frac{PF_{fut} - PF_{2023}}{PF_{2003}} \times 100\%
-\tag{21}
+\tag{22}
 $$
 
 **5.3. Revisão dos fatores de ajuste subdiários**
@@ -417,7 +464,7 @@ As estimativas de frequência de precipitação futura (PFVOL2) foram finalmente
 
 $$
 PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)
-\tag{22}
+\tag{23}
 $$
 
 Onde, os valores de AF são funções do espaço 𝑥 e do tempo 𝑡, dependentes do GWL, dos cenários de emissões e do AEP.
