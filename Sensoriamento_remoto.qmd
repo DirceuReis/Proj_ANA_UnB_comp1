@@ -29,7 +29,8 @@ O estudo de @Overeem.2009 é amplamente reconhecido como um dos pioneiros na est
 
 O conceito de curvas de Intensidade-Duração-Frequência (IDF) da precipitação é baseado na gestão de águas pluviais e nos projetos de infraestrutura urbanas e hidráulicas, com o intuito de resistir ou prevenir a inundações e eventos extremos de precipitação [@Kawara.2022]. Sua metodologia baseia-se na seleção de maiores chuvas de duração (como por exemplo: 30 minutos) em cada série de dados. E ajustadas as séries máximas anuais históricas (número de anos) de diferentes durações (5 minutos, 10 minutos, 1 hora, 12 horas, 24 horas, 5 dias), e seus resultados são plotadas em formas de gráficos ou equações, com as seguintes variáveis: Intensidade, Duração e Frequência [@Martel.2021].
 
-![Fluxograma da metodologia do Volume 2 do NOAA 15](figuras/i_d_f_exemplo.jpg) Figura 1. de um posto pluviômetro em Curitiba e São José dos Pinhais (Fonte: [@Mora.2024]). ::::
+![Fluxograma da metodologia do Volume 2 do NOAA 15](figuras/i_d_f_exemplo.jpg) 
+Figura 1. de um posto pluviômetro em Curitiba e São José dos Pinhais (Fonte: [@Mora.2024]). ::::
 
 Diante disso, a utilização de modelos de mudanças climáticas para a atualização das curvas IDF, vem se tornando um grande aliado. @Shrestha.2017 realizaram um estudo onde utilizaram métodos de desagregação temporal de redução espacial de chuva, para desenvolver IDF futuras sob cenários de mudanças climáticas, na região da Tailândia. Para estimar as curvas de IDF futuras os autores utilizaram dados de precipitação de 3 e 24 horas, nos anos de 1981 a 2010. As curvas IDF projetadas foram para o período de 2011 a 2030 e 2046 a 2065, onde as IDF atuais e futuras mostraram que a intensidade da chuva aumentou sob as mudanças climáticas na maioria das durações das chuvas.
 
