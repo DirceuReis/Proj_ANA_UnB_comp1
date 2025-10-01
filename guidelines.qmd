@@ -35,7 +35,7 @@ Aqui serão descritas as metodologias adotadas para a estimativa de chuvas extre
 
 **INGLATERRA**
 
-Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation, (1999) [@   ***.
+Documento: ***Flood Estimation Handbook. Vol 2: Rainfall Frequency estimation [@Faulkner.1999]   ***.
 
 **1. Descrição da Metodologia**
 
@@ -107,13 +107,13 @@ A metodologia resultou na elaboração de:
 
 **1.7 Atualizações da Metodologia**
 
-Documentos: *Reservoir Safety – Long Return Period Rainfall Volume 1 Technical Report (Part 1 and 2)*
+Documentos: *Reservoir Safety – Long Return Period Rainfall Volume 1 Technical Report (Part 1 and 2)* [@Stewart.2010a; @Stewart.2010b]
 
 Em 2013 a *Environment Agency* e o *Departament for Envionment Food and Rural Affairs* publicaram os volumes 1 e 2 do referido documento que possuem atualizações para a metodologia. Assim, destacam-se as seguintes mundanças:
 
 -   Expansão da base de dados de estações horárias de 375 para 968;
 -   Novo índice de referência que combina RMED, SAAR (*Standard Average Annual Rainfall*) e *northing* (coordenada N-S), reduzindo a variabilidade espacial residual;
--   No FEH, Vol 2 a depedência espacial era tratada de forma simplificada e constante, sou seja, assumia-se um certo grau de correlação espacial entre pluviômetros, independentemente da raridade do evento. Nos relatórios \|*Long Return Period Rainfall* a dependência entre estações varia com o período de retorno: Para eventos comuns (baixo período de retorno) há uma forte dependência, ou seja, chuvas intensas costumam ocorrer em várias estações próximas ao mesmo tempo; para eventos raros (período de retorno alto) há menor depedência, ou seja, eventos muito extremos são mais localizados e não atingem grandes áreas com a mesma intensidade;
+-   No FEH, Vol 2 a depedência espacial era tratada de forma simplificada e constante, sou seja, assumia-se um certo grau de correlação espacial entre pluviômetros, independentemente da raridade do evento. Nos relatórios, *Long Return Period Rainfall*, a dependência entre estações varia com o período de retorno: Para eventos comuns (baixo período de retorno) há uma forte dependência, ou seja, chuvas intensas costumam ocorrer em várias estações próximas ao mesmo tempo; para eventos raros (período de retorno alto) há menor depedência, ou seja, eventos muito extremos são mais localizados e não atingem grandes áreas com a mesma intensidade;
 -   As estimativas acima de 1000 anos frequentemente excediam o PMP (*Probable Maximum Precipitation*); na atualização, as curvas foram ajustadas para crescer de forma mais realista, mantendo consistência com o PMP e com eventos observados.
 
 ![Fluxograma da metodologia aplicada na Inglaterra](figuras/guidelines_fluxograma_inglaterra.png) Figura 1. Fluxograma da metodologia aplicada na Inglaterra (Baseado no FEH, 99)
@@ -127,7 +127,7 @@ Documento: ***Australian Rainfall and Runoff, 2019***.
 
 **2. Descrição da Metodologia**
 
-O estudo apresenta a metodologia para estimativa das chuvas de projeto na Austrália, no contexto das revisões do *Australian Rainfall and Runoff* (ARR). A abordagem adotada baseia-se em um conjunto integrado de etapas, que incluem a criação de uma base de dados nacional de precipitação, o controle de qualidade dos registros, a extração de séries de valores extremos, a análise de frequência, a regionalização e a interpolação espacial.
+O estudo apresenta a metodologia para estimativa das chuvas de projeto na Austrália, no contexto das revisões do *Australian Rainfall and Runoff* [@ARR.2019]. A abordagem adotada baseia-se em um conjunto integrado de etapas, que incluem a criação de uma base de dados nacional de precipitação, o controle de qualidade dos registros, a extração de séries de valores extremos, a análise de frequência, a regionalização e a interpolação espacial.
 
 **2.1. Construção de uma base de dados nacional**
 
@@ -157,9 +157,9 @@ Os parâmetros da GEV foram interpolados em grade nacional usando ANUSPLIN (*spl
 
 **2.7. Atualização**
 
-Em 2024, houve revisões do *Australian Rainfall and Runoff* (ARR, 2019), principalmente no capítulo que aborda questões relacionadas às mudanças climáticas. O capítulo 6 do livro 1, fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas (ARR, 2024).
+Em 2024, houve revisões do *Australian Rainfall and Runoff* [@ARR.2019], principalmente no capítulo que aborda questões relacionadas às mudanças climáticas. O capítulo 6 do livro 1, fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas [@ARR.2024].
 
-Assim, um dos pontos centrais é a ampliação das incertezas. Se os modelos hidrológicos já envolvem margens de erro significativas, a mudança climática as amplia, tornando essencial a análise de cenários múltiplos, a avaliação de sensibilidade e a comunicação clara dessas incertezas nos estudos e relatórios. Para auxiliar os profissionais, o capítulo apresenta tabelas com fatores de ajuste para diferentes durações de chuva e parâmetros de escoamento, além de cenários de aquecimento global baseados no IPCC. Exemplos práticos ilustram como aplicar esses ajustes na elaboração de projetos (ARR, 2024).
+Assim, um dos pontos centrais é a ampliação das incertezas. Se os modelos hidrológicos já envolvem margens de erro significativas, a mudança climática as amplia, tornando essencial a análise de cenários múltiplos, a avaliação de sensibilidade e a comunicação clara dessas incertezas nos estudos e relatórios. Para auxiliar os profissionais, o capítulo apresenta tabelas com fatores de ajuste para diferentes durações de chuva e parâmetros de escoamento, além de cenários de aquecimento global baseados no IPCC. Exemplos práticos ilustram como aplicar esses ajustes na elaboração de projetos [@ARR.2024].
 
 O documento sugere o uso da equação abaixo para o estimativa da produndidade ou intensidade do prepitiação do projeto:
 
@@ -168,7 +168,7 @@ I_p = I \times \left( 1 + \frac{\alpha}{100} \right)^{\Delta T}
 \tag{4}
 $$
 
-Onde, $I_p$ é a profundidade ou intensidade projetada (atual ou futura) da precipitação de projeto; $\alpha$ (taxas recomendadas de mudança e incerteza associada derivadas de Wasko et al. (2024), apresentadas por grau de mudança na temperatura global (%/°C), ver Tabela 1.6.1 do ARR, 2024; $I$ é a profundidade ou intensidade histórica da precipitação de projeto (por exemplo, do portal IFD 2016 ou estimativas históricas do PMP); $ΔT$ é a estimativa mais atualizada da projeção da temperatura global (terra e oceano) para o período de projeto de interesse e cenário climático selecionado em relação a um período de tempo de referência, ver Tabela 1.6.2 do ARR, 2024.
+Onde, $I_p$ é a profundidade ou intensidade projetada (atual ou futura) da precipitação de projeto; $\alpha$ (taxas recomendadas de mudança e incerteza associada derivadas de @Wasko.2024, apresentadas por grau de mudança na temperatura global (%/°C), ver Tabela 1.6.1 do @ARR.2024; $I$ é a profundidade ou intensidade histórica da precipitação de projeto (por exemplo, do portal IFD 2016 ou estimativas históricas do PMP); $ΔT$ é a estimativa mais atualizada da projeção da temperatura global (terra e oceano) para o período de projeto de interesse e cenário climático selecionado em relação a um período de tempo de referência, ver Tabela 1.6.2 do @ARR.2024.
 
 ![Fluxograma da metodologia aplicada na Austrália](figuras/guidelines_fluxograma_australia.jpg) Figura 2. Fluxograma da metodologia aplicada na Austrália
 
@@ -179,7 +179,7 @@ Onde, $I_p$ é a profundidade ou intensidade projetada (atual ou futura) da prec
 
 Documento: ***A web-based tool for the development of Intensity Duration Frequency curves under changing climate***
 
-*Environmental Modelling & Software. Simonović et al., 2016.*
+*Environmental Modelling & Software. [@Simonovic.2016].*
 
 **3. Descrição da Metodologia**
 
@@ -191,7 +191,7 @@ Inicialmente, destaca-se que foram utilizados dados subdiários de precipitaçã
 
 **3.2. *Downscaling* espacial e temporal da precipitação**
 
-Para atualizar as curvas IDF foi adotado o método *Equidistant Quantile Matching* (EQM), desenvolvido por Srivastav et al. (2014b). Esse método realiza o *downscaling temporal* (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do *downscaling espacial* da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).
+Para atualizar as curvas IDF foi adotado o método *Equidistant Quantile Matching* (EQM), desenvolvido por @Srivastav.2014. Esse método realiza o *downscaling temporal* (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do *downscaling espacial* da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).
 
 O EQM é aplicado diretamente à AMP para estabelecer as relações estatísticas entre as AMPs dos dados de precipitação gerados pelo GCM e os dados observados (históricos) subdiários em vez de usar registros completos de precipitação diária.
 
@@ -205,7 +205,7 @@ O processo de EQM ocorre em três etapas principais:
 
 **3.3 Descrição do método EQM**
 
-A descrição, aqui inserida, é a mesma encontrada no anexo do artigo de Simonović et al., 2016.
+A descrição, aqui inserida, é a mesma encontrada no anexo do artigo de @Simonovic.2016.
 
 (i) Extrair máximos subdiários dos dados observados em um determinado local (ou seja, máximos de 5 minutos, 10 minutos, 15 minutos, 1 hora, 2 horas, 6 horas, 12 horas, 24 horas de dados de precipitação):
 
@@ -347,7 +347,7 @@ Para cada modelo, é possível selecionar o conjunto de multimodelo (selecionand
 
 **ESTADOS UNIDOS**
 
-Documento: ***NOAA Atlas 15 Pilot: Technical Report***
+Documento: ***NOAA Atlas 15 Pilot: Technical Report [@Perica.2024]***
 
 O relatório é dividido em duas partes: (1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas e (2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.
 
@@ -355,7 +355,7 @@ O relatório é dividido em duas partes: (1) Volume 1 que fornece estimativas de
 
 **4.1. Conjunto de dados relevantes**
 
-O relatório utilizou dados produzidos e/ou adquiridos a partir do Atlas 14 (Vol. 12):
+O relatório utilizou dados produzidos e/ou adquiridos a partir do Atlas 14 - Vol. 12 [@Bonnin.2004]:
 
 -   Metadados para estações diárias e subdiárias em Montana e um buffer aproximado de 30 km;
 -   Dados de precipitação: Série Máxima Anual (AMS) com controle de qualidade, durante períodos de 60 minutos, 6 horas, 24 horas, 4 dias e 10 dias para essas estações;
