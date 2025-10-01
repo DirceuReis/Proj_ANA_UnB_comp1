@@ -324,7 +324,7 @@ Vcells 57846440 441.4  138400913 1056.0 113681040 867.4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
 Ncells  1233963  66.0    2332345  124.6   2332345 124.6
-Vcells 85773370 654.4  138400913 1056.0 123316681 940.9</code></pre>
+Vcells 85773370 654.4  138400913 1056.0 123316673 940.9</code></pre>
 </div>
 </div>
 </section>
@@ -339,7 +339,7 @@ Vcells 85773370 654.4  138400913 1056.0 123316681 940.9</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
 Ncells  1292590  69.1    2332345  124.6   2332345 124.6
-Vcells 85877019 655.2  138400913 1056.0 123316681 940.9</code></pre>
+Vcells 85877019 655.2  138400913 1056.0 123316673 940.9</code></pre>
 </div>
 </div>
 </section>
@@ -445,7 +445,7 @@ Vcells 417144285 3182.6  937042622 7149.1 748432974 5710.1</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
 Ncells   1478196   79.0    2332358  124.6   2332358  124.6
-Vcells 422590939 3224.2  937226142 7150.5 937226142 7150.5</code></pre>
+Vcells 422590939 3224.2  937226135 7150.5 937226135 7150.5</code></pre>
 </div>
 </div>
 <p>Avaliação de como se distribuem o número de estações conforme definimos diferentes niveis de tolerância de falhas. São criados 2 vetores de critérios: <code>threshold</code>, que contém possibilidades de percentuais de falha (ex. 10% a 40%) que queremos tolerar; e <code>min_years</code>, para avaliarmos quantas estações possuem pelo menos <code>min_years</code> anos com no máximo <code>threshold</code> % de falhas. A função <code>purrr::map2_int()</code> é usada para iterar sobre dois vetores ao mesmo tempo (<code>.x = threshold</code> e <code>.y = min_years</code>), realizando alguma operação sobre os pares (isso elimina a necessidade de fazer um loop).</p>
@@ -529,7 +529,7 @@ Figure&nbsp;1: Número de estações que atendem determinado nível de tolerânc
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
 Ncells   1529039   81.7    2332358  124.6   2332358  124.6
-Vcells 477365394 3642.1  937226142 7150.5 937226142 7150.5</code></pre>
+Vcells 477365394 3642.1  937226135 7150.5 937226135 7150.5</code></pre>
 </div>
 </div>
 <p>Exportar conjunto gerado:</p>
