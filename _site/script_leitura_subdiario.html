@@ -297,7 +297,7 @@ Vcells 1103937  8.5    8388608 64.0  1928265 14.8</code></pre>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">setdiff</span>(<span class="fu">ls</span>(), <span class="fu">c</span>(<span class="st">"df_data"</span>, <span class="st">"df_info"</span>))); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1207173  64.5    2332342  124.6   1741105  93.0
+Ncells  1207173  64.5    2332337  124.6   1741105  93.0
 Vcells 57846439 441.4  138400912 1056.0 113681039 867.4</code></pre>
 </div>
 </div>
@@ -323,7 +323,7 @@ Vcells 57846439 441.4  138400912 1056.0 113681039 867.4</code></pre>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ); <span class="fu">gc</span>() <span class="co"># resolução temporal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1233963  66.0    2332342  124.6   2332342 124.6
+Ncells  1233963  66.0    2332337  124.6   2332337 124.6
 Vcells 85773369 654.4  138400912 1056.0 123316680 940.9</code></pre>
 </div>
 </div>
@@ -338,7 +338,7 @@ Vcells 85773369 654.4  138400912 1056.0 123316680 940.9</code></pre>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1292590  69.1    2332342  124.6   2332342 124.6
+Ncells  1292590  69.1    2332337  124.6   2332337 124.6
 Vcells 85877018 655.2  138400912 1056.0 123316680 940.9</code></pre>
 </div>
 </div>
@@ -373,13 +373,13 @@ Estações CEMADEN...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1332727   71.2    2332367  124.6   2332367  124.6
-Vcells 417155547 3182.7  937042620 7149.1 594049185 4532.3</code></pre>
+Ncells   1332727   71.2    2332352  124.6   2332352  124.6
+Vcells 417155547 3182.7  937042620 7149.1 594049211 4532.3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_subdaily_filled); <span class="fu">rm</span>(list_subdaily_filled); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1324103   70.8    2332367  124.6   2332367  124.6
+Ncells   1324103   70.8    2332352  124.6   2332352  124.6
 Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
 </div>
 </div>
@@ -444,7 +444,7 @@ Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1478196   79.0    2332367  124.6   2332367  124.6
+Ncells   1478196   79.0    2332352  124.6   2332352  124.6
 Vcells 422590938 3224.2  937226142 7150.5 937226142 7150.5</code></pre>
 </div>
 </div>
@@ -528,7 +528,7 @@ Figure&nbsp;1: Número de estações que atendem determinado nível de tolerânc
 <span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">min_years =</span> <span class="dv">8</span>); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1529039   81.7    2332367  124.6   2332367  124.6
+Ncells   1529020   81.7    2332352  124.6   2332352  124.6
 Vcells 477365393 3642.1  937226142 7150.5 937226142 7150.5</code></pre>
 </div>
 </div>
