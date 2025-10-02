@@ -14,10 +14,8 @@ bibliography: referencias/refs_guidelines.bib
 -   **FEH**: *Flood Estimation Handbook*\
 -   **FORGEX**: *Focused Rainfall Growth Curve Extension*\
 -   **IDF**: *Intensity-Duration-Frequency*\
--   **NOAA**: *National Oceanic and Atmospheric Administration*\
 -   **GEV**: *Generalized Extreme Value Distribution*\
 -   **PMP**: *Probable Maximum Precipitation*\
--   **ARR**: *Australian Rainfall and Runoff*\
 -   **GPA**: *Generalised Pareto*\
 -   **BGLSR**: *Bayesian Generalised Least Squares Regression*\
 -   **GCMs**: *Modelos Climáticos Globais*\
@@ -35,7 +33,7 @@ Aqui serão descritas as metodologias adotadas para a estimativa de chuvas extre
 
 **1. INGLATERRA**
 
-Documento: ***Flood Estimation Handbook (FEH). Vol 2: Rainfall Frequency estimation [@Faulkner.1999]*** .
+Documento: ***Flood Estimation Handbook (FEH). Vol 2: Rainfall Frequency estimation*** [@Faulkner.1999].
 
 **1.1 Descrição da Metodologia**
 
@@ -63,7 +61,7 @@ A mediana da série AM (RMED) foi definida como índice de referência (*Index R
 
 O RMED foi interpolado em uma malha regular de 1 km sobre o território do Reino Unido, utilizando-se o método de geo-regressão.
 
-Esse procedimento combina:
+Esse procedimento combinou:
 
 -   Uma regressão múltipla entre RMED e variáveis fisiográficas (elevação, distância média ao mar, barreiras orográficas, continentalidade – distância a Lille/França, latitude, longitude);
 
@@ -75,7 +73,7 @@ As séries de AM foram padronizadas pela razão entre o valor observado e o RMED
 
 A obtenção das curvas de crescimento foi realizada por meio do método FORGEX (*Focused Rainfall Growth Curve Extension*), desenvolvido especificamente para o FEH. O FORGEX deriva empiricamente as curvas de crescimento a partir das séries de máximos anuais padronizadas pela razão R/RMED, representadas na escala reduzida de Gumbel.
 
-O método utiliza a divisão dos dados em faixas de retorno (y-slices) e ajusta segmentos lineares por mínimos quadrados, aplicando suavização para garantir consistência entre diferentes períodos de retorno.
+O método utilizou a divisão dos dados em faixas de retorno (y-slices) e ajusta segmentos lineares por mínimos quadrados, aplicando suavização para garantir consistência entre diferentes períodos de retorno.
 
 Diferentemente de abordagens paramétricas (como GEV ou Gumbel), o FORGEX não assume uma distribuição de probabilidade fixa; a curva é construída de forma a seguir o comportamento observado nos dados.
 
@@ -95,7 +93,7 @@ $$
 \tag{3}
 $$
 
-O modelo DDF é parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados separadamente para cada ponto da grade de 1 km.
+O modelo DDF foi parametrizado por 6 parâmetros (c, d₁, d₂, d₃, e, f) ajustados separadamente para cada ponto da grade de 1 km.
 
 A incerteza associada às curvas de crescimento foi avaliada por reamostragem *bootstrap*, permitindo a construção de intervalos de confiança para diferentes períodos de retorno e durações.
 
@@ -127,7 +125,7 @@ Em 2013, a *Environment Agency* e o *Departament for Envionment Food and Rural A
 
 **2. AUSTRÁLIA**
 
-Documento: ***Australian Rainfall and Runoff, 2019***.
+Documento: ***Australian Rainfall and Runoff, 2019*** [@ARR.2019].
 
 **2.1 Descrição da Metodologia**
 
@@ -163,7 +161,7 @@ Foi utilizado o método da Região de Influência (em inglês “*Region Of Infl
 
 Os parâmetros da GEV foram interpolados em grade nacional usando o software ANUSPLIN utilizando curvas que consideram latitude, longitude e elevação, sendo a escala de altitude exagerada por um fator de 100, para representar a importância que a altitude tem nos padrões de precipitação. Para disponibilizar resultados em locais não monitorados, os parâmetros regionalizados da GEV foram interpolados por meio do mesmo *software*, aplicando também curvas de suavização em função da latitude, longitude e altitude. Essa etapa produziu superfícies contínuas de parâmetros, permitindo estimar curvas IDF em qualquer ponto do território australiano.
 
-**2.7. Atualização**
+**2.1.7 Atualização**
 
 Em 2024, houve revisões do *Australian Rainfall and Runoff* [@ARR.2019], principalmente no capítulo que aborda questões relacionadas às mudanças climáticas. O capítulo 6 do livro 1, fornece uma base científica e prática para que a engenharia australiana incorpore a não estacionariedade climática em seus projetos de drenagem, barragens, infraestrutura urbana e planejamento de riscos. Ele recomenda atualizações constantes à medida que novas evidências se consolidem, defende a adaptação das soluções ao contexto local e reforça a necessidade de explicitar as incertezas envolvidas [@ARR.2024].
 
@@ -187,7 +185,7 @@ Onde, $I_p$ é a profundidade ou intensidade projetada (atual ou futura) da prec
 
 Documento: ***A web-based tool for the development of Intensity Duration Frequency curves under changing climate***
 
-*Environmental Modelling & Software. [@Simonovic.2016].*
+*Environmental Modelling & Software*. [@Simonovic.2016].
 
 **3.1 Descrição da Metodologia**
 
@@ -195,13 +193,13 @@ O estudo apresenta a ferramenta IDF_CC, desenvolvida com o objetivo de atualizar
 
 **3.1.1 Curvas de Intensidade-Duração-Frequência**
 
-Inicialmente, destaca-se que foram utilizados dados subdiários de precipitação das estações pluviométricas de diferentes intervalos de tempo (5, 10, 15 e 30 minutos e 1, 2, 6, 12 e 24 horas). A ferramenta IDF_CC adota a distribuição Gumbel para ajustar a precipitação máxima anual (AMP) em todo o Canadá. O método dos momentos foi utilizado para estimar os parâmetros da distribuição Gumbel.
+Inicialmente, destaca-se que foram utilizados dados subdiários de precipitação das estações pluviométricas de diferentes intervalos de tempo (5, 10, 15 e 30 minutos e 1, 2, 6, 12 e 24 horas). A ferramenta IDF_CC adotou a distribuição Gumbel para ajustar a precipitação máxima anual (AMP) em todo o Canadá. O método dos momentos foi utilizado para estimar os parâmetros da distribuição Gumbel.
 
-**3.1.2. *Downscaling* espacial e temporal da precipitação**
+**3.1.2 *Downscaling* espacial e temporal da precipitação**
 
 Para atualizar as curvas IDF foi adotado o método *Equidistant Quantile Matching* (EQM), desenvolvido por @Srivastav.2014. Esse método realiza o *downscaling temporal* (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do *downscaling espacial* da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).
 
-O EQM é aplicado diretamente à AMP para estabelecer as relações estatísticas entre as AMPs dos dados de precipitação gerados pelo GCM e os dados observados (históricos) subdiários, ao invés de usar registros completos de precipitação diária.
+O EQM foi aplicado diretamente à AMP para estabelecer as relações estatísticas entre as AMPs dos dados de precipitação gerados pelo GCM e os dados observados (históricos) subdiários, ao invés de usar registros completos de precipitação diária.
 
 O processo de EQM ocorre em três etapas principais:
 
@@ -355,17 +353,17 @@ Para cada modelo, é possível selecionar o conjunto de multimodelos (selecionan
 
 **4. ESTADOS UNIDOS**
 
-Documento: ***NOAA Atlas 15 Pilot: Technical Report [@Perica.2024]***
+Documento: ***NOAA Atlas 15 Pilot: Technical Report*** [@Perica.2024].
 
 O relatório é dividido em duas partes: 
 
-- (1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas; 
+(1) Volume 1 que fornece estimativas de Frequência da Precipitação (PF) que levam em conta tendências temporais em observações históricas; 
 
-- (2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.
+(2) Volume 2 que fornece estimativas de PF projetadas para o futuro, sob diferentes cenários de emissões de carbono, com base em projeções de modelos climáticos.
 
 **4.1 Metodologia do Volume 1 - Estimativas históricas não estacionárias**
 
-**4.1.1. Conjunto de dados relevantes**
+**4.1.1 Conjunto de dados relevantes**
 
 O relatório utilizou dados produzidos e/ou adquiridos a partir do Atlas 14 - Vol. 12 [@Bonnin.2004]:
 
@@ -378,7 +376,7 @@ Além disso, foram coletados os seguintes dados:
 -   Anomalias anuais da temperatura global próxima à superfície para 1850-2023 dos Centros Nacionais de Informação Ambiental da NOAA;
 -   Grades do modelo digital de elevação (DEM) da Missão Topográfica do Radar *Shuttle* (SRTM90) de 90 metros da NASA.
 
-**4.1.2. Distribuição estatística**
+**4.1.2 Distribuição estatística**
 
 A distribuição Generalizada de Valores Extremos (GEV) foi utilizada em uma abordagem regional, com parâmetros estimados pelo método verossimilhança (MLE). A distribuição Kappa de quatro parâmetros também foi testada como alternativa, mas a GEV foi selecionada para compor os produtos finais do NOAA Atlas 15
 
@@ -391,7 +389,7 @@ f(x,t) = \frac{1}{\sigma(x,t)}
 \tag{18}
 $$
 
-onde $\mu$, $\sigma$, e $\xi$, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros são definidos da seguinte forma:
+onde $\mu$, $\sigma$, e $\xi$, são parâmetros de localização, escala e forma, respectivamente, 𝑥 é uma coordenada espacial e 𝑡 representa o tempo (ano). Para cada região os parâmetros foram definidos da seguinte forma:
 
 $$
 \text{Localização:} \quad \mu(x,t) = a_{1} \times MAM(x)\,[1+a_{2} \times GWL(t)]
@@ -410,36 +408,36 @@ $$
 
 Os parâmetros de posição e escala variam em função de uma covariável espacial (MAM) e de uma covariável temporal (GWL - *Global Warming Level*). A forma da distribuição foi mantida constante (parâmetro $\xi$ fixo) para evitar instabilidade.
 
-**4.1.3. Regionalização**
+**4.1.3 Regionalização**
 
 Como o número de estações diárias e subdiárias varia significativamente, a regionalização foi realizada separadamente para durações inferiores a 24 horas e para durações iguais ou superiores a 24 horas. Para cada estação dentro da área do projeto (estação-alvo), foram identificadas todas as estações dentro de um raio de 160 km (estações regionais).
 
 As estações foram agrupadas considerando semelhanças de atributos como:
 
--   Distância;
--   Diferenças de valores entre MAM e MAP;
--   Elevação e obstáculos orográficos (se uma estação regional está separada da estação alvo por um terreno complexo); e
--   Testes estatísticos entre distribuições (os testes Qui-quadrado e Kolmogorov-Smirnov de duas amostras foram usados para avaliar o grau de similaridade nas distribuições entre as estações alvo e regionais).
+- Distância;
+- Diferenças de valores entre MAM e MAP;
+- Elevação e obstáculos orográficos (se uma estação regional está separada da estação alvo por um terreno complexo); e
+- Testes estatísticos entre distribuições (os testes Qui-quadrado e Kolmogorov-Smirnov de duas amostras foram usados para avaliar o grau de similaridade nas distribuições entre as estações alvo e regionais).
 
 Foi aplicado um esquema de pesos com função Kernel para atribuir relevância a cada estação regional. Onde 0 indica nenhuma semelhança entre as estações e 1 indica que estão geograficamente próximas, e que possuem semelhanças nos atributos da precipitação.
 
-**4.1.4. Covariáveis espaciais e temporais**
+**4.1.4 Covariáveis espaciais e temporais**
 
 As covariáveis espaciais e temporais foram utilizadas para calcular os parâmetros de localização e escala da distribuição GEV. Foram testadas várias covariáveis espacias em grade (elevação, MAP, MAM, dentre outras). O parâmetro MAM teve o melhor desempenho em todas as durações. Para o Volume 1, o GWL foi selecionado como a covariável temporal, definida como a anomalia da temperatura global média móvel de 30 anos em relação ao período pré-industrial (1851 – 1900).
 
-**4.1.5. Interpolação para grade**
+**4.1.5 Interpolação para grade**
 
 As estimativas em estações foram interpoladas para uma grade de 30 segundos de arco (\~0,9 x 0,6 km) usando interpolação cúbica monotônica baseada na razão entre precipitação e MAM. As estimativas de MAM em grade são então multiplicadas pelas razões em grades correspondentes para criar estimativas de frequência de precipitação em grade. Para garantir a consistência nas estimativas em todas as durações e frequências (por exemplo, a estimativa de 24 horas deve ser igual ou superior à estimativa de 12 horas), foram realizadas verificações de consistência internas baseadas na duração e, em casos raros, ajustadas conforme necessário.
 
-**4.1.6. Intervalos de confiança**
+**4.1.6 Intervalos de confiança**
 
 Foi utilizada uma simulação de Monte Carlo que considera a dependência entre estações para estimar intervalos de confiança de 90% em curvas de frequência de precipitação baseadas em AMS. O método consiste em adicionar perturbações aos parâmetros da distribuição GEV-MLE com base na variabilidade regional. O processo é repetido mil vezes, permitindo capturar incertezas estatísticas e estocásticas. Os limites inferior e superior do intervalo de confiança são definidos pelos percentis de 5% e 95% das distribuições simuladas. É destacado no texto que essa abordagem é semelhante à usada nos volumes do NOAA Atlas 14, porém com duas diferenças principais: 1) as estimativas do intervalo de confiança do Atlas 15 levam em conta a incerteza nos parâmetros GEV-MLE, enquanto as estimativas do Atlas 14 levam em conta a incerteza nos L-momentos; 2) a dependência entre estações para cada região foi expressa como uma função da distância no Atlas 15, em contraste com o Atlas 14, onde foi assumido que era uniforme em toda a região.
 
-**4.1.7. Avaliação do modelo**
+**4.1.7 Avaliação do modelo**
 
 Foi realizada uma comparação entre modelos estacionário e não estacionário usando AICs e teste de razão de verossimilhança. A não estacionariedade mostrou melhor desempenho em regiões com tendências de mudança nas chuvas extremas.
 
-**4.1.8. Saídas**
+**4.1.8 Saídas**
 
 Estimativa de precipitação e IC 90% em grade para todas as durações e AEP's para o ano base de 2023.
 
@@ -447,24 +445,24 @@ Estimativa de precipitação e IC 90% em grade para todas as durações e AEP's 
 
 **4.2 Metodologia do Volume 2 - Projeções futuras com modelos climáticos**
 
-**4.2.1. Conjunto de dados relevantes**
+**4.2.1 Conjunto de dados relevantes**
 
 Dois conjuntos de dados gerados por *downscaling* estatístico, LOCA2 e STAR-ESDM, foram utilizados para derivar fatores de ajuste aplicáveis a durações diárias de precipitação em cenários futuros. Ambos são baseados em projeções do CMIP6 (*Coupled Model Intercomparison Project Phase 6*). Para os dados subdiários foi utilizado o conjunto NA-CORDEX, que reúne simulações CMIP5 com *downscaling* dinâmico, para investigar a relação entre fatores de ajuste diários e subdiários. Foram analisadas sete simulações, combinando quatro modelos climáticos globais (GCMs) do CMIP5 com três modelos climáticos regionais (RCMs) selecionados.
 
-**5.2. Fatores de ajuste**
+**4.2.2 Fatores de ajuste**
 
-Os parâmetros de distribuição GEV para o Volume 2 foram estimados usando valores AMS em grade extraídos do LOCA2 e do STAR-ESDM. Os parâmetros de localização, escala e forma, que são calculados de maneira semelhante ao Volume 1, são, portanto, identificados para cada célula da grade dentro do domínio e para cada um dos 32 conjuntos para durações diárias e mais longas durante o período de 1950 a 2100. As distribuições GEV resultantes foram usadas para gerar estimativas de frequência de precipitação em resoluções de células de grade nativas para cada modelo estatístico. Assim, enquanto as estimativas do Volume 1 se originam em locais de estações, com um valor por duração e AEP, as estimativas do Volume 2 se originam em uma grade, com 32 valores (um de cada conjunto de modelos) por duração e AEP. Uma vez obtidas as estimativas absolutas de frequência de precipitação para cada GWL (1,5 - 5 °C), suas mudanças, em relação ao ano base de 2023, foram computadas. As estimativas de frequência de precipitação são geradas para o presente (2023) e, em seguida, novamente para um momento futuro quando os GCMs atingirem 3 °C. Para cada nível de aquecimento, foi calculado:
+Os parâmetros de distribuição GEV para o Volume 2 foram estimados usando valores AMS em grade extraídos do LOCA2 e do STAR-ESDM. Os parâmetros de localização, escala e forma, que foram calculados de maneira semelhante ao Volume 1, foram, portanto, identificados para cada célula da grade dentro do domínio e para cada um dos 32 conjuntos para durações diárias e mais longas durante o período de 1950 a 2100. As distribuições GEV resultantes foram usadas para gerar estimativas de frequência de precipitação em resoluções de células de grade nativas para cada modelo estatístico. Assim, enquanto as estimativas do Volume 1 se originaramm em locais de estações, com um valor por duração e AEP, as estimativas do Volume 2 se originam em uma grade, com 32 valores (um de cada conjunto de modelos) por duração e AEP. Uma vez obtidas as estimativas absolutas de frequência de precipitação para cada GWL (1,5 - 5 °C), suas mudanças, em relação ao ano base de 2023, foram computadas. As estimativas de frequência de precipitação foram geradas para o presente (2023) e, em seguida, novamente para um momento futuro quando os GCMs atingirem 3 °C. Para cada nível de aquecimento, foi calculado:
 
 $$
 AF = \frac{PF_{fut} - PF_{2023}}{PF_{2003}} \times 100\%
 \tag{22}
 $$
 
-**5.3. Revisão dos fatores de ajuste subdiários**
+**4.2.3 Revisão dos fatores de ajuste subdiários**
 
 Devido ao tamanho reduzido das amostras subdiárias, ao invés de utilizar diretamente os fatores de ajuste extraídos das simulações de modelos climáticos dinâmicos, foram aplicadas suas relações relativas com os fatores diários, que possuem amostras mais robustas. Isso permitiu aproveitar os processos físicos dos modelos de alta resolução, como os do NA-CORDEX, mantendo a consistência entre diferentes durações e evitando distorções que poderiam surgir do uso direto dos dados subdiários.
 
-**5.4. Aplicação dos fatores de ajuste**
+**4.2.4 Aplicação dos fatores de ajuste**
 
 Uma vez calculados os fatores de ajuste diários e subdiários na estrutura GWL, estes foram transferidos para a estrutura de cenários, mapeando-os para décadas individuais entre 2030 e 2100, segundo os modelos SSP2-4.5 e SSP5-8.5. Para esse mapeamento, foram obtidos os GWLs médios multimodelo por década em cada cenário. Os fatores de ajuste e seus intervalos de confiança em grade foram identificados nos dois GWLs mais próximos de cada década e cenário, sendo os valores intermediários obtidos por interpolação temporal.
 
@@ -479,7 +477,7 @@ $$
 
 Onde, os valores de AF são funções do espaço 𝑥 e do tempo 𝑡, dependentes do GWL, dos cenários de emissões e do AEP.
 
-O termo multiplicativo é baseado em um fator de ajuste que expressa (em unidades percentuais) a mudança relativa no futuro a partir da linha de base do PFVOL1, que representa o ano de 2023. Assim, os valores finais do PFVOL2 representam estimativas futuras de precipitação para as mesmas durações e AEPs do PFVOL1, mas também são funções da temperatura global (estrutura do GWL) e do tempo.
+O termo multiplicativo foi baseado em um fator de ajuste que expressa (em unidades percentuais) a mudança relativa no futuro a partir da linha de base do PFVOL1, que representa o ano de 2023. Assim, os valores finais do PFVOL2 representaramm estimativas futuras de precipitação para as mesmas durações e AEPs do PFVOL1, mas também são funções da temperatura global (estrutura do GWL) e do tempo.
 
 ![Fluxograma da metodologia do Volume 2 do NOAA 15](figuras/guidelines_fluxograma_eua_2.jpg) Figura 5. Fluxograma da metodologia do Volume 2 do NOAA 15. ::::
 ::::::
