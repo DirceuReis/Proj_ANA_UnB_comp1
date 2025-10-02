@@ -228,7 +228,7 @@ $$
 
 As verificações com as séries mostram linearidade log–log dos momentos e dos parâmetros $(\mu_d,\sigma_d)$ com declives consistentes $(\eta\approx 0,65–0,780)$; a Gumbel ajusta bem as CDFs dos máximos ao longo das durações na faixa de escala observada. Como $i_d(T)$ e $(\mu_d,\sigma_d)$ obedecem leis de potência em $d$, pode-se transferir quantis entre durações sem recorrer a geradores complexos: estima-se $(\mu,\sigma)$ em 24 h a partir de séries diárias longas, estima-se $\eta$ com uma curta série subdiária local/regional, e então obtêm-se quantis para $d<24$ via $i_d(T)=(d/24\mathrm{h})^{-\eta}\cdot i_{24\mathrm{h}}(T)$ ou diretamente pela fórmula IDF acima. Essa coerência multiescala fornece um mapeamento determinístico útil para *downscaling* de extremos de durações subdiárias a partir de informação diária, mantendo a consistência entre durações exigida por DDF/IDF baseadas em invariância de escala.
 
-![Menabde_Fig4](C:/Users/laris/OneDrive/3.%20UFC/UFC%20-%202025/UNB%20-%202025/Desagregacao_temporal/Desagregacao_temporal/Menabde_Fig4.png)
+![Menabde_Fig4](figuras/Menabde_Fig4.png)
 
 Consolidando esse avanço, Gupta & Waymire [-@Gupta.1990] estabelecem a base teórica do multiescalonamento (*multiscaling*) em hidrologia ao demonstrar que (i) momentos de precipitação e vazões exibem linearidade em gráficos log–log com a escala $\lambda$ e que (ii) a inclinação desses gráficos varia de forma côncava com a ordem do momento ($h$). Em escala simples (*wide sense*), os momentos condicionados seguem
 
