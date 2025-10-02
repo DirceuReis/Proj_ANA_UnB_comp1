@@ -248,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>          used (Mb) gc trigger (Mb) max used (Mb)
 Ncells  605246 32.4    1378244 73.7   702060 37.5
-Vcells 1103938  8.5    8388608 64.0  1928265 14.8</code></pre>
+Vcells 1103937  8.5    8388608 64.0  1928265 14.8</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar e carregar pacotes</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -297,8 +297,8 @@ Vcells 1103938  8.5    8388608 64.0  1928265 14.8</code></pre>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">setdiff</span>(<span class="fu">ls</span>(), <span class="fu">c</span>(<span class="st">"df_data"</span>, <span class="st">"df_info"</span>))); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1207173  64.5    2332345  124.6   1741105  93.0
-Vcells 57846440 441.4  138400913 1056.0 113681040 867.4</code></pre>
+Ncells  1207173  64.5    2332342  124.6   1741105  93.0
+Vcells 57846439 441.4  138400912 1056.0 113681039 867.4</code></pre>
 </div>
 </div>
 </section>
@@ -323,8 +323,8 @@ Vcells 57846440 441.4  138400913 1056.0 113681040 867.4</code></pre>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ); <span class="fu">gc</span>() <span class="co"># resolução temporal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1233963  66.0    2332345  124.6   2332345 124.6
-Vcells 85773370 654.4  138400913 1056.0 123316673 940.9</code></pre>
+Ncells  1233963  66.0    2332342  124.6   2332342 124.6
+Vcells 85773369 654.4  138400912 1056.0 123316680 940.9</code></pre>
 </div>
 </div>
 </section>
@@ -338,8 +338,8 @@ Vcells 85773370 654.4  138400913 1056.0 123316673 940.9</code></pre>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1292590  69.1    2332345  124.6   2332345 124.6
-Vcells 85877019 655.2  138400913 1056.0 123316673 940.9</code></pre>
+Ncells  1292590  69.1    2332342  124.6   2332342 124.6
+Vcells 85877018 655.2  138400912 1056.0 123316680 940.9</code></pre>
 </div>
 </div>
 </section>
@@ -373,14 +373,14 @@ Estações CEMADEN...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1332727   71.2    2332358  124.6   2332358  124.6
-Vcells 417155548 3182.7  937042622 7149.1 594049108 4532.3</code></pre>
+Ncells   1332727   71.2    2332367  124.6   2332367  124.6
+Vcells 417155547 3182.7  937042620 7149.1 594049185 4532.3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_subdaily_filled); <span class="fu">rm</span>(list_subdaily_filled); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1324103   70.8    2332358  124.6   2332358  124.6
-Vcells 417144285 3182.6  937042622 7149.1 748432974 5710.1</code></pre>
+Ncells   1324103   70.8    2332367  124.6   2332367  124.6
+Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
 </div>
 </div>
 <p>Caso necessário (ou por conveniência) quisermos salvar o arquivo comprimido, basta rodar o código abaixo (deixar <code>eval: false</code>, porque gera um arquivo maior que 100 MB, que é o limite de transferência para o GitHub):</p>
@@ -444,8 +444,8 @@ Vcells 417144285 3182.6  937042622 7149.1 748432974 5710.1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1478196   79.0    2332358  124.6   2332358  124.6
-Vcells 422590939 3224.2  937226135 7150.5 937226135 7150.5</code></pre>
+Ncells   1478196   79.0    2332367  124.6   2332367  124.6
+Vcells 422590938 3224.2  937226142 7150.5 937226142 7150.5</code></pre>
 </div>
 </div>
 <p>Avaliação de como se distribuem o número de estações conforme definimos diferentes niveis de tolerância de falhas. São criados 2 vetores de critérios: <code>threshold</code>, que contém possibilidades de percentuais de falha (ex. 10% a 40%) que queremos tolerar; e <code>min_years</code>, para avaliarmos quantas estações possuem pelo menos <code>min_years</code> anos com no máximo <code>threshold</code> % de falhas. A função <code>purrr::map2_int()</code> é usada para iterar sobre dois vetores ao mesmo tempo (<code>.x = threshold</code> e <code>.y = min_years</code>), realizando alguma operação sobre os pares (isso elimina a necessidade de fazer um loop).</p>
@@ -528,8 +528,8 @@ Figure&nbsp;1: Número de estações que atendem determinado nível de tolerânc
 <span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">min_years =</span> <span class="dv">8</span>); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1529039   81.7    2332358  124.6   2332358  124.6
-Vcells 477365394 3642.1  937226135 7150.5 937226135 7150.5</code></pre>
+Ncells   1529039   81.7    2332367  124.6   2332367  124.6
+Vcells 477365393 3642.1  937226142 7150.5 937226142 7150.5</code></pre>
 </div>
 </div>
 <p>Exportar conjunto gerado:</p>
