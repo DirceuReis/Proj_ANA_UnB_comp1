@@ -140,7 +140,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-documentos">    
         <li>
     <a class="dropdown-item" href="./distr_chuva_intensa.html">
- <span class="dropdown-text">Modelagem probabilística de cuhvas intensas</span></a>
+ <span class="dropdown-text">Modelagem probabilística de chuvas intensas</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./IDF_basico.html">
@@ -151,12 +151,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Desagregacao temporal</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./IDF_regional.html">
+    <a class="dropdown-item" href="./regionalizacao.html">
  <span class="dropdown-text">Modelos Regionais</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./IDF_mudanca.html">
  <span class="dropdown-text">IDF e as mudanças do clima</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./guidelines.html">
+ <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Australia.html">
+ <span class="dropdown-text">Austrália</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Canada.html">
+ <span class="dropdown-text">Canadá</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Inglaterra.html">
+ <span class="dropdown-text">Inglaterra</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./estados unidos.html">
+ <span class="dropdown-text">Estados Unidos</span></a>
   </li>  
     </ul>
   </li>
@@ -247,58 +267,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>()); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used (Mb) gc trigger (Mb) max used (Mb)
-Ncells  605246 32.4    1378244 73.7   702060 37.5
-Vcells 1103937  8.5    8388608 64.0  1928265 14.8</code></pre>
+Ncells  597747 32.0    1364625 72.9   686445 36.7
+Vcells 1090976  8.4    8388608 64.0  1876640 14.4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar e carregar pacotes</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Carregando pacotes exigidos: pacman</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>               tidyverse, <span class="co"># manipulação de dados</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               lubridate, <span class="co"># manipulação de datas</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>               arrow,     <span class="co"># ler dados no formato 'parquet'</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>               ggplot2)   <span class="co"># visualização</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: pacote 'pacman' foi compilado no R versão 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               tidyverse, <span class="co"># manipulação de dados</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               lubridate, <span class="co"># manipulação de datas</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               arrow,     <span class="co"># ler dados no formato 'parquet'</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               ggplot2)   <span class="co"># visualização</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="dados" class="level2">
 <h2 class="anchored" data-anchor-id="dados">Dados</h2>
 <p>Conjunto de dados subdiários consolidados reunidos pelo GTA-UFPB contendo 383 estações do CEMADEN, ICEA, Telemetria (ANA) e INMET disponibilizados no <a href="https://1drv.ms/f/c/AAFB08B2A81BEEB3/AmW6jY4wqDdKj3jn-N3PqAQ?e=B06g8T">OneDrive</a>. Estes dados brutos se encontram em “base/fonte”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Caminho do diretório</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>path_dir <span class="ot">&lt;-</span> <span class="st">"base/fonte/consolidado/subdiario/"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Listar arquivos c/ extensão ".parquet" no diretório</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Os arquivos contém divisões por ano de duas tabelas: info e data</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Listar 'data'</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>files_data <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> path_dir,           </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pattern =</span> <span class="st">"*.data.parquet"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Listar 'info'</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>files_info <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> path_dir,</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pattern =</span> <span class="st">"*.info.parquet"</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                         <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Ler dados</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># list_data &lt;- lapply(X = files_data, FUN = arrow::read_parquet, as_data_frame = TRUE)</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>list_data <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> files_data, <span class="at">FUN =</span> arrow<span class="sc">::</span>read_parquet)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>list_info <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> files_info, <span class="at">FUN =</span> arrow<span class="sc">::</span>read_parquet)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Juntar dados</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_data)[<span class="sc">-</span><span class="dv">4</span>]  <span class="co"># remover coluna '__intex_level_0__'</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_info)[<span class="sc">-</span><span class="dv">10</span>] <span class="co"># remover coluna '__intex_level_0__'</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Manter somente 'df_data' e 'df_info' no ambiente</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">setdiff</span>(<span class="fu">ls</span>(), <span class="fu">c</span>(<span class="st">"df_data"</span>, <span class="st">"df_info"</span>))); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Caminho do diretório</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>path_dir <span class="ot">&lt;-</span> <span class="st">"base/fonte/consolidado/subdiario/"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Listar arquivos c/ extensão ".parquet" no diretório</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Os arquivos contém divisões por ano de duas tabelas: info e data</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Listar 'data'</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>files_data <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> path_dir,           </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pattern =</span> <span class="st">"*.data.parquet"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Listar 'info'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>files_info <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> path_dir,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pattern =</span> <span class="st">"*.info.parquet"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                         <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Ler dados</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># list_data &lt;- lapply(X = files_data, FUN = arrow::read_parquet, as_data_frame = TRUE)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>list_data <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> files_data, <span class="at">FUN =</span> arrow<span class="sc">::</span>read_parquet)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>list_info <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> files_info, <span class="at">FUN =</span> arrow<span class="sc">::</span>read_parquet)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Juntar dados</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_data)[<span class="sc">-</span><span class="dv">4</span>]  <span class="co"># remover coluna '__intex_level_0__'</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_info)[<span class="sc">-</span><span class="dv">10</span>] <span class="co"># remover coluna '__intex_level_0__'</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Manter somente 'df_data' e 'df_info' no ambiente</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">setdiff</span>(<span class="fu">ls</span>(), <span class="fu">c</span>(<span class="st">"df_data"</span>, <span class="st">"df_info"</span>))); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1207173  64.5    2332337  124.6   1741105  93.0
-Vcells 57846439 441.4  138400912 1056.0 113681039 867.4</code></pre>
+Ncells  1232108  65.9    2412910  128.9   2048843 109.5
+Vcells 57878316 441.6  138439164 1056.3 113712801 867.6</code></pre>
 </div>
 </div>
 </section>
@@ -306,40 +329,40 @@ Vcells 57846439 441.4  138400912 1056.0 113681039 867.4</code></pre>
 <h2 class="anchored" data-anchor-id="organizar-dados">Organizar dados</h2>
 <p>O data frame <code>df_info</code> contém estações repetida, então vamos limpar mantendo somente e uma observação do campo de códigos da estação <code>gauge_code</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># O arquivo 'df_info' contém estações repetidas, portanto precisamos manter</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># somente um único registro de cada 'gauge_code'</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> <span class="fu">slice_tail</span>(<span class="at">.data =</span> df_info, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="st">"gauge_code"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># O arquivo 'df_info' contém estações repetidas, portanto precisamos manter</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># somente um único registro de cada 'gauge_code'</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> <span class="fu">slice_tail</span>(<span class="at">.data =</span> df_info, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="st">"gauge_code"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Já no data frame <code>df_data</code> há uma incompatibilidade com a forma com que os dados são lidos no R. O R automaticamente atribui um fuso horário a dados no formato “date” de acordo com o fuso horário da máquina do usuário. Sabemos que todos os dados estão na zona UTC-3, então:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fuso horário</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Todos os dados do conjunto deveriam estar na zona UTC -3</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Isso corrige o shift de -2 ou -3 horas nos dados</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> df_data <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">datetime =</span> <span class="fu">as.POSIXct</span>(datetime, <span class="at">format =</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>),        <span class="co"># alterar fuso</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_steps =</span> df_info<span class="sc">$</span>monitoring_time_step[<span class="fu">match</span>(gauge_code, df_info<span class="sc">$</span>gauge_code)], <span class="co"># resolução temporal</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">responsible =</span> df_info<span class="sc">$</span>responsible[<span class="fu">match</span>(gauge_code, df_info<span class="sc">$</span>gauge_code)]          <span class="co"># operador</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ); <span class="fu">gc</span>() <span class="co"># resolução temporal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fuso horário</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Todos os dados do conjunto deveriam estar na zona UTC -3</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Isso corrige o shift de -2 ou -3 horas nos dados</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> df_data <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">datetime =</span> <span class="fu">as.POSIXct</span>(datetime, <span class="at">format =</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>),        <span class="co"># alterar fuso</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_steps =</span> df_info<span class="sc">$</span>monitoring_time_step[<span class="fu">match</span>(gauge_code, df_info<span class="sc">$</span>gauge_code)], <span class="co"># resolução temporal</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">responsible =</span> df_info<span class="sc">$</span>responsible[<span class="fu">match</span>(gauge_code, df_info<span class="sc">$</span>gauge_code)]          <span class="co"># operador</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ); <span class="fu">gc</span>() <span class="co"># resolução temporal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1233963  66.0    2332337  124.6   2332337 124.6
-Vcells 85773369 654.4  138400912 1056.0 123316680 940.9</code></pre>
+Ncells  1258901  67.3    2412910  128.9   2412910 128.9
+Vcells 85805251 654.7  138439164 1056.3 123152365 939.6</code></pre>
 </div>
 </div>
 </section>
 <section id="exportar-dados-brutos" class="level2">
 <h2 class="anchored" data-anchor-id="exportar-dados-brutos">Exportar dados brutos</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parquet</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df_data, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df_info, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_info.parquet"</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parquet</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df_data, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df_info, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_info.parquet"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)  max used  (Mb)
-Ncells  1292590  69.1    2332337  124.6   2332337 124.6
-Vcells 85877018 655.2  138400912 1056.0 123316680 940.9</code></pre>
+Ncells  1317525  70.4    2412910  128.9   2412910 128.9
+Vcells 85908895 655.5  138439164 1056.3 123152365 939.6</code></pre>
 </div>
 </div>
 </section>
@@ -348,9 +371,9 @@ Vcells 85877018 655.2  138400912 1056.0 123316680 940.9</code></pre>
 <h1>Preenchimento das datas</h1>
 <p>O objetivo desse parte é apresentar as etapas para elaboração da função que realiza o preenchimento das datas das séries de precipitação subdiárias <code>fun_fill_dates()</code>. Atualmente este QMD conta somente com a aplicação das funções para gerar um arquivo .PARQUET onde se encontram as séries.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ler dados gerados em `rs_subdaily_read_parquet.R`</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_info.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ler dados gerados em `rs_subdaily_read_parquet.R`</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df_info <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_info.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="objetivo" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
@@ -360,9 +383,9 @@ Vcells 85877018 655.2  138400912 1056.0 123316680 940.9</code></pre>
 <h2 class="anchored" data-anchor-id="preenchimento">Preenchimento</h2>
 <p>Vamos então chamar a função que foi escrita utilizando a função <code>source()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Função completa</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_fill_dates.R"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>list_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">fun_fill_dates</span>(<span class="at">df =</span> df_data, <span class="at">col_names =</span> <span class="fu">names</span>(df_data)); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Função completa</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_fill_dates.R"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>list_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">fun_fill_dates</span>(<span class="at">df =</span> df_data, <span class="at">col_names =</span> <span class="fu">names</span>(df_data)); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Estações ICEA, ANA, INMET...</code></pre>
@@ -373,25 +396,25 @@ Estações CEMADEN...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1332727   71.2    2332352  124.6   2332352  124.6
-Vcells 417155547 3182.7  937042620 7149.1 594049211 4532.3</code></pre>
+Ncells   1357183   72.5    2412926  128.9   2412926  128.9
+Vcells 417186109 3182.9  937133878 7149.8 595913320 4546.5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_subdaily_filled); <span class="fu">rm</span>(list_subdaily_filled); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(list_subdaily_filled); <span class="fu">rm</span>(list_subdaily_filled); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1324103   70.8    2332352  124.6   2332352  124.6
-Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
+Ncells   1348559   72.1    2412926  128.9   2412926  128.9
+Vcells 417174846 3182.8  937133878 7149.8 748463493 5710.4</code></pre>
 </div>
 </div>
 <p>Caso necessário (ou por conveniência) quisermos salvar o arquivo comprimido, basta rodar o código abaixo (deixar <code>eval: false</code>, porque gera um arquivo maior que 100 MB, que é o limite de transferência para o GitHub):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Salvar arquivo (deixar comentado)</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>list_by_resp <span class="ot">&lt;-</span> <span class="fu">split</span>(df_subdaily_filled, <span class="at">f =</span> df_subdaily_filled<span class="sc">$</span>responsible); <span class="fu">rm</span>(df_subdaily_filled); <span class="fu">gc</span>()</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>compression_codecs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"snappy"</span>, <span class="st">"gzip"</span>, <span class="st">"brotli"</span>, <span class="st">"zstd"</span>, <span class="st">"lz4"</span>, <span class="st">"lzo"</span>, <span class="st">"bz2"</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(<span class="at">x =</span> df_subdaily_filled,</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">sink =</span> <span class="st">"base/gerados/df_subadaily_filled.parquet"</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">compression =</span> compression_codecs[[<span class="dv">4</span>]],</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">compression_level =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Salvar arquivo (deixar comentado)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>list_by_resp <span class="ot">&lt;-</span> <span class="fu">split</span>(df_subdaily_filled, <span class="at">f =</span> df_subdaily_filled<span class="sc">$</span>responsible); <span class="fu">rm</span>(df_subdaily_filled); <span class="fu">gc</span>()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>compression_codecs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"snappy"</span>, <span class="st">"gzip"</span>, <span class="st">"brotli"</span>, <span class="st">"zstd"</span>, <span class="st">"lz4"</span>, <span class="st">"lzo"</span>, <span class="st">"bz2"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(<span class="at">x =</span> df_subdaily_filled,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">sink =</span> <span class="st">"base/gerados/df_subadaily_filled.parquet"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">compression =</span> compression_codecs[[<span class="dv">4</span>]],</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">compression_level =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -399,38 +422,38 @@ Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
 <h1>Análise das séries</h1>
 <p>Com o data frame com as datas preenchidas (<code>df_subdaily_filled</code>), gerar um data frame “resumo” para avaliar a quantidade de dados disponível no conjunto: percentual de falhas, número de anos “completo”, entre outros.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabela resumo</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  df_subdaily_filled <span class="sc">%&gt;%</span> </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(datetime),        <span class="co"># criar coluna c/ ano</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">rain_na =</span> <span class="fu">is.na</span>(rain_mm)) <span class="sc">%&gt;%</span>            <span class="co"># TRUE/FALSE se rain_mm é NA</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, year) <span class="sc">%&gt;%</span>                  <span class="co"># agrupar por estacao e por ano</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">rain_yr =</span> <span class="fu">sum</span>(rain_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="co"># acumulado anual</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_fail =</span> <span class="fu">sum</span>(rain_na),                <span class="co"># número de observações c/ NA por ano</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_obs =</span> <span class="fu">n</span>(),                          <span class="co"># número total de observações</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">fail_prct =</span> n_fail<span class="sc">/</span>n_obs<span class="sc">*</span><span class="dv">100</span>)         <span class="co"># percentual de falhas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabela resumo</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  df_subdaily_filled <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(datetime),        <span class="co"># criar coluna c/ ano</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">rain_na =</span> <span class="fu">is.na</span>(rain_mm)) <span class="sc">%&gt;%</span>            <span class="co"># TRUE/FALSE se rain_mm é NA</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, year) <span class="sc">%&gt;%</span>                  <span class="co"># agrupar por estacao e por ano</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">rain_yr =</span> <span class="fu">sum</span>(rain_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="co"># acumulado anual</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_fail =</span> <span class="fu">sum</span>(rain_na),                <span class="co"># número de observações c/ NA por ano</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_obs =</span> <span class="fu">n</span>(),                          <span class="co"># número total de observações</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">fail_prct =</span> n_fail<span class="sc">/</span>n_obs<span class="sc">*</span><span class="dv">100</span>)         <span class="co"># percentual de falhas</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'gauge_code'. You can override using the
 `.groups` argument.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adicionar operador responsável</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_summary, df_info[, <span class="fu">c</span>(<span class="st">"gauge_code"</span>, <span class="st">"responsible"</span>)], <span class="at">by =</span> <span class="st">"gauge_code"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adicionar operador responsável</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> <span class="fu">merge</span>(df_summary, df_info[, <span class="fu">c</span>(<span class="st">"gauge_code"</span>, <span class="st">"responsible"</span>)], <span class="at">by =</span> <span class="st">"gauge_code"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="visualizações" class="level2">
 <h2 class="anchored" data-anchor-id="visualizações">Visualizações</h2>
 <p>Conferir se o preenchimento das séries do CEMADEN está funcionando corretamente.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>gauge_cemaden <span class="ot">&lt;-</span> <span class="st">"430920901A"</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="sc">%&gt;%</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> gauge_cemaden) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> datetime, <span class="at">y =</span> rain_mm)) <span class="sc">+</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Precipitação [mm]"</span>, <span class="at">col =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>,</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>)); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gauge_cemaden <span class="ot">&lt;-</span> <span class="st">"430920901A"</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df_subdaily_filled <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> gauge_cemaden) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> datetime, <span class="at">y =</span> rain_mm)) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Precipitação [mm]"</span>, <span class="at">col =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>)); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 26496 rows containing missing values or values outside the scale range
 (`geom_line()`).</code></pre>
@@ -444,47 +467,47 @@ Vcells 417144284 3182.6  937042620 7149.1 748432973 5710.1</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1478196   79.0    2332352  124.6   2332352  124.6
-Vcells 422590938 3224.2  937226142 7150.5 937226142 7150.5</code></pre>
+Ncells   1504437   80.4    2412926  128.9   2412926  128.9
+Vcells 422626172 3224.4  937248907 7150.7 937248907 7150.7</code></pre>
 </div>
 </div>
 <p>Avaliação de como se distribuem o número de estações conforme definimos diferentes niveis de tolerância de falhas. São criados 2 vetores de critérios: <code>threshold</code>, que contém possibilidades de percentuais de falha (ex. 10% a 40%) que queremos tolerar; e <code>min_years</code>, para avaliarmos quantas estações possuem pelo menos <code>min_years</code> anos com no máximo <code>threshold</code> % de falhas. A função <code>purrr::map2_int()</code> é usada para iterar sobre dois vetores ao mesmo tempo (<code>.x = threshold</code> e <code>.y = min_years</code>), realizando alguma operação sobre os pares (isso elimina a necessidade de fazer um loop).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Limites</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>thresholds <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">10</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Avaliar quantas estacoes atendem os criterios de falha e nro mínimo de anos </span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>analise_series <span class="ot">&lt;-</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">threshold =</span> thresholds,                              <span class="co"># combinar possibilidades</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">min_years =</span> min_years) <span class="sc">%&gt;%</span>                           <span class="co"># entre threshold e min_years</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_gauges =</span> purrr<span class="sc">::</span><span class="fu">map2_int</span>(threshold, min_years, <span class="sc">~</span>{  </span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    df_summary <span class="sc">%&gt;%</span> </span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(fail_prct <span class="sc">&lt;=</span> .x) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(gauge_code) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n <span class="sc">&gt;=</span> .y) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">nrow</span>()</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  })) <span class="co"># extrair nro estacoe atendem criterios</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualização</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"green4"</span>, <span class="st">"lightgreen"</span>, <span class="st">"orange"</span>, <span class="st">"#F10000"</span>)</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>analise_series <span class="sc">%&gt;%</span> </span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">threshold =</span> <span class="fu">factor</span>(threshold, <span class="at">levels =</span> thresholds)) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> min_years, <span class="at">y =</span> n_gauges, <span class="at">fill =</span> threshold)) <span class="sc">+</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n_gauges), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>threshold, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">threshold =</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="st">"% falhas"</span>))) <span class="sc">+</span></span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(analise_series<span class="sc">$</span>min_years), <span class="fu">max</span>(analise_series<span class="sc">$</span>min_years), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">430</span>)) <span class="sc">+</span></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cores) <span class="sc">+</span></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Número de anos por estação"</span>,</span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Número de estações"</span>) <span class="sc">+</span></span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span>  <span class="st">"none"</span>,</span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Limites</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>thresholds <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">10</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Avaliar quantas estacoes atendem os criterios de falha e nro mínimo de anos </span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>analise_series <span class="ot">&lt;-</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">threshold =</span> thresholds,                              <span class="co"># combinar possibilidades</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">min_years =</span> min_years) <span class="sc">%&gt;%</span>                           <span class="co"># entre threshold e min_years</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_gauges =</span> purrr<span class="sc">::</span><span class="fu">map2_int</span>(threshold, min_years, <span class="sc">~</span>{  </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    df_summary <span class="sc">%&gt;%</span> </span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(fail_prct <span class="sc">&lt;=</span> .x) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(gauge_code) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n <span class="sc">&gt;=</span> .y) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">nrow</span>()</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  })) <span class="co"># extrair nro estacoe atendem criterios</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualização</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"green4"</span>, <span class="st">"lightgreen"</span>, <span class="st">"orange"</span>, <span class="st">"#F10000"</span>)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>analise_series <span class="sc">%&gt;%</span> </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">threshold =</span> <span class="fu">factor</span>(threshold, <span class="at">levels =</span> thresholds)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> min_years, <span class="at">y =</span> n_gauges, <span class="at">fill =</span> threshold)) <span class="sc">+</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n_gauges), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>threshold, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">threshold =</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="st">"% falhas"</span>))) <span class="sc">+</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(analise_series<span class="sc">$</span>min_years), <span class="fu">max</span>(analise_series<span class="sc">$</span>min_years), <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">430</span>)) <span class="sc">+</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cores) <span class="sc">+</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Número de anos por estação"</span>,</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Número de estações"</span>) <span class="sc">+</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span>  <span class="st">"none"</span>,</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-estacoes-falha" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -504,38 +527,38 @@ Figure&nbsp;1: Número de estações que atendem determinado nível de tolerânc
 <h1>Exportar conjunto de séries</h1>
 <p>Definir critérios como tolerância de falhas (<code>na_accept</code>) e número mínimo de anos (<code>min_years</code>) para exportar um subconjunto de <code>df_subdaily_filled</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fun_filter_set <span class="ot">&lt;-</span> <span class="cf">function</span>(data, na_accept, min_years){</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Resumir e filtrar dados</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  valid_gauges <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(datetime)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code, year) <span class="sc">%&gt;%</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">fail_prct =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(rain_mm))<span class="sc">/</span><span class="fu">n</span>() <span class="sc">*</span> <span class="dv">100</span>, <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> <span class="co"># calcular % falhas</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">valid_years =</span> <span class="fu">sum</span>(fail_prct <span class="sc">&lt;=</span> na_accept <span class="sc">*</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span> <span class="co"># nro anos que atende</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(valid_years <span class="sc">&gt;=</span> min_years) <span class="sc">%&gt;%</span>                           <span class="co"># o criterio de falhas</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(gauge_code); <span class="fu">gc</span>()                                         <span class="co"># extrair so codigo estacoes            </span></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtrar estacoes</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  df_valid <span class="ot">&lt;-</span> data[data<span class="sc">$</span>gauge_code <span class="sc">%in%</span> valid_gauges,]</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df_valid)</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar função</span></span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_subdaily_filled,</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">na_accept =</span> <span class="fl">0.2</span>,</span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">min_years =</span> <span class="dv">8</span>); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>fun_filter_set <span class="ot">&lt;-</span> <span class="cf">function</span>(data, na_accept, min_years){</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Resumir e filtrar dados</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  valid_gauges <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">year</span>(datetime)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code, year) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">fail_prct =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(rain_mm))<span class="sc">/</span><span class="fu">n</span>() <span class="sc">*</span> <span class="dv">100</span>, <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> <span class="co"># calcular % falhas</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">valid_years =</span> <span class="fu">sum</span>(fail_prct <span class="sc">&lt;=</span> na_accept <span class="sc">*</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span> <span class="co"># nro anos que atende</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(valid_years <span class="sc">&gt;=</span> min_years) <span class="sc">%&gt;%</span>                           <span class="co"># o criterio de falhas</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(gauge_code); <span class="fu">gc</span>()                                         <span class="co"># extrair so codigo estacoes            </span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtrar estacoes</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  df_valid <span class="ot">&lt;-</span> data[data<span class="sc">$</span>gauge_code <span class="sc">%in%</span> valid_gauges,]</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df_valid)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar função</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_subdaily_filled,</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">na_accept =</span> <span class="fl">0.2</span>,</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">min_years =</span> <span class="dv">8</span>); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   1529020   81.7    2332352  124.6   2332352  124.6
-Vcells 477365393 3642.1  937226142 7150.5 937226142 7150.5</code></pre>
+Ncells   1554973   83.1    2412926  128.9   2412926  128.9
+Vcells 477400067 3642.3  937248907 7150.7 937248907 7150.7</code></pre>
 </div>
 </div>
 <p>Exportar conjunto gerado:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exportar como parquet com compressão</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_filled.parquet"</span>, <span class="at">compression =</span> <span class="st">"zstd"</span>, <span class="at">compression_level =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exportar como parquet com compressão</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(df, <span class="at">sink =</span> <span class="st">"base/gerados/df_subdaily_filled.parquet"</span>, <span class="at">compression =</span> <span class="st">"zstd"</span>, <span class="at">compression_level =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
