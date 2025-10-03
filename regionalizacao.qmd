@@ -13,27 +13,27 @@ As metodologias de regionalização podem ser classificadas de diversas formas, 
 
 Focada em métodos e comparações de regionalização de estatísticas de precipitação, incluindo a formação de regiões homogêneas e a aplicação de regressões.
 
-O estudo da CPRM para o Rio de Janeiro (2000) realiza uma análise de frequência regional com base em momentos-L e em séries de duração parcial (POT) para construir IDFs regionais. Primeiro, opta-se por POT para aumentar o tamanho amostral frente a séries curtas e com falhas: selecionam-se, por posto, excedências acima de um limiar por múltiplas durações (5 min–24 h), em vez do único máximo anual, justamente para representar melhor a cauda da distribuição de intensidades extremas. A regionalização inicia pela definição de regiões homogêneas via agrupamento (*K-means*), usando como descritores a precipitação média anual (MAP), latitude/longitude e altitude, com pesos diferentes, resultando em quatro regiões no estado. Os limites dos agrupamentos são compatibilizados com o relevo e o padrão isoietal. Em seguida, em cada região, é realizado o cálculo dos momentos-L amostrais, verificação de discordância $D_i$, medida de heterogeneidade $H$, seleção da distribuição regional por estatística $Z$ e, uma vez aprovada a homogeneidade, estimação dos parâmetros adimensionais regionais. A forma final da equação IDF regional segue o modelo de índice-enchente (*index-flood*). Para um local $j$, duração $d$ e período de retorno $T$, a estimativa de intensidade é $\widehat{I}_{j,d,T}=i_j(d)\,\mu_{T,d}$, em que $i_j(d)$ é o índice local (escala) e $\mu_{T,d}$ é o quantil adimensional regional (função apenas de $T$ e $d$, comum à região). Os $\mu_{T,d}$ são tabelados (um vetor por duração/retorno), enquanto $i_j(d)$ é obtido por regressão múltipla contra covariáveis fisiográficas/climáticas para viabilizar predições em pontos sem posto. O relatório explicita essa estrutura e o uso da precipitação média anual e altitude (e a própria duração $d$) como preditores candidatos, escolhidos por critério de ajuste parcimonioso. Assim, a variabilidade espacial entra por $i_j(d)$, ao passo que a forma de cauda e a relação duração–retorno ficam em $\mu_{T,d}$.
+O estudo da CPRM para o Rio de Janeiro [-@Davis2000] realiza uma análise de frequência regional com base em momentos-L e em séries de duração parcial (POT) para construir IDFs regionais. Primeiro, opta-se por POT para aumentar o tamanho amostral frente a séries curtas e com falhas: selecionam-se, por posto, excedências acima de um limiar por múltiplas durações (5 min–24 h), em vez do único máximo anual, justamente para representar melhor a cauda da distribuição de intensidades extremas. A regionalização inicia pela definição de regiões homogêneas via agrupamento (*K-means*), usando como descritores a precipitação média anual (MAP), latitude/longitude e altitude, com pesos diferentes, resultando em quatro regiões no estado. Os limites dos agrupamentos são compatibilizados com o relevo e o padrão isoietal. Em seguida, em cada região, é realizado o cálculo dos momentos-L amostrais, verificação de discordância $D_i$, medida de heterogeneidade $H$, seleção da distribuição regional por estatística $Z$ e, uma vez aprovada a homogeneidade, estimação dos parâmetros adimensionais regionais. A forma final da equação IDF regional segue o modelo de índice-enchente (*index-flood*). Para um local $j$, duração $d$ e período de retorno $T$, a estimativa de intensidade é $\widehat{I}_{j,d,T}=i_j(d)\,\mu_{T,d}$, em que $i_j(d)$ é o índice local (escala) e $\mu_{T,d}$ é o quantil adimensional regional (função apenas de $T$ e $d$, comum à região). Os $\mu_{T,d}$ são tabelados (um vetor por duração/retorno), enquanto $i_j(d)$ é obtido por regressão múltipla contra covariáveis fisiográficas/climáticas para viabilizar predições em pontos sem posto. O relatório explicita essa estrutura e o uso da precipitação média anual e altitude (e a própria duração $d$) como preditores candidatos, escolhidos por critério de ajuste parcimonioso. Assim, a variabilidade espacial entra por $i_j(d)$, ao passo que a forma de cauda e a relação duração–retorno ficam em $\mu_{T,d}$.
 
 O trabalho de Alila [-@Alila.2000] trata a regionalização de chuvas intensas com o objetivo de obter equações profundidade–duração–frequência regional (RDDF - *regional depth–duration–frequency*) aplicáveis em locais sem medição sub-horária. Parte-se de estimativas locais $R_d^T$ (profundidade de chuva de duração $d$ e período de retorno $T$) obtidas por GEV via L-momentos em um arranjo hierárquico (HRGEV) — L-média no sítio, L-CV em sub-regiões e L-assimetria à escala regional — e, com essa base, constroem-se duas relações regionais que desacoplam a variação com a duração e com a frequência. Na dimensão duração, toma-se 60 min como referência e ajusta-se, para $d<60$ min, uma lei quase linear que na prática resulta em um fator puramente de duração:
 
-$$R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d<60\ \text{min})$$
+$$R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d<60\ \text{min})$${#eq-alila-ddr}
 
 o que implica que a relação profundidade–duração (DDR) $(=R_d^T/R_{60}^T)$ para $d<60$ min é aproximadamente independente de $T$ e da localização. Na dimensão frequência, para cada duração fixa $d$, modela-se a razão da relação profundidade-frequencia $(=R_d^T/R_d^{10\ \text{yr}})$ como função logarítmica da precipitação média anual da região ($\mathrm{MAP}$, em mm):
 
-$$\frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152$$
+$$\frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152$${#eq-alila-freq}
 
 Combinando ambas as peças e ancorando em 60 min obtém-se, para a própria duração de referência,
 
-$$R_{60}^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}$$
+$$R_{60}^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}$${#eq-alila-r60}
 
 e, propagando para $d<60$ min,
 
-$$R_d^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\;\big(0.183\,d^{0.433}\big)$$
+$$R_d^T=\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]\;R_{60}^{10\ \text{yr}}\;\big(0.183\,d^{0.433}\big)$${#eq-alila-rd}
 
 Para $d=120$ min o autor identifica dois regimes segundo a umidade regional e introduz um leve ajuste:
 
-$$R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big)$$
+$$R_{120}^T=1.18\Big[\big(-0.038\ln T+0.088\big)\ln(\mathrm{MAP})+\big(0.495\ln T-0.152\big)\Big]R_{60}^{10\ \text{yr}}+\big(1.23\ln T+1.6\big)$${#eq-alila-r120}
 
 se $\mathrm{MAP}\le1200$ mm . Em síntese, a regionalização de Alila [-@Alila.2000] separa: (i) um escalonamento por duração ancorado em 60 min (via $0.183\,d^{0.433}$) e (ii) um escalonamento por frequência mediado por $\mathrm{MAP}$ (via $c(T),e(T)$.
 
@@ -41,13 +41,13 @@ Brath et al. [-@Brath.2003] desenvolvem equações regionais profundidade–dura
 
 $$
 R_{T,d}=A(d)\,R_{T,24\text{h}}+B(d,T)
-$$
+$${#eq-brath-duracao}
 
 com $A$ dependente apenas de $d$ (ajustada por lei de potência) e $B$ dependente de $d$ e $T$; e (ii) a equação profundidade–frequência por duração fixa,
 
 $$
 R_{T,d}=R_{10\text{yr},d}\,\big[f\,\ln(T/10)+1\big]
-$$
+$${#eq-brath-freq}
 
 em que $f$ é constante na sub-região Tirrena e função da precipitação média anual no restante do domínio. Combinando a equação profundidade–duração e a equação profundidade–frequência, obtém-se a RDDFE final que usa como índices apenas $R_{10\text{yr},24\text{h}}$ e a precipitação média anual. Os autores recalibram conjuntamente todos os parâmetros por otimização com programação quadrática sequencial e fornecem a forma numérica válida para $1\le t\le24$ h e $2\le T\le100$ anos.
 
@@ -225,7 +225,7 @@ No estudo de Simonovic et al. [-@Simonovic.2017], a regionalização de IDFs sob
 
 Se $Q(\cdot)=F^{-1}(\cdot)$ denota o quantil de ordem $p$ a atualização pode ser vista como uma transformação por composição nas precipitações máximas anuais do GCM, então, o quantil futuro no posto é obtido avaliando $p$ no GCM futuro $[Q_{m,f}(p)]$, trazendo-o ao GCM base $[F_{m,b}]$ e então ancorando-o na escala observada via $F_o$. A partir dessas precipitações máximas anuais atualizadas constrói-se a IDF futura $\{I(d,T)\}$ para durações $d\in\{5,10,15,30\ \mathrm{min},1,2,6,12,24\ \mathrm{h}\}$ e tempos de retorno usuais $\{2,5,10,25,50,100\ \mathrm{anos}\}$. O procedimento é repetido para cada GCM (24 disponíveis) e cada RCP (2.6, 4.5, 8.5). Para transferir espacialmente essas estimativas a pontos não observado, aplica-se a interpolação *natural neighbor* em que para um alvo $x$, os valores pontuais das IDFs/precipitações máximas anuais são ponderados pelas áreas proporcionais das células de Voronoi partilhadas pelos vizinhos imediatos de $x$, garantindo uma superfície suave que preserva o suporte dos dados. Com isso, os autores detalham que a escolha do GCM afeta fortemente os padrõe onde a mediana do *ensemble* tende a suavizar extremos e pode obscurecer reduções (ou aumentos) regionais que aparecem em modelos individuais, enquanto a interpolação amplia o acesso a locais sem estação, sobretudo onde a rede é escassa.
 
-O estudo de Hosseinzadehtalaei et al. (2018) regionaliza as IDFs ao transferir informação de um grande conjunto regional de modelos climáticos para o sítio-alvo (Uccle, Bélgica) por meio de *downscaling* de perturbação de quantis e uma contabilidade explícita das incertezas por componentes. Em termos operacionais, as IDFs históricas/atuais são ajustadas com Excedências acima de limiar (POT) e distribuição exponencial de dois componentes, uma para chuvas convectivas e outra para frontais, definindo o período de retorno $T$ dos excedentes
+O estudo de Hosseinzadehtalaei et al. [-@HOSSEINZADEHTALAEI20181] regionaliza as IDFs ao transferir informação de um grande conjunto regional de modelos climáticos para o sítio-alvo (Uccle, Bélgica) por meio de *downscaling* de perturbação de quantis e uma contabilidade explícita das incertezas por componentes. Em termos operacionais, as IDFs históricas/atuais são ajustadas com Excedências acima de limiar (POT) e distribuição exponencial de dois componentes, uma para chuvas convectivas e outra para frontais, definindo o período de retorno $T$ dos excedentes
 
 $$
 T=\frac{n}{t}\,\frac{1}{\bigl(1-G_a(x)\bigr)^p\,\bigl(1-G_b(x)\bigr)^{(1-p)}},\quad
