@@ -54,7 +54,6 @@ No Atlas Pluviométrico do Brasil (CPRM, 2013), a desagregação temporal parte 
 
 $$P(T,d)=J\,\ln\!\Big(d+\tfrac{\alpha}{60}\Big)+K,\qquad J=A\ln T+B,\quad K=C\ln T+E$$ onde $\alpha$ (min) é um parâmetro de correção de duração que “desloca” o eixo das abscissas e lineariza o comportamento para tempos curtos. A calibração procede em dois passos encadeados: primeiro escolhe-se $\alpha$ que maximiza a linearidade de $P$ versus $\ln(t+\alpha/60)$ nas durações consideradas (tipicamente separando faixas curtas e longas, quando necessário). Em seguida, estimam-se $A,B,C,E$ (parâmetros da equação) por regressões lineares de $J$ e $K$ contra $\ln T$, usando os pares $\{P(T,d),\,d,\,T\}$ derivados dos quantis diários. A intensidade IDF resulta de $i(T,d)=P(T,d)/d$. Essa construção garante coerência entre durações (o mesma $\alpha$ por faixa) e suavidade ao longo de $d$, ao mesmo tempo em que preserva a escala de retorno por meio dos termos $J$ e $K$. Quando os dados sugerem mudanças de regime, o Atlas permite duas faixas de duração com conjuntos de parâmetros distintos, mantendo continuidade na junção.
 
-
 #### Isozonas
 
 A metodologia de isozonas é uma abordagem de regionalização que se baseia no princípio de que áreas climaticamente semelhantes exibem comportamento homogêneo em relação às chuvas intensas. Proposto por Torrico (1974), o conceito é aplicado na divisão do Brasil em oito microclimas homogêneos, a partir de dados de 98 postos pluviográficos previamente analisados por Pfafstetter (1956; 1982). O estudo foca nas alturas máximas para 24h e 1h, representadas em papel de probabilidade de Hershfield e Wilson. Observa-se que, ao prolongar as semirretas das curvas de altura versus duração, elas convergiam para um mesmo ponto no eixo das ordenadas em determinadas áreas. Essas relações entre durações passaram, então, a ser utilizadas como coeficientes de desagregação, possibilitando a estimativa de precipitações em locais sem registros pluviográficos.
@@ -64,7 +63,6 @@ Décadas mais tarde, Basso et al. [-@Basso.2016] revisitam e atualizam o zoneame
 Além de coeficientes e isozonas, há uma vertente importante de equações paramétricas DDF/IDF. Baldassarre et al. [-@Baldassarre.2006] realizam um estudo para testar a confiabilidade de sete diferentes curvas DDF (quatro com dois parâmetros e três com três parâmetros). Essas curvas foram calibradas utilizando o método dos mínimos quadrados com dados de precipitação observados referentes a durações mais longas (1, 3, 6, 12 e 24 horas). Após a calibração, as curvas DDF são extrapoladas para estimar as profundidades de precipitação de projeto para durações mais curtas, especificamente 15, 20, 30 e 45 minutos.
 
 Para avaliar a precisão dessas estimativas extrapoladas, elas são comparadas com os quantis de precipitação obtidos pelo ajuste direto da distribuição de Gumbel aos dados observados em cada duração. Embora a distribuição de Gumbel seja considerada um ajuste aceitável para os dados utilizados no estudo e tenha sua adequação verificada por testes de L-momentos e Kolmogorov-Smirnov, o artigo ressalta que estudos recentes apontam que a distribuição pode subestimar a profundidade de precipitação de projeto para grandes períodos de retorno. O estudo ilustra a sensibilidade à forma da equação e os riscos de extrapolar para durações curtas fora do intervalo de calibração, motivando o uso de formulações que imponham consistência entre durações quando possível [@Baldassarre.2006].
-
 
 ### Modelos de Processos Pontuais {#subsec-processos-pontuais}
 
@@ -100,7 +98,6 @@ Em paralelo, Vorobevskii et al. [-@Vorobevskii.2023] compararam um modelo condic
 Dados os intervalos “úmidos” da série binária, as alturas são amostradas em dois passos: o primeiro valor de cada sub-evento é extraído da amostra observada com pesos empíricos condicionados ao total diário e ao mês; os valores subsequentes são amostrados por uma cópula beta empírica bivariada, impondo dependência de defasagem 1 (*lag*-1) entre intensidades consecutivas. A soma diária da série desagregada é então comparada ao valor diário alvo; se o erro relativo absoluto ficar abaixo de um limiar (padrão 10%; para totais muito pequenos, p.ex. \< 1 mm, admite-se limiar maior para reduzir custo computacional), aplica-se uma correção proporcional (valores maiores recebem ajuste maior) para garantir coincidência exata. Caso contrário, repete-se a amostragem de intensidades para a mesma série binária; após cerca de 30 tentativas sem sucesso, uma nova série binária é amostrada e o processo recomeça. Para consistência entre dias, o último valor do dia anterior é considerado ao amostrar o início do dia corrente (transição evento-a-evento). O método é testado com resoluções de 1, 5, 10 e 30 min, com bom desempenho computacional.
 
 O LetItRain \[https://sites.google.com/site/hihydrology/projects?authuser=0, último acesso em 26 de setembro de 2025\], desenvolvido no Laboratório de Inovação em Hidrologia da Universidade Hongik, é um gerador incondicional de séries de precipitação que estende os modelos de agrupamento de Poisson (*Neyman–Scott/Bartlett–Lewis*). Assume chegadas de episódios segundo Poisson e distribuições para a duração do episódio e para as propriedades das células (chegada, duração, intensidade). Para superar a tendência clássica de subestimar extremos, incorpora quatro melhorias: (i) calibração visando momentos de primeira a terceira ordem das séries observadas; (ii) relação inversa entre duração e intensidade da célula, reforçando picos de curta duração; (iii) intensidade celular com distribuição Gamma; (iv) dois algoritmos de embaralhamento que reproduzem autocorrelação de episódios e eventos persistentes. Para aplicações a cenários futuros, o fluxo é mensal: estatísticas de referência (média, variância, covariância, assimetria e proporção de períodos úmidos) são computadas em múltiplas agregações (10–960 min); regressões entre estatísticas (por exemplo, média–variância, média–proporção úmida; e relações entre variâncias/proporções em diferentes agregações) são ajustadas. Calcula-se um fator de mudança para a média diária (razão futuro/histórico), usado em conjunto com um gerador climático diário (por exemplo, LARS-WG – *Long Ashton Research Station Weather Generator*) para ancorar a média de 10 min no futuro. As estatísticas futuras para cada agregação são então derivadas via essas regressões (covariância e assimetria podem ser herdadas do clima atual quando a sensibilidade é fraca e faltam relações estáveis). Com esse conjunto estatístico, o modelo é calibrado e gera séries sub-horárias futuras preservando propriedades observadas e extremos em ampla faixa temporal. Os autores observam que o *WayDown* tende a reproduzir melhor a mediana das estatísticas, enquanto o *LetItRain* fornece maior variabilidade de cenários. Ambos podem superestimar extremos até certo limiar e subestimar acima dele, explicitando a troca entre conservação de massa diária e liberdade estatística intradiária.
-
 
 ### Modelos Baseados em Invariância de Escala / Autossemelhança / Fractais {#subsec-invariancia}
 
@@ -207,14 +204,14 @@ o que implica, em termos de distribuição acumulada,
 
 $$
 F_d(i)=F_0\!\left(\left(\frac{d}{D}\right)^{\eta}i\right)
-$${#eq-cdf-inv-escala}
+$$ {#eq-cdf-inv-escala}
 
 e, em sentido amplo, para momentos de ordem $q$:
 
 $$
 \mathbb{E}\!\left[I_d^{\,q}\right]=f(q)\,d^{-\eta
 q}
-$${#eq-momentos-inv-escala}
+$$ {#eq-momentos-inv-escala}
 
 Nessa estrutura, ao assumir que a CDF dos extremos tem forma padronizada $F\!\left(\frac{i-\mu_d}{\sigma_d}\right)$ (p.ex., EV1/Gumbel), os parâmetros de localização e escala obedecem também a leis de potência em $d$, $\mu_d\propto d^{-\eta}$ e $\sigma_d\propto d^{-\eta}$. Assim, a relação IDF resultante é dada por
 
@@ -272,7 +269,7 @@ Borga et al. [-@Borga.2005] aplicam hipótese de invariância de escala a série
 $$
 h(kD)\
 \overset{d}{=}\ k^{\,\eta}\,H(D)
-$${#eq-ddf-inv-escala}
+$$ {#eq-ddf-inv-escala}
 
 onde $k>0$ é o fator de reescala temporal, $\eta$ o expoente de escala. Sobre essa base, os autores formulam uma DDF Gumbel escalável. Para a distribuição de Gumbel (EV1), o quantil de período de retorno $T$ na duração $d$ é expresso como
 
@@ -285,7 +282,7 @@ em que $\lambda(d)=\mathbb{E}[H(d)]$ é a média na duração $d$, $CV(d)$ é o 
 
 $$
 h_T(d)=a_{1}\Big[1-\tfrac{CV}{\sqrt{6}}\big(\gamma+y_T\big)\Big]\,d^{\,\eta}
-$${#eq-ddf-inv-escala-gumbel2}
+$$ {#eq-ddf-inv-escala-gumbel2}
 
 Os autores mostram que, para durações menores que 60 min, as razões profundidade–duração (t vs. 60 min) são praticamente independentes do período de retorno e da localização, facilitando transferência entre durações e a regionalização das curvas.
 
@@ -298,21 +295,21 @@ Outros estudos expandiram essas aplicações. Blanchet et al. [-@Blancheti5] apr
 $$
 \mu_D=\Big(\tfrac{D}{D_0}\Big)^{-\eta}
 \, \mu_0,\qquad \sigma_D=\Big(\tfrac{D}{D_0}\Big)^{-\eta} \, \sigma_0
-$${#eq-gev-par}
+$$ {#eq-gev-par}
 
 mantendo o parâmetro de forma constante, $\xi_D = p$. Aqui $\eta$ é o expoente de escala (inclinação log–log da relação entre parâmetros e duração), $\mu_0$ e $\sigma_0$ são, respectivamente, a localização e a escala na duração $D_0$, $p$ é o parâmetro de forma comum a todas as durações e $D$ é a duração alvo. Esse modelo é calibrado localmente com séries de máximos diários agregados até escalas semanais, no intervalo onde a suposição de escalonamento simples é suportada pelos dados. Em seguida, os vetores $(\eta,\mu_0,\sigma_0,p)$ são espacializados para produzir um modelo regional, permitindo construir IDFs de diferentes durações. Um ponto metodológico importante é a estimação conjunta, por máxima verossimilhança, dos quatro parâmetros por estação, assumindo independência entre durações, com correção tipo *sandwich* para a variância assintótica sob verossimilhança. Os autores corrigem o efeito da frequência de medição ao passar de máximos diários (1/24 h) para máximos horários (1/h). Eles discutem duas rotas: (a) um fator de Hershfield $a(D)\geq1$, que implica
 
 $$
 I^{(1)}_D
 \overset{d}{=} a(D)\, I^{(24)}_D
-$${#eq-hershfield}
+$$ {#eq-hershfield}
 
 e (b) uma correção de EVT à la Robinson–Tawn que liga diretamente as funções de distribuição,
 
 $$
 \Pr\{I^{(1)}_D\le
 x\} \approx \Pr\{I^{(24)}_D\le x\}^{\,a(D)}
-$${#eq-robinson-tawn}
+$$ {#eq-robinson-tawn}
 
 onde $I^{(24)}_D$ e $I^{(1)}_D$ são os máximos com frequência de amostragem de $1/24$ h e $1$ h, respectivamente, e $a(D)$ depende dos índices extremos das duas séries. Ao incorporar $a(D)$ nos parâmetros da GEV horário, o modelo se afasta do simples escalonamento e passa a reproduzir sistematicamente o ganho de intensidade quando a janela de medição é afinada, habilitando IDFs horárias mesmo com rede horária muito esparsa.
 
@@ -340,7 +337,7 @@ Courty et al. [-@Courty.2019] constroem um arcabouço global de curvas IDF a par
 $$
 \mu_d =
 a\,d^{\alpha},\qquad \sigma_d=b\,d^{\beta},\qquad i_{d,T}=\mu_d+\sigma_d\,y_T
-$${#eq-par-courty}
+$$ {#eq-par-courty}
 
 onde $d$ é a duração (h), $i_{d,T}$, é o quantil (mm $h^{-1}$) para período de retorno $T$, e $y_T$ é a variável reduzida da GEV. 𝜇 e 𝜎 escalam de forma robusta com a duração (R² \> 0,88). Com base nisso, propõem uma fórmula IDF universal (PXR-4) e verificam, com ERA5 e pluviômetros MIDAS (Reino Unido e cidades globais), que as intensidades estimadas ficam ±20% das de PXR-2 para 2–360 h.
 
@@ -349,7 +346,7 @@ Ainda, Mascaro et al. [-@Mascaro.2020] analisam dados de 223 pluviômetros no Ar
 $$
 i_{T,d}=x_{d_0}\,(d/d_0)^{-\eta}\,i^{\text{GC}}_{T,d_0},\qquad
 \mu_d=(d/d_0)^{-\eta}\mu_{d_0},\ \ \sigma_d=(d/d_0)^{-\eta}\sigma_{d_0}
-$${#eq-mascaro}
+$$ {#eq-mascaro}
 
 com $\mu,\sigma,\xi$ da GEV e $\eta$ comum às durações. Na validação cruzada aplicando *bootstrapping*, todos os modelos têm acurácia similar até $T\le 30$ anos. Para $T$ altos, At-siteBC reduz viés (cauda mais pesada). Quando há poucos medidores sub-diários $(N_t\!\le\!5)$ mas muitos diários $(N_{24h}\!\ge\!10)$, os modelos de escala (Sc/RegSc) superam os demais e a incerteza cai acentuadamente (p.ex., largura do $IC_{90\%}$ e RMSE diminuem). O desempenho depende de captar o controle orográfico sobre $\mu,\sigma$ (forte), enquanto $\xi$ e $\eta$ pouco variam espacialmente.
 
@@ -373,8 +370,7 @@ Apesar do embasamento teórico consolidado há décadas [@Burlando.1996], impedi
 $$
 I_d
 \;\overset{d}{=}\; \Big(\tfrac{d}{D}\Big)^{-\eta}\
-$$
-<!--# acho que pode só referenciar outra equação @eq-idf-inv-escala-geral ou adicionar $I_D$ -->
+$$ <!--# acho que pode só referenciar outra equação @eq-idf-inv-escala-geral ou adicionar $I_D$ -->
 
 e a consequência para momentos não centrais,
 
@@ -393,8 +389,7 @@ Mais recentemente, Wang et al. [-@Wang.2024] aplicam um modelo unificado de inte
 
 $$
 i_{d,T}\;=\;\Big(\tfrac{d}{D}\Big)^{-\eta}\
-$$
-<!-- $I_{D,T}$ -->
+$$ <!-- $I_{D,T}$ -->
 
 onde $i_{d,T}$ é o quantil (intensidade) para duração $d$ e período de retorno $T$, $D$ é uma duração de referência (p.ex., diária) e $-\eta$ controla a inclinação log–log da IDF. A verificação da invariância usa momentos de ordem $q$:
 
@@ -420,7 +415,6 @@ i_t(P)=a_1\!\left[1+K_P\,\sqrt{\Big(\tfrac{a_2}{a_1^2}\Big)(t+c)^{2-\eta}(\phi_2
 $$ {#eq-inv-escala-creacco
 
 que equivale a permitir $V$ dependente de $t$ via $(t+c)^{-2\eta}(\phi_2-1)$. A novidade principal é usar $T=t+c$ dentro da teoria de escala para obter uma única estrutura IDF coerente de 10 min a 24 h, em vez de emparelhar duas curvas (sub-h e supra-h) ou ajustar uma forma de três parâmetros separadamente para cada $T$. A estimação é feita em duas fases. Primeiro, busca-se $c$ iterativamente minimizando o erro absoluto relativo entre as IDFs do modelo e os quantis obtidos por EV (no estudo, Gumbel para $i_t$ devido a amostras curtas), enquanto $a_1$ e $\eta$ vêm de regressão log–log de $\mathbb{E}[i_t]$ vs. $t+c$, $V$ do coeficiente de variação médio e $(\mu,\sigma,\xi)$ de $K_P$ por momentos. Depois, um refinamento local minimiza o erro ponderado, permitindo pesos por duração para dar mais confiança às séries longas (tipicamente ≥ 1 h) quando as sub-horárias são curtas/ruidosas. Aplicações em quatro casos europeus mostram bom ajuste em 10 min–24 h. O escalonamento multiplo melhora marginalmente em dois locais, embora $\phi_2\approx1$ na prática, e a inclusão de $c>0$ corrige os vieses típicos da hipótese tradicional $c=0$ na vizinhança de 0,5–1 h. Os autores também evidenciam que, pelas amostras disponíveis, $\xi$ tende a 0 (Gumbel), coerente com o uso de quantis Gumbel na calibração, sem prejuízo da estrutura geral baseada na GEV de $K_P$. Em síntese, o trabalho estende a invariância de escala para uma curva de três parâmetros com duração ajustada, fornece um procedimento de calibração robusto e reduz a parametrização necessária para múltiplos períodos de retorno mantendo consistência estatística entre durações.
-
 
 ### Técnicas Não Paramétricas / Reamostragem {#subsec-tecnicas-nao-parametricas}
 
@@ -484,7 +478,6 @@ f_X(x)\,f_{C_\varepsilon}\!\left(\tfrac{w}{x}\right)\,\frac{1}{|x|}\,dx
 $$ {#eq-densidade}
 
 o que permite quantificar quão pequeno deve ser $p_\varepsilon$ para não distorcer as marginais. Os autores demonstram o método em precipitação mensal para horária e em séries com tendências, evidenciando desempenho e robustez. Em contextos com dados finos escassos, o DiPMaC pode ser acoplado a estruturas espaciais para produzir campos subdiários.
-
 
 ### Modelagem Hierárquica de Extremos {#subsec-hierarq}
 
@@ -589,7 +582,6 @@ Le et al. [-@Le.2018] propõem um modelo de valores extremos espacial que combin
 Na prática, a calibração procede em camadas, com ênfase operacional na desagregação: (i) ajustam-se independentemente, em cada posto, as marginais GEV “ligadas” entre durações para obter os parametros; (ii) esses cinco parâmetros são espacializados (p.ex., *thin-plate splines*), gerando superfícies contínuas que permitem prever os parâmetros GEV em locais sem dados subdiários; (iii) usando as marginais, todas as séries (e durações) são transformadas para Fréchet padrão, o que coloca as durações numa base comum e facilita comparar/extender informação entre janelas; (iv) ajusta-se então um processo máximo-estável *Brown–Resnick* à dependência espacial/entre-durações, com um *nugget* de duração que enfraquece, de forma realista, a ligação entre extremos de janelas muito diferentes (p.ex., 24 h vs 1 h); (v) por fim, calculam-se probabilidades condicionais e níveis de retorno condicionais: dado um extremo observado ou projetado numa duração (ou bacia) mais bem monitorada, obtêm-se mapas e quantis compatíveis para outras durações e postos com pouca ou nenhuma observação de alta frequência.
 
 Na China, Gu et al. [-@Gu.2022] apresentam uma síntese abrangente de métodos e aplicações (máximos anuais, picos acima de um limiar, precipitação máxima provável, não-estacionariedade, IDFs, incerteza e variabilidade espacial), útil como guia metodológico por região/clima.
-
 
 ### Referências
 
