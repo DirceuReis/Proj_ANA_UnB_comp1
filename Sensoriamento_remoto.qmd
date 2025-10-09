@@ -9,7 +9,7 @@ As precipitações extremas referem-se aos altos valores de precipitações que 
 
 O sexto relatório do *Intergovernmental Panel on Climate Change* (IPCC) observou que a temperatura da superfície global durante o período de 2011 a 2020 teve um acréscimo de 1,1 ºC relacionado aos anos de 1850 a 1900 [@IPCC.2023], pressupondo que a tendência e frequência dos eventos extremos de precipitação tendem a aumentar ao decorrer dos anos [@Liang.2025].
 
-No contexto das mudanças climáticas nas últimas décadas, os eventos temporais vêm alterando gradativamente em diversas partes do mundo e vem se tornando cada vez mais frequentes, destacando-se a precipitações extremas [@IPCC.2023], como na China [@Zhang.2022; @Deng.2023; @Dai.2023], Europa [@Tuel.2022], África [@Marra.2022], Brasil [@Rao.2016] e Asia [@Mondal.2022].
+No contexto das mudanças climáticas nas últimas décadas, os eventos temporais vêm alterando gradativamente em diversas partes do mundo e vem se tornando cada vez mais frequentes, destacando-se a precipitações extremas [@IPCC.2023], como na China [@Zhang.2022; @Deng.2023; @Dai.2023], Europa [@Tuel.2021], África [@Marra.2022], Brasil [@Rao.2016] e Asia [@Mondal.2022].
 
 Nas últimas décadas, o Brasil vem sofrendo com eventos extremos como inundações e secas prolongadas, resultando em grandes perdas de infraestruturas, agropecuárias e econômicas [@Alvala.2024; @Marengo.2023]. Grande parte dos centros urbanos brasileiros são resultados da expansão desordenada da população [@Lima.2019], o que pode alavancar os impactos da precipitação extrema, deixando cada vez mais a população exposta e vulnerável, destacando-se áreas com uma alta densidade de pessoas [@Cortez.2022].
 
