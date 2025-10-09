@@ -2,26 +2,30 @@
 title: "Desenvolvimento de Curvas Intensidade-Duração-Frequência para o Território Nacional sob a Influência de Mudanças Climáticas"
 subtitle: "Componente 1 do projeto Riscos de eventos extremos: drenagem urbana e monitoramento hidrológico SWOT"
 ---
+
 ## Equipe:
 
 ### Professores
-- Dirceu S. Reis Jr. (Supervisor acadêmico)
-- Carlos Lima (Professor UnB)
-- Cristiano (Professor, UFPB)
+
+-   Dirceu S. Reis Jr. (Supervisor acadêmico)
+-   Carlos Lima (Professor UnB)
+-   Cristiano (Professor, UFPB)
 
 ### Pesquisadores bolsistas do projeto
-- Larissa (Pesquisadora doutora colaboradora, PTARH/UnB)
-- Bruno (Pesquisador doutor colaborador, PTARH/UnB)
-- Filipe (Pesquisador, UFPB)
+
+-   Larissa (Pesquisadora doutora colaboradora, PTARH/UnB)
+-   Bruno (Pesquisador doutor colaborador, PTARH/UnB)
+-   Filipe (Pesquisador, UFPB)
 
 ### Colaboradores
-- Veber Costa (Professor, UFMG)
-- Christian (Professor, Chile)
-- Luna Gripp (Pesquisadora: estágio pós-doutoral, UFMG)
+
+-   Veber Costa (Professor, UFMG)
+-   Christian (Professor, Chile)
+-   Luna Gripp (Pesquisadora: estágio pós-doutoral, UFMG)
 
 ### Alunos
-- Bruna (Aluna de doutorado do IG/UnB)
-- Tomás (Aluno de mestardo do PTARH/UnB)
-- Eduardo (aluno de graduação da UnB)
-- Jonatha (aluno de raduação da UnB)
 
+-   Bruna (Aluna de doutorado do IG/UnB)
+-   Tomás (Aluno de mestardo do PTARH/UnB)
+-   Eduardo (aluno de graduação da UnB)
+-   Jonatha (aluno de raduação da UnB)
