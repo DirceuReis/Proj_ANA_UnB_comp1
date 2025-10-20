@@ -256,25 +256,22 @@ div.csl-indent {
 <div class="cell-output cell-output-stderr">
 <pre><code>Carregando pacotes exigidos: pacman</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: pacote 'pacman' foi compilado no R versão 4.4.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em “scripts/funcoes” foi criada uma função <code>fun_filter_set.R</code>, que combina a função <code>fun_fill_dates.R</code> – que preenche as datas das séries – e a funçãõ <code>fun_filter_set()</code> definida no script <code>script_leitura_subdiario.qmd</code> – que filtra as estações, mantando somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critérios p/ filtrar séries</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>na_accept <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar funções</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">na_accept =</span> na_accept,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">min_years =</span> min_years); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critérios p/ filtrar séries</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>na_accept <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar funções</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">na_accept =</span> na_accept,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">min_years =</span> min_years); <span class="fu">gc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Preenchendo datas...</code></pre>
@@ -293,23 +290,18 @@ Aplicando filtros...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           used  (Mb) gc trigger   (Mb)   max used    (Mb)
-<<<<<<< HEAD
-Ncells  1266876  67.7    2304456  123.1    2304456   123.1
-Vcells 62070614 473.6 1074660833 8199.1 1343325611 10248.8</code></pre>
-=======
-Ncells  1291256  69.0    2384551  127.4    2384551   127.4
-Vcells 62101028 473.8 1074690171 8199.3 1343348233 10249.0</code></pre>
->>>>>>> 148bc6cc5d60ee2cd9b6a2f3441a3f7b2bfa31f6
+Ncells  1266887  67.7    2304039  123.1    2304039   123.1
+Vcells 62070765 473.6 1074660978 8199.1 1343325762 10248.8</code></pre>
 </div>
 </div>
 <p><span class="citation" data-cites="Papalexiou.2013">Papalexiou and Koutsoyiannis (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span> apresentam o seguinte conjunto de estatísticas descritivas básicas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/basic_summary_statistics_papalexiou_2013.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/basic_summary_statistics_papalexiou_2013.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-papalexiou-estatisticas" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-papalexiou-estatisticas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/basic_summary_statistics_papalexiou_2013.png" class="img-fluid figure-img" width="538">
+<img src="figuras/basic_summary_statistics_papalexiou_2013.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-papalexiou-estatisticas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Estatísticas descritivas básicas de <span class="citation" data-cites="Papalexiou.2013">Papalexiou and Koutsoyiannis (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span>.
