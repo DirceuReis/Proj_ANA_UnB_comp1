@@ -19,24 +19,24 @@ Um exemplo nacional representativo é o estudo da CPRM para o Rio de Janeiro  [-
 
 Enquanto o método do índice-enchente oferece um arcabouço poderoso, outras abordagens buscaram fórmulas mais diretas e parcimoniosas para toda a relação IDF/DDF, motivando a decomposição paramétrica. A proposta de  Alila [-@Alila.2000] desacopla duração e frequência e ancora a escala em 60 minutos. Para durações curtas ($d<60$ min), a profundidade obedece a
 
-$$R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d<60\ \text{min})$${#eq-alila-ddr}
+$$R_d^T=0.183\,d^{0.433}\;R_{60}^T \qquad (d<60\ \text{min})$$
 
 implicando que a relação profundidade–duração é, na prática, pouco sensível ao período de retorno e à localização nesse intervalo. Na dimensão frequência, para cada duração fixa $d$, modela-se a razão da relação profundidade-frequencia $(=R_d^T/R_d^{10\ \text{yr}})$ como função logarítmica da precipitação média anual da região ($\mathrm{MAP}$, em mm):
 
-$$\frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152$${#eq-alila-freq}
+$$\frac{R_d^T}{R_d^{10\ \text{yr}}}=c\,\ln(\mathrm{MAP})+e,\qquad c=-0.038\ln T+0.088,\ \ e=0.495\ln T-0.152$$
 
 o que, combinado com a âncora em 60 min, fornece expressões diretas para $R_{60}^T$. A mesma lógica de separar um índice de referência de uma função de crescimento comum reaparece em Brath et al. [-@Brath.2003], agora com âncora em 24 h e com ênfase em avaliar a transferibilidade para postos não monitorados.
 O fator de duração assume relação linear no espaço entre $(R_{T,d} vs R_{T,24\text{h}})$,
 
 $$
 R_{T,d}=A(d)\,R_{T,24\text{h}}+B(d,T)
-$${#eq-brath-duracao}
+$$
 
 com $A$ dependente apenas de $d$ (ajustada por lei de potência) e $B$ dependente de $d$ e $T$; e (ii) a equação profundidade–frequência por duração fixa,
 
 $$
 R_{T,d}=R_{10\text{yr},d}\,\big[f\,\ln(T/10)+1\big]
-$${#eq-brath-freq}
+$$
 
 em que $f$ é constante na sub-região Tirrena e função da precipitação média anual no restante do domínio. A regionalização final depende apenas de $R_{10\text{yr},24\text{h}}$ e a precipitação média anual, e a validação *jackknife*, retirando postos longos, recalibrando sem eles e interpolando o índice por krigagem, mostra que o erro de predição é, em grande medida, o erro de mapear o próprio índice $R_{10\text{yr},24\text{h}}$, indicando que a metodologia é tão confiável quanto a etapa de mapeamento dos índices permite. Os métodos acima tratam as observações em diferentes locais como estatisticamente independentes, uma vez que as covariáveis são consideradas. No entanto, os campos hidrológicos são espacialmente correlacionados. Outra alternativa é incorporar essa correlação diretamente na estrutura de regressão.
 
@@ -98,7 +98,7 @@ O Modelo Hierárquico Bayesiano (BHM) fornece uma estrutura unificada para a mod
 
 $$
 (Y[s_1,t],\dots,Y[s_M,t])\sim EC_M\!\big(\mathbf{R},\gamma,\boldsymbol\theta[s_1],\dots,\boldsymbol\theta[s_M]\big)
-$${#eq-renard-copula}
+$$
 
 e a variação espacial dos parâmetros (regressões com erro espacial Gaussiano. No nível de processo, cada componente $\theta_k(s)$ do vetor de parâmetros $\boldsymbol\theta(s)=(\theta_1,\dots,\theta_D)$ é ligado a covariáveis fisiográficas/climáticas $\mathbf{x}_k(s)$ por uma regressão com função de ligação $g_k(\cdot)$ e erro espacial Gaussiano:
 
@@ -107,7 +107,7 @@ g_k\!\big(\theta_k[s]\big)
 \;=\; h_k\!\big(\mathbf{x}_k[s];\,\boldsymbol\beta_k\big) \;+\;
 \varepsilon_k(s),\qquad (\varepsilon_k[s_1],\dots,\varepsilon_k[s_M]) \sim
 \mathcal{N}\!\big(\mathbf{0},\mathbf{C}_k\big)
-$${#eq-renard-process}
+$$
 
 com $\mathbf{C}_k(i,j)=\mathcal{C}_k(\|s_i-s_j\|;\,\boldsymbol\tau_k)$ e evitando análises em duas etapas. A inferência conjunta segue a posteriori
 
@@ -131,7 +131,7 @@ $$
 \mu(s)=\beta_{\mu,0}+\mathbf{x}(s)^{\top}\boldsymbol{\beta}_\mu(s)+w_\mu(s),\quad
 \sigma(s)=\beta_{\sigma,0}+\mathbf{x}(s)^{\top}\boldsymbol{\beta}_\sigma(s)+w_\sigma(s),\quad
 \xi(s)=\beta_{\xi,0}+\mathbf{x}(s)^{\top}\boldsymbol{\beta}_\xi(s)+w_\xi(s)
-$${#eq-bracken-gev}
+$$
 
 Para viabilidade com ~2 600 estações, adotam verossimilhança composta, simulam condicionalmente os campos em grade e obtêm mapas com sem viés espacial sistemático. Sharkey & Winter [-@Sharkey.2019] abordam uma questão sutil, mas crítica: os BHMs padrão que assumem independência condicional podem subestimar a incerteza. Eles introduzem um fator de correção k aplicado à verossimilhança, que infla a variância a posteriori para fornecer intervalos de credibilidade mais realistas. Os autores modelam excedências diárias pela Distribuição Pareto Generalizada (GPD) em cada célula e aplicam um ajuste de magnitude da verossimilhança ($L^\ast=L^k$) para inflar variâncias e corrigir dependência residual não modelada, enquanto a regionalização ocorre no nível de processo por modelo autoregressivo condicional multivariado (CAR) ou um modelo autoregressivo intrínseco (IAR) na malha $\theta_j=\left(log{\widetilde{\sigma}}_j,\xi_j\right$) seguem
 
@@ -153,7 +153,7 @@ com $\alpha <1$ em
 
 $$
 \Pr\big(X_{t,d}(s_i) < x_i,\; i = 1, \ldots, N\big) = \exp\left\{  - \sum_{k=1}^{K}  \left[    \sum_{i=1}^{N}    \left( \frac{w_k(s_i)}{x_i} \right)^{1/\alpha}  \right]^{\alpha} \right\}
-$${#eq-stephenson-maxstable}
+$$
 
 as superfícies de níveis de retorno ficam mais plausíveis e as caudas, mais pesadas do que no hierárquico latente independente, preservando intervalos realistas em áreas pouco monitoradas.
 
@@ -161,14 +161,14 @@ No mesmo espírito de acoplar espaço e duração, Le et al. [-@Le.2018] reduzem
 
 $$
 sigma_{i,d}\;=\;\tilde{r}_i\,\big(d+\delta_i\big)^{\gamma_i}
-$${#eq-le2018-scale}
+$$
 
 e interpolando seus parâmetros por thin-plate splines com latitude/longitude (elevação e distância ao litoral não melhoraram), gerando superfícies contínuas $\tilde{\ell}(x),\tilde{r}(x),\xi(x),\delta(x),\gamma(x)$ para uso em locais não monitorados. A dependência residual é modelada por Brown–Resnick com um *nugget* de duração para pares com durações diferentes (p.ex., 24 h vs. 1 h):
 
 $$
 c_{\text{ad}}(h)\;=\;h^{\,b}/q\;+\;c\,\frac{D-d}{d},\qquad
 (D=24\ \text{h})
-$${#eq-le2018-variograma}
+$$
 
 permitindo mapas condicionais úteis quando durações críticas diferem entre bacias vizinhas.
 
@@ -176,13 +176,13 @@ O desempenho desses modelos espaciais depende fortemente da qualidade das covari
 
 $$
 \ell(\psi)=\sum_{i=1}^{n_r}\sum_{t=1}^{T}\Big\{-\log\sigma(x_i)-\Big(1+\xi\,\tfrac{y_{it}-\mu(x_i)}{\sigma(x_i)}\Big)^{-1/\xi}-\Big(1+\tfrac{1}{\xi}\Big)\log\!\Big(1+\xi\,\tfrac{y_{it}-\mu(x_i)}{\sigma(x_i)}\Big)\Big\}
-$${#eq-poschlod-loglik}
+$$
 
 maximizada em $\hat\psi$ para gerar as superfícies $\hat\mu(x),\hat\sigma(x)$. Como a independência é uma idealização e ignora correlação espacial residual, a incerteza dos parâmetros é corrigida por erro-padrão *sandwich*,
 
 $$
 \mathrm{Var}(\hat\psi)=\big[I_M(\hat\psi)\big]^{-1}\,J(\hat\psi)\,\big[I_M(\hat\psi)\big]^{-1},
-$${#eq-poschlod-sandwich}
+$$
 
 em que $I_M$ é a informação de Fisher (hessiana de $\ell$) e $J$ é a covariância empírica do escore. . A complexidade do campo (número de nós dos splines e conjunto de covariáveis) é escolhida por Critério de Informação de Takeuchi (TIC), com validação cruzada e controle de multicolinearidade (VIF), e os resultados mostram que preditores *convection-permitting* reduzem viés e RMSE frente a alternativas apenas topográficas ou baseadas em reanálises grosseiras, produzindo mapas de níveis de retorno ancorados em observações e informados pela física resolvida do WRF.
 
@@ -198,13 +198,13 @@ $$
 T=\frac{n}{t}\,\frac{1}{\bigl(1-G_a(x)\bigr)^p\,\bigl(1-G_b(x)\bigr)^{(1-p)}},\quad
 G_a(x)=1-\exp\!\left(-\frac{x-x_t}{\beta_a}\right),\;\;
 G_b(x)=1-\exp\!\left(-\frac{x-x_t}{\beta_b}\right),
-$${#eq-hosseinzadehtalaei2018-pot}
+$$
 
 onde $n$ é o comprimento da série (anos), $t$ é a ordem do limiar $x_t$, $\beta_a,\beta_b$ são parâmetros de escala e $p$ é a proporção da subpopulação convectiva. A projeção futura aplica fatores de mudança (CF) por duração e $T$ (razão cenário/controle) multiplicados nos quantis observados, incorporando correção de viés implícita. A incerteza regional é decomposta por variância entre três componentes, RCM, GCM e RCP, e suas interações, usando
 
 $$
 \mathrm{Var}(T)=\mathrm{Var}(R)+\mathrm{Var}(G)+\mathrm{Var}(S)+\mathrm{Var}(RG)+\mathrm{Var}(RS)+\mathrm{Var}(GS)+\mathrm{Var}(RGS)
-$${#eq-hosseinzadehtalaei2018-variance}
+$$
 
 onde $\mathrm{Var}(\cdot)$ são as variância; e R,G,SR,G,SR,G,S: índices para *RCM*, *GCM* e *RCP*, respectivamente. Em síntese, o RCM é, na maioria dos casos, o contribuinte dominante para a incerteza nas mudanças de quantis extremos, seguido por GCM e RCP.
 
@@ -220,11 +220,11 @@ $$
 f_{Z_d\mid
 Z_{-d}}(z_d\mid z_{-d})\ \approx\ \frac{\|z\|^{-(d+1)}\,h\!\left(z/\|z\|\right)}{\displaystyle\int_0^{\infty}
 \|z(t)\|^{-(d+1)}\,h\!\left(z(t)/\|z(t)\|\right)\,dt}
-$${#eq-cooley2012-angular}
+$$
 
 com $z=(z_{-d},z_d)$ e $z(t)=(z_{-d},t)$. Essa aproximação decorre da representação por processo de Poisson para excedências de vetores regularmente variantes e permite gerar distribuições preditivas completas (com incerteza) em locais não monitorados, específicas para o regime extremo (em vez de apenas preditores lineares). O artigo ilustra com NO₂ em Washington, DC em que transforma-se cada estação para Fréchet, ajusta-se $H$ às observações mais altas e, para dias “grandes”, estima-se a densidade condicional no ponto-alvo dado as quatro estações vizinhas; compara-se com *krigagem* simples e *krigagem* por indicadores, mostrando melhor calibração probabilística nas caudas.
 
-O estudo de Meis et al. [-@Meis.2024] propõe uma regionalização baseada na co-variabilidade precipitação–temperatura máxima diária, tratando a regionalização como a identificação de estações/áreas com comportamento coerente da relação temperatura com extremos de precipitação. A metodologia tem duas etapas acopladas: (i) modela-se a série de temperatura máxima diária $X_t$ por regressão harmônica dinâmica com componente autorregressivo AR($p$) e sazonalidade estocástica (seleção de $p$ e do número de harmônicos $R_s$ por validação cruzada em janelas deslizantes). Desta forma, obtêm-se valores $\hat X_t$ que capturam a memória temporal relevante do aquecimento antes da chuva; (ii) estima-se, por regressão quantílica polinomial, o quantil extremo condicional de precipitação $Q_{Y\mid X}(\tau)$ (usando $\tau=0{,}90$ e $0,95$) com $\log Y_t$ como resposta e polinômios em $\hat X_t$ como preditores (ordem $k$ escolhida por validação). O desempenho é avaliado por perda da função de custo *pinball* no conjunto de teste e comparado a um modelo nulo que usa apenas os quantis empíricos de precipitação. O ganho do modelo condicional é então mapeado por estação e por estação-do-ano. O passo explicitamente regional consiste em classificar cada posto segundo (a) o grau de memória ($p$ baixo/médio/alto, refletindo a extensão temporal da influência térmica) e (b) a forma funcional da relação (linear, quadrática, linear-quadrática ou não linear-quadrática). Esses rótulos são organizados espacialmente para delimitar regiões de co-variabilidade com interpretação físico-climática. Em termos de resultados, o modelo condicional supera o nulo em ~35–45% dos casos (dependendo da estação e do quantil), chegando a >50–70% quando a diferença relativa de perda é <1%, e os mapas de $p$ e da forma do polinômio exibem coerência espacial com poucas quebras atribuíveis a ruído/amostragem.
+O estudo de Meis et al. [-@Meis.2024] propõe uma regionalização baseada na co-variabilidade precipitação–temperatura máxima diária, tratando a regionalização como a identificação de estações/áreas com comportamento coerente da relação temperatura com extremos de precipitação. A metodologia tem duas etapas acopladas: (i) modela-se a série de temperatura máxima diária $X_t$ por regressão harmônica dinâmica com componente autorregressivo AR($p$) e sazonalidade estocástica (seleção de $p$ e do número de harmônicos $R_s$ por validação cruzada em janelas deslizantes). Desta forma, obtêm-se valores $\hat X_t$ que capturam a memória temporal relevante do aquecimento antes da chuva; (ii) estima-se, por regressão quantílica polinomial, o quantil extremo condicional de precipitação $Q_{Y\mid X}(\tau)$ (usando $\tau=0{,}90$ e $0,95$) com $\log Y_t$ como resposta e polinômios em $\hat X_t$ como preditores (ordem $k$ escolhida por validação). O desempenho é avaliado por perda da função de custo *pinball* no conjunto de teste e comparado a um modelo nulo que usa apenas os quantis empíricos de precipitação. O ganho do modelo condicional é então mapeado por estação e por estação-do-ano. O passo explicitamente regional consiste em classificar cada posto segundo (a) o grau de memória ($p$ baixo/médio/alto, refletindo a extensão temporal da influência térmica) e (b) a forma funcional da relação (linear, quadrática, linear-quadrática ou não linear-quadrática). Esses rótulos são organizados espacialmente para delimitar regiões de co-variabilidade com interpretação físico-climática. Em termos de resultados, o modelo condicional supera o nulo em \~35–45% dos casos (dependendo da estação e do quantil), chegando a \>50–70% quando a diferença relativa de perda é \<1%, e os mapas de $p$ e da forma do polinômio exibem coerência espacial com poucas quebras atribuíveis a ruído/amostragem.
 
 ### Referências
 
