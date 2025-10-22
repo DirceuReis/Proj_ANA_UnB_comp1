@@ -1,7 +1,7 @@
 ---
 title: "Mudanças climáticas"
 format: html
-#bibliography: referencias/ref_impactos_mudancas.bib
+bibliography: referencias/ref_impactos_mudancas.bib
 ---
 
 ## Impactos das mudanças climáticas nas precipitações intensas
