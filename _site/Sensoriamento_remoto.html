@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Bruna, Bruno e Tomás.">
 
-<title>Sensoriamento Remoto – Proj. IDF Brasil ANA/UnB</title>
+<title>Proj. IDF Brasil ANA/UnB - Sensoriamento Remoto</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -56,10 +56,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-299fde5381b5a602aab895950093955a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -88,7 +88,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -133,7 +133,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -149,7 +149,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentos" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Documentos</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-documentos">    
@@ -205,7 +205,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+          <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -214,7 +214,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
     </div>
 <!-- main -->
@@ -246,6 +246,9 @@ window.Quarto = {
 
 
 <div style="text-align: justify;">
+<!--# parágrafo de introdução do tópico de sensoriamento remoto do artigo de revisão da Bruna: -->
+<p>A ausência de redes locais de precipitação observada dificulta o desenvolvimento de curvas IDF <span class="citation" data-cites="Lanciotti.2022">(<a href="#ref-Lanciotti.2022" role="doc-biblioref">Lanciotti et al. 2022</a>)</span>. Em casos como esse, as busca por fontes alternativas de dados para construção dessas curvas se torna necessária, busca essa que motivou a evolução de produto derivados de sensoriamento remoto (SSPs) com alta resolução temporal e espacial com cobertura quase global <span class="citation" data-cites="Islam.2022">(<a href="#ref-Islam.2022" role="doc-biblioref">Islam, Yu, and Cartwright 2022</a>)</span>. Diferentes tipos de séries climáticas remotas e combinadas são usdas para estimar IDFs, incluindo produtos como TRMM (<em>Tropical Rainfall Measuring Mission</em>), GPM (<em>Global Precipitation Measurement</em>), GSMaP (<em>Global Satellite Mapping of Precipitation</em>), PERSIANN (<em>Precipitation Estimation from Remotely Sensed Information Using Artifitial Neural Networks</em>) e CHIRPS (<em>Climate Hazards Group InfraRed Precipitation with Station Data</em>). Esses SPPs possuem grande importância para regiões onde a rede de estações é de baixa resolução temporal e densidade espacial <span class="citation" data-cites="Islam.2022">Wright, Mantilla, and Peters-Lidard (<a href="#ref-Wright.2017" role="doc-biblioref">2017</a>)</span>.</p>
+<p>Apesar de se apresentarem como uma alternativa promissora no contexto acima, esses produtos possuem incertezas e erros associados decorrentes da topografia, erros na observação, vento e evaporação – o que torna difícil que sua aplicação se torne completamente operacional <span class="citation" data-cites="Dehaghani.2023">Baig et al. (<a href="#ref-Baig.2023" role="doc-biblioref">2023</a>)</span>. <!--# adicionar trecho sobre incerteza nas estimativas do IMERG (wpp bruna) --></p>
 <p>As precipitações extremas referem-se aos altos valores de precipitações que desviam dos valores médios, são manifestados como aleatoriedade, baixa frequência e alta intensidade com grandes danos <span class="citation" data-cites="Ghebreyesus.2021">(<a href="#ref-Ghebreyesus.2021" role="doc-biblioref">Ghebreyesus and Sharif 2021</a>)</span>.</p>
 <p>O sexto relatório do <em>Intergovernmental Panel on Climate Change</em> (IPCC) observou que a temperatura da superfície global durante o período de 2011 a 2020 teve um acréscimo de 1,1 ºC relacionado aos anos de 1850 a 1900 <span class="citation" data-cites="IPCC.2023">(<a href="#ref-IPCC.2023" role="doc-biblioref">Calvin et al. 2023</a>)</span>, pressupondo que a tendência e frequência dos eventos extremos de precipitação tendem a aumentar ao decorrer dos anos <span class="citation" data-cites="Liang.2025">(<a href="#ref-Liang.2025" role="doc-biblioref">Liang et al. 2025</a>)</span>.</p>
 <p>No contexto das mudanças climáticas nas últimas décadas, os eventos temporais vêm alterando gradativamente em diversas partes do mundo e vem se tornando cada vez mais frequentes, destacando-se a precipitações extremas <span class="citation" data-cites="IPCC.2023">(<a href="#ref-IPCC.2023" role="doc-biblioref">Calvin et al. 2023</a>)</span>, como na China <span class="citation" data-cites="Zhang.2022 Deng.2023 Dai.2023">(<a href="#ref-Zhang.2022" role="doc-biblioref">B. Zhang et al. 2022</a>; <a href="#ref-Deng.2023" role="doc-biblioref"><strong>Deng.2023?</strong></a>; <a href="#ref-Dai.2023" role="doc-biblioref">Dai et al. 2023</a>)</span>, Europa <span class="citation" data-cites="Tuel.2021">(<a href="#ref-Tuel.2021" role="doc-biblioref">Tuel and Eltahir 2021</a>)</span>, África <span class="citation" data-cites="Marra.2022">(<a href="#ref-Marra.2022" role="doc-biblioref">Marra, Levizzani, and Cattani 2022</a>)</span>, Brasil <span class="citation" data-cites="Rao.2016">(<a href="#ref-Rao.2016" role="doc-biblioref">Rao et al. 2016</a>)</span> e Asia <span class="citation" data-cites="Mondal.2022">(<a href="#ref-Mondal.2022" role="doc-biblioref">Mondal et al. 2022</a>)</span>.</p>
@@ -296,6 +299,9 @@ Allen, Myles R., and William J. Ingram. 2002. <span>“Constraints on Future Cha
 <div id="ref-Arshad.2021" class="csl-entry" role="listitem">
 Arshad, Muhammad, Xieyao Ma, Jun Yin, Waheed Ullah, Gohar Ali, Safi Ullah, Mengyang Liu, Muhammad Shahzaman, and Irfan Ullah. 2021. <span>“Evaluation of <span>GPM-IMERG</span> and <span>TRMM-3B42</span> Precipitation Products over <span>Pakistan</span>.”</span> <em>Atmospheric Research</em> 249 (February): 105341. <a href="https://doi.org/10.1016/j.atmosres.2020.105341">https://doi.org/10.1016/j.atmosres.2020.105341</a>.
 </div>
+<div id="ref-Baig.2023" class="csl-entry" role="listitem">
+Baig, Faisal, Muhammad Abrar, Haonan Chen, and Mohsen Sherif. 2023. <span>“Evaluation of <span>Precipitation Estimates</span> from <span>Remote Sensing</span> and <span>Artificial Neural Network Based Products</span> (<span>PERSIANN</span>) <span>Family</span> in an <span>Arid Region</span>.”</span> <em>Remote Sensing</em> 15 (4): 1078. <a href="https://doi.org/10.3390/rs15041078">https://doi.org/10.3390/rs15041078</a>.
+</div>
 <div id="ref-Beck.2017" class="csl-entry" role="listitem">
 Beck, Hylke E., Albert I. J. M. Van Dijk, Vincenzo Levizzani, Jaap Schellekens, Diego G. Miralles, Brecht Martens, and Ad De Roo. 2017. <span>“<span>MSWEP</span>: 3-Hourly 0.25° Global Gridded Precipitation (1979–2015) by Merging Gauge, Satellite, and Reanalysis Data.”</span> <em>Hydrology and Earth System Sciences</em> 21 (1): 589–615. <a href="https://doi.org/10.5194/hess-21-589-2017">https://doi.org/10.5194/hess-21-589-2017</a>.
 </div>
@@ -319,6 +325,9 @@ Courty, Laurent G, Robert L Wilby, John K Hillier, and Louise J Slater. 2019. <s
 </div>
 <div id="ref-Dai.2023" class="csl-entry" role="listitem">
 Dai, Xin, Lunche Wang, Xin Li, Jie Gong, and Qian Cao. 2023. <span>“Characteristics of the Extreme Precipitation and Its Impacts on Ecosystem Services in the <span>Wuhan Urban Agglomeration</span>.”</span> <em>Science of The Total Environment</em> 864 (March): 161045. <a href="https://doi.org/10.1016/j.scitotenv.2022.161045">https://doi.org/10.1016/j.scitotenv.2022.161045</a>.
+</div>
+<div id="ref-Dehaghani.2023" class="csl-entry" role="listitem">
+Dehaghani, Asieh Mousavi, Alireza Gohari, Mohammad Javad Zareian, and Ali Torabi Haghighi. 2023. <span>“A Comprehensive Evaluation of the Satellite Precipitation Products Across <span>Iran</span>.”</span> <em>Journal of Hydrology: Regional Studies</em> 46 (April): 101360. <a href="https://doi.org/10.1016/j.ejrh.2023.101360">https://doi.org/10.1016/j.ejrh.2023.101360</a>.
 </div>
 <div id="ref-Santos.2023" class="csl-entry" role="listitem">
 Dos Santos, Luiz Octávio F., Nadja G. Machado, Marcelo S. Biudes, Hatim M. E. Geli, Carlos Alexandre S. Querino, Anderson L. Ruhoff, Israel O. Ivo, and Névio Lotufo Neto. 2023. <span>“Trends in <span>Precipitation</span> and <span>Air Temperature Extremes</span> and <span>Their Relationship</span> with <span>Sea Surface Temperature</span> in the <span>Brazilian Midwest</span>.”</span> <em>Atmosphere</em> 14 (3): 426. <a href="https://doi.org/10.3390/atmos14030426">https://doi.org/10.3390/atmos14030426</a>.
@@ -350,6 +359,9 @@ Hu, Qingfang, Zhe Li, Leizhi Wang, Yong Huang, Yintang Wang, and Lingjie Li. 201
 <div id="ref-PBMC.2016" class="csl-entry" role="listitem">
 <em>Impacto, vulnerabilidade e adaptação das cidades costeiras brasileiras às mudanças climáticas: Relatório Especial do Painel Brasileiro de Mudanças Climáticas.</em> 2016. Coppe - Ufrj.
 </div>
+<div id="ref-Islam.2022" class="csl-entry" role="listitem">
+Islam, Md. Atiqul, Bofu Yu, and Nick Cartwright. 2022. <span>“Coupling of Satellite-Derived Precipitation Products with <span>Bartlett-Lewis</span> Model to Estimate Intensity-Frequency-Duration Curves for Remote Areas.”</span> <em>Journal of Hydrology</em> 609 (June): 127743. <a href="https://doi.org/10.1016/j.jhydrol.2022.127743">https://doi.org/10.1016/j.jhydrol.2022.127743</a>.
+</div>
 <div id="ref-Jenkinson.1955" class="csl-entry" role="listitem">
 Jenkinson, A. F. 1955. <span>“The Frequency Distribution of the Annual Maximum (or Minimum) Values of Meteorological Elements.”</span> <em>Quarterly Journal of the Royal Meteorological Society</em> 81 (348): 158–71. <a href="https://doi.org/10.1002/qj.49708134804">https://doi.org/10.1002/qj.49708134804</a>.
 </div>
@@ -361,6 +373,9 @@ Kawara, Atef Q., and Ibrahim H. Elsebaie. 2022. <span>“Development of <span>Ra
 </div>
 <div id="ref-Kubota.2007" class="csl-entry" role="listitem">
 Kubota, Takuji, Shoichi Shige, Hiroshi Hashizume, Kazumasa Aonashi, Nobuhiro Takahashi, Shinta Seto, Masafumi Hirose, et al. 2007. <span>“Global <span>Precipitation Map Using Satellite-Borne Microwave Radiometers</span> by the <span>GSMaP Project</span>: <span>Production</span> and <span>Validation</span>.”</span> <em>IEEE Transactions on Geoscience and Remote Sensing</em> 45 (7): 2259–75. <a href="https://doi.org/10.1109/TGRS.2007.895337">https://doi.org/10.1109/TGRS.2007.895337</a>.
+</div>
+<div id="ref-Lanciotti.2022" class="csl-entry" role="listitem">
+Lanciotti, Sabrina, Elena Ridolfi, Fabio Russo, and Francesco Napolitano. 2022. <span>“Intensity–<span>Duration</span>–<span>Frequency</span> <span>Curves</span> in a <span>Data</span>-<span>Rich</span> <span>Era</span>: <span>A</span> <span>Review</span>.”</span> <em>Water</em> 14 (22): 3705. <a href="https://doi.org/10.3390/w14223705">https://doi.org/10.3390/w14223705</a>.
 </div>
 <div id="ref-Liang.2025" class="csl-entry" role="listitem">
 Liang, Qixiang, Yaning Chen, Weili Duan, Chuan Wang, Yupeng Li, JianYu Zhu, Ganchang He, Wei Wei, and Mengqi Yuan. 2025. <span>“Temporal and Spatial Changes of Extreme Precipitation and Its Related Large-Scale Climate Mechanisms in the Arid Region of <span>Northwest China</span> During 1961–2022.”</span> <em>Journal of Hydrology</em> 658 (September): 133182. <a href="https://doi.org/10.1016/j.jhydrol.2025.133182">https://doi.org/10.1016/j.jhydrol.2025.133182</a>.
@@ -440,6 +455,9 @@ Tuel, Alexandre, and Elfatih A. B. Eltahir. 2021. <span>“Mechanisms of <span>E
 <div id="ref-Westra.2014" class="csl-entry" role="listitem">
 Westra, S., H. J. Fowler, J. P. Evans, L. V. Alexander, P. Berg, F. Johnson, E. J. Kendon, G. Lenderink, and N. M. Roberts. 2014. <span>“Future Changes to the Intensity and Frequency of Short-Duration Extreme Rainfall: <span>FUTURE INTENSITY OF SUB-DAILY RAINFALL</span>.”</span> <em>Reviews of Geophysics</em> 52 (3): 522–55. <a href="https://doi.org/10.1002/2014RG000464">https://doi.org/10.1002/2014RG000464</a>.
 </div>
+<div id="ref-Wright.2017" class="csl-entry" role="listitem">
+Wright, Daniel B., Ricardo Mantilla, and Christa D. Peters-Lidard. 2017. <span>“A Remote Sensing-Based Tool for Assessing Rainfall-Driven Hazards.”</span> <em>Environmental Modelling &amp; Software</em> 90 (April): 34–54. <a href="https://doi.org/10.1016/j.envsoft.2016.12.006">https://doi.org/10.1016/j.envsoft.2016.12.006</a>.
+</div>
 <div id="ref-Yao.2021" class="csl-entry" role="listitem">
 Yao, Junqiang, Yaning Chen, Jing Chen, Yong Zhao, Dilinuer Tuoliewubieke, Jiangang Li, Lianmei Yang, and Weiyi Mao. 2021. <span>“Intensification of Extreme Precipitation in Arid <span>Central Asia</span>.”</span> <em>Journal of Hydrology</em> 598 (July): 125760. <a href="https://doi.org/10.1016/j.jhydrol.2020.125760">https://doi.org/10.1016/j.jhydrol.2020.125760</a>.
 </div>
@@ -494,7 +512,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -526,45 +555,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -599,11 +590,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
+      return note.innerHTML;
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -651,6 +638,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
