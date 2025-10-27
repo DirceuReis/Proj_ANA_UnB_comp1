@@ -5,8 +5,80 @@ bibliography: referencias/ref_modelos.bib
 nocite: |
   @*
 ---
-## Introdução
 
+### A Necessidade de Modelar Extremos de Precipitação
+
+O dimensionamento e a gestão de obras de proteção contra cheias dependem de estimativas probabilísticas consistentes de perigo e risco hidrológico. Idealmente, essas estimativas seriam ancoradas em séries fluviométricas longas e representativas, mas essa condição raramente se verifica. A escassez de postos de medição de vazão, ou a intermitência de seus dados, desloca o foco para modelos hidrológicos dirigidos por precipitação e para a síntese de tempestades de projeto [@koutsoyiannis2017-extreme-rainfall].
+
+Nesse contexto, as chuvas de projeto, expressas pelas relações Intensidade–Duração–Frequência (IDF) ou Profundidade–Duração–Frequência (DDF), tornam-se a base de referência para o dimensionamento. A preferência por essas relações decorre da maior abrangência temporal e espacial das observações de chuva em comparação às de vazão, notadamente para eventos raros. A sua derivação requer a seleção de eventos extremos independentes para cada duração e o ajuste de uma distribuição de valores extremos capaz de extrapolar quantis aos níveis de probabilidade de interesse [@johnson2017-design-rainfall].
+
+### Abordagens Fundamentais: Determinística (PMP) vs. Probabilística
+
+Historicamente, a estimação de extremos pluviométricos consolidou-se em duas tradições: (i) a determinística, que busca estabelecer limites físicos (Precipitação Máxima Provável - PMP) para orientar projetos supostamente livres de risco; e (ii) a probabilística, que modela a incerteza por distribuições e probabilidades de excedência. Apesar de sua difusão em guias de engenharia, a via determinística (PMP) revela-se metodológica e logicamente frágil. As dificuldades em representar a chuva por primeiros princípios e as incoerências conceituais do PMP, um "máximo" que é, de fato, inferido estatisticamente, minam sua validade [@koutsoyiannis2017-extreme-rainfall].
+
+Em contraste, a abordagem probabilística é logicamente consistente e operacionalmente superior. Ela reconhece que qualquer valor fisicamente admissível possui uma probabilidade de excedência (ainda que desprezível) e fornece fundamentos, como o princípio da máxima entropia, para a escolha de famílias distribucionais. A evidência ampara, portanto, uma formulação probabilística fundada em dados locais, apta a quantificar risco e explicitar incertezas [@koutsoyiannis2017-extreme-rainfall].
+
+### Amostragem de Eventos Extremos: AMS vs. POT
+
+Na derivação das relações IDF/DDF sob o paradigma probabilístico, dois esquemas de amostragem são predominantes. A série de máximos anuais (AMS) retém, para cada duração, o maior total de chuva observado em cada ano civil. Por sua vez, a série de duração parcial (PDS) ou de picos acima do limiar (POT, Peaks Over Threshold) agrega todos os eventos que excedem um limiar predefinido, permitindo múltiplos eventos por ano ou, ocasionalmente, nenhum. O método PDS/POT tende a reduzir a variância dos quantis ajustados por capturar todos os excedentes relevantes, mitigando a perda de informação que pode ocorrer no AMS em anos com múltiplos episódios intensos. Contudo, o PDS/POT exige a definição criteriosa do limiar e a verificação da independência entre eventos, usualmente por regras de separação temporal cujo valor ótimo depende da duração e do regime sinótico local [@johnson2017-design-rainfall].
+
+As implicações estatísticas diferem: AMS é tipicamente modelada pela distribuição Generalizada de Valores Extremos (GEV) ou Log-Pearson III, enquanto PDS/POT adota a distribuição de Pareto Generalizada (GPD) com um processo de Poisson para a taxa de excedências. Embora as métricas de risco (AEP para AMS, ARI para PDS) sejam conceitualmente distintas, para eventos raros (ex: AEP ≤ 10% ou ARI ≥ 10 anos), as estimativas são praticamente equivalentes [@johnson2017-design-rainfall]. A Tabela apresenta as distribuições mais comuns.
+
+| Distribuição | Função (CDF/PDF) | Observações |
+|------------------|----------------------------------------------|----------------------------|
+| Generalized Extreme Value (GEV) | $F(x)=\exp\!\left\{-\left[1+\xi\,\dfrac{x-\mu}{\sigma}\right]^{-1/\xi}\right\}$, com $1+\xi\,\dfrac{x-\mu}{\sigma}\ge 0$, $\sigma>0$ | Gumbel: $\xi=0$. Fréchet: $\xi>0$ (sem limite superior). Weibull: $\xi<0$ (limite sup.: $x_{\max}=\mu-\sigma/\xi$). |
+| Generalized Pareto (GPD) | $F(x)=1-\left[1+\xi\,\dfrac{x-u}{\beta}\right]^{-1/\xi}$, com $1+\xi\,\dfrac{x-u}{\beta}\ge 0$, $\beta>0$ | $\xi=0$: exponencial. $\xi<0$: $u\le x\le u-\beta/\xi$. $\xi>0$: $x\ge u$. |
+| Log-Pearson III (PDF) | $f(x)=\dfrac{\lvert\beta\rvert\,\{\beta[\log(x)-\xi]\}^{\alpha-1}\exp\{-\beta[\log(x)-\xi]\}}{x\,\Gamma(\alpha)}$, $x>0$ | Se $\beta<0$: $0<x<e^{\xi}$. Se $\beta>0$: $x>e^{\xi}$. |
+| Log-normal (PDF) | $f(x)=\dfrac{1}{x\,\sigma_Y\sqrt{2\pi}}\exp\!\left[-\dfrac{1}{2}\left(\dfrac{\log x-\mu_Y}{\sigma_Y}\right)^{2}\right]$, $x>0$ (onde $Y=\log X$) | $\mu_Y$: média de $Y$. $\sigma_Y>0$: desvio-padrão de $Y$. |
+
+### Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda
+
+<!---# Expandir aqui: Acho que vale discutir o uso de distribuições de probabilidades mais usadas, mas justificar a GEV pela Teoria dos Valores Extremos, muito embora não haja garantia de que 365 dias para extrair o máximo anual seja suficiente para atingir convergência. -->
+
+Embora diversas distribuições de probabilidade sejam historicamente aplicadas para o ajuste de séries de precipitação (como Log-Normal ou Log-Pearson III), a modelagem probabilística de extremos é fundamentada na Teoria dos Valores Extremos (EVT). O ponto de partida é a variável aleatória $Y_n$, definida como o máximo de um conjunto de $n$ variáveis aleatórias independentes e identicamente distribuídas (i.i.d.), $Y_n = \max(X_1, ..., X_n)$. A EVT clássica postula que, à medida que o tamanho do bloco $n$ tende ao infinito ($n \to \infty$), a distribuição de $Y_n$ (após normalização) converge para uma de apenas três possíveis leis-limite [@Papalexiou.2013a].
+
+As três leis-limite são: Tipo I (Gumbel), Tipo II (Fréchet) e Tipo III (Weibull Reversa). A qual dessas leis a distribuição converge depende do comportamento da cauda da "distribuição-mãe" (a distribuição de $X_i$). De forma geral, distribuições-mãe com caudas pesadas (ex: tipo potência, como Pareto) pertencem ao domínio de atração da Fréchet; distribuições com caudas que decaem rapidamente (ex: tipo exponencial, como Normal ou Gama) pertencem ao domínio da Gumbel; e distribuições com limite superior finito pertencem ao domínio da Weibull Reversa [@Papalexiou.2013a].
+
+Essas três leis podem ser unificadas em uma única expressão, a Distribuição Generalizada de Valores Extremos (GEV), formalizada por von Mises [-@vonmises1936-reprint1954] e Jenkinson [-@jenkinson1955-frequency], e apresentada em @Papalexiou.2013a\] como:
+
+$$
+G_{\mathrm{GEV}}(x)
+= \exp\!\left\{-\left(1+\xi\,\frac{x-\mu}{\sigma}\right)^{-1/\xi}\right\},
+\qquad
+1+\xi\,\frac{x-\mu}{\sigma} \ge 0.
+$$
+
+Esta distribuição é definida por três parâmetros: localização ($\mu$), escala ($\sigma$) e forma ($\xi$). O parâmetro de forma $\xi$ (às vezes denotado como $\kappa$) é o que unifica as três leis: $\xi > 0$ corresponde à Fréchet (cauda pesada, sem limite superior), $\xi < 0$ à Weibull Reversa (cauda limitada), e o caso Gumbel emerge como o limite quando $\xi \to 0$ (cauda exponencial).
+
+Essa fundamentação justifica a ampla adoção da GEV. Contudo, é importante notar que a convergência teórica é assintótica, o que exige que o tamanho do bloco ($n$) de onde o máximo é extraído tenda ao infinito. Em aplicações hidrológicas práticas, como a série de máximos anuais (AMS) de precipitação diária, o tamanho do bloco é fixo e finito (na melhor das hipóteses, $n = 365$ dias, mas na prática, o número de dias chuvosos, $N_R$, é muito menor). Esse tamanho de bloco finito não é grande o suficiente para garantir a convergência teórica [@Koutsoyiannis.2004; @Papalexiou.2013a].
+
+A explicação para o comportamento de cauda pesada observado empiricamente vai além da lenta convergência. Acredita-se que ela resida nas flutuações dos parâmetros da distribuição-mãe (o processo de chuva diária) ao longo de diferentes escalas de tempo. Essas flutuações, por vezes chamadas de "superestatística" ou "processos duplamente estocásticos", fazem com que a distribuição dos máximos convirja para um regime de cauda pesada (Fréchet), tornando a distribuição de Gumbel (que assume parâmetros constantes) uma escolha inadequada [@Koutsoyiannis.2004; @Serinaldi.2014] . Além disso, o tamanho reduzido das amostras, usualmente inferior a 50 máximos anuais, tende a esconder o comportamento de cauda pesada, levando à seleção da opção Gumbel mesmo quando a verdadeira distribuição é a GEV com cauda pesada [@Serinaldi.2014].
+
+De fato, Papalexiou & Koutsoyiannis [-@Papalexiou.2013a] demonstram um aparente paradoxo: mesmo quando a distribuição-mãe (precipitação diária) pertence teoricamente ao domínio de atração da Gumbel (como a distribuição Gama Generalizada), a distribuição do máximo anual (para um $N_R$ realista, e.g., $N_R \approx 87$) não converge para a Gumbel. Em vez disso, os máximos observados são significativamente melhor descritos pela lei de Fréchet. Isso ocorre por duas razões principais: (1) a convergência para a lei de Gumbel é extremamente lenta, e (2) o parâmetro de forma adicional da GEV (o $\xi$) confere a flexibilidade necessária para "imitar" a forma da distribuição dos máximos em amostras finitas.
+
+Estudos subsequentes, como Serinaldi & Kilsby [-@Serinaldi.2014], buscam reconciliar a controvérsia analisando os dados pela metodologia dual de Picos Acima do Limiar (POT) ajustados à Distribuição de Pareto Generalizada (GP). A EVT estabelece que o parâmetro de forma ($\xi$) deve ser idêntico para ambas as abordagens. Ao analisar um banco de dados global ,Serinaldi & Kilsby [-@Serinaldi.2014] confirmaram que o "efeito de ocultação" também ocorre em amostras POT: embora séries curtas mascarem o comportamento da cauda, à medida que o tamanho do registro (número de anos) aumenta, o parâmetro $\xi$ da GP também converge para um valor médio positivo, confirmando o comportamento de cauda pesada (Fréchet).
+
+A implicação prática dessa evidência combinada é a dificuldade em estimar o parâmetro de forma $\xi$, criando um dilema em aplicações hidrológicas [@Courty.2019] . Por um lado, forçar $\xi=0$ (adotar Gumbel) leva a uma subestimação considerável da intensidade da precipitação, especialmente para longos períodos de retorno, o que representa uma importante preocupação de segurança [@Koutsoyiannis.2004]. Por outro lado, para amostras muito pequenas (ex: $m < 50$), a instabilidade da estimação do terceiro parâmetro é tão alta que o uso da Gumbel pode, paradoxalmente, resultar em um erro de estimação menor do que a GEV [@Courty.2019].
+
+A implicação prática dessa lenta convergência é que a adoção da distribuição de Gumbel (um caso particular da GEV com $\xi = 0$) por conveniência ou inércia tende a subestimar severamente os quantis de precipitação para grandes períodos de retorno, levando a projetos potencialmente inseguros [-@Serinaldi.2014]. A decisão principal na modelagem passa então a ser o regime de cauda da GEV: exponencial (Gumbel/EV1, que é um caso particular da GEV com parâmetro de forma $\xi=0$) ou pesada (Fréchet/EV2, com $\xi<0$) [@koutsoyiannis2017-extreme-rainfall].
+
+Evidências teóricas e empíricas em larga escala favorecem caudas pesadas (EV2/Fréchet) para chuva intensa, com o parâmetro de forma $\xi$ tipicamente estimado entre 0,09 e 0,15. A adoção da distribuição de Gumbel (EV1) por inércia ou conveniência tende a subestimar os quantis para grandes períodos de retorno, levando a projetos menos seguros em comparação com a GEV (com $\xi < 0$), que oferece uma representação mais realista das caudas [@koutsoyiannis2017-extreme-rainfall].
+
+A consolidação de caudas pesadas levanta a questão da estabilidade espacial do parâmetro $\xi$. Embora a hipótese de um $\xi$ global simplificasse a estimação, a evidência empírica não respalda tal universalidade. Estudos globais, baseados em séries diárias, indicam que, mesmo corrigindo o viés por comprimento de registro, persiste uma variabilidade geográfica. Em termos práticos, recomenda-se evitar $\xi > 0$ (incompatível com chuva) e, na ausência de suporte local robusto, adotar Gumbel ($\xi = 0$) ou uma GEV com $\xi ≈ 0,114$ como escolha prudente, até que evidências regionais justifiquem um ajuste distinto [@Papalexiou.2013a; @koutsoyiannis2017-extreme-rainfall; @Courty.2019].
+
+### Métodos de Estimação e Qualidade dos Dados
+
+A seleção da distribuição (conforme listado na Tabela <!--# Adicionar tabela do livro com as formulas das distribuições -->) é acompanhada pela escolha do método de estimação. Os L-momentos têm se destacado por sua robustez a outliers e desempenho superior em amostras reduzidas, situação típica de durações subdiárias. A Máxima Verossimilhança (MLE), frequentemente integrada a estruturas bayesianas, é útil para incorporar não-estacionariedade e covariáveis, mas pode enfrentar instabilidades de convergência em amostras pequenas. Estratégias de regionalização, que aumentam o tamanho amostral efetivo, atenuam as limitações de ambos os métodos [@johnson2017-design-rainfall].
+
+A utilidade prática de qualquer análise está condicionada à qualidade e representatividade dos dados. Qualquer tentativa séria de modelar extremos de precipitação deve apoiar-se em dados observacionais locais. Pluviômetros de superfície continuam sendo a fonte mais confiável, mas exigem controle de qualidade rigoroso, contemplando a correção de "dados restritos" (quando a resolução de registro não coincide com a duração), avaliação de subcaptação por vento e limites instrumentais, especialmente relevantes em escalas sub-horárias [@johnson2017-design-rainfall; @koutsoyiannis2017-extreme-rainfall].
+
+Dados de radar e satélite agregam valor ao representar a dimensão espacial dos eventos, mas devem ser rigorosamente calibrados e validados contra as redes pluviométricas. Além disso, a análise deve considerar a persistência de longo prazo (comportamento Hurst–Kolmogorov) nas séries, pois a presença de memória (Coeficiente de Hurst \> 0,5) tem implicações diretas na estimação de quantis e na avaliação de incerteza [@koutsoyiannis2017-extreme-rainfall].
+
+#adicionar regionalição
+
+<!--# Adicionar esse tópico?? OMBRIAN (INTENSITY-DURATION-FREQUENCY) CURVES 74.6.1 Theoretical Basis and Mathematical Formalism -->
+
+## Introdução
 
 ## Principais distribuições utilizadas
 
@@ -14,7 +86,7 @@ Introduzir a questão da necessidade de se relacionar probabilidade de excedênc
 
 Mencionar a possibilidade de se analisar os extremos de duas foromas distintas: via séries parciais e via máximos anuais;
 
-Falar de uma maneira geral sobre as ditribuições, dando exemplos de uso de cada uma delas. 
+Falar de uma maneira geral sobre as ditribuições, dando exemplos de uso de cada uma delas.
 
 ## As distribuições de extremos
 
@@ -25,4 +97,3 @@ INtroduzir o conceito de máximo de um conjunto de variáveis aleatórias e expl
 ### Justificativa para uso da GEV
 
 ### A questão do parâmetro do forma
-
