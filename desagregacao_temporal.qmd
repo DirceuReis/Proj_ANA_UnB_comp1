@@ -320,11 +320,10 @@ No escopo de desagregação, Lima et al. [-@LIMA2016744] propõem um modelo Beta
 $$
 \mathcal{L}(p,q,a\mid
 \{x_i,b_i\}_{i=1}^n) =\prod_{i=1}^n \frac{1}{B(p,q)}
-\frac{(x_i-a)^{\,p-1}\,(b_i-x_i)^{\,q-1}}{(b_i-a)^{\,p+q-1}},\qquad
-0<a<\min x_i< x_i<b_i
+\frac{(x_i-a)^{\,p-1}\,(b_i-x_i)^{\,q-1}}{(b_i-a)^{\,p+q-1}}
 $$ {#eq-beta-bayes}
 
-onde $B(\cdot,\cdot)$ é a função beta; prioris pouco informativas ou quase informativa para $p,q$ e uma priori truncado para $a$ (até $\min x_i$) induzem a posterior conjunta de $(p,q,a)$, amostrada por MCMC. Para cada ano $i$, amostra-se $X_d$ da Beta com $[a,b_i]$. Repetir esse processo sobre $i$ e $d$ fornece amostras da distribuição não estacionária de máximos por duração. As IDFs derivam dos quantis empíricos $\widehat{q}_{T}(d)$ dessas amostras, com intensidade $i_{T}(d)=\widehat{q}_{T}(d)/d$. Alimentando o modelo com $b_i$ futuros (24 h) corrigidos de viés por RCM/GCM, obtêm-se IDFs futuras com propagação explícita da incerteza dos parâmetros e do limite superior anual, uma via direta de desagregar mudanças projetadas em 24 h para escalas horárias preservando a coerência física do suporte finito. Em Lima et al[-@Lima.2018], a desagregação temporal é conduzida por invariância de escala entre durações, permitindo transferir informação de 24 h para escalas subdiárias dentro de um arcabouço Bayesiano local–regional que preserva as propriedades de uma GEV e propaga incerteza até as IDFs. A hipótese central liga as IDFs em duas durações $d$ e $d_0$ por um deslocamento $\theta\ge0$ e um expoente de escala $\eta\in(0,1]$:
+em que $0<a<\min x_i< x_i<b_i$, sendo $B(\cdot,\cdot)$ a função beta; prioris pouco informativas ou quase informativa para $p,q$ e uma priori truncado para $a$ (até $\min x_i$) induzem a posterior conjunta de $(p,q,a)$, amostrada por MCMC. Para cada ano $i$, amostra-se $X_d$ da Beta com $[a,b_i]$. Repetir esse processo sobre $i$ e $d$ fornece amostras da distribuição não estacionária de máximos por duração. As IDFs derivam dos quantis empíricos $\widehat{q}_{T}(d)$ dessas amostras, com intensidade $i_{T}(d)=\widehat{q}_{T}(d)/d$. Alimentando o modelo com $b_i$ futuros (24 h) corrigidos de viés por RCM/GCM, obtêm-se IDFs futuras com propagação explícita da incerteza dos parâmetros e do limite superior anual, uma via direta de desagregar mudanças projetadas em 24 h para escalas horárias preservando a coerência física do suporte finito. Em Lima et al[-@Lima.2018], a desagregação temporal é conduzida por invariância de escala entre durações, permitindo transferir informação de 24 h para escalas subdiárias dentro de um arcabouço Bayesiano local–regional que preserva as propriedades de uma GEV e propaga incerteza até as IDFs. A hipótese central liga as IDFs em duas durações $d$ e $d_0$ por um deslocamento $\theta\ge0$ e um expoente de escala $\eta\in(0,1]$:
 
 $$
 y(d,T)=y(d_0,T)\,\Big(\tfrac{d+\theta}{d_0+\theta}\Big)^{-\eta}\!
@@ -347,18 +346,22 @@ $$ {#eq-inv-escala-gevpar}
 ou, de forma equivalente, $\log\mu_d=\log\mu{d_0}-H\log\big(\tfrac{d+\theta}{d_0+\theta}\big)$ e $\log\sigma_d=\log\sigma{d_0}-\eta\log\big(\tfrac{d+\theta}{d_0+\theta}\big)$. Escolhe-se tipicamente $d_0 =$ 24 h para projetar parâmetros a $d<$ 24 h. O nível Bayesiano (hierárquico) local–regional impõe essas relações de escala como priors por duração
 
 $$
+\begin{gather}
 \log\mu_d\sim
 \mathcal{N}\!\Big(\alpha-
-\eta\log\tfrac{d+\theta}{24+\theta},\,\tau_\mu^2\Big),\quad \log\sigma_d\sim
+\eta\log\tfrac{d+\theta}{24+\theta},\,\tau_\mu^2\Big)\\
+\log\sigma_d\sim
 \mathcal{N}\!\Big(\beta -
-\eta\log\tfrac{d+\theta}{24+\theta},\,\tau_\sigma^2\Big),\quad \xi_d\sim
+\eta\log\tfrac{d+\theta}{24+\theta},\,\tau_\sigma^2\Big)\\
+\xi_d\sim
 \mathcal{N}(\xi,\,\tau_\xi^2)
+\end{gather}
 $$ {#eq-prioris-gevpar-lima}
 
 onde $\alpha=\log\mu_{24}$ e $\beta=\log\sigma_{24}$. Os hiperpriors adotados são fracos: $\alpha,\beta\sim\mathcal{N}(0,10^6)$; $H\sim\text{Beta}(1,1)$ em \[0,1\]; $\theta\sim\mathcal{U}(0,10)$; $\xi\sim\text{Beta}(9,6)$ com suporte \[−0.5,0.5\]; e $\tau_\mu^2,\tau_\sigma^2,\tau_\xi^2\sim
 \text{Inv-Gamma}(0.01,0.01)$.
 
-Quando é necessário modelar explicitamente a dependência espacial dos extremos, os processos máximo-estável são uma alternativa, pois dispensam a suposição de independência condicional dos dados. Stephenson et al. [-@Stephenson.2016] realizam um acoplamento entre durações dentro do ajuste de extremos, de modo a inferir quantis/IDFs em escalas finas a partir de informação conjunta em múltiplas janelas de acumulação. A suposição central é que, para um sítio $s$, a localização reduzida μ\~(s) e a forma $\xi(s)$ não variam com a duração, e toda a variação temporal entra via escala $\sigma_d(s)$. Define-se a relação de duração (em horas) $\rho_d$ com dois parâmetros de duração, com deslocamento $\kappa(s)>0$ e expoente $0<\eta(s)\le1$, impondo a monotonicidade física dos quantis com $d$:
+Quando é necessário modelar explicitamente a dependência espacial dos extremos, os processos máximo-estável são uma alternativa, pois dispensam a suposição de independência condicional dos dados. Stephenson et al. [-@Stephenson.2016] realizam um acoplamento entre durações dentro do ajuste de extremos, de modo a inferir quantis/IDFs em escalas finas a partir de informação conjunta em múltiplas janelas de acumulação. A suposição central é que, para um sítio $s$, a localização reduzida $\tilde\mu(s)$ e a forma $\xi(s)$ não variam com a duração, e toda a variação temporal entra via escala $\sigma_d(s)$. Define-se a relação de duração (em horas) $\rho_d$ com dois parâmetros de duração, com deslocamento $\kappa(s)>0$ e expoente $0<\eta(s)\le1$, impondo a monotonicidade física dos quantis com $d$:
 
 $$
 \sigma_d(s)\;=\;\rho_d\,\sigma(s)\,\{\rho_d+\kappa(s)\}^{-\eta(s)}\,,
