@@ -39,8 +39,6 @@ Por fim, a escolha do limiar, passo prático mais sensível do método de exced�
 
 ### Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda
 
-<!---# Expandir aqui: Acho que vale discutir o uso de distribuições de probabilidades mais usadas, mas justificar a GEV pela Teoria dos Valores Extremos, muito embora não haja garantia de que 365 dias para extrair o máximo anual seja suficiente para atingir convergência. -->
-
 Selecionar a função de distribuição paramétrica adequada é essencial para estimar probabilidades de eventos de alto impacto e estudar extremos no contexto da variabilidade e mudança climática. Embora análises de valores extremos estejam cada vez mais difundidas, classificações em larga escala ainda costumam depender de escolhas subjetivas de famílias paramétricas. Uma alternativa conceitualmente consistente é considerar famílias com caudas que decaem como lei de potência, as chamadas “caudas pesadas” [@Cavanaugh.2015].
 
 Evidências baseadas em estações globais indicam, com alta confiança estatística, que as caudas de precipitação diária são predominantemente pesadas (decaindo como lei de potência). Isso implica que distribuições frequentemente usadas para chuva diária (exponencial, Weibull, Gama e log-normal) tendem a subestimar as probabilidades dos extremos. A magnitude dessa subestimação depende de características sazonais e regionais do clima, com caudas pesadas mais proeminentes em regiões onde diferentes tipos de sistemas meteorológicos produzem taxas de precipitação muito distintas [@Cavanaugh.2015]. Além disso, modelos estocásticos populares para precipitação horária pressupõem distribuições de cauda leve para facilitar sua formulação matemática [@Papalexiou.2018].
