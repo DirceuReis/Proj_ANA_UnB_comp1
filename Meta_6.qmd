@@ -1,12 +1,11 @@
 ---
 title: "META 1.6 Correção de Viés dos Dados Climáticos"
-author: Dirceu S. Reis Jr.
 bibliography: referencias/ref_impactos_mudancas.bib
 nocite: |
   @*
 ---
 
-### META 1.6 Correção de Viés dos Dados Climáticos
+## META 1.6 Correção de Viés dos Dados Climáticos
 
 A base de dados NEX-GDDP-CMIP6 cobre o período de 1950 a 2010. Para o horizonte temporal passado e presente, anos 1950-2014, é possível avaliar como os dados de precipitação gerados pelos modelos climáticos da base NEX-GDDP-CMIP6 representam aqueles efetivamente registrados nas estações e espacializados para a base em grade. Via de regra, há um desvio sistemático entre os dados históricos reproduzidos pelos modelos climáticos e os registros efetivamente observados, denominado viés. Dessa forma, é importante que as projeções futuras de chuva tenham esse viés corrigido antes de serem efetivamente empregadas para análises.
 
@@ -23,3 +22,5 @@ Outras variantes mais recentes incluem o *Bias Correction Quantile Mapping* (BCQ
 Além disso, destaca-se o método *Quantile Perturbation Downscaling* (QPD), que aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Hosseinzadehtalaei.2020].
 
 O produto desta meta será um relatório com a descrição dos prós e contras das metodologias citadas acima com a definição da metodologia a ser utilizada para remoção de viés.
+
+##Referências bibliográficas
