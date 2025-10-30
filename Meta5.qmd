@@ -1,0 +1,14 @@
+---
+title: "Meta 5: "
+bibliography: referencias/ref_meta5.bib
+---
+
+O objetivo desta etapa é desenvolver curvas IDF a partir dos postos pluviométricos da ANA (obtidos do Hidroweb), bem como a base de dados em grade adotada na Meta 4 desta componente. As curvas serão construídas para durações acumuladas de 1, 2, 3, 4, 5, 6, 7 e 10 dias e tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos, partindo das series de máximos anuais.
+
+Esta seção inclui as seguintes atividades: (i) construção de um modelo de distribuição *a priori* regional para o parâmetro de forma da distribuição GEV ($\xi$) a partir dos dados de precipitação diária; (ii)
+
+## Modelo *a priori* $\xi$
+
+
+
+## IDF regionais diárias
