@@ -1,0 +1,18 @@
+---
+title: "Apresentação"
+---
+
+
+O presente relatório corresponde à Meta 1 da Componente 1 do Termo de Execução Descentralizada nº 02/2024, firmado entre a Agência Nacional de Águas e Saneamento Básico (ANA) e a Universidade de Brasília (UnB). Essa meta integra o Projeto 1 – Desenvolvimento de Curvas de Intensidade, Duração e Frequência (IDFs) para o Território Nacional sob a Influência de Mudanças Climáticas.
+
+Este documento fornece um panorama atual detalhado dos desafios e das principias estratégias empregagadas na modelagem estatística de chuvas intensas e respectiva derivação de curvas IDF que façam o melhor uso possível das informações disponíveis. A baixa densidade de estações com medições de precitação nas escalas subdiárias, bem como suas relativamente curtas séries temporais, impõe um desafio técnico-científico nas definição de curvas IDF sobre o território com a precisão desejada para estudos de engenharia.        
+
+Ainda Falta
+
+
+
+A elaboração deste documento tem como finalidade apresentar um panorama sobre a utilização de sensoriamento remoto no monitoramento de corpos hídricos continentais, consolidando informações científicas e técnicas que servirão de referência para as próximas etapas do projeto. A análise aqui conduzida busca identificar o estado da arte acerca dos sensores empregados, das variáveis hidrológicas extraídas e das metodologias mais recorrentes, bem como as principais limitações tecnológicas e operacionais já relatadas pela literatura.
+
+Ao compilar essas informações, pretende-se oferecer uma base sólida que subsidie tanto o aprimoramento de metodologias de mapeamento, quanto a integração dos dados SWOT em aplicações práticas de gestão de recursos hídricos. Este relatório, portanto, representa não apenas um marco no cumprimento da Meta 1, mas também um instrumento de apoio para pesquisadores, gestores e tomadores de decisão interessados no avanço do monitoramento hidrológico a partir de tecnologias de observação da Terra.
+
+Por fim, destaca-se que a seção de Introdução apresenta em maior detalhe o contexto científico e tecnológico que fundamenta esta meta, delineando as bases conceituais que orientam as análises desenvolvidas ao longo do relatório.
