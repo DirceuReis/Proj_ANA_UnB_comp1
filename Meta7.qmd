@@ -1,0 +1,29 @@
+---
+title: "Meta 1.7 - IDFs Pluviógrafos INMET/CEMADEM"
+---
+
+Nesta etapa serão geradas curvas IDF a partir dos dados de pluviógrafos operados pelo INMET e pelo CEMADEN. O procedimento segue a mesma lógica geral aplicada aos pluviômetros convencionais (isto é, geração de máximos anuais, ajuste a distribuições de valores extremos e obtenção de quantis para diferentes períodos de retorno), mas aqui a discretização temporal é mais fina. Serão considerados acumulados de precipitação em janelas móveis de 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos, e serão estimadas intensidades associadas a períodos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos. As etapas de ajuste às distribuições extremas (por exemplo, GEV), os testes de aderência e o ajuste das equações de IDF seguirão procedimentos análogos aos descritos anteriormente (ver Meta 1.4.5), e serão detalhados no Plano de Trabalho atualizado.
+
+Além do ajuste direto de curvas IDF tradicionais para cada estação, será adotado um enquadramento teórico explícito baseado no princípio de invariância de escala e na formulação separável proposta por Koutsoyiannis et al. [@KOUTSOYIANNIS1998118] e amplamente aplicada em diversos estudos [@Nguyen.1998, @Lima.2018 ,@Mascaro.2020]. Nessa formulação, a intensidade de projeto $i(T,d)$, isto é, a intensidade máxima média associada a um período de retorno $T$ e duração $d$, é decomposta em duas componentes independentes mas coerentes entre si:
+
+$$ i(T,d)= a(T) / b(T) $$ {eq-idf-k}
+
+A função $a(T)$ representa a componente de frequência, enquanto $b(d)$ representa a componente de duração. Essa separabilidade é metodologicamente importante porque permite estimar, de forma consistente, a dependência com a duração e a dependência com a raridade do evento sem impor uma forma puramente empírica às curvas IDF.
+
+Para a componente de duração, Koutsoyiannis et al. [-@KOUTSOYIANNIS1998118] demonstram que uma forma parcimoniosa é suficiente para descrever a variação sistemática da intensidade média com a duração:
+
+$$
+b(d)=(d+\theta)^{\eta},\qquad
+\theta>0,\;0<\eta<1
+$$ {eq-dur-k}
+
+Nesta formulação, $\theta$ atua como um parâmetro de translação associado a processos físicos (por exemplo, limite inferior de concentração da chuva em janelas muito curtas), enquanto $\eta$ controla a taxa com que a intensidade média decai à medida que a duração aumenta. Um ponto central da proposta é que $\theta$ e $eta$ podem ser tratados como essencialmente independentes de $T$; ou seja, os parâmetros de escala temporal não mudam de um período de retorno para outro. Toda a variação em frequência (raridade do evento) é então absorvida em $a(T)$. A função $a(T)$ é obtida diretamente a partir da distribuição estatística dos máximos anuais, evitando ajustar formas empíricas ad hoc para cada período de retorno. Em termos operacionais, define-se uma variável transformada $Y=I(d)b(d)$, onde $I(d)$ é a intensidade máxima média na duração $d$. Se $Y$ segue uma distribuição de valores extremos (por exemplo, Gumbel ou GEV), então $a(T)$ coincide com o quantil teórico de ordem $1−1/T$ dessa distribuição. 
+
+No presente projeto, essa formulação será usada de forma combinada com o conceito de pooling parcial já descrito na Meta 1.4.5. Ou seja, parâmetros como $\theta$, $\eta$ e os parâmetros da distribuição de extremos ($\xi$) não serão estimados isoladamente para cada pluviógrafo de maneira totalmente independente, mas sim dentro de um arcabouço que compartilha informação estatística entre estações de uma mesma região. Esse pooling parcial é necessário porque, mesmo para pluviógrafos de alta resolução temporal (10 min, 15 min, 1 h etc.), muitas séries são curtas e apresentam falhas operacionais. A regionalização estatística dos parâmetros permite estabilizar as estimativas e produzir curvas IDF fisicamente plausíveis também em estações com histórico curto.
+
+Os resultados obtidos por esse arcabouço de invariância de escala serão comparados diretamente com o método empírico tradicionalmente utilizado no Brasil para derivar intensidades de curta duração a partir de informações de maior duração, notadamente o método da CETESB [@cetesb1979-drenagem]. Esse método parte da suposição de que um valor de projeto diário, normalmente associado a um certo período de retorno, pode ser “desagregado” para durações menores (por exemplo, 1 h, 30 min, 10 min) multiplicando-se a precipitação por coeficientes de desagregação. Esses coeficientes são tabelados a partir de amostras históricas e amplamente usados em práticas de projeto por órgãos estaduais e municipais de drenagem urbana.
+
+A comparação entre as abordagens cumpre dois objetivos. Primeiro, verificar em que medida o método empírico de relações fixas de desagregação (CETESB), que supõe proporções constantes entre a chuva diária e as chuvas de curta duração, continua adequado frente a uma formulação estatisticamente consistente e fisicamente informada de dependência entre duração e frequência (invariância de escala). Segundo, quantificar o ganho de robustez estatística obtido quando se impõe *pooling parcial* e coerência regional aos parâmetros, em comparação com ajustes puramente locais baseados em poucas durações registradas em cada pluviógrafo.
+
+Os produtos desta etapa incluirão: (i) as curvas IDF estimadas para cada estação/pluviógrafo em diferentes durações e períodos de retorno; (ii) os parâmetros regionais estimados, parâmetros da distribuição de extremos) e sua interpretação hidrológica; (iii) a comparação entre a abordagem de invariância de escala e o método empírico baseado em coeficientes de desagregação (CETESB); e (iv) um relatório técnico consolidando metodologia. Também serão disponibilizados os scripts em R e/ou Python utilizados para ajuste das distribuições de extremos, estimação dos parâmetros, geração das curvas IDF e derivação das intensidades de projeto.
+
