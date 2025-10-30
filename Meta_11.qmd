@@ -1,0 +1,19 @@
+---
+title: "Modelos probabilísticos de chuvas intensas"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_modelos.bib
+nocite: |
+  @*
+---
+
+### META 1.11 Protótipo da Ferramenta Web para Curvas IDF
+
+A partir dos resultados advindos da etapa 3.10, um protótipo de ferramenta web para disponibilização das IDFs com influência das mudanças climáticas para os municípios brasileiros será desenvolvido. O protótipo ou piloto da ferramenta será implementado em linguagem Python ou R e incluirá os resultados das etapas e processamentos anteriores. Os principais produtos desta etapa serão o protótipo da ferramenta web e um relatório com uma descrição da estrutura da ferramenta. O plano de trabalho atualizado descreverá de forma mais detalhada os principais aspectos desta etapa.
+
+A ferramenta web terá como base a estrutura usada pelo Canadá no desenvolmento do [IDF_CC Tool](https://www.idf-cc-uwo.ca/). A ferramenta está dividida em três principais eixos: interface do usuário, modelos matemáticos e banco de dados. O sistema de gerenciamento de banco de dados (DBMS) utilizado é a versão mais recente do Microsoft SQL Server™ (MSSQL).
+
+É necessário um cadastro simples para ter acesso a todas as funcionalidades da ferramenta. Após o login, o usuário pode escolher se deseja criar a IDF para uma região ou selecionar uma estação meteorológica específica. Após essa escolha, é exibida uma nova aba com os dados básicos da região ou da estação (ID, número de anos, arquivos complementares). Nessa nova aba, pode-se optar por criar a IDF com base em dados históricos ou sob mudanças climáticas.
+
+No primeiro caso, o gráfico de IDF é gerado a partir de uma distribuição GEV ou Gumbel, a critério do usuário, sendo possível acessar a tabela com os dados gerados e as equações de interpolação (ou seja, os coeficientes $A$, $B$, $C$ e $t_{o}$ para o cálculo da intensidade). No caso da IDF sob mudanças climáticas, o usuário deve escolher um intervalo de tempo de, no mínimo, 30 anos, entre 2015 e 2100, e selecionar entre as distribuições GEV e Gumbel. Em seguida, é necessário escolher o modelo climático, entre o CMIP6 e o CMIP5.
+
+Para cada modelo, é possível selecionar o conjunto de multimodelo (selecionando todos ou personalizando). Após essas escolhas, basta clicar no botão "Continuar" para acessar as curvas IDF's, tabelas, equações de interpolação e o boxplot das incertezas para os três cenários de emissão e concentração (SSP1.26, SSP2.45 e SSP5.85).
