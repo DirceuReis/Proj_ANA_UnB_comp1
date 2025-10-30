@@ -1,0 +1,23 @@
+---
+title: "META 1.6 Correção de Viés dos Dados Climáticos"
+author: Dirceu S. Reis Jr.
+bibliography: referencias/ref_impactos_mudancas.bib
+nocite: |
+  @*
+---
+
+### META 1.6 Correção de Viés dos Dados Climáticos
+
+A base de dados NEX-GDDP-CMIP6 cobre o período de 1950 a 2010. Para o horizonte temporal passado e presente, anos 1950-2014, é possível avaliar como os dados de precipitação gerados pelos modelos climáticos da base NEX-GDDP-CMIP6 representam aqueles efetivamente registrados nas estações e espacializados para a base em grade. Via de regra, há um desvio sistemático entre os dados históricos reproduzidos pelos modelos climáticos e os registros efetivamente observados, denominado viés. Dessa forma, é importante que as projeções futuras de chuva tenham esse viés corrigido antes de serem efetivamente empregadas para análises.
+
+Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (*Quantile Mapping* QM) proposta por Bárdossy & Pegram (2011) é forte candidata a ser empregada. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.
+
+Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés. O método *Delta Change* aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas.
+
+Baseado no QM o método *Equidistant Quantile Matching* (EQM) [@Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo. O EQM também possui uma versão não estacionária (*Equidistant Quantile Matching non-stationary*) que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado [@Silva.2021].
+
+Outro método baseado no QM é o *Quantile–Quantile Downscaling* (QQD) [@Hassanzadeh.2019] que é um método estatístico que combina *downscaling* e correção de viés ao ajustar quantil a quantil a distribuição simulada por modelos climáticos para coincidir com a distribuição observada em uma escala local. Em vez de apenas reduzir a escala espacial, o QQD também corrige sistematicamente as diferenças entre o clima simulado e o real, garantindo que a série resultante apresente características estatísticas (como média, variabilidade e extremos) mais próximas das observações históricas.
+
+Outras variantes mais recentes incluem o *Bias Correction Quantile Mapping* (BCQM), o *Kernel Density Distribution Mapping* (KDDM), o *Quantile Delta Mapping* (QDM) e o PresRat (PRAT). O BCQM corrige diretamente as funções de distribuição cumulativa (CDFs); o KDDM utiliza densidades suavizadas por meio de funções kernel; o QDM preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições; e o PRAT estende o QDM incorporando um fator médio de correção adiciona [@Lanzante.2021].
+
+Além disso, destaca-se o método *Quantile Perturbation Downscaling* (QPD), que aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Hosseinzadehtalaei.2020].
