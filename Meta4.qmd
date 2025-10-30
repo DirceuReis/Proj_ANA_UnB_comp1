@@ -1,5 +1,6 @@
 ---
 title: "Meta 1.4 - Espacialização dos Dados de Chuva em Grade "
+bibliography: referencias/ref_meta_4_7.bib
 ---
 
 Esta etapa trata da conversão de dados pontuais de precipitação (postos pluviométricos e pluviógrafos) para bases contínuas em grade em locais sem monitoramento completo. As atividades incluem: (i) construção de duas bases em grade com resoluções distintas; (ii) descrição da metodologia de interpolação espacial dos dados; (iii) elaboração de metadados técnicos dos bancos de dados; e (iv) formulação e aplicação de um método de desagregação temporal, combinando inferência Bayesiana e modelagem de extremos.
@@ -51,3 +52,6 @@ A inferência é feita por MCMC, amostrando simultaneamente parâmetros marginai
 As duas abordagens serão avaliadas comparativamente e, para isso, serão empregados procedimentos propostos na literatura [@Mascaro.2020]. Em linhas gerais, essa avaliação consiste em comparar, para cada posto de validação, as intensidades projetadas por cada modelo (para uma dada duração e um dado período de retorno) com uma intensidade de referência. A partir dessa comparação, são calculadas medidas de viés relativo médio (para verificar se o modelo tende a superestimar ou subestimar as intensidades de projeto) e de erro quadrático médio relativo (para avaliar a magnitude típica do erro em relação ao valor de referência). A aplicação inicial será feita no estado do Rio Grande do Sul. Com base nesses diagnósticos quantitativos, decidirá-se qual metodologia adotar.
 
 Ao final da Meta 1.4.5, serão entregues: (i) um relatório metodológico descrevendo as duas abordagens bayesianas utilizadas (modelo hierárquico de escala e modelo espacial max-estável), incluindo critérios de diagnóstico, convergência e validação; (ii) tabelas e mapas de fatores de desagregação temporal e parâmetros das distribuições. Esses produtos serão gerados em linguagem R e/ou Python, que também serão empregadas nas etapas anteriores desta Meta 1.4 para pré-processamento das séries observadas, espacialização (krigagem), construção das bases em grade e documentação técnica.
+
+::: {#refs}
+:::
