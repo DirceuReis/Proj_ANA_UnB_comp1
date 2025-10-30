@@ -6,19 +6,19 @@ nocite: |
   @*
 ---
 
-### A Necessidade de Modelar Extremos de Precipitação
+## A Necessidade de Modelar Extremos de Precipitação
 
 O dimensionamento e a gestão de obras de proteção contra cheias dependem de estimativas probabilísticas consistentes dos perigos (*hazard*) e dos riscos associados. Idealmente, essas estimativas seriam ancoradas em séries fluviométricas longas e representativas, mas essa condição raramente se verifica. A escassez de postos de medição de vazão, ou a intermitência de seus dados, desloca o foco para modelos hidrológicos dirigidos por precipitação e para a síntese de tempestades de projeto [@koutsoyiannis2017-extreme-rainfall].
 
 Nesse contexto, as chuvas de projeto, expressas pelas relações Intensidade–Duração–Frequência (IDF) ou Lâmina–Duração–Frequência (DDF), tornam-se a base de referência para o dimensionamento. A preferência por essas relações decorre da maior abrangência temporal e espacial das observações de chuva em comparação às de vazão, notadamente para eventos raros. No entanto, a derivação robusta dessas curvas é frequentemente dificultada pela cobertura inadequada de dados em resolução subdiária. Para superar a escassez de dados e a limitação de análises puramente locais (restritas aos postos de medição), desenvolveram-se abordagens de regionalização. Esses métodos permitem a criação de mapas espacialmente coerentes para diferentes tempos de retorno, usualmente baseados em distribuições GEV cujos parâmetros são modelados em função de informações geográficas e meteorológicas locais [@Benestad.2021]. A sua derivação requer a seleção de eventos extremos independentes para cada duração e o ajuste de uma distribuição de valores extremos capaz de extrapolar quantis aos níveis de probabilidade de interesse [@johnson2017-design-rainfall].
 
-### Abordagens Fundamentais: Determinística (PMP) vs. Probabilística
+## Abordagens Fundamentais: Determinística (PMP) vs. Probabilística
 
 Historicamente, a estimação de extremos pluviométricos consolidou-se em duas frentes: (i) a determinística, que busca estabelecer limites físicos (Precipitação Máxima Provável - PMP) para orientar projetos supostamente livres de risco; e (ii) a probabilística, que modela a incerteza por distribuições e probabilidades de excedência. Apesar de sua difusão em guias de engenharia, a via determinística (PMP) revela-se metodológica e logicamente frágil. As dificuldades em representar a chuva por primeiros princípios e as incoerências conceituais do PMP, um "máximo" que é, de fato, inferido estatisticamente, minam sua validade [@koutsoyiannis2017-extreme-rainfall].
 
 Em contraste, a abordagem probabilística é logicamente consistente e operacionalmente superior. Ela reconhece que qualquer valor fisicamente admissível possui uma probabilidade de excedência (ainda que desprezível) e fornece fundamentos, como o princípio da máxima entropia, para a escolha de famílias distribucionais. A evidência ampara, portanto, uma formulação probabilística fundada em dados locais, apta a quantificar risco e explicitar incertezas [@Koutsoyiannis.2004; @koutsoyiannis2017-extreme-rainfall].
 
-### Amostragem de Eventos Extremos: AMS vs. POT
+## Amostragem de Eventos Extremos: AMS vs. POT
 
 Na derivação das relações IDF/DDF sob o paradigma probabilístico, dois esquemas de amostragem são predominantes. A série de máximos anuais (AMS) retém, para cada duração, o maior total de chuva observado em cada ano hidrológico. Por sua vez, a série de duração parcial (PDS) ou de picos acima do limiar (POT, *Peaks Over Threshold*) agrega todos os eventos que excedem um limiar predefinido, permitindo múltiplos eventos por ano ou, ocasionalmente, nenhum. O método PDS/POT tende a reduzir a variância dos quantis ajustados por capturar todos os excedentes relevantes, mitigando a perda de informação que pode ocorrer no AMS em anos com múltiplos episódios intensos. Contudo, o PDS/POT exige a definição criteriosa do limiar e a verificação da independência entre eventos, usualmente por regras de separação temporal cujo valor ótimo depende da duração e do regime sinótico local [@johnson2017-design-rainfall].
 
@@ -37,7 +37,7 @@ Há, ainda, uma correspondência teórica e empírica particularmente útil entr
 
 Por fim, a escolha do limiar, passo prático mais sensível do método de excedências, deve ser conduzida com critério, seja por um percentil alto da distribuição (como 95º–99º), seja pela fixação de uma frequência média anual de ocorrências, sempre levando em conta a climatologia local e o tamanho amostral, pois limiares distintos induzem séries com propriedades diferentes e, portanto, diferentes equilíbrios entre viés e variância nas estimativas de quantis de projeto [@Gu.2022].
 
-### Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda
+## Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda
 
 Selecionar a função de distribuição paramétrica adequada é essencial para estimar probabilidades de eventos de alto impacto e estudar extremos no contexto da variabilidade e mudança climática. Embora análises de valores extremos estejam cada vez mais difundidas, classificações em larga escala ainda costumam depender de escolhas subjetivas de famílias paramétricas. Uma alternativa conceitualmente consistente é considerar famílias com caudas que decaem como lei de potência, as chamadas “caudas pesadas” [@Cavanaugh.2015].
 
@@ -54,7 +54,7 @@ G_{\mathrm{GEV}}(x)
 = \exp\!\left\{-\left(1+\xi\,\frac{x-\mu}{\sigma}\right)^{-1/\xi}\right\},
 \qquad
 1+\xi\,\frac{x-\mu}{\sigma} \ge 0.
-$$
+$$ {eq-gev}
 
 Esta distribuição é definida por três parâmetros: localização ($\mu$), escala ($\sigma$) e forma ($\xi$). O parâmetro de forma $\xi$ (às vezes denotado como $\kappa$) é o que unifica as três leis: $\xi > 0$ corresponde à Fréchet (cauda pesada, sem limite superior), $\xi < 0$ à Weibull Reversa (cauda limitada), e o caso Gumbel emerge como o limite quando $\xi \to 0$ (cauda exponencial).
 
@@ -82,7 +82,7 @@ Uma via operacional alternativa é assumir $\xi \approx 0,15$: com $\xi$ fixo, a
 
 Em termos de diretrizes e prática consolidada, a Organização Meteorológica Mundial (WMO) recomenda a GEV como distribuição teórica para séries de máximos anuais. Análises por testes de aderência reportam que a GEV frequentemente é a distribuição ótima para AM em diversas durações, dando suporte normativo e empírico ao seu uso [@Gu.2022]. Evidências recentes trazem recomendações operacionais importantes para melhorar a acurácia, especialmente com séries curtas: (i) recomenda-se o uso de anos hidrológicos para a definição dos blocos AMS, especialmente em regiões com sazonalidade marcada; e (ii) sugere-se melhorar a consistência espacial das estimativas por meio de modelos espaciais de extremos (e.g., abordagens max-stable), que “emprestam força” entre locais vizinhos e mitigam instabilidades de ajuste [@Gründemann.2023].
 
-### Métodos de Estimação e Qualidade dos Dados
+## Métodos de Estimação e Qualidade dos Dados
 
 A seleção da distribuição é acompanhada pela escolha do método de estimação. Os L-momentos têm se destacado por sua robustez a outliers e desempenho superior em amostras reduzidas, situação típica de durações subdiárias. A Máxima Verossimilhança (MLE), frequentemente integrada a estruturas bayesianas, é útil para incorporar não-estacionariedade e covariáveis, mas pode enfrentar instabilidades de convergência em amostras pequenas. Estratégias de regionalização, que aumentam o tamanho amostral efetivo, atenuam as limitações de ambos os métodos [@johnson2017-design-rainfall].
 
@@ -92,11 +92,16 @@ A utilidade prática de qualquer análise está condicionada à qualidade e repr
 
 Dados de radar e satélite agregam valor ao representar a dimensão espacial dos eventos, mas devem ser rigorosamente calibrados e validados contra as redes pluviométricas. Além disso, a análise deve considerar a persistência de longo prazo (comportamento Hurst–Kolmogorov) nas séries, pois a presença de memória (Coeficiente de Hurst \> 0,5) tem implicações diretas na estimação de quantis e na avaliação de incerteza [@koutsoyiannis2017-extreme-rainfall].
 
-### Curvas IDF
+## Curvas IDF
 
 Encerrando a discussão sobre escolhas distribucionais para extremos de precipitação, vale destacar como esses fundamentos se materializam em duas frentes operacionais centrais: (i) a construção de curvas ombrianas (IDF) teoricamente consistentes e (ii) a regionalização para ganho de eficiência estatística e coerência espacial.
 
 Do ponto de vista teórico, uma curva IDF nada mais é do que a família de distribuições de intensidade considerada em múltiplas escalas temporais, em que o período de retorno está ligado diretamente à função de distribuição. Na prática de engenharia, uma formulação multiescala plenamente consistente pode ser complexa, mas simplificações bem fundamentadas, separabilidade entre efeitos de $T$ e $d$, caudas do tipo Pareto/EV2 (GEV com $\xi>0$) acima de limiar e lei parsimoniosa para a dependência com a duração, produzem IDFs dimensionais e estatisticamente coerentes no intervalo de durações de interesse [@koutsoyiannis2017-extreme-rainfall]. Esse enquadramento conecta, de forma direta, a EVT às curvas de projeto, oferecendo um caminho claro para extrapolação de quantis com transparência sobre hipóteses e parâmetros.
 
 Em paralelo, a regionalização enfrenta o problema recorrente de amostras curtas, especialmente em durações sub-diárias/sub-horárias. Ao agrupar estações semelhantes e assumir uma mesma família distribucional com fatores de escala específicos por regiões, é possível reduzir variância, aumentar robustez e elevar a coerência espacial dos níveis de retorno. A literatura recomenda definir regiões por atributos físicos e locacionais (e não por estatísticas de extremos), testar homogeneidade, considerar a correlação espacial e quantificar incertezas por *bootstrap* e/ou regressões com correlação espacial. Em síntese: a regionalização “empresta força” entre sítios e atua também como controle de qualidade, identificando discordâncias e metadados problemáticos [@johnson2017-design-rainfall]. Por fim, propagar essas relações no espaço por meio de regionalização para produzir mapas e curvas de projeto mais estáveis e confiáveis. Esse é o elo natural com os próximos dois capítulos: desagregação temporal, que detalha o trânsito entre escalas mantendo a consistência das caudas; e regionalização, que formaliza a passagem de estimativas pontuais para superfícies espacialmente coerentes de quantis e incertezas, ambos construídos sobre o alicerce distribucional estabelecido aqui [@koutsoyiannis2017-extreme-rainfall; @johnson2017-design-rainfall].
+
+## Referências
+
+::: {#refs}
+:::
 
