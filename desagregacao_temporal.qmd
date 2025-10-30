@@ -6,7 +6,7 @@ date-format: long
 bibliography: referencias/ref_desagregacao.bib
 ---
 
-## Desagregação Temporal {#sec-desagregacao}
+# Desagregação Temporal {#sec-desagregacao}
 
 As relações Intensidade–Duração–Frequência (IDF) são elemnetos centrais na engenharia de recursos hídricos, pois orientam o dimensionamento seguro e econômico de drenagem, bueiros, pontes e barragens. Em termos simples, uma curva IDF define $i=f(d,T)$, relacionando a intensidade média máxima $i$ para uma dada duração $d$, associada a uma certa frequência de ocorrência (período de retorno $T$, ou probabilidade anual de excedência). É a partir dessas curvas, que se costuma estimar as chamadas chuvas de projeto, isto é, eventos de magnitude e raridade específicas que a infraestrutura a ser projetada deve suportar [@Vyver.2018].
 
@@ -18,11 +18,11 @@ A desagregação temporal, descrita aqui, é a principal resposta ao problema en
 
 Para organizar o vasto campo de metodologias, esta revisão as classifica em cinco famílias principais, seguindo uma progressão lógica que parte de abordagens empíricas diretas em direção a modelos estocásticos e estatísticos cada vez mais abrangentes. A classificação inicia-se com (i) Fórmulas Empíricas e Regionais, que forma a base histórica e prática da engenharia. Em seguida, avança para os (ii) Modelos de Processos Pontuais, que buscam simular a microestrutura geradora da chuva. Uma perspectiva alternativa é apresentada pelos (iii) Modelos Baseados em Invariância de Escala, que exploram simetrias estatísticas fundamentais do processo chuvoso. A revisão aborda também as (iv) Técnicas Não Paramétricas, que se libertam de premissas distributivas por meio de reamostragem, e finaliza com a (v) Modelagem Hierárquica de Extremos, que representa o arcabouço mais moderno para a síntese de informação e a quantificação da incerteza.
 
-### Fórmulas/ajustes empíricos e regionais (equações IDF/DDF, isozonas, coeficientes) {#subsec-empirico}
+## Fórmulas/ajustes empíricos e regionais (equações IDF/DDF, isozonas, coeficientes) {#subsec-empirico}
 
 Uma das abordagens mais diretas e difundidas na desagregação temporal baseia-se em relações empíricas que traduzem totais de chuva de longa duração em durações mais curtas por meio de fatores de ajuste ou equações regionalizadas [@Abreu.2022].
 
-#### Coeficientes empíricos
+### Coeficientes empíricos
 
 O método de desagregação por coeficientes empíricos permite converter dados de durações maiores (tipicamente diárias) para durações menores (subdiárias). O processo consiste em aplicar um fator de ajuste a um quantil (ou valor de projeto) de uma duração de referência para estimar o valor correspondente em uma duração inferior, mantendo o mesmo período de retorno $T$ [@cetesb1979-drenagem; @Abreu.2022]
 
@@ -46,13 +46,13 @@ $$P(T,d)=J\,\ln\!\Big(d+\tfrac{\alpha}{60}\Big)+K,\qquad J=A\ln T+B,\quad K=C\ln
 
 onde $\alpha$ (min) é um parâmetro de correção de duração que “desloca” o eixo das abscissas e lineariza o comportamento para tempos curtos. Essa formulação permite consistência e suavização entre durações, preservando a escala de retorno por meio dos termos $J$ e $K$.
 
-#### Isozonas de desagregação
+### Isozonas de desagregação
 
 A metodologia de isozonas é uma abordagem de regionalização que se baseia no princípio de que áreas climaticamente semelhantes exibem comportamento homogêneo em relação às chuvas intensas. Proposto por Torrico [-@torrico1974-praticas] para o Brasil, o conceito foi aplicado e revisitado por Basso et al. [-@Basso.2016], que utilizaram um conjunto mais amplo para redefinir as zonas homogêneas e os coeficientes de desagregação regionais. No processo de rezoneamento, as intensidades e as relações entre durações obtidas a partir das IDF atuais são comparadas às estimadas por Torrico [-@torrico1974-praticas] com ênfase em $r_{1(h)},24h$, apoiando-se em mapas climáticos nacionais para áreas com baixa densidade de dados e verificando a homogeneidade intra-zona por estatísticas descritivas. O resultado é um conjunto de novas isozonas e coeficientes regionais de desagregação $r_{d(h)},24h$, para $T=10$ anos.
 
 Além de coeficientes e isozonas, há uma vertente importante de equações paramétricas DDF/IDF. Baldassarre et al. [-@Baldassarre.2006] realizam um estudo para testar a confiabilidade de sete diferentes curvas DDF (quatro com dois parâmetros e três com três parâmetros). Essas curvas foram calibradas utilizando o método dos mínimos quadrados com dados de precipitação observados referentes a durações mais longas (1, 3, 6, 12 e 24 horas). Após a calibração, as curvas DDF são extrapoladas para estimar as profundidades de precipitação de projeto para durações mais curtas, especificamente 15, 20, 30 e 45 minutos. O estudo ilustra a sensibilidade à forma da equação e os riscos de extrapolar para durações curtas fora do intervalo de calibração, motivando o uso de formulações que imponham consistência entre durações quando possível.
 
-### Modelos de Processos Pontuais {#subsec-processos-pontuais}
+## Modelos de Processos Pontuais {#subsec-processos-pontuais}
 
 Em contraste com a simplicidade dos coeficientes empíricos, os modelos de processos pontuais buscam reproduzir a estrutura estocástica interna da chuva. A premissa fundamental, inspirada na Teoria do Processo Pontual, é que a precipitação pode ser representada como uma sequência de pulsos ou células de chuva, cujas chegadas, durações e intensidades são governadas por processos aleatórios. Dentro desse arcabouço, consolidaram-se duas famílias principais de processos de agrupamento: *Neyman–Scott* e *Bartlett–Lewis*, capazes de reproduzir estatísticas de primeira e segunda ordem em uma ampla faixa de agregações temporais [@KOUTSOYIANNIS2001109].
 
@@ -74,7 +74,7 @@ Para explicitar o trade-off entre conservação estrita do total diário e capac
 
 Modelos de processos pontuais oferecem um quadro estocástico robusto para a desagregação temporal em passo fino, com estrutura de aglomeração, parâmetros fisicamente interpretáveis e boa capacidade de reproduzir estatísticas em múltiplas escalas, e constituem a base de ferramentas consolidadas como HYETOS e HyetosMinute [@Qin.2024], mas seus altos requisitos de dados sub-horários, calibração multivariada complexa e custo computacional [@Vorobevskii.2023] justificam uma abordagem alternativa. Dado o foco do estudo em quantificar quantis de projeto de forma parcimoniosa, adotaremos um arcabouço coerente com a EVT, tratando os processos pontuais como referência conceitual e pesquisa futura.
 
-### Modelos Baseados em Invariância de Escala / Autossemelhança / Fractais {#subsec-invariancia}
+## Modelos Baseados em Invariância de Escala / Autossemelhança / Fractais {#subsec-invariancia}
 
 Em vez de decompor a chuva em células e episódios, outra abordagem olha para um padrão estatístico que aparece em várias escalas: a invariância de escala. Nela, assume-se que as estatísticas da chuva mudam de forma previsível quando a duração de observação muda, geralmente, seguindo leis de potência.
 
@@ -244,7 +244,7 @@ Apesar do embasamento teórico consolidado há décadas [@Burlando.1996], impedi
 
 Mais recentemente, Wang et al. [-@Wang.2024] aplicam um modelo unificado de intensidades extremas no Reino Unido, integrando registros diários, fatores geográficos e regiões homogêneas de precipitação, utilizando a distribuição Gumbel (EV1). O estudo parte da hipótese de escala simples nos máximos anuais e estima um expoente de escala $-\eta$ a partir de séries agregadas de 1–30 dias, para então transferir intensidades entre durações, o que permite obter $i_{D,T}$ e reconstruir $i_{d,T}$ nas durações subdiárias.
 
-### Técnicas Não Paramétricas / Reamostragem {#subsec-tecnicas-nao-parametricas}
+## Técnicas Não Paramétricas / Reamostragem {#subsec-tecnicas-nao-parametricas}
 
 Os modelos baseados em invariância de escala, embora teoricamente robustos, impõem uma forte estrutura paramétrica (a lei de potência) aos dados. As técnicas não paramétricas de desagregação geram séries subdiárias por reamostragem de padrões intradiários observados, sem postular uma distribuição específica e preservando o acumulado diário. O método dos fragmentos (MOF) reparte o total diário segundo “fragmentos” subdiários históricos (hietogramas normalizados). No MOF, para uma estação doadora $s$, dia $i$ e duração $m$, o fragmento adimensional é definido como
 
@@ -309,7 +309,7 @@ o que permite quantificar quão pequeno deve ser $p_\varepsilon$ para não disto
 
 A principal limitação dos métodos de reamostragem é a dificuldade em gerar extremos mais intensos ou padrões mais raros do que os já observados na série histórica. Para uma abordagem que pode formalmente integrar informação de múltiplas fontes (locais, durações) e quantificar rigorosamente a incerteza, recorre-se à Modelagem Hierárquica.
 
-### Modelagem Hierárquica de Extremos {#subsec-hierarq}
+## Modelagem Hierárquica de Extremos {#subsec-hierarq}
 
 A modelagem hierárquica de extremos (MHE) organiza a inferência em camadas para conjugar verossimilhanças de máximos ou excedências com efeitos espaciais, temporais e entre-durações, permitindo *pooling* parcial entre postos, propagação explícita de incerteza e coerência nas dimensões espaço–tempo–duração. Em contextos com séries subdiárias curtas ou ausentes, a MHE “empresta informação” de vizinhos e de durações mais longas por meio de estruturas compartilhadas. A inferência é tipicamente bayesiana (cadeias de Markov via Monte Carlo - MCMC), entregando quantis de projeto com incerteza plenamente quantificada.
 
@@ -390,7 +390,7 @@ Na prática, a calibração procede em camadas, com ênfase operacional na desag
 
 A revisão das metodologias de desagregação temporal revela uma clara evolução, partindo de soluções empíricas e pragmáticas para frameworks teóricos e estatísticos cada vez mais sofisticados e integrados. Cada família de modelos oferece um balanço distinto entre simplicidade, realismo físico-estatístico e rigor na quantificação da incerteza. No horizonte próximo, o avanço da desagregação temporal exige (i) abandonar a estacionariedade: parâmetros da distribuição devem variar no tempo e/ou com covariáveis climáticas, permitindo GEV e vínculos de escala não estacionários que propaguem tendências e variabilidade às durações subdiárias [@LIMA2016744; @Cannon.2018]; (ii) integrar espaço–tempo–duração em um único arcabouço inferencial, no qual a coerência entre durações e locais decorre de estruturas hierárquicas bayesianas e/ou processos de dependência extrema (máximo-estáveis), com pooling parcial e quantificação rigorosa da incerteza em toda a bacia; e (iii) explorar dados de alta resolução e simulações convection-permitting (p.ex., ERA5 e CPMs) para estimar expoentes de escala e parâmetros extremos em grade, calibrar modelos onde a rede sub-horária é rarefeita e validar projeções de IDF sob cenários de mudança do clima.
 
-### Referências
+## Referências
 
 ::: {#refs}
 :::
