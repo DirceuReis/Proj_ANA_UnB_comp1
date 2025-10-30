@@ -2,8 +2,6 @@
 title: "Modelos probabilísticos de chuvas intensas"
 author: Dirceu S. Reis Jr.
 bibliography: referencias/ref_modelos.bib
-nocite: |
-  @*
 ---
 
 ### Meta 11: Protótipo da Ferramenta Web para Curvas IDF
