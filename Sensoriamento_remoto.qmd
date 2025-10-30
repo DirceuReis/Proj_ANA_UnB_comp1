@@ -10,7 +10,7 @@ Apesar de se apresentarem como uma alternativa promissora no contexto acima, ess
 
 O objetivo deste capítulo é introduzir alguns dos principais produtos de sensoriamento remoto de precipitação disponíveis e utilizados na atualidade. Uma das definições da técnica diz respeito à sua forma de obtenção: remota. Isso significa que não há contato entre o sensor e o objeto de interesse. Para precipitação, diferentes abordagens podem ser utilizadas e diferentes formas de processamento que compõem bases de dados variadas em alta resolução temporal de pluviosidade oriundas de reanálises integradas, sensores de satélites e combinações com dados terrestres [@Papa.2025]. Serão apresentados a seguir métodos de obtenção e a aplicação de diferentes produtos de sensoriamento remoto na construção de curvas IDF.
 
-## Radar
+## Radar {#sec-radar}
 
 Radares meteorológicos são capazes de calcular precipitação média em uma área relativamente grande, ao contrário de medidores pontuais [@Lanciotti.2022], emitindo ondas eletromagnéticas que retroespalham ao interagir com hidrometeoros de chuva e retornam ao sensor. Dessa informação que retorna são extraídas informações sobre localização, intensidade, movimento da precipitação e a detecção de tempestades individuais [@Marra.2015], normalmente com uma resolução espacial de 1 km × 1 km e resolução temporal subdiária e diária [@Sivasubramaniam.2019].
 
@@ -22,7 +22,7 @@ Alguns produtos disponíveis utilizam empregam tanto dados de observação local
 
 Apesar de bons resultados quando combinado com observações locais, há também complicações operacionais, como análises em uma escala maior, em razão do alcance limitado e alto custo [@Yu.2022]. Satélites, porém, fornecem um monitoramento em uma boa resolução espacial e temporal, em diferentes pontos geográficos e em altas altitudes [@Tang.2021].
 
-## Satélite
+## Satélite {#sec-satelite}
 
 Diferentes missões foram lançadas específicas para precipitação. TRMM (mencionado anteriormente) foi um projeto multissatélite lançado em 1997 com o intuito de apromirar a qualidade ddas estimativas de precipitação para aplicação em pesquisas em meteorologia e hirologia [@Pedreira.2021]. Foi importante para previsão e análise de precipitação, utilizando sensores que possibilitavam a avaliação de nuvens, chuva, fluxo de calor, raios e outros aspectos relevantes para o ciclo da água combinando dados obtidos por três sensores: Radar de Precipitação, Gerador de Imagens de Micro-ondas e Sensor Visível e Infravermelho [@Liu.2012]. Uma vantagem dos produtos TRMM são os fornecimentos de frequência, duração e intensidade nas regiões tropicais, sendo avaliados na Índia [@Shukla.2019] e avaliados para construção de IDFs [@Noor.2021; @Zoysa.2023; @Zoysa.2024].
 
@@ -39,4 +39,5 @@ Em meio à variedade de produtos, algoritmos diferentes, formas diferentes de co
 
 ## Referências
 
-::: {#refs}{style="text-align: justify;"} :::
+::: {#refs style="text-align: justify;"}
+:::
