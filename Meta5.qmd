@@ -48,7 +48,7 @@ Será aplicado também um modelo max-estável baseado no trabalho de Stephenson 
 
 ## Produtos esperados
 
-Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados; bem como os scripts em linguagem R utilizados no procedimento. <!-- rever -->
+Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados; bem como os scripts em linguagem R utilizados no procedimento.
 :::
 
 ## Referências
