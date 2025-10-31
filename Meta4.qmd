@@ -1,6 +1,6 @@
 ---
 title: "Meta 1.4 - Espacialização dos Dados de Chuva em Grade "
-bibliography: referencias/ref_meta_4_7.bib
+bibliography: referencias/ref_meta3.bib
 ---
 
 As atividades incluem: (i) descrição da metodologia de interpolação espacial dos dados; e (ii) formulação e aplicação de um método de desagregação temporal de dados de chuva e construção de um modelo regional, combinando inferência Bayesiana e modelagem de extremos.
