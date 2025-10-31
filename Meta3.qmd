@@ -2,25 +2,26 @@
 title: "Meta 3: Organização da Base de Dados"
 bibliography: referencias/ref_meta3.bib
 ---
-Esta etapa do projeto consiste na coleta e organização dos dados diários e sub-diários de diferentes fontes: ANA (base de dados do Hidroweb com pluviômetros), Telemetria - ANA, INMET, CEMADEN, e ICEA, além de dados diários em grade disponíveis do projeto da NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP) e Xavier et al. [-@Xavier.2022]. 
+
+Esta etapa do projeto consiste na coleta e organização dos dados diários e sub-diários de diferentes fontes: ANA (base de dados do Hidroweb com pluviômetros), Telemetria - ANA, INMET, CEMADEN, e ICEA, além de dados diários em grade disponíveis do projeto da NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP) e Xavier et al. [-@Xavier.2022].
 
 ## Controle de qualidade
 
 Nesta seção, descreve-se o procedimento de controle de qualidade empírico a ser aplicado aos dados subdiários na escala nacional, considerando os dados provenientes do INMET, CEMADEN, Telemetria-ANA e ICEA. Para o melhor entendimento do procedimento, as seguintes premissas devem ficar claras:
 
-- O controle de qualidade é aplicado aos dados de cada rede de monitoramento de maneira independente anualmente;
+-   O controle de qualidade é aplicado aos dados de cada rede de monitoramento de maneira independente anualmente;
 
-- O controle de qualidade foi desenvolvido para capturar as minúcias dos dados subdiários, neste caso os dados horários e sub-horários.
+-   O controle de qualidade foi desenvolvido para capturar as minúcias dos dados subdiários, neste caso os dados horários e sub-horários.
 
 De maneira resumida, o procedimento de controle de qualidade empírico dos dados subdiário, denominado de Análise Visual (AV), é composto por 7 etapas. O principal resultado desse processo é uma lista de estações HQ (do inglês High Quality) e PQ (do inglês Poor Quality) para cada ano e cada rede de monitoramento. Nesse procedimento, uma estação só é classificada como HQ quando ela funcionar corretamente ao longo de todo o ano. Essa observação é importante, pois o procedimento pode deixar de fora da lista de estações HQ estações que, muitas vezes, funcionaram corretamente por 10 meses, ou mesmo que conseguiram registrar a precipitação máxima diária. Isso ocorre porque apenas as estações que apresentam menos de 60 dias de falhas ao longo do ano são analisadas visualmente. A seguir, são detalhadas cada uma das etapas.
-	
+
 ### Coleta de dados e armazenamento dos dados brutos
 
 Os dados brutos são coletados nas páginas oficiais de cada órgão operador (CEMADEN, INMET, ICEA e Telemetria/ANA). Após a padronização dos nomes das colunas, os arquivos são convertidos para o formato HDF (Hierarchical Data Format). Para todas as redes, exceto o INMET, os dados são salvos com a nomenclatura formada pela sigla do Estado e ano, por exemplo: “PB_2024.h5”. No caso do INMET, por possuir menos estações, os arquivos são organizados por ano, por exemplo: “2015.h5”. Todos os arquivos brutos processados são armazenados em uma pasta nomeada de “0 – Raw files”, que contém subpastas com os nomes das redes de monitoramento. Nos arquivos HDF há informações sobre o posto pluviométrico (município, código etc.) e sua série temporal. Cada um desses arquivos contém duas chaves (keys), uma com as informações do posto pluviométrico, a “table_info”, e uma segunda chave com a série temporal da chuva, a “table_data”. As informações de cada chave, que no caso do Python serão os nomes das colunas de um DataFrame do Pandas, são seguintes:
 
-- *table_info*: informações sobre o código da estação (gauge_code), cidade (city), Estado (state), latitude (lat), longitude (long) e elevação (elevation), essa última informação só está presente nas redes que disponibilizam esta informação;
+-   *table_info*: informações sobre o código da estação (gauge_code), cidade (city), Estado (state), latitude (lat), longitude (long) e elevação (elevation), essa última informação só está presente nas redes que disponibilizam esta informação;
 
-- *table_data*: data, hora e minuto (datetime), dados de chuva (rain_mm), e código da estação (gauge_code).
+-   *table_data*: data, hora e minuto (datetime), dados de chuva (rain_mm), e código da estação (gauge_code).
 
 Ainda nessa pasta, os dados passam por uma avaliação de coerência em relação às informações fornecidas pelo órgão responsável pela rede de monitoramento. Em alguns casos, o Estado informado diverge da localização geográfica indicada pela latitude e longitude. Para corrigir essas situações, utiliza-se um shapefile disponibilizado pelo IBGE, que permite a verificação e o ajuste, quando necessário. Esses casos ocorrem, em geral, em estações localizadas em áreas de fronteira entre Estados, sobretudo naqueles delimitados por rios. Desta maneira, ficam disponibilizados os dados brutos de forma organizada e seguindo um único padrão, mas com discordâncias mínimas em relação ao número de colunas de cada rede de monitoramento. Por exemplo, há redes que não informam a altitude.
 
@@ -28,9 +29,9 @@ Ainda nessa pasta, os dados passam por uma avaliação de coerência em relaçã
 
 Nessa etapa, todos os arquivos de dados brutos são lidos e recebem colunas adicionais, como altitude, resolução de monitoramento e diferença em relação ao horário UTC, quando essas informações não estão disponíveis nas redes originais. Também são removidos valores nulos ou negativos de precipitação (NAN e -99). Em seguida, os arquivos são armazenados na pasta “1 - Organized data”, que mantém a mesma estrutura de nomenclatura utilizada anteriormente. Cada chave dos arquivos HDF possui agora as seguintes informações:
 
-- *table_info*, que contém 8 colunas com informações sobre o código da estação (gauge_code), cidade (city), Estado (state), latitude (lat), longitude (long), resolução temporal (time_step), elevação (elevation) e ajuste de referência para o horário UTC;
+-   *table_info*, que contém 8 colunas com informações sobre o código da estação (gauge_code), cidade (city), Estado (state), latitude (lat), longitude (long), resolução temporal (time_step), elevação (elevation) e ajuste de referência para o horário UTC;
 
-- *table_data*, que contém 3 colunas e reúne os dados data, hora e minuto (datetime), de chuva (rain_mm), e código da estação (gauge_code).
+-   *table_data*, que contém 3 colunas e reúne os dados data, hora e minuto (datetime), de chuva (rain_mm), e código da estação (gauge_code).
 
 Desta maneira, ficam disponibilizados os dados brutos de forma organizada e seguindo um único padrão. Os arquivos da pasta “1 - Organized data”, tem estrutura similar aos da pasta “0 – Raw files”, mas agora todos os arquivos de todas as redes de monitoramento têm a mesma quantidade de colunas.
 
@@ -40,21 +41,23 @@ Nesta etapa, os arquivos HDF gerados anteriormente são lidos e convertidos em a
 
 Nessa etapa, são aplicados quatro pré-filtros para exclusão de postos que não atendem aos critérios mínimos de qualidade:
 
-1. Registros constantes, indicando possível entupimento parcial. Para identificar possíveis casos de entupimento parcial, foram aplicadas três verificações baseadas na ocorrência repetitiva do valor 0,2 mm (resolução mínima dos pluviômetros).
-  + Ocorrências consecutivas absolutas: foi verificado o número máximo de registros de 0,2 mm em sequência sem interrupção. Valores acima de 30 ocorrências consecutivas resultaram na exclusão da estação.
-  + Ocorrências consecutivas com pausas temporárias: considerou-se a repetição de 0,2 mm mesmo quando ocorriam pequenas pausas entre os registros. Foram admitidas pausas entre 30 e 160 minutos, e estações que ultrapassaram 45 ocorrências consecutivas nesse critério foram eliminadas.
-  + Ocorrências consecutivas desconsiderando zeros: neste caso, zeros foram ignorados e analisou-se apenas a sequência de valores iguais ou próximos a 0,2 mm. Quando essa repetição ultrapassou 55 registros consecutivos, a estação também foi descartada.
-2. Exclusão de estações que registraram mais de 40 mm em 10 minutos (quando aplicável), caracterizando picos não confiáveis;
-3. Precipitação anual fora do intervalo de 150 a 6.000 mm/ano;
-4. Limite máximo de 60 dias de falha (ausência de dados).
+1.  Registros constantes, indicando possível entupimento parcial. Para identificar possíveis casos de entupimento parcial, foram aplicadas três verificações baseadas na ocorrência repetitiva do valor 0,2 mm (resolução mínima dos pluviômetros).
+
+-   Ocorrências consecutivas absolutas: foi verificado o número máximo de registros de 0,2 mm em sequência sem interrupção. Valores acima de 30 ocorrências consecutivas resultaram na exclusão da estação.
+-   Ocorrências consecutivas com pausas temporárias: considerou-se a repetição de 0,2 mm mesmo quando ocorriam pequenas pausas entre os registros. Foram admitidas pausas entre 30 e 160 minutos, e estações que ultrapassaram 45 ocorrências consecutivas nesse critério foram eliminadas.
+-   Ocorrências consecutivas desconsiderando zeros: neste caso, zeros foram ignorados e analisou-se apenas a sequência de valores iguais ou próximos a 0,2 mm. Quando essa repetição ultrapassou 55 registros consecutivos, a estação também foi descartada.
+
+2.  Exclusão de estações que registraram mais de 40 mm em 10 minutos (quando aplicável), caracterizando picos não confiáveis;
+3.  Precipitação anual fora do intervalo de 150 a 6.000 mm/ano;
+4.  Limite máximo de 60 dias de falha (ausência de dados).
 
 Após a aplicação desses pré-filtros, o conjunto final de arquivos do Excel é importado para a planilha de Análise Visual, que serve como base para a avaliação visual dos dados diários.
 
 ### Análise visual dos dados de chuva diária
 
-Em uma planilha do Excel, com os dados pré-filtrados e importados na etapa anterior, realiza-se a etapa denominada de Análise Visual. Um conjunto de dados de estações é separada e entregue a dois pesquisadores da área de recursos hídricos. Assim, um mesmo conjunto de dados é analisado e classificado por dois pesquisadores de maneira independente. 
+Em uma planilha do Excel, com os dados pré-filtrados e importados na etapa anterior, realiza-se a etapa denominada de Análise Visual. Um conjunto de dados de estações é separada e entregue a dois pesquisadores da área de recursos hídricos. Assim, um mesmo conjunto de dados é analisado e classificado por dois pesquisadores de maneira independente.
 
-Na Análise Visual, cada estação é comparada às cinco estações mais próximas por meio de um conjunto de gráficos. Nessa planilha o pesquisador vai passando pelas estações ao clicar no botão “Próx. Estação”. Para cada estação em análise e suas cinco mais próximas, um conjunto de gráfico é apresentado e a partir deles o pesquisador atribui a qualidade da estação em análise. Os gráficos são os seguintes: (i) precipitações anuais, (ii) precipitações mensais, (iii) precipitações diárias, (iv) precipitações máximas diárias, (v) localização das estações, (vi) altitude, (vii) correlação das precipitações mensais, (viii) correlação das precipitações diárias, e (ix) soma cumulativa das precipitações diárias, que apresenta as precipitações diárias acumuladas da estação em análise e das cinco mais próximas. 
+Na Análise Visual, cada estação é comparada às cinco estações mais próximas por meio de um conjunto de gráficos. Nessa planilha o pesquisador vai passando pelas estações ao clicar no botão “Próx. Estação”. Para cada estação em análise e suas cinco mais próximas, um conjunto de gráfico é apresentado e a partir deles o pesquisador atribui a qualidade da estação em análise. Os gráficos são os seguintes: (i) precipitações anuais, (ii) precipitações mensais, (iii) precipitações diárias, (iv) precipitações máximas diárias, (v) localização das estações, (vi) altitude, (vii) correlação das precipitações mensais, (viii) correlação das precipitações diárias, e (ix) soma cumulativa das precipitações diárias, que apresenta as precipitações diárias acumuladas da estação em análise e das cinco mais próximas.
 
 Com esse conjunto de gráficos é possível identificar inconsistências nos dados a partir de mudanças repentinas de inclinação de parte de um ou mais gráficos, ou na permanência em um patamar único, enquanto suas vizinhas apresentam crescimento (ocorrência de precipitação) ao longo do tempo. Assim, cada estação é classificada de forma independente com os rótulos “B” (Boa), “R” (Ruim) ou “D” (Dúvida). No caso das estações classificadas como “D”, um terceiro pesquisador consultará outras bases de dados para decidir se ela é Boa ou Ruim. Já as estações classificadas como “R” exigem que o pesquisador informe o tipo de problema identificado, que pode corresponder a registros de chuva constante ao longo do tempo (cte), valores sistematicamente acima ou abaixo das estações vizinhas (acima/abaixo) ou ausência de dados, em dias, com precipitação registrada em estações próximas (período). Como esse processo de avaliação, realizado por dois pesquisadores, tem intrinsicamente subjetividade, pois a análise depende da experiência do pesquisador, é possível que uma mesma estação receba classificações diferentes. Nessas situações, os resultados divergentes são reavaliados por um terceiro pesquisador mais experiente, que, se necessário, recorre ainda a dados de outras redes pluviométricas, para resolver as divergências. Ao final dessa etapa, é gerada uma lista preliminar de estações, classificadas como HQ ou PQ, sendo que as HQ seguem para uma análise de qualidade mais detalhada, na qual os eventos chuvosos são examinados.
 
@@ -68,8 +71,11 @@ As caraterísticas dos eventos chuvosos das estações determinadas na etapa ant
 
 ### Emissão do relatório anual da precipitação no Brasil
 
-Concluída as seis etapas anteriores, chega-se a uma lista final de estações HQ para cada ano, a qual é então utilizada para gerar um relatório do comportamento da chuva no Brasil nos períodos disponíveis. Esse relatório fornece para cada estação HQ a chuva anual, a precipitação máxima horária, a precipitação máxima diária, o número de dias com chuva, o número de horas com chuva e o número de meses com chuva. 
+Concluída as seis etapas anteriores, chega-se a uma lista final de estações HQ para cada ano, a qual é então utilizada para gerar um relatório do comportamento da chuva no Brasil nos períodos disponíveis. Esse relatório fornece para cada estação HQ a chuva anual, a precipitação máxima horária, a precipitação máxima diária, o número de dias com chuva, o número de horas com chuva e o número de meses com chuva.
 
-## Banco de dados consolidados 
+## Banco de dados consolidados
 
 Os dados consolidados, incluindo os de grade, serão organizados e armazenados no (Hierarchical Data Format), que é o formato utilizado por importantes agências internacionais como a NASA, para disponibilização de grandes bases de dados.
+
+::: {#refs}
+:::
