@@ -12,13 +12,13 @@ Esta seção inclui as seguintes atividades: (i) construção de um modelo de di
 
 É comum, em diferentes trabalhos, dada a incerteza em torno da estimação do parâmetro de forma ($\xi$) da GEV, assumir um valor constante ao longo de $d$ durações diferentes, ou seja, $\xi_d = \xi$ [@blanchet2016; @lima2018]. Uma vez testada a hipótese de invariância de escala na Meta 4, considerando a necessidade de séries longas para obter estimativas mais precisas [@papalexiou2013], nesta meta pretende-se desenvolver um modelo regional para o parâmetro de forma utilizando regressão linear por Mínimos Quadrados Generalizado (GLS).
 
-A abordagem é utilizada para obter estimativas mais precisas incorporando informação de outras estações na região e pode ser vista (não restrita a $\xi$ da GEV) em diferentes trabalhos [@martins2008; @ball2019; @reis2020]. São estabelecidas relações lineares entre uma variável de interesse ($\xi$) e covariáveis ($X$), relacionadas às características fisiográficas da bacia hidrográfica (coordenadas geográgicas, altitude, declividade, distância da costa); características da precipitação (chuva média anual); e covariáveis tipológicas (*dummy*<!--bobinhas-->).
+A abordagem é utilizada para obter estimativas mais precisas incorporando informação de outras estações na região e pode ser vista (não restrita a $\xi$ da GEV) em diferentes trabalhos [@martins2008; @ball2019; @reis2020]. São estabelecidas relações entre uma variável de interesse ($\xi$) e covariáveis ($X$), relacionadas às características fisiográficas (coordenadas geográgicas, altitude, direção da face do relevo, distância da costa, entre outros); características da precipitação (chuva média anual). citar [@haddad2011; \@haddad2012 @haddad2015]
 
-A relação estabelecida é do tipo $\hat\xi = X\beta + \varepsilon$, em que $\beta$ e $\varepsilon$ são vetores que representam, respectivamente, os parâmetros da regressão e o erro total do modelo. O método GLS foi escolhido, pois inclui, na estimação da matriz de covariância, a estrutura de correlação entre as estimativas – frequentemente estimada em função da correlação entre séries históricas concomitantes e da correlação espacial entre as estações [@martins2008; @england2018] – e resulta em valores mais precisos da variância do modelo.
+A relação estabelecida é do tipo $\hat\xi = X\beta + \varepsilon$, em que $\beta$ e $\varepsilon$ são vetores que representam, respectivamente, os parâmetros da regressão e o erro total do modelo. O método GLS foi escolhido, pois inclui, na estimação da matriz de covariância, a estrutura de correlação entre as estimativas – frequentemente estimada em função da correlação entre séries históricas concomitantes e da correlação espacial entre as estações [@martins2008; @england2018] – e resulta em valores mais precisos da variância do modelo. <!-- esse pode tirar -->
 
 O objetivo final desta primeira parte é construir uma distribuição *a priori* para $\xi$ a partir das estimativas de média $\hat\mu_{\xi_i}$ e variância $\sigma^2_{\xi_i}$ obtidas pelo modelo GLS utilizando um estimador Bayesiano proposto por @reis2005. O conjunto de média e variância para cada estação serão utilizados para estimar os parâmetros de uma distribuição Beta, definida entre $-0.50$ e $+0.50$ como definido em @martins2000.
 
-## IDF regionais diárias
+## IDF locais diárias
 
 A relação intensidade-duração-frequência será estipulada a partir do modelo proposto por @koutsoyiannis1998, o qual separa a componende de duração $b(d)$ da distribuição de probabildade das precipitações extremas $a(T)$. A intensidade é obtida por:
 
@@ -30,7 +30,7 @@ Este modelo será utilizado para derivar as IDFs para as bases de precipitação
 
 ### Modelo Bayesiano
 
-A construção do modelo Bayesiano para as IDF baseia-se na metodologia apresentada por @lima2018 para a Coréia do Sul, uma vez que este permite uma descrição completa das incertezas nas estimativas através da distribuição *a posteriori*. Neste procedimento, a hipótese de invariância de escala é utilizada para construir distribuições *a priori* normais para os parâmetros de posição ($\mu$) e de escala ($\sigma$) da GEV. O parâmetro de forma, como especificado anteriormente, é considerado invariante com a duração e sua distribuição *a priori* considera um hiperparâmetro $\bar\xi$ descrito pela distribuição *a priori* definida na @sec-priori-regional. Ademais, o conhecimento prévio sobre os parâmetros da invariância de escala $\theta$ e $\eta$ são modelados conforme seu domínio: $\theta \ge 0$ e $0 < \eta \le 1$.
+A construção do modelo Bayesiano para as IDF baseia-se na metodologia apresentada por @lima2018 para a Coréia do Sul, uma vez que este permite uma descrição completa das incertezas nas estimativas através da distribuição *a posteriori*. Neste procedimento, a hipótese de invariância de escala (que será detalhada na Meta 7) é utilizada para construir distribuições *a priori* normais para os parâmetros de posição ($\mu$) e de escala ($\sigma$) da GEV. O parâmetro de forma, como especificado anteriormente, é considerado invariante com a duração e sua distribuição *a priori* considera um hiperparâmetro $\bar\xi$ descrito pela distribuição *a priori* definida na @sec-priori-regional. Ademais, o conhecimento prévio sobre os parâmetros da invariância de escala $\theta$ e $\eta$ são modelados conforme seu domínio: $\theta \ge 0$ e $0 < \eta \le 1$.
 
 Sendo $\Theta$ o espaço paramétrico, de maneira simplificada, a distribuição *a posteriori* será proporcional ao produto entre verossimilhança da GEV em cada estação ou pixeis ($i$, de 1 a $m$), observação ($j$, de 1 a $n_i$) e duração ($d$, de $d_0 =$ 24 h a 10 dias) e o conjunto de *prioris* e *hiperprioris* representadas por $\pi(\Theta)$
 
@@ -44,11 +44,13 @@ $$
 I(d,T) = \left( \frac{d + \theta}{d_0 + \theta} \right)^{-\eta} \left\{ \mu_{d_0}  - \frac{\sigma_{d_0}}{\xi}\left[1 - (-\ln p)\right]^{-\xi} \right\},
 $$ {#eq-idf-bayesiano} permitindo facilmente a avaliação das incertezas nas estimativas, simplesmente avaliando os quantis empíricos de 2,5% e 97,5% por exemplo.
 
-### Max-estável (?)
+### Max-estável
+
+Seguir a metodologia descrita em duarte...
 
 ## Produtos esperados
 
-Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados em camadas vetoriais (em formato *geopackage* e *shapefile*) e produtos em grade espacializados em *raster* (em formato HDF e GeoTiff); bem como os scripts em linguagem R utilizados no procedimento.
+Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados em camadas vetoriais (em formato *geopackage* e *shapefile*) e produtos em grade espacializados em *raster* (em formato HDF e GeoTiff); bem como os scripts em linguagem R utilizados no procedimento. <!-- rever -->
 :::
 
 ## Referências
