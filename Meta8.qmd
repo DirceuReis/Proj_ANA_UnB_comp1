@@ -1,12 +1,15 @@
 ---
 title: "Análise Não Estacionária"
-bibliography: referencias/ref_analise_nao_estacionaria.bib
+bibliography: referencias/ref_meta3.bib
 ---
 
-Os sistemas de recursos hídricos são projetados e operados com base no pressuposto de que as séries hidrológicas são estacionárias. Caso esta condição não seja verificada, os procedimentos existentes para o desenvolvimento de projetos e estudos de engenharia como  barragens, reservatórios, disponibilidade hídrica, sistemas de drenagem, etc, podem ser comprometidos. Dessa forma, avaliar a hipótese de estacionariedade das séries advindas dos pluviômetros e pluviógrafos é fundamental. Além disso, uma análise de tendência das séries históricas permite avaliar com maior consistência o comportamento das projeções efetuadas a partir dos modelos climáticos.
+Os sistemas de recursos hídricos são projetados e operados com base no pressuposto de que as séries hidrológicas são estacionárias. Caso esta condição não seja verificada, os procedimentos existentes para o desenvolvimento de projetos e estudos de engenharia como barragens, reservatórios, disponibilidade hídrica, sistemas de drenagem, etc, podem ser comprometidos. Dessa forma, avaliar a hipótese de estacionariedade das séries advindas dos pluviômetros e pluviógrafos é fundamental. Além disso, uma análise de tendência das séries históricas permite avaliar com maior consistência o comportamento das projeções efetuadas a partir dos modelos climáticos.
 
 As mudanças nas séries hidrometeorológicas podem ocorrer de diferentes maneiras: abruptamente (saltos na série), gradualmente (tendências) ou de forma mais complexa. Estas mudanças podem afetar algumas características estatísticas das séries como média, mediana, variância, autocorrelação, entre outras. A partir do diagnóstico da forma como essas mudanças se apresentam, os testes estatísticos para a detecção e quantificação das tendências podem ser melhor selecionados.
 
 A análise de não estacionariedade será baseada no trabalho recente apresentado por [@m6a]. Serão avaliadas mudanças em salto e graduais em todos as séries de máximos advindas dos dados de pluviômetros, pluviógrafos e aqueles presentes nos pontos de grade das bases Xavier e NEX-GDDP-CMIP6. O objetivo das análises para as séries dos pluviômetros/pluviógrafos é de verificar de forma regionalizada se existem evidências de mudanças nas séries de máximos dos postos de medição de chuva existentes. De maneira análoga os testes nas bases Xavier e NEX-GDDP-CMIP6 serão conduzidos e comparados com as tendências observadas nos registros históricos das estações para verificar como as tendências regionais evidenciadas nos dados são reproduzidas nas bases geradas para os dados em grade. Os testes conduzidos na base NEX-GDDP-CMIP6 serão aplicados tanto na série original como naquela advinda da correção de viés para avaliar se a metodologia de correção de viés impacta o comportamento das tendências. Complementarmente, os testes nessa base permitirão analisar a coerência e significância estatística dos resultados das projeções dos modelos, com base nas tendências efetivamente verificadas nas séries históricas geradas por eles.
 
 Os produtos desta etapa consistirão no relatório de análise de não estacionariedade para os dados dos pluviômetros/pluviógrafos, e um relatório de análise de não estacionariedade para os dados em grade.
+
+::: {#refs}
+:::
