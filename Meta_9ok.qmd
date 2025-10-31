@@ -1,0 +1,10 @@
+---
+title: "META 1.9 IDFs nos Pontos de Grade para os Dados Históricos"
+bibliography: referencias/refs_sensoriamento_remoto.bib
+---
+
+## META 1.9 IDFs nos Pontos de Grade para os Dados Históricos
+
+De maneira similar às IDFs para os postos pluviométricos e para os pluviógrafos, serão desenvolvidas IDFs para os dados históricos/presente de chuva gerados em grade após a etapa de espacialização dos dados, conforme descrito nas meta 3 e 4. Assim, para cada ponto da malha serão desenvolvidas curvas IDFs para as chuvas acumuladas para 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos; 1, 2, 3, 4, 5, 6 e 7 dias, com tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos, considerando o histórico de dados até a data presente (considerado o ano de 2014 na base NEX-GDDP-CMIP6). Os ajustes às distribuições extremas e os ajustes às equações IDF serão conduzidos conforme os métodos a serem desenvolvidos e que estão descritos nas metas 4, 5 e 7.
+
+Os resultados desta etapa metodológica serão disponibilizados na forma de um boletim, scripts do R ou Python, e um relatório com os ajustes estatísticos realizados e as equações com as curvas IDF nos pontos de grade.
