@@ -4,9 +4,9 @@ bibliography: referencias/ref_meta5.bib
 ---
 
 ::: {style="text-align: justify;"}
-O objetivo desta etapa é desenvolver curvas IDF a partir dos postos pluviométricos da ANA (obtidos do Hidroweb) e das bases de dados em grade adotadas na Meta 4 desta componente. As curvas serão construídas para durações acumuladas de 1, 2, 3, 4, 5, 6, 7 e 10 dias e tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos, partindo das series de máximos anuais.
+O objetivo desta etapa é desenvolver curvas IDF a partir dos postos pluviométricos da ANA (obtidos do Hidroweb) e das bases de dados em grade adotadas na Meta 3 e 4 desta componente. As curvas serão construídas para durações acumuladas de 1, 2, 3, 4, 5, 6, 7 e 10 dias e tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos, partindo das series de máximos anuais.
 
-Esta seção inclui as seguintes atividades: (i) construção de um modelo de distribuição *a priori* regional para o parâmetro de forma da distribuição GEV ($\xi$) a partir dos dados de precipitação diária utilizando regressão linear GLS Bayesiana; (ii) utilizar a informação *a priori* em um procedimento Bayesiano completo para construir curvas de IDF para precipitações diárias.
+Esta seção inclui as seguintes atividades: (i) construção de um modelo de distribuição *a priori* regional para o parâmetro de forma da distribuição GEV ($\xi$) a partir dos dados de precipitação diária utilizando regressão linear GLS Bayesiana; (ii) utilizar a informação *a priori* em um procedimento Bayesiano completo para construir curvas de IDF para precipitações diárias.
 
 ## Modelo *a priori* para $\xi$ {#sec-priori-regional}
 
@@ -14,11 +14,9 @@ Esta seção inclui as seguintes atividades: (i) construção de um modelo de di
 
 A abordagem é utilizada para obter estimativas mais precisas incorporando informação de outras estações na região e pode ser vista (não restrita a $\xi$ da GEV) em diferentes trabalhos [@martins2008; @ball2019; @reis2020]. São estabelecidas relações entre uma variável de interesse ($\xi$) e covariáveis ($X$), relacionadas às características fisiográficas (coordenadas geográgicas, altitude, direção da face do relevo, distância da costa, entre outros); características da precipitação (chuva média anual). citar [@haddad2011; \@haddad2012 @haddad2015]
 
-A relação estabelecida é do tipo $\hat\xi = X\beta + \varepsilon$, em que $\beta$ e $\varepsilon$ são vetores que representam, respectivamente, os parâmetros da regressão e o erro total do modelo. O método GLS foi escolhido, pois inclui, na estimação da matriz de covariância, a estrutura de correlação entre as estimativas – frequentemente estimada em função da correlação entre séries históricas concomitantes e da correlação espacial entre as estações [@martins2008; @england2018] – e resulta em valores mais precisos da variância do modelo. <!-- esse pode tirar -->
-
 O objetivo final desta primeira parte é construir uma distribuição *a priori* para $\xi$ a partir das estimativas de média $\hat\mu_{\xi_i}$ e variância $\sigma^2_{\xi_i}$ obtidas pelo modelo GLS utilizando um estimador Bayesiano proposto por @reis2005. O conjunto de média e variância para cada estação serão utilizados para estimar os parâmetros de uma distribuição Beta, definida entre $-0.50$ e $+0.50$ como definido em @martins2000.
 
-## IDF locais diárias
+## IDF regionais diárias
 
 A relação intensidade-duração-frequência será estipulada a partir do modelo proposto por @koutsoyiannis1998, o qual separa a componende de duração $b(d)$ da distribuição de probabildade das precipitações extremas $a(T)$. A intensidade é obtida por:
 
@@ -26,7 +24,7 @@ $$
 I(d,T) = \frac{a(T)}{b(d)}
 $$ {#eq-idf-koutsoyianni}
 
-Este modelo será utilizado para derivar as IDFs para as bases de precipitação em grade e localmente nas estações pluviométricas.
+Este modelo será utilizado para derivar as IDFs para as bases de precipitação  localmente nas estações pluviométricas.
 
 ### Modelo Bayesiano
 
@@ -38,7 +36,7 @@ $$
 p(\Theta|I) \propto \prod_i\prod_j\prod_d GEV(I_{d,j,i}|\mu_{d,i},\sigma_{d,i},\xi_i) \times \pi(\Theta).
 $$ {#eq-posteriori}
 
-A solução da @eq-posteriori envolve a soluções de integrais complexas das distribuições marginais, portanto a distribuição *a posteriori* será amostrada utilizando simulações Monte Carlo por Cadeias de Markov (MCMC) através de pacotes como `R2WinBUGS` [@sturtz2005] e `Stan` [@gelman2013; @carpenter2017]. A convergência da simulação será verificada por meio do coeficiente de redução potencial de escala $\hat R$ [@gelman2013]. A amostragem de $p(\Theta|I)$ permite a amostragem da *posteriori* de quantidades calculadas a partir dela, como as intensidades $I(d,T)$ calculadas como:
+A solução da @eq-posteriori envolve a soluções de integrais complexas das distribuições marginais, portanto a distribuição *a posteriori* será amostrada utilizando simulações Monte Carlo por Cadeias de Markov (MCMC) através de pacotes como `R2WinBUGS` [@sturtz2005] e `Stan` [@gelman2013; @carpenter2017]. A convergência da simulação será verificada por meio do coeficiente de redução potencial de escala $\hat R$ [@gelman2013]. A amostragem de $p(\Theta|I)$ permite a amostragem da *posteriori* de quantidades calculadas a partir dela, como as intensidades $I(d,T)$ calculadas como:
 
 $$
 I(d,T) = \left( \frac{d + \theta}{d_0 + \theta} \right)^{-\eta} \left\{ \mu_{d_0}  - \frac{\sigma_{d_0}}{\xi}\left[1 - (-\ln p)\right]^{-\xi} \right\},
@@ -46,11 +44,11 @@ $$ {#eq-idf-bayesiano} permitindo facilmente a avaliação das incertezas nas es
 
 ### Max-estável
 
-Seguir a metodologia descrita em duarte...
+Será aplicado também um modelo max-estável baseado no trabalho de Stephenson et al. [-@Stephenson.2016] com as inovações de Duarte et al. [-@Duarte.2025]. Recentemente, Duarte et al. [-@Duarte.2025] desenvolveram uma estratégia de modelagem baseada em processo máximo-estável, seguindo a lógica introduzida por Stephenson et al. [-@Stephenson.2016], porém com algumas inovações. Eles aplicaram a metodologia proposta na região metropolitana de Belo Horizonte, fazendo uso de observações em 8 postos, com tamanho de série histórica variando entre 6 e 17 anos. Dentre as inovações, quando comparada com a metodologia de Stephenson et al. [-@Stephenson.2016], pode-se citar: (a) o uso de covariáveis tanto no nível dos dados, quando no nível dos processos, na tentativa de explicar a variabilidade espacial dos parâmetros e avaliar de forma explícita seus efeitos no expoente de escala, no parâmetro de forma da GEV, e na dependência espacial dos extremos; (b) a incorporação do "pooling" parcial na estimativa dos parâmetros da GEV, permitindo uma combinação mais adequada entre as informações locais, muitas vezes restritas, com informações oriundas de outras estações na região; e (c) uma comparação entre o modelo espacialmente dependente, baseado no processo máximo-estável, com um modelo condicionalmente independente, permitndo uma análise de como a depedência espacial dos extremos afeta as estimativas das curvas IDF. 
 
 ## Produtos esperados
 
-Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados em camadas vetoriais (em formato *geopackage* e *shapefile*) e produtos em grade espacializados em *raster* (em formato HDF e GeoTiff); bem como os scripts em linguagem R utilizados no procedimento. <!-- rever -->
+Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados; bem como os scripts em linguagem R utilizados no procedimento. <!-- rever -->
 :::
 
 ## Referências
