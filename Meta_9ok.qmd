@@ -1,6 +1,5 @@
 ---
 title: "META 1.9 IDFs nos Pontos de Grade para os Dados Históricos"
-bibliography: referencias/refs_sensoriamento_remoto.bib
 ---
 
 ## META 1.9 IDFs nos Pontos de Grade para os Dados Históricos
