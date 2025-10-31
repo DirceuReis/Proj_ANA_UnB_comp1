@@ -46,6 +46,7 @@ format:
     theme: zephyr
     css: styles.css
     toc: true
+    lang: pt
 
 editor: visual
 
