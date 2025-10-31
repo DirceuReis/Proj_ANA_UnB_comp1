@@ -1,6 +1,6 @@
 ---
 title: "Meta 5: IDFs para precipitação diária"
-bibliography: referencias/ref_meta5.bib
+bibliography: referencias/ref_meta3.bib
 ---
 
 ::: {style="text-align: justify;"}
@@ -49,9 +49,6 @@ Será aplicado também um modelo max-estável baseado no trabalho de Stephenson 
 ## Produtos esperados
 
 Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados; bem como os scripts em linguagem R utilizados no procedimento.
-:::
 
-## Referências
-
-::: {#refs style="text-align: justify;"}
+::: {#refs}
 :::
