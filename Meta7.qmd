@@ -1,6 +1,6 @@
 ---
 title: "Meta 1.7 - IDFs Pluviógrafos INMET/CEMADEM"
-bibliography: referencias/ref_meta_4_7.bib
+bibliography: referencias/ref_meta3.bib
 ---
 
 Nesta etapa serão geradas curvas IDF a partir dos dados de pluviógrafos operados pelo INMET e pelo CEMADEN. O procedimento segue a mesma lógica geral aplicada aos pluviômetros convencionais (isto é, geração de máximos anuais, ajuste a distribuições de valores extremos e obtenção de quantis para diferentes períodos de retorno), mas aqui a discretização temporal é mais fina. Serão considerados acumulados de precipitação em janelas móveis de 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos, e serão estimadas intensidades associadas a períodos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos. As etapas de ajuste às distribuições extremas (por exemplo, GEV), os testes de aderência e o ajuste das equações de IDF seguirão procedimentos análogos aos descritos anteriormente (ver Meta 1.4.5), e serão detalhados no Plano de Trabalho atualizado.

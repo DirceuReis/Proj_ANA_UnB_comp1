@@ -1,6 +1,6 @@
 ---
 title: "META 1.6 Correção de Viés dos Dados Climáticos"
-bibliography: referencias/ref_impactos_mudancas.bib
+bibliography: referencias/ref_meta3.bib
 ---
 
 ## META 1.6 Correção de Viés dos Dados Climáticos
@@ -21,4 +21,5 @@ Além disso, destaca-se o método *Quantile Perturbation Downscaling* (QPD), que
 
 O produto desta meta será um relatório com a descrição dos prós e contras das metodologias citadas acima com a definição da metodologia a ser utilizada para remoção de viés.
 
-##Referências 
+::: {#refs}
+:::
