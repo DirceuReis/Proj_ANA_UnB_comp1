@@ -1,0 +1,7 @@
+---
+title: "Apresentação"
+---
+
+O presente relatório corresponde à Meta 2 da Componente 1 do Termo de Execução Descentralizada nº 02/2024, firmado entre a Agência Nacional de Águas e Saneamento Básico (ANA) e a Universidade de Brasília (UnB). Essa meta integra o Projeto 1 – Desenvolvimento de Curvas de Intensidade, Duração e Frequência (IDFs) para o Território Nacional sob a Influência de Mudanças Climáticas.
+
+Este documento apresenta uma adequação das metas e atividades do plano de trabalho original da componente 1. Como as Metas 1 e 2 já foram executas, elas não fazem parte deste relatório. Não houve adição ou exclusão de Metas, e tampouco alteração nos meses de início e fim das mesmas, embora tenha havido mudanças em algumas atividades.
