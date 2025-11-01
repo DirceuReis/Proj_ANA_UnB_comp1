@@ -1,9 +1,8 @@
 ---
 title: "Modelos probabilísticos de chuvas intensas"
-author: Dirceu S. Reis Jr.
+date: now
+date-format: long
 bibliography: referencias/ref_modelos.bib
-nocite: |
-  @*
 ---
 
 ## A Necessidade de Modelar Extremos de Precipitação
@@ -76,7 +75,7 @@ Por outro lado, para amostras muito pequenas (ex: $m < 50$), a instabilidade da 
 
 Ainda, a discussão anterior, e a maior parte da EVT clássica, assume implicitamente a estacionariedade das estatísticas de chuva. Diante das mudanças climáticas, essa suposição torna-se inadequada: a probabilidade de eventos intensos apresenta tendências ao longo do tempo, configurando um regime não estacionário. Essa não estacionariedade pode ser incorporada no ajuste GEV ao permitir que seus parâmetros (notadamente $\mu$ e $\sigma$) variem no tempo ou em função de covariáveis [@Benestad.2021]. Essa questão também é observada por Nerantzaki & Papalexiou [-@Nerantzaki.2022] que destacam, em seu artigo de revisão, que muitos estudos recentes estendem a GEV para contextos não estacionários. Essa abordagem é vista como essencial frente às mudanças climáticas.
 
-A consolidação de caudas pesadas levanta a questão da estabilidade espacial do parâmetro $\xi$. Embora a hipótese de um $\xi$ global simplificasse a estimação, a evidência empírica não respalda tal universalidade. Estudos globais, baseados em séries diárias, indicam que, mesmo corrigindo o viés por comprimento de registro, persiste uma variabilidade geográfica. Em termos práticos, recomenda-se evitar $\xi < 0$ (incompatível com chuva) e, na ausência de suporte local robusto, adotar Gumbel ($\xi = 0$) ou uma GEV com $\xi \approx 0,114$ como escolha prudente, até que evidências regionais justifiquem um ajuste distinto [@Papalexiou.2013a; @koutsoyiannis2017-extreme-rainfall; @Courty.2019]. Essas evidências regionias podem ser incorporadas na estimativa de $\xi$ por meio da contruçao de modelos regionais, como por exemplo, aqueles derivados por Haddad e Rahman [-@Haddad.2012], baseados na abordaem de regressão BGLS (Bayesian Generalized Least Square), desenvolvida e apriomorada em Reis et al. [-@Reis.2005;-@Reis.2020].
+A consolidação de caudas pesadas levanta a questão da estabilidade espacial do parâmetro $\xi$. Embora a hipótese de um $\xi$ global simplificasse a estimação, a evidência empírica não respalda tal universalidade. Estudos globais, baseados em séries diárias, indicam que, mesmo corrigindo o viés por comprimento de registro, persiste uma variabilidade geográfica. Em termos práticos, recomenda-se evitar $\xi < 0$ (incompatível com chuva) e, na ausência de suporte local robusto, adotar Gumbel ($\xi = 0$) ou uma GEV com $\xi \approx 0,114$ como escolha prudente, até que evidências regionais justifiquem um ajuste distinto [@Papalexiou.2013a; @koutsoyiannis2017-extreme-rainfall; @Courty.2019]. Essas evidências regionias podem ser incorporadas na estimativa de $\xi$ por meio da contruçao de modelos regionais, como por exemplo, aqueles derivados por Haddad e Rahman [-@Haddad.2012], baseados na abordaem de regressão BGLS (Bayesian Generalized Least Square), desenvolvida e apriomorada em Reis et al. [-@Reis.2005; -@Reis.2020].
 
 Uma via operacional alternativa é assumir $\xi \approx 0,15$: com $\xi$ fixo, a estimação dos demais parâmetros (por momentos ou L-momentos) fica tão simples quanto na Gumbel, preservando porém a flexibilidade de cauda necessária para extrapolações seguras [@Koutsoyiannis.2005].
 
@@ -104,4 +103,3 @@ Em paralelo, a regionalização enfrenta o problema recorrente de amostras curta
 
 ::: {#refs}
 :::
-

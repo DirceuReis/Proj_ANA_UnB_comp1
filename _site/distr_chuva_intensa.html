@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Dirceu S. Reis Jr.">
 
 <title>Modelos probabilísticos de chuvas intensas – Proj. IDF Brasil ANA/UnB</title>
 <style>
@@ -74,20 +73,49 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -103,8 +131,8 @@ div.csl-indent {
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -129,40 +157,24 @@ div.csl-indent {
  <span class="dropdown-text">Modelagem probabilística de chuvas intensas</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./IDF_basico.html">
- <span class="dropdown-text">IDF básico</span></a>
-  </li>  
-        <li>
     <a class="dropdown-item" href="./desagregacao_temporal.html">
  <span class="dropdown-text">Desagregacao temporal</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./regionalizacao.html">
- <span class="dropdown-text">Modelos Regionais</span></a>
+ <span class="dropdown-text">Regionalização</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./IDF_mudanca.html">
+    <a class="dropdown-item" href="./Sensoreamento_remoto.qmd">
+ <span class="dropdown-text">Sensoreamento remoto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./climate_models.html">
  <span class="dropdown-text">IDF e as mudanças do clima</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
  <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Australia.html">
- <span class="dropdown-text">Austrália</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Canada.html">
- <span class="dropdown-text">Canadá</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Inglaterra.html">
- <span class="dropdown-text">Inglaterra</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./estados unidos.html">
- <span class="dropdown-text">Estados Unidos</span></a>
   </li>  
     </ul>
   </li>
@@ -187,17 +199,16 @@ div.csl-indent {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Nesta página</h2>
    
   <ul>
-  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#principais-distribuições-utilizadas" id="toc-principais-distribuições-utilizadas" class="nav-link" data-scroll-target="#principais-distribuições-utilizadas">Principais distribuições utilizadas</a></li>
-  <li><a href="#as-distribuições-de-extremos" id="toc-as-distribuições-de-extremos" class="nav-link" data-scroll-target="#as-distribuições-de-extremos">As distribuições de extremos</a>
-  <ul class="collapse">
-  <li><a href="#a-teoria-de-valores-extremos" id="toc-a-teoria-de-valores-extremos" class="nav-link" data-scroll-target="#a-teoria-de-valores-extremos">A teoria de valores extremos</a></li>
-  <li><a href="#justificativa-para-uso-da-gev" id="toc-justificativa-para-uso-da-gev" class="nav-link" data-scroll-target="#justificativa-para-uso-da-gev">Justificativa para uso da GEV</a></li>
-  <li><a href="#a-questão-do-parâmetro-do-forma" id="toc-a-questão-do-parâmetro-do-forma" class="nav-link" data-scroll-target="#a-questão-do-parâmetro-do-forma">A questão do parâmetro do forma</a></li>
-  </ul></li>
+  <li><a href="#a-necessidade-de-modelar-extremos-de-precipitação" id="toc-a-necessidade-de-modelar-extremos-de-precipitação" class="nav-link active" data-scroll-target="#a-necessidade-de-modelar-extremos-de-precipitação">A Necessidade de Modelar Extremos de Precipitação</a></li>
+  <li><a href="#abordagens-fundamentais-determinística-pmp-vs.-probabilística" id="toc-abordagens-fundamentais-determinística-pmp-vs.-probabilística" class="nav-link" data-scroll-target="#abordagens-fundamentais-determinística-pmp-vs.-probabilística">Abordagens Fundamentais: Determinística (PMP) vs.&nbsp;Probabilística</a></li>
+  <li><a href="#amostragem-de-eventos-extremos-ams-vs.-pot" id="toc-amostragem-de-eventos-extremos-ams-vs.-pot" class="nav-link" data-scroll-target="#amostragem-de-eventos-extremos-ams-vs.-pot">Amostragem de Eventos Extremos: AMS vs.&nbsp;POT</a></li>
+  <li><a href="#modelagem-probabilística-a-escolha-da-distribuição-e-o-comportamento-da-cauda" id="toc-modelagem-probabilística-a-escolha-da-distribuição-e-o-comportamento-da-cauda" class="nav-link" data-scroll-target="#modelagem-probabilística-a-escolha-da-distribuição-e-o-comportamento-da-cauda">Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda</a></li>
+  <li><a href="#métodos-de-estimação-e-qualidade-dos-dados" id="toc-métodos-de-estimação-e-qualidade-dos-dados" class="nav-link" data-scroll-target="#métodos-de-estimação-e-qualidade-dos-dados">Métodos de Estimação e Qualidade dos Dados</a></li>
+  <li><a href="#curvas-idf" id="toc-curvas-idf" class="nav-link" data-scroll-target="#curvas-idf">Curvas IDF</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
   </ul>
 </nav>
     </div>
@@ -213,13 +224,13 @@ div.csl-indent {
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Dirceu S. Reis Jr. </p>
-          </div>
-  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">1 de novembro de 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -229,118 +240,190 @@ div.csl-indent {
 </header>
 
 
-<section id="introdução" class="level2">
-<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
+<section id="a-necessidade-de-modelar-extremos-de-precipitação" class="level2">
+<h2 class="anchored" data-anchor-id="a-necessidade-de-modelar-extremos-de-precipitação">A Necessidade de Modelar Extremos de Precipitação</h2>
+<p>O dimensionamento e a gestão de obras de proteção contra cheias dependem de estimativas probabilísticas consistentes dos perigos (<em>hazard</em>) e dos riscos associados. Idealmente, essas estimativas seriam ancoradas em séries fluviométricas longas e representativas, mas essa condição raramente se verifica. A escassez de postos de medição de vazão, ou a intermitência de seus dados, desloca o foco para modelos hidrológicos dirigidos por precipitação e para a síntese de tempestades de projeto <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
+<p>Nesse contexto, as chuvas de projeto, expressas pelas relações Intensidade–Duração–Frequência (IDF) ou Lâmina–Duração–Frequência (DDF), tornam-se a base de referência para o dimensionamento. A preferência por essas relações decorre da maior abrangência temporal e espacial das observações de chuva em comparação às de vazão, notadamente para eventos raros. No entanto, a derivação robusta dessas curvas é frequentemente dificultada pela cobertura inadequada de dados em resolução subdiária. Para superar a escassez de dados e a limitação de análises puramente locais (restritas aos postos de medição), desenvolveram-se abordagens de regionalização. Esses métodos permitem a criação de mapas espacialmente coerentes para diferentes tempos de retorno, usualmente baseados em distribuições GEV cujos parâmetros são modelados em função de informações geográficas e meteorológicas locais <span class="citation" data-cites="Benestad.2021">(<a href="#ref-Benestad.2021" role="doc-biblioref">Benestad et al. 2021</a>)</span>. A sua derivação requer a seleção de eventos extremos independentes para cada duração e o ajuste de uma distribuição de valores extremos capaz de extrapolar quantis aos níveis de probabilidade de interesse <span class="citation" data-cites="johnson2017-design-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>.</p>
 </section>
-<section id="principais-distribuições-utilizadas" class="level2">
-<h2 class="anchored" data-anchor-id="principais-distribuições-utilizadas">Principais distribuições utilizadas</h2>
-<p>Introduzir a questão da necessidade de se relacionar probabilidade de excedência com magnitude das precipitações para fins de engenharia;</p>
-<p>Mencionar a possibilidade de se analisar os extremos de duas foromas distintas: via séries parciais e via máximos anuais;</p>
-<p>Falar de uma maneira geral sobre as ditribuições, dando exemplos de uso de cada uma delas.</p>
+<section id="abordagens-fundamentais-determinística-pmp-vs.-probabilística" class="level2">
+<h2 class="anchored" data-anchor-id="abordagens-fundamentais-determinística-pmp-vs.-probabilística">Abordagens Fundamentais: Determinística (PMP) vs.&nbsp;Probabilística</h2>
+<p>Historicamente, a estimação de extremos pluviométricos consolidou-se em duas frentes: (i) a determinística, que busca estabelecer limites físicos (Precipitação Máxima Provável - PMP) para orientar projetos supostamente livres de risco; e (ii) a probabilística, que modela a incerteza por distribuições e probabilidades de excedência. Apesar de sua difusão em guias de engenharia, a via determinística (PMP) revela-se metodológica e logicamente frágil. As dificuldades em representar a chuva por primeiros princípios e as incoerências conceituais do PMP, um “máximo” que é, de fato, inferido estatisticamente, minam sua validade <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
+<p>Em contraste, a abordagem probabilística é logicamente consistente e operacionalmente superior. Ela reconhece que qualquer valor fisicamente admissível possui uma probabilidade de excedência (ainda que desprezível) e fornece fundamentos, como o princípio da máxima entropia, para a escolha de famílias distribucionais. A evidência ampara, portanto, uma formulação probabilística fundada em dados locais, apta a quantificar risco e explicitar incertezas <span class="citation" data-cites="Koutsoyiannis.2004 koutsoyiannis2017-extreme-rainfall">(<a href="#ref-Koutsoyiannis.2004" role="doc-biblioref">Koutsoyiannis 2004a</a>; <a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
 </section>
-<section id="as-distribuições-de-extremos" class="level2">
-<h2 class="anchored" data-anchor-id="as-distribuições-de-extremos">As distribuições de extremos</h2>
-<section id="a-teoria-de-valores-extremos" class="level3">
-<h3 class="anchored" data-anchor-id="a-teoria-de-valores-extremos">A teoria de valores extremos</h3>
-<p>INtroduzir o conceito de máximo de um conjunto de variáveis aleatórias e explicr a ideia de que a distribuição desses máximos converge para uma das 3 distribuições de extremos: Gimbel, Frechet e Weibull reversa. Ver discussão na seção 2 de Papalexious e Koutsoyiannis (2013).</p>
+<section id="amostragem-de-eventos-extremos-ams-vs.-pot" class="level2">
+<h2 class="anchored" data-anchor-id="amostragem-de-eventos-extremos-ams-vs.-pot">Amostragem de Eventos Extremos: AMS vs.&nbsp;POT</h2>
+<p>Na derivação das relações IDF/DDF sob o paradigma probabilístico, dois esquemas de amostragem são predominantes. A série de máximos anuais (AMS) retém, para cada duração, o maior total de chuva observado em cada ano hidrológico. Por sua vez, a série de duração parcial (PDS) ou de picos acima do limiar (POT, <em>Peaks Over Threshold</em>) agrega todos os eventos que excedem um limiar predefinido, permitindo múltiplos eventos por ano ou, ocasionalmente, nenhum. O método PDS/POT tende a reduzir a variância dos quantis ajustados por capturar todos os excedentes relevantes, mitigando a perda de informação que pode ocorrer no AMS em anos com múltiplos episódios intensos. Contudo, o PDS/POT exige a definição criteriosa do limiar e a verificação da independência entre eventos, usualmente por regras de separação temporal cujo valor ótimo depende da duração e do regime sinótico local <span class="citation" data-cites="johnson2017-design-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>.</p>
+<p>As implicações estatísticas diferem: AMS é tipicamente modelada pela distribuição Generalizada de Valores Extremos (GEV), enquanto PDS/POT adota a distribuição de Pareto Generalizada (GPD) com um processo de Poisson para a taxa de excedências. Via teoria da POT, a GPD surge como candidata natural para modelar a cauda acima de um limiar, conectando-se a leis do tipo Pareto <span class="citation" data-cites="Cavanaugh.2015">(<a href="#ref-Cavanaugh.2015" role="doc-biblioref">Cavanaugh et al. 2015</a>)</span>. Embora as métricas de risco adotadas em cada abordagem sejam conceitualmente distintas, na série de máximos anuais trabalha-se com a probabilidade anual de excedência de um determinado valor, ao passo que nas excedências (AEP) usa-se o intervalo médio entre ocorrências (ARI) que superam esse valor, para eventos raros (por exemplo, AEP ≤ 10% ou ARI ≥ 10 anos), as estimativas tendem a ser praticamente equivalentes <span class="citation" data-cites="johnson2017-design-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>. A Tabela abaixo apresenta as distribuições mais comuns a essas abordagens.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 45%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Distribuição</th>
+<th>Função (CDF/PDF)</th>
+<th>Observações</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Generalized Extreme Value (GEV)</td>
+<td><span class="math inline">\(F(x)=\exp\!\left\{-\left[1+\xi\,\dfrac{x-\mu}{\sigma}\right]^{-1/\xi}\right\}\)</span>, com <span class="math inline">\(1+\xi\,\dfrac{x-\mu}{\sigma}\ge 0\)</span>, <span class="math inline">\(\sigma&gt;0\)</span></td>
+<td>Gumbel: <span class="math inline">\(\xi=0\)</span>. Fréchet: <span class="math inline">\(\xi&gt;0\)</span> (sem limite superior). Weibull: <span class="math inline">\(\xi&lt;0\)</span> (limite sup.: <span class="math inline">\(x_{\max}=\mu-\sigma/\xi\)</span>).</td>
+</tr>
+<tr class="even">
+<td>Generalized Pareto (GPD)</td>
+<td><span class="math inline">\(F(x)=1-\left[1+\xi\,\dfrac{x-u}{\beta}\right]^{-1/\xi}\)</span>, com <span class="math inline">\(1+\xi\,\dfrac{x-u}{\beta}\ge 0\)</span>, <span class="math inline">\(\beta&gt;0\)</span></td>
+<td><span class="math inline">\(\xi=0\)</span>: exponencial. <span class="math inline">\(\xi&lt;0\)</span>: <span class="math inline">\(u\le x\le u-\beta/\xi\)</span>. <span class="math inline">\(\xi&gt;0\)</span>: <span class="math inline">\(x\ge u\)</span>.</td>
+</tr>
+<tr class="odd">
+<td>Log-Pearson III (PDF)</td>
+<td><span class="math inline">\(f(x)=\dfrac{\lvert\beta\rvert\,\{\beta[\log(x)-\xi]\}^{\alpha-1}\exp\{-\beta[\log(x)-\xi]\}}{x\,\Gamma(\alpha)}\)</span>, <span class="math inline">\(x&gt;0\)</span></td>
+<td>Se <span class="math inline">\(\beta&lt;0\)</span>: <span class="math inline">\(0&lt;x&lt;e^{\xi}\)</span>. Se <span class="math inline">\(\beta&gt;0\)</span>: <span class="math inline">\(x&gt;e^{\xi}\)</span>.</td>
+</tr>
+<tr class="even">
+<td>Log-normal (PDF)</td>
+<td><span class="math inline">\(f(x)=\dfrac{1}{x\,\sigma_Y\sqrt{2\pi}}\exp\!\left[-\dfrac{1}{2}\left(\dfrac{\log x-\mu_Y}{\sigma_Y}\right)^{2}\right]\)</span>, <span class="math inline">\(x&gt;0\)</span> (onde <span class="math inline">\(Y=\log X\)</span>)</td>
+<td><span class="math inline">\(\mu_Y\)</span>: média de <span class="math inline">\(Y\)</span>. <span class="math inline">\(\sigma_Y&gt;0\)</span>: desvio-padrão de <span class="math inline">\(Y\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<p>Vale enfatizar que a abordagem por picos acima de um limiar aumenta a eficiência estatística ao aproveitar todas as excedências disponíveis, enquanto a série de máximos anuais retém apenas um valor por bloco. Apesar dessa diferença de amostragem, o conteúdo analítico de ambas permanece essencialmente análogo, em ambos os casos escolhe-se a família distribucional, estimam-se parâmetros e avalia-se o ajuste, com a prática consolidada indicando a GEV para séries de máximos anuais e a GPD combinada a um processo de Poisson para as excedências, o que decorre diretamente da teoria de caudas acima de limiar e da conexão natural com leis do tipo Pareto <span class="citation" data-cites="Cavanaugh.2015 johnson2017-design-rainfall Merz.2022">(<a href="#ref-Cavanaugh.2015" role="doc-biblioref">Cavanaugh et al. 2015</a>; <a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>; <a href="#ref-Merz.2022" role="doc-biblioref">Merz et al. 2022</a>)</span>.</p>
+<p>Há, ainda, uma correspondência teórica e empírica particularmente útil entre as duas visões: após reescalonamento apropriado, os mesmos parâmetros que descrevem a distribuição dos máximos anuais segundo a GEV (domínio Fréchet) informam com sucesso a estrutura de cauda representada pela Pareto/GPD no enquadramento de excedências, de modo que o conhecimento acumulado em um esquema pode ser transposto para o outro com perdas mínimas, reforçando a coerência do arcabouço da EVT e simplificando a transferência de resultados entre análises por blocos e por limiar <span class="citation" data-cites="Koutsoyiannis.2004 Gu.2022">(<a href="#ref-Koutsoyiannis.2004" role="doc-biblioref">Koutsoyiannis 2004a</a>; <a href="#ref-Gu.2022" role="doc-biblioref">Gu et al. 2022</a>)</span>.</p>
+<p>Por fim, a escolha do limiar, passo prático mais sensível do método de excedências, deve ser conduzida com critério, seja por um percentil alto da distribuição (como 95º–99º), seja pela fixação de uma frequência média anual de ocorrências, sempre levando em conta a climatologia local e o tamanho amostral, pois limiares distintos induzem séries com propriedades diferentes e, portanto, diferentes equilíbrios entre viés e variância nas estimativas de quantis de projeto <span class="citation" data-cites="Gu.2022">(<a href="#ref-Gu.2022" role="doc-biblioref">Gu et al. 2022</a>)</span>.</p>
 </section>
-<section id="justificativa-para-uso-da-gev" class="level3">
-<h3 class="anchored" data-anchor-id="justificativa-para-uso-da-gev">Justificativa para uso da GEV</h3>
+<section id="modelagem-probabilística-a-escolha-da-distribuição-e-o-comportamento-da-cauda" class="level2">
+<h2 class="anchored" data-anchor-id="modelagem-probabilística-a-escolha-da-distribuição-e-o-comportamento-da-cauda">Modelagem Probabilística: A Escolha da Distribuição e o Comportamento da Cauda</h2>
+<p>Selecionar a função de distribuição paramétrica adequada é essencial para estimar probabilidades de eventos de alto impacto e estudar extremos no contexto da variabilidade e mudança climática. Embora análises de valores extremos estejam cada vez mais difundidas, classificações em larga escala ainda costumam depender de escolhas subjetivas de famílias paramétricas. Uma alternativa conceitualmente consistente é considerar famílias com caudas que decaem como lei de potência, as chamadas “caudas pesadas” <span class="citation" data-cites="Cavanaugh.2015">(<a href="#ref-Cavanaugh.2015" role="doc-biblioref">Cavanaugh et al. 2015</a>)</span>.</p>
+<p>Evidências baseadas em estações globais indicam, com alta confiança estatística, que as caudas de precipitação diária são predominantemente pesadas (decaindo como lei de potência). Isso implica que distribuições frequentemente usadas para chuva diária (exponencial, Weibull, Gama e log-normal) tendem a subestimar as probabilidades dos extremos. A magnitude dessa subestimação depende de características sazonais e regionais do clima, com caudas pesadas mais proeminentes em regiões onde diferentes tipos de sistemas meteorológicos produzem taxas de precipitação muito distintas <span class="citation" data-cites="Cavanaugh.2015">(<a href="#ref-Cavanaugh.2015" role="doc-biblioref">Cavanaugh et al. 2015</a>)</span>. Além disso, modelos estocásticos populares para precipitação horária pressupõem distribuições de cauda leve para facilitar sua formulação matemática <span class="citation" data-cites="Papalexiou.2018">(<a href="#ref-Papalexiou.2018" role="doc-biblioref">Papalexiou, AghaKouchak, e Foufoula‐Georgiou 2018</a>)</span>.</p>
+<p>Formalmente, a modelagem probabilística de extremos é fundamentada na Teoria dos Valores Extremos (EVT). O ponto de partida é a variável aleatória <span class="math inline">\(Y_n\)</span>, definida como o máximo de um conjunto de <span class="math inline">\(n\)</span> variáveis aleatórias independentes e identicamente distribuídas (i.i.d.), <span class="math inline">\(Y_n = \max(X_1, ..., X_n)\)</span>. A EVT clássica postula que, à medida que o tamanho do bloco <span class="math inline">\(n\)</span> tende ao infinito (<span class="math inline">\(n \to \infty\)</span>), a distribuição de <span class="math inline">\(Y_n\)</span> (após normalização) converge para uma de apenas três possíveis leis-limite <span class="citation" data-cites="Papalexiou.2013a">(<a href="#ref-Papalexiou.2013a" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span>.</p>
+<p>As três leis-limite são: Tipo I (Gumbel), Tipo II (Fréchet) e Tipo III (Weibull Reversa). A qual dessas leis a distribuição converge depende do comportamento da cauda da “distribuição-mãe” (a distribuição de <span class="math inline">\(X_i\)</span>). De forma geral, distribuições-mãe com caudas pesadas (ex: tipo potência, como Pareto) pertencem ao domínio de atração da Fréchet; distribuições com caudas que decaem rapidamente (ex: tipo exponencial, como Normal ou Gama) pertencem ao domínio da Gumbel; e distribuições com limite superior finito pertencem ao domínio da Weibull Reversa <span class="citation" data-cites="Papalexiou.2013a">(<a href="#ref-Papalexiou.2013a" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span>.</p>
+<p>Essas três leis podem ser unificadas em uma única expressão, a Distribuição Generalizada de Valores Extremos (GEV), formalizada por von Mises <span class="citation" data-cites="vonmises1936-reprint1954">(<a href="#ref-vonmises1936-reprint1954" role="doc-biblioref">1936</a>)</span> e Jenkinson <span class="citation" data-cites="jenkinson1955-frequency">(<a href="#ref-jenkinson1955-frequency" role="doc-biblioref">1955</a>)</span>, e apresentada em <span class="citation" data-cites="Papalexiou.2013a">Papalexiou e Koutsoyiannis (<a href="#ref-Papalexiou.2013a" role="doc-biblioref">2013</a>)</span>] como:</p>
+<p><span class="math display">\[
+G_{\mathrm{GEV}}(x)
+= \exp\!\left\{-\left(1+\xi\,\frac{x-\mu}{\sigma}\right)^{-1/\xi}\right\},
+\qquad
+1+\xi\,\frac{x-\mu}{\sigma} \ge 0.
+\]</span> {eq-gev}</p>
+<p>Esta distribuição é definida por três parâmetros: localização (<span class="math inline">\(\mu\)</span>), escala (<span class="math inline">\(\sigma\)</span>) e forma (<span class="math inline">\(\xi\)</span>). O parâmetro de forma <span class="math inline">\(\xi\)</span> (às vezes denotado como <span class="math inline">\(\kappa\)</span>) é o que unifica as três leis: <span class="math inline">\(\xi &gt; 0\)</span> corresponde à Fréchet (cauda pesada, sem limite superior), <span class="math inline">\(\xi &lt; 0\)</span> à Weibull Reversa (cauda limitada), e o caso Gumbel emerge como o limite quando <span class="math inline">\(\xi \to 0\)</span> (cauda exponencial).</p>
+<p>A fundamentação teórica da GEV justifica sua ampla adoção. Contudo, a convergência é assintótica (<span class="math inline">\(n \to \infty\)</span>) <span class="citation" data-cites="Merz.2022">(<a href="#ref-Merz.2022" role="doc-biblioref">Merz et al. 2022</a>)</span>. Em aplicações hidrológicas práticas, como a série de máximos anuais (AMS) de precipitação diária, o tamanho do bloco é fixo e finito (na melhor das hipóteses, <span class="math inline">\(n = 365\)</span> dias, mas na prática, o número de dias chuvosos, <span class="math inline">\(N_R\)</span>, é muito menor). Esse tamanho de bloco finito não é grande o suficiente para garantir a convergência teórica <span class="citation" data-cites="Koutsoyiannis.2004 Papalexiou.2013a">(<a href="#ref-Koutsoyiannis.2004" role="doc-biblioref">Koutsoyiannis 2004a</a>; <a href="#ref-Papalexiou.2013a" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span>.</p>
+<p>De fato, Papalexiou &amp; Koutsoyiannis <span class="citation" data-cites="Papalexiou.2013a">(<a href="#ref-Papalexiou.2013a" role="doc-biblioref">2013</a>)</span> demonstram um aparente paradoxo: mesmo quando a distribuição-mãe (precipitação diária) pertence teoricamente ao domínio de atração da Gumbel (como a Gama Generalizada), a distribuição do máximo anual (para um <span class="math inline">\(N_R\)</span> realista, e.g., <span class="math inline">\(N_R \approx 87\)</span>) não converge para a Gumbel. Em vez disso, os máximos observados são significativamente melhor descritos pela lei de Fréchet. Posteriormente, Papalexiou &amp; Koutsoyiannis <span class="citation" data-cites="Papalexiou.2016">(<a href="#ref-Papalexiou.2016" role="doc-biblioref">2016</a>)</span> focaram na modelagem de precipitação diária não nula, empregando as distribuições GG e Burr XII em vez da GEV, mostrando que as distribuições exponenciais e Gamma subestimam eventos extremos.</p>
+<p>A explicação para o comportamento de cauda pesada observado empiricamente vai além da lenta convergência. Acredita-se que ela resida nas flutuações dos parâmetros da distribuição-mãe ao longo de diferentes escalas de tempo. Essas flutuações, por vezes chamadas de “superestatística” ou “processos duplamente estocásticos”, fazem com que a distribuição dos máximos convirja para um regime de cauda pesada (Fréchet), tornando a distribuição de Gumbel (que assume parâmetros constantes) uma escolha inadequada <span class="citation" data-cites="Koutsoyiannis.2004 Serinaldi.2014">(<a href="#ref-Koutsoyiannis.2004" role="doc-biblioref">Koutsoyiannis 2004a</a>; <a href="#ref-Serinaldi.2014" role="doc-biblioref">Serinaldi e Kilsby 2014</a>)</span>. Além disso, o tamanho reduzido das amostras, usualmente inferior a 50 máximos anuais, tende a esconder o comportamento de cauda pesada, levando à seleção da opção Gumbel mesmo quando a verdadeira distribuição é a GEV com cauda pesada <span class="citation" data-cites="Serinaldi.2014">(<a href="#ref-Serinaldi.2014" role="doc-biblioref">Serinaldi e Kilsby 2014</a>)</span>.</p>
+<p>Estudos subsequentes, como Serinaldi &amp; Kilsby <span class="citation" data-cites="Serinaldi.2014">(<a href="#ref-Serinaldi.2014" role="doc-biblioref">2014</a>)</span>, buscam reconciliar a controvérsia analisando os dados pela metodologia dual de POT ajustados à Distribuição de Pareto Generalizada (GP). A EVT estabelece que o parâmetro de forma (<span class="math inline">\(\xi\)</span>) deve ser idêntico para ambas as abordagens. Ao analisar um banco de dados global, Serinaldi &amp; Kilsby <span class="citation" data-cites="Serinaldi.2014">(<a href="#ref-Serinaldi.2014" role="doc-biblioref">2014</a>)</span> confirmaram que o “efeito de ocultação” também ocorre em amostras POT: embora séries curtas mascarem o comportamento da cauda, à medida que o tamanho do registro (número de anos) aumenta, o parâmetro <span class="math inline">\(\xi\)</span> da GP também converge para um valor médio positivo, confirmando o comportamento de cauda pesada (Fréchet).</p>
+<p>A implicação prática dessa evidência combinada é um dilema em aplicações hidrológicas <span class="citation" data-cites="Courty.2019">(<a href="#ref-Courty.2019" role="doc-biblioref">Courty et al. 2019</a>)</span>. Por um lado, forçar <span class="math inline">\(\xi=0\)</span> (adotar Gumbel) por conveniência ou inércia tende a subestimar severamente os quantis de precipitação para grandes períodos de retorno, levando a projetos potencialmente inseguros <span class="citation" data-cites="Koutsoyiannis.2004 Serinaldi.2014 koutsoyiannis2017-extreme-rainfall">(<a href="#ref-Koutsoyiannis.2004" role="doc-biblioref">Koutsoyiannis 2004a</a>; <a href="#ref-Serinaldi.2014" role="doc-biblioref">Serinaldi e Kilsby 2014</a>; <a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>. Evidências teóricas e empíricas em larga escala favorecem caudas pesadas (EV2/Fréchet) para chuva intensa, com o parâmetro de forma <span class="math inline">\(\xi\)</span> tipicamente estimado entre 0,09 e 0,15 <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
+<p>A discussão sobre o parâmetro de forma é expandida em Ragulina et al. <span class="citation" data-cites="Ragulina.2017">(<a href="#ref-Ragulina.2017" role="doc-biblioref">2017</a>)</span>, Stephenson et al. <span class="citation" data-cites="Stephenson.2016">(<a href="#ref-Stephenson.2016" role="doc-biblioref">2016</a>)</span>, e Duarte et al. <span class="citation" data-cites="Duarte.2025">(<a href="#ref-Duarte.2025" role="doc-biblioref">2025</a>)</span> que aplicam abordagens bayesianas hierárquicas e processos max-estáveis, evidenciando que a inclusão da dependência espacial tende a aumentar <span class="math inline">\(\xi\)</span>, gerando caudas mais pesadas e estimativas mais realistas dos extremos.</p>
+<p>Análises teóricas e uma investigação empírica com 169 séries de máximos anuais (100–154 anos; 18.065 estação-anos) indicam que a EV1 (Gumbel) é improvável para extremos hidrológicos, enquanto a EV2 (GEV com <span class="math inline">\(\xi &gt; 0\)</span>) descreve melhor os dados. Em &gt;90% das séries, a estimativa de <span class="math inline">\(\xi\)</span> é positiva (valores típicos ≈ 0,10–0,15). A diferença entre EV1 e EV2 é modesta para T &lt; ~50 anos, mas torna-se crítica em grandes períodos de retorno (p.ex., T ≈ 20.000 anos), quando a EV1 subestima fortemente os quantis, potencialmente pela metade do valor obtido pela EV2 — um risco relevante para obras de grande porte <span class="citation" data-cites="Koutsoyiannis.200475">(<a href="#ref-Koutsoyiannis.200475" role="doc-biblioref">Koutsoyiannis 2004b</a>)</span>.</p>
+<p>Por outro lado, para amostras muito pequenas (ex: <span class="math inline">\(m &lt; 50\)</span>), a instabilidade da estimação do terceiro parâmetro (<span class="math inline">\(\xi\)</span>) é tão alta que o uso da Gumbel pode, paradoxalmente, resultar em um erro de estimação menor do que a GEV <span class="citation" data-cites="Courty.2019">(<a href="#ref-Courty.2019" role="doc-biblioref">Courty et al. 2019</a>)</span>.</p>
+<p>Ainda, a discussão anterior, e a maior parte da EVT clássica, assume implicitamente a estacionariedade das estatísticas de chuva. Diante das mudanças climáticas, essa suposição torna-se inadequada: a probabilidade de eventos intensos apresenta tendências ao longo do tempo, configurando um regime não estacionário. Essa não estacionariedade pode ser incorporada no ajuste GEV ao permitir que seus parâmetros (notadamente <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma\)</span>) variem no tempo ou em função de covariáveis <span class="citation" data-cites="Benestad.2021">(<a href="#ref-Benestad.2021" role="doc-biblioref">Benestad et al. 2021</a>)</span>. Essa questão também é observada por Nerantzaki &amp; Papalexiou <span class="citation" data-cites="Nerantzaki.2022">(<a href="#ref-Nerantzaki.2022" role="doc-biblioref">2022</a>)</span> que destacam, em seu artigo de revisão, que muitos estudos recentes estendem a GEV para contextos não estacionários. Essa abordagem é vista como essencial frente às mudanças climáticas.</p>
+<p>A consolidação de caudas pesadas levanta a questão da estabilidade espacial do parâmetro <span class="math inline">\(\xi\)</span>. Embora a hipótese de um <span class="math inline">\(\xi\)</span> global simplificasse a estimação, a evidência empírica não respalda tal universalidade. Estudos globais, baseados em séries diárias, indicam que, mesmo corrigindo o viés por comprimento de registro, persiste uma variabilidade geográfica. Em termos práticos, recomenda-se evitar <span class="math inline">\(\xi &lt; 0\)</span> (incompatível com chuva) e, na ausência de suporte local robusto, adotar Gumbel (<span class="math inline">\(\xi = 0\)</span>) ou uma GEV com <span class="math inline">\(\xi \approx 0,114\)</span> como escolha prudente, até que evidências regionais justifiquem um ajuste distinto <span class="citation" data-cites="Papalexiou.2013a koutsoyiannis2017-extreme-rainfall Courty.2019">(<a href="#ref-Papalexiou.2013a" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>; <a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>; <a href="#ref-Courty.2019" role="doc-biblioref">Courty et al. 2019</a>)</span>. Essas evidências regionias podem ser incorporadas na estimativa de <span class="math inline">\(\xi\)</span> por meio da contruçao de modelos regionais, como por exemplo, aqueles derivados por Haddad e Rahman <span class="citation" data-cites="Haddad.2012">(<a href="#ref-Haddad.2012" role="doc-biblioref">2012</a>)</span>, baseados na abordaem de regressão BGLS (Bayesian Generalized Least Square), desenvolvida e apriomorada em Reis et al. <span class="citation" data-cites="Reis.2005 Reis.2020">(<a href="#ref-Reis.2005" role="doc-biblioref">2005</a>; <a href="#ref-Reis.2020" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Uma via operacional alternativa é assumir <span class="math inline">\(\xi \approx 0,15\)</span>: com <span class="math inline">\(\xi\)</span> fixo, a estimação dos demais parâmetros (por momentos ou L-momentos) fica tão simples quanto na Gumbel, preservando porém a flexibilidade de cauda necessária para extrapolações seguras <span class="citation" data-cites="Koutsoyiannis.2005">(<a href="#ref-Koutsoyiannis.2005" role="doc-biblioref">Koutsoyiannis 2005</a>)</span>.</p>
+<p>Em termos de diretrizes e prática consolidada, a Organização Meteorológica Mundial (WMO) recomenda a GEV como distribuição teórica para séries de máximos anuais. Análises por testes de aderência reportam que a GEV frequentemente é a distribuição ótima para AM em diversas durações, dando suporte normativo e empírico ao seu uso <span class="citation" data-cites="Gu.2022">(<a href="#ref-Gu.2022" role="doc-biblioref">Gu et al. 2022</a>)</span>. Evidências recentes trazem recomendações operacionais importantes para melhorar a acurácia, especialmente com séries curtas: (i) recomenda-se o uso de anos hidrológicos para a definição dos blocos AMS, especialmente em regiões com sazonalidade marcada; e (ii) sugere-se melhorar a consistência espacial das estimativas por meio de modelos espaciais de extremos (e.g., abordagens max-stable), que “emprestam força” entre locais vizinhos e mitigam instabilidades de ajuste <span class="citation" data-cites="Gründemann.2023">(<a href="#ref-Gründemann.2023" role="doc-biblioref">Gründemann et al. 2023</a>)</span>.</p>
 </section>
-<section id="a-questão-do-parâmetro-do-forma" class="level3">
-
-
-
-
+<section id="métodos-de-estimação-e-qualidade-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="métodos-de-estimação-e-qualidade-dos-dados">Métodos de Estimação e Qualidade dos Dados</h2>
+<p>A seleção da distribuição é acompanhada pela escolha do método de estimação. Os L-momentos têm se destacado por sua robustez a outliers e desempenho superior em amostras reduzidas, situação típica de durações subdiárias. A Máxima Verossimilhança (MLE), frequentemente integrada a estruturas bayesianas, é útil para incorporar não-estacionariedade e covariáveis, mas pode enfrentar instabilidades de convergência em amostras pequenas. Estratégias de regionalização, que aumentam o tamanho amostral efetivo, atenuam as limitações de ambos os métodos <span class="citation" data-cites="johnson2017-design-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>.</p>
+<p>O uso da MLE e inferência Bayesiana MCMC é relatado por Stepehenson et al. <span class="citation" data-cites="Stephenson.2016">(<a href="#ref-Stephenson.2016" role="doc-biblioref">2016</a>)</span> e Wildson &amp; Toumi <span class="citation" data-cites="Wilson.2005">(<a href="#ref-Wilson.2005" role="doc-biblioref">2005</a>)</span>, enquanto Papalexiou &amp; Koutsoyiannis <span class="citation" data-cites="Papalexiou.2013a">(<a href="#ref-Papalexiou.2013a" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span> e Nadarajah <span class="citation" data-cites="Nadarajah.2005">(<a href="#ref-Nadarajah.2005" role="doc-biblioref">Nadarajah 2005</a>)</span> adotam L-momentos pela estabilidade em amostras curtas. Essas abordagens reforçam a importância de estimar <span class="math inline">\(\xi\)</span> com robustez, pois ele controla a probabilidade de eventos extremos.Já Overeem et al. <span class="citation" data-cites="Overeem.2008">(<a href="#ref-Overeem.2008" role="doc-biblioref">2008</a>)</span> empregou a GEV para ajustar máximos anuais de precipitação em diferentes durações (1 a 24h), modelando os parâmetros em função da duração e utilizando mínimos quadrados generalizados. O autor observou que o parâmetro de forma da GEV não varia significativamente com a duração.</p>
+<p>A utilidade prática de qualquer análise está condicionada à qualidade e representatividade dos dados. Qualquer tentativa séria de modelar extremos de precipitação deve apoiar-se em dados observacionais locais. Pluviômetros de superfície continuam sendo a fonte mais confiável, mas exigem controle de qualidade rigoroso, contemplando a correção de “dados restritos” (quando a resolução de registro não coincide com a duração), avaliação de subcaptação por vento e limites instrumentais, especialmente relevantes em escalas sub-horárias <span class="citation" data-cites="johnson2017-design-rainfall koutsoyiannis2017-extreme-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>; <a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
+<p>Dados de radar e satélite agregam valor ao representar a dimensão espacial dos eventos, mas devem ser rigorosamente calibrados e validados contra as redes pluviométricas. Além disso, a análise deve considerar a persistência de longo prazo (comportamento Hurst–Kolmogorov) nas séries, pois a presença de memória (Coeficiente de Hurst &gt; 0,5) tem implicações diretas na estimação de quantis e na avaliação de incerteza <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>.</p>
 </section>
+<section id="curvas-idf" class="level2">
+<h2 class="anchored" data-anchor-id="curvas-idf">Curvas IDF</h2>
+<p>Encerrando a discussão sobre escolhas distribucionais para extremos de precipitação, vale destacar como esses fundamentos se materializam em duas frentes operacionais centrais: (i) a construção de curvas ombrianas (IDF) teoricamente consistentes e (ii) a regionalização para ganho de eficiência estatística e coerência espacial.</p>
+<p>Do ponto de vista teórico, uma curva IDF nada mais é do que a família de distribuições de intensidade considerada em múltiplas escalas temporais, em que o período de retorno está ligado diretamente à função de distribuição. Na prática de engenharia, uma formulação multiescala plenamente consistente pode ser complexa, mas simplificações bem fundamentadas, separabilidade entre efeitos de <span class="math inline">\(T\)</span> e <span class="math inline">\(d\)</span>, caudas do tipo Pareto/EV2 (GEV com <span class="math inline">\(\xi&gt;0\)</span>) acima de limiar e lei parsimoniosa para a dependência com a duração, produzem IDFs dimensionais e estatisticamente coerentes no intervalo de durações de interesse <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>)</span>. Esse enquadramento conecta, de forma direta, a EVT às curvas de projeto, oferecendo um caminho claro para extrapolação de quantis com transparência sobre hipóteses e parâmetros.</p>
+<p>Em paralelo, a regionalização enfrenta o problema recorrente de amostras curtas, especialmente em durações sub-diárias/sub-horárias. Ao agrupar estações semelhantes e assumir uma mesma família distribucional com fatores de escala específicos por regiões, é possível reduzir variância, aumentar robustez e elevar a coerência espacial dos níveis de retorno. A literatura recomenda definir regiões por atributos físicos e locacionais (e não por estatísticas de extremos), testar homogeneidade, considerar a correlação espacial e quantificar incertezas por <em>bootstrap</em> e/ou regressões com correlação espacial. Em síntese: a regionalização “empresta força” entre sítios e atua também como controle de qualidade, identificando discordâncias e metadados problemáticos <span class="citation" data-cites="johnson2017-design-rainfall">(<a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>. Por fim, propagar essas relações no espaço por meio de regionalização para produzir mapas e curvas de projeto mais estáveis e confiáveis. Esse é o elo natural com os próximos dois capítulos: desagregação temporal, que detalha o trânsito entre escalas mantendo a consistência das caudas; e regionalização, que formaliza a passagem de estimativas pontuais para superfícies espacialmente coerentes de quantis e incertezas, ambos construídos sobre o alicerce distribucional estabelecido aqui <span class="citation" data-cites="koutsoyiannis2017-extreme-rainfall johnson2017-design-rainfall">(<a href="#ref-koutsoyiannis2017-extreme-rainfall" role="doc-biblioref">Koutsoyiannis e Papalexiou 2017</a>; <a href="#ref-johnson2017-design-rainfall" role="doc-biblioref">Johnson e Sharma 2017</a>)</span>.</p>
 </section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">A questão do parâmetro do forma</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-Amin.2024" class="csl-entry" role="listitem">
-Amin, Bushra, András Bárdossy, and Uwe Haberlandt. 2024. <span>“<span class="nocase">Uncertainty Quantification of Theoretical Consistent Intensity Duration Frequency (IDF) Curves of Rainfall Intensity</span>.”</span> <a href="https://doi.org/10.5194/egusphere-egu24-15926">https://doi.org/10.5194/egusphere-egu24-15926</a>.
-</div>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Benestad.2021" class="csl-entry" role="listitem">
-Benestad, Rasmus E, Julia Lutz, Anita Verpe Dyrrdal, Jan Erik Haugen, Kajsa M Parding, and Andreas Dobler. 2021. <span>“<span class="nocase">Testing a simple formula for calculating approximate intensity-duration-frequency curves</span>.”</span> <em>Environmental Research Letters</em> 16 (4): 044009. <a href="https://doi.org/10.1088/1748-9326/abd4ab">https://doi.org/10.1088/1748-9326/abd4ab</a>.
+Benestad, Rasmus E, Julia Lutz, Anita Verpe Dyrrdal, Jan Erik Haugen, Kajsa M Parding, e Andreas Dobler. 2021. <span>«<span>Testing a simple formula for calculating approximate intensity-duration-frequency curves</span>»</span>. <em>Environmental Research Letters</em> 16 (4): 044009. <a href="https://doi.org/10.1088/1748-9326/abd4ab">https://doi.org/10.1088/1748-9326/abd4ab</a>.
 </div>
 <div id="ref-Cavanaugh.2015" class="csl-entry" role="listitem">
-Cavanaugh, Nicholas R., Alexander Gershunov, Anna K. Panorska, and Tomasz J. Kozubowski. 2015. <span>“<span class="nocase">The probability distribution of intense daily precipitation</span>.”</span> <em>Geophysical Research Letters</em> 42 (5): 1560–67. <a href="https://doi.org/10.1002/2015gl063238">https://doi.org/10.1002/2015gl063238</a>.
+Cavanaugh, Nicholas R., Alexander Gershunov, Anna K. Panorska, e Tomasz J. Kozubowski. 2015. <span>«<span>The probability distribution of intense daily precipitation</span>»</span>. <em>Geophysical Research Letters</em> 42 (5): 1560–67. <a href="https://doi.org/10.1002/2015gl063238">https://doi.org/10.1002/2015gl063238</a>.
 </div>
 <div id="ref-Courty.2019" class="csl-entry" role="listitem">
-Courty, Laurent G, Robert L Wilby, John K Hillier, and Louise J Slater. 2019. <span>“<span class="nocase">Intensity-duration-frequency curves at the global scale</span>.”</span> <em>Environmental Research Letters</em> 14 (8): 084045. <a href="https://doi.org/10.1088/1748-9326/ab370a">https://doi.org/10.1088/1748-9326/ab370a</a>.
+Courty, Laurent G, Robert L Wilby, John K Hillier, e Louise J Slater. 2019. <span>«<span>Intensity-duration-frequency curves at the global scale</span>»</span>. <em>Environmental Research Letters</em> 14 (8): 084045. <a href="https://doi.org/10.1088/1748-9326/ab370a">https://doi.org/10.1088/1748-9326/ab370a</a>.
 </div>
-<div id="ref-Davison.2015" class="csl-entry" role="listitem">
-Davison, A. C., and R. Huser. 2015. <span>“<span class="nocase">Statistics of Extremes</span>.”</span> <em>Annual Review of Statistics and Its Application</em> 2 (1): 1–33. <a href="https://doi.org/10.1146/annurev-statistics-010814-020133">https://doi.org/10.1146/annurev-statistics-010814-020133</a>.
-</div>
-<div id="ref-Goly.2013" class="csl-entry" role="listitem">
-Goly, Aneesh. 2013. <span>“<span>INFLUENCES OF CLIMATE VARIABILITY AND CHANGE ON PRECIPITATION CHARACTERISTICS AND EXTREMES</span>.”</span> PhD thesis, Florida Atlantic University.
-</div>
-<div id="ref-Goly.2014" class="csl-entry" role="listitem">
-Goly, Aneesh, and Ramesh S. V. Teegavarapu. 2014. <span>“<span class="nocase">Individual and coupled influences of AMO and ENSO on regional precipitation characteristics and extremes</span>.”</span> <em>Water Resources Research</em> 50 (6): 4686–4709. <a href="https://doi.org/10.1002/2013wr014540">https://doi.org/10.1002/2013wr014540</a>.
+<div id="ref-Duarte.2025" class="csl-entry" role="listitem">
+Duarte, Luíza Virgínia, Alan de Gois Barbosa, Priscilla M Moura, e Veber Costa. 2025. <span>«<span>A Bayesian approach to model IDF curves employing max-stable processes</span>»</span>. <em>Hydrological Sciences Journal</em>. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
 </div>
 <div id="ref-Gründemann.2023" class="csl-entry" role="listitem">
-Gründemann, Gaby J., Enrico Zorzetto, Hylke E. Beck, Marc Schleiss, Nick van de Giesen, Marco Marani, and Ruud J. van der Ent. 2023. <span>“<span class="nocase">Extreme precipitation return levels for multiple durations on a global scale</span>.”</span> <em>Journal of Hydrology</em> 621: 129558. <a href="https://doi.org/10.1016/j.jhydrol.2023.129558">https://doi.org/10.1016/j.jhydrol.2023.129558</a>.
+Gründemann, Gaby J., Enrico Zorzetto, Hylke E. Beck, Marc Schleiss, Nick van de Giesen, Marco Marani, e Ruud J. van der Ent. 2023. <span>«<span>Extreme precipitation return levels for multiple durations on a global scale</span>»</span>. <em>Journal of Hydrology</em> 621: 129558. <a href="https://doi.org/10.1016/j.jhydrol.2023.129558">https://doi.org/10.1016/j.jhydrol.2023.129558</a>.
 </div>
 <div id="ref-Gu.2022" class="csl-entry" role="listitem">
-Gu, Xuezhi, Lei Ye, Qian Xin, Chi Zhang, Fanzhang Zeng, Sofia D. Nerantzaki, and Simon Michael Papalexiou. 2022. <span>“<span class="nocase">Extreme Precipitation in China: A Review on Statistical Methods and Applications</span>.”</span> <em>Advances in Water Resources</em> 163: 104144. <a href="https://doi.org/10.1016/j.advwatres.2022.104144">https://doi.org/10.1016/j.advwatres.2022.104144</a>.
+Gu, Xuezhi, Lei Ye, Qian Xin, Chi Zhang, Fanzhang Zeng, Sofia D. Nerantzaki, e Simon Michael Papalexiou. 2022. <span>«<span>Extreme Precipitation in China: A Review on Statistical Methods and Applications</span>»</span>. <em>Advances in Water Resources</em> 163: 104144. <a href="https://doi.org/10.1016/j.advwatres.2022.104144">https://doi.org/10.1016/j.advwatres.2022.104144</a>.
+</div>
+<div id="ref-Haddad.2012" class="csl-entry" role="listitem">
+Haddad, Khaled, e Ataur Rahman. 2012. <span>«<span>Regional flood frequency analysis in eastern Australia: Bayesian GLS regression-based methods within fixed region and ROI framework – Quantile Regression vs. Parameter Regression Technique</span>»</span>. <em>Journal of Hydrology</em> 430: 142–61. <a href="https://doi.org/10.1016/j.jhydrol.2012.02.012">https://doi.org/10.1016/j.jhydrol.2012.02.012</a>.
+</div>
+<div id="ref-jenkinson1955-frequency" class="csl-entry" role="listitem">
+Jenkinson, A. F. 1955. <span>«The frequency distribution of the annual maximum (or minimum) values of meteorological elements»</span>. <em>Quarterly Journal of the Royal Meteorological Society</em> 81 (348): 158–71. <a href="https://doi.org/10.1002/qj.49708134804">https://doi.org/10.1002/qj.49708134804</a>.
+</div>
+<div id="ref-johnson2017-design-rainfall" class="csl-entry" role="listitem">
+Johnson, Fiona, e Ashish Sharma. 2017. <span>«Design Rainfall»</span>. Em <em>Handbook of Applied Hydrology</em>, editado por Vijay P. Singh, 2.ª ed., 125-1-125-13. McGraw-Hill Education.
 </div>
 <div id="ref-Koutsoyiannis.2004" class="csl-entry" role="listitem">
-Koutsoyiannis, Demetris. 2004a. <span>“<span class="nocase">Statistics of extremes and estimation of extreme rainfall: I. Theoretical investigation / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: I. Recherche théorique</span>.”</span> <em>Hydrological Sciences Journal</em> 49 (4): 590. <a href="https://doi.org/10.1623/hysj.49.4.575.54430">https://doi.org/10.1623/hysj.49.4.575.54430</a>.
+Koutsoyiannis, Demetris. 2004a. <span>«<span>Statistics of extremes and estimation of extreme rainfall: I. Theoretical investigation / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: I. Recherche théorique</span>»</span>. <em>Hydrological Sciences Journal</em> 49 (4): 590. <a href="https://doi.org/10.1623/hysj.49.4.575.54430">https://doi.org/10.1623/hysj.49.4.575.54430</a>.
 </div>
 <div id="ref-Koutsoyiannis.200475" class="csl-entry" role="listitem">
-———. 2004b. <span>“<span class="nocase">Statistics of extremes and estimation of extreme rainfall: II. Empirical investigation of long rainfall records / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: II. Recherche empirique sur de longues séries de précipitations</span>.”</span> <em>Hydrological Sciences Journal</em> 49 (4): 610. <a href="https://doi.org/10.1623/hysj.49.4.591.54424">https://doi.org/10.1623/hysj.49.4.591.54424</a>.
+———. 2004b. <span>«<span>Statistics of extremes and estimation of extreme rainfall: II. Empirical investigation of long rainfall records / Statistiques de valeurs extrêmes et estimation de précipitations extrêmes: II. Recherche empirique sur de longues séries de précipitations</span>»</span>. <em>Hydrological Sciences Journal</em> 49 (4): 610. <a href="https://doi.org/10.1623/hysj.49.4.591.54424">https://doi.org/10.1623/hysj.49.4.591.54424</a>.
 </div>
 <div id="ref-Koutsoyiannis.2005" class="csl-entry" role="listitem">
-———. 2005. <span>“<span class="nocase">Uncertainty, entropy, scaling and hydrological stochastics. 1. Marginal distributional properties of hydrological processes and state scaling / Incertitude, entropie, effet d’échelle et propriétés stochastiques hydrologiques. 1. Propriétés distributionnelles marginales des processus hydrologiques et échelle d’état</span>.”</span> <em>Hydrological Sciences Journal</em> 50 (3): 404. <a href="https://doi.org/10.1623/hysj.50.3.381.65031">https://doi.org/10.1623/hysj.50.3.381.65031</a>.
+———. 2005. <span>«<span>Uncertainty, entropy, scaling and hydrological stochastics. 1. Marginal distributional properties of hydrological processes and state scaling / Incertitude, entropie, effet d’échelle et propriétés stochastiques hydrologiques. 1. Propriétés distributionnelles marginales des processus hydrologiques et échelle d’état</span>»</span>. <em>Hydrological Sciences Journal</em> 50 (3): 404. <a href="https://doi.org/10.1623/hysj.50.3.381.65031">https://doi.org/10.1623/hysj.50.3.381.65031</a>.
 </div>
-<div id="ref-Koutsoyiannis.2006" class="csl-entry" role="listitem">
-———. 2006. <span>“<span class="nocase">An entropic‐stochastic representation of rainfall intermittency: The origin of clustering and persistence</span>.”</span> <em>Water Resources Research</em> 42 (1). <a href="https://doi.org/10.1029/2005wr004175">https://doi.org/10.1029/2005wr004175</a>.
+<div id="ref-koutsoyiannis2017-extreme-rainfall" class="csl-entry" role="listitem">
+Koutsoyiannis, Demetris, e Simon Michael Papalexiou. 2017. <span>«Extreme Rainfall: Global Perspective»</span>. Em <em>Handbook of Applied Hydrology</em>, editado por Vijay P. Singh, 2.ª ed., 74-1-74-16. McGraw-Hill Education.
 </div>
 <div id="ref-Merz.2022" class="csl-entry" role="listitem">
-Merz, Bruno, Stefano Basso, Svenja Fischer, David Lun, Günter Blöschl, Ralf Merz, Björn Guse, et al. 2022. <span>“<span class="nocase">Understanding Heavy Tails of Flood Peak Distributions</span>.”</span> <em>Water Resources Research</em> 58 (6). <a href="https://doi.org/10.1029/2021wr030506">https://doi.org/10.1029/2021wr030506</a>.
+Merz, Bruno, Stefano Basso, Svenja Fischer, David Lun, Günter Blöschl, Ralf Merz, Björn Guse, et al. 2022. <span>«<span>Understanding Heavy Tails of Flood Peak Distributions</span>»</span>. <em>Water Resources Research</em> 58 (6). <a href="https://doi.org/10.1029/2021wr030506">https://doi.org/10.1029/2021wr030506</a>.
+</div>
+<div id="ref-vonmises1936-reprint1954" class="csl-entry" role="listitem">
+Mises, Richard von. 1936. <span>«La distribution de la plus grande de n valeurs»</span>.
 </div>
 <div id="ref-Nadarajah.2005" class="csl-entry" role="listitem">
-Nadarajah, Saralees. 2005. <span>“<span class="nocase">Extremes of Daily Rainfall in West Central Florida</span>.”</span> <em>Climatic Change</em> 69 (2-3): 325–42. <a href="https://doi.org/10.1007/s10584-005-1812-y">https://doi.org/10.1007/s10584-005-1812-y</a>.
+Nadarajah, Saralees. 2005. <span>«<span>Extremes of Daily Rainfall in West Central Florida</span>»</span>. <em>Climatic Change</em> 69 (2-3): 325–42. <a href="https://doi.org/10.1007/s10584-005-1812-y">https://doi.org/10.1007/s10584-005-1812-y</a>.
 </div>
 <div id="ref-Nerantzaki.2022" class="csl-entry" role="listitem">
-Nerantzaki, Sofia D., and Simon Michael Papalexiou. 2022. <span>“<span class="nocase">Assessing extremes in hydroclimatology: A review on probabilistic methods</span>.”</span> <em>Journal of Hydrology</em> 605: 127302. <a href="https://doi.org/10.1016/j.jhydrol.2021.127302">https://doi.org/10.1016/j.jhydrol.2021.127302</a>.
-</div>
-<div id="ref-Nguyen.2019" class="csl-entry" role="listitem">
-Nguyen, Truong-Huy, and Van-Thanh-Van Nguyen. 2019. <span>“<span class="nocase">Decision-Support Tool for Constructing Robust Rainfall IDF Relations in Consideration of Model Uncertainty</span>.”</span> <em>Journal of Hydrologic Engineering</em> 24 (7): 06019004. <a href="https://doi.org/10.1061/(asce)he.1943-5584.0001802">https://doi.org/10.1061/(asce)he.1943-5584.0001802</a>.
+Nerantzaki, Sofia D., e Simon Michael Papalexiou. 2022. <span>«<span>Assessing extremes in hydroclimatology: A review on probabilistic methods</span>»</span>. <em>Journal of Hydrology</em> 605: 127302. <a href="https://doi.org/10.1016/j.jhydrol.2021.127302">https://doi.org/10.1016/j.jhydrol.2021.127302</a>.
 </div>
 <div id="ref-Overeem.2008" class="csl-entry" role="listitem">
-Overeem, Aart, Adri Buishand, and Iwan Holleman. 2008. <span>“<span class="nocase">Rainfall depth-duration-frequency curves and their uncertainties</span>.”</span> <em>Journal of Hydrology</em> 348 (1-2): 124–34. <a href="https://doi.org/10.1016/j.jhydrol.2007.09.044">https://doi.org/10.1016/j.jhydrol.2007.09.044</a>.
+Overeem, Aart, Adri Buishand, e Iwan Holleman. 2008. <span>«<span>Rainfall depth-duration-frequency curves and their uncertainties</span>»</span>. <em>Journal of Hydrology</em> 348 (1-2): 124–34. <a href="https://doi.org/10.1016/j.jhydrol.2007.09.044">https://doi.org/10.1016/j.jhydrol.2007.09.044</a>.
 </div>
 <div id="ref-Papalexiou.2018" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">A Diagnostic Framework for Understanding Climatology of Tails of Hourly Precipitation Extremes in the United States</span>.”</span> <em>Water Resources Research</em> 54 (9): 6725–38. <a href="https://doi.org/10.1029/2018wr022732">https://doi.org/10.1029/2018wr022732</a>.
+Papalexiou, Simon Michael, Amir AghaKouchak, e Efi Foufoula‐Georgiou. 2018. <span>«<span>A Diagnostic Framework for Understanding Climatology of Tails of Hourly Precipitation Extremes in the United States</span>»</span>. <em>Water Resources Research</em> 54 (9): 6725–38. <a href="https://doi.org/10.1029/2018wr022732">https://doi.org/10.1029/2018wr022732</a>.
 </div>
-<div id="ref-Papalexiou.2012" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, and Demetris Koutsoyiannis. 2012. <span>“<span class="nocase">Entropy based derivation of probability distributions: A case study to daily rainfall</span>.”</span> <em>Advances in Water Resources</em> 45: 51–57. <a href="https://doi.org/10.1016/j.advwatres.2011.11.007">https://doi.org/10.1016/j.advwatres.2011.11.007</a>.
-</div>
-<div id="ref-Papalexiou.2013" class="csl-entry" role="listitem">
-———. 2013. <span>“<span class="nocase">Battle of extreme value distributions: A global survey on extreme daily rainfall</span>.”</span> <em>Water Resources Research</em> 49 (1): 187–201. <a href="https://doi.org/10.1029/2012wr012557">https://doi.org/10.1029/2012wr012557</a>.
+<div id="ref-Papalexiou.2013a" class="csl-entry" role="listitem">
+Papalexiou, Simon Michael, e Demetris Koutsoyiannis. 2013. <span>«<span>Battle of extreme value distributions: A global survey on extreme daily rainfall</span>»</span>. <em>Water Resources Research</em> 49 (1): 187–201. <a href="https://doi.org/10.1029/2012wr012557">https://doi.org/10.1029/2012wr012557</a>.
 </div>
 <div id="ref-Papalexiou.2016" class="csl-entry" role="listitem">
-———. 2016. <span>“<span class="nocase">A global survey on the seasonal variation of the marginal distribution of daily precipitation</span>.”</span> <em>Advances in Water Resources</em> 94: 131–45. <a href="https://doi.org/10.1016/j.advwatres.2016.05.005">https://doi.org/10.1016/j.advwatres.2016.05.005</a>.
-</div>
-<div id="ref-Papalexiou.2018h3" class="csl-entry" role="listitem">
-Papalexiou, Simon Michael, Yannis Markonis, Federico Lombardo, Amir AghaKouchak, and Efi Foufoula‐Georgiou. 2018. <span>“<span class="nocase">Precise Temporal Disaggregation Preserving Marginals and Correlations (DiPMaC) for Stationary and Nonstationary Processes</span>.”</span> <em>Water Resources Research</em> 54 (10): 7435–58. <a href="https://doi.org/10.1029/2018wr022726">https://doi.org/10.1029/2018wr022726</a>.
-</div>
-<div id="ref-Pendergrass.2014" class="csl-entry" role="listitem">
-Pendergrass, Angeline G., and Dennis L. Hartmann. 2014. <span>“<span class="nocase">Two Modes of Change of the Distribution of Rain*</span>.”</span> <em>Journal of Climate</em> 27 (22): 8357–71. <a href="https://doi.org/10.1175/jcli-d-14-00182.1">https://doi.org/10.1175/jcli-d-14-00182.1</a>.
+———. 2016. <span>«<span>A global survey on the seasonal variation of the marginal distribution of daily precipitation</span>»</span>. <em>Advances in Water Resources</em> 94: 131–45. <a href="https://doi.org/10.1016/j.advwatres.2016.05.005">https://doi.org/10.1016/j.advwatres.2016.05.005</a>.
 </div>
 <div id="ref-Ragulina.2017" class="csl-entry" role="listitem">
-Ragulina, Galina, and Trond Reitan. 2017. <span>“<span class="nocase">Generalized extreme value shape parameter and its nature for extreme precipitation using long time series and the Bayesian approach</span>.”</span> <em>Hydrological Sciences Journal</em> 62 (6): 863–79. <a href="https://doi.org/10.1080/02626667.2016.1260134">https://doi.org/10.1080/02626667.2016.1260134</a>.
+Ragulina, Galina, e Trond Reitan. 2017. <span>«<span>Generalized extreme value shape parameter and its nature for extreme precipitation using long time series and the Bayesian approach</span>»</span>. <em>Hydrological Sciences Journal</em> 62 (6): 863–79. <a href="https://doi.org/10.1080/02626667.2016.1260134">https://doi.org/10.1080/02626667.2016.1260134</a>.
+</div>
+<div id="ref-Reis.2005" class="csl-entry" role="listitem">
+Reis, D. S., J. R. Stedinger, e E. S. Martins. 2005. <span>«<span>Bayesian generalized least squares regression with application to log Pearson type 3 regional skew estimation</span>»</span>. <em>Water Resources Research</em> 41 (10). <a href="https://doi.org/10.1029/2004wr003445">https://doi.org/10.1029/2004wr003445</a>.
+</div>
+<div id="ref-Reis.2020" class="csl-entry" role="listitem">
+Reis, Dirceu S., Andrea G. Veilleux, Jonathan R. Lamontagne, Jery R. Stedinger, e Eduardo S. Martins. 2020. <span>«<span>Operational Bayesian GLS Regression for Regional Hydrologic Analyses</span>»</span>. <em>Water Resources Research</em> 56 (8). <a href="https://doi.org/10.1029/2019wr026940">https://doi.org/10.1029/2019wr026940</a>.
 </div>
 <div id="ref-Serinaldi.2014" class="csl-entry" role="listitem">
-Serinaldi, Francesco, and Chris G. Kilsby. 2014. <span>“<span class="nocase">Rainfall extremes: Toward reconciliation after the battle of distributions</span>.”</span> <em>Water Resources Research</em> 50 (1): 336–52. <a href="https://doi.org/10.1002/2013wr014211">https://doi.org/10.1002/2013wr014211</a>.
+Serinaldi, Francesco, e Chris G. Kilsby. 2014. <span>«<span>Rainfall extremes: Toward reconciliation after the battle of distributions</span>»</span>. <em>Water Resources Research</em> 50 (1): 336–52. <a href="https://doi.org/10.1002/2013wr014211">https://doi.org/10.1002/2013wr014211</a>.
 </div>
 <div id="ref-Stephenson.2016" class="csl-entry" role="listitem">
-Stephenson, Alec G., Eric A. Lehmann, and Aloke Phatak. 2016. <span>“<span class="nocase">A max-stable process model for rainfall extremes at different accumulation durations</span>.”</span> <em>Weather and Climate Extremes</em> 13: 44–53. <a href="https://doi.org/10.1016/j.wace.2016.07.002">https://doi.org/10.1016/j.wace.2016.07.002</a>.
+Stephenson, Alec G., Eric A. Lehmann, e Aloke Phatak. 2016. <span>«<span>A max-stable process model for rainfall extremes at different accumulation durations</span>»</span>. <em>Weather and Climate Extremes</em> 13: 44–53. <a href="https://doi.org/10.1016/j.wace.2016.07.002">https://doi.org/10.1016/j.wace.2016.07.002</a>.
 </div>
 <div id="ref-Wilson.2005" class="csl-entry" role="listitem">
-Wilson, P. S., and R. Toumi. 2005. <span>“<span class="nocase">A fundamental probability distribution for heavy rainfall</span>.”</span> <em>Geophysical Research Letters</em> 32 (14): n/a–. <a href="https://doi.org/10.1029/2005gl022465">https://doi.org/10.1029/2005gl022465</a>.
+Wilson, P. S., e R. Toumi. 2005. <span>«<span>A fundamental probability distribution for heavy rainfall</span>»</span>. <em>Geophysical Research Letters</em> 32 (14): n/a–. <a href="https://doi.org/10.1029/2005gl022465">https://doi.org/10.1029/2005gl022465</a>.
 </div>
-</div></section></div></main> <!-- /main -->
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -384,12 +467,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Copiada");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Copiada");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",

@@ -1,6 +1,7 @@
 ---
 title: "Mudanças climáticas"
-format: html
+date: now
+date-format: long
 bibliography: referencias/ref_impactos_mudancas.bib
 ---
 

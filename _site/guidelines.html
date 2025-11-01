@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
@@ -74,17 +74,17 @@ div.csl-indent {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
   }
 }</script>
 
@@ -132,8 +132,8 @@ window.Quarto = {
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -158,40 +158,24 @@ window.Quarto = {
  <span class="dropdown-text">Modelagem probabilística de chuvas intensas</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./IDF_basico.html">
- <span class="dropdown-text">IDF básico</span></a>
-  </li>  
-        <li>
     <a class="dropdown-item" href="./desagregacao_temporal.html">
  <span class="dropdown-text">Desagregacao temporal</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./regionalizacao.html">
- <span class="dropdown-text">Modelos Regionais</span></a>
+ <span class="dropdown-text">Regionalização</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./IDF_mudanca.html">
+    <a class="dropdown-item" href="./Sensoreamento_remoto.qmd">
+ <span class="dropdown-text">Sensoreamento remoto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./climate_models.html">
  <span class="dropdown-text">IDF e as mudanças do clima</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
  <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Australia.html">
- <span class="dropdown-text">Austrália</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Canada.html">
- <span class="dropdown-text">Canadá</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./Inglaterra.html">
- <span class="dropdown-text">Inglaterra</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./estados unidos.html">
- <span class="dropdown-text">Estados Unidos</span></a>
   </li>  
     </ul>
   </li>
@@ -230,7 +214,7 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Autor</div>
     <div class="quarto-title-meta-contents">
              <p>Bruno Pereira. </p>
           </div>
@@ -436,7 +420,7 @@ I_p = I \times \left( 1 + \frac{\alpha}{100} \right)^{\Delta T}
 </section>
 <section id="downscaling-espacial-e-temporal-da-precipitação" class="level4">
 <h4 class="anchored" data-anchor-id="downscaling-espacial-e-temporal-da-precipitação">Downscaling* espacial e temporal da precipitação</h4>
-<p>Para atualizar as curvas IDF foi adotado o método <em>Equidistant Quantile Matching</em> (EQM), desenvolvido por <span class="citation" data-cites="Srivastav.2014">Srivastav, Schardong, and Simonovic (<a href="#ref-Srivastav.2014" role="doc-biblioref">2014</a>)</span>. Esse método realiza o <em>downscaling temporal</em> (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do <em>downscaling espacial</em> da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).</p>
+<p>Para atualizar as curvas IDF foi adotado o método <em>Equidistant Quantile Matching</em> (EQM), desenvolvido por <span class="citation" data-cites="Srivastav.2014">Srivastav, Schardong, e Simonovic (<a href="#ref-Srivastav.2014" role="doc-biblioref">2014</a>)</span>. Esse método realiza o <em>downscaling temporal</em> (a distribuição das mudanças entre o período de tempo projetado e o período de linha de base), além do <em>downscaling espacial</em> da precipitação máxima anual (AMP derivada dos dados do GCM e dos dados subdiários observados).</p>
 <p>O EQM foi aplicado diretamente à AMP para estabelecer as relações estatísticas entre as AMPs dos dados de precipitação gerados pelo GCM e os dados observados (históricos) subdiários, ao invés de usar registros completos de precipitação diária.</p>
 <p>O processo de EQM ocorre em três etapas principais:</p>
 <ol type="1">
@@ -697,7 +681,7 @@ PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-ARR.2019" class="csl-entry" role="listitem">
 <em>Australian Rainfall and Runoff: A Guide to Flood Estimation</em>. 2019. Symonston, Australian Capital Territory: Geoscience Australia.
 </div>
@@ -705,28 +689,28 @@ PF_{VOL2}(x,t) = \big(1 + 0.01 \times AF(x,t)\big) \times PF_{VOL1}(x)
 ———. 2024. Symonston, Australian Capital Territory: Geoscience Australia.
 </div>
 <div id="ref-Bonnin.2004" class="csl-entry" role="listitem">
-Bonnin, Geoffrey M, Deborah Martin, Bingzhang Lin, Michael Yekta, and David Riley. 2004. <span>“Precipitation-<span>Frequency Atlas</span> of the <span>United States</span>”</span> 1.
+Bonnin, Geoffrey M, Deborah Martin, Bingzhang Lin, Michael Yekta, e David Riley. 2004. <span>«Precipitation-<span>Frequency Atlas</span> of the <span>United States</span>»</span> 1.
 </div>
 <div id="ref-Faulkner.1999" class="csl-entry" role="listitem">
 Faulker, Ducan. 1999. <em>Flood Estimation Handbook: 2 Rainfall Frequency Estimation</em>. Wallingford, Oxfordshire: Institute of Hydrology.
 </div>
 <div id="ref-Perica.2024" class="csl-entry" role="listitem">
-Perica, S., J. Hanrahan, M. Lago, K. Kunkel, and D. Martin. 2024. <em>Atlas 15 Pilot Technical Report.</em> Silver Spring, MD: National Weather Service.
+Perica, S., J. Hanrahan, M. Lago, K. Kunkel, e D. Martin. 2024. <em>Atlas 15 Pilot Technical Report.</em> Silver Spring, MD: National Weather Service.
 </div>
 <div id="ref-Simonovic.2016" class="csl-entry" role="listitem">
-Simonovic, Slobodan P., Andre Schardong, Dan Sandink, and Roshan Srivastav. 2016. <span>“A Web-Based Tool for the Development of <span>Intensity Duration Frequency</span> Curves Under Changing Climate.”</span> <em>Environmental Modelling &amp; Software</em> 81 (July): 136–53. <a href="https://doi.org/10.1016/j.envsoft.2016.03.016">https://doi.org/10.1016/j.envsoft.2016.03.016</a>.
+Simonovic, Slobodan P., Andre Schardong, Dan Sandink, e Roshan Srivastav. 2016. <span>«A Web-Based Tool for the Development of <span>Intensity Duration Frequency</span> Curves Under Changing Climate»</span>. <em>Environmental Modelling &amp; Software</em> 81 (julho): 136–53. <a href="https://doi.org/10.1016/j.envsoft.2016.03.016">https://doi.org/10.1016/j.envsoft.2016.03.016</a>.
 </div>
 <div id="ref-Srivastav.2014" class="csl-entry" role="listitem">
-Srivastav, Roshan K., Andre Schardong, and Slobodan P. Simonovic. 2014. <span>“Equidistance <span>Quantile Matching Method</span> for <span>Updating IDFCurves</span> Under <span>Climate Change</span>.”</span> <em>Water Resources Management</em> 28 (9): 2539–62. <a href="https://doi.org/10.1007/s11269-014-0626-y">https://doi.org/10.1007/s11269-014-0626-y</a>.
+Srivastav, Roshan K., Andre Schardong, e Slobodan P. Simonovic. 2014. <span>«Equidistance <span>Quantile Matching Method</span> for <span>Updating IDFCurves</span> Under <span>Climate Change</span>»</span>. <em>Water Resources Management</em> 28 (9): 2539–62. <a href="https://doi.org/10.1007/s11269-014-0626-y">https://doi.org/10.1007/s11269-014-0626-y</a>.
 </div>
 <div id="ref-Stewart.2013a" class="csl-entry" role="listitem">
-Stewart, E. J., D. A. Jones, C. Svensson, D. G. Morris, P. Dempsey, J. E. Dent, C. G. Collier, and C. W. Anderson. 2013a. <em>Reservoir Safety – Long Return Period Rainfall: Volume 1 Technical Report (Part 1)</em>. Vol. 1. Department for Environment, Food; Rural Affairs.
+Stewart, E. J., D. A. Jones, C. Svensson, D. G. Morris, P. Dempsey, J. E. Dent, C. G. Collier, e C. W. Anderson. 2013a. <em>Reservoir Safety – Long Return Period Rainfall: Volume 1 Technical Report (Part 1)</em>. Vol. 1. Department for Environment, Food; Rural Affairs.
 </div>
 <div id="ref-Stewart.2013b" class="csl-entry" role="listitem">
 ———. 2013b. <em>Reservoir Safety – Long Return Period Rainfall: Volume 1 Technical Report (Part 2)</em>. Vol. 1. Department for Environment, Food; Rural Affairs.
 </div>
 <div id="ref-Wasko.2024" class="csl-entry" role="listitem">
-Wasko, Conrad, Seth Westra, Rory Nathan, Acacia Pepler, Timothy H. Raupach, Andrew Dowdy, Fiona Johnson, et al. 2024. <span>“A Systematic Review of Climate Change Science Relevant to <span>Australian</span> Design Flood Estimation.”</span> <em>Hydrology and Earth System Sciences</em> 28 (5): 1251–85. <a href="https://doi.org/10.5194/hess-28-1251-2024">https://doi.org/10.5194/hess-28-1251-2024</a>.
+Wasko, Conrad, Seth Westra, Rory Nathan, Acacia Pepler, Timothy H. Raupach, Andrew Dowdy, Fiona Johnson, et al. 2024. <span>«A Systematic Review of Climate Change Science Relevant to <span>Australian</span> Design Flood Estimation»</span>. <em>Hydrology and Earth System Sciences</em> 28 (5): 1251–85. <a href="https://doi.org/10.5194/hess-28-1251-2024">https://doi.org/10.5194/hess-28-1251-2024</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -772,12 +756,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Copiada");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Copiada");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Dirceu S. Reis Jr.">
 
-<title>links – Proj. IDF Brasil ANA/UnB</title>
+<title>Meta 11: Protótipo da Ferramenta Web para Curvas IDF – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -134,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" aria-current="page"> 
+    <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
   </li>  
 </ul>
@@ -148,21 +149,33 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#meta-11-protótipo-da-ferramenta-web-para-curvas-idf" id="toc-meta-11-protótipo-da-ferramenta-web-para-curvas-idf" class="nav-link active" data-scroll-target="#meta-11-protótipo-da-ferramenta-web-para-curvas-idf">Meta 11: Protótipo da Ferramenta Web para Curvas IDF</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">links</h1>
+<h1 class="title">Meta 11: Protótipo da Ferramenta Web para Curvas IDF</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Autor</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dirceu S. Reis Jr. </p>
+          </div>
+  </div>
     
   
     
@@ -173,8 +186,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="meta-11-protótipo-da-ferramenta-web-para-curvas-idf" class="level2">
+<h2 class="anchored" data-anchor-id="meta-11-protótipo-da-ferramenta-web-para-curvas-idf">Meta 11: Protótipo da Ferramenta Web para Curvas IDF</h2>
+<p>A partir dos resultados advindos da meta 10, um protótipo de ferramenta web para disponibilização das IDFs, com e sem influência das mudanças climáticas, será desenvolvido. O protótipo da ferramenta será implementado em linguagem Python ou R.</p>
+<p>Os principais produtos desta etapa serão o protótipo da ferramenta web e um relatório com uma descrição da estrutura da ferramenta.</p>
+<p>A ferramenta web terá como base a estrutura empregada pelo Canadá no desenvolmento do <a href="https://www.idf-cc-uwo.ca/">IDF_CC Tool</a>. A ferramenta será dividida em três eixos principais: interface do usuário, modelos matemáticos e banco de dados.</p>
+<p>O sistema exigirá um cadastro simples para ter acesso a todas as funcionalidades da ferramenta. Após o login, o usuário poderá escolher se deseja obter a curva IDF para uma dada região ou selecionar uma estação meteorológica específica. Feita a escolha, o sistema exibirá uma nova aba com os dados básicos da região ou da estação (por exemplo, ID, número de anos, arquivos complementares). Nessa nova aba, pode-se optar por obter a curva IDF com base nos dados históricos ou sob mudanças climáticas.</p>
+<p>No primeiro caso, o gráfico da curva IDF, bem como uma tabela com os quatis desejados, são gerados a partir dos valores dos parâmetros da IDF. No caso da curva IDF sob efeitos das mudanças climáticas, o usuário deverá escolher o período de tempo futuro de análise (possivelmente um dentre os três períodos possíveis até o ano 2100), os cenários de SSP desejados, e os modelos climáticos de interesse. Para cada escolha, o sistema deverá fornecer graficamente e tabularmente as curvas IDF bem como as mudanças pecentuais dos quantis para as diferentes durações.</p>
+<p>O sistema deverá ser capaz de apresentar, caso o usuário deseje, os resultados para um dado conjunto de modelos (todos os modelos ou um subconjunto personalizado). O sistema irá prover as curvas IDF’s, tabelas, equações de interpolação e o boxplot das incertezas para os três cenários de emissão e concentração (SSP1.26, SSP2.45 e SSP5.85).</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

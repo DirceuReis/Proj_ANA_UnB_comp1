@@ -1,6 +1,5 @@
 ---
 title: "Desagregação temporal das chuvas intensas"
-author: Dirceu S. Reis Jr.
 date: now
 date-format: long
 bibliography: referencias/ref_desagregacao.bib

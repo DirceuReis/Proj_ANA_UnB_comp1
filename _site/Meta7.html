@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>links – Proj. IDF Brasil ANA/UnB</title>
+<title>Meta 1.7 - IDFs Pluviógrafos INMET/CEMADEM – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -67,6 +87,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -134,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" aria-current="page"> 
+    <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
   </li>  
 </ul>
@@ -156,7 +205,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">links</h1>
+<h1 class="title">Meta 1.7 - IDFs Pluviógrafos INMET/CEMADEM</h1>
 </div>
 
 
@@ -173,6 +222,37 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>Nesta etapa serão geradas curvas IDF a partir dos dados de pluviógrafos operados pelo INMET e pelo CEMADEN. O procedimento segue a mesma lógica geral aplicada aos pluviômetros convencionais (isto é, geração de máximos anuais, ajuste a distribuições de valores extremos e obtenção de quantis para diferentes períodos de retorno), mas aqui a discretização temporal é mais fina. Serão considerados acumulados de precipitação em janelas móveis de 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos, e serão estimadas intensidades associadas a períodos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos. As etapas de ajuste às distribuições extremas (por exemplo, GEV), os testes de aderência e o ajuste das equações de IDF seguirão procedimentos análogos aos descritos anteriormente (ver Meta 1.4.5), e serão detalhados no Plano de Trabalho atualizado.</p>
+<p>Além do ajuste direto de curvas IDF tradicionais para cada estação, será adotado um enquadramento teórico explícito baseado no princípio de invariância de escala e na formulação separável proposta por Koutsoyiannis et al. <span class="citation" data-cites="KOUTSOYIANNIS1998118">(<a href="#ref-KOUTSOYIANNIS1998118" role="doc-biblioref">Koutsoyiannis, Kozonis, e Manetas 1998</a>)</span> e amplamente aplicada em diversos estudos <span class="citation" data-cites="Nguyen.1998">Mascaro (<a href="#ref-Mascaro.2020" role="doc-biblioref">2020</a>)</span>. Nessa formulação, a intensidade de projeto <span class="math inline">\(i(T,d)\)</span>, isto é, a intensidade máxima média associada a um período de retorno <span class="math inline">\(T\)</span> e duração <span class="math inline">\(d\)</span>, é decomposta em duas componentes independentes mas coerentes entre si:</p>
+<p><span class="math display">\[ i(T,d)= a(T) / b(T) \]</span> {eq-idf-k}</p>
+<p>A função <span class="math inline">\(a(T)\)</span> representa a componente de frequência, enquanto <span class="math inline">\(b(d)\)</span> representa a componente de duração. Essa separabilidade é metodologicamente importante porque permite estimar, de forma consistente, a dependência com a duração e a dependência com a raridade do evento sem impor uma forma puramente empírica às curvas IDF.</p>
+<p>Para a componente de duração, Koutsoyiannis et al. <span class="citation" data-cites="KOUTSOYIANNIS1998118">(<a href="#ref-KOUTSOYIANNIS1998118" role="doc-biblioref">1998</a>)</span> demonstram que uma forma parcimoniosa é suficiente para descrever a variação sistemática da intensidade média com a duração:</p>
+<p><span class="math display">\[
+b(d)=(d+\theta)^{\eta},\qquad
+\theta&gt;0,\;0&lt;\eta&lt;1
+\]</span> {eq-dur-k}</p>
+<p>Nesta formulação, <span class="math inline">\(\theta\)</span> atua como um parâmetro de translação associado a processos físicos (por exemplo, limite inferior de concentração da chuva em janelas muito curtas), enquanto <span class="math inline">\(\eta\)</span> controla a taxa com que a intensidade média decai à medida que a duração aumenta. Um ponto central da proposta é que <span class="math inline">\(\theta\)</span> e <span class="math inline">\(eta\)</span> podem ser tratados como essencialmente independentes de <span class="math inline">\(T\)</span>; ou seja, os parâmetros de escala temporal não mudam de um período de retorno para outro. Toda a variação em frequência (raridade do evento) é então absorvida em <span class="math inline">\(a(T)\)</span>. A função <span class="math inline">\(a(T)\)</span> é obtida diretamente a partir da distribuição estatística dos máximos anuais, evitando ajustar formas empíricas ad hoc para cada período de retorno. Em termos operacionais, define-se uma variável transformada <span class="math inline">\(Y=I(d)b(d)\)</span>, onde <span class="math inline">\(I(d)\)</span> é a intensidade máxima média na duração <span class="math inline">\(d\)</span>. Se <span class="math inline">\(Y\)</span> segue uma distribuição de valores extremos (por exemplo, Gumbel ou GEV), então <span class="math inline">\(a(T)\)</span> coincide com o quantil teórico de ordem <span class="math inline">\(1−1/T\)</span> dessa distribuição.</p>
+<p>No presente projeto, essa formulação será usada de forma combinada com o conceito de pooling parcial e max-estável já descrito nas metas 4 e 5. Ou seja, parâmetros como <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\eta\)</span> e os parâmetros da distribuição de extremos (<span class="math inline">\(\xi\)</span>) não serão estimados isoladamente para cada pluviógrafo de maneira totalmente independente, mas sim dentro de um arcabouço que compartilha informação estatística entre estações de uma mesma região. Esse pooling parcial é necessário porque, mesmo para pluviógrafos de alta resolução temporal (10 min, 15 min, 1 h etc.), muitas séries são curtas e apresentam falhas operacionais. A regionalização estatística dos parâmetros permite estabilizar as estimativas e produzir curvas IDF fisicamente plausíveis também em estações com histórico curto.</p>
+<p>Os resultados obtidos por esse arcabouço de invariância de escala serão comparados diretamente com o método empírico tradicionalmente utilizado no Brasil para derivar intensidades de curta duração a partir de informações de maior duração, notadamente o método da CETESB <span class="citation" data-cites="cetesb1979-drenagem">(<a href="#ref-cetesb1979-drenagem" role="doc-biblioref">CETESB 1979</a>)</span>. Esse método parte da suposição de que um valor de projeto diário, normalmente associado a um certo período de retorno, pode ser “desagregado” para durações menores (por exemplo, 1 h, 30 min, 10 min) multiplicando-se a precipitação por coeficientes de desagregação. Esses coeficientes são tabelados a partir de amostras históricas e amplamente usados em práticas de projeto por órgãos estaduais e municipais de drenagem urbana.</p>
+<p>A comparação entre as abordagens cumpre dois objetivos. Primeiro, verificar em que medida o método empírico de relações fixas de desagregação (CETESB), que supõe proporções constantes entre a chuva diária e as chuvas de curta duração, continua adequado frente a uma formulação estatisticamente consistente e fisicamente informada de dependência entre duração e frequência (invariância de escala). Segundo, quantificar o ganho de robustez estatística obtido quando se impõe <em>pooling parcial</em> e coerência regional aos parâmetros, em comparação com ajustes puramente locais baseados em poucas durações registradas em cada pluviógrafo.</p>
+<p>Os produtos desta etapa incluirão: (i) as curvas IDF estimadas para cada estação/pluviógrafo em diferentes durações e períodos de retorno; (ii) os parâmetros regionais estimados, parâmetros da distribuição de extremos) e sua interpretação hidrológica; (iii) a comparação entre a abordagem de invariância de escala e o método empírico baseado em coeficientes de desagregação (CETESB); e (iv) um relatório técnico consolidando metodologia. Também serão disponibilizados os scripts em R e/ou Python utilizados para ajuste das distribuições de extremos, estimação dos parâmetros, geração das curvas IDF e derivação das intensidades de projeto.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-cetesb1979-drenagem" class="csl-entry" role="listitem">
+CETESB. 1979. <em>Drenagem urbana: manual de projeto</em>. São Paulo: Companhia Ambiental do Estado de São Paulo.
+</div>
+<div id="ref-KOUTSOYIANNIS1998118" class="csl-entry" role="listitem">
+Koutsoyiannis, Demetris, Demosthenes Kozonis, e Alexandros Manetas. 1998. <span>«A mathematical framework for studying rainfall intensity-duration-frequency relationships»</span>. <em>Journal of Hydrology</em> 206 (1): 118–35. https://doi.org/<a href="https://doi.org/10.1016/S0022-1694(98)00097-3">https://doi.org/10.1016/S0022-1694(98)00097-3</a>.
+</div>
+<div id="ref-Lima.2018" class="csl-entry" role="listitem">
+Lima, Carlos H. R., Hyun-Han Kwon, e Yong-Tak Kim. 2018. <span>«<span>A local-regional scaling-invariant Bayesian GEV model for estimating rainfall IDF curves in a future climate</span>»</span>. <em>Journal of Hydrology</em> 566: 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
+</div>
+<div id="ref-Mascaro.2020" class="csl-entry" role="listitem">
+Mascaro, Giuseppe. 2020. <span>«<span>Comparison of Local, Regional, and Scaling Models for Rainfall Intensity–Duration–Frequency Analysis</span>»</span>. <em>Journal of Applied Meteorology and Climatology</em> 59 (9): 1519–36. <a href="https://doi.org/10.1175/jamc-d-20-0094.1">https://doi.org/10.1175/jamc-d-20-0094.1</a>.
+</div>
+<div id="ref-Nguyen.1998" class="csl-entry" role="listitem">
+Nguyen, V. T. V., T. D. Nguyen, e H. Wang. 1998. <span>«<span>Regional estimation of short duration rainfall extremes</span>»</span>. <em>Water Science and Technology</em> 37 (11): 15–19. <a href="https://doi.org/10.2166/wst.1998.0425">https://doi.org/10.2166/wst.1998.0425</a>.
+</div>
+</div>
 
 
 

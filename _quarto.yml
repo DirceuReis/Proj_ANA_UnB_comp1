@@ -13,25 +13,17 @@ website:
         menu:
           - href: distr_chuva_intensa.qmd
             text: Modelagem probabilística de chuvas intensas
-          - href: IDF_basico.qmd 
-            text: IDF básico
           - href: desagregacao_temporal.qmd
             text: Desagregacao temporal
           - href: regionalizacao.qmd
-            text: Modelos Regionais
-          - href: IDF_mudanca.qmd
+            text: Regionalização
+          - href: Sensoreamento_remoto.qmd
+            text: Sensoreamento remoto
+          - href: climate_models.qmd
             text: IDF e as mudanças do clima
           - href: guidelines.qmd
             text: Exemplos de esudos de caráter nacional
-          - href: Australia.qmd
-            text: Austrália
-          - href: Canada.qmd
-            text: Canadá
-          - href: Inglaterra.qmd
-            text: Inglaterra
-          - href: estados unidos.qmd
-            text: Estados Unidos
-            
+          
       #- text: "Tutoriais"
       #  menu: 
       #    - href: tutorial/rs_subdaily_read_hdf_all.qmd

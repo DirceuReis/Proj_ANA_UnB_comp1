@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>links – Proj. IDF Brasil ANA/UnB</title>
+<title>META 1.6 Correção de Viés dos Dados Climáticos – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -134,7 +153,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" aria-current="page"> 
+    <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
   </li>  
 </ul>
@@ -148,15 +167,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#meta-1.6-correção-de-viés-dos-dados-climáticos" id="toc-meta-1.6-correção-de-viés-dos-dados-climáticos" class="nav-link active" data-scroll-target="#meta-1.6-correção-de-viés-dos-dados-climáticos">META 1.6 Correção de Viés dos Dados Climáticos</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">links</h1>
+<h1 class="title">META 1.6 Correção de Viés dos Dados Climáticos</h1>
 </div>
 
 
@@ -173,8 +198,22 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="meta-1.6-correção-de-viés-dos-dados-climáticos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-1.6-correção-de-viés-dos-dados-climáticos">META 1.6 Correção de Viés dos Dados Climáticos</h2>
+<p>A base de dados NEX-GDDP-CMIP6 cobre o período de 1950 a 2010. Para o horizonte temporal passado e presente, anos 1950-2014, é possível avaliar como os dados de precipitação gerados pelos modelos climáticos da base NEX-GDDP-CMIP6 representam aqueles efetivamente registrados nas estações e espacializados para a base em grade. Via de regra, há um desvio sistemático entre os dados históricos reproduzidos pelos modelos climáticos e os registros efetivamente observados, denominado viés. Dessa forma, é importante que as projeções futuras de chuva tenham esse viés corrigido antes de serem efetivamente empregadas para análises.</p>
+<p>Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (<em>Quantile Mapping</em> QM) proposta por Bárdossy &amp; Pegram (2011) é forte candidata a ser empregada. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.</p>
+<p>Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o <em>Delta Change</em>, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de <em>downscaling</em> e ajuste de viés. O método <em>Delta Change</em> aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas.</p>
+<p>Baseado no QM o método <em>Equidistant Quantile Matching</em> (EQM) <span class="citation" data-cites="Simonovic.2017">(<a href="#ref-Simonovic.2017" role="doc-biblioref"><strong>Simonovic.2017?</strong></a>)</span> é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo. O EQM também possui uma versão não estacionária (<em>Equidistant Quantile Matching non-stationary</em>) que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado <span class="citation" data-cites="Silva.2021">(<a href="#ref-Silva.2021" role="doc-biblioref"><strong>Silva.2021?</strong></a>)</span>.</p>
+<p>Outro método baseado no QM é o <em>Quantile–Quantile Downscaling</em> (QQD) <span class="citation" data-cites="Hassanzadeh.2019">(<a href="#ref-Hassanzadeh.2019" role="doc-biblioref"><strong>Hassanzadeh.2019?</strong></a>)</span> que é um método estatístico que combina <em>downscaling</em> e correção de viés ao ajustar quantil a quantil a distribuição simulada por modelos climáticos para coincidir com a distribuição observada em uma escala local. Em vez de apenas reduzir a escala espacial, o QQD também corrige sistematicamente as diferenças entre o clima simulado e o real, garantindo que a série resultante apresente características estatísticas (como média, variabilidade e extremos) mais próximas das observações históricas.</p>
+<p>Outras variantes mais recentes incluem o <em>Bias Correction Quantile Mapping</em> (BCQM), o <em>Kernel Density Distribution Mapping</em> (KDDM), o <em>Quantile Delta Mapping</em> (QDM) e o PresRat (PRAT). O BCQM corrige diretamente as funções de distribuição cumulativa (CDFs); o KDDM utiliza densidades suavizadas por meio de funções kernel; o QDM preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições; e o PRAT estende o QDM incorporando um fator médio de correção adiciona <span class="citation" data-cites="Lanzante.2021">(<a href="#ref-Lanzante.2021" role="doc-biblioref"><strong>Lanzante.2021?</strong></a>)</span>.</p>
+<p>Além disso, destaca-se o método <em>Quantile Perturbation Downscaling</em> (QPD), que aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas <span class="citation" data-cites="Hosseinzadehtalaei.2020">(<a href="#ref-Hosseinzadehtalaei.2020" role="doc-biblioref"><strong>Hosseinzadehtalaei.2020?</strong></a>)</span>.</p>
+<p>O produto desta meta será um relatório com a descrição dos prós e contras das metodologias citadas acima com a definição da metodologia a ser utilizada para remoção de viés.</p>
+<div id="refs" role="list">
+
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

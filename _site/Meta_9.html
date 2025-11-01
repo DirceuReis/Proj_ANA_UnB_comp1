@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>links – Proj. IDF Brasil ANA/UnB</title>
+<title>META 1.9 IDFs nos Pontos de Grade para os Dados Históricos – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -67,6 +87,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -134,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" aria-current="page"> 
+    <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
   </li>  
 </ul>
@@ -148,15 +197,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#meta-1.9-idfs-nos-pontos-de-grade-para-os-dados-históricos" id="toc-meta-1.9-idfs-nos-pontos-de-grade-para-os-dados-históricos" class="nav-link active" data-scroll-target="#meta-1.9-idfs-nos-pontos-de-grade-para-os-dados-históricos">META 1.9 IDFs nos Pontos de Grade para os Dados Históricos</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">links</h1>
+<h1 class="title">META 1.9 IDFs nos Pontos de Grade para os Dados Históricos</h1>
 </div>
 
 
@@ -173,10 +228,65 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="meta-1.9-idfs-nos-pontos-de-grade-para-os-dados-históricos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-1.9-idfs-nos-pontos-de-grade-para-os-dados-históricos">META 1.9 IDFs nos Pontos de Grade para os Dados Históricos</h2>
+<p>De maneira similar às IDFs para os postos pluviométricos e para os pluviógrafos, serão desenvolvidas IDFs para os dados históricos/presente de chuva gerados em grade após a etapa de espacialização dos dados, conforme descrito no item 3.4. Assim, para cada ponto da malha serão desenvolvidas curvas IDFs para as chuvas acumuladas para 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos; 1, 2, 3, 4, 5, 6 e 7 dias, com tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos, considerando o histórico de dados até a data presente (considerado o ano de 2014 na base NEX-GDDP-CMIP6). Os ajustes às distribuições extremas, os testes de aderência e os ajustes às equações IDF serão conduzidos de forma similar ao descrito no item 3.5.</p>
+<p>A utilização de dados de precipitação em grade tem se tornado fundamental para estudos hidrológicos, sobretudo em regiões onde a rede de estações pluviométricas apresenta baixa densidade espacial ou falhas de cobertura. Diferentes tipos de séries climáticas remotas e combinadas estão sendo usadas para estimar IDFs, incluindo produtos como TRMM (<em>Tropical Rainfall Measuring Mission</em>), GPM (<em>Global Precipitation Measurement</em>)<span class="citation" data-cites="Pan.2023">(<a href="#ref-Pan.2023" role="doc-biblioref">Pan et al. 2023</a>)</span>, GSMaP (<em>Global Satellite Mapping of Precipitation</em>) <span class="citation" data-cites="Pan.2023">(<a href="#ref-Pan.2023" role="doc-biblioref">Pan et al. 2023</a>)</span>, PERSIANN (<em>Precipitation Estimation from Remotely Sensed Information Using Artifitial Neural Networks</em>) e CHIRPS (<em>Climate Hazards Group InfraRed Precipitation with Station Data</em>). Esses produtos derivados de sensoriamento remoto (SPPs) possuem grande importância para regiões onde a rede de estações é de baixa resolução temporal e densidade espacial <span class="citation" data-cites="Islam.2022">Wright, Mantilla, e Peters-Lidard (<a href="#ref-Wright.2017" role="doc-biblioref">2017</a>)</span>.</p>
+<p>Para a composição dessa base gridded, poderão ser utilizados conjuntos de dados consolidados, tais como CHIRPS (1981–presente) <span class="citation" data-cites="Musie.2019">(<a href="#ref-Musie.2019" role="doc-biblioref">Musie, Sen, e Srivastava 2019</a>)</span>, PERSIANN-CDR (1983–presente) <span class="citation" data-cites="Zoysa.2024">(<a href="#ref-Zoysa.2024" role="doc-biblioref">Zoysa et al. 2024</a>)</span>, e CMORPH (1998–presente), além de produtos provenientes de reanálises como ERA5/ERA5-Land (1950–presente)<span class="citation" data-cites="Shen.2022">(<a href="#ref-Shen.2022" role="doc-biblioref"><strong>Shen.2022?</strong></a>)</span>. O CHIRPS, em particular, combina dados de satélite e estações pluviométricas, disponibilizando séries diárias e mensais em resoluções de 0,05° (~5 km) e 0,25° (~25 km), com abrangência global. O PERSIANN-CDR fornece séries diárias contínuas desde 1983, também em resolução de 0,25°, sendo amplamente utilizado em estudos de longo prazo devido à sua consistência temporal. Já o CMORPH (<em>Climate Prediction Center Morphing Technique</em>), com resolução espacial de 0,25° (~25 km) e séries desde 1998, apresenta alta resolução temporal (30 minutos), o que o torna particularmente útil para estudos de eventos extremos de curta duração.</p>
+<p>Além dos produtos puramente observacionais e combinados, poderão ser empregados dados de reanálises climáticas, como o ERA5 e o ERA5-Land, desenvolvidos pelo ECMWF/Copernicus. O ERA5 fornece dados horários em resolução de 0,25° (~25 km) desde 1950 até o presente, enquanto o ERA5-Land aprimora a representação de processos de superfície com resolução espacial de 0,1° (~9 km) e cobertura temporal semelhante <span class="citation" data-cites="Shen.2022">(<a href="#ref-Shen.2022" role="doc-biblioref"><strong>Shen.2022?</strong></a>)</span>. Esses produtos integram observações meteorológicas com modelos numéricos, sendo úteis para a reconstrução de séries históricas contínuas.</p>
+<p>Alternativamente, poderão ser empregados dados climáticos simulados e já disponibilizados em formato de grade, como aqueles oriundos da base NEX-GDDP-CMIP6, que agrega simulações climáticas de 35 modelos globais sob diferentes cenários de forçamento, com resolução de 0,25° e dados diários cobrindo o período histórico (1950–2014) e projeções futuras até 2100. Neste plano de trabalho, o NEX-GDDP-CMIP6 será adotado como referência para o período histórico até 2014.</p>
+<p>Para comparar o desempenho dos produtos satelitais, serão calculados o coeficiente de determinação (R2), a concordância (índice de concordância -d) e o erro médio quadrático (RMSE).</p>
+<p><span class="math display">\[
+r = \frac{\sum (P_{eu} - {P})(O_{eu} - {O})}{\sqrt{\sum (P_{eu} - {P})^2 \sum (O_{eu} - {O})^2}}
+\]</span></p>
+<p><span class="math display">\[
+d = 1 - \left[ \frac{\sum (P_{eu} - O_{eu})^2}{\sum \left( |P_{eu} - \bar{O}| + |O_{eu} - \bar{O}| \right)^2} \right]
+\]</span></p>
+<p><span class="math display">\[
+RMSE = \sqrt{\frac{\sum (P_{eu} - O_{eu})^2}{n}}
+\]</span></p>
+<p>Em que, <span class="math inline">\(P_{eu}\)</span> é o valor estimado da precipitação (em escala de tempo diária, mensal ou anual), <span class="math inline">\(i\)</span> representa um numerador para o número de observações de 1 a n com n o número total (dias, mês, anos). <span class="math inline">\(P\)</span> é a média do valor estimado da precipitação, <span class="math inline">\(O_{eu}\)</span> é o valor de precipitação medido, <span class="math inline">\(O\)</span> é a média da precipitação medida, e <span class="math inline">\(n\)</span> é o número de observações. Para avaliar o desempenho dos produtos na detecção de eventos climáticos será utilizado o método Wilks <span class="citation" data-cites="Junior.2021">(<a href="#ref-Junior.2021" role="doc-biblioref"><strong>Junior.2021?</strong></a>)</span>, que utiliza índices categóricos, baseados nos critérios de correção ou erro das estimativas aos valores medidos.</p>
+<p>A razão (adimensional) das ocorrências de eventos de precipitação para as que não ocorreram será obtida por meio do indicador <em>False Alarm Ratio</em> (FAR).</p>
+<p><span class="math display">\[
+FAR = \frac{b}{a+b}
+\]</span></p>
+<p>A capacidade de corrigir os eventos de precipitação será determinada pelo indicador de Probabilidade de Detecção (POD).</p>
+<p><span class="math display">\[
+POD = \frac{a}{b+c}
+\]</span></p>
+<p>A tendência de um produto de precipitação de superestimar o número total de eventos será determinado pelo BIAS (adimensional).</p>
+<p><span class="math display">\[
+BIAS = \frac{a+c}{a+b}
+\]</span></p>
+<p>Em que, BIAS = 1representam concordância perfeita, BIAS &gt;1 superestimação, e BIAS &lt; 1 subestimação.</p>
+<p>A proporção do número de eventos de precipitação corretamente previstos e os casos que não houve eventos de precipitação será realizado através do Índice Crítico de Sucesso (CSI).</p>
+<p><span class="math display">\[
+CSI = \frac{a}{a+b+c}
+\]</span></p>
+<p>Os resultados desta etapa metodológica serão disponibilizados na forma de um boletim, scripts do R ou Python, e um relatório com os ajustes estatísticos realizados e as equações com as curvas IDF nos pontos de grade.</p>
+<p>##Referências</p>
 
 
 
-</main> <!-- /main -->
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Islam.2022" class="csl-entry" role="listitem">
+Islam, Md. Atiqul, Bofu Yu, e Nick Cartwright. 2022. <span>«Coupling of Satellite-Derived Precipitation Products with <span>Bartlett-Lewis</span> Model to Estimate Intensity-Frequency-Duration Curves for Remote Areas»</span>. <em>Journal of Hydrology</em> 609 (junho): 127743. <a href="https://doi.org/10.1016/j.jhydrol.2022.127743">https://doi.org/10.1016/j.jhydrol.2022.127743</a>.
+</div>
+<div id="ref-Musie.2019" class="csl-entry" role="listitem">
+Musie, Mulugeta, Sumit Sen, e Puneet Srivastava. 2019. <span>«Comparison and Evaluation of Gridded Precipitation Datasets for Streamflow Simulation in Data Scarce Watersheds of <span>Ethiopia</span>»</span>. <em>Journal of Hydrology</em> 579 (dezembro): 124168. <a href="https://doi.org/10.1016/j.jhydrol.2019.124168">https://doi.org/10.1016/j.jhydrol.2019.124168</a>.
+</div>
+<div id="ref-Pan.2023" class="csl-entry" role="listitem">
+Pan, Xinshun, Huan Wu, Sirong Chen, Nergui Nanding, Zhijun Huang, Weitian Chen, Chaoqun Li, e Xiaomeng Li. 2023. <span>«Evaluation and <span>Applicability Analysis</span> of <span>GPM Satellite Precipitation</span> over <span>Mainland China</span>»</span>. <em>Remote Sensing</em> 15 (11): 2866. <a href="https://doi.org/10.3390/rs15112866">https://doi.org/10.3390/rs15112866</a>.
+</div>
+<div id="ref-Wright.2017" class="csl-entry" role="listitem">
+Wright, Daniel B., Ricardo Mantilla, e Christa D. Peters-Lidard. 2017. <span>«A Remote Sensing-Based Tool for Assessing Rainfall-Driven Hazards»</span>. <em>Environmental Modelling &amp; Software</em> 90 (abril): 34–54. <a href="https://doi.org/10.1016/j.envsoft.2016.12.006">https://doi.org/10.1016/j.envsoft.2016.12.006</a>.
+</div>
+<div id="ref-Zoysa.2024" class="csl-entry" role="listitem">
+Zoysa, Sanjana De, Jeewanthi Sirisena, Helani Perera, Shalinda Fernando, Miyuru Gunathilake, e Upaka Rathnayake. 2024. <span>«Development of Intensity-Duration-Frequency Curves for <span>Sri Lanka</span> Using Satellite-Based Precipitation Products – <span>Understanding</span> Environmental Conditions and Concerns»</span>. <em>Case Studies in Chemical and Environmental Engineering</em> 9 (junho): 100713. <a href="https://doi.org/10.1016/j.cscee.2024.100713">https://doi.org/10.1016/j.cscee.2024.100713</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

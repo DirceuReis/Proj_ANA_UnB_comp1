@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>links – Proj. IDF Brasil ANA/UnB</title>
+<title>Meta 10 - IDFs para Projeções Futuras – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -134,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" aria-current="page"> 
+    <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
   </li>  
 </ul>
@@ -156,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">links</h1>
+<h1 class="title">Meta 10 - IDFs para Projeções Futuras</h1>
 </div>
 
 
@@ -173,6 +193,15 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>De maneira similar às IDFs geradas para cada ponto da grade desenvolvida para os dados históricos/presente, descrito na meta 9, serão desenvolvidas às curvas IDFs para as projeções futuras de chuvas acumuladas para 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos; 1, 2, 3, 4, 5, 6 e 7 dias, com tempos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos. Para cada ponto de grade e para cada estação, serão utilizadas as séries futuras de máximos anuais corrigidas de viés (particularmente para a duração de 24 h), conforme descritos na meta 6. Para atualizar, via modelo estatístico bayesiano, os parâmetros de localização e escala das distribuições de extremos sob clima futuro, condicionando o parâmetro de forma às distribuições históricas estimadas. Em seguida, essas estimativas futuras de 24 h serão propagadas para as demais durações por meio das relações de escala entre durações, obtendo assim, para cada duração e para cada tempo de retorno, as intensidades projetadas em clima futuro e permitindo a comparação direta entre períodos histórico e futuro em cada célula da grade.</p>
+<p>Os ajustes às distribuições extremas e os ajustes às equações IDF aplicados serão os mesmo dos dados históricos conforme descrito na meta 9 o procedimento de correção de viés adotado para as projeções será avaliado dentre as alternativas descritas e analisadas na meta 6.</p>
+<p>A metodologia utilizada para a seleção dos modelos climáticos será definida com base na literatura científica. Ainda não há uma formulação operacional consolidada para esta atividade, tendo em vista que, na maioria dos estudos, essa análise é conduzida na perspectiva de disponibilidade hídrica e não de extremos. Uma das alternativas é o trabalho de Silva <span class="citation" data-cites="Silva.2025">(<a href="#ref-Silva.2025" role="doc-biblioref">2025</a>)</span>. O procedimento de seleção dos modelos climáticos globais (MCGs) foi realizado tratando a precipitação observada em cada estação como variável resposta e as estimativas dos 35 MCGs como preditores. Para cada estação, inicialmente avaliou-se a importância relativa de cada MCG aplicando sete métricas de relevância (RIMs), que atribuem peso a cada modelo considerando sua contribuição estatística e mitigando problemas como colinearidade. Em seguida, essas sete métricas foram combinadas em um índice síntese único (CPI), que permite comparar diretamente o desempenho dos modelos em cada estação. Depois, os valores do CPI foram agrupados por similaridade de desempenho usando um método de classificação (JOM), produzindo classes de qualidade para os MCGs em cada estação. Por fim, verificou-se, entre todas as estações, quais modelos pertenciam com maior frequência à melhor classe do JOM; esses modelos, mais consistentemente bem ranqueados, foram selecionados para compor o ensemble climático utilizado nas projeções.</p>
+<p>Os resultados desta etapa metodológica serão disponibilizados a partir de scripts do R ou Python, um relatório com a descrição do processo de obtenção das IDFs para o clima futuro nos pontos de grade, relatório com as IDFs para o clima futuro nas estações pluviométricas/pluviográficas, relatório com análise de seleção dos modelos climáticos mais representativos, a base de dados com as IDFs projetadas nos pontos de grade para o clima futuro.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Silva.2025" class="csl-entry" role="listitem">
+Paula e Silva, Gabriel Lopes de. 2025. <span>«Estimativa de curvas Intensidade-dura<span>ç</span><span>ã</span>o-frequ<span>ê</span>ncia no contexto de mudan<span>ç</span>as clim<span>á</span>ticas no Estado de Minas Gerais»</span>. Disserta{\c c}{\~a}o (Mestrado em Saneamento, Meio Ambiente e Recursos H{\'i}dricos, Universidade Federal de Minas Gerais.
+</div>
+</div>
 
 
 

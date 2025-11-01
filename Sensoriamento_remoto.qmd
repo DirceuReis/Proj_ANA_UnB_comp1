@@ -1,5 +1,7 @@
 ---
 title: "Sensoriamento Remoto"
+date: now
+date-format: long
 bibliography: referencias/refs_sensoriamento_remoto.bib
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "Regionalização"
-author: Larissa Rolim
-format: html
+date: now
+date-format: long
 bibliography: referencias/ref_modelo_regional.bib
 ---
 
