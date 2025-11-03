@@ -1,5 +1,10 @@
 project:
   type: website
+  output-dir: docs
+  render: 
+    - "*.qmd"
+    - "!script_descricao_subdiario.qmd"
+    - "!script_leitura_subdiario.qmd"
 
 website:
   title: "Proj. IDF Brasil ANA/UnB"
@@ -17,7 +22,7 @@ website:
             text: Desagregacao temporal
           - href: regionalizacao.qmd
             text: Regionalização
-          - href: sensoriamento_remoto.qmd
+          - href: Sensoriamento_remoto.qmd
             text: Sensoriamento remoto
           - href: climate_models.qmd
             text: IDF e as mudanças do clima
