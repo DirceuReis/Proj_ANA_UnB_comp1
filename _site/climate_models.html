@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Mudanças climáticas – Proj. IDF Brasil ANA/UnB</title>
+<title>Proj. IDF Brasil ANA/UnB - Mudanças climáticas</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,10 +55,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-299fde5381b5a602aab895950093955a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -87,7 +87,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -132,7 +132,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -148,7 +148,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentos" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-documentos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Documentos</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-documentos">    
@@ -165,8 +165,8 @@ window.Quarto = {
  <span class="dropdown-text">Regionalização</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Sensoreamento_remoto.qmd">
- <span class="dropdown-text">Sensoreamento remoto</span></a>
+    <a class="dropdown-item" href="./sensoriamento_remoto.html">
+ <span class="dropdown-text">Sensoriamento remoto</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./climate_models.html">
@@ -188,7 +188,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+          <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -202,8 +202,7 @@ window.Quarto = {
     <h2 id="toc-title">Nesta página</h2>
    
   <ul>
-  <li><a href="#impactos-das-mudanças-climáticas-nas-precipitações-intensas" id="toc-impactos-das-mudanças-climáticas-nas-precipitações-intensas" class="nav-link active" data-scroll-target="#impactos-das-mudanças-climáticas-nas-precipitações-intensas">Impactos das mudanças climáticas nas precipitações intensas</a></li>
-  <li><a href="#metodologias-de-curvas-idf-sob-mudança-climática" id="toc-metodologias-de-curvas-idf-sob-mudança-climática" class="nav-link" data-scroll-target="#metodologias-de-curvas-idf-sob-mudança-climática">Metodologias de Curvas IDF sob Mudança Climática</a>
+  <li><a href="#metodologias-de-curvas-idf-sob-mudança-climática" id="toc-metodologias-de-curvas-idf-sob-mudança-climática" class="nav-link active" data-scroll-target="#metodologias-de-curvas-idf-sob-mudança-climática">Metodologias de Curvas IDF sob Mudança Climática</a>
   <ul class="collapse">
   <li><a href="#downscaling-remoção-de-viés" id="toc-downscaling-remoção-de-viés" class="nav-link" data-scroll-target="#downscaling-remoção-de-viés"><em>Downscaling</em> / Remoção de Viés</a></li>
   <li><a href="#modelos-que-permitem-resolução-da-convecção-cpms" id="toc-modelos-que-permitem-resolução-da-convecção-cpms" class="nav-link" data-scroll-target="#modelos-que-permitem-resolução-da-convecção-cpms">Modelos que Permitem Resolução da Convecção (CPMs)</a></li>
@@ -227,12 +226,6 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Data de Publicação</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">1 de novembro de 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -242,12 +235,10 @@ window.Quarto = {
 </header>
 
 
-<section id="impactos-das-mudanças-climáticas-nas-precipitações-intensas" class="level2">
-<h2 class="anchored" data-anchor-id="impactos-das-mudanças-climáticas-nas-precipitações-intensas">Impactos das mudanças climáticas nas precipitações intensas</h2>
+<!-- ## Impactos das mudanças climáticas nas precipitações intensas -->
 <p>Dois mecanismos físicos justificam a expectativa de que o aquecimento da atmosfera possa afetar a magnitude e frequência de chuvas intensas num dado local. O primeiro mecanismo está relacionado com os processos termodinâmicos que ocorrem na atmosfera, pois um ar mais aquecido tem uma maior capacidade de reter vapor d’água, como mostra a equação de Clausius-Clapeyron, que relaciona a temperatura do ar com a tensão de saturação de vapor. Mais vapor d’água na atmosfera, em média, aumenta o potencial de ocorrência de chuvas intensas. Em tese, para cada 1K de aumento de temperatura, a atmosfera consegue reter um volume de vapor d’água 7 % maior, entretanto estudos observacionais mostram que essa taxa de 7 % no aumento da intensidade de chuva para cada 1K não é necessariamente observada em todos os lugares <span class="citation" data-cites="OGormanSchneider2009PNAS Sugiyama2010PNAS Fowler2021NREE Marra2023HESS">(<a href="#ref-OGormanSchneider2009PNAS" role="doc-biblioref">O’Gorman e Schneider 2009</a>; <a href="#ref-Sugiyama2010PNAS" role="doc-biblioref">Sugiyama, Shiogama, e Emori 2010</a>; <a href="#ref-Fowler2021NREE" role="doc-biblioref">Fowler et al. 2021</a>; <a href="#ref-Marra2023HESS" role="doc-biblioref">Marra et al. 2023</a>)</span>. A explicação para esse fato está relacionada com outros fatores intervenientes no processo de formação de chuva, como por exemplo: limites no fornecimento de vapor d’água, mudanças na taxa adiabática úmida e nos padrões de vento vertical, bem como o valor da temperatura no momento da ocorrência da chuva extrema <span class="citation" data-cites="OGormanSchneider2009PNAS">(<a href="#ref-OGormanSchneider2009PNAS" role="doc-biblioref">O’Gorman e Schneider 2009</a>)</span> e o excesso de calor latente <span class="citation" data-cites="Seneviratne2021AR6WGI">(<a href="#ref-Seneviratne2021AR6WGI" role="doc-biblioref">Seneviratne et al. 2021</a>)</span>. O segundo mecanismo físico – este com maiores repercussões regionais – está relacionado com os processos dinâmicos associados à circulação atmosférica de larga escala. Esses processos podem ser afetados pelo aquecimento, com repercussões tanto na magnitude quanto na direção do transporte de vapor na atmosfera aumentando ou diminuindo as intensidades de chuva em determinada região. Alguns estudos, baseados em modelagem climática de larga escala, permitiram decompor os efeitos oriundos dos processos termodinâmicos e da dinâmica da atmosfera <span class="citation" data-cites="Pfahl2017NatClimChange">(<a href="#ref-Pfahl2017NatClimChange" role="doc-biblioref">Pfahl, O’Gorman, e Fischer 2017</a>)</span>. O resultado da composição dessas duas classes de mecanismos é que vai indicar uma intensificação ou redução das chuvas intensas num dado local, mas a quantificação do papel da dinâmica atmosférica em diversos locais do mundo ainda é incerta, sendo uma fonte de incerteza relevante nos prognósticos futuros. As mudanças recentes são evidentes em todos os componentes do sistema climático em transformação: aquecimento atmosférico e oceânico, redução de neve e gelo, elevação do nível do mar, acidificação e decréscimo de oxigênio nos oceanos, e aumento das concentrações de gases de efeito estufa <span class="citation" data-cites="IPCC2012SREX">(<a href="#ref-IPCC2012SREX" role="doc-biblioref">IPCC 2012</a>)</span>.</p>
 <p>Vários estudos relatados em Seneviratne et al. <span class="citation" data-cites="Seneviratne2021AR6WGI">(<a href="#ref-Seneviratne2021AR6WGI" role="doc-biblioref">2021</a>)</span> mostram que, em diversas partes do globo, observa-se uma intensificação das chuvas intensas ao nível diário sobre os continentes, principalmente no hemisfério Norte, onde há informações com densidade espacial mais refinada e séries históricas mais longas, permitindo conclusões mais confiáveis. Por exemplo, Fischer e Knutti <span class="citation" data-cites="Fischer.2014">(<a href="#ref-Fischer.2014" role="doc-biblioref">2014</a>)</span>, empregando dados observacionais ao longo do século XX, realizaram uma modelagem climática para estimativa do contrafactual e, fazendo uso da métrica FAR (<em>Fraction of Attributable Risk</em>, interpretada como o nível de contribuição causal por fator antrópico), estimaram o grau de contribuição antrópica dos eventos de chuva diária que ultrapassam os quantis de 99% e 99,9% estimados com base no período pré-industrial para diferentes níveis de aquecimento global. Eles concluíram que, com o nível de aquecimento registrado na época do estudo, aproximadamente 18% das chuvas extremas (acima do quantil 99,9%) são resultado do aquecimento global. A análise permite ainda inferir que os valores de FAR podem aumentar substancialmente para níveis de aquecimento mais elevados, podendo chegar a 30% e 52% para níveis de aquecimento de 1,5 e 3,0 °C, respectivamente. Na escala subdiária, a quantidade de estudos é menor e a quantidade de informação disponível dificulta conclusões mais enfáticas, muito embora os resultados apontem quase sempre para a intensificação das chuvas.</p>
 <p>Centenas de estudos já foram realizados ao redor do mundo na tentativa de detecção de mudanças nas séries observacionais para diferentes escalas temporais das chuvas intensas, apesar de as análises a nível diário sejam as mais comuns. No Brasil, tem-se observado um aumento nas intensidades de precipitações máximas diárias nas regiões sudeste e sul com alguma confiança, e um pouco na região Amazônica, muito embora Souza et al. <span class="citation" data-cites="Souza2020RBC">(<a href="#ref-Souza2020RBC" role="doc-biblioref">2020</a>)</span> tenham encontrado uma proporção relativamente pequena de estações com tendências significativas no território brasileiro, em torno de 3% apenas, mas com número mais elevado de estações nas regiões hidrográficas do Paraná e Atlântico Sul.</p>
-</section>
 <section id="metodologias-de-curvas-idf-sob-mudança-climática" class="level2">
 <h2 class="anchored" data-anchor-id="metodologias-de-curvas-idf-sob-mudança-climática">Metodologias de Curvas IDF sob Mudança Climática</h2>
 <p>A engenharia de recursos hídricos e o dimensionamento de infraestruturas críticas dependem de uma quantificação precisa do risco associado a eventos extremos de precipitação. As curvas de Intensidade-Duração-Frequência (IDF) constituem a principal ferramenta para essa finalidade, fundamentadas na suposição de estacionariedade, segundo a qual as estatísticas de extremos permanecem invariáveis ao longo do tempo <span class="citation" data-cites="Kourtis.2022 Lai.2022">(<a href="#ref-Kourtis.2022" role="doc-biblioref">Kourtis e Tsihrintzis 2022</a>; <a href="#ref-Lai.2022" role="doc-biblioref">Lai et al. 2022</a>)</span>. Entretanto, em um cenário de mudanças climáticas antropogênicas, essa premissa vem sendo amplamente questionada.</p>
@@ -307,7 +298,7 @@ R \sim \ln \mathcal{N}(\mu_R, \sigma_R^2)
 \tag{6}\]</span></span></p>
 <p>onde, <span class="math inline">\(r\)</span> é uma variável amostrada aleatoriamente de <span class="math inline">\(R\)</span> e <span class="math inline">\(\hat{X}_{RCM}\)</span> é a precipitação corrigida pelo viés.</p>
 <p>Entretanto, Yu et al. <span class="citation" data-cites="Yu.2020">(<a href="#ref-Yu.2020" role="doc-biblioref">2020</a>)</span> concluem que a técnica de correção de viés estocástico, apesar de poder ajustar a precipitação em uma escala espaço-temporal específica, não implica que necessariamente corrigirá o viés em outras escalas e pode, de fato, exacerbá-lo. Os autores ainda afirmam que o viés dependente da escala é problemático para muitas aplicações hidrológicas, incluindo inundações, devido à complexidade das respostas hidrológicas aos processos de precipitação e escoamento a montante.</p>
-<p>Taysi &amp; Özger <span class="citation" data-cites="Taysi.2021">(<a href="#ref-Taysi.2021" role="doc-biblioref"><strong>Taysi.2021?</strong></a>)</span> combinaram técnicas de correção de viés e métodos estatísticos não paramétricos para gerar séries de precipitação de alta resolução a partir de dados diários ou horários de GCMs/RCMs. Utilizando o <em>software CMhyd</em> (<em>Texas A&amp;M University</em>) e dados observados da <em>Turkish State Meteorological Service</em> (1980–2005) para calibração, os autores aplicaram uma versão aprimorada do modelo <em>HYETOS</em> para desagregar precipitação diária futura em escalas sub-horárias, com parâmetros derivados de 14 anos de registros horários mensais. Com base em quatro modelos climáticos globais (HadGEM2-ES, ICHEC-ECEARTH, IPSL-CM5A-MR e NorESM1-M) e nos cenários RCP4.5 e RCP8.5, foram estimadas curvas IDF futuras para os períodos 2036–2065 e 2066–2095, ajustadas pela distribuição de Gumbel com parâmetros obtidos pelo método dos momentos. Os resultados mostraram forte concordância entre as precipitações máximas observadas e as desagregadas, indicando que séries diárias podem ser desagregadas de forma confiável usando registros horários curtos. As projeções apontam aumento nas chuvas de longa duração para períodos de retorno de 10 anos e redução para 100 anos em quase todos os modelos, exceto o HadGEM2-ES.</p>
+<p><span class="citation" data-cites="Tayşi.2021">Tayşi e Özger (<a href="#ref-Tayşi.2021" role="doc-biblioref">2021</a>)</span> combinaram técnicas de correção de viés e métodos estatísticos não paramétricos para gerar séries de precipitação de alta resolução a partir de dados diários ou horários de GCMs/RCMs. Utilizando o <em>software CMhyd</em> (<em>Texas A&amp;M University</em>) e dados observados da <em>Turkish State Meteorological Service</em> (1980–2005) para calibração, os autores aplicaram uma versão aprimorada do modelo <em>HYETOS</em> para desagregar precipitação diária futura em escalas sub-horárias, com parâmetros derivados de 14 anos de registros horários mensais. Com base em quatro modelos climáticos globais (HadGEM2-ES, ICHEC-ECEARTH, IPSL-CM5A-MR e NorESM1-M) e nos cenários RCP4.5 e RCP8.5, foram estimadas curvas IDF futuras para os períodos 2036–2065 e 2066–2095, ajustadas pela distribuição de Gumbel com parâmetros obtidos pelo método dos momentos. Os resultados mostraram forte concordância entre as precipitações máximas observadas e as desagregadas, indicando que séries diárias podem ser desagregadas de forma confiável usando registros horários curtos. As projeções apontam aumento nas chuvas de longa duração para períodos de retorno de 10 anos e redução para 100 anos em quase todos os modelos, exceto o HadGEM2-ES.</p>
 <p>Destaca-se que dois estudos de caso conduzidos por Lai et al. <span class="citation" data-cites="Lai.2022">(<a href="#ref-Lai.2022" role="doc-biblioref">2022</a>)</span>, um voltado ao dimensionamento de pavimentos em Los Angeles e outro a projetos de drenagem pluvial em Nova York, avaliaram a sensibilidade dos resultados a diferentes escolhas metodológicas, incluindo versões do CMIP (5 e 6), tipos de <em>downscaling</em> (dinâmico e estatístico), cenários de emissão (RCP4.5 e RCP8.5) e técnicas de pós-processamento. Os autores observaram que o <em>downscaling</em> reduz substancialmente o viés dos modelos, sobretudo para temperatura, embora persistam incertezas relevantes para precipitação. Constatou-se ainda que as escolhas metodológicas influenciam significativamente parâmetros de projeto, como temperatura de pavimento e diâmetro de tubulações. Com base nesses resultados, os autores recomendam que a incorporação de projeções climáticas em obras de engenharia siga um processo estruturado e documentado, com avaliação crítica em cada etapa e uso de ensembles multimodelo para capturar a variabilidade e reduzir vieses de interpretação.</p>
 <p>Em sua revisão, Kourtis e Tsihrintzis <span class="citation" data-cites="Kourtis.2022">(<a href="#ref-Kourtis.2022" role="doc-biblioref">2022</a>)</span> destacaram o papel central das técnicas de <em>downscaling</em> estatístico e correção de viés, especialmente o <em>quantile mapping</em>, bem como dos métodos de desagregação temporal, como cascatas multiplicativas, fragmentos e invariância de escala, na geração de séries sub-horárias necessárias à construção de curvas IDF. Os autores observaram que a maioria dos estudos adota o método de máximos anuais (AMS) e a distribuição GEV como principais abordagens para modelagem de extremos, embora o uso de modelos não estacionários, em que os parâmetros variam no tempo ou em função de covariáveis climáticas, venha crescendo, com calibração via inferência bayesiana ou máxima verossimilhança e seleção pelo critério de Akaike (AIC).</p>
 <p>O estudo ressalta que a incerteza é o principal desafio na atualização das curvas IDF, resultando não apenas dos modelos climáticos e cenários de emissão, mas também das etapas de <em>downscaling</em>, correção de viés, desagregação e escolha da distribuição de probabilidade. Diferentes pesquisas buscam quantificá-la por meio de <em>bootstrapping</em>, inferência bayesiana e análises multimodelo. Os autores enfatizam o uso de conjuntos multi-modelo e multi-cenário como estratégia essencial para reduzir vieses e capturar a variabilidade entre simulações, além de recomendarem janelas móveis de 30 anos para estimativas mais robustas e a realização prévia de análises de tendência a fim de identificar componentes determinísticos antes do ajuste estatístico.</p>
@@ -336,7 +327,7 @@ R \sim \ln \mathcal{N}(\mu_R, \sigma_R^2)
 </section>
 <section id="experiências-internacionais" class="level2">
 <h2 class="anchored" data-anchor-id="experiências-internacionais">Experiências Internacionais</h2>
-<p>Nas últimas duas décadas, um crescente corpo de estudos internacionais tem investigado os impactos das mudanças climáticas sobre eventos de precipitação extrema, visando compreender suas implicações para a engenharia de drenagem urbana e a necessária atualização das curvas Intensidade-Duração-Frequência (IDF). Pesquisas realizadas no Canadá <span class="citation" data-cites="Simonovic.2017 Nguyen.2020 Silva.2021">(<a href="#ref-Simonovic.2017" role="doc-biblioref">Simonovic, Schardong, e Sandink 2017</a>; <a href="#ref-Nguyen.2020" role="doc-biblioref">Nguyen e Nguyen 2020</a>; <a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>)</span>; Alemanha <span class="citation" data-cites="Poschlod.2024">(<a href="#ref-Poschlod.2024" role="doc-biblioref">Poschlod e Koh 2024</a>)</span>; Estados Unidos <span class="citation" data-cites="Yu.2020 Infanti.2020">(<a href="#ref-Yu.2020" role="doc-biblioref">Yu, Wright, e Li 2020</a>; <a href="#ref-Infanti.2020" role="doc-biblioref">Infanti et al. 2020</a>)</span>; Índia <span class="citation" data-cites="Upadhyay.2021">(<a href="#ref-Upadhyay.2021" role="doc-biblioref">Upadhyay, Mohapatra, e Bhatia 2021</a>)</span>; Itália <span class="citation" data-cites="Napolitano.2024">(<a href="#ref-Napolitano.2024" role="doc-biblioref">Napolitano et al. 2024</a>)</span> e Turquia <span class="citation" data-cites="Taysi.2021">(<a href="#ref-Taysi.2021" role="doc-biblioref"><strong>Taysi.2021?</strong></a>)</span> revelam tendências de intensificação das chuvas extremas e alterações no regime pluviométrico, refletindo a influência do aquecimento global em diferentes escalas espaciais. Em nível continental, análises conduzidas na América do Norte <span class="citation" data-cites="Cannon.2018">(<a href="#ref-Cannon.2018" role="doc-biblioref">Cannon e Innocenti 2018</a>)</span> e América do Sul <span class="citation" data-cites="ME.2022">(<a href="#ref-ME.2022" role="doc-biblioref">ME, Balmaceda-Huarte, e Bettolli 2022</a>)</span> apontam variações significativas na frequência e magnitude dos extremos hidrometeorológicos. Em escala global <span class="citation" data-cites="Zhang.2013 Pendergrass.2014 Papalexiou.2019">(<a href="#ref-Zhang.2013" role="doc-biblioref">Zhang et al. 2013</a>; <a href="#ref-Pendergrass.2014" role="doc-biblioref">Pendergrass e Hartmann 2014</a>; <a href="#ref-Papalexiou.2019" role="doc-biblioref">Papalexiou e Montanari 2019</a>)</span>, estudos demonstram que o aumento da temperatura média do planeta intensifica o ciclo hidrológico, promovendo maior variabilidade e intensidade das precipitações.</p>
+<p>Nas últimas duas décadas, um crescente corpo de estudos internacionais tem investigado os impactos das mudanças climáticas sobre eventos de precipitação extrema, visando compreender suas implicações para a engenharia de drenagem urbana e a necessária atualização das curvas Intensidade-Duração-Frequência (IDF). Pesquisas realizadas no Canadá <span class="citation" data-cites="Simonovic.2017 Nguyen.2020 Silva.2021">(<a href="#ref-Simonovic.2017" role="doc-biblioref">Simonovic, Schardong, e Sandink 2017</a>; <a href="#ref-Nguyen.2020" role="doc-biblioref">Nguyen e Nguyen 2020</a>; <a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>)</span>; Alemanha <span class="citation" data-cites="Poschlod.2024">(<a href="#ref-Poschlod.2024" role="doc-biblioref">Poschlod e Koh 2024</a>)</span>; Estados Unidos <span class="citation" data-cites="Yu.2020 Infanti.2020">(<a href="#ref-Yu.2020" role="doc-biblioref">Yu, Wright, e Li 2020</a>; <a href="#ref-Infanti.2020" role="doc-biblioref">Infanti et al. 2020</a>)</span>; Índia <span class="citation" data-cites="Upadhyay.2021">(<a href="#ref-Upadhyay.2021" role="doc-biblioref">Upadhyay, Mohapatra, e Bhatia 2021</a>)</span>; Itália <span class="citation" data-cites="Napolitano.2024">(<a href="#ref-Napolitano.2024" role="doc-biblioref">Napolitano et al. 2024</a>)</span> e Turquia <span class="citation" data-cites="Tayşi.2021">(<a href="#ref-Tayşi.2021" role="doc-biblioref">Tayşi e Özger 2021</a>)</span> revelam tendências de intensificação das chuvas extremas e alterações no regime pluviométrico, refletindo a influência do aquecimento global em diferentes escalas espaciais. Em nível continental, análises conduzidas na América do Norte <span class="citation" data-cites="Cannon.2018">(<a href="#ref-Cannon.2018" role="doc-biblioref">Cannon e Innocenti 2018</a>)</span> e América do Sul <span class="citation" data-cites="ME.2022">(<a href="#ref-ME.2022" role="doc-biblioref">ME, Balmaceda-Huarte, e Bettolli 2022</a>)</span> apontam variações significativas na frequência e magnitude dos extremos hidrometeorológicos. Em escala global <span class="citation" data-cites="Zhang.2013 Pendergrass.2014 Papalexiou.2019">(<a href="#ref-Zhang.2013" role="doc-biblioref">Zhang et al. 2013</a>; <a href="#ref-Pendergrass.2014" role="doc-biblioref">Pendergrass e Hartmann 2014</a>; <a href="#ref-Papalexiou.2019" role="doc-biblioref">Papalexiou e Montanari 2019</a>)</span>, estudos demonstram que o aumento da temperatura média do planeta intensifica o ciclo hidrológico, promovendo maior variabilidade e intensidade das precipitações.</p>
 <p>A complexidade de traduzir projeções climáticas de larga escala para estimativas de chuva localizadas exige uma cadeia metodológica robusta. Madsen et al. <span class="citation" data-cites="Madsen.2014">(<a href="#ref-Madsen.2014" role="doc-biblioref">2014</a>)</span> descrevem essa cadeia como uma sequência interligada de modelos: inicia-se com projeções de Modelos Climáticos Globais (GCMs), que são então refinadas por meio de <em>downscaling</em> (dinâmico ou estatístico) e correção de viés, para finalmente alimentar modelos hidrológicos que simulam a resposta em escala de bacia. Dado que a malha de um GCM (≈100–250 km) é inadequada para capturar extremos locais, o <em>downscaling</em> e a correção de viés são etapas indispensáveis. De forma complementar, Goly et al. <span class="citation" data-cites="Goly.2013">(<a href="#ref-Goly.2013" role="doc-biblioref">2013</a>)</span> propuseram uma estrutura metodológica abrangente para a Flórida (EUA), que não só aborda o downscaling de projeções futuras, mas também investiga a influência da variabilidade climática natural (como AMO e ENSO) nos extremos de precipitação, reconhecendo que as mudanças observadas são uma superposição de tendências de longo prazo e oscilações de baixa frequência.</p>
 <p>Dentro dessa cadeia, a evolução das técnicas de pós-processamento tem sido crucial. No <em>downscaling</em> estatístico, o método <em>delta change</em> é um avanço fundamental para capturar alterações nos extremos. Em paralelo, a correção de viés evoluiu de simples ajustes de média para abordagens mais sofisticadas como o mapeamento quantil-a-quantil e correções baseadas em distribuições de probabilidade, que ajustam não só a intensidade, mas também o número de dias chuvosos. Uma vez refinadas as projeções de chuva através dessas técnicas, elas são usadas como entrada em uma variedade de modelos hidrológicos, desde conceituais agregados (como HBV e GR4J) até modelos distribuídos em grade (como LISFLOOD e MIKE SHE), para converter a precipitação em risco de inundação.</p>
 <p>A evidência de alteração nos regimes de chuva, processada por essa cadeia de modelos, impõe a necessidade de abandonar a premissa de estacionariedade. Em uma análise global com 8.730 registros diários, Papalexiou &amp; Montanari <span class="citation" data-cites="Papalexiou.2019">(<a href="#ref-Papalexiou.2019" role="doc-biblioref">2019</a>)</span> demonstraram, através de simulações de Monte Carlo, que as mudanças na frequência dos eventos extremos são muito mais significativas estatisticamente do que as mudanças em sua magnitude, reforçando a urgência de atualizar as práticas de engenharia. Diante dessa não-estacionariedade, Mo et al. <span class="citation" data-cites="Mo.2019">(<a href="#ref-Mo.2019" role="doc-biblioref">2019</a>)</span> propuseram um arcabouço prático para atualizar a componente diária das curvas IDF na China, que utiliza um sistema de diagnóstico para detectar pontos de mudança nas séries de precipitação e, a partir daí, derivar fatores de ajuste que incorporam a deriva temporal diretamente nas curvas históricas. Indo além da análise estatística, Martinez-Villalobos e Neelin <span class="citation" data-cites="Martinez-Villalobos.2023">(<a href="#ref-Martinez-Villalobos.2023" role="doc-biblioref">2023</a>)</span> conectaram essas mudanças a mecanismos físicos, mostrando que o aumento na frequência dos extremos está exponencialmente ligado a variações em uma escala característica da precipitação (<span class="math inline">\(P_L\)</span>), oferecendo uma compreensão mais profunda do porquê os extremos estão se intensificando.A aplicação dessas metodologias resulta em alterações quantificáveis e expressivas. Os resultados para precipitação extrema na Europa, por exemplo, convergem para aumentos significativos: até ~30% em Bruxelas até 2100, incrementos de 30–50% para eventos diários de 50–100 anos na República Tcheca, e até a duplicação do evento de 100 anos em Copenhague. Contudo, para cheias de rios o quadro é mais heterogêneo; estudos pan-europeus com o modelo LISFLOOD confirmam aumentos nos níveis de retorno em grande parte da Europa ocidental, mas também decréscimos em setores do leste e do Báltico, refletindo a complexa interação entre o tipo de chuva, o tamanho da bacia e a influência do degelo.</p>
@@ -349,11 +340,11 @@ I_{fut,D,T} = I_{ref,D,T} \times F_T \times F_D \times
 \tag{7}\]</span></span></p>
 <p>onde <span class="math inline">\(I_{fut,D,T}\)</span> representa a intensidade de chuva futura projetada para uma dada duração <span class="math inline">\(D\)</span> e período de retorno <span class="math inline">\(T\)</span>. <span class="math inline">\(I_{ref,D,T}\)</span> representa a intensidade de chuva do período de referência para a mesma duração <span class="math inline">\(D\)</span> e período de retorno <span class="math inline">\(T\)</span>. <span class="math inline">\(F_T\)</span> é o fator de ajuste para o período de retorno <span class="math inline">\(T\)</span>, onde <span class="math inline">\(F_T\)</span> é igual ou maior que 1 para períodos de retorno superiores a 2 anos (<span class="math inline">\(T &gt; 2\)</span> anos).<span class="math inline">\(F_D\)</span> é o fator de ajuste para durações menores que 24 h (<span class="math inline">\(D &lt; 24\)</span> horas), onde <span class="math inline">\(F_D\)</span> é igual ou maior que1. <span class="math inline">\(R_{sc,24,2}\)</span> representa o fator de escala de precipitação (%/°C) para o evento de precipitação com período de retorno de 24 h e 2 anos. <span class="math inline">\(ΔT\)</span> representa a mudança projetada na temperatura média sazonal (em graus Celsius).</p>
 <p>Os resultados foram comparados ao valor teórico de 7%/°C da relação de Clausius–Clapeyron e validados em uma cidade de clima temperado (Champaign, EUA). Os resultados mostraram que em Barranquilla houve uma relação sub-CC, ou seja, a taxa de aumento da precipitação extrema com a temperatura foi menor que 7%/°C.</p>
-<p>Wasko et al.&nbsp;(<span class="citation" data-cites="Wasco.2024">(<a href="#ref-Wasco.2024" role="doc-biblioref"><strong>Wasco.2024?</strong></a>)</span>) realizaram uma revisão sistemática da literatura sobre mudanças de chuva extrema relevantes à estimativa de cheias de projeto na Austrália. Os autores analisaram as publicações quanto à relação entre intensidade da precipitação e aumento de temperatura, adotando como base: (i) Quantificação da mudança extrema de chuva por grau de aquecimento global, considerando variação com duração, severidade (AEP) e localização; (ii) Uso do aquecimento médio global (terra + oceano) para compatibilizar com as projeções do IPCC; (iii) Para estudos de <em>scaling</em> chuva–temperatura, utilizou-se temperatura local como variável representativa do aquecimento; e (iv) Cada estudo foi ponderado por tipo (observacional, modelado), número de locais e robustez metodológica. Também foi analisado como os padrões temporais de tempestades mudam com a temperatura, aspecto fundamental para o formato das curvas IDF. Foram usadas duas abordagens: Método da variabilidade média (<em>average variability method</em>): mede como a fração da chuva em intervalos curtos varia com o aumento da temperatura e Modelagem estocástica: ajusta modelos geradores de chuva a dados históricos e aplica regressões com temperatura.</p>
+<p><span class="citation" data-cites="wasko2024">Wasko et al. (<a href="#ref-wasko2024" role="doc-biblioref">2024</a>)</span> realizaram uma revisão sistemática da literatura sobre mudanças de chuva extrema relevantes à estimativa de cheias de projeto na Austrália. Os autores analisaram as publicações quanto à relação entre intensidade da precipitação e aumento de temperatura, adotando como base: (i) Quantificação da mudança extrema de chuva por grau de aquecimento global, considerando variação com duração, severidade (AEP) e localização; (ii) Uso do aquecimento médio global (terra + oceano) para compatibilizar com as projeções do IPCC; (iii) Para estudos de <em>scaling</em> chuva–temperatura, utilizou-se temperatura local como variável representativa do aquecimento; e (iv) Cada estudo foi ponderado por tipo (observacional, modelado), número de locais e robustez metodológica. Também foi analisado como os padrões temporais de tempestades mudam com a temperatura, aspecto fundamental para o formato das curvas IDF. Foram usadas duas abordagens: Método da variabilidade média (<em>average variability method</em>): mede como a fração da chuva em intervalos curtos varia com o aumento da temperatura e Modelagem estocástica: ajusta modelos geradores de chuva a dados históricos e aplica regressões com temperatura.</p>
 <p>Dentre os resultados foi observado que os padrões temporais estão se tornando mais “<em>front-loaded</em>” (chuva concentrada no início) com temperaturas mais altas. Na revisão sistemática os autores observaram que há também um aumento na proporção de chuva caindo no período mais chuvoso da tempestade, levando a um aumento na intensidade dos picos (menor uniformidade) dos padrões temporais. A projeção até o fim do século (RCP8.5) indica aumento da fração de chuva de pico em cidades como Sydney e Brisbane. Os autores concluem que o aquecimento leva a chuvas mais intensas e concentradas, exigindo ajuste das curvas IDF e revisão das práticas de projeto.</p>
 </section>
-<section id="referências" class="level2">
-<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<section id="referências" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referências">Referências</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Abdelmoaty.2023" class="csl-entry" role="listitem">
 Abdelmoaty, Hebatallah Mohamed, e Simon Michael Papalexiou. 2023. <span>«<span>Changes of Extreme Precipitation in CMIP6 Projections: Should We Use Stationary or Nonstationary Models?</span>»</span> <em>Journal of Climate</em> 36 (9): 2999–3014. <a href="https://doi.org/10.1175/jcli-d-22-0467.1">https://doi.org/10.1175/jcli-d-22-0467.1</a>.
@@ -481,6 +472,9 @@ Souza, S. A. de, R. S. Amorim, e D. S. Reis. 2020. <span>«Influência da correl
 <div id="ref-Sugiyama2010PNAS" class="csl-entry" role="listitem">
 Sugiyama, Masahiro, Hideo Shiogama, e Seita Emori. 2010. <span>«Precipitation extreme changes exceeding moisture content increases in MIROC and IPCC climate models»</span>. <em>Proceedings of the National Academy of Sciences</em> 107 (2): 571–75. <a href="https://doi.org/10.1073/pnas.0903186107">https://doi.org/10.1073/pnas.0903186107</a>.
 </div>
+<div id="ref-Tayşi.2021" class="csl-entry" role="listitem">
+Tayşi, H, e M Özger. 2021. <span>«<span>Disaggregation of future GCMs to generate IDF curves for the assessment of urban floods</span>»</span>. <em>Journal of Water and Climate Change</em> 13 (2): 684–706. <a href="https://doi.org/10.2166/wcc.2021.241">https://doi.org/10.2166/wcc.2021.241</a>.
+</div>
 <div id="ref-Upadhyay.2021" class="csl-entry" role="listitem">
 Upadhyay, Divya, Pranab Mohapatra, e Udit Bhatia. 2021. <span>«<span>Depth‐Duration‐Frequency of Extreme Precipitation Events Under Internal Climate Variability: Indian Summer Monsoon</span>»</span>. <em>Journal of Geophysical Research: Atmospheres</em> 126 (8). <a href="https://doi.org/10.1029/2020jd034193">https://doi.org/10.1029/2020jd034193</a>.
 </div>
@@ -489,6 +483,9 @@ Vorobevskii, Ivan, Jeongha Park, Dongkyun Kim, Klemens Barfus, e Rico Kronenberg
 </div>
 <div id="ref-Wang.2014" class="csl-entry" role="listitem">
 Wang, Xiuquan, Guohe Huang, e Jinliang Liu. 2014. <span>«<span>Projected increases in intensity and frequency of rainfall extremes through a regional climate modeling approach</span>»</span>. <em>Journal of Geophysical Research: Atmospheres</em> 119 (23): 13, 271–13, 286. <a href="https://doi.org/10.1002/2014jd022564">https://doi.org/10.1002/2014jd022564</a>.
+</div>
+<div id="ref-wasko2024" class="csl-entry" role="listitem">
+Wasko, Conrad, Seth Westra, Rory Nathan, Acacia Pepler, Timothy H. Raupach, Andrew Dowdy, Fiona Johnson, et al. 2024. <span>«A Systematic Review of Climate Change Science Relevant to Australian Design Flood Estimation»</span>. <em>Hydrology and Earth System Sciences</em> 28 (5): 1251–85. <a href="https://doi.org/10.5194/hess-28-1251-2024">https://doi.org/10.5194/hess-28-1251-2024</a>.
 </div>
 <div id="ref-Xu.2024" class="csl-entry" role="listitem">
 Xu, Muyuan, Lelys Bravo de Guenni, e José Rafael Córdova. 2024. <span>«<span>Climate change impacts on rainfall intensity–duration–frequency curves in local scale catchments</span>»</span>. <em>Environmental Monitoring and Assessment</em> 196 (4): 372. <a href="https://doi.org/10.1007/s10661-024-12532-2">https://doi.org/10.1007/s10661-024-12532-2</a>.
@@ -540,7 +537,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -572,45 +580,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -645,11 +615,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
+      return note.innerHTML;
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -697,6 +663,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

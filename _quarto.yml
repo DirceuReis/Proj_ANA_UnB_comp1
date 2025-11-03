@@ -17,8 +17,8 @@ website:
             text: Desagregacao temporal
           - href: regionalizacao.qmd
             text: Regionalização
-          - href: Sensoreamento_remoto.qmd
-            text: Sensoreamento remoto
+          - href: sensoriamento_remoto.qmd
+            text: Sensoriamento remoto
           - href: climate_models.qmd
             text: IDF e as mudanças do clima
           - href: guidelines.qmd
