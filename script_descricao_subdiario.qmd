@@ -1,7 +1,10 @@
 ---
 title: "Estatísticas descritivas"
-author: "tqduval"
 bibliography: "referencias/ref_modelos.bib"
+date: last-modified
+date-format: "DD/MM/YYYY HH:mm:ss"
+execute: 
+  freeze: auto
 ---
 
 ```{r}
@@ -10,7 +13,7 @@ if(!require(pacman)) install.packages("pacman")
 pacman::p_load(pacman, tidyverse, ggplot2, arrow)
 ```
 
-O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em "scripts/funcoes" foi criada uma função `fun_filter_set.R`, que combina a função `fun_fill_dates.R` -- que preenche as datas das séries -- e a funçãõ `fun_filter_set()` definida no script `script_leitura_subdiario.qmd` -- que filtra as estações, mantando somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.
+O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em "scripts/funcoes" foi criada uma função `fun_filter_set.R`, que combina a função `fun_fill_dates.R` -- que preenche as datas das séries -- e a funçãõ `fun_filter_set()` definida no script `script_leitura_subdiario.qmd` -- que filtra as estações, mantendo somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.
 
 ```{r importar e filtrar dados}
 # Critérios p/ filtrar séries
@@ -34,4 +37,3 @@ df_data <- fun_filter_set(data = df_data,
 #| fig-cap: Estatísticas descritivas básicas de @Papalexiou.2013.
 knitr::include_graphics("figuras/basic_summary_statistics_papalexiou_2013.png")
 ```
-

@@ -1,0 +1,15 @@
+{
+  "hash": "6a60ad3e3447dd8f193118c9a6e1fc35",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Estatísticas descritivas\"\nbibliography: \"referencias/ref_modelos.bib\"\ndate: last-modified\ndate-format: \"DD/MM/YYYY HH:mm:ss\"\nexecute: \n  freeze: auto\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n# Pacotes\nif(!require(pacman)) install.packages(\"pacman\")\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nCarregando pacotes exigidos: pacman\n```\n\n\n:::\n\n```{.r .cell-code}\npacman::p_load(pacman, tidyverse, ggplot2, arrow)\n```\n:::\n\n\nO objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em \"scripts/funcoes\" foi criada uma função `fun_filter_set.R`, que combina a função `fun_fill_dates.R` -- que preenche as datas das séries -- e a funçãõ `fun_filter_set()` definida no script `script_leitura_subdiario.qmd` -- que filtra as estações, mantendo somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Critérios p/ filtrar séries\nna_accept <- 0.2\nmin_years <- 8\n\n# Importar\ndf_data <- arrow::read_parquet(\"base/gerados/df_subdaily_data.parquet\")\nsource(\"scripts/funcoes/fun_filter_set.R\")\n\n# Aplicar funções\ndf_data <- fun_filter_set(data = df_data,\n                          na_accept = na_accept,\n                          min_years = min_years); gc()\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nPreenchendo datas...\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nEstações ICEA, ANA, INMET...\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nEstações CEMADEN...\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nAplicando filtros...\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stdout}\n\n```\n           used  (Mb) gc trigger   (Mb)   max used    (Mb)\nNcells  1547346  82.7    2465210  131.7    2465210   131.7\nVcells 62547949 477.3 1075119579 8202.6 1343897425 10253.2\n```\n\n\n:::\n:::\n\n\n@Papalexiou.2013 apresentam o seguinte conjunto de estatísticas descritivas básicas:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nknitr::include_graphics(\"figuras/basic_summary_statistics_papalexiou_2013.png\")\n```\n\n::: {.cell-output-display}\n![Estatísticas descritivas básicas de @Papalexiou.2013.](figuras/basic_summary_statistics_papalexiou_2013.png){#fig-papalexiou-estatisticas}\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
