@@ -7,25 +7,28 @@ subtitle: "Componente 1 do projeto Riscos de eventos extremos: drenagem urbana e
 
 ### Professores
 
--   Dirceu S. Reis Jr. (Supervisor acadêmico)
--   Carlos Lima (Professor UnB)
--   Cristiano (Professor, UFPB)
+-   Dirceu S. Reis Jr. (Supervisor acadêmico, Professor UnB)
+-   Carlos Henrique Ribeiro Lima (Professor UnB)
+-   Cristiano das Neves Almeida (Professor, UFPB)
 
 ### Pesquisadores bolsistas do projeto
 
--   Larissa (Pesquisadora doutora colaboradora, PTARH/UnB)
--   Bruno (Pesquisador doutor colaborador, PTARH/UnB)
--   Filipe (Pesquisador, UFPB)
-
-### Colaboradores
-
--   Veber Costa (Professor, UFMG)
--   Christian (Professor, Chile)
--   Luna Gripp (Pesquisadora: estágio pós-doutoral, UFMG)
+-   Bruno Silva Pereira (Pesquisador doutor colaborador, PTARH/UnB)
+-   Filipe Carvalho Lemos (Pesquisador, UFPB)
+-   Larissa Zaira Rafael Rolim (Pesquisadora doutora colaboradora, PTARH/UnB)
 
 ### Alunos
 
--   Bruna (Aluna de doutorado do IG/UnB)
--   Tomás (Aluno de mestardo do PTARH/UnB)
--   Eduardo (aluno de graduação da UnB)
--   Jonatha (aluno de raduação da UnB)
+-   Bruna Dias Silva (Aluna de doutorado do IG/UnB)
+-   Eduardo de Queiroz Nascimento (aluno de graduação da UnB)
+-   Jonnatha Teixeira Valerio (aluno de graduação da UnB)
+-   Tomás Antonio Quezado Duval (Aluno de mestardo do PTARH/UnB)
+
+### Colaboradores
+
+-   Emerson Freitas da Silva (Pesquisador, UFPB)
+-   Christian Chadwick (Professor, Universidad Adolfo Ibáñez, Chile)
+-   Luna Gripp Simões Alves (Pesquisadora: estágio pós-doutoral, UFMG)
+-   Veber Afonso Figueiredo Costa (Professor, UFMG)
+
+### 
