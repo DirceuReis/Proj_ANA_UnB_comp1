@@ -1,6 +1,9 @@
 ---
 title: "Análise de Dados Subdiários"
-author: "tqduval"
+date: last-modified
+date-format: "DD/MM/YYYY HH:mm:ss"
+execute: 
+  freeze: auto
 ---
 
 # Leitura dos dados
@@ -65,7 +68,7 @@ rm(list = setdiff(ls(), c("df_data", "df_info"))); gc()
 
 ## Organizar dados
 
-O data frame `df_info` contém estações repetida, então vamos limpar mantendo somente e uma observação do campo de códigos da estação `gauge_code`.
+O data frame `df_info` contém estações repetidas, então vamos limpar mantendo somente e uma observação do campo de códigos da estação `gauge_code`.
 
 ```{r}
 # O arquivo 'df_info' contém estações repetidas, portanto precisamos manter
@@ -160,7 +163,6 @@ df_summary <- merge(df_summary, df_info[, c("gauge_code", "responsible")], by = 
 
 ```
 
-
 ## Visualizações
 
 Conferir se o preenchimento das séries do CEMADEN está funcionando corretamente.
@@ -181,7 +183,7 @@ df_subdaily_filled %>%
 
 ```
 
-Avaliação de como se distribuem o número de estações conforme definimos diferentes niveis de tolerância de falhas. São criados 2 vetores de critérios: `threshold`, que contém possibilidades de percentuais de falha (ex. 10% a 40%) que queremos tolerar; e `min_years`, para avaliarmos quantas estações possuem pelo menos `min_years` anos com no máximo `threshold` % de falhas. A função `purrr::map2_int()` é usada para iterar sobre dois vetores ao mesmo tempo (`.x = threshold` e ` .y = min_years`), realizando alguma operação sobre os pares (isso elimina a necessidade de fazer um loop).
+Avaliação de como se distribuem o número de estações conforme definimos diferentes niveis de tolerância de falhas. São criados 2 vetores de critérios: `threshold`, que contém possibilidades de percentuais de falha (ex. 10% a 40%) que queremos tolerar; e `min_years`, para avaliarmos quantas estações possuem pelo menos `min_years` anos com no máximo `threshold` % de falhas. A função `purrr::map2_int()` é usada para iterar sobre dois vetores ao mesmo tempo (`.x = threshold` e `.y = min_years`), realizando alguma operação sobre os pares (isso elimina a necessidade de fazer um loop).
 
 ```{r grafico estacoes vs. falhas vs. anos completos}
 #| label: fig-estacoes-falha
@@ -254,6 +256,7 @@ df <- fun_filter_set(data = df_subdaily_filled,
                      min_years = 8); gc()
 
 ```
+
 Exportar conjunto gerado:
 
 ```{r exportar conjunto}
@@ -261,4 +264,3 @@ Exportar conjunto gerado:
 # Exportar como parquet com compressão
 write_parquet(df, sink = "base/gerados/df_subdaily_filled.parquet", compression = "zstd", compression_level = 9)
 ```
-
