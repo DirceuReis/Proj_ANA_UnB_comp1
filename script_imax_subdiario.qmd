@@ -1,0 +1,18 @@
+---
+title: "Máximos anuais de intensidade"
+author: tqduval
+date: today
+---
+
+## Funcionamento da função
+
+Este documento conterá a explicação sobre o funcionamento e a estrutura da função `fun_imax_agg()`.
+Esta função toma como argumento uma lista com `data.frame` das estações subdiárias de mesmas duração, 
+agrega as lâminas registradas em diferentes durações, calcula as intensidades máximas anuais e retorna uma lista contendo 
+para cada estação um `data.frame` com as seguintes informações:
+- `gauge_code`: código da estação;
+- `d`: duração, em horas;
+- `imax`: intensidade máxima anual, em milímetros por hora;
+- `date`: data em que ocorre o máximo, em `POSIXct`;
+- `na_prct`: porcentagem de falhas (`NA`s) por ano;
+- `mon_filter`: sequência de meses utilizados.
