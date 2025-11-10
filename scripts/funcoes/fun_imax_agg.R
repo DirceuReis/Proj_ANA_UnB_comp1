@@ -1,8 +1,3 @@
-# Essa função agrega lâminas de precipitação de um conjunto de estações
-# em durações diferentes e retorna os máximos anuais de cada uma para cada 
-# duração especificada em 'durations'
-
-# tqduval@gmail.com
 
 fun_imax_agg <- function(data,             # lista contendo as séries das estações
                          durations,        # vetor c/ durações desde a duração base (em horas)
@@ -37,7 +32,7 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
     }
     
     # Usa is.element() parar conferir se os nomes do argumento 'names' são os mesmos nomes das colunas dos data.frames
-    if(sum(is.element(names[1:2], names(data.s))) != 2){
+    if(sum(is.element(names[1:2], names(data.gauge))) != 2){
       stop("Data.frame of station ", station, " does not contain $", names[1], " or $", names[2], ".")
     }
     

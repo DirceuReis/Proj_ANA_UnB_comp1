@@ -27,14 +27,13 @@ min_years <- 0 # 8
 # Funções
 source("scripts/funcoes/fun_filter_set.R")        # preencher datas e filtrar
 source("scripts/funcoes/fun_group_by_timestep.R") # agrupar por time_step
-source("scripts/funcoes/fun_agg_timeseries.R")    # agregar por durações e calcular intensidade máxima anual
+source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e calcular intensidade máxima anual
 
 # Preencher datas e filtrar conforme 'na_accept' e 'min_years'
 df_data <- fun_filter_set(data = df_data,
+                          filter = FALSE,
                           na_accept = na_accept,
                           min_years = min_years)
-
-invisivle(gc())
 
 
 # AGREGAR DURAÇÕES --------------------------------------------------------
@@ -44,7 +43,9 @@ data.ls <- split(df_data, f = df_data$gauge_code)             # lista de data.fr
 data.by.time <- fun_group_ts(data.ls, ts_name = "time_steps") # agrupar em durações diferentes numa lista
 
 # Durações
-durations <- c(10/60, 15/60, 0.5, 1, 2, 4, 6, 8, 12, 24) # começar no horário
+d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 24))               # durações subdiárias
+d.daily <- c(1, 2, 3, 4, 5, 7, 10)                       # durações diárias
+durations <- c(d.subdaily, d.daily)                      # durações
 time.steps <- as.list(names(data.by.time))               # lista de time_steps
 
 # Aplicar função 'fun_imax_agg' p/ cada grupo de durações
@@ -56,12 +57,10 @@ imax.ls <- lapply(X = time.steps, FUN = function(ts){
   
   message(paste0("\nProcessando conjunto de estações com resolução de ", ds*60, " minutos..."))
   
-  out <- fun_imax(data = current.ts,
-                  durations = valid.durations,
-                  which.mon = 1:12,
-                  names = c("datetime", "rain_mm"))
-  
-  beepr::beep(sound = 2)
+  out <- fun_imax_agg(data = current.ts,
+                      durations = valid.durations,
+                      which.mon = 1:12,
+                      names = c("datetime", "rain_mm"))
   
 }) # fim 'imax.ls'
 
@@ -73,7 +72,7 @@ names(imax.ls) <- time.steps
 
 # Salvar resultados
 # saveRDS(object = imax.ls, file = "base/gerados/imax_ls.rds")
-arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
+# arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
 
 # Ler arquivo c/ intensidades máximas
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
