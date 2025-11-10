@@ -4,15 +4,88 @@ author: tqduval
 date: today
 ---
 
-## Funcionamento da função
+## Intensidades máximas anuais: função `fun_imax_agg()`
 
-Este documento conterá a explicação sobre o funcionamento e a estrutura da função `fun_imax_agg()`.
-Esta função toma como argumento uma lista com `data.frame` das estações subdiárias de mesmas duração, 
-agrega as lâminas registradas em diferentes durações, calcula as intensidades máximas anuais e retorna uma lista contendo 
-para cada estação um `data.frame` com as seguintes informações:
-- `gauge_code`: código da estação;
-- `d`: duração, em horas;
-- `imax`: intensidade máxima anual, em milímetros por hora;
-- `date`: data em que ocorre o máximo, em `POSIXct`;
-- `na_prct`: porcentagem de falhas (`NA`s) por ano;
-- `mon_filter`: sequência de meses utilizados.
+O objetivo deste documento é explicar o funcionamento e a estrutura da função `fun_imax_agg()`, que se encontra em "scripts/funcoes/fun_imax_agg.R".
+
+```{r argumentos fun_imax_agg}
+#| eval: false
+
+fun_imax_agg(data,
+             durations,
+             which.mon = 1:12,
+             names = c("datetime", "rain_mm"))
+```
+
+Esta função toma como argumento as séries das lâminas registradas pelas estações pluviográficas armazenadas em uma lista (`data`), em que cada objeto é um `data.frame` contendo: (1) `datetime`, série "data-hora" em formato `POSIX` marcando o momento em que determinada lâmina foi registrada; e (2) `rain_mm`, a lâmina registrada em milímetros. São argumentos dessa função:
+
+-   `data`: lista contendo séries históricas das estações;
+
+-   `durations`: vetor com durações (em horas) a partir da duração base (resolução temporal padrão da estação, ex. 10 minutos);
+
+-   `which.mon`: vetor (ou sequência) de entre 1 e 12 representando subconjuntos de meses para o cálculo dos máximos (por padrão `1:12`;
+
+-   `names`: nome das colunas de data-hora e lâmina precipitada, especificamente nesta ordem. É através desse vetor que a função acessará as informações nos dataframes contidos em `data`.
+
+A função agregará as lâminas em `rain_mm` usando soma em janela móvel para diferentes durações estabelecidas em `durations`, calculará a intensidade em milímetros por hora (mm/h) e retornará a intensidade máxima anual para cada ano, duração e estação. O resultado da função será uma lista contendo, para cada estação, um `data.frame` com as seguintes colunas:
+
+-   `gauge_code`: código da estação;
+
+-   `d`: duração utilizada para calcular a intensidade máxima anual (em horas);
+
+-   `imax`: intensidade máxima anual (em milímetros por hora);
+
+-   `date`: data em que ocorreu o máximo (em `POSIXct`);
+
+-   `na_prct`: porcentagem de falhas (`NA`) por ano (de 0 a 1);
+
+-   `mon_filter`: sequência de meses utilizados (`deparse` de `which.mon`).
+
+### Pacotes necessários
+
+Esta função utiliza de pacotes já bem consolidados para R:
+
+-   [`pacman`](https://github.com/trinker/pacman): gerenciador de pacotes para o R, permite a instalação de diferentes pacotes facilmente usando `pacman::p_load()` ;
+
+-   [`RcppRoll`](https://github.com/kevinushey/RcppRoll): pacote para realizar operações em janela móvel, utilizado para calcular as somas acumuladas com a função `RcppRoll::roll_sum()`;
+
+-   [`pbapply`](https://github.com/psolymos/pbapply): pacote para realizar um `lapply` convencional, mas com a conveniência de uma barra de progresso para acompanhar o processamento da função, utilizada como `pbapply::pblapplly()`;
+
+-   [`lubridate`](https://lubridate.tidyverse.org/): pacote para realizar operações com objetos de data mais facilmente. São utilizadas as funções `lubridate::month()` e `lubridate::year()`.
+
+### Estrutura da função
+
+A função está estruturada em três `lapply()`. O primeiro itera sobre o conjunto de estações (`gauges`) e gera a lista `imax.gauge`; o segundo iterar sobre o conjunto de durações (`durations`), gerando a lilsta `imax.duration`; e o terceiro itera sobre cada ano disponível (`years`), gerando a lista `imax.year`. A lógica de processamento é a seguinte: (1) selecionar uma estação; (2) selecionar uma duração; (3) agregar as lâminas usando soma em janela móvel para a duração especificada; (4) calcular a intensidade máxima anual; (5) selecionar somente as observações dentro de um determinado ano; (6) selecionar a intensidade máxima do ano em questão. Apresentaremos a construção da função começando do `lapply` mais interno (`imax.year`) até o mais externo (`imax.gauge`).
+
+#### Iterar em cada ano
+
+Supondo que estamos trabalhando com uma estação já selecionada `gauge`, para uma duração `d`. Vamos começar importanto nosso conjunto de estações subdiárias com o pacote [`arrow`](https://arrow.apache.org/docs/r/) para leitura de arquivos do tipo .PARQUET:
+
+```{r ler df_data}
+#| message: false
+# Instalar pacote 'arrow' se necessário
+if(!require(arrow)) install.packages("arrow")
+library(arrow)
+
+# Ler séries subdiárias
+df_data <- arrow::read_parquet(file = "base/gerados/df_subdaily_data.parquet")
+```
+
+`df_data` contém as séries das estações, ainda precisamos completar as datas parar analisar possíveis falhas. Usaremos a função `fun_filter_set()` localizada em "scripts/funcoes/fun_filter_set.R". Essa função é uma versão da funçãõ `fun_fill_dates()` que possibilita ainda filtragem das estações por percentual mínimo de falhas anuais e número mínimo de anos por estação. Usaremos, porém, sem esses filtros:
+
+```{r completar datas}
+#| message: false
+#| freeze: auto
+
+# Chamar função
+source("scripts/funcoes/fun_filter_set.R")
+
+# Completar datas das séries
+df_data <- fun_filter_set(data = df_data,
+                          filter = FALSE,
+                          aux_path = "scripts/funcoes/fun_fill_dates.R")
+```
+
+## Aplicação da função
+
+O script em R "scripts/script_agg_imax_subdiario.R" contém uma aplicação direta do que será descrito a seguir.
