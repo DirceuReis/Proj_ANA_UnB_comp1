@@ -18,10 +18,10 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
   }
   
   # Vetor de estações
-  gauges.ls <- as.list(names(data))
+  gauges <- names(data)
   
   # Iterar sobre cada estação
-  imax.gauge <- pbapply::pblapply(X = gauges.ls, FUN = function(gauge){
+  imax.gauge <- pbapply::pblapply(X = gauges, FUN = function(gauge){
     
     # Extrair data.frame da estação 'gauge'
     data.gauge <- data[[gauge]]
@@ -60,7 +60,6 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
       # Auxiliares
       # data.gauge$year <- lubridate::year(data.gauge[[names[1]]])         # adicionar coluna c/ anos (alterar dps p/ 'hydro_year')
       years <- unique(lubridate::year(dates)) # vetor c/ valores únidos dos anos da estação 'gauge'
-      years <- as.list(years)                 # transformar vetor em lista p/ lapply
       
       # Converter soma acumulada em intensidade/hora
       intensity.agg <- depth.agg/d
@@ -69,9 +68,10 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
       imax.year <- lapply(X = years, FUN = function(yr){
         
         year.idx <- lubridate::year(dates) == yr # índices p/ filtrar anos
+        
         intensity.yr <- intensity.agg[year.idx]  # filtrar intensidades em 'yr'
         date.yr <- dates[year.idx]               # filtrar datas em 'yr'
-        na.yr <- sum(is.na(intensity.yr))        # somar NAs no ano
+        na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
         na.prct <- na.yr/length(intensity.yr)    # porcentagem de NAs no ano
         max.idx <- which.max(intensity.yr)       # posição do máximo
         

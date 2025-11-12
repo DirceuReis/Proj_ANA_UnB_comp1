@@ -30,11 +30,9 @@ source("scripts/funcoes/fun_group_by_timestep.R") # agrupar por time_step
 source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e calcular intensidade máxima anual
 
 # Preencher datas e filtrar conforme 'na_accept' e 'min_years'
-df_data <- fun_filter_set(data = df_data,
-                          filter = FALSE,
-                          na_accept = na_accept,
-                          min_years = min_years)
+df_data <- fun_filter_set(data = df_data, filter = FALSE)
 
+invisible(gc())
 
 # AGREGAR DURAÇÕES --------------------------------------------------------
 

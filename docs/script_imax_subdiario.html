@@ -192,6 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#pacotes-necessários" id="toc-pacotes-necessários" class="nav-link" data-scroll-target="#pacotes-necessários">Pacotes necessários</a></li>
   <li><a href="#estrutura-da-função" id="toc-estrutura-da-função" class="nav-link" data-scroll-target="#estrutura-da-função">Estrutura da função</a></li>
+  <li><a href="#função-completa" id="toc-função-completa" class="nav-link" data-scroll-target="#função-completa">Função completa</a></li>
   </ul></li>
   <li><a href="#aplicação-da-função" id="toc-aplicação-da-função" class="nav-link" data-scroll-target="#aplicação-da-função">Aplicação da função</a></li>
   </ul>
@@ -219,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">10 de novembro de 2025</p>
+      <p class="date">12 de novembro de 2025</p>
     </div>
   </div>
   
@@ -273,24 +274,485 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="iterar-em-cada-ano">Iterar em cada ano</h4>
 <p>Supondo que estamos trabalhando com uma estação já selecionada <code>gauge</code>, para uma duração <code>d</code>. Vamos começar importanto nosso conjunto de estações subdiárias com o pacote <a href="https://arrow.apache.org/docs/r/"><code>arrow</code></a> para leitura de arquivos do tipo .PARQUET:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar pacote 'arrow' se necessário</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(arrow)) <span class="fu">install.packages</span>(<span class="st">"arrow"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar pacote 'pacman' se necessário</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, arrow, RcppRoll, lubridate)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ler séries subdiárias</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>df_data</code> contém as séries das estações, ainda precisamos completar as datas parar analisar possíveis falhas. Usaremos a função <code>fun_filter_set()</code> localizada em “scripts/funcoes/fun_filter_set.R”. Essa função é uma versão da funçãõ <code>fun_fill_dates()</code> que possibilita ainda filtragem das estações por percentual mínimo de falhas anuais e número mínimo de anos por estação. Usaremos, porém, sem esses filtros:</p>
-<div class="cell">
+<p><code>df_data</code> contém as séries das estações, ainda precisamos completar as datas parar analisar possíveis falhas. Usaremos a função <code>fun_filter_set()</code> localizada em “scripts/funcoes/fun_filter_set.R”. Essa função é uma versão da função <code>fun_fill_dates()</code> que possibilita ainda filtragem das estações por percentual mínimo de falhas anuais e número mínimo de anos por estação. Usaremos, porém, sem esses filtros:</p>
+<div class="cell" data-freeze="true">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chamar função</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Completar datas das séries</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">filter =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">aux_path =</span> <span class="st">"scripts/funcoes/fun_fill_dates.R"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data, <span class="co"># tbl_df c/ séries das estações</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">filter =</span> <span class="cn">FALSE</span>, <span class="co"># FALSE p/ não aplicar filtros</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">aux_path =</span> <span class="st">"scripts/funcoes/fun_fill_dates.R"</span>) <span class="co"># fun_fill_dates</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-freeze="true">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gauge <span class="ot">&lt;-</span> <span class="st">"432300204A"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data.gauge <span class="ot">&lt;-</span> df_data[df_data<span class="sc">$</span>gauge_code <span class="sc">==</span> gauge,]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para exemplificar a aplicação de cada etapa, vamos primeiro selecionar uma estação para análise: a estação 432300204A. Filtrando de <code>df_data</code>, extraimos somentre as observações referentes à estação em <code>data.gauge</code>. Vamos primeiro agregar as lâminas para a duração <code>d</code> desejada (30 minutos por exemplo) utilizando a função <code>roll_sum</code>. Essa função toma como argumento um vetor numérico com os dados que deverão ser utilizados (<code>x</code>); o tamanho da janela sobre a qual a função aplicará a soma (<code>n</code>); como serão preenchidas as pontas (<code>fill</code>) e em qual das pontas não será preenchida (<code>align</code>). Passamos também o argumento <code>na.rm = TRUE</code>, já que queremos preservar o valor da soma na janela, mesmo que ela contenha algum registro com falha.</p>
+<p>Antes, porém, vamos filtrar as observações com base em um vetor de meses (<code>which.mon</code>) e extrair algumas informações sobre a estação selecionada: série de datas (<code>dates</code>), série de lâminas (<code>depths</code>) e a resolução “base” da estação, ou seja, o tempo padrão entre registros consecutivos (<code>d.base.hr</code>).</p>
+<div class="cell" data-freeze="true">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrair datas, lâminas e resolução</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"datetime"</span>, <span class="st">"rain_mm"</span>)       <span class="co"># nome das colunas relevantes p/ análise</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>which.mon <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>                       <span class="co"># sequência de meses de 1 (janeiro) a 12 (dezembro)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mon.idx <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">month</span>(data.gauge[[names[<span class="dv">1</span>]]]) <span class="sc">%in%</span> which.mon <span class="co"># TRUE/FALSE se mês está contindo em 'which.mon'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data.gauge <span class="ot">&lt;-</span> data.gauge[mon.idx,]      <span class="co"># filtrar somente meses em 'which.mon'</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> data.gauge[[names[<span class="dv">1</span>]]]         <span class="co"># extrair datas</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>depths <span class="ot">&lt;-</span> data.gauge[[names[<span class="dv">2</span>]]]        <span class="co"># extrair lâminas</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>years <span class="ot">&lt;-</span> <span class="fu">unique</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(dates)) <span class="co"># extrair anos da estação</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>d.base.hr <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dates[<span class="dv">2</span>] <span class="sc">-</span> dates[<span class="dv">1</span>], <span class="at">units =</span> <span class="st">"hours"</span>) <span class="co"># resolução base da estação</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir uma duração</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">7</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Se dividirmos <code>d</code> por <code>d.base.hr</code>, teremos o tamanho da janela que será agregada. No nosso caso, temos uma duração de 7 horas e uma duração base de 0.1666667 horas (10 minutos), portanto nossa janela será de 42.</p>
+<div class="cell" data-freeze="true">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregar lâminas</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>depth.agg <span class="ot">&lt;-</span> RcppRoll<span class="sc">::</span><span class="fu">roll_sum</span>(<span class="at">x =</span> depths,             <span class="co"># vetor c/ dados de precipitação</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">n =</span> <span class="fu">round</span>(d<span class="sc">/</span>d.base.hr), <span class="co"># tamanho da janela móvel</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">na.rm =</span> <span class="cn">TRUE</span>,           <span class="co"># manter soma qdo houver NA</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fill =</span> <span class="cn">NA</span>,              <span class="co"># preencher pontas c/ NA</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">align =</span> <span class="st">"left"</span>)         <span class="co"># alinhar janela no índice</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sendo uma operação em janela móvel, o vetor <code>depth.agg</code> deve retornar o mesmo número de observações em <code>depths</code>. Agora com o vetor acumulado, transformamos em intensidade (<code>intensity.agg</code>) e encontramos o máximo referente a esse ano. Como dito anteriormente, isso será feito utilizando um <code>lapply</code> que itera sobre cada ano da estação de 2015 até 2024, portanto, devemos transformar <code>years</code> em uma lista antes.</p>
+<p>Filtramos primeiro o vetor <code>intensity.agg</code> para manter somente as observações em determinado ano de <code>years</code>. Em seguida determinamos a posição em que se encontra o máximo utilizando a função <code>which.max()</code>, a qual permitirá encontrar a posição da data em que ocorre o máximo e do valor máximo em si. É importante ressaltar que, como estamos aplicando a função para todo o conjunto de dados sem verificar sua qualidade previamente, precisaremos prever possiveis falhas, como por exemplo encontrarmos um ano inteiro com falhas (<code>NA</code>). Em casos como esse, a função <code>which.max()</code> retornará um objeto vazio e não conseguiremos determinar o máximo. O código abaixo lida com essa situação.</p>
+<div class="cell" data-freeze="true">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Intensidade</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>intensity.agg <span class="ot">&lt;-</span> depth.agg<span class="sc">/</span>d</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular máximos anuais</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>imax.year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> years, <span class="at">FUN =</span> <span class="cf">function</span>(yr){</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  year.idx <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">year</span>(dates) <span class="sc">==</span> yr <span class="co"># índices das observações do ano 'yr'</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  intensity.yr <span class="ot">&lt;-</span> intensity.agg[year.idx]  <span class="co"># filtrar intensidades em 'yr'</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  date.yr <span class="ot">&lt;-</span> dates[year.idx]               <span class="co"># filtrar datas em 'yr'</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  na.yr <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(intensity.yr))        <span class="co"># somar NAs em 'yr'</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  na.prct <span class="ot">&lt;-</span> na.yr<span class="sc">/</span>(<span class="fu">length</span>(intensity.yr))  <span class="co"># % NAs em 'yr'</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  max.idx <span class="ot">&lt;-</span> <span class="fu">which.max</span>(intensity.yr)       <span class="co"># índice do máximo em 'yr'</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Verificar se é ano de falha, senão extrair máximos</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(max.idx) <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    imax.yr <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    date.max <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    imax.yr <span class="ot">&lt;-</span> intensity.yr[[max.idx]] <span class="co"># extrair máximo anual</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    date.max <span class="ot">&lt;-</span> date.yr[[max.idx]]     <span class="co"># extrair data do máximo anual</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"gauge_code"</span> <span class="ot">=</span> gauge, <span class="co"># código da estação</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"d"</span> <span class="ot">=</span> d,              <span class="co"># duração [h]</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"imax_mmh"</span> <span class="ot">=</span> imax.yr, <span class="co"># intensidade máxima anual [mm/h]</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"date"</span> <span class="ot">=</span> date.max,    <span class="co"># data em que ocorre o máximo</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"year"</span> <span class="ot">=</span> yr,          <span class="co"># ano em que ocorre o máximo (alterar dps p/ ano_hidro)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"na_prct"</span> <span class="ot">=</span> na.prct,  <span class="co"># porcentagem de falhas por ano</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"mon_filter"</span> <span class="ot">=</span> <span class="fu">deparse</span>(which.mon)) <span class="co"># meses usados p/ análise</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim imax.year</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em  tbl_df</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>imax.year <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, imax.year)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Obtemos então as seguintes intensidades máximas para a duração de 420 minutos da estação 432300204A:</p>
+<div class="cell" data-freeze="true">
+<div id="tbl-imax-year" class="cell quarto-float anchored" data-freeze="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-imax-year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;1: Máximos anuais para uma duração de uma estação.
+</figcaption>
+<div aria-describedby="tbl-imax-year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 4%">
+<col style="width: 13%">
+<col style="width: 28%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">gauge_code</th>
+<th style="text-align: center;">d</th>
+<th style="text-align: center;">imax_mmh</th>
+<th style="text-align: center;">date</th>
+<th style="text-align: center;">year</th>
+<th style="text-align: center;">na_prct</th>
+<th style="text-align: center;">mon_filter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">9.31</td>
+<td style="text-align: center;">2015-07-20 03:50:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8.51</td>
+<td style="text-align: center;">2016-05-15 11:30:00</td>
+<td style="text-align: center;">2016</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">17.77</td>
+<td style="text-align: center;">2017-12-07 06:30:00</td>
+<td style="text-align: center;">2017</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">7.54</td>
+<td style="text-align: center;">2018-07-17 11:50:00</td>
+<td style="text-align: center;">2018</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">7.89</td>
+<td style="text-align: center;">2019-05-27 23:00:00</td>
+<td style="text-align: center;">2019</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8.83</td>
+<td style="text-align: center;">2020-06-30 06:00:00</td>
+<td style="text-align: center;">2020</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">12.97</td>
+<td style="text-align: center;">2021-12-06 05:20:00</td>
+<td style="text-align: center;">2021</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">10.71</td>
+<td style="text-align: center;">2022-01-05 11:00:00</td>
+<td style="text-align: center;">2022</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">14.94</td>
+<td style="text-align: center;">2023-06-16 02:40:00</td>
+<td style="text-align: center;">2023</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">13.86</td>
+<td style="text-align: center;">2024-05-23 11:50:00</td>
+<td style="text-align: center;">2024</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
 </div>
 </section>
+<section id="iterar-em-cada-duração" class="level4">
+<h4 class="anchored" data-anchor-id="iterar-em-cada-duração">Iterar em cada duração</h4>
+<p>Agora precisamos somente repetir o processo acima para cada duração contida em um vetor:</p>
+<div class="cell" data-freeze="true">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemplos de durações</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>durations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">24</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterar sobre cada duração</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>imax.duration <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> durations, <span class="at">FUN =</span> <span class="cf">function</span>(d){</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Agregar lâminas</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  depth.agg <span class="ot">&lt;-</span> RcppRoll<span class="sc">::</span><span class="fu">roll_sum</span>(<span class="at">x =</span> depths,             <span class="co"># vetor c/ dados de precipitação</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">n =</span> <span class="fu">round</span>(d<span class="sc">/</span>d.base.hr), <span class="co"># tamanho da janela móvel</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">na.rm =</span> <span class="cn">TRUE</span>,           <span class="co"># manter soma qdo houver NA</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">fill =</span> <span class="cn">NA</span>,              <span class="co"># preencher pontas c/ NA</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">align =</span> <span class="st">"left"</span>)         <span class="co"># alinhar janela no índice</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Intensidade</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  intensity.agg <span class="ot">&lt;-</span> depth.agg<span class="sc">/</span>d</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular máximos anuais</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  imax.year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> years, <span class="at">FUN =</span> <span class="cf">function</span>(yr){</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    year.idx <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">year</span>(dates) <span class="sc">==</span> yr <span class="co"># índices das observações do ano 'yr'</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    intensity.yr <span class="ot">&lt;-</span> intensity.agg[year.idx]  <span class="co"># filtrar intensidades em 'yr'</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    date.yr <span class="ot">&lt;-</span> dates[year.idx]               <span class="co"># filtrar datas em 'yr'</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    na.yr <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(intensity.yr))        <span class="co"># somar NAs em 'yr'</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    na.prct <span class="ot">&lt;-</span> na.yr<span class="sc">/</span>(<span class="fu">length</span>(intensity.yr))  <span class="co"># % NAs em 'yr'</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    max.idx <span class="ot">&lt;-</span> <span class="fu">which.max</span>(intensity.yr)       <span class="co"># índice do máximo em 'yr'</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Verificar se é ano de falha, senão extrair máximos</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(max.idx) <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    imax.yr <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    date.max <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    imax.yr <span class="ot">&lt;-</span> intensity.yr[[max.idx]] <span class="co"># extrair máximo anual</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    date.max <span class="ot">&lt;-</span> date.yr[[max.idx]]     <span class="co"># extrair data do máximo anual</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"gauge_code"</span> <span class="ot">=</span> gauge, <span class="co"># código da estação</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"d"</span> <span class="ot">=</span> d,              <span class="co"># duração [h]</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"imax_mmh"</span> <span class="ot">=</span> imax.yr, <span class="co"># intensidade máxima anual [mm/h]</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"date"</span> <span class="ot">=</span> date.max,    <span class="co"># data em que ocorre o máximo</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"year"</span> <span class="ot">=</span> yr,          <span class="co"># ano em que ocorre o máximo (alterar dps p/ ano_hidro)</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"na_prct"</span> <span class="ot">=</span> na.prct,  <span class="co"># porcentagem de falhas por ano</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"mon_filter"</span> <span class="ot">=</span> <span class="fu">deparse</span>(which.mon)) <span class="co"># meses usados p/ análise</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim imax.year</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em  tbl_df</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>imax.year <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, imax.year)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim imax.duration</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em  tbl_df</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>imax.duration <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, imax.duration)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Como resultado do segundo <code>lapply()</code>, agora pelas durações, <code>imax.duration</code> para a estação 432300204A conterá os máximos para os anos de 2015 até 2024 para cada uma das durações 1, 4, 8, 12, 24.</p>
+<div class="cell" data-freeze="true">
+<div id="tbl-imax-duration" class="cell quarto-float anchored" data-freeze="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-imax-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;2: Máximos anuais para uma diferentes durações de uma estação.
+</figcaption>
+<div aria-describedby="tbl-imax-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 15%">
+<col style="width: 5%">
+<col style="width: 12%">
+<col style="width: 27%">
+<col style="width: 7%">
+<col style="width: 11%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">gauge_code</th>
+<th style="text-align: center;">d</th>
+<th style="text-align: center;">imax_mmh</th>
+<th style="text-align: center;">date</th>
+<th style="text-align: center;">year</th>
+<th style="text-align: center;">na_prct</th>
+<th style="text-align: center;">mon_filter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">36.40</td>
+<td style="text-align: center;">2015-11-19 21:00:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">11</td>
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">12.40</td>
+<td style="text-align: center;">2015-07-20 03:50:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21</td>
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">8.85</td>
+<td style="text-align: center;">2015-07-20 03:50:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">31</td>
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">7.25</td>
+<td style="text-align: center;">2015-07-20 03:50:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">41</td>
+<td style="text-align: center;">432300204A</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">4.83</td>
+<td style="text-align: center;">2015-05-27 06:10:00</td>
+<td style="text-align: center;">2015</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1:12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="iterar-em-cada-estação" class="level4">
+<h4 class="anchored" data-anchor-id="iterar-em-cada-estação">Iterar em cada estação</h4>
+<p>A última etapa é simplesmente iterar sobre o conjunto de estações. Dividiremos <code>df_data</code> com a função <code>split()</code> em uma lista em que cada objeto contém o <code>data.frame</code> referente a uma estação e aplicaremos a cada uma delas os dois <code>lapply()</code>’s anteriores.</p>
+</section>
+</section>
+<section id="função-completa" class="level3">
+<h3 class="anchored" data-anchor-id="função-completa">Função completa</h3>
+<p>Juntando todas as etapas em uma única função e adicionando algumas verificações, temos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fun_imax_agg <span class="ot">&lt;-</span> <span class="cf">function</span>(data,             <span class="co"># lista contendo as séries das estações</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                         durations,        <span class="co"># vetor c/ durações desde a duração base (em horas)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">which.mon =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="co"># subconjunto de meses se desejado</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"datetime"</span>, <span class="st">"rain_mm"</span>) <span class="co"># nome das colunas, nessa ordem </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                         ){</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pacotes</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)){</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Instalando pacote 'pacman'..."</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, RcppRoll, pbapply, lubridate)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Confere se o argumento 'data' é uma lista</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">inherits</span>(data, <span class="st">"list"</span>)){</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"'data' deve ser uma lista, e não: "</span>, <span class="fu">class</span>(data), <span class="st">".</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Vetor de estações</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  gauges <span class="ot">&lt;-</span> <span class="fu">names</span>(data)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Iterar sobre cada estação</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  imax.gauge <span class="ot">&lt;-</span> pbapply<span class="sc">::</span><span class="fu">pblapply</span>(<span class="at">X =</span> gauges, <span class="at">FUN =</span> <span class="cf">function</span>(gauge){</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extrair data.frame da estação 'gauge'</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    data.gauge <span class="ot">&lt;-</span> data[[gauge]]</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Confere se a lista contém data.frames</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.data.frame</span>(data.gauge)){</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Elements of 'data' must be data.frames. But element "</span>, gauge, <span class="st">" contains: "</span>, <span class="fu">class</span>(data.gauge))</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Usa is.element() parar conferir se os nomes do argumento 'names' são os mesmos nomes das colunas dos data.frames</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">sum</span>(<span class="fu">is.element</span>(names[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">names</span>(data.gauge))) <span class="sc">!=</span> <span class="dv">2</span>){</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Data.frame of station "</span>, station, <span class="st">" does not contain $"</span>, names[<span class="dv">1</span>], <span class="st">" or $"</span>, names[<span class="dv">2</span>], <span class="st">"."</span>)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Processar uma estação</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    mon.idx <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">month</span>(data.gauge[[names[<span class="dv">1</span>]]]) <span class="sc">%in%</span> which.mon <span class="co"># TRUE/FALSE se mês está contindo em 'which.mon'</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    data.gauge <span class="ot">&lt;-</span> data.gauge[mon.idx,] <span class="co"># filtrar somente meses em 'which.mon'</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    dates <span class="ot">&lt;-</span> data.gauge[[names[<span class="dv">1</span>]]]    <span class="co"># extrair vetor c/ datas</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    depths <span class="ot">&lt;-</span> data.gauge[[names[<span class="dv">2</span>]]]   <span class="co"># extrair vetor c/ lâminas</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Conferir se durações são múltiplas da resolução 'base' da estação</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    d.base.hr <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dates[<span class="dv">2</span>] <span class="sc">-</span> dates[<span class="dv">1</span>], <span class="at">units =</span> <span class="st">"hours"</span>) <span class="co"># diferença entre 2ª e 1ª 'datetime'</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">any</span>((durations<span class="sc">/</span>d.base.hr) <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">&gt;</span> <span class="fl">1e-8</span>)){</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Pelo menos uma das durações de agregação não é múltipla da resolução base de "</span>, d.base.hr<span class="sc">*</span><span class="dv">60</span>, <span class="st">" min na estação "</span>, gauge, <span class="st">"."</span>)</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iterar sobre cada duração</span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    imax.duration <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> durations, <span class="at">FUN =</span> <span class="cf">function</span>(d){</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Vetor de somas móveis de precipitação</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>      depth.agg <span class="ot">&lt;-</span> RcppRoll<span class="sc">::</span><span class="fu">roll_sum</span>(<span class="at">x =</span> depths,             <span class="co"># vetor c/ dados de precipitação</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">n =</span> <span class="fu">round</span>(d<span class="sc">/</span>d.base.hr), <span class="co"># tamanho da janela móvel</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">fill =</span> <span class="cn">NA</span>,              <span class="co"># preencher as pontas c/ NA</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">align =</span> <span class="st">"left"</span>)         <span class="co"># alinhas janela no índice i (NAs no final)</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Auxiliares</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>      <span class="co"># data.gauge$year &lt;- lubridate::year(data.gauge[[names[1]]])         # adicionar coluna c/ anos (alterar dps p/ 'hydro_year')</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>      years <span class="ot">&lt;-</span> <span class="fu">unique</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(dates)) <span class="co"># vetor c/ valores únidos dos anos da estação 'gauge'</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Converter soma acumulada em intensidade/hora</span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>      intensity.agg <span class="ot">&lt;-</span> depth.agg<span class="sc">/</span>d</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Calcular máximos anuais</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>      imax.year <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> years, <span class="at">FUN =</span> <span class="cf">function</span>(yr){</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>        year.idx <span class="ot">&lt;-</span> lubridate<span class="sc">::</span><span class="fu">year</span>(dates) <span class="sc">==</span> yr <span class="co"># índices p/ filtrar anos</span></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>        intensity.yr <span class="ot">&lt;-</span> intensity.agg[year.idx]  <span class="co"># filtrar intensidades em 'yr'</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>        date.yr <span class="ot">&lt;-</span> dates[year.idx]               <span class="co"># filtrar datas em 'yr'</span></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>        na.yr <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(intensity.yr))        <span class="co"># somar NAs no ano</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>        na.prct <span class="ot">&lt;-</span> na.yr<span class="sc">/</span><span class="fu">length</span>(intensity.yr)    <span class="co"># porcentagem de NAs no ano</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>        max.idx <span class="ot">&lt;-</span> <span class="fu">which.max</span>(intensity.yr)       <span class="co"># posição do máximo</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Conferir se o ano inteiro é NA, senão extrair os máximos</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="fu">length</span>(max.idx) <span class="sc">==</span> <span class="dv">0</span>){</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>          imax.yr <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>          date.max <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span>{</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>          imax.yr <span class="ot">&lt;-</span> intensity.yr[[max.idx]] <span class="co"># extrair máximo anual</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>          date.max <span class="ot">&lt;-</span> date.yr[[max.idx]]     <span class="co"># extrair data do máximo anual</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>        out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"gauge_code"</span> <span class="ot">=</span> gauge, <span class="co"># código da estação</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"d"</span> <span class="ot">=</span> d,              <span class="co"># duração [h]</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"imax"</span> <span class="ot">=</span> imax.yr,     <span class="co"># intensidade máxima anual [mm/h]</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"date"</span> <span class="ot">=</span> date.max,    <span class="co"># data em que ocorre o máximo             </span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"year"</span> <span class="ot">=</span> yr,          <span class="co"># ano em que ocorre o máximo (alterar dps p/ ano_hidro)</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"na_prct"</span> <span class="ot">=</span> na.prct,  <span class="co"># porcentagem de falhas por ano</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"mon_filter"</span> <span class="ot">=</span> <span class="fu">deparse</span>(which.mon)) <span class="co"># meses usados p/ análise</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>      }) <span class="co"># fim 'imax.year'</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Transformar em  tbl_df</span></span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>      imax.year <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, imax.year)</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>    }) <span class="co"># fim 'imax.duration'</span></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transformar em tbl_df</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>    imax.duration <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, imax.duration)</span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>  }) <span class="co"># fim 'imax.gauge'</span></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">do.call</span>(rbind, imax.gauge))</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="aplicação-da-função" class="level2">
