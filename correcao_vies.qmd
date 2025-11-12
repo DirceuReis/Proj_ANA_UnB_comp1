@@ -11,7 +11,7 @@ Entretanto, existem outras possibilidades metodológicas para a correção de vi
 
 ### *Quantile Mapping* (QM)
 
-### **Delta Change*
+### \*\*Delta Change\*
 
 ### *Equidistant Quantile Matching* (EQM)
 
@@ -63,7 +63,7 @@ X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\
 X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
 \tag{3}
-$$ 
+$$
 
 Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerados; e $N_F$ é o número total de anos considerados para o período futuro.
 
@@ -72,12 +72,13 @@ Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os c
 $$
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
 \tag{4}
-$$ 
+$$
 
 $$
 PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
 \tag{5}
-$$ 
+$$
+
 $$
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
 \tag{6}
@@ -113,7 +114,7 @@ $$
 $$
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
 \tag{10}
-$$ 
+$$
 
 (viii) Encontrar uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
 
@@ -125,7 +126,7 @@ $$
 $$
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
 \tag{12}
-$$ 
+$$
 
 (ix) Para gerar dados subdiários máximos futuros, combinar as equações acima em:
 
@@ -135,8 +136,9 @@ X^{STN, future}_{\max,j}
 \left[ 
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
 \right] 
-+ b_{1} \tag{13}
-$$ 
++ b_{1} 
+\tag{13}
+$$
 
 (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
 
@@ -151,25 +153,19 @@ $$
 
 No EQM original, a função de mapeamento de quantis realiza o *donwscaling* espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM ($F_{m,h}$) e a série subdiária ($x_{j,o,h}$) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM ($\hat{x}_{j,o,h}$) conforme mostrado na Equação (15):
 
-
 $$
 \hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
 \tag{15}
 $$
 
-onde $\hat{x}$ é o quantil máximo anual na escala da estação, $F$ é a função de distribuição cumulativa
-e $F^{-1}$ é sua inversa. $j,o,h$ correspondem a cada dado de precipitação observado subdiário ($‘j’$)
-($‘o’$) no período histórico-base ($‘h’$), enquanto $‘m’$ permanece como os dados modelados. Os quantis
-extraídos de cada par \hat{x}_{j,o,h} e $x_{m,h}$ são igualados para estabelecer uma relação funcional na
-forma da Equação (16):
+onde $\hat{x}$ é o quantil máximo anual na escala da estação, $F$ é a função de distribuição cumulativa e $F^{-1}$ é sua inversa. $j,o,h$ correspondem a cada dado de precipitação observado subdiário ($‘j’$) ($‘o’$) no período histórico-base ($‘h’$), enquanto $‘m’$ permanece como os dados modelados. Os quantis extraídos de cada par \hat{x}\_{j,o,h} e $x_{m,h}$ são igualados para estabelecer uma relação funcional na forma da Equação (16):
 
 $$
 \hat{x}_{j,o,h} = \frac{a_j + x_{m,h}}{b_j + c_j x_{m,h}} + \frac{d_j}{x_{m,h}}
 \tag{16}
 $$
 
-onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como
-função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o novo $EQM_{NS}$ introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
+onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o novo $EQM_{NS}$ introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
 
 Semelhante ao EQM, o $EQM_{NS}$ utiliza o mapeamento delta de quantis, uma vez que preserva as mudanças relativas na média e nos quantis de precipitação obtidos a partir dos modelos climáticos. A distribuição de probabilidade cumulativa da precipitação gerada pelo GCM no período futuro ($F_{m,f}$ ) e a precipitação gerada pelo GCM no período de referência ($X_{m,h}$) são igualadas para estabelecer uma relação estatística (Equação (17)). Além disso, a mudança relativa entre o período histórico e o período futuro é dada pela Equação (18):
 
@@ -178,17 +174,12 @@ $$
 \tag{17}
 $$
 
-
 $$
 \Delta_m = \frac{x_{m,f}}{\hat{x}_{m,h}}
 \tag{18}
 $$
 
-
-onde $m,f$ corresponde aos dados modelados ($‘m’$) no período de projeção futuro ($‘f’$), e $\Delta_m$ é
-a mudança relativa. A série subdiária máxima futura projetada ($X_j,f$ )) na escala da estação é
-então gerada usando a Equação (16) substituindo $x_{m,h}$ por $\hat{x}_{m,h}$ e multiplicando-a pela
-mudança relativa Dm da Equação (18), conforme dado pela Equação (19):
+onde $m,f$ corresponde aos dados modelados ($‘m’$) no período de projeção futuro ($‘f’$), e $\Delta_m$ é a mudança relativa. A série subdiária máxima futura projetada ($X_j,f$ )) na escala da estação é então gerada usando a Equação (16) substituindo $x_{m,h}$ por $\hat{x}_{m,h}$ e multiplicando-a pela mudança relativa Dm da Equação (18), conforme dado pela Equação (19):
 
 $$
 x_{j,f} = \Delta_m \cdot \hat{x}_{j,o,h}
@@ -199,15 +190,55 @@ $$
 
 Outro método baseado no QM é o *Quantile–Quantile Downscaling* (QQD) [@Hassanzadeh.2014; @Hassanzadeh.2019] que é um método estatístico que combina *downscaling* e correção de viés ao ajustar quantil a quantil a distribuição simulada por modelos climáticos para coincidir com a distribuição observada em uma escala local. Em vez de apenas reduzir a escala espacial, o QQD também corrige sistematicamente as diferenças entre o clima simulado e o real, garantindo que a série resultante apresente características estatísticas (como média, variabilidade e extremos) mais próximas das observações históricas.
 
-Outras variantes mais recentes incluem o *Bias Correction Quantile Mapping* (BCQM), corrige diretamente as funções de distribuição cumulativa (CDFs)
+O método é uma forma não linear e simbólica de Quantile Mapping, desenvolvida via Programação Genética (GP). O GP é uma técnica geral orientada por dados inspirada no conceito de evolução biológica.Uma forma especial de GP, a regressão genética simbólica (GSR), visa encontrar equações ótimas que possam relacionar o preditor ao predito por meio da busca aleatória adaptativa [@Hassanzadeh.2014].
 
-o *Kernel Density Distribution Mapping* (KDDM), utiliza densidades suavizadas por meio de funções kernel
+O GP cria equações que relacionam o quantil do GCM $(Q_{GCM}(X))$ com o quantil local ajustado $(Q_{Local}(X))$. Assim, a estutrutra geral do mapeamento é:
 
-o *Quantile Delta Mapping* (QDM), preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições
+$$
+Q_{Local}(x) = aQ_{GCM}(x) + f[Q_{GCM}(x)]
+\tag{20}
+$$
 
-e o PresRat (PRAT),estende o QDM incorporando um fator médio de correção adiciona [@Lanzante.2021].
+Onde $aQ_{GCM}(x)$ pode ser considerado a parte principal das relações extraídas que descrevem a maior parte da variância. O termo $a$ em cada relação é um coeficiente numérico; $f[Q_{GCM}(x)]$ é uma função não linear gerada automaticamente pelo algoritmo GP.
 
-Além disso, destaca-se o método *Quantile Perturbation Downscaling* (QPD), que aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Hosseinzadehtalaei.2020].
+### *Bias Correction Quantile Mapping* (BCQM)
+
+O método BCQM corrige diretamente as funções de distribuição cumulativa (CDFs) [@Lanzante.2018; @Lanzante.2021]. Ele é calculado como:
+
+$$
+F_{DF}(x) = F_{Oh}[F^{-1}_{Mh}(x)]
+\tag{21}
+$$
+
+Onde $F$ é a função de distribuição cumulativa; $F^{−1}$ sua inversa; $x$ o valor de $M_f$ (Modelo futuro) a ser reduzido e $M_h$ refere-se ao Modelo histórico;$O_h$ são as observações históricas e $D_f$ refere-se a saída futura em escala reduzida.
+
+Os autores afiram que equação (21) não é aplicável a valores novos, ou seja, para valores de $M_f$ fora do intervalo de valores de $M_h$. Quando isso ocorre, usa-se uma modificação da extrapolação padrão [@deque.2007]:
+
+Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. [-@Ho.2012] em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de $X_o$ e $X_m$ é a mesma que a relação entre as distribuições de $X^{′}_o$ e $X^{′}_m$), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, $X^{′}_o = B(X^{′}_m)$, com uma função de transferência dada por $B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]$, onde $F_m$(.) é a função de distribuição cumulativa (CDF) de $X_m$ e $F^{-1}_o$(.) é a CDF inversa (a “função quantil”) de $X_o$.
+
+![Fluxograma da metodologia aplicada no Canadá](figuras/bias.png) Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas.
+
+Onde, <!-- ainda falta terminar essa parte-->
+
+### *Kernel Density Distribution Mapping* (KDDM)
+
+utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021]
+
+O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
+
+<!--vale a pena descrever por completo esse método?-->
+
+### *Quantile Delta Mapping* (QDM)
+
+preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições[@Lanzante.2021]
+
+### PresRat (PRAT)
+
+estende o QDM incorporando um fator médio de correção adiciona [@Lanzante.2021].
+
+### *Quantile Perturbation Downscaling* (QPD)
+
+aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Hosseinzadehtalaei.2020].
 
 ::: {#refs}
 :::
