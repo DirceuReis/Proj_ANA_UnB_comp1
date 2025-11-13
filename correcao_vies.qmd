@@ -230,11 +230,32 @@ O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa
 
 ### *Quantile Delta Mapping* (QDM)
 
-preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições[@Lanzante.2021]
+Por sua vez, o QDM preserva o sinal de mudança climática aplicando ajustes aditivos ou multiplicativos às distribuições [@Lanzante.2021]. 
+
+A forma aditiva é: 
+
+$$
+D_f(x) = x + \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big) - F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
+\tag{22}
+$$
+E a forma multiplicativa é:
+
+$$
+D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
+\tag{23}
+$$
+C código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).
+
 
 ### PresRat (PRAT)
 
-estende o QDM incorporando um fator médio de correção adiciona [@Lanzante.2021].
+O método PresRat estende o QDM incluindo um fator de correção médio [@Lanzante.2021]. Cada valor de $D_f$
+calculado a partir de (23) é multiplicado por um fator de correção $K$ específico para o mês do calendário:
+
+$$K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
+\tag{24}
+$$
+Onde as barras indicam as médias climatológicas ao longo de um mês.
 
 ### *Quantile Perturbation Downscaling* (QPD)
 
