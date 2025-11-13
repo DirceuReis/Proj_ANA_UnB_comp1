@@ -9,10 +9,6 @@ Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quant
 
 Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés. O método *Delta Change* aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas.
 
-### *Quantile Mapping* (QM)
-
-### \*\*Delta Change\*
-
 ### *Equidistant Quantile Matching* (EQM)
 
 Baseado no QM o método EQM [@Srivastav.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
@@ -230,15 +226,56 @@ O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa
 
 ### *Quantile Delta Mapping* (QDM)
 
-preserva explicitamente o sinal de mudança climática ao aplicar ajustes aditivos ou multiplicativos às distribuições[@Lanzante.2021]
+Por sua vez, o QDM preserva o sinal de mudança climática aplicando ajustes aditivos ou multiplicativos às distribuições [@Lanzante.2021].
+
+A forma aditiva é:
+
+$$
+D_f(x) = x + \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big) - F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
+\tag{22}
+$$ 
+
+E a forma multiplicativa é:
+
+$$
+D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
+\tag{23}
+$$ C código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).
 
 ### PresRat (PRAT)
 
-estende o QDM incorporando um fator médio de correção adiciona [@Lanzante.2021].
+O método PresRat estende o QDM incluindo um fator de correção médio [@Lanzante.2021]. Cada valor de $D_f$ calculado a partir de (23) é multiplicado por um fator de correção $K$ específico para o mês do calendário:
+
+$$
+K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
+\tag{24}
+$$ 
+
+Onde as barras indicam as médias climatológicas ao longo de um mês.
 
 ### *Quantile Perturbation Downscaling* (QPD)
 
-aplica fatores de correção específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Hosseinzadehtalaei.2020].
+O método aplica fatores de perturbação específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Willems.2013; @Hosseinzadehtalaei.2020].
+
+Willems [-@Willems.2013] afirma que o fator de perturbação é calculado nos quantis de intensidade de precipitação em dias chuvosos como a razão entre a intensidade de precipitação da simulação de cenário sobre a intensidade de precipitação da simulação de controle para a mesma probabilidade de excedência empírica $(p)$ ou período de retorno:
+
+$$
+\varphi({p}) = \frac{I_s({p})}{I_c({p})}
+\tag{25}
+$$
+onde $\varphi({p})$ é o fator de perturbação quantílica; $I_c({p})$ o quantil de precipitação da simulação de controle; $I_s({p})$ o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, $I(1)\geq I(2)\geq...\geq I(n_g)$, a probabilidade de excedência $p$ de qualquer intensidade de precipitação diária $I(k_g)$ é calculada empiricamente como a razão $(\frac{kg} {ng})$ do número de classificação $k_g$ sobre o número total de dias $n_g$ do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.
+
+Para períodos de retorno elevados, devido à aleatoriedade nos dados empíricos, os períodos de retorno empíricos podem diferir significativamente dos períodos de retorno teóricos derivados das distribuições de probabilidade calibradas. Por essa razão, Willems [-@Willems.2013] aplica distribuições teóricas exponenciais de dois componentes para valores extremos.
+
+Essas distribuições são calibradas aos dados empíricos e aplicadas, conforme abaixo, para derivar os fatores de perturbação dos quantis:
+
+$$
+\varphi({p}) = \frac{G^{-1}_s({p})}{G^{-1}_c({p})}
+\tag{26}
+$$
+onde $G_s_$ é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; $G_c$ calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos,
+os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (26), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (25).
+
 
 ::: {#refs}
 :::
