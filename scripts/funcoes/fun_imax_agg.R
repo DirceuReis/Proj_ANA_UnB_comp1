@@ -2,7 +2,7 @@
 fun_imax_agg <- function(data,             # lista contendo as séries das estações
                          durations,        # vetor c/ durações desde a duração base (em horas)
                          which.mon = 1:12, # subconjunto de meses se desejado
-                         names = c("datetime", "rain_mm") # nome das colunas, nessa ordem 
+                         names = c("datetime", "rain_mm") # nome das colunas, nessa ordem
                          ){
   
   # Pacotes
@@ -58,7 +58,6 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
                                       align = "left")         # alinhas janela no índice i (NAs no final)
       
       # Auxiliares
-      # data.gauge$year <- lubridate::year(data.gauge[[names[1]]])         # adicionar coluna c/ anos (alterar dps p/ 'hydro_year')
       years <- unique(lubridate::year(dates)) # vetor c/ valores únidos dos anos da estação 'gauge'
       
       # Converter soma acumulada em intensidade/hora
@@ -74,14 +73,15 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
         na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
         na.prct <- na.yr/length(intensity.yr)    # porcentagem de NAs no ano
         max.idx <- which.max(intensity.yr)       # posição do máximo
+        n.max <- length(max.idx)                 # comprimento do 
         
         # Conferir se o ano inteiro é NA, senão extrair os máximos
-        if(length(max.idx) == 0){
+        if(n.max <= 0){
           imax.yr <- as.numeric(NA)
           date.max <- as.numeric(NA)
         } else{
-          imax.yr <- intensity.yr[[max.idx]] # extrair máximo anual
-          date.max <- date.yr[[max.idx]]     # extrair data do máximo anual
+          imax.yr <- intensity.yr[[max.idx]][1] # extrair máximo anual
+          date.max <- date.yr[[max.idx]][1]     # extrair data do máximo anual
         }
         
         out <- data.frame("gauge_code" = gauge, # código da estação
@@ -90,8 +90,9 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
                           "date" = date.max,    # data em que ocorre o máximo             
                           "year" = yr,          # ano em que ocorre o máximo (alterar dps p/ ano_hidro)
                           "na_prct" = na.prct,  # porcentagem de falhas por ano
-                          "mon_filter" = deparse(which.mon)) # meses usados p/ análise
-        
+                          "mon_filter" = deparse(which.mon), # meses usados p/ análise
+                          "n_max" = n.max)      # número de máximos iguais
+         
       }) # fim 'imax.year'
       
       # Transformar em  tbl_df

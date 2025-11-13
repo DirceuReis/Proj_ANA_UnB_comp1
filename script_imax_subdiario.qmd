@@ -1,6 +1,6 @@
 ---
 title: "Máximos anuais de intensidade"
-author: tqduval
+author: tqduval@gmail.com
 date: today
 ---
 
@@ -454,5 +454,92 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
 
 ## Aplicação da função
 
-O script em R "scripts/script_agg_imax_subdiario.R" contém uma aplicação direta do que será descrito a seguir.
+O script em R "scripts/script_agg_imax_subdiario.R" contém uma aplicação direta do que será descrito a seguir. Inicialmente vamos reunir todas as funções que já utilizamos ou utilizaremos adiante:
+
+-   `fun_filter_set()`: utilizada para completar as datas nas séries históricas de cada estação de acordo com sua resolução temporal padrão e filtrar estações caso desejado (não é o caso nesta aplicação). Esta função já foi utilizada anteriormente para gerar nossa versão atual de `df_data`;
+-   `fun_group_by_ts()`: utilizada para agrupar as estações conforme sua resolução temporal, retornando uma lista em que cada objeto é nomeado conforme o campo `time_steps` dos `data.frame`'s;
+-   `fun_imax_agg()`: utilizada para agregar as lâminas registradas de cada estações em diferentes durações e extrair a intensidade máxima anual para cada duração,
+
+```{r source funções}
+
+# Funções
+source("scripts/funcoes/fun_filter_set.R")        # preencher datas e filtrar
+source("scripts/funcoes/fun_group_by_timestep.R") # agrupar por time_step
+source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e calcular intensidade máxima anual
+
+```
+
+A primeira etapa seria completar as datas das séries temporais:
+<!-- "eval: false" pq isso já foi feito anteriormente e não precisa repetir o processamento -->
+
+```{r}
+#| eval: false
+
+# Preencher datas
+df_data <- fun_filter_set(data = df_data, filter = FALSE); invisible(gc())
+
+```
+
+Usando `df_data` já com as datas completas, precisaremos dividir as estações em grupos de mesma resolução. Isso poderá ser feito com a função auxiliar `fun_group_by_ts()`. Para aplicar essa função primeiro dividiremos `df_data` em uma lista contendo, em cada objeto, o `data.frame` referente para cada estação:
+
+```{r split e agrupar por duração}
+
+data.ls <- split(df_data, f = df_data$gauge_code)
+data.by.time <- fun_group_ts(data.ls, ts_name = "time_steps")
+time.steps <- names(data.by.time)
+
+```
+
+No nosso conjunto, temos estações com as seguintes resoluções: `r time.steps`. Vamos selecionar durações nas escalas subdiária e diária e como nem todas as durações serão compatíveis com as resoluções bases das estações, faremos um vetor com durações gerais de 10 minutos até 10 dias que depois poderão ser filtradas conforme a resolução da estação.
+
+```{r durações}
+
+# Durações
+d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 24)) # durações subdiárias
+d.daily <- c(1, 2, 3, 4, 5, 7, 10)         # durações diárias
+durations <- c(d.subdaily, d.daily*24)     # durações
+
+cat(durations)
+
+```
+
+Finalmente, vamos aplicar a função que escrevemos `fun_imax_agg()` para cada um dos grupos de estações em `data.by.time` e salvar os resultados como `df_imax.parquet`.
+
+```{r aplicar `fun_imax_agg`}
+#| eval: false
+
+# Aplicar função 'fun_imax_agg' p/ cada grupo de durações
+imax.ls <- lapply(X = time.steps, FUN = function(ts){
+  
+  current.ts <- data.by.time[[ts]] # extrair listas de estações c/ resolução 'ts'
+  ds <- as.numeric(ts)/3600        # segundos p/ horas
+  valid.durations <- durations[(durations/ds) %% 1 < 1e-8] # selecionar somente durações compatíveis c/ a resolução 'ts'
+  
+  message(paste0("\nProcessando conjunto de estações com resolução de ", ds*60, " minutos..."))
+  
+  out <- fun_imax_agg(data = current.ts,
+                      durations = valid.durations,
+                      which.mon = 1:12,
+                      names = c("datetime", "rain_mm"))
+  
+}) # fim 'imax.ls'
+
+rm(df_data, data.ls, data.by.time); invisible(gc())
+
+# Nomear lista
+names(imax.ls) <- time.steps
+
+# Salvar resultados
+arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
+
+```
+
+Para ler os dados posteriormente, basta rodar:
+
+```{r}
+#| eval: false
+
+# Ler arquivo c/ intensidades máximas
+df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
+```
 

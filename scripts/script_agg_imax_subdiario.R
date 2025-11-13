@@ -7,9 +7,9 @@ rm(list = ls()); gc()
 # Pacotes
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(pacman,    # gerenciador de pacotes
-               dplyr,     # manipulação de dados
                arrow,     # leitura de dados 'parquet'
                lubridate, # manipulação de datas
+               parallel,
                beepr      # alerta sonoro
                )
 
@@ -18,7 +18,6 @@ pacman::p_load(pacman,    # gerenciador de pacotes
 
 # Importar
 df_data <- arrow::read_parquet("base/gerados/df_subdaily_data.parquet")
-df_info <- arrow::read_parquet("base/gerados/df_subdaily_info.parquet")
 
 # Critérios p/ filtrar séries
 na_accept <- 0 # 0.2
@@ -30,9 +29,7 @@ source("scripts/funcoes/fun_group_by_timestep.R") # agrupar por time_step
 source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e calcular intensidade máxima anual
 
 # Preencher datas e filtrar conforme 'na_accept' e 'min_years'
-df_data <- fun_filter_set(data = df_data, filter = FALSE)
-
-invisible(gc())
+df_data <- fun_filter_set(data = df_data, filter = FALSE); invisible(gc())
 
 # AGREGAR DURAÇÕES --------------------------------------------------------
 
@@ -41,10 +38,10 @@ data.ls <- split(df_data, f = df_data$gauge_code)             # lista de data.fr
 data.by.time <- fun_group_ts(data.ls, ts_name = "time_steps") # agrupar em durações diferentes numa lista
 
 # Durações
-d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 24))               # durações subdiárias
-d.daily <- c(1, 2, 3, 4, 5, 7, 10)                       # durações diárias
-durations <- c(d.subdaily, d.daily)                      # durações
-time.steps <- as.list(names(data.by.time))               # lista de time_steps
+d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 23)) # durações subdiárias
+d.daily <- c(1, 2, 3, 4, 5, 7, 10)         # durações diárias
+durations <- c(d.subdaily, d.daily*24)     # durações
+time.steps <- names(data.by.time)          # lista de time_steps
 
 # Aplicar função 'fun_imax_agg' p/ cada grupo de durações
 imax.ls <- lapply(X = time.steps, FUN = function(ts){
@@ -62,15 +59,14 @@ imax.ls <- lapply(X = time.steps, FUN = function(ts){
   
 }) # fim 'imax.ls'
 
-rm(df_data, data.ls, data.by.time)
-invisible(gc())
+rm(df_data, data.ls, data.by.time); invisible(gc())
 
 # Nomear lista
 names(imax.ls) <- time.steps
 
 # Salvar resultados
 # saveRDS(object = imax.ls, file = "base/gerados/imax_ls.rds")
-# arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
+arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
 
 # Ler arquivo c/ intensidades máximas
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
