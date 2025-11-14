@@ -5,6 +5,7 @@ project:
     - "*.qmd"
     - "!script_descricao_subdiario.qmd"
     - "!script_leitura_subdiario.qmd"
+    - "!script_imax_subdiario.qmd"
 
 website:
   title: "Proj. IDF Brasil ANA/UnB"
@@ -14,7 +15,11 @@ website:
         text: Home
       - about.qmd
     right:
-      - text: "Documentos"
+      - text: "Scripts"
+        menu: 
+          - href: script_imax_subdiario.qmd
+            text: Geração das intensidades máximas anuais
+      - text: "Revisão Bibliográfica"
         menu:
           - href: distr_chuva_intensa.qmd
             text: Modelagem probabilística de chuvas intensas

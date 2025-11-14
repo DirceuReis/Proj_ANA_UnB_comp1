@@ -1,0 +1,545 @@
+---
+title: "Máximos anuais de intensidade"
+author: tqduval@gmail.com
+date: today
+---
+
+## Intensidades máximas anuais: função `fun_imax_agg()`
+
+O objetivo deste documento é explicar o funcionamento e a estrutura da função `fun_imax_agg()`, que se encontra em "scripts/funcoes/fun_imax_agg.R".
+
+```{r argumentos fun_imax_agg}
+#| eval: false
+
+fun_imax_agg(data,
+             durations,
+             which.mon = 1:12,
+             names = c("datetime", "rain_mm"))
+```
+
+Esta função toma como argumento as séries das lâminas registradas pelas estações pluviográficas armazenadas em uma lista (`data`), em que cada objeto é um `data.frame` contendo: (1) `datetime`, série "data-hora" em formato `POSIX` marcando o momento em que determinada lâmina foi registrada; e (2) `rain_mm`, a lâmina registrada em milímetros. São argumentos dessa função:
+
+-   `data`: lista contendo séries históricas das estações;
+
+-   `durations`: vetor com durações (em horas) a partir da duração base (resolução temporal padrão da estação, ex. 10 minutos);
+
+-   `which.mon`: vetor (ou sequência) de entre 1 e 12 representando subconjuntos de meses para o cálculo dos máximos (por padrão `1:12`;
+
+-   `names`: nome das colunas de data-hora e lâmina precipitada, especificamente nesta ordem. É através desse vetor que a função acessará as informações nos dataframes contidos em `data`.
+
+A função agregará as lâminas em `rain_mm` usando soma em janela móvel para diferentes durações estabelecidas em `durations`, calculará a intensidade em milímetros por hora (mm/h) e retornará a intensidade máxima anual para cada ano, duração e estação. O resultado da função será uma lista contendo, para cada estação, um `data.frame` com as seguintes colunas:
+
+-   `gauge_code`: código da estação;
+
+-   `d`: duração utilizada para calcular a intensidade máxima anual (em horas);
+
+-   `imax`: intensidade máxima anual (em milímetros por hora);
+
+-   `date`: data em que ocorreu o máximo (em `POSIXct`);
+
+-   `na_prct`: porcentagem de falhas (`NA`) por ano (de 0 a 1);
+
+-   `mon_filter`: sequência de meses utilizados (`deparse` de `which.mon`).
+
+### Pacotes necessários
+
+Esta função utiliza de pacotes já bem consolidados para R:
+
+-   [`pacman`](https://github.com/trinker/pacman): gerenciador de pacotes para o R, permite a instalação de diferentes pacotes facilmente usando `pacman::p_load()` ;
+
+-   [`RcppRoll`](https://github.com/kevinushey/RcppRoll): pacote para realizar operações em janela móvel, utilizado para calcular as somas acumuladas com a função `RcppRoll::roll_sum()`;
+
+-   [`pbapply`](https://github.com/psolymos/pbapply): pacote para realizar um `lapply` convencional, mas com a conveniência de uma barra de progresso para acompanhar o processamento da função, utilizada como `pbapply::pblapplly()`;
+
+-   [`lubridate`](https://lubridate.tidyverse.org/): pacote para realizar operações com objetos de data mais facilmente. São utilizadas as funções `lubridate::month()` e `lubridate::year()`.
+
+### Estrutura da função
+
+A função está estruturada em três `lapply()`. O primeiro itera sobre o conjunto de estações (`gauges`) e gera a lista `imax.gauge`; o segundo iterar sobre o conjunto de durações (`durations`), gerando a lilsta `imax.duration`; e o terceiro itera sobre cada ano disponível (`years`), gerando a lista `imax.year`. A lógica de processamento é a seguinte: (1) selecionar uma estação; (2) selecionar uma duração; (3) agregar as lâminas usando soma em janela móvel para a duração especificada; (4) calcular a intensidade máxima anual; (5) selecionar somente as observações dentro de um determinado ano; (6) selecionar a intensidade máxima do ano em questão. Apresentaremos a construção da função começando do `lapply` mais interno (`imax.year`) até o mais externo (`imax.gauge`).
+
+#### Iterar em cada ano
+
+Supondo que estamos trabalhando com uma estação já selecionada `gauge`, para uma duração `d`. Vamos começar importanto nosso conjunto de estações subdiárias com o pacote [`arrow`](https://arrow.apache.org/docs/r/) para leitura de arquivos do tipo .PARQUET:
+
+```{r ler df_data}
+#| message: false
+# Instalar pacote 'pacman' se necessário
+if(!require(pacman)) install.packages("pacman")
+pacman::p_load(pacman, arrow, RcppRoll, lubridate)
+
+# Ler séries subdiárias
+df_data <- arrow::read_parquet(file = "base/gerados/df_subdaily_data.parquet")
+```
+
+`df_data` contém as séries das estações, ainda precisamos completar as datas parar analisar possíveis falhas. Usaremos a função `fun_filter_set()` localizada em "scripts/funcoes/fun_filter_set.R". Essa função é uma versão da função `fun_fill_dates()` que possibilita ainda filtragem das estações por percentual mínimo de falhas anuais e número mínimo de anos por estação. Usaremos, porém, sem esses filtros:
+
+```{r completar datas}
+#| message: false
+#| freeze: true
+
+# Chamar função
+source("scripts/funcoes/fun_filter_set.R")
+
+# Completar datas das séries
+df_data <- fun_filter_set(data = df_data, # tbl_df c/ séries das estações
+                          filter = FALSE, # FALSE p/ não aplicar filtros
+                          aux_path = "scripts/funcoes/fun_fill_dates.R") # fun_fill_dates
+
+```
+
+```{r limpar memória}
+#| echo: false
+#| message: false
+
+# Limpar memória
+invisible(gc())
+```
+
+```{r escolher estação}
+#| freeze: true
+gauge <- "432300204A"
+data.gauge <- df_data[df_data$gauge_code == gauge,]
+
+```
+
+Para exemplificar a aplicação de cada etapa, vamos primeiro selecionar uma estação para análise: a estação `r gauge`. Filtrando de `df_data`, extraimos somentre as observações referentes à estação em `data.gauge`. Vamos primeiro agregar as lâminas para a duração `d` desejada (30 minutos por exemplo) utilizando a função `roll_sum`. Essa função toma como argumento um vetor numérico com os dados que deverão ser utilizados (`x`); o tamanho da janela sobre a qual a função aplicará a soma (`n`); como serão preenchidas as pontas (`fill`) e em qual das pontas não será preenchida (`align`). Passamos também o argumento `na.rm = TRUE`, já que queremos preservar o valor da soma na janela, mesmo que ela contenha algum registro com falha.
+
+Antes, porém, vamos filtrar as observações com base em um vetor de meses (`which.mon`) e extrair algumas informações sobre a estação selecionada: série de datas (`dates`), série de lâminas (`depths`) e a resolução "base" da estação, ou seja, o tempo padrão entre registros consecutivos (`d.base.hr`).
+
+```{r agregação}
+#| freeze: true
+
+# Extrair datas, lâminas e resolução
+names <- c("datetime", "rain_mm")       # nome das colunas relevantes p/ análise
+which.mon <- 1:12                       # sequência de meses de 1 (janeiro) a 12 (dezembro)
+mon.idx <- lubridate::month(data.gauge[[names[1]]]) %in% which.mon # TRUE/FALSE se mês está contindo em 'which.mon'
+data.gauge <- data.gauge[mon.idx,]      # filtrar somente meses em 'which.mon'
+dates <- data.gauge[[names[1]]]         # extrair datas
+depths <- data.gauge[[names[2]]]        # extrair lâminas
+years <- unique(lubridate::year(dates)) # extrair anos da estação
+d.base.hr <- as.numeric(dates[2] - dates[1], units = "hours") # resolução base da estação
+
+
+# Definir uma duração
+d <- 7
+```
+
+Se dividirmos `d` por `d.base.hr`, teremos o tamanho da janela que será agregada. No nosso caso, temos uma duração de `r d` horas e uma duração base de `r d.base.hr` horas (`r d.base.hr*60` minutos), portanto nossa janela será de `r round(d/d.base.hr)`.
+
+```{r roll_sum}
+#| freeze: true
+# Agregar lâminas
+depth.agg <- RcppRoll::roll_sum(x = depths,             # vetor c/ dados de precipitação
+                                n = round(d/d.base.hr), # tamanho da janela móvel
+                                na.rm = TRUE,           # manter soma qdo houver NA
+                                fill = NA,              # preencher pontas c/ NA
+                                align = "left")         # alinhar janela no índice
+
+```
+
+Sendo uma operação em janela móvel, o vetor `depth.agg` deve retornar o mesmo número de observações em `depths`. Agora com o vetor acumulado, transformamos em intensidade (`intensity.agg`) e encontramos o máximo referente a esse ano. Como dito anteriormente, isso será feito utilizando um `lapply` que itera sobre cada ano da estação de `r min(years)` até `r max(years)`, portanto, devemos transformar `years` em uma lista antes.
+
+Filtramos primeiro o vetor `intensity.agg` para manter somente as observações em determinado ano de `years`. Em seguida determinamos a posição em que se encontra o máximo utilizando a função `which.max()`, a qual permitirá encontrar a posição da data em que ocorre o máximo e do valor máximo em si. É importante ressaltar que, como estamos aplicando a função para todo o conjunto de dados sem verificar sua qualidade previamente, precisaremos prever possiveis falhas, como por exemplo encontrarmos um ano inteiro com falhas (`NA`). Em casos como esse, a função `which.max()` retornará um objeto vazio e não conseguiremos determinar o máximo. O código abaixo lida com essa situação.
+
+```{r máximo anual}
+#| freeze: true
+
+# Intensidade
+intensity.agg <- depth.agg/d
+
+# Calcular máximos anuais
+imax.year <- lapply(X = years, FUN = function(yr){
+  
+  year.idx <- lubridate::year(dates) == yr # índices das observações do ano 'yr'
+  intensity.yr <- intensity.agg[year.idx]  # filtrar intensidades em 'yr'
+  date.yr <- dates[year.idx]               # filtrar datas em 'yr'
+  na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
+  na.prct <- na.yr/(length(intensity.yr))  # % NAs em 'yr'
+  max.idx <- which.max(intensity.yr)       # índice do máximo em 'yr'
+  
+  # Verificar se é ano de falha, senão extrair máximos
+  if(length(max.idx) == 0){
+    imax.yr <- as.numeric(NA)
+    date.max <- as.numeric(NA)
+  } else{
+    imax.yr <- intensity.yr[[max.idx]] # extrair máximo anual
+    date.max <- date.yr[[max.idx]]     # extrair data do máximo anual
+  }
+  
+  out <- data.frame("gauge_code" = gauge, # código da estação
+                    "d" = d,              # duração [h]
+                    "imax_mmh" = imax.yr, # intensidade máxima anual [mm/h]
+                    "date" = date.max,    # data em que ocorre o máximo
+                    "year" = yr,          # ano em que ocorre o máximo (alterar dps p/ ano_hidro)
+                    "na_prct" = na.prct,  # porcentagem de falhas por ano
+                    "mon_filter" = deparse(which.mon)) # meses usados p/ análise
+  
+}) # fim imax.year
+
+# Transformar em  tbl_df
+imax.year <- do.call(rbind, imax.year)
+```
+
+Obtemos então as seguintes intensidades máximas para a duração de `r d*60` minutos da estação `r gauge`:
+
+```{r tabela imax.year}
+#| freeze: true
+#| echo: false
+#| label: tbl-imax-year
+#| tbl-cap: Máximos anuais para uma duração de uma estação.
+
+knitr::kable(imax.year, digits = 2, align = "c")
+```
+
+#### Iterar em cada duração
+
+Agora precisamos somente repetir o processo acima para cada duração contida em um vetor:
+
+```{r lapply durações}
+#| freeze: true
+
+# Exemplos de durações
+durations <- c(1, 4, 8, 12, 24)
+
+# Iterar sobre cada duração
+imax.duration <- lapply(X = durations, FUN = function(d){
+  
+  # Agregar lâminas
+  depth.agg <- RcppRoll::roll_sum(x = depths,             # vetor c/ dados de precipitação
+                                  n = round(d/d.base.hr), # tamanho da janela móvel
+                                  na.rm = TRUE,           # manter soma qdo houver NA
+                                  fill = NA,              # preencher pontas c/ NA
+                                  align = "left")         # alinhar janela no índice
+  
+  # Intensidade
+  intensity.agg <- depth.agg/d
+  
+  # Calcular máximos anuais
+  imax.year <- lapply(X = years, FUN = function(yr){
+    
+    year.idx <- lubridate::year(dates) == yr # índices das observações do ano 'yr'
+    intensity.yr <- intensity.agg[year.idx]  # filtrar intensidades em 'yr'
+    date.yr <- dates[year.idx]               # filtrar datas em 'yr'
+    na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
+    na.prct <- na.yr/(length(intensity.yr))  # % NAs em 'yr'
+    max.idx <- which.max(intensity.yr)       # índice do máximo em 'yr'
+  
+  # Verificar se é ano de falha, senão extrair máximos
+  if(length(max.idx) == 0){
+    imax.yr <- as.numeric(NA)
+    date.max <- as.numeric(NA)
+  } else{
+    imax.yr <- intensity.yr[[max.idx]] # extrair máximo anual
+    date.max <- date.yr[[max.idx]]     # extrair data do máximo anual
+  }
+  
+  out <- data.frame("gauge_code" = gauge, # código da estação
+                    "d" = d,              # duração [h]
+                    "imax_mmh" = imax.yr, # intensidade máxima anual [mm/h]
+                    "date" = date.max,    # data em que ocorre o máximo
+                    "year" = yr,          # ano em que ocorre o máximo (alterar dps p/ ano_hidro)
+                    "na_prct" = na.prct,  # porcentagem de falhas por ano
+                    "mon_filter" = deparse(which.mon)) # meses usados p/ análise
+  
+}) # fim imax.year
+
+# Transformar em  tbl_df
+imax.year <- do.call(rbind, imax.year)
+  
+}) # fim imax.duration
+
+# Transformar em  tbl_df
+imax.duration <- do.call(rbind, imax.duration)
+```
+
+Como resultado do segundo `lapply()`, agora pelas durações, `imax.duration` para a estação `r gauge` conterá os máximos para os anos de `r min(years)` até `r max(years)` para cada uma das durações `r durations`.
+
+```{r tabela imax.duration}
+#| echo: false
+#| label: tbl-imax-duration
+#| tbl-cap: Máximos anuais para diferentes durações de uma estação.
+#| freeze: true
+
+knitr::kable(imax.duration[imax.duration$year == min(years),], digits = 2, align = "c")
+
+```
+
+#### Iterar em cada estação
+
+A última etapa é simplesmente iterar sobre o conjunto de estações. Dividiremos `df_data` com a função `split()` em uma lista em que cada objeto contém o `data.frame` referente a uma estação e aplicaremos a cada uma delas os dois `lapply()`'s anteriores.
+
+```{r lapply estações}
+#| freeze: true
+
+# Dividir df_data
+data <- split(df_data, f = df_data$gauge_code)
+
+# Iterar sobre cada estação
+imax.gauge <- pbapply::pblapply(X = names(data), FUN = function(gauge){
+  
+  data.gauge <- data[[gauge]]
+  
+  mon.idx <- lubridate::month(data.gauge[[names[1]]]) %in% which.mon
+  data.gauge <- data.gauge[mon.idx,]
+  dates <- data.gauge[[names[1]]]
+  depths <- data.gauge[[names[2]]]
+  d.base.hr <- as.numeric(dates[2] - dates[1], units = "hours")
+  
+  imax.duration <- lapply(X = durations, FUN = function(d){
+    
+    depth.agg <- RcppRoll::roll_sum(x = depths,
+                                    n = round(d/d.base.hr),
+                                    na.rm = TRUE,
+                                    fill = NA,
+                                    align = "left")
+    
+    years <- unique(lubridate::year(dates))
+    intensity.agg <- depth.agg/d
+    
+    imax.year <- lapply(X = years, FUN = function(yr){
+      
+      year.idx <- lubridate::year(dates) == yr
+      intensity.yr <- intensity.agg[year.idx]
+      date.yr <- dates[year.idx]
+      na.yr <- sum(is.na(depths)[year.idx])
+      na.prct <- na.yr/length(intensity.yr)
+      max.idx <- which.max(intensity.yr)
+      
+      if(length(max.idx) == 0){
+        imax.yr <- as.numeric(NA)
+        date.max <- as.numeric(NA)
+      } else{
+        imax.yr <- intensity.yr[[max.idx]]
+        date.max <- date.yr[[max.idx]]
+      }
+      
+      out <- data.frame("gauge_code" = gauge,
+                        "d" = d,
+                        "imax" = imax.yr,
+                        "date" = date.max,
+                        "year" = yr,
+                        "na_prct" = na.prct,
+                        "mon_filter" = deparse(which.mon))
+      
+    })
+    
+    imax.year <- do.call(rbind, imax.year)
+    
+  })
+  
+  imax.duration <- do.call(rbind, imax.duration)
+  
+})
+
+imax.gauge <- do.call(rbind, imax.gauge)
+
+invisible(gc())
+```
+
+### Função completa
+
+Juntando todas as etapas em uma única função e adicionando algumas verificações, temos:
+
+```{r função completa}
+
+fun_imax_agg <- function(data,             # lista contendo as séries das estações
+                         durations,        # vetor c/ durações desde a duração base (em horas)
+                         which.mon = 1:12, # subconjunto de meses se desejado
+                         names = c("datetime", "rain_mm") # nome das colunas, nessa ordem 
+                         ){
+  
+  # Pacotes
+  if(!require(pacman)){
+    message("Instalando pacote 'pacman'...")
+    install.packages("pacman")
+  }
+  pacman::p_load(pacman, RcppRoll, pbapply, lubridate)
+  
+  # Confere se o argumento 'data' é uma lista
+  if(!inherits(data, "list")){
+    stop("'data' deve ser uma lista, e não: ", class(data), ".\n")
+  }
+  
+  # Vetor de estações
+  gauges <- names(data)
+  
+  # Iterar sobre cada estação
+  imax.gauge <- pbapply::pblapply(X = gauges, FUN = function(gauge){
+    
+    # Extrair data.frame da estação 'gauge'
+    data.gauge <- data[[gauge]]
+    
+    # Confere se a lista contém data.frames
+    if(!is.data.frame(data.gauge)){
+      stop("Elements of 'data' must be data.frames. But element ", gauge, " contains: ", class(data.gauge))
+    }
+    
+    # Usa is.element() parar conferir se os nomes do argumento 'names' são os mesmos nomes das colunas dos data.frames
+    if(sum(is.element(names[1:2], names(data.gauge))) != 2){
+      stop("Data.frame of station ", station, " does not contain $", names[1], " or $", names[2], ".")
+    }
+    
+    # Processar uma estação
+    mon.idx <- lubridate::month(data.gauge[[names[1]]]) %in% which.mon # TRUE/FALSE se mês está contindo em 'which.mon'
+    data.gauge <- data.gauge[mon.idx,] # filtrar somente meses em 'which.mon'
+    dates <- data.gauge[[names[1]]]    # extrair vetor c/ datas
+    depths <- data.gauge[[names[2]]]   # extrair vetor c/ lâminas
+    
+    # Conferir se durações são múltiplas da resolução 'base' da estação
+    d.base.hr <- as.numeric(dates[2] - dates[1], units = "hours") # diferença entre 2ª e 1ª 'datetime'
+    if(any((durations/d.base.hr) %% 1 > 1e-8)){
+      stop("Pelo menos uma das durações de agregação não é múltipla da resolução base de ", d.base.hr*60, " min na estação ", gauge, ".")
+    }
+    
+    # Iterar sobre cada duração
+    imax.duration <- lapply(X = durations, FUN = function(d){
+      
+      # Vetor de somas móveis de precipitação
+      depth.agg <- RcppRoll::roll_sum(x = depths,             # vetor c/ dados de precipitação
+                                      n = round(d/d.base.hr), # tamanho da janela móvel
+                                      fill = NA,              # preencher as pontas c/ NA
+                                      align = "left")         # alinhas janela no índice i (NAs no final)
+      
+      # Auxiliares
+      # data.gauge$year <- lubridate::year(data.gauge[[names[1]]])         # adicionar coluna c/ anos (alterar dps p/ 'hydro_year')
+      years <- unique(lubridate::year(dates)) # vetor c/ valores únidos dos anos da estação 'gauge'
+      
+      # Converter soma acumulada em intensidade/hora
+      intensity.agg <- depth.agg/d
+      
+      # Calcular máximos anuais
+      imax.year <- lapply(X = years, FUN = function(yr){
+        
+        year.idx <- lubridate::year(dates) == yr # índices p/ filtrar anos
+        intensity.yr <- intensity.agg[year.idx]  # filtrar intensidades em 'yr'
+        date.yr <- dates[year.idx]               # filtrar datas em 'yr'
+        na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
+        na.prct <- na.yr/length(intensity.yr)    # porcentagem de NAs no ano
+        max.idx <- which.max(intensity.yr)       # posição do máximo
+        
+        # Conferir se o ano inteiro é NA, senão extrair os máximos
+        if(length(max.idx) == 0){
+          imax.yr <- as.numeric(NA)
+          date.max <- as.numeric(NA)
+        } else{
+          imax.yr <- intensity.yr[[max.idx]] # extrair máximo anual
+          date.max <- date.yr[[max.idx]]     # extrair data do máximo anual
+        }
+        
+        out <- data.frame("gauge_code" = gauge, # código da estação
+                          "d" = d,              # duração [h]
+                          "imax" = imax.yr,     # intensidade máxima anual [mm/h]
+                          "date" = date.max,    # data em que ocorre o máximo             
+                          "year" = yr,          # ano em que ocorre o máximo (alterar dps p/ ano_hidro)
+                          "na_prct" = na.prct,  # porcentagem de falhas por ano
+                          "mon_filter" = deparse(which.mon)) # meses usados p/ análise
+        
+      }) # fim 'imax.year'
+      
+      # Transformar em  tbl_df
+      imax.year <- do.call(rbind, imax.year)
+      
+    }) # fim 'imax.duration'
+    
+    # Transformar em tbl_df
+    imax.duration <- do.call(rbind, imax.duration)
+    
+  }) # fim 'imax.gauge'
+  
+  return(do.call(rbind, imax.gauge))
+  
+}
+
+```
+
+## Aplicação da função
+
+O script em R "scripts/script_agg_imax_subdiario.R" contém uma aplicação direta do que será descrito a seguir. Inicialmente vamos reunir todas as funções que já utilizamos ou utilizaremos adiante:
+
+-   `fun_filter_set()`: utilizada para completar as datas nas séries históricas de cada estação de acordo com sua resolução temporal padrão e filtrar estações caso desejado (não é o caso nesta aplicação). Esta função já foi utilizada anteriormente para gerar nossa versão atual de `df_data`;
+-   `fun_group_by_ts()`: utilizada para agrupar as estações conforme sua resolução temporal, retornando uma lista em que cada objeto é nomeado conforme o campo `time_steps` dos `data.frame`'s;
+-   `fun_imax_agg()`: utilizada para agregar as lâminas registradas de cada estações em diferentes durações e extrair a intensidade máxima anual para cada duração,
+
+```{r source funções}
+
+# Funções
+source("scripts/funcoes/fun_filter_set.R")        # preencher datas e filtrar
+source("scripts/funcoes/fun_group_by_timestep.R") # agrupar por time_step
+source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e calcular intensidade máxima anual
+
+```
+
+A primeira etapa seria completar as datas das séries temporais:
+<!-- "eval: false" pq isso já foi feito anteriormente e não precisa repetir o processamento -->
+
+```{r}
+#| eval: false
+
+# Preencher datas
+df_data <- fun_filter_set(data = df_data, filter = FALSE); invisible(gc())
+
+```
+
+Usando `df_data` já com as datas completas, precisaremos dividir as estações em grupos de mesma resolução. Isso poderá ser feito com a função auxiliar `fun_group_by_ts()`. Para aplicar essa função primeiro dividiremos `df_data` em uma lista contendo, em cada objeto, o `data.frame` referente para cada estação:
+
+```{r split e agrupar por duração}
+
+data.ls <- split(df_data, f = df_data$gauge_code)
+data.by.time <- fun_group_ts(data.ls, ts_name = "time_steps")
+time.steps <- names(data.by.time)
+
+```
+
+No nosso conjunto, temos estações com as seguintes resoluções: `r time.steps`. Vamos selecionar durações nas escalas subdiária e diária e como nem todas as durações serão compatíveis com as resoluções bases das estações, faremos um vetor com durações gerais de 10 minutos até 10 dias que depois poderão ser filtradas conforme a resolução da estação.
+
+```{r durações}
+
+# Durações
+d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 24)) # durações subdiárias
+d.daily <- c(1, 2, 3, 4, 5, 7, 10)         # durações diárias
+durations <- c(d.subdaily, d.daily*24)     # durações
+
+cat(durations)
+
+```
+
+Finalmente, vamos aplicar a função que escrevemos `fun_imax_agg()` para cada um dos grupos de estações em `data.by.time` e salvar os resultados como `df_imax.parquet`.
+
+```{r aplicar `fun_imax_agg`}
+#| eval: false
+
+# Aplicar função 'fun_imax_agg' p/ cada grupo de durações
+imax.ls <- lapply(X = time.steps, FUN = function(ts){
+  
+  current.ts <- data.by.time[[ts]] # extrair listas de estações c/ resolução 'ts'
+  ds <- as.numeric(ts)/3600        # segundos p/ horas
+  valid.durations <- durations[(durations/ds) %% 1 < 1e-8] # selecionar somente durações compatíveis c/ a resolução 'ts'
+  
+  message(paste0("\nProcessando conjunto de estações com resolução de ", ds*60, " minutos..."))
+  
+  out <- fun_imax_agg(data = current.ts,
+                      durations = valid.durations,
+                      which.mon = 1:12,
+                      names = c("datetime", "rain_mm"))
+  
+}) # fim 'imax.ls'
+
+rm(df_data, data.ls, data.by.time); invisible(gc())
+
+# Nomear lista
+names(imax.ls) <- time.steps
+
+# Salvar resultados
+arrow::write_parquet(x = bind_rows(imax.ls), sink = "base/gerados/df_imax.parquet")
+
+```
+
+Para ler os dados posteriormente, basta rodar:
+
+```{r}
+#| eval: false
+
+# Ler arquivo c/ intensidades máximas
+df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
+```
+
