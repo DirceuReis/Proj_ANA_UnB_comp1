@@ -2,8 +2,6 @@
 title: "Análise de Dados Subdiários"
 date: last-modified
 date-format: "DD/MM/YYYY HH:mm:ss"
-execute: 
-  freeze: auto
 ---
 
 # Leitura dos dados

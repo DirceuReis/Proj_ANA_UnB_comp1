@@ -3,8 +3,6 @@ title: "Estatísticas descritivas"
 bibliography: "referencias/ref_modelos.bib"
 date: last-modified
 date-format: "DD/MM/YYYY HH:mm:ss"
-execute: 
-  freeze: auto
 ---
 
 ```{r}

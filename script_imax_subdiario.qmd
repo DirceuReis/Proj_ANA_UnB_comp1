@@ -1,7 +1,8 @@
 ---
 title: "Máximos anuais de intensidade"
 author: tqduval@gmail.com
-date: today
+date: last-modified
+date-format: "DD/MM/YYYY HH:mm:ss"
 ---
 
 ## Intensidades máximas anuais: função `fun_imax_agg()`
@@ -469,8 +470,7 @@ source("scripts/funcoes/fun_imax_agg.R")          # agregar por durações e cal
 
 ```
 
-A primeira etapa seria completar as datas das séries temporais:
-<!-- "eval: false" pq isso já foi feito anteriormente e não precisa repetir o processamento -->
+A primeira etapa seria completar as datas das séries temporais: <!-- "eval: false" pq isso já foi feito anteriormente e não precisa repetir o processamento -->
 
 ```{r}
 #| eval: false
@@ -542,4 +542,3 @@ Para ler os dados posteriormente, basta rodar:
 # Ler arquivo c/ intensidades máximas
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
 ```
-
