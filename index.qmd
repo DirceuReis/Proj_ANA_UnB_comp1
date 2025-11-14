@@ -22,7 +22,7 @@ subtitle: "Componente 1 do projeto Riscos de eventos extremos: drenagem urbana e
 -   Bruna Dias Silva (Aluna de doutorado do IG/UnB)
 -   Eduardo de Queiroz Nascimento (aluno de graduação da UnB)
 -   Jonnatha Teixeira Valerio (aluno de graduação da UnB)
--   Tomás Antonio Quezado Duval (Aluno de mestardo do PTARH/UnB)
+-   Tomás Antonio Quezado Duval (Aluno de mestrado do PTARH/UnB)
 
 ### Colaboradores
 
