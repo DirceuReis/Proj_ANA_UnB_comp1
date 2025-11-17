@@ -1,3 +1,12 @@
+# Organização dos scripts de execução:
+Os códigos executados neste projeto contam com uma versão em R acompanhada de uma versão escrita em QMD -- utilizada para gerar as páginas no site -- que apresentam um nível de detalhe maior sobre o funcionamento do código.
+
+Todos os dados/resultados produzidos neste projeto foram gerados a partir dos scripts em R (pasta scripts/). A ordem de execução é a seguinte:
+-   script_leitura_subdiario.R;
+-   script_agg_imax_subdiario.R;
+-   script_descricao_subdiario.R;
+-   ...
+
 # Git
 
 ## Resolução de conflitos

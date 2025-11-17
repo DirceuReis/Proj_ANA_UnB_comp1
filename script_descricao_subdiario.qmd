@@ -5,33 +5,111 @@ date: last-modified
 date-format: "DD/MM/YYYY HH:mm:ss"
 ---
 
-```{r}
+```{r pacotes}
+#| message: false
+
 # Pacotes
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(pacman, tidyverse, ggplot2, arrow)
 ```
 
-O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em "scripts/funcoes" foi criada uma função `fun_filter_set.R`, que combina a função `fun_fill_dates.R` -- que preenche as datas das séries -- e a funçãõ `fun_filter_set()` definida no script `script_leitura_subdiario.qmd` -- que filtra as estações, mantendo somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.
+O objetivo deste documento (e do respectivo [script](scripts/script_descricao_subdiario.R)) é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários e máximos anuais de intensidade. Analisaremos também a forma dos dados, focando especialmente na cauda das distribuições das séries através das razões de L-momentos e a existência de relações entre máximos de durações diferentes, avaliando a hipótese de invariância de escala.
+
+## Qualidade dos dados
+
+Em [Geração das intensidades máximas anuais](script_imax_subdiario.qmd), foram apresentadas as etapas de processamento necessárias para gerar o dado de intensidades máximas anuais para cada estação do conjunto de 383. Nessa construção, adicionamos um campo `na_prct` nos dataframes resultantes que apresenta, baseado na resolução temporal padrão ($\Delta t$) de cada estação, o percentual de falha para um dado ano com $n$ observações calculado como:
+
+$$ 
+\% \text{ Falha} = \frac{\sum_{i=1}^n(\mathbb{1}_{x\ =\ \texttt{NA}})}{n} 
+= \frac{\texttt{sum(is.na(x))}}{\texttt{length(x)}}. \\
+$$
+
+`na_prct` é calculado sempre com base no vetor `depths` de cada estação, independente da duração que esteja sendo analisada no momento da iteração na função `fun_imax_agg()`, ou seja, os valores se repetem para durações diferentes.
 
 ```{r importar e filtrar dados}
-# Critérios p/ filtrar séries
-na_accept <- 0.2
-min_years <- 8
 
-# Importar
-df_data <- arrow::read_parquet("base/gerados/df_subdaily_data.parquet")
-source("scripts/funcoes/fun_filter_set.R")
+# Importar intensidades máximas anuais
+df_imax <- arrow::read_parquet("base/gerados/df_imax.parquet")
 
-# Aplicar funções
-df_data <- fun_filter_set(data = df_data,
-                          na_accept = na_accept,
-                          min_years = min_years); gc()
 ```
 
-@Papalexiou.2013 apresentam o seguinte conjunto de estatísticas descritivas básicas:
+Começamos isolando somente as colunas `gauge_code`, `year` e `na_prct` de `df_imax`. Queremos avaliar, para diferentes limites de falhas anuais, quantos anos disponíveis temos.
+
+```{r}
+# Manter somente estação, falhas e anos
+df.quality <- df_imax %>% 
+  select(gauge_code, year, na_prct) %>% 
+  group_by(gauge_code, year) %>% 
+  reframe(na_prct = first(na_prct)*100)
+```
+
+`df.quality` contém somente 1 valor de percentual de falha para determinado ano de determinada estação. Vamos criar agora 2 vetores: `thresholds`, que conterá diferentes percentuais de falha; e `min.years`, contendo o número mínimo mínimo de anos que atendem o critério de falha. Nosso objetivo é ter uma perspectiva geral de quantas estações temos no nosso conjunto que possuem pelo menos $N$ anos de dados com no máximo $X$% de falhas.
+
+```{r}
+
+# Limites de falha e mínimo de anos
+thresholds <- seq(10, 40, 10) # limites de falha, de 10 a 40%
+min.years <- 1:10             # ao menos 1 ano até ao menos 10 anos de dados completos
+
+# Criar tbl_df c/ possibilidades de falha e anos
+grid <-
+  expand_grid(threshold = thresholds, min_years = min.years) %>%       # combinações
+  mutate(n_gauges = purrr::map2_int(.x = threshold, .y = min_years, ~{ # analisar qtas estações p/ cada par
+    df.quality %>% 
+      filter(na_prct <= .x) %>% # filtrar estações c/ no máximo 'threshold' falhas
+      count(gauge_code) %>%     # contar qtas estações
+      filter(n >= .y) %>%       # filtrar estações c/ no mínimo 'min_years' anos
+      nrow()                    # contar qtas estações
+  }))
+
+```
+
+Usamos a função `dplyr::expand_grid()` para criar um `data.frame` com as combinações entre `thresholds` e `min.years`. A partir dessas combinações, a função `purrr::map2()` é usada para computar um conjunto de operações entre duas variáveis `.x = threshold` e `.y = min_years`, operação essa indicada por `~{...}`, o qual calcula o número de estações corerspondentes aos critérios. Os resultados são apresentados na @fig-anos-estacao abaixo.
+
+```{r}
+#| echo: false
+#| label: fig-anos-estacao
+#| fig-cap: Número de anos por estação para diferentes limiares de falha anual.
+
+# Visualização
+cores <- c("green4", "lightgreen", "orange", "#F10000")
+grid %>% 
+  mutate(threshold = factor(threshold, levels = thresholds)) %>% # ordenar valores de 'threshold'
+  ggplot(aes(x = min_years, y = n_gauges, fill = threshold)) +
+  geom_col() +
+  geom_text(aes(label = n_gauges), vjust = -0.3, size = 3, family = "serif") +
+  facet_wrap(~threshold, nrow = 4, labeller = labeller(threshold = function(x) paste0(x, "% falhas"))) +
+  scale_x_continuous(breaks = seq(min(grid$min_years), max(grid$min_years), by = 1)) +
+  scale_y_continuous(limits = c(0, 450)) +
+  scale_fill_manual(values = cores) +
+  labs(x = "Número de anos por estação",
+       y = "Número de estações") +
+  theme_minimal() +
+  theme(strip.text = element_text(face = "bold"),
+        legend.position =  "none",
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(size = 10, family = "serif"))
+```
+
+## Forma dos dados
+
+Analisando um conjunto global de precipitações diárias, @Papalexiou.2013 apresentam o seguinte conjunto de estatísticas descritivas básicas:
 
 ```{r estatisticas papalexiou}
+#| echo: false
 #| label: fig-papalexiou-estatisticas
 #| fig-cap: Estatísticas descritivas básicas de @Papalexiou.2013.
 knitr::include_graphics("figuras/basic_summary_statistics_papalexiou_2013.png")
 ```
+
+@vogel2024 discutem como a L-assimetria ($\hat\tau_4$) pode ser utilizada como um indicador de que o dado se distribui com cauda pesada.
+
+## Relações entre durações
+
+
+## Sazonalidade
+
+## Referências
+::: {#refs}
+:::

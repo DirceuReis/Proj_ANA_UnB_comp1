@@ -121,6 +121,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -166,7 +195,7 @@ div.csl-indent {
  <span class="dropdown-text">Análise e descrição dos subdiários</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_imax_subdiario.html">
+    <a class="dropdown-item" href="./script_imax_subdiario.qmd vss">
  <span class="dropdown-text">Geração das intensidades máximas anuais</span></a>
   </li>  
     </ul>
@@ -222,7 +251,17 @@ div.csl-indent {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#qualidade-dos-dados" id="toc-qualidade-dos-dados" class="nav-link active" data-scroll-target="#qualidade-dos-dados">Qualidade dos dados</a></li>
+  <li><a href="#forma-dos-dados" id="toc-forma-dos-dados" class="nav-link" data-scroll-target="#forma-dos-dados">Forma dos dados</a></li>
+  <li><a href="#relações-entre-durações" id="toc-relações-entre-durações" class="nav-link" data-scroll-target="#relações-entre-durações">Relações entre durações</a></li>
+  <li><a href="#sazonalidade" id="toc-sazonalidade" class="nav-link" data-scroll-target="#sazonalidade">Sazonalidade</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -240,7 +279,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">14/11/2025 10:30:51</p>
+      <p class="date">17/11/2025 12:28:46</p>
     </div>
   </div>
   
@@ -254,51 +293,67 @@ div.csl-indent {
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacotes</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Carregando pacotes exigidos: pacman</code></pre>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, ggplot2, arrow)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>O objetivo deste script é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários de interesse. Em “scripts/funcoes” foi criada uma função <code>fun_filter_set.R</code>, que combina a função <code>fun_fill_dates.R</code> – que preenche as datas das séries – e a funçãõ <code>fun_filter_set()</code> definida no script <code>script_leitura_subdiario.qmd</code> – que filtra as estações, mantendo somente aquelas que atendam os critérios de tolerância de falhas e mínimo de anos.</p>
+<p>O objetivo deste documento (e do respectivo <a href="scripts/script_descricao_subdiario.R">script</a>) é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários e máximos anuais de intensidade. Analisaremos também a forma dos dados, focando especialmente na cauda das distribuições das séries através das razões de L-momentos e a existência de relações entre máximos de durações diferentes, avaliando a hipótese de invariância de escala.</p>
+<section id="qualidade-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="qualidade-dos-dados">Qualidade dos dados</h2>
+<p>Em <a href="./script_imax_subdiario.html">Geração das intensidades máximas anuais</a>, foram apresentadas as etapas de processamento necessárias para gerar o dado de intensidades máximas anuais para cada estação do conjunto de 383. Nessa construção, adicionamos um campo <code>na_prct</code> nos dataframes resultantes que apresenta, baseado na resolução temporal padrão (<span class="math inline">\(\Delta t\)</span>) de cada estação, o percentual de falha para um dado ano com <span class="math inline">\(n\)</span> observações calculado como:</p>
+<p><span class="math display">\[
+\% \text{ Falha} = \frac{\sum_{i=1}^n(\mathbb{1}_{x\ =\ \texttt{NA}})}{n}
+= \frac{\texttt{sum(is.na(x))}}{\texttt{length(x)}}. \\
+\]</span></p>
+<p><code>na_prct</code> é calculado sempre com base no vetor <code>depths</code> de cada estação, independente da duração que esteja sendo analisada no momento da iteração na função <code>fun_imax_agg()</code>, ou seja, os valores se repetem para durações diferentes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Critérios p/ filtrar séries</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>na_accept <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>min_years <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar intensidades máximas anuais</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_imax.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Começamos isolando somente as colunas <code>gauge_code</code>, <code>year</code> e <code>na_prct</code> de <code>df_imax</code>. Queremos avaliar, para diferentes limites de falhas anuais, quantos anos disponíveis temos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manter somente estação, falhas e anos</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df.quality <span class="ot">&lt;-</span> df_imax <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gauge_code, year, na_prct) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, year) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">na_prct =</span> <span class="fu">first</span>(na_prct)<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>df.quality</code> contém somente 1 valor de percentual de falha para determinado ano de determinada estação. Vamos criar agora 2 vetores: <code>thresholds</code>, que conterá diferentes percentuais de falha; e <code>min.years</code>, contendo o número mínimo mínimo de anos que atendem o critério de falha. Nosso objetivo é ter uma perspectiva geral de quantas estações temos no nosso conjunto que possuem pelo menos <span class="math inline">\(N\)</span> anos de dados com no máximo <span class="math inline">\(X\)</span>% de falhas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Limites de falha e mínimo de anos</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>thresholds <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">10</span>) <span class="co"># limites de falha, de 10 a 40%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>min.years <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>             <span class="co"># ao menos 1 ano até ao menos 10 anos de dados completos</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Importar</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_subdaily_data.parquet"</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_filter_set.R"</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar funções</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df_data <span class="ot">&lt;-</span> <span class="fu">fun_filter_set</span>(<span class="at">data =</span> df_data,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">na_accept =</span> na_accept,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">min_years =</span> min_years); <span class="fu">gc</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Preenchendo datas...</code></pre>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Criar tbl_df c/ possibilidades de falha e anos</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">threshold =</span> thresholds, <span class="at">min_years =</span> min.years) <span class="sc">%&gt;%</span>       <span class="co"># combinações</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_gauges =</span> purrr<span class="sc">::</span><span class="fu">map2_int</span>(<span class="at">.x =</span> threshold, <span class="at">.y =</span> min_years, <span class="sc">~</span>{ <span class="co"># analisar qtas estações p/ cada par</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    df.quality <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(na_prct <span class="sc">&lt;=</span> .x) <span class="sc">%&gt;%</span> <span class="co"># filtrar estações c/ no máximo 'threshold' falhas</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(gauge_code) <span class="sc">%&gt;%</span>     <span class="co"># contar qtas estações</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n <span class="sc">&gt;=</span> .y) <span class="sc">%&gt;%</span>       <span class="co"># filtrar estações c/ no mínimo 'min_years' anos</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">nrow</span>()                    <span class="co"># contar qtas estações</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  }))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Estações ICEA, ANA, INMET...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Estações CEMADEN...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Aplicando filtros...</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           used  (Mb) gc trigger   (Mb)   max used    (Mb)
-Ncells  1547373  82.7    2465260  131.7    2465260   131.7
-Vcells 62548044 477.3 1075121876 8202.6 1343899818 10253.2</code></pre>
-</div>
-</div>
-<p><span class="citation" data-cites="Papalexiou.2013">Papalexiou, Koutsoyiannis, e Makropoulos (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span> apresentam o seguinte conjunto de estatísticas descritivas básicas:</p>
+<p>Usamos a função <code>dplyr::expand_grid()</code> para criar um <code>data.frame</code> com as combinações entre <code>thresholds</code> e <code>min.years</code>. A partir dessas combinações, a função <code>purrr::map2()</code> é usada para computar um conjunto de operações entre duas variáveis <code>.x = threshold</code> e <code>.y = min_years</code>, operação essa indicada por <code>~{...}</code>, o qual calcula o número de estações corerspondentes aos critérios. Os resultados são apresentados na <a href="#fig-anos-estacao" class="quarto-xref">Figura&nbsp;1</a> abaixo.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"figuras/basic_summary_statistics_papalexiou_2013.png"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-anos-estacao" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anos-estacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="script_descricao_subdiario_files/figure-html/fig-anos-estacao-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anos-estacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Número de anos por estação para diferentes limiares de falha anual.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="forma-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="forma-dos-dados">Forma dos dados</h2>
+<p>Analisando um conjunto global de precipitações diárias, <span class="citation" data-cites="Papalexiou.2013">Papalexiou, Koutsoyiannis, e Makropoulos (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span> apresentam o seguinte conjunto de estatísticas descritivas básicas:</p>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-papalexiou-estatisticas" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -306,21 +361,35 @@ Vcells 62548044 477.3 1075121876 8202.6 1343899818 10253.2</code></pre>
 <img src="figuras/basic_summary_statistics_papalexiou_2013.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-papalexiou-estatisticas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;1: Estatísticas descritivas básicas de <span class="citation" data-cites="Papalexiou.2013">Papalexiou, Koutsoyiannis, e Makropoulos (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span>.
+Figura&nbsp;2: Estatísticas descritivas básicas de <span class="citation" data-cites="Papalexiou.2013">Papalexiou, Koutsoyiannis, e Makropoulos (<a href="#ref-Papalexiou.2013" role="doc-biblioref">2013</a>)</span>.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-
-
-
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<p><span class="citation" data-cites="vogel2024">Vogel et al. (<a href="#ref-vogel2024" role="doc-biblioref">2024</a>)</span> discutem como a L-assimetria (<span class="math inline">\(\hat\tau_4\)</span>) pode ser utilizada como um indicador de que o dado se distribui com cauda pesada.</p>
+</section>
+<section id="relações-entre-durações" class="level2">
+<h2 class="anchored" data-anchor-id="relações-entre-durações">Relações entre durações</h2>
+</section>
+<section id="sazonalidade" class="level2">
+<h2 class="anchored" data-anchor-id="sazonalidade">Sazonalidade</h2>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">Referências</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Papalexiou.2013" class="csl-entry" role="listitem">
 Papalexiou, S. M., D. Koutsoyiannis, e C. Makropoulos. 2013. <span>«<span>How extreme is extreme? An assessment of daily rainfall distribution tails</span>»</span>. <em>Hydrology and Earth System Sciences</em> 17 (2): 851–62. <a href="https://doi.org/10.5194/hess-17-851-2013">https://doi.org/10.5194/hess-17-851-2013</a>.
 </div>
-</div></section></div></main> <!-- /main -->
+<div id="ref-vogel2024" class="csl-entry" role="listitem">
+Vogel, Richard M., Simon Michael Papalexiou, Jonathan R. Lamontagne, e Flannery C. Dolan. 2024. <span>«When Heavy Tails Disrupt Statistical Inference»</span>. <em>The American Statistician</em>, outubro, 1–15. <a href="https://doi.org/10.1080/00031305.2024.2402898">https://doi.org/10.1080/00031305.2024.2402898</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

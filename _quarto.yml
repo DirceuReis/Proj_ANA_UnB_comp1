@@ -19,10 +19,10 @@ website:
         menu: 
           - href: script_leitura_subdiario.qmd
             text: Leitura das séries de precipitação subdiária
-          - href: script_descricao_subdiario.qmd
-            text: Análise e descrição dos subdiários
           - href: script_imax_subdiario.qmd vss
             text: Geração das intensidades máximas anuais
+          - href: script_descricao_subdiario.qmd
+            text: Análise e descrição dos subdiários
       - text: "Revisão Bibliográfica"
         menu:
           - href: distr_chuva_intensa.qmd
