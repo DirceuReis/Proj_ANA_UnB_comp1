@@ -17,6 +17,7 @@ pacman::p_load(
   boot       # bootstrap
 )
 
+font_size <- 10
 
 # LER DADOS ---------------------------------------------------------------
 
@@ -141,8 +142,6 @@ df_slopes <- df_est %>%
   mutate(signf = p_value < 0.05)
 
 # Visualização
-font_size <- 10
-
 # Boxplot L-assimetria e L-curtose
 plot_tau3 <- df_est %>% 
   mutate(ds = as.factor(ds*60)) %>% 
@@ -194,53 +193,3 @@ plot_tau4_lm <- df_est %>%
 #        width = 210, height = 297, dpi = 300, units = "mm",
 #        # device = cairo_pdf,
 #        ) # cairo_pdf plota textos c/ fontes que não são padrão
-
-
-# RELAÇÕES ENTRE DURAÇÕES -------------------------------------------------
-
-# Calcular 1º e 2º momentos centrais p/ cada duração
-df.mom <- df_imax %>% 
-  group_by(d) %>% 
-  reframe(mean = mean(imax, na.rm = TRUE),
-          var = var(imax, na.rm = TRUE))
-
-# Visualização
-color <- c("mean" = "steelblue", "var" = "orange")
-plot.mom.scale <- ({
-  
-  df.mom %>%
-    pivot_longer(cols = c("mean", "var"),
-                 names_to = "moment",
-                 values_to = "value") %>% 
-    ggplot(aes(x = d, y = value)) +
-    facet_wrap(~moment, ncol = 2) +
-    geom_line() +
-    scale_x_log10() +
-    scale_y_log10() +
-    theme_minimal() +
-    theme(legend.position =  "none",
-          plot.background = element_rect(color = "white"),
-          panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(family = "Times New Roman", color = "black", size = 10))
-  
-  df.mom %>%
-    pivot_longer(cols = c("mean", "var"),
-                 names_to = "moment",
-                 values_to = "value") %>% 
-    ggplot(aes(x = d, y = value, color = moment)) +
-    geom_line() +
-    scale_x_log10() +
-    scale_y_log10() +
-    scale_color_manual(values = color) +
-    theme_minimal() +
-    theme(legend.position =  "none",
-          plot.background = element_rect(color = "white"),
-          panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(family = "Times New Roman", color = "black", size = 10))
-  
-})
-
-
-# SAZONALIDADE ------------------------------------------------------------
-
-

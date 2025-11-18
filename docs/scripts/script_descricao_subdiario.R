@@ -41,35 +41,36 @@ min.years <- 1:10             # ao menos 1 ano até ao menos 10 anos de dados co
 
 # Criar tbl_df c/ possibilidades de falha e anos
 grid <-
-  expand_grid(threshold = thresholds, min_years = min.years) %>%       # combinações
+  expand_grid(threshold = thresholds, min_years = min.years) %>% # combinações
   mutate(n_gauges = purrr::map2_int(.x = threshold, .y = min_years, ~{ # analisar qtas estações p/ cada par
     df.quality %>% 
       filter(na_prct <= .x) %>% # filtrar estações c/ no máximo 'threshold' falhas
       count(gauge_code) %>%     # contar qtas estações
       filter(n >= .y) %>%       # filtrar estações c/ no mínimo 'min_years' anos
       nrow()                    # contar qtas estações
-  }))
+  })) # fim 'grid'
 
 # Visualização
-cores <- c("green4", "lightgreen", "orange", "#F10000")
-plot.anos.estacao <- 
+color <- c("green4", "lightgreen", "orange", "#F10000")
+plot.anos.estacao <- ({
   grid %>% 
-  mutate(threshold = factor(threshold, levels = thresholds)) %>% # ordenar valores de 'threshold'
-  ggplot(aes(x = min_years, y = n_gauges, fill = threshold)) +
-  geom_col() +
-  geom_text(aes(label = n_gauges), vjust = -0.3, size = 3, family = "serif") +
-  facet_wrap(~threshold, nrow = 4, labeller = labeller(threshold = function(x) paste0(x, "% falhas"))) +
-  scale_x_continuous(breaks = seq(min(grid$min_years), max(grid$min_years), by = 1)) +
-  scale_y_continuous(limits = c(0, 450)) +
-  scale_fill_manual(values = cores) +
-  labs(x = "Número de anos por estação",
-       y = "Número de estações") +
-  theme_minimal() +
-  theme(strip.text = element_text(face = "bold"),
-        legend.position =  "none",
-        plot.background = element_rect(color = "white"),
-        panel.border = element_rect(color = "black", fill = NA),
-        text = element_text(size = 10, family = "serif"))
+    mutate(threshold = factor(threshold, levels = thresholds)) %>% # ordenar valores de 'threshold'
+    ggplot(aes(x = min_years, y = n_gauges, fill = threshold)) +
+    geom_col() +
+    geom_text(aes(label = n_gauges), vjust = -0.3, size = 3, family = "serif") +
+    facet_wrap(~threshold, nrow = 4, labeller = labeller(threshold = function(x) paste0(x, "% falhas"))) +
+    scale_x_continuous(breaks = seq(min(grid$min_years), max(grid$min_years), by = 1)) +
+    scale_y_continuous(limits = c(0, 450)) +
+    scale_fill_manual(values = color) +
+    labs(x = "Número de anos por estação",
+         y = "Número de estações") +
+    theme_minimal() +
+    theme(strip.text = element_text(face = "bold"),
+          legend.position =  "none",
+          plot.background = element_rect(color = "white"),
+          panel.border = element_rect(color = "black", fill = NA),
+          text = element_text(size = 10, family = "serif"))
+}) # fim 'plot.anos.estacao'
 
 # ggsave(filename = "figuras/fig_anos_estacao.png", plot = plot.anos.estacao,
 #        width = 16, height = 14, units = "cm", dpi = 200)
@@ -189,15 +190,7 @@ plot_tau4_lm <- df_est %>%
         panel.border = element_rect(color = "black", fill = NA),
         text = element_text(family = "Times New Roman", color = "black", size = font_size)); plot_tau4_lm
 
-ggsave(plot = plot_tau4_lm, filename = "figuras/plot_tau4_lm.png",
-       width = 210, height = 297, dpi = 300, units = "mm",
-       # device = cairo_pdf,
-       ) # cairo_pdf plota textos c/ fontes que não são padrão
-
-
-# RELAÇÕES ENTRE DURAÇÕES -------------------------------------------------
-
-
-# SAZONALIDADE ------------------------------------------------------------
-
-
+# ggsave(plot = plot_tau4_lm, filename = "figuras/plot_tau4_lm.png",
+#        width = 210, height = 297, dpi = 300, units = "mm",
+#        # device = cairo_pdf,
+#        ) # cairo_pdf plota textos c/ fontes que não são padrão

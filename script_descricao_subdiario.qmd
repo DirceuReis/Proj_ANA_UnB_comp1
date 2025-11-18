@@ -13,7 +13,7 @@ if(!require(pacman)) install.packages("pacman")
 pacman::p_load(pacman, tidyverse, ggplot2, arrow)
 ```
 
-O objetivo deste documento (e do respectivo [script](scripts/script_descricao_subdiario.R)) é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários e máximos anuais de intensidade. Analisaremos também a forma dos dados, focando especialmente na cauda das distribuições das séries através das razões de L-momentos e a existência de relações entre máximos de durações diferentes, avaliando a hipótese de invariância de escala.
+O objetivo deste documento (e do respectivo [script](scripts/script_descricao_subdiario.R)) é calcular algumas estatísticas descritivas relevantes para o conjunto de dados subdiários e máximos anuais de intensidade. Analisaremos também a forma dos dados, focando especialmente na cauda das distribuições das séries através das razões de L-momentos.
 
 ## Qualidade dos dados
 
@@ -64,7 +64,7 @@ grid <-
 
 ```
 
-Usamos a função `dplyr::expand_grid()` para criar um `data.frame` com as combinações entre `thresholds` e `min.years`. A partir dessas combinações, a função `purrr::map2()` é usada para computar um conjunto de operações entre duas variáveis `.x = threshold` e `.y = min_years`, operação essa indicada por `~{...}`, o qual calcula o número de estações corerspondentes aos critérios. Os resultados são apresentados na @fig-anos-estacao abaixo.
+Usamos a função `dplyr::expand_grid()` para criar um `data.frame` com as combinações entre `thresholds` e `min.years`. A partir dessas combinações, a função `purrr::map2()` é usada para computar um conjunto de operações entre duas variáveis `.x = threshold` e `.y = min_years`, operação essa indicada por `~{...}`, o qual calcula o número de estações correspondentes aos critérios. Os resultados são apresentados na @fig-anos-estacao abaixo.
 
 ```{r}
 #| echo: false
@@ -105,11 +105,7 @@ knitr::include_graphics("figuras/basic_summary_statistics_papalexiou_2013.png")
 
 @vogel2024 discutem como a L-assimetria ($\hat\tau_4$) pode ser utilizada como um indicador de que o dado se distribui com cauda pesada.
 
-## Relações entre durações
-
-
-## Sazonalidade
-
 ## Referências
+
 ::: {#refs}
 :::
