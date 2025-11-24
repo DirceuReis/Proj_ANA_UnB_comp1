@@ -214,7 +214,7 @@ Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo
 
 ![Diagrama esquemático do BCQM](figuras/bias.png) Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas.
 
-Onde, <!-- ainda falta terminar essa parte-->
+Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis modeladas no presente; $X^{′}_o$ são as variáveis projetadas para o futuro e $X^{′}_m$ são as variáveis modeladas no futuro.
 
 ### *Kernel Density Distribution Mapping* (KDDM)
 
@@ -222,7 +222,157 @@ Utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021]
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
 
-<!--vale a pena descrever por completo esse método?-->
+<!--Bruno: vale a pena descrever por completo esse método?-->
+
+::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
+``` r
+##' Bias correction of climate model output using KDDM.
+##'
+##' This is the description of the function.  It's the first full
+##' paragraph, and should briefly describe what the function does.
+##'
+##' Third and subsequent paragraphs are details: a long section shown
+##' after the argument that goes into detail about how the function
+##' works.
+##'
+##' @param bcdata The data to be bias-corrected.  A list with elements
+##' named "obs", "cur", and "fut".
+##'
+##' @param norm The type of normalization to use.  See
+##' \code{\link{normalize}} for more details.
+##'
+##' @param minobs The minimum number of data points to attempt a bias
+##' correction.  If there are fewer that this many values in the
+##' observations or in the current period model output (e.g., for
+##' precipitation in a very dry location), the bias correction falls
+##' back on a simple scaling by the ratio of obs mean to cur mean.
+##' (If the ratio is undefined,  future values are passed through
+##' unchanged.)
+##'
+##' @param dmap Logical; if TRUE, returns the \code{\link{distmap}}
+##' object generated during bias correction as an element named "dmap"
+##' in the returned list.  N.B.: This option defaults to FALSE because
+##' the distmap object is significantly larger than the inputs and
+##' outputs of this function combined.
+##' 
+##' @param ... Arguments to pass to \code{\link{distmap}}.
+##' 
+##' @return The return value of the function.
+##'
+##' @examples
+##' x <- "example code"
+##' y <- "more example code"
+##' paste(x, y)
+##'
+##' @importFrom stats predict
+##' 
+##' @export
+
+biascorrect <- function(bcdata, norm="zscore", minobs=250, dmap=FALSE, ...){
+
+  ## If there's too little data to get a good estimate of the PDF for
+  ## either obs or cur, it's not possible to bias-correct using KDDM;
+  ## fall back to simple ratio scaling.  Also set an uncorrectable
+  ## attribute, in case knowing where this has happened is of
+  ## interest.
+  
+  if(sum(is.finite(unlist(bcdata$obs))) < minobs |
+     sum(is.finite(unlist(bcdata$cur))) < minobs ){
+
+    muobs <- mean(unlist(bcdata$obs), na.rm=TRUE)
+    mucur <- mean(unlist(bcdata$cur), na.rm=TRUE)
+    ratio <- muobs / mucur
+    if(!is.finite(ratio)){
+      muobs <- 1
+      mucur <- 1
+      ratio <- 1
+    }
+
+    unfixable <- function(x){
+      x@uncorrectable <- is.finite(x)
+      x * ratio
+    }
+
+    result <- rapply(bcdata, unfixable, how="replace")
+    result$obs <- bcdata$obs
+    if(dmap){ result$distmap <- distmap(c(0,mucur),c(0,muobs)) }
+    return(result)
+  }
+
+
+  ## normalize the three data components
+
+    if(norm=="boxcox"){
+
+      ## You can't really apply an adjustment to the denormalization
+      ## for Box-Cox; you need to use the same parameter values you
+      ## used for the obs or things go wonky.  This means that you
+      ## also want to use the same params over all times in both cur
+      ## and fut, so that you're not discarding any climate change
+      ## signal when you normalize.  Given that, it makes sense to use
+      ## a single value for all three, so we pool data to fit gamma to
+      ## get the best compromise value.
+
+      gamma <- megamma(unlist(bcdata, use.names=FALSE))
+      nbcd <- rapply(bcdata, normalize, how="replace", norm=norm, gamma=gamma)
+      
+    } else {
+        nbcd <- rapply(bcdata, normalize, how="replace", norm=norm)
+    }
+    
+    ## construct distribution mapping
+    mapping <- distmap(unlist(nbcd$cur), unlist(nbcd$obs), ...)
+
+    ## apply KDDM transfer function
+    ## note: could skip predict(obs), but need its norm atts for next step
+    fixed <- rapply(nbcd, function(x){predict(mapping, x)}, how="replace")
+
+    ## extract & average normalization attributes
+    adj <- rapply(fixed, attributes, how="replace")
+    adj <- lapply(adj, renest)
+    adj <- lapply(adj, function(x){lapply(x, function(y){unlist(y)})})
+    adj <- lapply(adj, function(x){x$norm<-NULL; x})
+    adj <- rapply(adj, mean, how="replace")
+  ## Probably fix for entire month missing; need to test.
+#    adj <- rapply(adj, mean, how="replace", na.rm=TRUE)
+    adj <- renest(adj)
+
+    ## calculate adjustments for denormalization
+    shift <- NA
+    scale <- NA
+    pscale <- NA
+
+    if(norm == "zscore"){
+        shift  <- adj$mu$obs - adj$mu$cur
+        scale  <- adj$sigma$obs   / adj$sigma$cur
+    }
+
+    if(norm == "boxcox"){
+        shift <- 0
+        pscale <- 1
+    }
+
+    if(norm == "scale"){
+        scale <- adj$mu2$obs / adj$mu2$cur
+    }
+  
+    ## no adjustments for range or identity norms
+  
+    ## denormalize bias-corrected data
+    result <- list()
+    result$obs <- bcdata$obs
+
+    result$cur <- rapply(fixed$cur, denormalize, how="replace",
+                         shift=shift, scale=scale, pscale=pscale)
+    result$fut <- rapply(fixed$fut, denormalize, how="replace",
+                         shift=shift, scale=scale, pscale=pscale)
+    
+    if(dmap){ result$distmap <- mapping }
+    
+    return(result)
+}
+```
+:::
 
 ### *Quantile Delta Mapping* (QDM)
 
@@ -233,7 +383,7 @@ A forma aditiva é:
 $$
 D_f(x) = x + \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big) - F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
 \tag{22}
-$$ 
+$$
 
 E a forma multiplicativa é:
 
@@ -241,7 +391,120 @@ $$
 D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
 \tag{23}
 $$
+
 O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).
+
+::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
+``` r
+# Quantile delta mapping bias correction for preserving changes in quantiles
+# Note: QDM is equivalent to the equidistant and equiratio forms of quantile
+# mapping (Cannon et al., 2015).
+# Cannon, A.J., Sobie, S.R., and Murdock, T.Q. 2015. Bias correction of
+#  simulated precipitation by quantile mapping: How well do methods preserve
+#  relative changes in quantiles and extremes? Journal of Climate,
+#  28: 6938-6959. doi:10.1175/JCLI-D-14-00754.1
+function(o.c, m.c, m.p, ratio=FALSE, trace=0.05, trace.calc=0.5*trace,
+         jitter.factor=0, n.tau=NULL, ratio.max=2, ratio.max.trace=10*trace,
+         ECBC=FALSE, ties='first', subsample=NULL, pp.type=7){
+    # o = vector of observed values; m = vector of modelled values
+    # c = current period;  p = projected period
+    # ratio = TRUE --> preserve relative trends in a ratio variable
+    # trace = 0.05 --> replace values less than trace with exact zeros
+    # trace.calc = 0.5*trace --> treat values below trace.calc as censored
+    # jitter.factor = 0.01 --> jitter to accommodate ties
+    # n.tau = NULL --> number of empirical quantiles (NULL=sample length)
+    # ratio.max = 2 --> maximum delta when values are less than ratio.max.trace
+    # ratio.max.trace = 10*trace --> values below which ratio.max is applied
+    # ECBC = TRUE --> apply Schaake shuffle to enforce o.c temporal sequencing
+    # subsample = NULL --> use this number of repeated subsamples of size n.tau
+    #  to calculate empirical quantiles (e.g., when o.c, m.c, and m.p are of
+    #  very different size)
+    # pp.type = 7 --> plotting position type used in quantile
+    # tau.m-p = F.m-p(x.m-p)
+    # delta.m = x.m-p {/,-} F.m-c^-1(tau.m-p)
+    # xhat.m-p = F.o-c^-1(tau.m-p) {*,+} delta.m
+    #
+    # If jitter.factor > 0, apply a small amount of jitter to accommodate ties
+    # due to limited measurement precision
+    if(jitter.factor==0 && 
+      (length(unique(o.c))==1 ||
+       length(unique(m.c))==1 ||
+       length(unique(m.p))==1)){
+        jitter.factor <- sqrt(.Machine$double.eps)
+    }
+    if(jitter.factor > 0){
+        o.c <- jitter(o.c, jitter.factor)
+        m.c <- jitter(m.c, jitter.factor)
+        m.p <- jitter(m.p, jitter.factor)
+    }
+    # For ratio data, treat exact zeros as left censored values less than
+    # trace.calc
+    if(ratio){
+        epsilon <- .Machine$double.eps
+        o.c[o.c < trace.calc] <- runif(sum(o.c < trace.calc), min=epsilon,
+                                       max=trace.calc)
+        m.c[m.c < trace.calc] <- runif(sum(m.c < trace.calc), min=epsilon,
+                                       max=trace.calc)
+        m.p[m.p < trace.calc] <- runif(sum(m.p < trace.calc), min=epsilon,
+                                       max=trace.calc)
+    }
+    # Calculate empirical quantiles
+    n <- length(m.p)
+    if(is.null(n.tau)) n.tau <- n
+    tau <- seq(0, 1, length=n.tau)
+    if(!is.null(subsample)){
+        quant.o.c <- rowMeans(apply(replicate(subsample,
+                              sample(o.c, size=length(tau))),
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
+        quant.m.c <- rowMeans(apply(replicate(subsample,
+                              sample(m.c, size=length(tau))),
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
+        quant.m.p <- rowMeans(apply(replicate(subsample,
+                              sample(m.p, size=length(tau))),
+                              2, quantile, probs=tau, type=pp.type,
+                              names=FALSE))
+    } else{
+        quant.o.c <- quantile(o.c, tau, type=pp.type, names=FALSE)
+        quant.m.c <- quantile(m.c, tau, type=pp.type, names=FALSE)
+        quant.m.p <- quantile(m.p, tau, type=pp.type, names=FALSE)
+    }
+    # Apply quantile delta mapping bias correction
+    tau.m.p <- approx(quant.m.p, tau, m.p, rule=2, ties='ordered')$y    
+    if(ratio){
+        approx.t.qmc.tmp <- approx(tau, quant.m.c, tau.m.p, rule=2,
+                                   ties='ordered')$y
+        delta.m <- m.p/approx.t.qmc.tmp
+        delta.m[(delta.m > ratio.max) &
+                (approx.t.qmc.tmp < ratio.max.trace)] <- ratio.max
+        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2,
+                         ties='ordered')$y*delta.m
+    } else{
+        delta.m <- m.p - approx(tau, quant.m.c, tau.m.p, rule=2,
+                                ties='ordered')$y
+        mhat.p <- approx(tau, quant.o.c, tau.m.p, rule=2,
+                         ties='ordered')$y + delta.m
+    }
+    mhat.c <- approx(quant.m.c, quant.o.c, m.c, rule=2,
+                     ties='ordered')$y
+    # For ratio data, set values less than trace to zero
+    if(ratio){
+        mhat.c[mhat.c < trace] <- 0
+        mhat.p[mhat.p < trace] <- 0
+    }
+    if(ECBC){
+        # empirical copula coupling/Schaake shuffle
+        if(length(mhat.p)==length(o.c)){
+            mhat.p <- sort(mhat.p)[rank(o.c, ties.method=ties)]
+        } else{
+            stop('Schaake shuffle failed due to incompatible lengths')
+        }
+    }
+    list(mhat.c=mhat.c, mhat.p=mhat.p)
+}
+```
+:::
 
 ### PresRat (PRAT)
 
@@ -250,7 +513,7 @@ O método PresRat estende o QDM incluindo um fator de correção médio [@Lanzan
 $$
 K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
 \tag{24}
-$$ 
+$$
 
 Onde as barras indicam as médias climatológicas ao longo de um mês.
 
@@ -263,8 +526,9 @@ Willems [-@Willems.2013] afirma que o fator de perturbação é calculado nos qu
 $$
 \varphi({p}) = \frac{I_s({p})}{I_c({p})}
 \tag{25}
-$$
-onde $\varphi({p})$ é o fator de perturbação quantílica; $I_c({p})$ o quantil de precipitação da simulação de controle; $I_s({p})$ o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, $I(1)\geq I(2)\geq...\geq I(n_g)$, a probabilidade de excedência $p$ de qualquer intensidade de precipitação diária $I(k_g)$ é calculada empiricamente como a razão $(\frac{kg} {ng})$ do número de classificação $k_g$ sobre o número total de dias $n_g$ do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.
+$$ 
+
+Onde $\varphi({p})$ é o fator de perturbação quantílica; $I_c({p})$ o quantil de precipitação da simulação de controle; $I_s({p})$ o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, $I(1)\geq I(2)\geq...\geq I(n_g)$, a probabilidade de excedência $p$ de qualquer intensidade de precipitação diária $I(k_g)$ é calculada empiricamente como a razão $(\frac{kg} {ng})$ do número de classificação $k_g$ sobre o número total de dias $n_g$ do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.
 
 Para períodos de retorno elevados, devido à aleatoriedade nos dados empíricos, os períodos de retorno empíricos podem diferir significativamente dos períodos de retorno teóricos derivados das distribuições de probabilidade calibradas. Por essa razão, Willems [-@Willems.2013] aplica distribuições teóricas exponenciais de dois componentes para valores extremos.
 
@@ -273,9 +537,9 @@ Essas distribuições são calibradas aos dados empíricos e aplicadas, conforme
 $$
 \varphi({p}) = \frac{G^{-1}_s({p})}{G^{-1}_c({p})}
 \tag{26}
-$$
-Onde $G_s_$ é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; $G_c$ calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (26), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (25).
+$$ 
 
+Onde $G_s_$ é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; $G_c$ calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (26), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (25).
 
 ::: {#refs}
 :::
