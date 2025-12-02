@@ -16,14 +16,12 @@ O método *Delta Change* aplica fatores de variação obtidos a partir da difere
 $$
 \Delta = \frac{X_{GCM}^{proj}}{X_{GCM}^{hist}} 
 \tag{1}
-$$
-Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.
+$$ Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.
 
 $$
 X = X_{OBS}+\Delta
 \tag{2}
-$$
-É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
+$$ É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
 
 ### *Equidistant Quantile Matching* (EQM)
 
@@ -228,7 +226,7 @@ Os autores afiram que equação (23) não é aplicável a valores novos, ou seja
 
 Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. [-@Ho.2012] em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de $X_o$ e $X_m$ é a mesma que a relação entre as distribuições de $X^{′}_o$ e $X^{′}_m$), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, $X^{′}_o = B(X^{′}_m)$, com uma função de transferência dada por $B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]$, onde $F_m$(.) é a função de distribuição cumulativa (CDF) de $X_m$ e $F^{-1}_o$(.) é a CDF inversa (a “função quantil”) de $X_o$.
 
-![Diagrama esquemático do BCQM](figuras/bias.png) Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas.
+![Diagrama esquemático do BCQM](figuras/bias.png) Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas. Fonte: [@Ho.2012].
 
 Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis modeladas no presente; $X^{′}_o$ são as variáveis projetadas para o futuro e $X^{′}_m$ são as variáveis modeladas no futuro.
 
@@ -238,7 +236,7 @@ Utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021]
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
 
-<!--Bruno: vale a pena descrever por completo esse método?-->
+<!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
@@ -408,7 +406,7 @@ D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big
 \tag{25}
 $$
 
-O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).
+O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC). <!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
