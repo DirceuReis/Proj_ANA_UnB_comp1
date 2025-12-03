@@ -38,9 +38,10 @@ data.ls <- split(df_data, f = df_data$gauge_code)             # lista de data.fr
 data.by.time <- fun_group_ts(data.ls, ts_name = "time_steps") # agrupar em durações diferentes numa lista
 
 # Durações
-d.subdaily <- c(1/6, 1/4, 0.5, seq(1, 23)) # durações subdiárias
+d.subhour <- c(10, 15, 20, 30, 40, 45, 50) # durações sub-horárias
+d.subdaily <- seq(1, 23)                   # durações subdiárias
 d.daily <- c(1, 2, 3, 4, 5, 7, 10)         # durações diárias
-durations <- c(d.subdaily, d.daily*24)     # durações
+durations <- c(d.subhour/60, d.subdaily, d.daily*24) # durações
 time.steps <- names(data.by.time)          # lista de time_steps
 
 # Aplicar função 'fun_imax_agg' p/ cada grupo de durações
