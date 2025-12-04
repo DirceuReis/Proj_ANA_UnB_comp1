@@ -25,23 +25,18 @@ library(rstan)
 
 # Introdução
 
-Neste documento descrevemos o conjunto de dados de máximas anuais por duração,
-os procedimentos de pré-processamento, as análises exploratórias realizadas
-e a formulação do modelo GEV multisite com pooling parcial utilizado
-para a regionalização das curvas IDF.
+Neste documento descrevemos o conjunto de dados de máximas anuais por duração, os procedimentos de pré-processamento, as análises exploratórias realizadas e a formulação do modelo GEV multisite com pooling parcial utilizado para a regionalização das curvas IDF.
 
 # Dados e pré-processamento
+
 ## Leitura e estrutura dos dados
+
 ```{r}
-dados_agregados <- read_parquet("C:/Users/laris/Downloads/df_imax.parquet")
+dados_agregados <- read_parquet("base/gerados/df_imax.parquet")
 str(dados_agregados)
 ```
 
-d: duração em horas
-imax: intensidade em mm/h
-date: data do evento máximo
-year: ano de referência
-na_prct: percentual de dados NA
+d: duração em horas; imax: intensidade em mm/h; date: data do evento máximo year: ano de referência; na_prct: percentual de dados NA
 
 ```{r}
 anos_por_estacao <- dados_agregados %>%
@@ -67,7 +62,6 @@ ggplot(anos_por_estacao, aes(x = n_anos)) +
   theme_minimal()
 ```
 
-
 Adotou-se um mínimo de 7 anos de dados por estação, para garantir (i) um número mínimo de observações para a estimação da GEV em cada posto e (ii) um número suficientemente grande de estações na amostra, evitando ao mesmo tempo um custo computacional excessivo no ajuste do modelo hierárquico multisite.
 
 ```{r}
@@ -81,7 +75,7 @@ filter(gauge_code %in% estacoes_validas)
 
 ## Remoção de dados faltantes
 
-Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na > 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
+Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na \> 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
 
 ```{r}
 max_anuais_filtrado2 <- max_anuais_filtrado %>%
@@ -120,11 +114,10 @@ dados_modelo <- dados_modelo %>%
 dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
 ```
 
-No total, foram identificados `r n_anos_total` anos-estação, dos quais
-`r n_anos_removidos` (`r round(perc_removidos, 1)`%) foram removidos por
-apresentarem mais de 80% de valores ausentes.
+No total, foram identificados `r n_anos_total` anos-estação, dos quais `r n_anos_removidos` (`r round(perc_removidos, 1)`%) foram removidos por apresentarem mais de 80% de valores ausentes.
 
 ### Estatísticas descritivas por duração
+
 ```{r}
 summary_dur <- dados_modelo %>%
   filter(!is.na(imax)) %>%
@@ -173,8 +166,7 @@ title = "Variação espacial das intensidades extremas") +
 theme_minimal()
 ```
 
-A Figura mostra a distribuição da média de log(imax) por estação.
-O desvio-padrão global de log(imax), calculado a partir de todas as observações agregadas, é igual a 0,62. Já o desvio-padrão entre estações, obtido a partir das médias de log(imax) por posto, é de aproximadamente 0,12. Isso significa que apenas cerca de 20% da variabilidade total está associada a diferenças sistemáticas entre estações, enquanto a maior parte decorre da variabilidade interna a cada posto (variabilidade interanual e entre durações).
+A Figura mostra a distribuição da média de log(imax) por estação. O desvio-padrão global de log(imax), calculado a partir de todas as observações agregadas, é igual a 0,62. Já o desvio-padrão entre estações, obtido a partir das médias de log(imax) por posto, é de aproximadamente 0,12. Isso significa que apenas cerca de 20% da variabilidade total está associada a diferenças sistemáticas entre estações, enquanto a maior parte decorre da variabilidade interna a cada posto (variabilidade interanual e entre durações).
 
 Em termos práticos, esses resultados indicam que as estações não são completamente homogêneas, existe um gradiente espacial de intensidades extremas, como sugerido pelo espalhamento do histograma, mas também não são tão distintas a ponto de justificar ajustes totalmente independentes (non-pooling). Essa combinação de heterogeneidade moderada e forte componente comum é justamente o cenário em que modelos hierárquicos com partial pooling são mais adequados: as estações “compartilham informação” por meio dos hiperparâmetros regionais, mas preservam diferenças locais nos parâmetros da GEV. Isso ajuda a estabilizar as estimativas em postos com poucas observações, evitando o superajuste, ao mesmo tempo em que mantém a capacidade de representar padrões espaciais reais nas intensidades extremas.
 
@@ -236,10 +228,7 @@ controlam o nível das curvas em uma duração de referência $d_0$, $\eta$ atua
 
 # Modelo GEV multisite com pooling parcial
 
-As máximas anuais de precipitação para cada duração são modeladas por uma
-distribuição de valores extremos generalizada (GEV), com parâmetros de
-localização \(\mu\), escala \(\sigma > 0\) e forma \(\xi\). Para \(\xi \neq 0\),
-a função densidade é dada por
+As máximas anuais de precipitação para cada duração são modeladas por uma distribuição de valores extremos generalizada (GEV), com parâmetros de localização (\mu), escala (\sigma \> 0) e forma (\xi). Para (\xi \neq 0), a função densidade é dada por
 
 $$
 f(x \mid \mu,\sigma,\xi)
@@ -252,18 +241,14 @@ No caso limite $(\xi \to 0)$ obtém-se a distribuição de Gumbel, implementada 
 
 ### Estrutura hierárquica por estação e duração
 
-Seja $(g = 1,\dots,G)$ o índice de estação e $(d = 1,\dots,D)$ o índice de
-duração (em horas), associado a uma duração $(D_d)$.
-Para cada observação $(x_{i})$ pertencente à estação $(g)$ e duração $(d)$,
-assume-se
+Seja $(g = 1,\dots,G)$ o índice de estação e $(d = 1,\dots,D)$ o índice de duração (em horas), associado a uma duração $(D_d)$. Para cada observação $(x_{i})$ pertencente à estação $(g)$ e duração $(d)$, assume-se
 
 $$
 d_i \mid \mu_{d,g}, \sigma_{d,g}, \xi_{d,g}
   \sim \text{GEV}\big(\mu_{d,g}, \sigma_{d,g}, \xi_{d,g}\big).
 $$
 
-Os parâmetros são modelados na escala log para $(\mu)$ e $(\sigma)$, e assume-se uma relação de escala paramétrica entre intensidade e duração.
-Para cada estação $(g)$ e duração $(D_d)$, temos
+Os parâmetros são modelados na escala log para $(\mu)$ e $(\sigma)$, e assume-se uma relação de escala paramétrica entre intensidade e duração. Para cada estação $(g)$ e duração $(D_d)$, temos
 
 $$
 \begin{gather}
@@ -286,30 +271,24 @@ O parâmetro de forma é modelado por para permitir o *pooling* parcial da infor
 
 Para os parâmetros específicos de estação, adotam-se priors fracas:
 
-- $\alpha_g \sim \mathcal{N}(0, 10^6)$,
-- $\beta_g  \sim \mathcal{N}(0, 10^6)$,
-- $\eta_g \sim \text{Beta}(1,1))$,
-- $\theta_g \sim \text{Uniforme}(0,10)$.
+-   $\alpha_g \sim \mathcal{N}(0, 10^6)$,
+-   $\beta_g  \sim \mathcal{N}(0, 10^6)$,
+-   $\eta_g \sim \text{Beta}(1,1))$,
+-   $\theta_g \sim \text{Uniforme}(0,10)$.
 
-Os parâmetros de forma $(\xi_{d,g}$ são hierarquicamente centrados em uma
-média global $\xi_{\text{bar}}$, com variância $\tau_\xi^2$, de modo a
-compartilhar informação sobre a cauda entre durações e estações:
+Os parâmetros de forma $(\xi_{d,g}$ são hierarquicamente centrados em uma média global $\xi_{\text{bar}}$, com variância $\tau_\xi^2$, de modo a compartilhar informação sobre a cauda entre durações e estações:
 
-- $\xi_{d,g} \mid \xi_{\text{bar}}, \tau_\xi^2$.
+-   $\xi_{d,g} \mid \xi_{\text{bar}}, \tau_\xi^2$.
 
-A média global $\xi_{\text{bar}}$ recebe uma prior do tipo Beta reescalada para o intervalo $[-0{,}5, 0{,}5]$. A variabilidade hierárquica entre durações é controlada pelos hiperparâmetros
-$\tau_\mu^2$, $\tau_\sigma^2$ e $\tau_\xi^2$, que recebem priors do
-tipo Inversa-Gamma:
+A média global $\xi_{\text{bar}}$ recebe uma prior do tipo Beta reescalada para o intervalo $[-0{,}5, 0{,}5]$. A variabilidade hierárquica entre durações é controlada pelos hiperparâmetros $\tau_\mu^2$, $\tau_\sigma^2$ e $\tau_\xi^2$, que recebem priors do tipo Inversa-Gamma:
 
-- $\tau_\mu^2    \sim \text{Inv-Gamma}(0.01, 0.01)$,
-- $\tau_\sigma^2 \sim \text{Inv-Gamma}(0.01, 0.01)$,
-- $\tau_\xi^2    \sim \text{Inv-Gamma}(0.01, 0.01)$.
+-   $\tau_\mu^2    \sim \text{Inv-Gamma}(0.01, 0.01)$,
+-   $\tau_\sigma^2 \sim \text{Inv-Gamma}(0.01, 0.01)$,
+-   $\tau_\xi^2    \sim \text{Inv-Gamma}(0.01, 0.01)$.
 
 ### Preparação do objeto `stan_data`
 
-Antes do ajuste Bayesiano, os dados são organizados em um formato
-compatível com o bloco `data` do modelo Stan. A partir do `dados_modelo`,
-constrói-se um data frame auxiliar:
+Antes do ajuste Bayesiano, os dados são organizados em um formato compatível com o bloco `data` do modelo Stan. A partir do `dados_modelo`, constrói-se um data frame auxiliar:
 
 ```{r build-stan-data}
 df <- dados_modelo %>% 
@@ -343,9 +322,8 @@ stopifnot(
 )
 
 ```
-Neste arranjo, cada observação de máxima anual é associada a dois
-índices inteiros: gauge_id[i] indica a estação e duration_id[i] indica a duração. Esses índices são usados no Stan para recuperar os parâmetros correspondentes dentro das estruturas matriciais
-$\mu[d,g],\sigma[d,g]$ e $\xi[d,g]$.
+
+Neste arranjo, cada observação de máxima anual é associada a dois índices inteiros: gauge_id[i] indica a estação e duration_id[i] indica a duração. Esses índices são usados no Stan para recuperar os parâmetros correspondentes dentro das estruturas matriciais $\mu[d,g],\sigma[d,g]$ e $\xi[d,g]$.
 
 ```{r}
 modelo_multistation_com_partial_pooling.stan <- "
@@ -512,21 +490,15 @@ refresh = 200
 )
 ```
 
-Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_k[K] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
+Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
 
-Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores
-iniciais em faixas estreitas, coerentes com a ordem de grandeza esperada
-para a variabilidade hierárquica, e a média global da forma é inicializada
-em xi_bar = 0, correspondente ao caso Gumbel. Esses valores
-iniciais não fixam a solução, mas ajudam a evitar problemas de
-convergência associados a pontos de partida pouco informativos ou
-numericamente instáveis.
+Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, coerentes com a ordem de grandeza esperada para a variabilidade hierárquica, e a média global da forma é inicializada em xi_bar = 0, correspondente ao caso Gumbel. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
 
 ## Diagnósticos e avaliação do modelo
 
 ```{r}
 library(rstan)
-fit <- readRDS("fit_orig_ate7anos.rds")
+fit <- readRDS("C:\\Users\\laris\\Documents\\fit_orig_ate7anos.rds")
 
 # Check transitions that ended with a divergence
 check_div <- function(fit, quiet=FALSE) {
@@ -674,7 +646,33 @@ check_all_diagnostics(fit)
 
 # Resultados Parciais
 
+As amostras geradas pelo Stan são extraídas por meio de `rstan::extract(fit)`,
+resultando em arrays tridimensionais para cada parâmetro do modelo, com
+dimensões `[iter × K × S]`, correspondentes às iterações do MCMC, às durações
+e às estações, respectivamente. Para transformar essa estrutura em um formato
+analítico, desenvolveu-se a função `summarize_param()`, que resume cada
+parâmetro por duração e estação, calculando sua mediana posterior e os
+intervalos creíveis de 95%.
+
+O resultado é um data frame “arrumado” contendo, para cada combinação
+(estação, duração), as estimativas:
+
+- mediana posterior;
+- limites inferior e superior do IC95%;
+- valor da duração real (`Duration`);
+- identificação da estação (`Estacao`);
+- nome do parâmetro (`Param`).
+
+Esses resumos posteriores são então combinados com as estimativas obtidas a
+partir do ajuste GEV ordinário (`ajustes_df`), permitindo comparação direta
+entre o modelo hierárquico e as estimativas locais independentes. Essa
+comparação é visualizada por meio da função `plot_param()`, que plota, para
+cada estação, a mediana posterior (linha), o IC95% (faixa sombreada) e os
+parâmetros da GEV ordinária (pontos vermelhos) ao longo da escala
+logarítmica da duração.
+
 ```{r}
+#retorna listas contendo arrays com TODAS as amostras MCMC dos parâmetros.
 posterior_samples <- rstan::extract(fit)
 
 # mapeamento estacao_id -> Estacao
