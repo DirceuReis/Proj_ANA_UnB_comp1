@@ -476,18 +476,18 @@ options(mc.cores = 5)
 
 sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
 
-fit_dbg <- sampling(
-sm,
-data   = stan_data,
-chains = 5,
-warmup = 2000,
-iter   = 4000,
-thin   = 10,
-seed   = 123,
-init   = replicate(5, init_vals, simplify = FALSE),
-control = list(adapt_delta = 0.99, max_treedepth = 15),
-refresh = 200
-)
+#fit_dbg <- sampling(
+#sm,
+#data   = stan_data,
+#chains = 5,
+#warmup = 2000,
+#iter   = 4000,
+#thin   = 10,
+#seed   = 123,
+#init   = replicate(5, init_vals, simplify = FALSE),
+#control = list(adapt_delta = 0.99, max_treedepth = 15),
+#refresh = 200
+#)
 ```
 
 Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
@@ -672,6 +672,7 @@ parâmetros da GEV ordinária (pontos vermelhos) ao longo da escala
 logarítmica da duração.
 
 ```{r}
+library(tidyr)
 #retorna listas contendo arrays com TODAS as amostras MCMC dos parâmetros.
 posterior_samples <- rstan::extract(fit)
 
@@ -718,9 +719,9 @@ plot_param <- function(df_comb_sub, y_obs_col, ylab_expr, title_txt, ncol = 9) {
     geom_ribbon(aes(ymin = low95, ymax = high95),
                 fill = "grey70", alpha = 0.6) +
     geom_line(color = "black", linewidth = 0.9) +
-    geom_point(aes(y = .data[[y_obs_col]]), color = "red", size = 1.5, na.rm = TRUE) +
+    #geom_point(aes(y = .data[[y_obs_col]]), color = "red", size = 1.5, na.rm = TRUE) +
     labs(x = "Log(Duration) (hours)", y = ylab_expr, title = title_txt) +
-    facet_wrap(~ Estacao, scales = "fixed", ncol = ncol) +
+    facet_wrap(~ Estacao, scales = "free_y", ncol = ncol) +
     theme_minimal(base_size = 13) +
     theme(panel.grid.minor = element_blank())
 }
@@ -759,4 +760,286 @@ p_xi    <- plot_param(df_xi_comb,    "xi_gev",    expression(xi),    "ξ: Bayes 
 
 p_mu; p_sigma; p_xi
 
+```
+
+
+```{r plotando-por-duração-da-série-parte-1}
+anos_por_estacao <- dados_modelo %>%
+  group_by(gauge_code) %>%
+  summarise(n_anos = n_distinct(year)) %>%
+  arrange(desc(n_anos)) %>%
+  rename(Estacao = gauge_code,
+         n_years = n_anos)
+
+df_years <- anos_por_estacao %>%
+  mutate(
+    grupo = case_when(
+      n_years %in% c(18,15,14) ~ "Longas (18,15,14 anos)",
+      n_years %in% c(13) ~ "13 anos",
+      n_years %in% c(12) ~ "12 anos",
+      n_years %in% c(11) ~ "11 anos",
+      n_years %in% c(10) ~ "10 anos",
+      n_years %in% c(9)  ~ "9 anos",
+      n_years %in% c(8)  ~ "8 anos",
+      n_years %in% c(7)  ~ "7 anos",
+      TRUE ~ "Outras"
+    )
+  )
+
+df_mu_comb    <- df_mu_comb    %>% left_join(df_years, by = "Estacao")
+df_sigma_comb <- df_sigma_comb %>% left_join(df_years, by = "Estacao")
+df_xi_comb    <- df_xi_comb    %>% left_join(df_years, by = "Estacao")
+
+p_mu_longas <- plot_param(
+  df_mu_comb %>% filter(grupo == "Longas (18,15,14 anos)"),
+  "mu_gev",
+  expression(mu),
+  "μ – Estações com séries longas (18-14 anos)",
+  ncol = 5
+)
+```
+
+
+```{r}
+grupos_validos <- df_mu_comb %>% 
+  distinct(grupo) %>% 
+  pull(grupo)
+
+
+plot_param_grupo <- function(df_comb, grupo_name) {
+  df_sub <- df_comb %>% filter(grupo == grupo_name)
+
+  plot_param(
+    df_sub,
+    "xi_gev", #mudar dependendo do plot
+    expression(mu),
+    paste0("μ – Estações com ", grupo_name),
+    ncol = 5
+  )
+}
+
+#plots_mu <- lapply(grupos_validos, function(g) plot_param_grupo(df_mu_comb, g))
+
+#names(plots_mu) <- grupos_validos
+
+plots_xi <- lapply(grupos_validos, function(g) plot_param_grupo(df_xi_comb, g))
+
+names(plots_xi) <- grupos_validos
+```
+
+## Posterior dos parâmetros por estação (H, θ e α)
+Nesta seção analisamos a distribuição posterior dos parâmetros **H**, **θ** e
+**α** do modelo hierárquico. Esses parâmetros controlam, respectivamente:
+
+- **H**: o expoente da relação intensidade–duração, determinando a inclinação
+  das curvas IDF para cada estação;
+- **θ**: o deslocamento da duração, que ajusta o comportamento da curva para
+  durações curtas;
+- **α**: o nível da curva de intensidade na duração de referência.
+
+O objetivo desta análise é comparar o comportamento posterior desses
+parâmetros entre estações, levando em conta o comprimento da série de
+cada uma. Como diferentes estações possuem diferentes números de anos de dados
+(n_anos), agrupamos as estações conforme seu comprimento:
+
+- **Longas (18, 15, 14 anos)**
+- **13 anos**
+- **12 anos**
+- **11 anos**
+- **10 anos**
+- **9 anos**
+- **8 anos**
+- **7 anos**
+
+Geramos então os gráficos posteriores de H, θ e α para cada grupo, evitando
+misturar estações com volumes muito distintos de informação.
+
+A estação SBPA apresenta um comportamento bem distinto das demais com o valor alto de H, e baixo alpha.
+
+```{r grafico-posteriori}
+
+station_labels <- df_mu_comb %>%
+  distinct(estacao_id, Estacao) %>%
+  arrange(estacao_id) %>%
+  pull(Estacao)
+
+library(posterior)
+draws <- posterior::as_draws_df(fit)
+
+extract_param_long <- function(draws, par_regex, value_name) {
+draws %>%
+select(matches(par_regex)) %>%
+mutate(.draw = row_number()) %>%
+tidyr::pivot_longer(-.draw, names_to = "name", values_to = value_name) %>%
+mutate(station_id = as.integer(stringr::str_extract(name, "\\d+"))) %>%
+select(.draw, station_id, !!value_name)
+}
+
+library(dplyr)
+
+H_long     <- extract_param_long(draws, "^H\\[",     "H")
+theta_long <- extract_param_long(draws, "^theta\\[", "theta")
+alpha_long <- extract_param_long(draws, "^alpha\\[", "alpha")
+
+posterior_df <- H_long %>%
+inner_join(theta_long, by = c(".draw", "station_id")) %>%
+inner_join(alpha_long, by = c(".draw", "station_id")) %>%
+mutate(station = factor(station_labels[station_id],
+levels = station_labels))
+
+posterior_df <- posterior_df %>%
+left_join(df_years %>% select(Estacao, grupo),
+by = c("station" = "Estacao"))
+
+library(ggplot2)
+library(patchwork)
+
+plot_posterior_group <- function(posterior_df, grupo_name) {
+
+df_sub <- posterior_df %>% filter(grupo == grupo_name)
+if (nrow(df_sub) == 0) return(NULL)
+
+p1 <- ggplot(df_sub, aes(x = H, color = station)) +
+geom_density() +
+labs(title = paste0("a) Posterior de H – ", grupo_name),
+x = "H", y = "Densidade") +
+theme_minimal() + theme(legend.position = "none")
+
+p2 <- ggplot(df_sub, aes(x = theta, color = station)) +
+geom_density() +
+labs(title = paste0("b) Posterior de θ – ", grupo_name),
+x = expression(theta), y = "Densidade") +
+theme_minimal() + theme(legend.position = "none")
+
+p3 <- ggplot(df_sub, aes(x = alpha, y = H, color = station)) +
+geom_point(alpha = 0.4, size = 0.8) +
+labs(title = paste0("c) Relação entre α e H – ", grupo_name),
+x = expression(alpha), y = "H") +
+theme_minimal() + theme(legend.position = "none")
+
+p4 <- ggplot(df_sub, aes(x = H, y = theta, color = station)) +
+geom_point(alpha = 0.4, size = 0.8) +
+labs(title = paste0("d) Relação entre H e θ – ", grupo_name),
+x = "H", y = expression(theta)) +
+theme_minimal() + theme(legend.position = "bottom")
+
+(p1 + p2) / (p3 + p4)
+}
+
+grupos_validos <- unique(posterior_df$grupo)
+
+plots_posterior <- lapply(grupos_validos, function(g) {
+plot_posterior_group(posterior_df, g)
+})
+
+names(plots_posterior) <- grupos_validos
+plots_posterior[[7]]
+
+```
+
+## Mapas interpolados dos parâmetros H e θ com identificação das estações
+
+Os parâmetros **H** e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de H e θ.
+
+Além disso, incluímos no mapa o código de cada estação e o número de anos de dados disponíveis, de modo a facilitar a avaliação da confiabilidade local da estimativa.
+
+```{r plot-H-Theta}
+library(dplyr)
+library(tidyr)
+library(sf)
+library(geobr)
+library(gstat)
+library(ggplot2)
+
+x <- readRDS("C:\\Users\\laris\\Downloads\\rs_info_table.rds")
+
+s_par <- rstan::summary(fit, pars = c("H", "theta"))$summary
+
+s_par_df <- s_par %>%
+as.data.frame() %>%
+tibble::rownames_to_column("par_raw")
+
+params_long <- s_par_df %>%
+  mutate(
+    # extrai nome do parâmetro antes do "["
+    par = sub("\\[.*$", "", par_raw),
+
+    # extrai conteúdo dentro dos colchetes
+    id_str = sub("^[^\\[]*\\[", "", par_raw),  # tira tudo até o [
+    id_str = sub("\\]$", "", id_str),          # remove o ]
+    estacao_id = as.integer(id_str)
+  ) %>%
+  filter(par %in% c("H", "theta")) %>%
+  select(par, estacao_id, mean)
+
+params_H_theta <- params_long %>%
+filter(par %in% c("H", "theta")) %>%
+select(par, estacao_id, mean) %>%
+pivot_wider(
+names_from  = par,
+values_from = mean
+)
+
+params_H_theta <- params_H_theta %>%
+left_join(map_est, by = "estacao_id") %>%
+rename(gauge_code = Estacao)
+
+params_H_theta <- params_H_theta %>%
+left_join(df_years %>% select(Estacao, n_years),
+by = c("gauge_code" = "Estacao"))
+
+stations_Htheta_sf <- x %>%
+select(gauge_code, long, lat) %>%
+distinct(gauge_code, .keep_all = TRUE) %>%
+left_join(params_H_theta, by = "gauge_code") %>%
+filter(!is.na(H), !is.na(theta)) %>%
+st_as_sf(coords = c("long", "lat"), crs = 4326)
+
+rs <- geobr::read_state(code_state = "RS", year = 2020) %>%
+st_transform(4326)
+
+grid_pol <- st_make_grid(rs, cellsize = 0.1, what = "polygons")
+grid_sf  <- st_sf(geometry = grid_pol) %>% st_intersection(rs)
+
+interpolar_campo <- function(pts_sf, grid_sf, var_name) {
+form <- as.formula(paste(var_name, "~ 1"))
+g <- gstat::gstat(formula = form, data = pts_sf,
+nmax = 10, set = list(idp = 2.0))
+predict(g, newdata = grid_sf)
+}
+
+H_grid     <- interpolar_campo(stations_Htheta_sf, grid_sf, "H") %>% mutate(param = "H")
+theta_grid <- interpolar_campo(stations_Htheta_sf, grid_sf, "theta") %>% mutate(param = "theta")
+
+p_H <- ggplot() +
+geom_sf(data = rs, fill = NA, color = "black") +
+geom_sf(data = H_grid, aes(fill = var1.pred), color = NA) +
+geom_sf(data = stations_Htheta_sf,
+color = "black", fill = "white", size = 1.6, shape = 21) +
+geom_sf_text(data = stations_Htheta_sf,
+aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+size = 2.1, nudge_y = 0.05) +
+scale_fill_distiller(palette = "Greens", direction = 1) +
+labs(
+title = "Parâmetro H interpolado",
+fill  = "H"
+) +
+theme_minimal()
+
+p_theta <- ggplot() +
+geom_sf(data = rs, fill = NA, color = "black") +
+geom_sf(data = theta_grid, aes(fill = var1.pred), color = NA) +
+geom_sf(data = stations_Htheta_sf,
+color = "black", fill = "white", size = 1.6, shape = 21) +
+geom_sf_text(data = stations_Htheta_sf,
+aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+size = 2.1, nudge_y = 0.05) +
+scale_fill_distiller(palette = "Purples", direction = 1) +
+labs(
+title = "Parâmetro θ interpolado",
+fill  = expression(theta)
+) +
+theme_minimal()
+
+p_H | p_theta
 ```
