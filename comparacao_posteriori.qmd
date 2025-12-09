@@ -1,0 +1,218 @@
+---
+title: "Comparação Prioris"
+---
+
+# Hiperparâmetros $\tau^2$ no modelo hierárquico
+
+Nos modelos hierárquicos aplicados à distribuição GEV, os hiperparâmetros $\tau_\mu^2$, $\tau_\sigma^2$ e $\tau_\xi^2$ representam a variância entre as estações para cada parâmetro da GEV (μ, σ, ξ).
+
+$\tau^2$ grande → maior variabilidade entre estações (menos pooling)
+$\tau^2$ pequeno → estações são “puxadas” para um comportamento comum (mais pooling)
+
+Para $\tau^2$, utilizamos uma prior Inverse-Gamma(a, b).
+A escolha de priors mais ou menos informativas influencia diretamente a suavização dos parâmetros. Os dois modelos analisados diferem apenas nesta prior. Modelo A (IG(0.01, 0.01)) e Modelo B (IG(0.001, 0.001)). Foi testado um modelo com a distribuição uniforme, mas o modelo não convergiu.
+
+```{r}
+
+fit_A <- readRDS("C:/Users/laris/Documents/fit_teste_0_01.rds")
+fit_B <- readRDS("C:/Users/laris/Documents/fit_teste_0_001.rds")
+
+post_A <- rstan::extract(fit_A)
+post_B <- rstan::extract(fit_B)
+
+tau_A <- list(
+  mu    = post_A$tau2_mu,
+  sigma = post_A$tau2_sigma,
+  xi    = post_A$tau2_xi
+)
+
+tau_B <- list(
+  mu    = post_B$tau2_mu,
+  sigma = post_B$tau2_sigma,
+  xi    = post_B$tau2_xi
+)
+
+a <- 0.001   # shape
+b <- 0.001   # scale
+
+x_vals  <- seq(0, 1, 0.001)
+dens_pr <- invgamma::dinvgamma(x_vals, a, b)
+
+df_prior <- data.frame(x = x_vals, density = dens_pr)
+
+posterior_to_line <- function(samples) {
+  d <- density(samples, na.rm = TRUE)
+  data.frame(x = d$x, density = d$y)
+}
+
+# Os valores de τ², tanto na prior quanto na posterior, concentram-se muito próximos de zero. Para que as curvas fossem visualmente comparáveis, foi necessário restringir a escala dos eixos. O limite xlim = c(0, 0.05) foca exatamente na região onde prior e posterior possuem massa de probabilidade.
+plot_tau <- function(param_name, xlim = c(0, 0.05), ylim = c(0, 0.5)) {
+  
+  postA_line <- posterior_to_line(tau_A[[param_name]])
+  postB_line <- posterior_to_line(tau_B[[param_name]])
+  
+  ggplot() +
+    geom_line(data = df_prior,
+              aes(x = x, y = density),
+              color = "blue", size = 1.1) +
+    
+    geom_line(data = postA_line,
+              aes(x = x, y = density),
+              color = "red", size = 1.1) +
+    
+    geom_line(data = postB_line,
+              aes(x = x, y = density),
+              color = "darkgreen", size = 1.1) +
+    
+    coord_cartesian(xlim = xlim, ylim = ylim) +
+    theme_minimal() +
+    labs(
+      title = paste0("Prior × Posterior — τ²_", param_name),
+      x = expression(tau^2),
+      y = "Densidade",
+      subtitle = "Azul = Prior | Vermelho = Modelo A (τ² prior=0.01) | Verde = Modelo B (τ² prior=0.001)"
+    )
+}
+
+plot_tau("xi")
+
+plot_tau("mu")
+
+plot_tau("sigma")
+
+```
+
+$\xi$ tem a maior variabilidade entre estações, e as posteriores ignoram a priori pouco pooling.
+$\mu$ é o parâmetro mais estável, com pooling forte e posterior bem próxima de zero.
+$\sigma$ ainda tem sua posteriori influenciada pela priori.
+
+O modelo com a priori 0.01 ainda é forte, mas deixa mais liberdade para o modelo.
+
+```{r}
+
+library(ggplot2)
+library(patchwork)
+
+post_line <- function(samples) {
+d <- density(samples, na.rm = TRUE)
+data.frame(x = d$x, density = d$y)
+}
+
+dfA <- list(
+mu    = post_line(tau_A$mu),
+sigma = post_line(tau_A$sigma),
+xi    = post_line(tau_A$xi)
+)
+
+dfB <- list(
+mu    = post_line(tau_B$mu),
+sigma = post_line(tau_B$sigma),
+xi    = post_line(tau_B$xi)
+)
+
+plot_tau_post <- function(param_name, xlim = c(0,0.05)) {
+
+ggplot() +
+geom_line(data = dfA[[param_name]],
+aes(x=x, y=density),
+color="red", size=1.1) +
+geom_line(data = dfB[[param_name]],
+aes(x=x, y=density),
+color="darkgreen", size=1.1) +
+coord_cartesian(xlim=xlim) +
+theme_minimal() +
+labs(
+title = paste0("Posterior de τ²_", param_name),
+subtitle = "Vermelho = Modelo A (0.01) | Verde = Modelo B (0.001)",
+x = expression(tau^2),
+y = "Densidade"
+)
+}
+
+p_mu    <- plot_tau_post("mu")
+p_sigma <- plot_tau_post("sigma")
+p_xi    <- plot_tau_post("xi")
+
+(p_mu | p_sigma | p_xi)
+
+```
+
+# Interpretação dos parâmetros hierárquicos α, β, H e θ
+
+Além da análise das variâncias hierárquicas τ², avaliamos também como a escolha da prior influencia a estimativa dos parâmetros α, β, H e θ, que governam a estrutura de escala das distribuições GEV entre durações e estações.
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(purrr)
+
+# ------------------------------------------
+# 1. Converter posterior para long format
+# ------------------------------------------
+
+make_long <- function(samples_matrix, param_name, model_name) {
+  as.data.frame(samples_matrix) %>%
+    pivot_longer(
+      cols = everything(),
+      names_to = "station",
+      values_to = "value"
+    ) %>%
+    mutate(
+      station = factor(station),
+      param   = param_name,
+      model   = model_name
+    )
+}
+
+# ------------------------------------------
+# 2. Criar tabela única com todos os parâmetros
+# ------------------------------------------
+
+df_all <- bind_rows(
+  make_long(post_A$alpha, "alpha", "A"),
+  make_long(post_B$alpha, "alpha", "B"),
+  make_long(post_A$beta,  "beta",  "A"),
+  make_long(post_B$beta,  "beta",  "B"),
+  make_long(post_A$H,     "H",     "A"),
+  make_long(post_B$H,     "H",     "B"),
+  make_long(post_A$theta, "theta", "A"),
+  make_long(post_B$theta, "theta", "B")
+)
+
+df_all$station <- factor(df_all$station)
+
+# ------------------------------------------
+# 3. Função para gerar gráfico por parâmetro
+# ------------------------------------------
+
+plot_param <- function(param_name) {
+  df_all %>%
+    filter(param == param_name) %>%
+    ggplot(aes(x = value, fill = model)) +
+    geom_density(alpha = 0.4) +
+    facet_wrap(~station, scales = "free") +
+    scale_fill_manual(values = c(A = "red", B = "darkgreen")) +
+    theme_minimal() +
+    labs(
+      title = paste("Distribuição posterior de", param_name),
+      subtitle = "Comparação entre Modelo A (0.01) e Modelo B (0.001)",
+      x = param_name,
+      y = "Densidade",
+      fill = "Modelo"
+    )
+}
+
+p_alpha <- plot_param("alpha")
+p_beta  <- plot_param("beta")
+p_H     <- plot_param("H")
+p_theta <- plot_param("theta")
+
+p_alpha
+p_beta
+p_H
+p_theta
+```
+A inspeção visual mostra que as distribuições posteriores praticamente se sobrepõem em todos os parâmetros.
+
+Mesmo usando priors diferentes para $\tau^2$ (0.01 e 0.001), os resultados mostram que os parâmetros hierárquicos praticamente não mudam. Então mudar esse valor não altera o grau de pooling nem modifica as estimativas de α, β, H e θ. Os dois modelos acabam produzindo inferências praticamente iguais.
