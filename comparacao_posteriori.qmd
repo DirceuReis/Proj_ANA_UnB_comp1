@@ -14,8 +14,8 @@ A escolha de priors mais ou menos informativas influencia diretamente a suaviza√
 
 ```{r}
 
-fit_A <- readRDS("C:/Users/laris/Documents/fit_teste_0_01.rds")
-fit_B <- readRDS("C:/Users/laris/Documents/fit_teste_0_001.rds")
+fit_A <- readRDS("base/fit_stan/fit_teste_0_01.rds")
+fit_B <- readRDS("base/fit_stan/fit_teste_0_001.rds")
 
 post_A <- rstan::extract(fit_A)
 post_B <- rstan::extract(fit_B)
