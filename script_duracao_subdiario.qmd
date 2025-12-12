@@ -7,7 +7,19 @@ bibliography: referencias/ref_desagregacao.bib
 
 ## Análise da hipótese de invariância de escala
 
-Originalmente, temos a seguinte relação para a invariância simples de escala em seu sentido amplo [@Menabde.1997]:
+Originalmente, temos a seguinte relação para a invariância simples de escala [@Nguyen.1998]:
+
+$$
+f(\lambda x) = C(\lambda)f(x)
+$$
+
+A expressão acima relaciona uma função $f(x)$ a uma função escalonada $f(\lambda x)$ através de um coeficiente $C(\lambda)$, este igual a $\lambda^{-H}$ no caso simples. O fator de escalonamento, por sua vez, é dado por $\lambda = d/D$, sendo $D$ o valor não escalonado (ex. 24 h) e $d = \lambda D$. Através da relação de invariância de escala temporal, as intensidades para durações diferentes seguem a relação [@Menabde.1999]:
+
+$$
+I_d \overset{d}{=}\left( \frac{d}{D} \right)^{-H} I_D,
+$$ {#eq-invariancia-escala-menabde}
+
+ou seja, sendo iguais em distribuição à exceção de um fator de escala. Essa relação também pode ser expandida para momentos de ordem $q$:
 
 $$
 E[I_d^q] = \left(\frac{d}{D}\right)^{-Hq} E[I_D^q],
@@ -51,3 +63,38 @@ q=2: & \quad \log(E[I_d^2]) = \log(f(2)) + (-2H)\log(d).
 $$
 
 Ajustando o valor do coeficiente angular $\beta_1$, teremos $\beta_1 = H_1 =  -H$ para o primeiro momento não central e $\beta_1 = H_2 = -2H$ para o segundo momento não central e, em teoria, $H_1 \approx H_2/2$.
+
+## Coeficientes de desagregação
+
+Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações (citar CETESB). Estes coeficientes ($C_P$) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias $P_D$). Em suma:
+
+$$
+C_P = \frac{P_d}{P_D}
+$$
+
+Estes coeficientes convencionais podem ser relacionados com a invariância de escala de intensidades de chuva. Sendo $I_d = P_d \times d$, $C_P$ será:
+
+$$
+C_P = \frac{P_d}{P_D} = \frac{I_d \times d}{I_D \times D} = \frac{I_d}{I_D} \times \frac{d}{D}
+$$
+
+O coeficiente de desagregação temporal das intensidades ($C_I$), seguindo a expressão em @eq-invariancia-escala-menabde, será:
+
+$$
+C_I = \frac{I_d}{I_D} = \left( \frac{d}{D} \right)^{-H}
+$$
+
+Assim, a partir da definição do parâmetro de escala $H$ pela regressão linear acima, é possível relacionar $C_P$ e $C_I$ como:
+
+$$
+\begin{align}
+C_P & = \frac{I_d}{I_D} \times \left( \frac{d}{D} \right) = C_I \times \left( \frac{d}{D} \right) \\
+& = \left( \frac{d}{D} \right)^{-H} \times \left( \frac{d}{D} \right),
+\end{align}
+$$
+
+e, finalmente,
+
+$$
+C_P = \left( \frac{d}{D} \right)^{-H + 1}
+$$ {#eq-coef-desagregacao}

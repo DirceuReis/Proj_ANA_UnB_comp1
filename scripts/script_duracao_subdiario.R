@@ -1,7 +1,7 @@
 
 # PACOTES -----------------------------------------------------------------
 
-rm(list = ls()); gc()
+rm(list = ls()); invisible(gc())
 
 if(!require(pacman)) install.packates("pacman")
 pacman::p_load(pacman,
@@ -23,7 +23,7 @@ source("scripts/funcoes/fun_scale_invariance.R")
 
 # LER DADOS ---------------------------------------------------------------
 
-# Dados
+# Dados subdiários
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
 
 
@@ -53,9 +53,7 @@ scale.invariance <- lapply(X = duration.intervals, FUN = function(interval){
                               font.size = 12,
                               plot.dim = c(6,6))
   
-})
-
-names(scale.invariance) <- c("all", "subhourly", "hourly", "daily")
+}); names(scale.invariance) <- c("all", "subhourly", "hourly", "daily")
 
 # Dimensões gráfico (pixels)
 height <- 2160
@@ -85,45 +83,7 @@ for(i in seq_along(scale.invariance)){
   
 }
 
-# Salvar 'scale.invariance'
-df.regression <- scale.invariance$hourly$regression
-arrow::write_parquet(x = df.regression, sink = "base/gerados/df_scale_invariance.parquet")
-
-# HISTOGRAMA DE SCALE -----------------------------------------------------
-
-# Análise horária
-
-# Diferença relativa entre scale locais e scale regional
-# Refazer o cálcuulo da diferença relativa
-df.scale <- df.regression %>% 
-  filter(which_moment == "1") %>% 
-  group_by(gauge_code) %>% 
-  summarise(scale = mean(scale)) %>% 
-  rename("scale_local" = "scale") %>% 
-  mutate(scale_regional = scale.regional,
-         relative_diff = (scale_local - scale_regional)/scale_regional*100)
-
-# Estabelecer um limite p/ seleção de estações
-limit <- c(-10, 10) #%
-
-plot.scale.hist <- ({
-
-  ggplot(df.scale, aes(x = relative_diff)) +
-    # fact_wrap(~which_moment, ncol = 2) +
-    geom_ribbon(aes(xmin = limit[1], xmax = limit[2])) +
-    geom_histogram(aes(y = after_stat(count/sum(count))), bins = 20, fill = "yellow2", color = "darkorange3") +
-    geom_vline(xintercept = first(df.scale$scale_regional),
-               color = "red", linetype = "dashed", linewidth = 0.5) +
-    scale_y_continuous(labels = scales::percent) +
-    labs(x = "(H<sub>i</sub> - H<sub>R</sub>)/H<sub>r</sub> × 100", y = "") +
-    theme_minimal() +
-    theme(legend.position =  "none",
-          axis.title.x = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
-          strip.placement = "none",                         # remover título do 'facet' 
-          strip.text = element_blank(),                     # 'strip.' altera configurações do facet_wrap
-          plot.background = element_rect(color = "white"),
-          aspect.ratio = 1,
-          panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(family = font.family, color = "black", size = font.size))
-
-})
+# Salvar resultados de 'scale.invariance'
+scale.moments <- scale.invariance$hourly$scale.moments         # momentos calculados
+scale.coefficient <- scale.invariance$hourly$scale.coefficient # coeficientes de escala da invariância
+arrow::write_parquet(x = scale.coefficient, sink = "base/gerados/df_scale_coefficient.parquet")

@@ -222,6 +222,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#análise-da-hipótese-de-invariância-de-escala" id="toc-análise-da-hipótese-de-invariância-de-escala" class="nav-link active" data-scroll-target="#análise-da-hipótese-de-invariância-de-escala">Análise da hipótese de invariância de escala</a></li>
+  <li><a href="#coeficientes-de-desagregação" id="toc-coeficientes-de-desagregação" class="nav-link" data-scroll-target="#coeficientes-de-desagregação">Coeficientes de desagregação</a></li>
   </ul>
 </nav>
     </div>
@@ -241,7 +242,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">04/12/2025 12:53:09</p>
+      <p class="date">11/12/2025 21:16:18</p>
     </div>
   </div>
   
@@ -255,7 +256,15 @@ window.Quarto = {
 
 <section id="análise-da-hipótese-de-invariância-de-escala" class="level2">
 <h2 class="anchored" data-anchor-id="análise-da-hipótese-de-invariância-de-escala">Análise da hipótese de invariância de escala</h2>
-<p>Originalmente, temos a seguinte relação para a invariância simples de escala em seu sentido amplo <span class="citation" data-cites="Menabde.1997">(<a href="#ref-Menabde.1997" role="doc-biblioref">Menabde et al. 1997</a>)</span>:</p>
+<p>Originalmente, temos a seguinte relação para a invariância simples de escala <span class="citation" data-cites="Nguyen.1998">(<a href="#ref-Nguyen.1998" role="doc-biblioref">Nguyen, Nguyen, e Wang 1998</a>)</span>:</p>
+<p><span class="math display">\[
+f(\lambda x) = C(\lambda)f(x)
+\]</span></p>
+<p>A expressão acima relaciona uma função <span class="math inline">\(f(x)\)</span> a uma função escalonada <span class="math inline">\(f(\lambda x)\)</span> através de um coeficiente <span class="math inline">\(C(\lambda)\)</span>, este igual a <span class="math inline">\(\lambda^{-H}\)</span> no caso simples. O fator de escalonamento, por sua vez, é dado por <span class="math inline">\(\lambda = d/D\)</span>, sendo <span class="math inline">\(D\)</span> o valor não escalonado (ex. 24 h) e <span class="math inline">\(d = \lambda D\)</span>. Através da relação de invariância de escala temporal, as intensidades para durações diferentes seguem a relação <span class="citation" data-cites="Menabde.1999">(<a href="#ref-Menabde.1999" role="doc-biblioref">Menabde, Seed, e Pegram 1999</a>)</span>:</p>
+<p><span id="eq-invariancia-escala-menabde"><span class="math display">\[
+I_d \overset{d}{=}\left( \frac{d}{D} \right)^{-H} I_D,
+\tag{1}\]</span></span></p>
+<p>ou seja, sendo iguais em distribuição à exceção de um fator de escala. Essa relação também pode ser expandida para momentos de ordem <span class="math inline">\(q\)</span>:</p>
 <p><span class="math display">\[
 E[I_d^q] = \left(\frac{d}{D}\right)^{-Hq} E[I_D^q],
 \]</span> que pode ser reescrita como:</p>
@@ -267,8 +276,8 @@ E[I_d^q] = d^{-Hq} \ D^{Hq} \ E[I_D^q].
 \]</span> Como <span class="math inline">\(H\)</span> e <span class="math inline">\(D\)</span> são escalares constantes, podemos chamar <span class="math inline">\(f(q) = D^{Hq} \ E[I_D^q]\)</span> e, assim, obter:</p>
 <p><span id="eq-invariancia-reduzida"><span class="math display">\[
 E[I_d^q] = f(q) \ d^{-Hq}
-\tag{1}\]</span></span></p>
-<p>Em um procedimento de regressão linear com duas variáveis (uma dependente <span class="math inline">\(Y\)</span> e outra independente <span class="math inline">\(X\)</span>), podemos estabelecer uma relação do tipo <span class="math inline">\(Y = \beta_0 + \beta_1 X\)</span>. Se tirarmos o logaritmo de <a href="#eq-invariancia-reduzida" class="quarto-xref">Equação&nbsp;1</a>, conseguimos manipular a expressão para tomar a forma de uma relação linear:</p>
+\tag{2}\]</span></span></p>
+<p>Em um procedimento de regressão linear com duas variáveis (uma dependente <span class="math inline">\(Y\)</span> e outra independente <span class="math inline">\(X\)</span>), podemos estabelecer uma relação do tipo <span class="math inline">\(Y = \beta_0 + \beta_1 X\)</span>. Se tirarmos o logaritmo de <a href="#eq-invariancia-reduzida" class="quarto-xref">Equação&nbsp;2</a>, conseguimos manipular a expressão para tomar a forma de uma relação linear:</p>
 <p><span class="math display">\[
 \log(E[I_d^q]) = \log{\left[ f(q) \ d^{-Hq} \right]} = \log(f(q)) + (-Hq)\log(d),
 \]</span></p>
@@ -288,14 +297,43 @@ q=2: &amp; \quad \log(E[I_d^2]) = \log(f(2)) + (-2H)\log(d).
 \end{align}
 \]</span></p>
 <p>Ajustando o valor do coeficiente angular <span class="math inline">\(\beta_1\)</span>, teremos <span class="math inline">\(\beta_1 = H_1 =  -H\)</span> para o primeiro momento não central e <span class="math inline">\(\beta_1 = H_2 = -2H\)</span> para o segundo momento não central e, em teoria, <span class="math inline">\(H_1 \approx H_2/2\)</span>.</p>
+</section>
+<section id="coeficientes-de-desagregação" class="level2">
+<h2 class="anchored" data-anchor-id="coeficientes-de-desagregação">Coeficientes de desagregação</h2>
+<p>Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações (citar CETESB). Estes coeficientes (<span class="math inline">\(C_P\)</span>) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias <span class="math inline">\(P_D\)</span>). Em suma:</p>
+<p><span class="math display">\[
+C_P = \frac{P_d}{P_D}
+\]</span></p>
+<p>Estes coeficientes convencionais podem ser relacionados com a invariância de escala de intensidades de chuva. Sendo <span class="math inline">\(I_d = P_d \times d\)</span>, <span class="math inline">\(C_P\)</span> será:</p>
+<p><span class="math display">\[
+C_P = \frac{P_d}{P_D} = \frac{I_d \times d}{I_D \times D} = \frac{I_d}{I_D} \times \frac{d}{D}
+\]</span></p>
+<p>O coeficiente de desagregação temporal das intensidades (<span class="math inline">\(C_I\)</span>), seguindo a expressão em <a href="#eq-invariancia-escala-menabde" class="quarto-xref">Equação&nbsp;1</a>, será:</p>
+<p><span class="math display">\[
+C_I = \frac{I_d}{I_D} = \left( \frac{d}{D} \right)^{-H}
+\]</span></p>
+<p>Assim, a partir da definição do parâmetro de escala <span class="math inline">\(H\)</span> pela regressão linear acima, é possível relacionar <span class="math inline">\(C_P\)</span> e <span class="math inline">\(C_I\)</span> como:</p>
+<p><span class="math display">\[
+\begin{align}
+C_P &amp; = \frac{I_d}{I_D} \times \left( \frac{d}{D} \right) = C_I \times \left( \frac{d}{D} \right) \\
+&amp; = \left( \frac{d}{D} \right)^{-H} \times \left( \frac{d}{D} \right),
+\end{align}
+\]</span></p>
+<p>e, finalmente,</p>
+<p><span id="eq-coef-desagregacao"><span class="math display">\[
+C_P = \left( \frac{d}{D} \right)^{-H + 1}
+\tag{3}\]</span></span></p>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-Menabde.1997" class="csl-entry" role="listitem">
-Menabde, Merab, Daniel Harris, Alan Seed, Geoff Austin, e David Stow. 1997. <span>«<span>Multiscaling properties of rainfall and bounded random cascades</span>»</span>. <em>Water Resources Research</em> 33 (12): 2823–30. <a href="https://doi.org/10.1029/97wr02006">https://doi.org/10.1029/97wr02006</a>.
+<div id="ref-Menabde.1999" class="csl-entry" role="listitem">
+Menabde, Merab, Alan Seed, e Geoff Pegram. 1999. <span>«<span>A simple scaling model for extreme rainfall</span>»</span>. <em>Water Resources Research</em> 35 (1): 335–39. <a href="https://doi.org/10.1029/1998wr900012">https://doi.org/10.1029/1998wr900012</a>.
+</div>
+<div id="ref-Nguyen.1998" class="csl-entry" role="listitem">
+Nguyen, V. T. V., T. D. Nguyen, e H. Wang. 1998. <span>«<span>Regional estimation of short duration rainfall extremes</span>»</span>. <em>Water Science and Technology</em> 37 (11): 15–19. <a href="https://doi.org/10.2166/wst.1998.0425">https://doi.org/10.2166/wst.1998.0425</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
