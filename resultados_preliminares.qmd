@@ -474,7 +474,7 @@ init_vals <- list(
 rstan_options(auto_write = TRUE)
 options(mc.cores = 5)
 
-sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
+#sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
 
 #fit_dbg <- sampling(
 #sm,
@@ -492,7 +492,7 @@ sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
 
 Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
 
-Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, coerentes com a ordem de grandeza esperada para a variabilidade hierárquica, e a média global da forma é inicializada em xi_bar = 0, correspondente ao caso Gumbel. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
+Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, e a média global da forma é inicializada em xi_bar = 0. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
 
 ## Diagnósticos e avaliação do modelo
 
@@ -644,6 +644,13 @@ check_all_diagnostics <- function(fit, max_depth = 15, quiet=FALSE) {
 check_all_diagnostics(fit)
 ```
 
+check_all_diagnostics(fit)
+[1] "n_eff / iter looks reasonable for all parameters"
+[1] "Rhat looks reasonable for all parameters"
+[1] "0 of 1000 iterations ended with a divergence (0%)"
+[1] "0 of 1000 iterations saturated the maximum tree depth of 15 (0%)"
+[1] "E-FMI indicated no pathological behavior"
+
 # Resultados Parciais
 
 As amostras geradas pelo Stan são extraídas por meio de `rstan::extract(fit)`,
@@ -674,7 +681,9 @@ logarítmica da duração.
 ```{r}
 library(tidyr)
 #retorna listas contendo arrays com TODAS as amostras MCMC dos parâmetros.
-posterior_samples <- rstan::extract(fit)
+#posterior_samples <- rstan::extract(fit)
+#saveRDS(posterior_samples, "base/fit_stan/posterior_samples.rds")
+posterior_samples <- readRDS("base/fit_stan/posterior_samples.rds")
 
 # mapeamento estacao_id -> Estacao
 map_est <- data.frame(estacao_id = seq(1,79,1), Estacao = unique(dados_modelo$gauge_code))
@@ -790,9 +799,10 @@ df_mu_comb    <- df_mu_comb    %>% left_join(df_years, by = "Estacao")
 df_sigma_comb <- df_sigma_comb %>% left_join(df_years, by = "Estacao")
 df_xi_comb    <- df_xi_comb    %>% left_join(df_years, by = "Estacao")
 
-p_mu_longas <- plot_param(
-  df_mu_comb %>% filter(grupo == "Longas (18,15,14 anos)"),
-  "mu_gev",
+# Usar o grupo para ver as estações de acordo com a duração
+p_xi_longas <- plot_param(
+  df_xi_comb %>% filter(grupo == "Longas (18,15,14 anos)"),
+  "xi_gev",
   expression(mu),
   "μ – Estações com séries longas (18-14 anos)",
   ncol = 5
@@ -825,6 +835,8 @@ plot_param_grupo <- function(df_comb, grupo_name) {
 plots_xi <- lapply(grupos_validos, function(g) plot_param_grupo(df_xi_comb, g))
 
 names(plots_xi) <- grupos_validos
+
+plots_xi[[5]]
 ```
 
 ## Posterior dos parâmetros por estação (H, θ e α)
@@ -863,76 +875,94 @@ station_labels <- df_mu_comb %>%
   arrange(estacao_id) %>%
   pull(Estacao)
 
-library(posterior)
-draws <- posterior::as_draws_df(fit)
-
-extract_param_long <- function(draws, par_regex, value_name) {
-draws %>%
-select(matches(par_regex)) %>%
-mutate(.draw = row_number()) %>%
-tidyr::pivot_longer(-.draw, names_to = "name", values_to = value_name) %>%
-mutate(station_id = as.integer(stringr::str_extract(name, "\\d+"))) %>%
-select(.draw, station_id, !!value_name)
-}
-
 library(dplyr)
-
-H_long     <- extract_param_long(draws, "^H\\[",     "H")
-theta_long <- extract_param_long(draws, "^theta\\[", "theta")
-alpha_long <- extract_param_long(draws, "^alpha\\[", "alpha")
-
-posterior_df <- H_long %>%
-inner_join(theta_long, by = c(".draw", "station_id")) %>%
-inner_join(alpha_long, by = c(".draw", "station_id")) %>%
-mutate(station = factor(station_labels[station_id],
-levels = station_labels))
-
-posterior_df <- posterior_df %>%
-left_join(df_years %>% select(Estacao, grupo),
-by = c("station" = "Estacao"))
-
+library(tidyr)
+library(stringr)
 library(ggplot2)
 library(patchwork)
+library(posterior)
+# --- função: extrai parâmetro do posterior_samples e devolve long -------------
+# Espera posterior_samples[[param]] ser:
+# - vetor (ndraw) -> vira ndraw x 1
+# - matriz (ndraw x S) -> padrão de parâmetros por estação (ex.: H, theta, alpha)
+extract_param_long_ps <- function(posterior_samples, param, value_name) {
 
+  x <- posterior_samples[[param]]
+  if (is.null(x)) stop("Parâmetro não encontrado em posterior_samples: ", param)
+
+  # garante matriz ndraw x ncol
+  if (is.null(dim(x))) {
+    x <- matrix(x, ncol = 1)
+  }
+
+  ndraw <- nrow(x)
+
+  # transforma em tibble com nomes tipo H[1], H[2], ...
+  df <- as_tibble(x)
+  colnames(df) <- paste0(param, "[", seq_len(ncol(x)), "]")
+
+  df %>%
+    mutate(.draw = row_number()) %>%
+    pivot_longer(-.draw, names_to = "name", values_to = value_name) %>%
+    mutate(station_id = as.integer(str_extract(name, "\\d+"))) %>%
+    select(.draw, station_id, !!value_name)
+}
+
+# --- extrair H, theta, alpha --------------------------------------------------
+H_long     <- extract_param_long_ps(posterior_samples, "H",     "H")
+theta_long <- extract_param_long_ps(posterior_samples, "theta", "theta")
+alpha_long <- extract_param_long_ps(posterior_samples, "alpha", "alpha")
+
+posterior_df <- H_long %>%
+  inner_join(theta_long, by = c(".draw", "station_id")) %>%
+  inner_join(alpha_long, by = c(".draw", "station_id")) %>%
+  mutate(station = factor(station_labels[station_id], levels = station_labels))
+
+posterior_df <- posterior_df %>%
+  left_join(df_years %>% select(Estacao, grupo),
+            by = c("station" = "Estacao"))
+
+# --- plots por grupo (igual ao seu) -------------------------------------------
 plot_posterior_group <- function(posterior_df, grupo_name) {
 
-df_sub <- posterior_df %>% filter(grupo == grupo_name)
-if (nrow(df_sub) == 0) return(NULL)
+  df_sub <- posterior_df %>% filter(grupo == grupo_name)
+  if (nrow(df_sub) == 0) return(NULL)
 
-p1 <- ggplot(df_sub, aes(x = H, color = station)) +
-geom_density() +
-labs(title = paste0("a) Posterior de H – ", grupo_name),
-x = "H", y = "Densidade") +
-theme_minimal() + theme(legend.position = "none")
+  p1 <- ggplot(df_sub, aes(x = H, color = station)) +
+    geom_density() +
+    labs(title = paste0("a) Posterior de H – ", grupo_name),
+         x = "H", y = "Densidade") +
+    theme_minimal() + theme(legend.position = "none")
 
-p2 <- ggplot(df_sub, aes(x = theta, color = station)) +
-geom_density() +
-labs(title = paste0("b) Posterior de θ – ", grupo_name),
-x = expression(theta), y = "Densidade") +
-theme_minimal() + theme(legend.position = "none")
+  p2 <- ggplot(df_sub, aes(x = theta, color = station)) +
+    geom_density() +
+    labs(title = paste0("b) Posterior de θ – ", grupo_name),
+         x = expression(theta), y = "Densidade") +
+    theme_minimal() + theme(legend.position = "none")
 
-p3 <- ggplot(df_sub, aes(x = alpha, y = H, color = station)) +
-geom_point(alpha = 0.4, size = 0.8) +
-labs(title = paste0("c) Relação entre α e H – ", grupo_name),
-x = expression(alpha), y = "H") +
-theme_minimal() + theme(legend.position = "none")
+  p3 <- ggplot(df_sub, aes(x = alpha, y = H, color = station)) +
+    geom_point(alpha = 0.4, size = 0.8) +
+    labs(title = paste0("c) Relação entre α e H – ", grupo_name),
+         x = expression(alpha), y = "H") +
+    theme_minimal() + theme(legend.position = "none")
 
-p4 <- ggplot(df_sub, aes(x = H, y = theta, color = station)) +
-geom_point(alpha = 0.4, size = 0.8) +
-labs(title = paste0("d) Relação entre H e θ – ", grupo_name),
-x = "H", y = expression(theta)) +
-theme_minimal() + theme(legend.position = "bottom")
+  p4 <- ggplot(df_sub, aes(x = H, y = theta, color = station)) +
+    geom_point(alpha = 0.4, size = 0.8) +
+    labs(title = paste0("d) Relação entre H e θ – ", grupo_name),
+         x = "H", y = expression(theta)) +
+    theme_minimal() + theme(legend.position = "bottom")
 
-(p1 + p2) / (p3 + p4)
+  (p1 + p2) / (p3 + p4)
 }
 
 grupos_validos <- unique(posterior_df$grupo)
 
 plots_posterior <- lapply(grupos_validos, function(g) {
-plot_posterior_group(posterior_df, g)
+  plot_posterior_group(posterior_df, g)
 })
 
 names(plots_posterior) <- grupos_validos
+
 plots_posterior[[7]]
 
 ```
