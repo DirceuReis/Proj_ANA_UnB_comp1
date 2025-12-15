@@ -1,7 +1,7 @@
 
 # PACOTES -----------------------------------------------------------------
 
-rm(list = ls()); gc()
+rm(list = ls()); invisible(gc())
 
 if(!require(pacman)) install.packates("pacman")
 pacman::p_load(pacman,
@@ -11,156 +11,79 @@ pacman::p_load(pacman,
                patchwork,
                ggplot2,
                ggtext,
-               gghighlight
+               gghighlight,
+               ggforce
                )
 
-font.size <- 12
-font.family <- "serif"
 
+# FUNÇÕES -----------------------------------------------------------------
+
+# Regressão linear e análise invariância de escala
+source("scripts/funcoes/fun_scale_invariance.R")
 
 # LER DADOS ---------------------------------------------------------------
 
-# Dados
+# Dados subdiários
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
-# df_imax <- df_imax[df_imax$d >= 0.5,]
-
-# Vetor de estações que possuem ao menos N anos
-# Manter somente estação, falhas e anos
-df.quality <- df_imax %>% 
-  select(gauge_code, year, na_prct) %>% 
-  group_by(gauge_code, year) %>% 
-  reframe(na_prct = first(na_prct)*100)
-
-# Estabelecer limites p/ análise
-threshold <- 10 # 10 %
-min.years <- 5  # 5 anos  
-
-# Filtrar dados e extrair vetor c/ codigo das estacoes
-gauges <- df.quality %>% 
-  filter(na_prct <= threshold) %>% # no máximo 'threshold'%
-  count(gauge_code) %>%      # contar nro. anos, cria coluna 'n'
-  filter(n >= min.years) %>% # pelo menos 'min.years' anos de dados
-  pull(gauge_code) # extrair as estações
 
 
-# RELAÇÕES ENTRE DURAÇÕES -------------------------------------------------
+# APLICAR FUNÇÃO 'fun_scale_invariance' -----------------------------------
 
-# Calcular 1º e 2º momentos centrais locais (p/ cada estação)
-df.mom.local <- df_imax %>% 
-  filter(gauge_code %in% gauges) %>% # filtrar por min.years e threshold
-  group_by(gauge_code, d) %>%        # agrupar por duração e estação
-  reframe(mom1 = mean(imax, na.rm = TRUE),   # valor esperado de Id:  E[Id^1]
-          mom2 = mean(imax^2, na.rm = TRUE)) # valor esperado de Id²: E[Id^2]
+# Argumentos
+na.accept <- 0.2            # percentual de falhas (0.2 -> 20%)
+min.years <- 8              # mínimo de anos na série
+which.durations <- c(1, 24) # intervalo de durações
+which.moment <- 1           # qual momento usar de base p/ gerar figuras individuais
 
-# Calcular 1º e 2º momentos centrais regionais
-df.mom.regional <- df_imax %>% 
-  filter(gauge_code %in% gauges) %>% # filtrar por min.years e threshold
-  group_by(d) %>%                    # agrupar por duração
-  reframe(mom1 = mean(imax, na.rm = TRUE),   # valor esperado de Id:  E[Id^1]
-          mom2 = mean(imax^2, na.rm = TRUE)) # valor esperado de Id²: E[Id^2]
+# Avaliar diferentes modelos
+duration.intervals <- list(c(10/60, 10*24), # todas as durações
+                           c(10, 60)/60,    # sub-horários
+                           c(1, 24),        # horários
+                           c(1, 10)*24)     # diários
 
-df.mom.regional$gauge_code <- "Regional" # adicionar coluna
-
-# Juntar local e regional
-df.mom <- bind_rows(df.mom.local, df.mom.regional)
-
-
-## REGRESSÃO --------------------------------------------------------------
-
-# Regressão entre momentos e duração de cada estação
-ls.mom <- split(x = df.mom, f = df.mom$gauge_code) # dividir em lista
-df.regression <- lapply(X = ls.mom, FUN = function(gauge){
+# Regressão + coeficiente de escala + plots
+scale.invariance <- lapply(X = duration.intervals, FUN = function(interval){
   
-  name <- gauge$gauge_code[1] # código da estação
-  mom1 <- gauge$mom1
-  mom2 <- gauge$mom2
-  log.mom1 <- log(mom1)     # vetor c/ logs do primeiro momento
-  log.mom2 <- log(mom2)     # vetor c/ logs do primeiro momento
-  log.d <- log(gauge$d)     # vetor c/ logs das durações
-  regression1 <- lm(log.mom1~log.d)        # regressão linear
-  regression2 <- lm(log.mom2~log.d)        # regressão linear
-  scale1 <- coef(regression1)[["log.d"]]   # coeficiente
-  scale2 <- coef(regression2)[["log.d"]]   # coeficiente
-  r.squared1 <- summary(regression1)$r.squared # regressão (pegar $sigma tambem)
-  r.squared2 <- summary(regression2)$r.squared # regressão
+  res <- fun_scale_invariance(df.imax = df_imax,
+                              na.accept = na.accept,
+                              min.years = min.years,
+                              which.moment = which.moment,
+                              which.duration = interval,
+                              font.family = "serif",
+                              font.size = 12,
+                              plot.dim = c(5,4))
   
-  data.frame("gauge_code" = name,
-             "d" = gauge$d,
-             "mom1" = mom1,
-             "mom2" = mom2,
-             "coef1" = scale1,
-             "coef2" = scale2,
-             "rsquared1" = r.squared1,
-             "rsquared2" = r.squared2)
-  
-}) # fim 'df.regression'
+}); names(scale.invariance) <- c("all", "subhourly", "hourly", "daily")
 
-# Transformar em tbl_df
-df.regression <- bind_rows(df.regression) %>% 
-  pivot_longer(cols = -c(gauge_code, d), # todas as colunas menos essas
-               names_to = c(".value", "which_moment"),
-               names_pattern = "(mom|coef|rsquared)(\\d+)") %>% 
-  mutate(which_moment = recode(which_moment, "1" = "q = 1", "2" = "q = 2"))
-  
+# Dimensões gráfico (pixels)
+height <- 2160
+width <- 3840
+units <- "px"
 
-# VISUALIZAÇÃO ------------------------------------------------------------
+# Salvar gráficos
+for(i in seq_along(scale.invariance)){
+  
+  name <- names(scale.invariance[i])
+  interval <- scale.invariance[[name]]
+  
+  dir.name <- paste0("figuras/scale_invariance/8 anos 20 prct/", name, "_duration/")
+  if(isFALSE(dir.exists(dir.name))) dir.create(dir.name)
+  
+  plot.all <- interval$plot.scale.all
+  ggsave(plot = plot.all, filename = paste0(dir.name, "plot_scale_invariance_", name, ".png"),
+         width = 16, height = 14, units = "cm", dpi = 300)
+  
+  for(group in seq_along(interval$plot.scale.each)){
 
-# Visualização
-plot.mom.scale <- ({
-  
-  # Textos
-  
-  
-  # Curvas
-  # Colocar H/r regionais no gráfico
-  plot1 <- 
-    ggplot(df.regression, aes(x = d, y = mom, color = gauge_code)) +
-    facet_wrap(~which_moment, nrow = 2, strip.position = "left") +      # colocar título do facet à esquerda
-    geom_line(data = subset(df.regression, gauge_code != "Regional"), alpha = 0.7) +
-    geom_smooth(data = subset(df.regression, gauge_code == "Regional"), method = lm, formula = y~x, se = FALSE,
-                aes(color = "Regional"), alpha = 0.6, linewidth = 0.5) +
-    geom_point(data = subset(df.regression, gauge_code == "Regional"), aes(shape = "Regional")) +
-    scale_x_log10(breaks = c(0.5, 1, 2, 6, 24, 72, 240)) +
-    scale_y_log10() +
-    scale_color_manual(values = c("Regional" = "grey10"), na.value = "lightblue") +
-    scale_shape_manual(values = c("Regional" = 17)) +
-    labs(y = "E[I<sub>d</sub><sup>q</sup>]", x = "Durações [h]")+
-    theme_minimal() +
-    theme(legend.position =  "none",
-          axis.title.y = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
-          strip.placement = "outside",                      # fora dos rotulos do eixo-y
-          strip.text = element_text(size = 12),             # 'strip.' altera configurações do facet_wrap
-          plot.background = element_rect(color = "white"),
-          aspect.ratio = 1,
-          panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(family = font.family, color = "black", size = font.size)); plot1
-  
-  # Histogramas de R^2
-  # Adicionar % de estaçoes acima de R^2 = 0.99
-  plot2 <- 
-    ggplot(df.regression, aes(x = rsquared)) +
-    facet_wrap(~which_moment, nrow = 2) +
-    geom_histogram(aes(y = after_stat(count/sum(count))), bins = 20, fill = "yellow2", color = "darkorange3") +
-    geom_vline(xintercept = 0.99, color = "red", linetype = "dashed", linewidth = 0.5) +
-    # annotate() + qtas estações acima
-    scale_y_continuous(labels = scales::percent) +
-    scale_x_continuous(breaks = c(0.98, 0.99, 1)) +
-    labs(x = "R²", y = "") +
-    theme_minimal() +
-    theme(legend.position =  "none",
-          axis.title.y = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
-          strip.placement = "none",                         # remover título do 'facet' 
-          strip.text = element_blank(),                     # 'strip.' altera configurações do facet_wrap
-          plot.background = element_rect(color = "white"),
-          aspect.ratio = 1,
-          panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(family = font.family, color = "black", size = font.size)); plot2
-  
-  # Combinar c/ 'patchwork'
-  plot1 + plot2 #+ patchwork::plot_layout(widths = c(2,1))
-  
-}) # fim 'plot.mom.scale'
-plot.mom.scale
+    plot.each <- interval$plot.scale.each[[group]]
+    ggsave(plot = plot.each, filename = paste0(dir.name, "plot_scale_invariance_", name, "_group", group, ".png"),
+           width = width, height = height, units = units, dpi = 300)
 
-# ggsave(filename = "figuras/plot_mom_scale_invariance.png", plot = plot.mom.scale,
-#        width = 16, height = 14, units = "cm", dpi = 200)
+  }
+  
+}
+
+# Salvar resultados de 'scale.invariance'
+scale.moments <- scale.invariance$hourly$scale.moments         # momentos calculados
+scale.coefficient <- scale.invariance$hourly$scale.coefficient # coeficientes de escala da invariância
+arrow::write_parquet(x = scale.coefficient, sink = "base/gerados/df_scale_coefficient.parquet")

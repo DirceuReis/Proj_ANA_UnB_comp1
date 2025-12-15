@@ -1,4 +1,5 @@
 fun_fill_dates <- function(df, # data.frame with all stations
+                           daily = FALSE,
                            col_names = c("gauge_code", "rain_mm", "datetime", "time_steps", "responsible")
 ){
   
@@ -29,19 +30,33 @@ fun_fill_dates <- function(df, # data.frame with all stations
     # Extract gauge code and responsible based on the first observation
     gauge_code <- df[[col_names[1]]][1]
     resp <- df[[col_names[5]]][1]
-    
-    # Extract start and end dates
-    date_min <- lubridate::floor_date(min(df[[col_names[3]]]), unit = "year")
-    date_max <- lubridate::ceiling_date(max(df[[col_names[3]]]), unit = "year") - 1
-    
-    # Extract time_steps vector
     time_step <- unique(df[[col_names[4]]])*60 # convert to seconds to build new date sequence
     
     # Build new date sequence
-    seq_date <- seq(from = date_min, to = date_max, by = time_step)
-    
-    # Fill new rainfall sequence by matching date between new sequence and df$datetime
-    seq_rain <- df[[col_names[2]]][fastmatch::fmatch(x = seq_date, table = df[[col_names[3]]])]
+    if(isFALSE(daily)){
+      
+      # Extract start and end dates
+      date_min <- lubridate::floor_date(min(df[[col_names[3]]]), unit = "year")
+      date_max <- lubridate::ceiling_date(max(df[[col_names[3]]]), unit = "year") - 1
+      
+      # Extract time_steps vector
+      seq_date <- seq(from = date_min, to = date_max, by = time_step)
+      
+      # Fill new rainfall sequence by matching date between new sequence and df$datetime
+      seq_rain <- df[[col_names[2]]][fastmatch::fmatch(x = seq_date, table = df[[col_names[3]]])]
+      
+    } else{
+      
+      # Extract start and end dates
+      date <- lubridate::date(df[[col_names[3]]]) # remover 'time'
+      date_min <- lubridate::floor_date(min(date), unit = "year")
+      date_max <- lubridate::ceiling_date(max(date), unit = "year") - 1
+      seq_date <- seq(from = date_min, to = date_max, by = "day")
+      
+      # Fill new rainfall sequence by matching date between new sequence and date(df$datetime)
+      seq_rain <- df[[col_names[2]]][fastmatch::fmatch(x = seq_date, table = date)]
+      
+    }
     
     # Build final table
     df <- tibble(gauge_code = gauge_code,

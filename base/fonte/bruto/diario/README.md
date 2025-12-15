@@ -1,0 +1,1 @@
+Os arquivos `df_daily_data.parquet` e `df_daily_info.parquet` foram gerados a partir dos dados em formato HDF disponibilizados pela UFPB. Esses dados foram convertidos em PARQUET usando o script em Python localizado em `scripts/python/read_hdf_files.py`.
