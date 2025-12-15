@@ -30,8 +30,8 @@ df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
 # APLICAR FUNÇÃO 'fun_scale_invariance' -----------------------------------
 
 # Argumentos
-threshold <- 0.1            # percentual de falhas (0.1 -> 10%)
-min.years <- 5              # mínimo de anos na série
+na.accept <- 0.2            # percentual de falhas (0.2 -> 20%)
+min.years <- 8              # mínimo de anos na série
 which.durations <- c(1, 24) # intervalo de durações
 which.moment <- 1           # qual momento usar de base p/ gerar figuras individuais
 
@@ -45,13 +45,13 @@ duration.intervals <- list(c(10/60, 10*24), # todas as durações
 scale.invariance <- lapply(X = duration.intervals, FUN = function(interval){
   
   res <- fun_scale_invariance(df.imax = df_imax,
-                              threshold = threshold,
+                              na.accept = na.accept,
                               min.years = min.years,
                               which.moment = which.moment,
                               which.duration = interval,
                               font.family = "serif",
                               font.size = 12,
-                              plot.dim = c(6,6))
+                              plot.dim = c(5,4))
   
 }); names(scale.invariance) <- c("all", "subhourly", "hourly", "daily")
 
@@ -66,7 +66,7 @@ for(i in seq_along(scale.invariance)){
   name <- names(scale.invariance[i])
   interval <- scale.invariance[[name]]
   
-  dir.name <- paste0("figuras/scale_invariance/", name, "_duration/")
+  dir.name <- paste0("figuras/scale_invariance/8 anos 20 prct/", name, "_duration/")
   if(isFALSE(dir.exists(dir.name))) dir.create(dir.name)
   
   plot.all <- interval$plot.scale.all

@@ -1,7 +1,7 @@
 # Essa função avalia invariância de escala para os 1º e 2º momentos e
 # gera gráficos para análise
 fun_scale_invariance <- function(df.imax,                   # data.frame com intensidades máximas anuais para diferentes durações
-                                 threshold,                 # limite de falhas por ano [0,1]
+                                 na.accept,                 # limite de falhas por ano [0,1]
                                  min.years,                 # mínimo de anos em uma série
                                  which.moment = 1,          # qual momento usar para plotar 
                                  which.duration = c(1, 24), # intervalo de durações
@@ -25,12 +25,12 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
     select(gauge_code, year, na_prct) %>% 
     group_by(gauge_code, year) %>% 
     reframe(na_prct = first(na_prct)) %>% 
-    filter(na_prct <= threshold) %>% 
+    filter(na_prct <= na.accept) %>% 
     count(gauge_code) %>% 
     filter(n >= min.years) %>% 
     pull(gauge_code)
   
-  data <- df.imax[df.imax$gauge_code %in% gauges,]
+  data <- df.imax[df.imax$na_prct <= na.accept & df.imax$gauge_code %in% gauges,]
   
   # Calcular 1º e 2º momentos centrais locais (p/ cada estação)
   df.mom.local <- data %>% 
@@ -100,6 +100,9 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
     group_by(gauge_code, which_moment) %>% 
     reframe(scale = first(scale))
   
+  # R² mínimo
+  min.rsquared <- min(scale.moments$rsquared)
+  
   # Gráfico omparação geral entre modelos regionai e local
   plot.scale.all <- ({
     
@@ -141,9 +144,9 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
       ggplot(scale.moments, aes(x = rsquared)) +
       facet_wrap(~which_moment, nrow = 2) +
       geom_histogram(aes(y = after_stat(count/sum(count))), bins = 20, fill = "yellow2", color = "darkorange3") +
-      geom_vline(xintercept = 0.99, color = "red", linetype = "dashed", linewidth = 0.5) +
+      # geom_vline(xintercept = 0.99, color = "red", linetype = "dashed", linewidth = 0.5) +
       scale_y_continuous(labels = scales::percent) +
-      # scale_x_continuous(breaks = c(0.98, 0.99, 1)) +
+      # scale_x_continuous(limits = c(min.rsquared, 1)) +
       labs(x = "R²", y = "") +
       theme_minimal() +
       theme(legend.position =  "none",
