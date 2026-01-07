@@ -1,0 +1,36 @@
+/*
+Developed by the Federal University of Rio Grande do Sul and Brazilian Water Agency (ANA)
+contact: leonardo.laipelt@ufrgs.br
+*/
+
+// ANADEM
+var anadem = ee.Image('projects/et-brasil/assets/anadem/v1');
+
+// Remover noData
+var anadem = anadem.updateMask(anadem.neq(-9999));
+
+// Visualization parameters
+var visparams = { min: 0, max: 1300.0};
+
+
+// Import and filter RS shapefil
+var pol_rs = pol_uf_brasil.filter(ee.Filter.eq('SIGLA_UF', 'RS'));
+
+// Clip anadem raster
+var dem_rs = anadem.clip(pol_rs);
+var demVis = {bands: 'elevation', min: 0, max: 1500};
+Map.addLayer(dem_rs, demVis, 'DEM');
+
+// Exportar p/ Drive como GeoTiff
+Export.image.toDrive({
+  image: dem_rs,
+  description: 'DEM_RS_Export',
+  fileNamePrefix: 'DEM_RS',
+  region: pol_rs,
+  maxPixels: 1e13,
+  fileFormat: 'GeoTIFF',
+  formatOptions: {
+    cloudOptimized: true
+  },
+  crs: 'EPSG:4674'
+});

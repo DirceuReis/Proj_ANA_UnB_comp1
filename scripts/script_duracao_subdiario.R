@@ -25,6 +25,7 @@ source("scripts/funcoes/fun_scale_invariance.R")
 
 # Dados subdiários
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
+df_imax <- df_imax[df_imax$gauge_code != "SBPA",]
 
 
 # APLICAR FUNÇÃO 'fun_scale_invariance' -----------------------------------
@@ -49,6 +50,7 @@ scale.invariance <- lapply(X = duration.intervals, FUN = function(interval){
                               min.years = min.years,
                               which.moment = which.moment,
                               which.duration = interval,
+                              min.duration = 3,
                               font.family = "serif",
                               font.size = 12,
                               plot.dim = c(5,4))
@@ -66,7 +68,7 @@ for(i in seq_along(scale.invariance)){
   name <- names(scale.invariance[i])
   interval <- scale.invariance[[name]]
   
-  dir.name <- paste0("figuras/scale_invariance/8 anos 20 prct/", name, "_duration/")
+  dir.name <- paste0("figuras/scale_invariance/", min.years, " anos ", na.accept*100, " prct/", name, "_duration/")
   if(isFALSE(dir.exists(dir.name))) dir.create(dir.name)
   
   plot.all <- interval$plot.scale.all
@@ -78,8 +80,10 @@ for(i in seq_along(scale.invariance)){
     plot.each <- interval$plot.scale.each[[group]]
     ggsave(plot = plot.each, filename = paste0(dir.name, "plot_scale_invariance_", name, "_group", group, ".png"),
            width = width, height = height, units = units, dpi = 300)
-
+    
   }
+  
+  message("Gerando figuras em: ", dir.name, "...")
   
 }
 

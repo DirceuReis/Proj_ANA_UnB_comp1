@@ -5,6 +5,7 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
                                  min.years,                 # mínimo de anos em uma série
                                  which.moment = 1,          # qual momento usar para plotar 
                                  which.duration = c(1, 24), # intervalo de durações
+                                 min.duration = 3,          # nro. mínimo durações p/ regressão
                                  font.family = "serif",     # fonte gráficos
                                  font.size = 12,            # tamanho fonte
                                  plot.dim = c(6,6)          # nrow e ncol p/ gráfico c/ todas as estações
@@ -17,20 +18,18 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
   }
   pacman::p_load(pacman, tidyverse, patchwork, ggplot2, ggtext, ggforce)
   
-
   # MOMENTOS --------------------------------------------------------------
   
   # Selecionar estações adequadas
-  gauges <- df.imax %>% 
-    select(gauge_code, year, na_prct) %>% 
-    group_by(gauge_code, year) %>% 
-    reframe(na_prct = first(na_prct)) %>% 
-    filter(na_prct <= na.accept) %>% 
-    count(gauge_code) %>% 
-    filter(n >= min.years) %>% 
-    pull(gauge_code)
-  
-  data <- df.imax[df.imax$na_prct <= na.accept & df.imax$gauge_code %in% gauges,]
+  data <- df.imax %>%
+    filter(na_prct <= na.accept,                # filtrar anos por porcentagem de falhas
+           between(d, which.duration[1], which.duration[2])) %>% # filtrar durações dentro do intervalo
+    group_by(gauge_code) %>%                    # agrupar por estação
+    filter(n_distinct(d) >= min.duration) %>%   # so estações com pelo menos 'min.duration' durações
+    ungroup() %>%                               # desagrupar   
+    group_by(gauge_code) %>%                    # agrupar por estação
+    filter(n_distinct(year) >= min.years) %>%   # so estações com pelo menos 'min.year' anos
+    ungroup()                                   # desagrupar
   
   # Calcular 1º e 2º momentos centrais locais (p/ cada estação)
   df.mom.local <- data %>% 
@@ -48,8 +47,7 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
   
   df.mom.regional$gauge_code <- "Regional"           # adicionar coluna
   df.mom <- bind_rows(df.mom.local, df.mom.regional) # juntar
-  df.mom <- df.mom[between(df.mom$d, which.duration[1], which.duration[2]),] # filtrar durações especificadas
-  
+  # df.mom <- df.mom[between(df.mom$d, which.duration[1], which.duration[2]),] # filtrar durações especificadas
 
   # REGRESSÃO -------------------------------------------------------------
 
