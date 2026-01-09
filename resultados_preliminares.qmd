@@ -1019,7 +1019,7 @@ left_join(df_years %>% select(Estacao, n_years),
 by = c("gauge_code" = "Estacao"))
 
 stations_Htheta_sf <- x %>%
-select(gauge_code, long, lat) %>%
+select(gauge_code, long, lat, elevation) %>%
 distinct(gauge_code, .keep_all = TRUE) %>%
 left_join(params_H_theta, by = "gauge_code") %>%
 filter(!is.na(H), !is.na(theta)) %>%
@@ -1072,4 +1072,245 @@ fill  = expression(theta)
 theme_minimal()
 
 p_H | p_theta
+```
+
+
+## Plotagem dos parametros por intervalo
+
+```{r plot-H-Theta classes}
+classificar_intervalos <- function(sf_obj, var, n_classes = 5) {
+  v <- sf_obj[[var]]
+
+  breaks <- seq(
+    from = min(v, na.rm = TRUE),
+    to   = max(v, na.rm = TRUE),
+    length.out = n_classes + 1
+  )
+
+  sf_obj[[paste0(var, "_class")]] <- cut(
+    v,
+    breaks = breaks,
+    include.lowest = TRUE,
+    dig.lab = 3
+  )
+
+  sf_obj
+}
+
+H_grid     <- H_grid     %>% classificar_intervalos("var1.pred", n_classes = 4)
+theta_grid <- theta_grid %>% classificar_intervalos("var1.pred", n_classes = 4)
+
+p_H <- ggplot() +
+  geom_sf(data = rs, fill = NA, color = "black") +
+
+  geom_sf(
+    data = H_grid,
+    aes(fill = var1.pred_class),
+    color = NA
+  ) +
+
+  geom_sf(
+    data = stations_Htheta_sf,
+    color = "black", fill = "white",
+    size = 1.6, shape = 21
+  ) +
+
+  # geom_sf_text(
+  #   data = stations_Htheta_sf,
+  #   aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+  #   size = 2.1, nudge_y = 0.05
+  # ) +
+
+  scale_fill_brewer(
+    palette = "Greens",
+    name = "H (classes)"
+  ) +
+
+  labs(title = "Parâmetro H interpolado (classes iguais)") +
+  theme_minimal()
+
+p_theta <- ggplot() +
+  geom_sf(data = rs, fill = NA, color = "black") +
+
+  geom_sf(
+    data = theta_grid,
+    aes(fill = var1.pred_class),
+    color = NA
+  ) +
+
+  geom_sf(
+    data = stations_Htheta_sf,
+    color = "black", fill = "white",
+    size = 1.6, shape = 21
+  ) +
+
+  # geom_sf_text(
+  #   data = stations_Htheta_sf,
+  #   aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+  #   size = 2.1, nudge_y = 0.05
+  # ) +
+
+  scale_fill_brewer(
+    palette = "Purples",
+    name = expression(theta ~ "(classes)")
+  ) +
+
+  labs(title = expression("Parâmetro " * theta * " interpolado (classes iguais)")) +
+  theme_minimal()
+
+p_H | p_theta
+```
+
+## Plot com parametros geomorfologicos
+```{r}
+library(sf)
+
+geomorf_sf <- st_read(
+  "C:/Users/laris/Downloads/OneDrive_2026-01-09/Macrozoneamento ambiental/Macrozonas ambientais.shp"
+)
+st_crs(geomorf_sf)
+
+geomorf_sf <- geomorf_sf %>%
+  st_transform(4326)
+
+geomorf_sf_valid <- geomorf_sf %>%
+  st_make_valid()
+
+geomorf_dissolved <- geomorf_sf_valid %>%
+  group_by(Geomorfolo, Geomorfo) %>%
+  summarise(
+    geometry = st_union(geometry),
+    .groups = "drop"
+  )
+
+geomorf_sf <- geomorf_dissolved %>%
+  select(Geomorfolo, Geomorfo, geometry)
+
+p_H_geo1 <- ggplot() +
+  geom_sf(data = rs, fill = NA, color = "black") +
+
+  geom_sf(
+    data = H_grid,
+    aes(fill = var1.pred_class),
+    color = NA
+  ) +
+
+    geom_sf(
+    data = geomorf_sf,
+    fill = NA,
+    color = "black",
+    linewidth = 1,
+    linetype = "dashed"
+  ) +
+
+  geom_sf(
+    data = stations_Htheta_sf,
+    color = "black", fill = "white",
+    size = 1.6, shape = 21
+  ) +
+
+  # geom_sf_text(
+  #   data = stations_Htheta_sf,
+  #   aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+  #   size = 2.1, nudge_y = 0.05
+  # ) +
+
+  scale_fill_brewer(
+    palette = "Greens",
+    name = "H (classes)"
+  ) +
+
+  labs(
+    title = "Parâmetro H interpolado",
+    subtitle = "Contornos de unidades geomorfológicas"
+  ) +
+
+  theme_minimal()
+
+stations_Htheta_sf %>%
+  st_join(geomorf_sf) %>%
+  group_by(Geomorfolo) %>%
+  summarise(
+    H_medio = mean(H, na.rm = TRUE),
+    n = n()
+  )
+
+stations_Htheta_sf <- stations_Htheta_sf %>%
+  st_join(
+    H_grid %>% select(var1.pred_class),
+    join = st_nearest_feature
+  )
+
+ggplot(stations_Htheta_sf %>% st_drop_geometry(),
+       aes(x = var1.pred_class, y = elevation)) +
+  geom_boxplot(fill = "grey85") +
+  geom_jitter(width = 0.15, alpha = 0.6) +
+  labs(
+    x = "Classe de H",
+    y = "Elevação (m)",
+    title = "Elevação por classe do parâmetro H"
+  ) +
+  theme_minimal()
+
+```
+
+## Plot com o MDE
+```{r}
+library(elevatr)
+
+rs_bbox <- st_bbox(rs)
+
+mde <- get_elev_raster(
+  locations = rs,
+  z = 7,        
+  clip = "locations"
+)
+
+mde <- terra::rast(mde)
+mde <- terra::project(mde, "EPSG:4326")
+names(mde) <- "elevation"
+
+library(ggplot2)
+library(tidyterra)
+library(ggnewscale)
+
+p_H_mde <- ggplot() +
+
+  geom_spatraster(data = mde, aes(fill = elevation)) +
+  scale_fill_viridis_c(
+    name   = "Elevação (m)",
+    option = "C",
+    direction = -1
+  ) +
+
+  ggnewscale::new_scale_fill() +
+
+  geom_sf(
+    data = H_grid,
+    aes(fill = var1.pred_class),
+    alpha = 0.35,      # ↓ transparência maior
+    color = NA
+  ) +
+  scale_fill_brewer(
+    palette = "Greens",
+    name = "H (classes)",
+    direction = 1
+  ) +
+
+  ## Limite
+  geom_sf(data = rs, fill = NA, color = "black", linewidth = 0.4) +
+
+  ## Ajustes finos
+  theme_minimal() +
+  theme(
+    panel.grid       = element_blank(),
+    legend.key.height = unit(0.6, "cm")
+  ) +
+  labs(
+    title = "Elevação (MDE) e classes do parâmetro H",
+    subtitle = "MDE em destaque; classes de H como informação contextual"
+  )
+
+
+plot(mde)
 ```
