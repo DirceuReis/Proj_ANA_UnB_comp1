@@ -66,7 +66,7 @@ Ajustando o valor do coeficiente angular $\beta_1$, teremos $\beta_1 = H_1 =  -H
 
 ## Coeficientes de desagregação
 
-Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações (citar CETESB). Estes coeficientes ($C_P$) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias $P_D$). Em suma:
+Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações (==citar CETESB==). Estes coeficientes ($C_P$) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias $P_D$). Em suma:
 
 $$
 C_P = \frac{P_d}{P_D}
@@ -96,5 +96,5 @@ $$
 e, finalmente,
 
 $$
-C_P = \left( \frac{d}{D} \right)^{-H + 1}
+C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 $$ {#eq-coef-desagregacao}
