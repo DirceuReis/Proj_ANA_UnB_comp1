@@ -54,6 +54,7 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
       # Vetor de somas móveis de precipitação
       depth.agg <- RcppRoll::roll_sum(x = depths,             # vetor c/ dados de precipitação
                                       n = round(d/d.base.hr), # tamanho da janela móvel
+                                      na.rm = TRUE,           # calcular a soma mesmo c/ NAs no vetor 'depths'
                                       fill = NA,              # preencher as pontas c/ NA
                                       align = "left")         # alinhas janela no índice i (NAs no final)
       
@@ -68,12 +69,12 @@ fun_imax_agg <- function(data,             # lista contendo as séries das esta�
         
         year.idx <- lubridate::year(dates) == yr # índices p/ filtrar anos
         
-        intensity.yr <- intensity.agg[year.idx]  # filtrar intensidades em 'yr'
-        date.yr <- dates[year.idx]               # filtrar datas em 'yr'
-        na.yr <- sum(is.na(depths)[year.idx])    # NAs em 'yr'
-        na.prct <- na.yr/length(intensity.yr)    # porcentagem de NAs no ano
-        max.idx <- which.max(intensity.yr)       # posição do máximo
-        n.max <- length(max.idx)                 # comprimento do 
+        intensity.yr <- intensity.agg[year.idx] # filtrar intensidades em 'yr'
+        date.yr <- dates[year.idx]              # filtrar datas em 'yr'
+        na.yr <- sum(is.na(depths)[year.idx])   # NAs em 'yr'
+        na.prct <- na.yr/length(intensity.yr)   # porcentagem de NAs no ano
+        max.idx <- which.max(intensity.yr)      # posição do máximo
+        n.max <- length(max.idx)                # número de máximos
         
         # Conferir se o ano inteiro é NA, senão extrair os máximos
         if(n.max <= 0){

@@ -27,6 +27,7 @@ Export.image.toDrive({
   description: 'DEM_RS_Export',
   fileNamePrefix: 'DEM_RS',
   region: pol_rs,
+  scale: 30, // resolução padrão ANADEM
   maxPixels: 1e13,
   fileFormat: 'GeoTIFF',
   formatOptions: {

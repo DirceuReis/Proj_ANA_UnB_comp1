@@ -3,7 +3,7 @@
 fun_scale_invariance <- function(df.imax,                   # data.frame com intensidades máximas anuais para diferentes durações
                                  na.accept,                 # limite de falhas por ano [0,1]
                                  min.years,                 # mínimo de anos em uma série
-                                 which.moment = 1,          # qual momento usar para plotar 
+                                 which.moment = 1:3,       # quais momentos calcular
                                  which.duration = c(1, 24), # intervalo de durações
                                  min.duration = 3,          # nro. mínimo durações p/ regressão
                                  font.family = "serif",     # fonte gráficos
@@ -31,22 +31,24 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
     filter(n_distinct(year) >= min.years) %>%   # so estações com pelo menos 'min.year' anos
     ungroup()                                   # desagrupar
   
-  # Calcular 1º e 2º momentos centrais locais (p/ cada estação)
+  # Calcular 'which.moment' momentos centrais locais (p/ cada estação)
   df.mom.local <- data %>% 
-    group_by(gauge_code, d) %>%                # agrupar por duração e estação
-    reframe(mom1 = mean(imax, na.rm = TRUE),   # valor esperado de Id:  E[Id^1]
-            mom2 = mean(imax^2, na.rm = TRUE), # valor esperado de Id²: E[Id^2]
-            n_years = n())
+    group_by(gauge_code, d) %>% 
+    reframe(n_years = n(),
+            purrr::map_dfc(which.moment, ~ tibble("mom{.x}" := mean(imax^.x, na.rm = TRUE))))
   
-  # Calcular 1º e 2º momentos centrais regionais
+  # Calcular 'which.moment' momentos centrais regionais
   df.mom.regional <- data %>% 
-    group_by(d) %>%                            # agrupar por duração
-    reframe(mom1 = mean(imax, na.rm = TRUE),   # valor esperado de Id:  E[Id^1]
-            mom2 = mean(imax^2, na.rm = TRUE), # valor esperado de Id²: E[Id^2]
-            n_years = n())
+    group_by(d) %>% 
+    reframe(n_years = n(),
+            purrr::map_dfc(which.moment, ~ tibble("mom{.x}" := mean(imax^.x, na.rm = TRUE))))
   
-  df.mom.regional$gauge_code <- "Regional"           # adicionar coluna
-  df.mom <- bind_rows(df.mom.local, df.mom.regional) # juntar
+  df.mom.regional$gauge_code <- "Regional"                # adicionar coluna
+  df.mom <- bind_rows(df.mom.local, df.mom.regional) %>%  # juntar
+    pivot_longer(cols = -c(gauge_code, d, n_years),
+                 names_to = c(".value", "which_moment"),
+                 names_pattern = "(mom)(\\d+)") %>% 
+    mutate(which_moment = as.numeric(which_moment))
 
   # REGRESSÃO -------------------------------------------------------------
 
@@ -55,45 +57,43 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
   scale.moments <- lapply(X = ls.mom, FUN = function(gauge){
     
     name <- gauge$gauge_code[1] # código da estação
-    mom1 <- gauge$mom1
-    mom2 <- gauge$mom2
-    n.years <- gauge$n_years
-    log.mom1 <- log(mom1)     # vetor c/ logs do primeiro momento
-    log.mom2 <- log(mom2)     # vetor c/ logs do segundo momento
-    log.d <- log(gauge$d)     # vetor c/ logs das durações
-    regression1 <- lm(log.mom1~log.d)        # regressão linear
-    regression2 <- lm(log.mom2~log.d)        # regressão linear
-    scale1 <- coef(regression1)[["log.d"]]   # coeficiente
-    scale2 <- coef(regression2)[["log.d"]]   # coeficiente
-    summary1 <- summary(regression1)
-    summary2 <- summary(regression2)
-    r.squared1 <- summary1$r.squared # regressão (pegar $sigma tambem)
-    r.squared2 <- summary2$r.squared # regressão
-    se1 <- summary1$sigma
-    se2 <- summary2$sigma
     
-    data.frame("gauge_code" = name,
-               "d" = gauge$d,
-               "mom1" = mom1,
-               "mom2" = mom2,
-               "coef1" = scale1,
-               "coef2" = scale2,
-               "rsquared1" = r.squared1,
-               "rsquared2" = r.squared2,
-               "se1" = se1,
-               "se2" = se2,
-               "n_years" = n.years)
+    # Aplicar 
+    gauge.mom <- split(x = gauge, f = gauge$which_moment)
     
-  }) # fim 'scale.moments'
+    gg <- gauge.mom[[1]]
+    
+    regression <- lapply(X = gauge.mom, FUN = function(gg){
+      
+      which.moment <- gg$which_moment[1] # extrair qual momento
+      gg$log_mom <- log(gg$mom)          # logaritmo do momento
+      gg$log_d <- log(gg$d)              # logaritmo da duração
+      model <- lm(log_mom ~ log_d, data = gg) # regressão linear
+      coef <- coef(model)[["log_d"]]     # slope
+      scale <- -coef/which.moment        # coeficiente de escala
+      summary <- summary(model)          # resumo
+      rsquared <- summary$r.squared      # R²
+      se <- summary$sigma/which.moment   # erro padrão
+      
+      res <- data.frame("gauge_code" = name,
+                        "n_years" = gg$n_years,
+                        "d" = gg$d,
+                        "which_moment" = factor(which.moment),
+                        "mom" = gg$mom,
+                        "coef_reg" = coef,
+                        "scale" = scale,
+                        "rsquared" = rsquared,
+                        "se" = se)
+      
+    }) # fim 'regression'
+    
+    # Transformar em tbl_df
+    regression <- bind_rows(regression)
+    
+  })
   
   # Transformar em tbl_df
-  scale.moments <- bind_rows(scale.moments) %>% 
-    pivot_longer(cols = -c(gauge_code, d, n_years), # todas as colunas menos essas
-                 names_to = c(".value", "which_moment"),
-                 names_pattern = "(mom|coef|rsquared|se)(\\d+)") %>% 
-    mutate(scale = -coef/as.numeric(which_moment),  # coeficiente de escala
-           se = se/as.numeric(which_moment),        # erro padrão
-           which_moment = as.numeric(which_moment)) # qual momento calculado
+  scale.moments <- bind_rows(scale.moments)
   
 
   # VISUALIZAÇÃO ----------------------------------------------------------
@@ -102,92 +102,81 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
   scale.regional <- scale.moments %>% 
     filter(gauge_code == "Regional") %>% 
     group_by(gauge_code, which_moment) %>% 
-    reframe(scale = mean(scale))
+    reframe(scale = first(scale),
+            rsquared = first(rsquared)) %>%
+    mutate(scale_vjust = (row_number() - 1)*1.5,
+           scale_label = sprintf("q = %d: H = %.4f", which_moment, round(scale, 4)),)
   
   # R² mínimo
   min.rsquared <- min(scale.moments$rsquared)
+  median.rsquared <- quantile(scale.moments$rsquared[scale.moments$gauge_code != "Regional"])[[3]]
   
-  # Gráfico comparação geral entre modelos regionai e local
+  # Gráfico comparação geral entre modelos regional e local
   plot.scale.all <- ({
     
     # Colocar scale/r regionais no gráfico
     plot1 <- 
-      ggplot(scale.moments, aes(x = d, y = mom, color = gauge_code)) +
-      facet_wrap(~which_moment, nrow = 2, strip.position = "left",          # colocar título do facet à esquerda
-                 labeller = as_labeller(c("1" = "q = 1", "2" = "q = 2"))) + # reformatar rótulos dos momentos    
-      # Modelos locais
-      geom_smooth(data = subset(scale.moments, gauge_code != "Regional"), method = lm, formula = y~x, se = FALSE,
-                  alpha = 0.6, linewidth = 0.4) +
-      # Modelos regionais
-      geom_smooth(data = subset(scale.moments, gauge_code == "Regional"), method = lm, formula = y~x, se = FALSE,
-                  aes(color = "Regional"), alpha = 0.6, linewidth = 0.5) +
-      geom_point(data = subset(scale.moments, gauge_code == "Regional"), aes(shape = "Regional")) +
-      ggrepel::geom_text_repel(data = scale.regional, # ggrepel ajuda no posionamento dinâmico do 'geom_text'
-                               aes(x = Inf, y = Inf, label = paste("H =", round(scale, 4))), segment.colour = NA,
-                               family = "mono", fontface = "bold", size = 3, hjust = 1, vjust = 1) +
-      # scale_x_log10(breaks = c(0.5, 1, 2, 6, 24, 72, 240)) +
-      # scale_x_log10(breaks = c(1, 2, 4, 6, 12, 24)) +
+      ggplot(scale.moments %>% filter(gauge_code == "Regional"), aes(x = d, y = mom)) +
+      geom_smooth(aes(group = which_moment), color = "black", method = "lm", formula = y~x, se = FALSE, linewidth = 0.4) +
+      geom_point(aes(shape = factor(which_moment,
+                                    labels = paste0("q = ", unique(which_moment), ": H = ", round(unique(scale), 4))))) +
       scale_x_log10() +
-      scale_y_log10() +
-      scale_color_manual(values = c("Regional" = "grey10"), na.value = "lightblue") +
-      scale_shape_manual(values = c("Regional" = 17)) +
-      labs(y = "E[I<sub>d</sub><sup>q</sup>]", x = "Durações [h]")+
+      scale_y_log10(labels = scales::label_comma()) +
+      labs(subtitle = "a)", y = "E[I<sub>d</sub><sup>q</sup>]", x = "Durações [h]", shape = "")+
       theme_minimal() +
-      theme(legend.position =  "none",
+      theme(legend.position =  c(1, 1.08),
+            legend.justification = c("right" , "top"),
+            legend.text = element_text(size = 9),
             axis.title.y = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
-            strip.placement = "outside",                      # fora dos rotulos do eixo-y
-            strip.text = element_text(size = 12),             # 'strip.' altera configurações do facet_wrap
             plot.background = element_rect(color = "white"),
-            aspect.ratio = 1,
+            # aspect.ratio = 1,
             panel.border = element_rect(color = "black", fill = NA),
-            text = element_text(family = font.family, color = "black", size = font.size)); plot1
+            text = element_text(family = "serif", color = "black", size = 12)); plot1
     
-    # scaleistogramas de R^2
-    # Adicionar % de estaçoes acima de R^2 = 0.99
+      # Histogramas de R^2
     plot2 <- 
       ggplot(scale.moments, aes(x = rsquared)) +
-      facet_wrap(~which_moment, nrow = 2) +
-      geom_histogram(aes(y = after_stat(count/sum(count))), bins = 20, fill = "yellow2", color = "darkorange3") +
-      # geom_vline(xintercept = 0.99, color = "red", linetype = "dashed", linewidth = 0.5) +
+      facet_wrap(~which_moment, nrow = length(which.moment), labeller = as_labeller(function(x) paste0("q = ", x))) +
+      geom_histogram(aes(y = after_stat(count/sum(count))), bins = 30, fill = "yellow2", color = "darkorange3") +
+      geom_vline(xintercept = median.rsquared, color = "red", linetype = "dashed", linewidth = 0.5) +
       scale_y_continuous(labels = scales::percent) +
       # scale_x_continuous(limits = c(min.rsquared, 1)) +
-      labs(x = "R²", y = "") +
+      labs(subtitle = "b)", x = "R²", y = "") +
       theme_minimal() +
       theme(legend.position =  "none",
+            strip.placement = "inside",                      # fora dos rotulos do eixo-y
+            strip.text = element_text(size = 10),             # 'strip.' altera configurações do facet_wrap
             axis.title.y = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
-            strip.placement = "none",                         # remover título do 'facet' 
-            strip.text = element_blank(),                     # 'strip.' altera configurações do facet_wrap
             plot.background = element_rect(color = "white"),
-            aspect.ratio = 1,
             panel.border = element_rect(color = "black", fill = NA),
-            text = element_text(family = font.family, color = "black", size = font.size)); plot2
+            text = element_text(family = "serif", color = "black", size = 12)); plot2
     
     # Combinar c/ 'patchwork'
-    plot1 + plot2 #+ patchwork::plot_layout(widths = c(2,1))
+    plot1 + plot2 + plot_layout(widths = c(1.5,1))
     
-  }) # fim 'plot.scale.all
+}) # fim 'plot.scale.all'
   
   # Gráfico avaliação individual dos modelos locais vs. regional
   # Dividir dados em 'local' e 'regional'
-  data.local <- scale.moments %>% filter(gauge_code != "Regional", which_moment == which.moment)
-  data.regional <- scale.moments %>% filter(gauge_code == "Regional", which_moment == which.moment) %>% select(!gauge_code)
+  data.local <- scale.moments %>% filter(gauge_code != "Regional")
+  data.regional <- scale.moments %>% filter(gauge_code == "Regional") %>% select(!gauge_code)
   
   # Rótulos
   labels <- data.local %>% 
     group_by(gauge_code) %>% 
-    summarise(scale_local = first(scale),     # coeficiente de escala da estação
-              n_years = first(n_years),       # número de anos da estação
-              rsquared = first(rsquared)) %>% # R² resultante da regressão na estação
-    mutate(scale_regional = scale.regional[["scale"]][which.moment]) # coeficiente de escala regional
+    summarise(scale_local = mean(scale),     # coeficiente de escala da estação
+              n_years = first(n_years),      # número de anos da estação
+              rsquared = mean(rsquared)) %>% # R² resultante da regressão na estação
+    mutate(scale_regional = mean(scale.regional[["scale"]])) # coeficiente de escala regional
   
   # Avaliar dimensões do gráfico
   plot.group <- ({
     
     ggplot(mapping = aes(x = d, y = mom)) +
       ggforce::facet_wrap_paginate(~gauge_code, nrow = plot.dim[1], ncol = plot.dim[2]) +
-      geom_smooth(data = data.regional, aes(linetype = "Regional", color = "Regional"),
+      geom_smooth(data = data.regional, aes(group = which_moment, linetype = "Regional", color = "Regional"),
                   method = lm, formula = y~x, se = FALSE, alpha = 0.6, linewidth = 0.3) +
-      geom_smooth(data = data.local, aes(linetype = "Local", color = "Local"),
+      geom_smooth(data = data.local, aes(group = which_moment, linetype = "Local", color = "Local"),
                   method = lm, formula = y~x, se = FALSE, alpha = 0.6, linewidth = 0.3) +
       geom_point(data = data.local, aes(shape = "Momentos observados"),
                  color = "steelblue4", alpha = 0.5, size = 1.1) +
@@ -203,9 +192,8 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
       geom_text(data = labels,
                 aes(x = Inf, y = Inf, label = sprintf("R² = %.3f", rsquared)),
                 hjust = 1.1, vjust = 6.5, size = 2.3, color = "steelblue4", family = "mono", fontface = "bold") +
-      # scale_x_log10(breaks = c(1, 2, 4, 6, 12, 24)) +
       scale_x_log10() +
-      scale_y_log10() +
+      scale_y_log10(labels = scales::label_comma()) +
       scale_color_manual(name = "", values = c("Regional" = "grey10", "Local" = "steelblue")) +
       scale_linetype_manual(name = "", values = c("Regional" = "dashed", "Local" = "solid")) +
       scale_shape_manual(name = "", values = c("Momentos observados" = 17)) +
@@ -219,7 +207,7 @@ fun_scale_invariance <- function(df.imax,                   # data.frame com int
             plot.background = element_rect(color = "white"),
             panel.border = element_rect(color = "black", fill = NA),
             panel.grid.minor = element_blank(),
-            text = element_text(family = font.family, color = "black", size = 10)) +
+            text = element_text(family = "serif", color = "black", size = 10)) +
       guides(shape = guide_legend(order = 2))
     
   }) # fim 'plot.group'

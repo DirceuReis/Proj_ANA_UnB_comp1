@@ -5,6 +5,21 @@ date-format: "DD/MM/YYYY HH:mm:ss"
 bibliography: referencias/ref_desagregacao.bib
 ---
 
+```{r pacotes}
+#| echo: false
+#| message: false
+
+if(!require(pacman)) install.packages("pacman")
+pacman::p_load(pacman, tidyverse, arrow)
+```
+
+```{r ler dados}
+
+# Dados gerados em 'script_duracao_subdiario.R'
+df_scale <- arrow::read_parquet("base/gerados/df_scale_coefficient.parquet")
+
+```
+
 ## Análise da hipótese de invariância de escala
 
 Originalmente, temos a seguinte relação para a invariância simples de escala [@Nguyen.1998]:
@@ -30,7 +45,9 @@ $$
 E[I_d^q] = \frac{D^{Hq}}{d^{Hq}} E[I_D^q] \\
 E[I_d^q] = d^{-Hq} \ D^{Hq} \ E[I_D^q].
 \end{gather}
-$$ Como $H$ e $D$ são escalares constantes, podemos chamar $f(q) = D^{Hq} \ E[I_D^q]$ e, assim, obter:
+$$
+
+Como $H$ e $D$ são escalares constantes, podemos chamar $f(q) = D^{Hq} \ E[I_D^q]$ e, assim, obter:
 
 $$
 E[I_d^q] = f(q) \ d^{-Hq}
@@ -66,7 +83,26 @@ Ajustando o valor do coeficiente angular $\beta_1$, teremos $\beta_1 = H_1 =  -H
 
 ## Coeficientes de desagregação
 
-Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações (==citar CETESB==). Estes coeficientes ($C_P$) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias $P_D$). Em suma:
+Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações [@cetesb1986, pg. 17], apresentados abaixo na @tbl-coef-cetesb.
+
+```{r tabela coeficientes cetesb}
+#| echo: false
+#| label: tbl-coef-cetesb
+#| tbl-cap: Coeficientes de desagregação sugeridos pela CETESB (1986) elaborados pelo DNOS.
+
+# Tabela CETESB coeficiente de desagregação
+df.cetesb <- data.frame(relacao = c("5 min/30 min", "10 min/30 min", "15 min/30 min", "20 min/30 min", "25 min/30 min", 
+                                    "30 min/1 h", "1 h/24 h", "6 h/24 h", "8 h/24 h", "10 h/24 h", "12 h/24 h"),
+                        d1 = c(seq(5, 30, 5)/60, 1, 6, 8, 10, 12),
+                        d2 = c(rep(0.5, 5), 1, rep(24, 5)),
+                        coef_pdmax = c(0.34, 0.54, 0.7, 0.81, 0.91, 0.74, 0.42, 0.72, 0.78, 0.82, 0.85))
+
+col.names <- c("Relação entre alturas pluviométricas", "Coeficiente (CETESB)")
+knitr::kable(x = df.cetesb[-c(2,3)], digits = 2, align = "c", col.names = col.names)
+
+```
+
+Estes coeficientes ($C_P$) são determinados a partir do ajuste de uma distribuição de probabilidade de eventos extremos às séries de máximos anuais de uma duração conhecida (usualmente de estações convencionais, ou seja, precipitações diárias $P_D$). Em suma:
 
 $$
 C_P = \frac{P_d}{P_D}
@@ -87,10 +123,8 @@ $$
 Assim, a partir da definição do parâmetro de escala $H$ pela regressão linear acima, é possível relacionar $C_P$ e $C_I$ como:
 
 $$
-\begin{align}
-C_P & = \frac{I_d}{I_D} \times \left( \frac{d}{D} \right) = C_I \times \left( \frac{d}{D} \right) \\
-& = \left( \frac{d}{D} \right)^{-H} \times \left( \frac{d}{D} \right),
-\end{align}
+C_P = \frac{I_d}{I_D} \times \left( \frac{d}{D} \right) = C_I \times \left( \frac{d}{D} \right) = 
+\left( \frac{d}{D} \right)^{-H} \times \left( \frac{d}{D} \right),
 $$
 
 e, finalmente,
@@ -98,3 +132,72 @@ e, finalmente,
 $$
 C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 $$ {#eq-coef-desagregacao}
+
+Dessa forma, podemos comparar os coeficientes estimados pelo DNOS [@cetesb1986] com os calculados através dos fatores de escala $H$ regionais da hipótese de invariância.
+
+```{r calculo comparação cetesb coeficientes desagregação}
+
+# Alterar nomes
+groups <- unique(df_scale$d)
+group.names <- c("Todas", "Sub-horários", "Horários", "Diários")
+groups <- setNames(object = group.names, nm = groups)
+
+df.scale.mean <- df_scale %>% 
+  group_by(gauge_code, d) %>% 
+  summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% # calcular média entre os momentos
+  mutate(relative_width = (ci_upper - ci_lower)/scale,  # largura relativa dos intervalos de confiança
+         d = recode(d, !!!groups),                      # alterar nome das durações
+         d = factor(d, levels = group.names))           # estabelecer ordem dos grupos de duração
+
+# Fatores de escala regionais
+regional <- df.scale.mean %>% 
+  filter(gauge_code == "Regional")
+
+# Passar todos p/ base de 24 h e calcular coeficientes
+df.cetesb$relacao_mod <- as.character(NA) # nova coluna p/ nome das relações
+df.cetesb$coef_mod <- as.numeric(NA)      # nova coluna p/ valor coeficientes de desagregação
+
+for(i in 1:nrow(df.cetesb)){
+  
+  if(df.cetesb$d2[i] <= 1){
+    
+    df.cetesb$relacao_mod[i] <- paste0(df.cetesb$d1[i]*60, " min/24 h")
+    df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i] * df.cetesb$coef_pdmax[6] * df.cetesb$coef_pdmax[7]
+    df.cetesb$coef_regional_multi[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[2],][["scale"]] + 1} # H sub-horários
+    
+    if(df.cetesb$d2[i] == 1){
+      df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i] * df.cetesb$coef_pdmax[7]
+    }
+    
+  } else{
+    
+    df.cetesb$relacao_mod[i] <- paste0(df.cetesb$d1[i], " h/24 h")
+    df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i]
+    df.cetesb$coef_regional_multi[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[3],][["scale"]] + 1} # H horários
+    
+  }
+  
+  # Calcular coeficiente de desagregação c/ H regional
+  df.cetesb$coef_regional_all[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[1],][["scale"]] + 1}
+  
+}
+
+```
+
+A @tbl-comparacao-coef abaixo apresenta os coeficientes calculados. Dois conjuntos de coeficientes de desagregação foram gerados a partir da hipótese de invariância de escala: 1) utilizando fatores separados para as durações sub-horárias ($H$ igual a `r round(regional[regional$d == "Sub-horários",][["scale"]], 3)`) e horárias ($H$ igual a `r round(regional[regional$d == "Horários",][["scale"]], 3)`); e 2) utilizando um único fator estimado utilizando todas as durações ($H$ igual a `r round(regional[regional$d == "Todas",][["scale"]], 3)`).
+
+```{r tabela comparacao}
+#| echo: false
+#| label: tbl-comparacao-coef
+#| tbl-cap: Comparação entre coeficientes sugeridos pela CETESB e coeficientes de desagregação calculados a partir do fator de escala do modelo de invariância de escala $H$ regional com um modelo único para todas as durações e um fator de escala para durações sub-horárias e horárias.
+
+col.names <- c(col.names, "Coeficiente Regional (Múltiplos Fatores)", "Coeficiente Regional (Único Fator)")
+
+df.cetesb %>% 
+  select(-c("relacao", "d1", "d2", "coef_pdmax")) %>% 
+  knitr::kable(digits = 2, align = "c", col.names = col.names)
+```
+
+## Aplicação: efeito de coeficientes de desagregação diferentes
+
+Os valores obtidos são diferentes entre si, especialmente os coeficientes calculados considerando dois fatores regionais diferentes. Para avaliar qual a importância dessas diferenças, podemos avaliar uma série de máximos de precipitação diária (registrados em intervalos fixos às 9:00), derivar uma série de 24 h utilizando fatores de conversão como o de Hershfield [@hershfield1962]
