@@ -1,0 +1,69 @@
+---
+title: "Escolha_da_GEV"
+---
+
+A estimativa de quantis de precipitação extrema associados a tempos de retorno elevados (p.ex., 100, 1.000 ou 10.000 anos) é um componente central da avaliação de risco e do dimensionamento de infraestruturas críticas, como grandes barragens, vertedores e sistemas de drenagem urbana de grande porte. Ao longo de grande parte do século XX, essa prática foi conduzida por uma abordagem essencialmente determinística, ou quase determinística, com uso recorrente da distribuição de Gumbel, apoiada na hipótese de que as probabilidades de cauda dos processos hidrológicos decaem aproximadamente de forma exponencial. Essa hipótese, embora operacionalmente conveniente, tem sido cada vez mais questionada por representar uma simplificação que pode subestimar a incerteza e a variabilidade estocástica inerentes aos extremos hidrometeorológicos, sobretudo na modelagem de caudas e na extrapolação para tempos de retorno muito elevados (KOUTSOYIANNIS, 2022).
+
+A distribuição de Gumbel é frequentemente adotada com base em um resultado assintótico da Teoria de Valores Extremos: máximos de distribuições parentais com cauda do tipo exponencial (p.ex., Gama e Exponencial) pertencem ao domínio de atração de Gumbel. No entanto, análises com séries mais longas indicam que essa convergência pode ser muito lenta (Serinaldi & Kilsby, 2015). Para tamanhos amostrais típicos em hidrologia (≈50–100 anos), os máximos anuais de precipitação muitas vezes apresentam comportamento compatível com caudas mais pesadas, associado ao domínio de atração de Fréchet (Tipo II), no intervalo de interesse prático, antes que o regime assintótico de Gumbel se torne efetivamente relevante (KOUTSOYIANNIS, 2022).
+
+A adoção da Distribuição Generalizada de Valores Extremos (GEV), especialmente em configurações com parâmetro de forma positivo ($\xi>0$), deve ser entendida como uma escolha coerente com caudas pesadas e, portanto, com uma representação mais realista da extrapolação para tempos de retorno elevados. Este documento discute as limitações de modelos de cauda leve na quantificação de risco e sintetiza justificativas físicas e teóricas para a ocorrência de caudas pesadas em extremos de precipitação.
+
+## Fundamentos Teóricos da Teoria de Valores Extremos (EVT)
+
+O Teorema de Fisher-Tippett-Gnedenko estabelece que, se o máximo de uma sequência de variáveis aleatórias independentes e identicamente distribuídas (i.i.d.) convergir para uma distribuição não degenerada, esse limite deve pertencer a uma de três famílias funcionais: Gumbel, Fréchet ou Weibull. Estas três famílias foram unificadas por Jenkinson e von Mises na Distribuição Generalizada de Valores Extremos (GEV), definida pela função de distribuição acumulada (CDF):
+
+$$G(z) = \exp \left\{ - \left[ 1 + \xi \left( \frac{z - \mu}{\sigma} \right) \right]^{-1/\xi} \right\}$$
+
+definida para $\{z : 1 + \xi(z - \mu) / \sigma > 0\}$, onde:
+
+-   $\mu$ é o parâmetro de localização (tendência central dos extremos).
+
+-   $\sigma$ é o parâmetro de escala (variabilidade), $\sigma > 0$.
+
+-   $\xi$ é o parâmetro de forma, também conhecido como índice de cauda (tail index).
+
+O parâmetro de forma $\xi$ controla o regime de cauda da GEV e, portanto, a extrapolação para quantis raros:
+
+-   $\xi \to 0$ (Domínio Gumbel, Tipo I): corresponde ao limite $\xi = 0$. A cauda apresenta decaimento aproximadamente exponencial, e todos os momentos são finitos. Em termos práticos, implica menor probabilidade relativa de valores extremamente discrepantes.
+-   $\xi > 0$ (Domínio Fréchet, Tipo II): caracteriza cauda pesada, com decaimento em lei de potência ∝ $x^{-1/\xi}$. A existência de momentos depende de $\xi$: o k-ésimo momento existe apenas se $k< 1/\xi$. Isso aumenta a massa de probabilidade na cauda e eleva quantis associados a tempos de retorno muito altos. 
+-   $\xi < 0$ (Domínio Weibull, Tipo III): implica limite superior finito para a variável. Para extremos de precipitação usados em projeto e segurança, esse regime costuma ser pouco apropriado porque introduz um “teto” determinístico para intensidades máximas, o que é difícil de sustentar em um sistema atmosférico aberto e variável (e potencialmente não estacionário) (Papalexiou et al., 2013). Por isso, na prática aplicada, a discussão normalmente se concentra na distinção entre cauda leve ($\xi=0$) e cauda pesada ($\xi>0$).
+
+A EVT estabelece que a distribuição assintótica dos máximos é governada pelo comportamento de cauda da distribuição “parental”, isto é, pela distribuição dos valores individuais (por exemplo, os totais diários de precipitação). Quando a parental tem cauda do tipo exponencial, como ocorre em famílias como Exponencial, Gama, Normal e certas parametrizações de Weibull, os máximos pertencem ao domínio de atração de Gumbel. Em contraste, quando a parental apresenta cauda em lei de potência, como em Pareto, Cauchy e Student-t, os máximos pertencem ao domínio de atração de Fréchet.
+
+A prática hidrológica tradicional frequentemente assumiu que a precipitação diária poderia ser representada por distribuições do tipo Gama ou Exponencial, o que leva, em princípio, à escolha de Gumbel para máximos anuais (Nerantzaki et al., 2013). Contudo, dois resultados recorrentes na literatura recente enfraquecem essa inferência: primeiro, análises em larga escala sugerem que a própria precipitação diária pode exibir caudas mais pesadas, compatíveis com leis de potência, em vez de um decaimento exponencial (Papalexiou et al., 2013); segundo, mesmo quando a parental é de cauda exponencial, a convergência para o regime assintótico de Gumbel pode ser tão lenta que, nas escalas amostrais usuais em hidrologia, um comportamento efetivamente mais pesado (compatível com Fréchet) pode descrever melhor os máximos no intervalo de interesse prático (Serinaldi & Kilsby, 2014).
+
+## Convergência e Regime Subassintótico dos Máximos
+
+Uma limitação central da aplicação rotineira da distribuição de Gumbel é que ela depende de resultados estritamente assintóticos da Teoria de Valores Extremos. Em termos formais, tais resultados descrevem o comportamento quando $n \to \infty$. Porém, em hidrologia, n é inerentemente finito (p.ex., dezenas de eventos independentes por ano e, tipicamente, 50–100 anos de registro). Assim, a aproximação assintótica pode não ser representativa do regime efetivamente observado. A adoção do limite teórico como se fosse automaticamente válido no domínio amostral finito corresponde ao que Koutsoyiannis (2022) denomina “falácia da convergência”.
+
+### Convergência lenta para o limite de Gumbel
+
+Koutsoyiannis (2022) documenta que, para distribuições parentais frequentemente utilizadas para precipitação (por exemplo, Weibull com parâmetro de forma $\xi<1$, comum em chuvas horárias), a convergência dos máximos para a assíntota de Gumbel pode ser extremamente lenta. Resultados baseados em simulações de Monte Carlo indicam que, mesmo com tamanhos amostrais por bloco muito superiores aos plausíveis em aplicações hidrológicas (p.ex., $N = 1.000$ ou $N = 10.000$ eventos por ano), a distribuição dos máximos ainda apresenta curvatura residual quando avaliada em papel de probabilidade de Gumbel (Koutsoyiannis, 2007). Essa curvatura é operacionalmente equivalente ao comportamento capturado por um parâmetro de forma positivo na GEV ($\xi>0$).
+
+Do ponto de vista aplicado, isso implica que os máximos podem apresentar, no domínio amostral relevante, uma cauda efetivamente mais pesada do que a imposta por ($\xi = 0$), mesmo quando o limite assintótico teórico seria Gumbel. Fixar $\xi = 0$ nesses casos equivale a substituir a estrutura observada dos dados por uma idealização assintótica que não se materializa nas escalas de tempo disponíveis.
+
+### Interpretação “penúltima” via GEV com 
+
+Como sistemas hidrológicos operam sob amostras finitas, a inferência sobre extremos ocorre em um regime pré-assintótico (subassintótico) (Serinaldi et al., 2025). Nesse regime, máximos de variáveis cuja parental é do tipo exponencial podem exibir comportamento aproximado compatível com Fréchet, no sentido de exigirem uma parametrização com $\xi > 0$ para reproduzir a curvatura observada e a massa de probabilidade na cauda superior.
+
+Impor Gumbel equivale a forçar uma condição assintótica que o processo, no domínio observacional, ainda não atingiu. Isso tende a “endireitar” artificialmente a curva de probabilidade, reduzindo a cauda superior e subestimando quantis associados a altos tempos de retorno. Em contraste, estimar $\xi$ livremente permite acomodar o comportamento subassintótico e, portanto, fornece uma representação mais consistente dos extremos no intervalo de interesse para projeto e segurança. Nessa perspectiva, adotar GEV/Fréchet não significa necessariamente postular cauda pesada no limite 
+$n \to \infty$, mas reconhecer que, nas escalas amostrais relevantes para a engenharia, o processo se comporta como tal (Serinaldi et al., 2014). Por isso, a GEV com $\xi > 0$ pode ser interpretada como uma aproximação “penúltima”: a melhor descrição estatística do regime finito no qual as decisões de risco são efetivamente tomadas.
+
+# Mecanismos Físicos Geradores de Caudas Pesadas
+
+# O Princípio da Máxima Entropia (PME)
+
+
+Referencias 
+
+Koutsoyiannis, D. (2022). Stochastics of Hydroclimatic Extremes – A Cool Look at Risk \[Μonograph\] (2nd ed.). Ka llipos, Open Academic Editions. http://dx.doi.org/10.57713/kallipos-1
+
+Serinaldi, F., & Kilsby, C. G. (2014). Rainfall extremes: Toward reconciliation after the battle of distributions. Water resources research, 50(1), 336-352. https://doi.org/10.1002/2013WR014211Digital
+
+Papalexiou, S. M., Koutsoyiannis, D., & Makropoulos, C. (2013). How extreme is extreme? An assessment of daily rainfall distribution tails. Hydrology and Earth System Sciences, 17(2), 851-862. https://doi.org/10.5194/hess-17-851-2013, 2013.
+
+Nerantzaki, S., Papalexiou, S. M., & Koutsoyiannis, D. (2013, April). Extreme rainfall distribution tails: Exponential, subexponential or hyperexponential?. In EGU General Assembly Conference Abstracts (pp. EGU2013-5149).
+
+Koutsoyiannis, D. (2007). A critical review of probability of extreme rainfall: principles and models. Advances in urban flood management, 151-178.
+
+Serinaldi, F., Lombardo, F., & Kilsby, C. G. (2025). Non-asymptotic distributions of water extremes: much ado about what?. Hydrology and Earth System Sciences, 29(4), 1159-1181.
