@@ -19,10 +19,12 @@ website:
         menu: 
           - href: script_leitura_subdiario.qmd
             text: Leitura das séries de precipitação subdiária
-          - href: script_imax_subdiario.qmd vss
+          - href: script_imax_subdiario.qmd
             text: Geração das intensidades máximas anuais
           - href: script_descricao_subdiario.qmd
             text: Análise e descrição dos subdiários
+          - href: resultados_preliminares.qmd
+            text: Modelo GEV multisite com pooling parcial
       - text: "Revisão Bibliográfica"
         menu:
           - href: distr_chuva_intensa.qmd
