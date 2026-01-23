@@ -114,8 +114,6 @@ dados_modelo <- dados_modelo %>%
 dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
 ```
 
-No total, foram identificados `r n_anos_total` anos-estação, dos quais `r n_anos_removidos` (`r round(perc_removidos, 1)`%) foram removidos por apresentarem mais de 80% de valores ausentes.
-
 ### Estatísticas descritivas por duração
 
 ```{r}
