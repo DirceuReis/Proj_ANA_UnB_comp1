@@ -69,6 +69,24 @@ estacoes_validas <- anos_por_estacao %>%
 filter(n_anos >= 7) %>%
 pull(gauge_code)
 
+# Estações usadas no ajuste do modelo Bayesiano (fit antigo); fixadas aqui para manter consistência após atualização do arquivo de entrada.
+estacoes <- c(
+  "430060402A","430120601A","430235201A","430300402A","430300403A","430350901A","430420002A",
+  "430450701A","430450704A","430460601A","430460603A","430510801A","430510802A","430620501A",
+  "430693201A","430700502A","430920901A","431020703A","431177501A","431320101A","431410001A",
+  "431410002A","431410003A","431440703A","431490202A","431490204A","431490221A","431540401A",
+  "431690707A","431720202A","431800201A","432000803A","432000805A","432040401A","432130301A",
+  "432145101A","432250903A","432250904A","432260802A","432300204A","70600000","86100600",
+  "87380000","88260000","A801","A802","A803","A804","A805",
+  "A808","A809","A811","A812","A813","A815","A826",
+  "A827","A828","A829","A831","A832","A833","A834",
+  "A836","A837","A838","A839","A840","A844","A852",
+  "A853","A854","A856","A879","A880","A883","A884",
+  "A894","SBPA"
+)
+
+estacoes_validas <- estacoes
+
 max_anuais_filtrado <- dados_agregados %>%
 filter(gauge_code %in% estacoes_validas)
 ```
@@ -76,8 +94,6 @@ filter(gauge_code %in% estacoes_validas)
 ## Remoção de dados faltantes
 
 Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na \> 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
-
-No total, foram identificados `n_anos_total` anos-estação, dos quais `n_anos_removidos` (`r round(perc_removidos, 1)`%) foram removidos por apresentarem mais de 80% de valores ausentes.
 
 ```{r}
 max_anuais_filtrado2 <- max_anuais_filtrado %>%
@@ -88,8 +104,9 @@ filter(prop_na <= 0.8) %>%
 select(-prop_na)
 
 na_por_ano_estacao <- max_anuais_filtrado %>%
-group_by(gauge_code, year) %>%
-summarise(prop_na = mean(is.na(imax)), .groups = "drop")
+  group_by(gauge_code, year) %>%
+  summarise(prop_na = mean(is.na(imax)), .groups = "drop")
+
 anos_removidos <- max_anuais_filtrado %>%
   group_by(gauge_code, year) %>%
   summarise(prop_na = mean(is.na(imax)), .groups = "drop") %>%
@@ -115,6 +132,7 @@ dados_modelo <- dados_modelo %>%
 
 dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
 ```
+No total, foram identificados `n_anos_removidos` foram removidos por apresentarem mais de 80% de valores ausentes.
 
 ### Estatísticas descritivas por duração
 
@@ -686,7 +704,11 @@ library(tidyr)
 posterior_samples <- readRDS("base/fit_stan/posterior_samples.rds")
 
 # mapeamento estacao_id -> Estacao
-map_est <- data.frame(estacao_id = seq(1,79,1), Estacao = unique(dados_modelo$gauge_code))
+est_vec <- sort(unique(dados_modelo$gauge_code))
+map_est <- data.frame(
+  estacao_id = seq_along(est_vec),
+  Estacao = est_vec
+)
 
 # função genérica para resumir um array posterior [iter x K x S]
 summarize_param <- function(arr_iks, param_name, Dvec) {
