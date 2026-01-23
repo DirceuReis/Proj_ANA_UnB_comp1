@@ -77,6 +77,8 @@ filter(gauge_code %in% estacoes_validas)
 
 Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na \> 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
 
+No total, foram identificados `n_anos_total` anos-estação, dos quais `n_anos_removidos` (`r round(perc_removidos, 1)`%) foram removidos por apresentarem mais de 80% de valores ausentes.
+
 ```{r}
 max_anuais_filtrado2 <- max_anuais_filtrado %>%
 group_by(gauge_code, year) %>%
