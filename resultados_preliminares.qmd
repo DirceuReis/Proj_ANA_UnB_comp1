@@ -225,7 +225,7 @@ controlam o nível das curvas em uma duração de referência $d_0$, $\eta$ atua
 
 # Modelo GEV multisite com pooling parcial
 
-As máximas anuais de precipitação para cada duração são modeladas por uma distribuição de valores extremos generalizada (GEV), com parâmetros de localização (\mu), escala (\sigma \> 0) e forma (\xi). Para (\xi \neq 0), a função densidade é dada por
+As máximas anuais de precipitação para cada duração são modeladas por uma distribuição de valores extremos generalizada (GEV), com parâmetros de localização ($\mu$), escala ($\sigma \> 0$) e forma ($\xi$). Para ($\xi \neq 0$), a função densidade é dada por
 
 $$
 f(x \mid \mu,\sigma,\xi)
@@ -236,7 +236,7 @@ $$
 
 No caso limite $(\xi \to 0)$ obtém-se a distribuição de Gumbel, implementada no modelo por meio da forma log-verossimilhança.
 
-### Estrutura hierárquica por estação e duração
+## Estrutura hierárquica por estação e duração
 
 Seja $(g = 1,\dots,G)$ o índice de estação e $(d = 1,\dots,D)$ o índice de duração (em horas), associado a uma duração $(D_d)$. Para cada observação $(x_{i})$ pertencente à estação $(g)$ e duração $(d)$, assume-se
 
@@ -264,7 +264,7 @@ $D_0$ é uma duração de referência (aqui $D_0 = 24\,\text{h}$), $\alpha_g$ e 
 
 O parâmetro de forma é modelado por para permitir o *pooling* parcial da informação sobre a cauda da distribuição entre durações e entre estações.
 
-### Priors e hiperpriors
+## Priors e hiperpriors
 
 Para os parâmetros específicos de estação, adotam-se priors fracas:
 
@@ -487,7 +487,7 @@ options(mc.cores = 5)
 #)
 ```
 
-Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
+Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto $\eta$ e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
 
 Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, e a média global da forma é inicializada em xi_bar = 0. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
 
@@ -829,7 +829,7 @@ plot_param_grupo <- function(df_comb, grupo_name) {
   )
 }
 
-#plots_mu <- lapply(grupos_validos, function(g) plot_param_grupo(df_mu_comb, g))
+plots_mu <- lapply(grupos_validos, function(g) plot_param_grupo(df_mu_comb, g))
 
 #names(plots_mu) <- grupos_validos
 
@@ -840,11 +840,11 @@ names(plots_xi) <- grupos_validos
 plots_xi[[5]]
 ```
 
-## Posterior dos parâmetros por estação (H, θ e α)
+## Posterior dos parâmetros por estação ($\eta$, θ e α)
 Nesta seção analisamos a distribuição posterior dos parâmetros **H**, **θ** e
 **α** do modelo hierárquico. Esses parâmetros controlam, respectivamente:
 
-- **H**: o expoente da relação intensidade–duração, determinando a inclinação
+- **$\eta$**: o expoente da relação intensidade–duração, determinando a inclinação
   das curvas IDF para cada estação;
 - **θ**: o deslocamento da duração, que ajusta o comportamento da curva para
   durações curtas;
@@ -864,10 +864,10 @@ cada uma. Como diferentes estações possuem diferentes números de anos de dado
 - **8 anos**
 - **7 anos**
 
-Geramos então os gráficos posteriores de H, θ e α para cada grupo, evitando
+Geramos então os gráficos posteriores de $\eta$, θ e α para cada grupo, evitando
 misturar estações com volumes muito distintos de informação.
 
-A estação SBPA apresenta um comportamento bem distinto das demais com o valor alto de H, e baixo alpha.
+A estação SBPA apresenta um comportamento bem distinto das demais com o valor alto de $\eta$, e baixo $\alpha$.
 
 ```{r grafico-posteriori}
 
@@ -970,7 +970,7 @@ plots_posterior[[7]]
 
 ## Mapas interpolados dos parâmetros H e θ com identificação das estações
 
-Os parâmetros **H** e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de H e θ.
+Os parâmetros **$\eta$** e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de $\eta$ e θ.
 
 Além disso, incluímos no mapa o código de cada estação e o número de anos de dados disponíveis, de modo a facilitar a avaliação da confiabilidade local da estimativa.
 
@@ -1085,9 +1085,9 @@ geom_sf(data = rs, fill = NA, color = "black") +
 geom_sf(data = H_grid, aes(fill = var1.pred), color = NA) +
 geom_sf(data = stations_Htheta_sf,
 color = "black", fill = "white", size = 1.6, shape = 21) +
-geom_sf_text(data = stations_Htheta_sf,
-aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
-size = 2.1, nudge_y = 0.05) +
+#geom_sf_text(data = stations_Htheta_sf,
+#aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+#size = 2.1, nudge_y = 0.05) +
 scale_fill_distiller(palette = "Greens", direction = 1) +
 labs(
 title = "Parâmetro H interpolado",
@@ -1100,9 +1100,9 @@ geom_sf(data = rs, fill = NA, color = "black") +
 geom_sf(data = theta_grid, aes(fill = var1.pred), color = NA) +
 geom_sf(data = stations_Htheta_sf,
 color = "black", fill = "white", size = 1.6, shape = 21) +
-geom_sf_text(data = stations_Htheta_sf,
-aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
-size = 2.1, nudge_y = 0.05) +
+#geom_sf_text(data = stations_Htheta_sf,
+#aes(label = paste0(gauge_code, "\n(", n_years, " anos)")),
+#size = 2.1, nudge_y = 0.05) +
 scale_fill_distiller(palette = "Purples", direction = 1) +
 labs(
 title = "Parâmetro θ interpolado",
