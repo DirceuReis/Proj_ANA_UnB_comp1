@@ -23,6 +23,8 @@ library(ggplot2)
 library(rstan)
 ```
 
+
+
 # Introdução
 
 Neste documento descrevemos o conjunto de dados de máximas anuais por duração, os procedimentos de pré-processamento, as análises exploratórias realizadas e a formulação do modelo GEV multisite com pooling parcial utilizado para a regionalização das curvas IDF.
@@ -31,12 +33,18 @@ Neste documento descrevemos o conjunto de dados de máximas anuais por duração
 
 ## Leitura e estrutura dos dados
 
+
+
 ```{r}
 dados_agregados <- read_parquet("base/gerados/df_imax.parquet")
 str(dados_agregados)
 ```
 
+
+
 d: duração em horas; imax: intensidade em mm/h; date: data do evento máximo year: ano de referência; na_prct: percentual de dados NA
+
+
 
 ```{r}
 anos_por_estacao <- dados_agregados %>%
@@ -62,7 +70,11 @@ ggplot(anos_por_estacao, aes(x = n_anos)) +
   theme_minimal()
 ```
 
+
+
 Adotou-se um mínimo de 7 anos de dados por estação, para garantir (i) um número mínimo de observações para a estimação da GEV em cada posto e (ii) um número suficientemente grande de estações na amostra, evitando ao mesmo tempo um custo computacional excessivo no ajuste do modelo hierárquico multisite.
+
+
 
 ```{r}
 estacoes_validas <- anos_por_estacao %>%
@@ -91,17 +103,41 @@ max_anuais_filtrado <- dados_agregados %>%
 filter(gauge_code %in% estacoes_validas)
 ```
 
+
+
 ## Remoção de dados faltantes
 
 Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na \> 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
 
+
+
 ```{r}
-max_anuais_filtrado <- max_anuais_filtrado %>%
+max_anuais_filtrado2 <- max_anuais_filtrado %>%
 group_by(gauge_code, year) %>%
 mutate(prop_na = mean(is.na(imax))) %>%
 ungroup() %>%
-filter(na_prct <= 0.8) %>%
+filter(prop_na <= 0.8) %>%
 select(-prop_na)
+
+na_por_ano_estacao <- max_anuais_filtrado %>%
+  group_by(gauge_code, year) %>%
+  summarise(prop_na = mean(is.na(imax)), .groups = "drop")
+
+anos_removidos <- max_anuais_filtrado %>%
+  group_by(gauge_code, year) %>%
+  summarise(prop_na = mean(is.na(imax)), .groups = "drop") %>%
+  filter(prop_na > 0.8)
+
+n_anos_removidos <- nrow(anos_removidos)
+
+n_anos_removidos
+
+ggplot(na_por_ano_estacao, aes(x = year, y = gauge_code, fill = prop_na)) +
+geom_tile() +
+scale_fill_viridis_c(name = "Proporção de NA") +
+labs(x = "Ano", y = "Estação",
+title = "Padrão temporal de dados faltantes") +
+theme_minimal()
 
 dados_modelo <- max_anuais_filtrado %>%
   filter(!is.na(imax)) %>%
@@ -110,10 +146,15 @@ dados_modelo <- max_anuais_filtrado %>%
 dados_modelo <- dados_modelo %>%
   filter(d >= 1 & d <=24)
 
-#dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
+dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
 ```
 
+
+No total, foram identificados `n_anos_removidos` foram removidos por apresentarem mais de 80% de valores ausentes.
+
 ### Estatísticas descritivas por duração
+
+
 
 ```{r}
 summary_dur <- dados_modelo %>%
@@ -135,9 +176,13 @@ ggplot(summary_dur, aes(x = d)) +
   theme_minimal()
 ```
 
+
+
 A Figura apresenta a variação da intensidade das máximas de precipitação em função da duração, representada pela mediana (linha contínua) e pelo 90º percentil (linha tracejada) agregados sobre todas as estações. Observa-se o comportamento típico de curvas IDF: as intensidades máximas decrescem de forma monotonicamente rápida à medida que a duração aumenta, com valores em torno de 35–40 mm para a duração de 1 h e inferiores a 10 mm para durações próximas de 24 h. Essa queda acentuada indica que os eventos mais intensos tendem a concentrar-se em janelas temporais curtas, coerente com a predominância de convecção na gênese das chuvas extremas de pequena duração.
 
 A distância entre as duas curvas também é informativa. Para durações curtas (1–3 h), o 90º percentil é bem superior à mediana, refletindo grande assimetria e variabilidade interanual nas máximas de alta resolução temporal. À medida que a duração aumenta, essa diferença se reduz, sugerindo que a agregação temporal “suaviza” os extremos, tornando a distribuição das máximas de longa duração relativamente menos dispersa. Em conjunto, esses resultados reforçam a hipótese de uma relação de escala bem comportada entre intensidade e duração, o que motiva o uso de modelos regionais com estrutura de invariância de escala (via parâmetros $H$ e $θ$) para descrever as curvas IDF no modelo hierárquico.
+
+
 
 ```{r}
 sd_global <- sd(log(dados_modelo$imax), na.rm = TRUE)
@@ -163,11 +208,15 @@ title = "Variação espacial das intensidades extremas") +
 theme_minimal()
 ```
 
+
+
 A Figura mostra a distribuição da média de log(imax) por estação. O desvio-padrão global de log(imax), calculado a partir de todas as observações agregadas, é igual a 0,62. Já o desvio-padrão entre estações, obtido a partir das médias de log(imax) por posto, é de aproximadamente 0,12. Isso significa que apenas cerca de 20% da variabilidade total está associada a diferenças sistemáticas entre estações, enquanto a maior parte decorre da variabilidade interna a cada posto (variabilidade interanual e entre durações).
 
 Em termos práticos, esses resultados indicam que as estações não são completamente homogêneas, existe um gradiente espacial de intensidades extremas, como sugerido pelo espalhamento do histograma, mas também não são tão distintas a ponto de justificar ajustes totalmente independentes (non-pooling). Essa combinação de heterogeneidade moderada e forte componente comum é justamente o cenário em que modelos hierárquicos com partial pooling são mais adequados: as estações “compartilham informação” por meio dos hiperparâmetros regionais, mas preservam diferenças locais nos parâmetros da GEV. Isso ajuda a estabilizar as estimativas em postos com poucas observações, evitando o superajuste, ao mesmo tempo em que mantém a capacidade de representar padrões espaciais reais nas intensidades extremas.
 
 ##Ajustes GEV ordinários por duração
+
+
 
 ```{r}
 safe_fgev <- safely(function(x) {
@@ -210,6 +259,8 @@ title = "Estimativas locais de μ[d] por duração") +
 theme_minimal() +
 theme(legend.position = "none")
 ```
+
+
 
 As estimativas locais de $\mu_d$ por duração (Figura acima) exibem um comportamento bem estruturado para a maioria das estações quando representadas em função de $log \mu_d$. Para cada estação, os valores de $\mu_d$ formam uma curva suave e monotonicamente decrescente, e as diferentes estações apresentam formas semelhantes, diferindo principalmente no nível médio e na taxa de decaimento com a duração. Esse padrão indica que a dependência entre intensidade e duração não é arbitrária, mas pode ser descrita de maneira parsimoniosa por meio de uma relação de escala.
 
@@ -287,6 +338,8 @@ A média global $\xi_{\text{bar}}$ recebe uma prior do tipo Beta reescalada para
 
 Antes do ajuste Bayesiano, os dados são organizados em um formato compatível com o bloco `data` do modelo Stan. A partir do `dados_modelo`, constrói-se um data frame auxiliar:
 
+
+
 ```{r build-stan-data}
 df <- dados_modelo %>% 
   mutate(
@@ -320,7 +373,11 @@ stopifnot(
 
 ```
 
+
+
 Neste arranjo, cada observação de máxima anual é associada a dois índices inteiros: gauge_id[i] indica a estação e duration_id[i] indica a duração. Esses índices são usados no Stan para recuperar os parâmetros correspondentes dentro das estruturas matriciais $\mu[d,g],\sigma[d,g]$ e $\xi[d,g]$.
+
+
 
 ```{r}
 modelo_multistation_com_partial_pooling.stan <- "
@@ -487,11 +544,15 @@ options(mc.cores = 5)
 #)
 ```
 
+
+
 Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto H e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
 
 Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, e a média global da forma é inicializada em xi_bar = 0. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
 
 ## Diagnósticos e avaliação do modelo
+
+
 
 ```{r}
 # library(rstan)
@@ -641,6 +702,8 @@ Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixa
 #check_all_diagnostics(fit)
 ```
 
+
+
 check_all_diagnostics(fit)
 [1] "n_eff / iter looks reasonable for all parameters"
 [1] "Rhat looks reasonable for all parameters"
@@ -674,6 +737,8 @@ comparação é visualizada por meio da função `plot_param()`, que plota, para
 cada estação, a mediana posterior (linha), o IC95% (faixa sombreada) e os
 parâmetros da GEV ordinária (pontos vermelhos) ao longo da escala
 logarítmica da duração.
+
+
 
 ```{r}
 library(tidyr)
@@ -772,7 +837,6 @@ p_mu; p_sigma; p_xi
 
 ```
 
-
 ```{r plotando-por-duração-da-série-parte-1}
 anos_por_estacao <- dados_modelo %>%
   group_by(gauge_code) %>%
@@ -810,7 +874,6 @@ p_xi_longas <- plot_param(
 )
 ```
 
-
 ```{r}
 grupos_validos <- df_mu_comb %>% 
   distinct(grupo) %>% 
@@ -840,6 +903,8 @@ names(plots_xi) <- grupos_validos
 plots_xi[[5]]
 ```
 
+
+
 ## Posterior dos parâmetros por estação (H, θ e α)
 Nesta seção analisamos a distribuição posterior dos parâmetros **H**, **θ** e
 **α** do modelo hierárquico. Esses parâmetros controlam, respectivamente:
@@ -868,6 +933,8 @@ Geramos então os gráficos posteriores de H, θ e α para cada grupo, evitando
 misturar estações com volumes muito distintos de informação.
 
 A estação SBPA apresenta um comportamento bem distinto das demais com o valor alto de H, e baixo alpha.
+
+
 
 ```{r grafico-posteriori}
 
@@ -968,11 +1035,15 @@ plots_posterior[[7]]
 
 ```
 
+
+
 ## Mapas interpolados dos parâmetros H e θ com identificação das estações
 
 Os parâmetros **H** e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de H e θ.
 
 Além disso, incluímos no mapa o código de cada estação e o número de anos de dados disponíveis, de modo a facilitar a avaliação da confiabilidade local da estimativa.
+
+
 
 ```{r plot-H-Theta}
 library(dplyr)
@@ -1114,7 +1185,11 @@ p_H | p_theta
 ```
 
 
+
+
 ## Plotagem dos parametros por intervalo
+
+
 
 ```{r plot-H-Theta classes}
 classificar_intervalos <- function(sf_obj, var, n_classes = 5) {
@@ -1200,7 +1275,11 @@ p_theta <- ggplot() +
 p_H | p_theta
 ```
 
+
+
 ## Plot com parametros geomorfologicos
+
+
 ```{r}
 library(sf)
 
@@ -1306,7 +1385,11 @@ ggplot(stations_Htheta_sf %>% st_drop_geometry(),
 p_H_geo1 
 ```
 
+
+
 ## Plot com o MDE
+
+
 ```{r}
 library(elevatr)
 
@@ -1367,3 +1450,4 @@ p_H_mde <- ggplot() +
 plot(mde)
 p_H_mde
 ```
+
