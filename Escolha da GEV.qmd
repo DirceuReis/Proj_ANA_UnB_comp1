@@ -1,5 +1,5 @@
 ---
-title: "Escolha_da_GEV"
+title: "Extremos de Precipitação e Caudas Pesadas"
 ---
 
 A estimativa de quantis de precipitação extrema associados a tempos de retorno elevados (p.ex., 100, 1.000 ou 10.000 anos) é um componente central da avaliação de risco e do dimensionamento de infraestruturas críticas, como grandes barragens, vertedores e sistemas de drenagem urbana de grande porte. Ao longo de grande parte do século XX, essa prática foi conduzida por uma abordagem essencialmente determinística, ou quase determinística, com uso recorrente da distribuição de Gumbel, apoiada na hipótese de que as probabilidades de cauda dos processos hidrológicos decaem aproximadamente de forma exponencial. Essa hipótese, embora operacionalmente conveniente, tem sido cada vez mais questionada por representar uma simplificação que pode subestimar a incerteza e a variabilidade estocástica inerentes aos extremos hidrometeorológicos, sobretudo na modelagem de caudas e na extrapolação para tempos de retorno muito elevados (KOUTSOYIANNIS, 2022).
@@ -8,7 +8,7 @@ A distribuição de Gumbel é frequentemente adotada com base em um resultado as
 
 A adoção da Distribuição Generalizada de Valores Extremos (GEV), especialmente em configurações com parâmetro de forma positivo ($\xi>0$), deve ser entendida como uma escolha coerente com caudas pesadas e, portanto, com uma representação mais realista da extrapolação para tempos de retorno elevados. Este documento discute as limitações de modelos de cauda leve na quantificação de risco e sintetiza justificativas físicas e teóricas para a ocorrência de caudas pesadas em extremos de precipitação.
 
-## Fundamentos Teóricos da Teoria de Valores Extremos (EVT)
+# Fundamentos Teóricos da Teoria de Valores Extremos (EVT)
 
 O Teorema de Fisher-Tippett-Gnedenko estabelece que, se o máximo de uma sequência de variáveis aleatórias independentes e identicamente distribuídas (i.i.d.) convergir para uma distribuição não degenerada, esse limite deve pertencer a uma de três famílias funcionais: Gumbel, Fréchet ou Weibull. Estas três famílias foram unificadas por Jenkinson e von Mises na Distribuição Generalizada de Valores Extremos (GEV), definida pela função de distribuição acumulada (CDF):
 
@@ -25,36 +25,73 @@ definida para $\{z : 1 + \xi(z - \mu) / \sigma > 0\}$, onde:
 O parâmetro de forma $\xi$ controla o regime de cauda da GEV e, portanto, a extrapolação para quantis raros:
 
 -   $\xi \to 0$ (Domínio Gumbel, Tipo I): corresponde ao limite $\xi = 0$. A cauda apresenta decaimento aproximadamente exponencial, e todos os momentos são finitos. Em termos práticos, implica menor probabilidade relativa de valores extremamente discrepantes.
--   $\xi > 0$ (Domínio Fréchet, Tipo II): caracteriza cauda pesada, com decaimento em lei de potência ∝ $x^{-1/\xi}$. A existência de momentos depende de $\xi$: o k-ésimo momento existe apenas se $k< 1/\xi$. Isso aumenta a massa de probabilidade na cauda e eleva quantis associados a tempos de retorno muito altos. 
+-   $\xi > 0$ (Domínio Fréchet, Tipo II): caracteriza cauda pesada, com decaimento em lei de potência ∝ $x^{-1/\xi}$. A existência de momentos depende de $\xi$: o k-ésimo momento existe apenas se $k< 1/\xi$. Isso aumenta a massa de probabilidade na cauda e eleva quantis associados a tempos de retorno muito altos.
 -   $\xi < 0$ (Domínio Weibull, Tipo III): implica limite superior finito para a variável. Para extremos de precipitação usados em projeto e segurança, esse regime costuma ser pouco apropriado porque introduz um “teto” determinístico para intensidades máximas, o que é difícil de sustentar em um sistema atmosférico aberto e variável (e potencialmente não estacionário) (Papalexiou et al., 2013). Por isso, na prática aplicada, a discussão normalmente se concentra na distinção entre cauda leve ($\xi=0$) e cauda pesada ($\xi>0$).
 
 A EVT estabelece que a distribuição assintótica dos máximos é governada pelo comportamento de cauda da distribuição “parental”, isto é, pela distribuição dos valores individuais (por exemplo, os totais diários de precipitação). Quando a parental tem cauda do tipo exponencial, como ocorre em famílias como Exponencial, Gama, Normal e certas parametrizações de Weibull, os máximos pertencem ao domínio de atração de Gumbel. Em contraste, quando a parental apresenta cauda em lei de potência, como em Pareto, Cauchy e Student-t, os máximos pertencem ao domínio de atração de Fréchet.
 
 A prática hidrológica tradicional frequentemente assumiu que a precipitação diária poderia ser representada por distribuições do tipo Gama ou Exponencial, o que leva, em princípio, à escolha de Gumbel para máximos anuais (Nerantzaki et al., 2013). Contudo, dois resultados recorrentes na literatura recente enfraquecem essa inferência: primeiro, análises em larga escala sugerem que a própria precipitação diária pode exibir caudas mais pesadas, compatíveis com leis de potência, em vez de um decaimento exponencial (Papalexiou et al., 2013); segundo, mesmo quando a parental é de cauda exponencial, a convergência para o regime assintótico de Gumbel pode ser tão lenta que, nas escalas amostrais usuais em hidrologia, um comportamento efetivamente mais pesado (compatível com Fréchet) pode descrever melhor os máximos no intervalo de interesse prático (Serinaldi & Kilsby, 2014).
 
-## Convergência e Regime Subassintótico dos Máximos
+# Convergência e Regime Subassintótico dos Máximos
 
 Uma limitação central da aplicação rotineira da distribuição de Gumbel é que ela depende de resultados estritamente assintóticos da Teoria de Valores Extremos. Em termos formais, tais resultados descrevem o comportamento quando $n \to \infty$. Porém, em hidrologia, n é inerentemente finito (p.ex., dezenas de eventos independentes por ano e, tipicamente, 50–100 anos de registro). Assim, a aproximação assintótica pode não ser representativa do regime efetivamente observado. A adoção do limite teórico como se fosse automaticamente válido no domínio amostral finito corresponde ao que Koutsoyiannis (2022) denomina “falácia da convergência”.
 
-### Convergência lenta para o limite de Gumbel
+## Convergência lenta para o limite de Gumbel
 
 Koutsoyiannis (2022) documenta que, para distribuições parentais frequentemente utilizadas para precipitação (por exemplo, Weibull com parâmetro de forma $\xi<1$, comum em chuvas horárias), a convergência dos máximos para a assíntota de Gumbel pode ser extremamente lenta. Resultados baseados em simulações de Monte Carlo indicam que, mesmo com tamanhos amostrais por bloco muito superiores aos plausíveis em aplicações hidrológicas (p.ex., $N = 1.000$ ou $N = 10.000$ eventos por ano), a distribuição dos máximos ainda apresenta curvatura residual quando avaliada em papel de probabilidade de Gumbel (Koutsoyiannis, 2007). Essa curvatura é operacionalmente equivalente ao comportamento capturado por um parâmetro de forma positivo na GEV ($\xi>0$).
 
 Do ponto de vista aplicado, isso implica que os máximos podem apresentar, no domínio amostral relevante, uma cauda efetivamente mais pesada do que a imposta por ($\xi = 0$), mesmo quando o limite assintótico teórico seria Gumbel. Fixar $\xi = 0$ nesses casos equivale a substituir a estrutura observada dos dados por uma idealização assintótica que não se materializa nas escalas de tempo disponíveis.
 
-### Interpretação “penúltima” via GEV com 
+## Interpretação “penúltima” via GEV com
 
 Como sistemas hidrológicos operam sob amostras finitas, a inferência sobre extremos ocorre em um regime pré-assintótico (subassintótico) (Serinaldi et al., 2025). Nesse regime, máximos de variáveis cuja parental é do tipo exponencial podem exibir comportamento aproximado compatível com Fréchet, no sentido de exigirem uma parametrização com $\xi > 0$ para reproduzir a curvatura observada e a massa de probabilidade na cauda superior.
 
-Impor Gumbel equivale a forçar uma condição assintótica que o processo, no domínio observacional, ainda não atingiu. Isso tende a “endireitar” artificialmente a curva de probabilidade, reduzindo a cauda superior e subestimando quantis associados a altos tempos de retorno. Em contraste, estimar $\xi$ livremente permite acomodar o comportamento subassintótico e, portanto, fornece uma representação mais consistente dos extremos no intervalo de interesse para projeto e segurança. Nessa perspectiva, adotar GEV/Fréchet não significa necessariamente postular cauda pesada no limite 
-$n \to \infty$, mas reconhecer que, nas escalas amostrais relevantes para a engenharia, o processo se comporta como tal (Serinaldi et al., 2014). Por isso, a GEV com $\xi > 0$ pode ser interpretada como uma aproximação “penúltima”: a melhor descrição estatística do regime finito no qual as decisões de risco são efetivamente tomadas.
+Impor Gumbel equivale a forçar uma condição assintótica que o processo, no domínio observacional, ainda não atingiu. Isso tende a “endireitar” artificialmente a curva de probabilidade, reduzindo a cauda superior e subestimando quantis associados a altos tempos de retorno. Em contraste, estimar $\xi$ livremente permite acomodar o comportamento subassintótico e, portanto, fornece uma representação mais consistente dos extremos no intervalo de interesse para projeto e segurança. Nessa perspectiva, adotar GEV/Fréchet não significa necessariamente postular cauda pesada no limite $n \to \infty$, mas reconhecer que, nas escalas amostrais relevantes para a engenharia, o processo se comporta como tal (Serinaldi et al., 2014). Por isso, a GEV com $\xi > 0$ pode ser interpretada como uma aproximação “penúltima”: a melhor descrição estatística do regime finito no qual as decisões de risco são efetivamente tomadas.
 
 # Mecanismos Físicos Geradores de Caudas Pesadas
 
+A adoção de uma distribuição GEV com parâmetro de forma positivo ($\xi>0$) não deve ser interpretada como um artifício estatístico de ajuste de cauda, mas como uma consequência com os mecanismos físicos que controlam a gênese de precipitação extrema. Extremos pluviométricos emergem de processos termodinâmicos e dinâmicos intrinsecamente não lineares, frequentemente dominados por amplificação multiplicativa e acoplamentos multiescala, o que favorece caudas pesadas (com comportamento tipo lei de potência) em detrimento de decaimentos exponenciais. Em outras palavras, a atmosfera relevante para extremos convectivos comporta-se como um sistema complexo e fortemente acoplado, não como um sistema linear com interações fracas.
+
+O limite termodinâmico primário para a precipitação extrema é a capacidade da atmosfera de armazenar vapor d’água, expressa pela relação de Clausius–Clapeyron (C–C) (Lenderink et al., 2021), que descreve a dependência da pressão de vapor de saturação $e_s$ escala com a temperatura $T$ de acordo com a aproximação:
+
+$$\frac{de_s}{dT} \approx \frac{L_v e_s}{R_v T^2}$$
+da qual decorre um escalonamento típico da ordem de $~7%$$𝐾^-1$. Embora o aumento de $e_s$ com $T$ seja essencialmente exponencial, a tradução desse potencial termodinâmico em intensidade de precipitação observada depende da dinâmica atmosférica. Se a chuva extrema fosse controlada apenas pelo conteúdo de água precipitável em uma coluna quase estática, seria esperado um comportamento mais limitado e “regular”. Contudo, eventos extremos são, em geral, fenômenos dinâmicos, nos quais transporte, convergência e intensificação convectiva definem a magnitude final.
+
+Estudos recentes reportam o chamado escalonamento “Super-CC”, no qual extremos de curta duração (horários e sub-horários) aumentam a taxas superiores ao previsto por C–C, frequentemente próximas de $~14%$$𝐾^-1$ ($2\times$C-C) (Argüeso et al., 2022). Esse comportamento indica que a precipitação extrema não é uma resposta passiva à disponibilidade de umidade, mas um processo ativo com intensificação dinâmica sob aquecimento.
+
+A base física dessa amplificação pode ser interpretada como um feedback positivo (Argüeso et al., 2022):
+
+-   Liberação de calor latente durante a condensação;
+
+-   Aumento de flutuabilidade e intensificação das correntes ascendentes (updrafts);
+
+-   Fortalecimento da convergência de umidade, pois updrafts mais vigorosos reduzem a pressão em baixos níveis e ampliam a área-fonte de alimentação de vapor.
+
+Nesse contexto, a intensidade de precipitação $I$ pode ser representada, em primeira ordem, como função conjunta da umidade disponível $q$ e da velocidade vertical $w$, com acoplamento entre ambos:
+
+$$I \propto q \cdot w(q)$$
+como $w$ depende do aquecimento por calor latente, que por sua vez depende de $q$, a relação torna-se não linear e multiplicativa, compatível com a noção de cascatas multiplicativas. Em sistemas desse tipo, a estatística resultante tende a produzir caudas pesadas e escalonamentos do tipo lei de potência (Koutsoyiannis 2022), o que é consistente com $xi>0$ na família GEV.
+
+Por contraste, a distribuição de Gumbel (caso $\xi=0$) incorpora uma escala característica e um decaimento essencialmente exponencial de cauda, adequado a sistemas com contribuições predominantemente aditivas e/ou interações fracas. Esse formalismo é estruturalmente limitado para representar regimes dominados por realimentações auto-reforçantes, nos quais a probabilidade de extremos muito grandes decai mais lentamente do que no caso exponencial.
+
+Ainda, a precipitação observada decorre da superposição e do acoplamento de processos físicos que atuam em múltiplas escalas, desde a microfísica de formação e crescimento de hidrometeoros até a organização convectiva em mesoescala e a modulação por forçantes sinóticas. Do ponto de vista estatístico, isso implica que intensidades extremas podem ser interpretadas como o resultado de uma interação efetivamente multiplicativa entre fatores distintos,(e.g., umidade atmosférica $\times$ eficiência da tempestade $\times$ duração) e, nesse tipo de estrutura, produtos envolvendo variáveis de alta variabilidade tendem a induzir distribuições com caudas mais pesadas (Koutsoyiannis 2022). 
+
+Além disso, séries pluviométricas frequentemente agregam regimes geradores diferentes, como precipitação estratiforme, tipicamente mais extensa e menos intensa, e precipitação convectiva, mais localizada e potencialmente muito intensa. A mistura dessas populações, sobretudo quando uma delas apresenta variância muito superior, pode produzir uma distribuição composta cuja cauda é mais pesada do que a de qualquer componente isolada (Serinaldi & Kilsby, 2014). Nesse contexto, a distribuição de Gumbel incorpora implicitamente a hipótese de homogeneidade do mecanismo gerador e, por isso, tende a subestimar a contribuição de uma população convectiva “outlier” que frequentemente domina o risco hidrológico em altos quantis, enquanto a família GEV com $\xi>0$ oferece a flexibilidade necessária para representar a heterogeneidade estrutural e os mecanismos físicos amplificadores, tornando a modelagem de extremos mais consistente com o comportamento esperado do sistema atmosférico em regimes convectivos intensos.
+
 # O Princípio da Máxima Entropia (PME)
 
+O embasamento para a adoção de distribuições com caudas pesadas não se limita a evidências empíricas ou a argumentos mecanísticos, ele também possui um suporte formal na Teoria da Informação. Pelo Princípio da Máxima Entropia (PME), a distribuição probabilística mais adequada, no sentido de ser a menos informativa e, portanto, a menos enviesada, é aquela que maximiza a entropia sob o conjunto de restrições físicas efetivamente conhecidas. Nessa formulação, a escolha da família distributiva deixa de ser “preferência estatística” e passa a ser consequência direta de quais invariantes e momentos são impostos pelo sistema (Koutsoyiannis 2022).
 
-Referencias 
+Em variáveis hidrológicas, a entropia ($\Phi$) pode ser interpretada como uma medida do número de microestados compatíveis com um mesmo estado macroscópico observado, quanto maior $\Phi$, maior a multiplicidade de realizações possíveis e, por conseguinte, maior a plausibilidade do macroestado sob incerteza. Aplicações do PME a variáveis hidrológicas mostram que a forma da distribuição é determinada integralmente pelo tipo de restrição selecionada. Se a única informação disponível sobre uma variável positiva é a sua média aritmética $\mu$, o que equivale a impor apenas uma restrição de escala associada à conservação simples de massa/energia, a maximização da entropia conduz à distribuição exponencial. Nesse cenário, a utilização de modelos com cauda leve (e, por extensão, o enquadramento no domínio de atração compatível com decaimento exponencial) só seria consistente caso o processo físico estivesse de fato condicionado exclusivamente por uma escala fixa.
+
+Entretanto, sistemas atmosféricos e hidrológicos associados a precipitação extrema exibem, em geral, invariância de escala e variabilidade ao longo de várias ordens de magnitude, isto é, não apresentam uma escala preferencial única. Essa característica física é mais bem representada por uma restrição do tipo geométrica, equivalente a impor uma condição sobre média geométrica (ou na média do logaritmo) (Koutsoyiannis 2022). Quando o PME é formulado com restrições simultâneas sobre a média aritmética e sobre a média do logaritmo, a distribuição resultante é do tipo Pareto, que constitui o arquétipo de caudas pesadas e está associada ao domínio de atração de Fréchet para máximos.
+
+Conclui-se que a escolha do modelo de valores extremos controla diretamente os quantis de projeto e, portanto, o nível real de segurança de obras hidráulicas e de proteção contra cheias. Modelos de cauda leve do tipo Gumbel implicam crescimento logarítmico dos quantis com o período de retorno ($∼lnT$), o que tende a subestimar rapidamente os níveis associados a retornos elevados. Em contraste, a GEV com domínio de atração de Fréchet/Pareto produz crescimento em lei de potência ($∼T^{\xi}$), gerando divergências que podem ser pequenas para $T$ usuais (50–100 anos), mas tornam-se críticas para infraestruturas de alta confiabilidade ($T≈10^{3}–
+10^{4}$ anos), onde o subdimensionamento passa a ser estrutural. Essa diferença não é apenas numérica, pois implica uma avaliação estruturalmente distinta da probabilidade de ocorrências muito acima do histórico, as quais são compatíveis com sistemas de alta variabilidade. Esse efeito é potencializado quando se considera a persistência e o agrupamento de extremos associados ao comportamento Hurst–Kolmogorov, circunstância em que hipóteses de cauda leve e independência podem levar a probabilidades de falha subestimadas por ordens de magnitude e, por consequência, a subdimensionamento.
+
+Nessa base, a adoção da GEV com $\xi >0$ representa um passo necessário para uma quantificação de risco fisicamente e estatisticamente consistente, alinhada com a dinâmica não linear e multiplicativa da precipitação intensa, com a amplificação observada em escalonamentos superiores ao Clausius–Clapeyron em eventos de curta duração, com a formulação inferencial do Princípio da Máxima Entropia sob invariância de escala, e com a realidade de amostras hidrológicas finitas, sub-assintóticas e heterogêneas. Assim, a manutenção de modelos de cauda leve na hidroclimatologia tende a perpetuar um viés de subestimação em altos quantis, enquanto a evidência física, teórica, estatística e empírica converge para o uso de GEV do tipo Fréchet como referência apropriada para dimensionamento robusto e aumento da resiliência frente a extremos pluviométricos.
+
+Referencias
 
 Koutsoyiannis, D. (2022). Stochastics of Hydroclimatic Extremes – A Cool Look at Risk \[Μonograph\] (2nd ed.). Ka llipos, Open Academic Editions. http://dx.doi.org/10.57713/kallipos-1
 
@@ -67,3 +104,7 @@ Nerantzaki, S., Papalexiou, S. M., & Koutsoyiannis, D. (2013, April). Extreme ra
 Koutsoyiannis, D. (2007). A critical review of probability of extreme rainfall: principles and models. Advances in urban flood management, 151-178.
 
 Serinaldi, F., Lombardo, F., & Kilsby, C. G. (2025). Non-asymptotic distributions of water extremes: much ado about what?. Hydrology and Earth System Sciences, 29(4), 1159-1181.
+
+Lenderink, G., de Vries, H., Fowler, H. J., Barbero, R., van Ulft, B., & Van Meijgaard, E. (2021). Scaling and responses of extreme hourly precipitation in three climate experiments with a convection-permitting model. Philosophical Transactions of the Royal Society A, 379(2195), 20190544.
+
+Argüeso, D., Luca, A. D., Jourdain, N. C., Romero, R., & Homar, V. (2022). Mechanisms for extreme precipitation changes in a tropical archipelago. Journal of Climate, 35(17), 5519-5536.
