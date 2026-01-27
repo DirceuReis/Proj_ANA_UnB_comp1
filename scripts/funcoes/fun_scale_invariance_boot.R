@@ -78,7 +78,9 @@ fun_scale_invariance_boot <- function(df.imax,                   # data.frame co
       mutate(d = first(gauge$d),                   # criar coluna duração
              n_year = n_distinct(gauge$year),      # criar coluna nro. anos
              which_moment = row_number(),          # criar coluna momentos
-             gauge_code = first(gauge$gauge_code)) # criar coluna nome estação
+             gauge_code = first(gauge$gauge_code)) %>%      # criar coluna nome estação
+      rename_with(~gsub(".", "_", .x, fixed = TRUE)) %>%    # renomear
+      rename(ci_lower = conf_low, ci_upper = conf_high)
     
   }) # fim 'ls.boot'
   

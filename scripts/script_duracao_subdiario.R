@@ -114,7 +114,7 @@ df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parque
 # BOOTSTRAP ---------------------------------------------------------------
 
 # Paralelização
-n.cores <- detectCores() - 2
+n.cores <- parallel::detectCores() - 2
 cluster <- parallel::makeCluster(n.cores)
 
 # Calcular intervalos de confiança usando bootstrap
@@ -123,7 +123,7 @@ R.boot <- 1e4
 #                                            na.accept = na.accept,
 #                                            min.years = min.years,
 #                                            which.moment = 1:3,
-#                                            which.duration = c(1,24),
+#                                            which.duration = duration.intervals[[2]],
 #                                            min.duration = 3,
 #                                            R.boot = R.boot,
 #                                            cl = cluster); parallel::stopCluster(cluster)
