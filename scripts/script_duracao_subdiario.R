@@ -113,34 +113,24 @@ df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parque
 
 # BOOTSTRAP ---------------------------------------------------------------
 
-# Paralelização
-n.cores <- parallel::detectCores() - 2
-cluster <- parallel::makeCluster(n.cores)
-
 # Calcular intervalos de confiança usando bootstrap
-R.boot <- 1e4
-# df.scale.boot <- fun_scale_invariance_boot(df.imax = df_imax,
-#                                            na.accept = na.accept,
-#                                            min.years = min.years,
-#                                            which.moment = 1:3,
-#                                            which.duration = duration.intervals[[2]],
-#                                            min.duration = 3,
-#                                            R.boot = R.boot,
-#                                            cl = cluster); parallel::stopCluster(cluster)
+R.boot <- 100
 
 scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
   
-  message("Estimando intervalo...")
+  message("Estimando intervalo de ", interval[1], " a ", interval[2], " h...")
   df.scale.boot <- fun_scale_invariance_boot(df.imax = df_imax,
                                              na.accept = na.accept,
                                              min.years = min.years,
                                              which.moment = 1:3,
-                                             which.duration = c(1,24),
+                                             which.duration = interval,
                                              min.duration = 3,
                                              R.boot = R.boot,
                                              cl = cluster)
   
-}); parallel::stopCluster(cluster); names(scale.invariance) <- c("all", "subhourly", "hourly", "daily")
+}); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
+
+df.scale.boot.ci <- bind_rows(scale.boot.ci)
 
 # arrow::write_parquet(df.scale.boot, sink = "base/gerados/df_scale_boot_hour.parquet")
 # df_scale_boot <- arrow::read_parquet(file = "base/gerados/df_scale_boot_hour.parquet")
