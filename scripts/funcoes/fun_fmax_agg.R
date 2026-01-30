@@ -49,7 +49,7 @@ fun_fmax_agg <- function(data,
            paste0(durations[bad], collapse = ", "))
     }
     
-    # trabalhar com tempo numérico (segundos)
+    # trabalhar com segundos
     tnum <- as.numeric(dt)
     
     # ano/mês/dia como inteiros
@@ -67,7 +67,7 @@ fun_fmax_agg <- function(data,
     }
     anchor_num <- as.numeric(anchor_time)
     
-    # anos únicos (para montar saída estável)
+    # anos únicos
     years <- sort(unique(yr))
     
     res_all_d <- vector("list", length(durations))
@@ -79,7 +79,7 @@ fun_fmax_agg <- function(data,
       # id do bloco fixo dentro da âncora
       block_id <- floor((tnum - anchor_num) / bs)
       
-      # identificador "ano|bloco" para agregar (base R rápido)
+      # identificador "ano|bloco" para agregar
       key <- paste0(yr, "|", block_id)
       
       # soma por bloco (mm)
@@ -92,10 +92,10 @@ fun_fmax_agg <- function(data,
       start_block <- tapply(tnum, key, min)
       
       # agora pegar, para cada ano, o maior bloco (ignorando NA)
-      # separar a parte do ano da key sem reconstruir tabelas enormes
+      # separar a parte do ano da key sem reconstruir tabelas
       key_year <- as.integer(sub("\\|.*$", "", names(sum_block)))
       
-      # vamos iterar por ano (poucos anos) — barato
+      # iterar por ano
       out_year <- vector("list", length(years))
       
       for(j in seq_along(years)){
