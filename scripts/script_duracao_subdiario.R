@@ -8,8 +8,10 @@ pacman::p_load(pacman,
                pbapply,
                arrow,
                tidyverse,
+               tidymodels,
                boot,
                patchwork,
+               parallel,
                ggtext,
                gghighlight,
                ggforce
@@ -21,6 +23,7 @@ pacman::p_load(pacman,
 # Regressão linear e análise invariância de escala
 # source("scripts/funcoes/fun_scale_invariance.R")
 source("scripts/funcoes/fun_scale_invariance_more_moments.R")
+source("scripts/funcoes/fun_scale_invariance_boot.R")
 
 # LER DADOS ---------------------------------------------------------------
 
@@ -106,6 +109,124 @@ scale.coefficient$ci_upper <- scale.coefficient$scale + 1.96*scale.coefficient$s
 
 arrow::write_parquet(x = scale.coefficient, sink = "base/gerados/df_scale_coefficient.parquet")
 df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parquet")
+
+
+# BOOTSTRAP ---------------------------------------------------------------
+
+# Calcular intervalos de confiança usando bootstrap
+R.boot <- 10
+n.cores <- parallelly::availableCores(omit = 1)
+cl <- parallelly::makeClusterPSOCK(n.cores)
+
+scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
+  
+  message("Estimando intervalo de ", interval[1], " a ", interval[2], " h...")
+  df.scale.boot <- fun_scale_invariance_boot(df.imax = df_imax,
+                                             na.accept = na.accept,
+                                             min.years = min.years,
+                                             which.moment = 1:3,
+                                             which.duration = interval,
+                                             min.duration = 3,
+                                             R.boot = R.boot,
+                                             cl = cl)
+  
+}); parallelly::autoStopCluster(cl); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
+
+df.scale.boot.ci <- bind_rows(scale.boot.ci)
+
+# arrow::write_parquet(df.scale.boot, sink = "base/gerados/df_scale_boot_hour.parquet")
+# df_scale_boot <- arrow::read_parquet(file = "base/gerados/df_scale_boot_hour.parquet")
+
+
+# VISUALIZAÇÃO INTERVALOS DE CONFIANÇA ------------------------------------
+
+groups <- unique(df_scale$d)
+group.names <- c("Todas", "Sub-horários", "Horários", "Diários")
+groups <- setNames(object = group.names, nm = groups)
+
+colors <- c("Todas" = "black", "Sub-horários" = "orange", "Horários" = "steelblue2", "Diários" =  "green")
+
+# Intervalos normais aproximados
+# Todas as durações no mesmo gráfico
+df_scale %>% 
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names),
+         gauge_code = forcats::fct_reorder(gauge_code, n_years)) %>% 
+  group_by(gauge_code, d) %>% 
+  summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
+  ggplot(aes(x = gauge_code, y = scale, ymin = ci_lower, ymax = ci_upper, color = d)) +
+  geom_errorbar(width = 0, linewidth = 0.8, alpha = 0.6, position = position_dodge(width = 0.5)) +
+  geom_point(pch = 16, size = 1.5, alpha = 0.9, position = position_dodge(width = 0.5)) +
+  # geom_text(data = . %>% filter(gauge_code != "Regional"), aes(y = Inf, label = n_years),
+  #            color = "black", vjust = 2, size = 2.5, family = "mono") +
+  scale_color_manual(values = colors) +
+  scale_y_continuous(breaks = seq(0.3, 0.95, 0.1)) +
+  labs(x = "", y = "H", color = "") +
+  theme_minimal() +
+  theme(legend.position = c(0.98,0.02),
+        legend.justification = c(1,0),
+        legend.key.spacing.y = unit(-2, "mm"),
+        legend.title = element_blank(),
+        legend.background = element_rect(color = "black", linewidth = 0.25),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 10))
+
+ggsave(filename = "figuras/scale_invariance/scale_confidence_interval.png",
+       width = 16, height = 12, units = "cm", bg = "white")
+
+# Com resultados do bootstrap
+df_scale_boot %>% 
+  group_by(gauge_code) %>% 
+  summarise_all(~mean(.x, na.rm = TRUE)) %>% 
+  ggplot(aes(x = gauge_code, y = scale, ymin = ci_lower, ymax = ci_upper)) +
+  geom_errorbar(width = 0, linewidth = 0.8, alpha = 0.6, position = position_dodge(width = 0.5)) +
+  geom_point(pch = 16, size = 1.5, alpha = 0.9, position = position_dodge(width = 0.5)) +
+  scale_y_continuous(breaks = seq(0.3, 0.95, 0.1)) +
+  labs(x = "", y = "H") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 10))
+
+# Comparar dois ICs gerados
+bind_rows(
+  df_scale %>% 
+    mutate(d = recode(d, !!!groups),
+           d = factor(d, levels = group.names)) %>% 
+    filter(gauge_code != "Regional",
+           d == "Horários") %>% 
+    group_by(gauge_code) %>% 
+    summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
+    select(gauge_code, scale, ci_lower, ci_upper) %>% 
+    mutate(which_ci = "Aproximado"),
+  df_scale_boot %>% 
+    select(gauge_code, scale, ci_lower, ci_upper) %>% 
+    group_by(gauge_code) %>% 
+    summarise_all(~mean(.x, na.rm = TRUE)) %>% 
+    mutate(which_ci = "Bootstrap")) %>% 
+  ggplot(aes(x = gauge_code, y = scale, color = which_ci, ymin = ci_lower, ymax = ci_upper)) +
+  geom_errorbar(width = 0, linewidth = 0.8, alpha = 0.6, position = position_dodge(width = 0.5)) +
+  geom_point(pch = 16, size = 1.5, alpha = 0.9, position = position_dodge(width = 0.5)) +
+  scale_y_continuous(breaks = seq(0.3, 0.95, 0.1)) +
+  scale_color_manual(values = c("Aproximado" = "red", "Bootstrap" = "blue")) +
+  labs(x = "", y = "H") +
+  theme_minimal() +
+  theme(legend.position = c(0.98,0.02),
+        legend.justification = c(1,0),
+        legend.key.spacing.y = unit(-1, "mm"),
+        legend.title = element_blank(),
+        legend.background = element_rect(color = "black", linewidth = 0.25),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 10))
+
+ggsave(filename = "figuras/scale_invariance/scale_confidence_intervals_approx_bootstrap_hourly.png",
+       width = 16, height = 12, units = "cm", bg = "white")
+
 
 # COEFICIENTES DE DESAGREGAÇÃO --------------------------------------------
 

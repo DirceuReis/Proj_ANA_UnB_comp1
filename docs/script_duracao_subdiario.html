@@ -255,8 +255,20 @@ window.Quarto = {
     <h2 id="toc-title">Nesta página</h2>
    
   <ul>
-  <li><a href="#análise-da-hipótese-de-invariância-de-escala" id="toc-análise-da-hipótese-de-invariância-de-escala" class="nav-link active" data-scroll-target="#análise-da-hipótese-de-invariância-de-escala">Análise da hipótese de invariância de escala</a></li>
-  <li><a href="#coeficientes-de-desagregação" id="toc-coeficientes-de-desagregação" class="nav-link" data-scroll-target="#coeficientes-de-desagregação">Coeficientes de desagregação</a></li>
+  <li><a href="#análise-da-hipótese-de-invariância-de-escala" id="toc-análise-da-hipótese-de-invariância-de-escala" class="nav-link active" data-scroll-target="#análise-da-hipótese-de-invariância-de-escala">Análise da hipótese de invariância de escala</a>
+  <ul class="collapse">
+  <li><a href="#construção-dos-modelos" id="toc-construção-dos-modelos" class="nav-link" data-scroll-target="#construção-dos-modelos">Construção dos modelos</a></li>
+  <li><a href="#sec-run-duration" id="toc-sec-run-duration" class="nav-link" data-scroll-target="#sec-run-duration">Cálculo dos coeficientes para diferentes conjuntos de duração</a></li>
+  </ul></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados">Resultados</a>
+  <ul class="collapse">
+  <li><a href="#intervalos-de-confiança" id="toc-intervalos-de-confiança" class="nav-link" data-scroll-target="#intervalos-de-confiança">Intervalos de confiança</a></li>
+  </ul></li>
+  <li><a href="#coeficientes-de-desagregação" id="toc-coeficientes-de-desagregação" class="nav-link" data-scroll-target="#coeficientes-de-desagregação">Coeficientes de desagregação</a>
+  <ul class="collapse">
+  <li><a href="#entendendo-o-coeficiente-de-escala" id="toc-entendendo-o-coeficiente-de-escala" class="nav-link" data-scroll-target="#entendendo-o-coeficiente-de-escala">Entendendo o coeficiente de escala</a></li>
+  <li><a href="#brasil" id="toc-brasil" class="nav-link" data-scroll-target="#brasil">Brasil</a></li>
+  </ul></li>
   <li><a href="#aplicação-efeito-de-coeficientes-de-desagregação-diferentes" id="toc-aplicação-efeito-de-coeficientes-de-desagregação-diferentes" class="nav-link" data-scroll-target="#aplicação-efeito-de-coeficientes-de-desagregação-diferentes">Aplicação: efeito de coeficientes de desagregação diferentes</a></li>
   </ul>
 </nav>
@@ -277,7 +289,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">19/01/2026 16:13:28</p>
+      <p class="date">23/01/2026 14:46:16</p>
     </div>
   </div>
   
@@ -289,10 +301,6 @@ window.Quarto = {
 </header>
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados gerados em 'script_duracao_subdiario.R'</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <section id="análise-da-hipótese-de-invariância-de-escala" class="level2">
 <h2 class="anchored" data-anchor-id="análise-da-hipótese-de-invariância-de-escala">Análise da hipótese de invariância de escala</h2>
 <p>Originalmente, temos a seguinte relação para a invariância simples de escala <span class="citation" data-cites="Nguyen.1998">(<a href="#ref-Nguyen.1998" role="doc-biblioref">Nguyen, Nguyen, e Wang 1998</a>)</span>:</p>
@@ -321,31 +329,619 @@ E[I_d^q] = f(q) \ d^{-Hq}
 <p><span class="math display">\[
 \log(E[I_d^q]) = \log{\left[ f(q) \ d^{-Hq} \right]} = \log(f(q)) + (-Hq)\log(d),
 \]</span></p>
-<p>em que a variável dependente <span class="math inline">\(Y = \log(E[I_d^q])\)</span> será função de uma variável independente <span class="math inline">\(\log(d)\)</span> multiplicada por um parâmetro <span class="math inline">\(\beta_1 = -Hq\)</span>, somada a um parâmetro médio <span class="math inline">\(\beta_0 = \log(f(q))\)</span>, o qual será constante se definirmos a ordem dos momentos não centrais <span class="math inline">\(q = 1, 2\)</span>.</p>
-<p>A hipótese de invariância de escala pode ser avaliada regionalmente, agrupando todos os anos de todas as estações do conjunto para uma mesma duração <span class="math inline">\(d\)</span> e ajustando um modelo ded regresão linear. Para o 1º e 2º momentos não centrais (ou seja, <span class="math inline">\(q = 1\)</span> e <span class="math inline">\(q = 2\)</span> respectivamente) teremos</p>
+<p>em que a variável dependente <span class="math inline">\(Y = \log(E[I_d^q])\)</span> será função de uma variável independente <span class="math inline">\(\log(d)\)</span> multiplicada por um parâmetro <span class="math inline">\(\beta_1 = -Hq\)</span>, somada a um parâmetro médio <span class="math inline">\(\beta_0 = \log(f(q))\)</span>, o qual será constante se definirmos a ordem dos momentos não centrais.</p>
+<p>A hipótese de invariância de escala pode ser avaliada local e regionalmente, este agrupando todos os anos de todas as estações do conjunto para uma mesma duração <span class="math inline">\(d\)</span> e ajustando um modelo de regressão linear <span class="citation" data-cites="Menabde.1999 Rodrigues.2023 casas-castillo2025">(<a href="#ref-Menabde.1999" role="doc-biblioref">Menabde, Seed, e Pegram 1999</a>; <a href="#ref-Rodrigues.2023" role="doc-biblioref">Rodrigues et al. 2023</a>; <a href="#ref-casas-castillo2025" role="doc-biblioref">Casas-Castillo et al. 2025</a>)</span>. Para o três primeiros momentos não centrais (ou seja, <span class="math inline">\(q = 1, 2, 3\)</span>) teremos</p>
 <p><span class="math display">\[
 \begin{align}
 q=1: &amp; \quad \beta_0 = f(q = 1) = D^{H} \times E[I_d] \\
-q=2:&amp; \quad \beta_0 = f(q = 2) = D^{2H} \times E[I_d^2], \\
+q=2:&amp; \quad \beta_0 = f(q = 2) = D^{2H} \times E[I_d^2] \\
+q=3:&amp; \quad \beta_0 = f(q = 3) = D^{3H} \times E[I_d^3], \\
 \end{align}
 \]</span></p>
 <p>e assim</p>
 <p><span class="math display">\[
 \begin{align}
 q=1: &amp; \quad \log(E[I_d]) = \log(f(1)) + (-H)\log(d) \\
-q=2: &amp; \quad \log(E[I_d^2]) = \log(f(2)) + (-2H)\log(d).
+q=2: &amp; \quad \log(E[I_d^2]) = \log(f(2)) + (-2H)\log(d) \\
+q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 \end{align}
 \]</span></p>
-<p>Ajustando o valor do coeficiente angular <span class="math inline">\(\beta_1\)</span>, teremos <span class="math inline">\(\beta_1 = H_1 =  -H\)</span> para o primeiro momento não central e <span class="math inline">\(\beta_1 = H_2 = -2H\)</span> para o segundo momento não central e, em teoria, <span class="math inline">\(H_1 \approx H_2/2\)</span>.</p>
+<p>Ajustando o valor do coeficiente angular <span class="math inline">\(\beta_1\)</span>, teremos <span class="math inline">\(\beta_1 = H_1 =  -H\)</span> para o primeiro momento não central; <span class="math inline">\(\beta_1 = H_2 = -2H\)</span> e <span class="math inline">\(\beta_1 = H_3 = -3H\)</span> para o segundo momento não central e, em teoria, <span class="math inline">\(H_1 \approx H_2/2 \approx H_3/3\)</span>.</p>
+<p>Seguindo a metodologia acima, podemos construir uma função – que chamaremos de <code>fun_scale_invariance</code> – para ajustar um modelo linear a <code>n</code> momentos não centrais de intensidades de múltiplas durações e obter uma estimativa do coeficiente de escala <span class="math inline">\(H\)</span>, além de permitir uma avaliação sobre a validade ou não da hipótese de invariância de escala na região. Na análise que faremos, separaremos os ajustes em intervalos de duração diferentes. Isso porque também nos interessa avaliar se os valores de <span class="math inline">\(H\)</span> ajustados são muito diferentes para as durações sub-horárias, horárias, diárias e considerando todas as durações.</p>
+<section id="construção-dos-modelos" class="level3">
+<h3 class="anchored" data-anchor-id="construção-dos-modelos">Construção dos modelos</h3>
+<p>Começamos importando as séries de intensidades máximas anuais para diferentes durações calculadas em <a href="./script_imax_subdiario.html">Máximos anuais de intensidade</a> no arquivo <code>df_imax.parquet</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df.imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_imax.parquet"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.imax, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  gauge_code     d  imax date                 year na_prct mon_filter n_max
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+1 420420201A 0.167  97.2 2024-03-08 21:00:00  2024   0.506 1:12           1
+2 420420201A 0.333  68.4 2024-02-27 08:00:00  2024   0.506 1:12           1
+3 420420201A 0.5    54.4 2024-01-15 12:50:00  2024   0.506 1:12           1
+4 420420201A 0.667  50.1 2024-01-15 12:50:00  2024   0.506 1:12           1
+5 420420201A 0.833  47.5 2024-01-15 12:50:00  2024   0.506 1:12           1</code></pre>
+</div>
+</div>
+<p>Esta tabela foi gerada sem aplicar filtros, mas contém, na coluna <code>na_prct</code>, uma forma que permite que o façamos agora. Definiremos dois critérios para validar as estações que serão utilizadas para a análise: <code>na.accept</code>, um percentual mínimo de falhas anuais; e <code>min.years</code>, qual o número mínimo de anos que uma estação deverá ter com <code>na_prct &lt;= na.accept</code> para que seja incluída na análise. Adicionalmente, para uma regressão linear é interessante que tenhamos pelo menos três pontos diferentes. Isso é importante quando avaliarmos as estações por intervalos de duração. São poucas as estações</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>na.accept <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># percentual de falhas (0.2 -&gt; 20%)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>min.years <span class="ot">&lt;-</span> <span class="dv">8</span>      <span class="co"># mínimo de anos na série</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>which.moment <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># qual momento usar de base p/ gerar figuras individuais</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>min.duration <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># mínimo de durações diferentes necessário</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>which.duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>) <span class="co"># uma faixa de duração para a análise</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Primeiro manteremos os anos que apresentarem um percentual de falhas <code>data$na_prct</code> inferior a 20% e selecionaremos um intervalo de durações para análise (ex. entre 1 e 24 horas). Em seguida, agrupando os dados por estação, selecionaremos somente aquelas que contiverem ao menos 3 durações distintas e 8 anos usando <code>dplyr::n_distinct(d)</code> e <code>dplyr::n_distinct(year)</code> respectivamente.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df.imax <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(na_prct <span class="sc">&lt;=</span> na.accept,              <span class="co"># filtrar anos por porcentagem de falhas</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">between</span>(d, which.duration[<span class="dv">1</span>], which.duration[<span class="dv">2</span>])) <span class="sc">%&gt;%</span> <span class="co"># filtrar durações dentro do intervalo</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span>                  <span class="co"># agrupar por estação</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">n_distinct</span>(d) <span class="sc">&gt;=</span> min.duration,     <span class="co"># só estações com pelo menos 'min.duration'</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">n_distinct</span>(year) <span class="sc">&gt;=</span> min.years) <span class="sc">%&gt;%</span> <span class="co"># so estações com pelo menos 'min.years'</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()                                 <span class="co"># desagrupar</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  gauge_code     d  imax date                 year na_prct mon_filter n_max
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dttm&gt;              &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;int&gt;
+1 430120601A     1  58.4 2016-04-10 22:30:00  2016  0.0139 1:12           1
+2 430120601A     1  59.2 2017-02-23 23:00:00  2017  0.0510 1:12           1
+3 430120601A     1  47.2 2018-01-27 20:50:00  2018  0.0487 1:12           1
+4 430120601A     1  45.6 2019-04-16 01:40:00  2019  0.0748 1:12           1
+5 430120601A     1  37.6 2020-08-19 00:40:00  2020  0.0832 1:12           1</code></pre>
+</div>
+</div>
+<section id="momentos" class="level4">
+<h4 class="anchored" data-anchor-id="momentos">Momentos</h4>
+<p>Feito isso calculamos os momentos não centrais. Queremos que o cálculo seja feito para quaisquer <code>n</code> momentos que possam ser passados para uma sequência <code>which.moment</code>, o que pode ser feito utilizando as funções <code>purrr::map_()</code>. Essas funções executam uma função qualquer dentro da estrutura do <code>dplyr</code>. Imaginemos então que queremos criar uma nova coluna para cada <code>1:n</code> momento não central desejado. Podemos criar essas novas colunas usando a função <code>dplyr::tibble()</code>, que na prática criará uma tabela, e adicionar essas novas colunas ao nosso dataframe <code>data</code> “mapeando” a função <code>tibble()</code> através do <code>purrr::map_dfc()</code> e esse <code>tibble</code> será criado com base em cada momento dentro do vetor <code>which.moment</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais locais (p/ cada estação)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df.mom.local <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, d) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>          purrr<span class="sc">::</span><span class="fu">map_dfc</span>(<span class="at">.x =</span> which.moment,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">tibble</span>(<span class="st">"mom{.x}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(imax<span class="sc">^</span>.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.mom.local, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 6
+  gauge_code     d n_years  mom1  mom2    mom3
+  &lt;chr&gt;      &lt;dbl&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 430120601A     1       8  46.9 2260. 111936.
+2 430120601A     2       8  26.4  714.  19721.
+3 430120601A     3       8  19.8  406.   8504.
+4 430120601A     4       8  15.6  254.   4245.
+5 430120601A     5       8  13.1  176.   2434.</code></pre>
+</div>
+</div>
+<p>No código acima, escrevemos <code>"mom{.x}" := mean(...)</code>. Aqui estamos usando o pacote <a href="https://glue.tidyverse.org/"><code>glue</code></a> e sua sintaxe para criar strings de maneira dinâmica (pois usamos <code>.x = which.moment</code>, e criamos o nome das colunas com <code>"mom{.x}"</code>) e atribuímos como nomes dos resultados dos momentos não centrais usando o operador <code>:=</code>.</p>
+<p>Mais informações sobre as funções <code>map_()</code> podem ser obtidas em <a href="https://purrr.tidyverse.org/reference/map.html"><code>purrr::map()</code></a>. Sobre o operador <code>:=</code> (<em>dynamic dots</em>), referenciamos <code>?rlang::</code>:=`.</p>
+<p>Também é de interesse obter uma perspectiva regional para fins de comparação, isto é, determinar um modelo de <span class="math inline">\(H\)</span> único para o conjunto, como se todas as estações fizessem parte da mesma série. Portando, em vez de agrupar por <code>gauge_code</code> e por duração <code>d</code>, agruparemos somente por <code>d</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais regionais</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.mom.regional <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(d) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">n</span>(),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>          purrr<span class="sc">::</span><span class="fu">map_dfc</span>(which.moment, <span class="sc">~</span> <span class="fu">tibble</span>(<span class="st">"mom{.x}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(imax<span class="sc">^</span>.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Podemos agora juntar os dois conjuntos em um único dataframe <code>df.mom</code> e reorganizar os dados de um formato “<em>wide</em>” (com várias colunas) para um formato “<em>long</em>” (com várias linhas) usando <code>dplyr::pivot_longer()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.mom.regional<span class="sc">$</span>gauge_code <span class="ot">&lt;-</span> <span class="st">"Regional"</span>                <span class="co"># adicionar coluna</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df.mom <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df.mom.local, df.mom.regional) <span class="sc">%&gt;%</span>  <span class="co"># juntar</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span><span class="fu">c</span>(gauge_code, d, n_years),       <span class="co"># manter essas colunas</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"which_moment"</span>),  <span class="co"># novas colunas</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">"(mom)(</span><span class="sc">\\</span><span class="st">d+)"</span>) <span class="sc">%&gt;%</span>       <span class="co"># colunas c/ valores</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">which_moment =</span> <span class="fu">as.numeric</span>(which_moment))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regressão-linear" class="level4">
+<h4 class="anchored" data-anchor-id="regressão-linear">Regressão linear</h4>
+<p>Para a regressão linear em si, antes dividiremos nossos dados em uma lista, cada objeto desta lista contendo o dataframe de uma única estação:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ls.mom <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="at">x =</span> df.mom, <span class="at">f =</span> df.mom<span class="sc">$</span>gauge_code)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Usaremos <code>lapply()</code> para iterar sobre cada objeto dessa lista e executar sobre eles uma sequência de operações: 1) calcular os logaritmos das durações e dos momentos; 2) ajustar um modelo linear usando <code>lm()</code> sobre <code>log(mom) ~ log(d)</code>; 3) extrair estatísticas do modelo linear ajustado (R², coeficiente angular, erro padrão); e 4) calcular, a partir do coeficiente angular do modelo, o coeficiente de escala <span class="math inline">\(H\)</span>. Também será necessário separar os dataframes dentro de <code>ls.mom</code> por momento, para que o ajuste dos modelos seja feito corretamente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> ls.mom, <span class="at">FUN =</span> <span class="cf">function</span>(gauge){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> gauge<span class="sc">$</span>gauge_code[<span class="dv">1</span>] <span class="co"># código da estação</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aplicar </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  gauge.mom <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="at">x =</span> gauge, <span class="at">f =</span> gauge<span class="sc">$</span>which_moment)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  regression <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> gauge.mom, <span class="at">FUN =</span> <span class="cf">function</span>(gg){</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    which.moment <span class="ot">&lt;-</span> gg<span class="sc">$</span>which_moment[<span class="dv">1</span>] <span class="co"># extrair qual momento</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    gg<span class="sc">$</span>log_mom <span class="ot">&lt;-</span> <span class="fu">log</span>(gg<span class="sc">$</span>mom)          <span class="co"># logaritmo do momento</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    gg<span class="sc">$</span>log_d <span class="ot">&lt;-</span> <span class="fu">log</span>(gg<span class="sc">$</span>d)              <span class="co"># logaritmo da duração</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">lm</span>(log_mom <span class="sc">~</span> log_d, <span class="at">data =</span> gg) <span class="co"># regressão linear</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    coef <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[[<span class="st">"log_d"</span>]]     <span class="co"># slope</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    scale <span class="ot">&lt;-</span> <span class="sc">-</span>coef<span class="sc">/</span>which.moment        <span class="co"># coeficiente de escala</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)          <span class="co"># resumo</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    rsquared <span class="ot">&lt;-</span> summary<span class="sc">$</span>r.squared      <span class="co"># R²</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">&lt;-</span> summary<span class="sc">$</span>sigma<span class="sc">/</span>which.moment   <span class="co"># erro padrão</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"gauge_code"</span> <span class="ot">=</span> name,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"n_years"</span> <span class="ot">=</span> gg<span class="sc">$</span>n_years,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"d"</span> <span class="ot">=</span> gg<span class="sc">$</span>d,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"which_moment"</span> <span class="ot">=</span> <span class="fu">factor</span>(which.moment),</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"mom"</span> <span class="ot">=</span> gg<span class="sc">$</span>mom,</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"coef_reg"</span> <span class="ot">=</span> coef,</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"scale"</span> <span class="ot">=</span> scale,</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"rsquared"</span> <span class="ot">=</span> rsquared,</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"se"</span> <span class="ot">=</span> se)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  }) <span class="co"># fim 'regression'</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transformar em tbl_df</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  regression <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(regression)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em tbl_df</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.moments)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.moments, <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  gauge_code n_years d which_moment   mom  coef_reg    scale rsquared
+1 430120601A       8 1            1 46.90 -0.706307 0.706307 0.993362
+2 430120601A       8 2            1 26.40 -0.706307 0.706307 0.993362
+3 430120601A       8 3            1 19.85 -0.706307 0.706307 0.993362
+4 430120601A       8 4            1 15.65 -0.706307 0.706307 0.993362
+5 430120601A       8 5            1 13.06 -0.706307 0.706307 0.993362
+          se
+1 0.04902731
+2 0.04902731
+3 0.04902731
+4 0.04902731
+5 0.04902731</code></pre>
+</div>
+</div>
+</section>
+<section id="visualização" class="level4">
+<h4 class="anchored" data-anchor-id="visualização">Visualização</h4>
+<p>Por fim, criaremos um conjunto de gráficos que apresentem de forma clara os resultados obtidos. Construiremos duas figuras: 1) uma apresentando os modelos regionais calculados, ilustrando o comportamento da invariância de escala à nível de região; 2) e outra comparando localmente os modelos de <span class="math inline">\(H\)</span> locais com o regional. Para a primeira figura, temos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coeficiente de escala regional de cada momento</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>scale.regional <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, which_moment) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">scale =</span> <span class="fu">first</span>(scale),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">rsquared =</span> <span class="fu">first</span>(rsquared)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">scale_vjust =</span> (<span class="fu">row_number</span>() <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">*</span><span class="fl">1.5</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">scale_label =</span> <span class="fu">sprintf</span>(<span class="st">"q = %d: H = %.4f"</span>, which_moment, <span class="fu">round</span>(scale, <span class="dv">4</span>)),)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># R² mínimo</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>min.rsquared <span class="ot">&lt;-</span> <span class="fu">min</span>(scale.moments<span class="sc">$</span>rsquared)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>median.rsquared <span class="ot">&lt;-</span> <span class="fu">quantile</span>(scale.moments<span class="sc">$</span>rsquared[scale.moments<span class="sc">$</span>gauge_code <span class="sc">!=</span> <span class="st">"Regional"</span>])[[<span class="dv">3</span>]]</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico comparação geral entre modelos regional e local</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plot.scale.all <span class="ot">&lt;-</span> ({</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Colocar scale/r regionais no gráfico</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  plot1 <span class="ot">&lt;-</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(scale.moments <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>), <span class="fu">aes</span>(<span class="at">x =</span> d, <span class="at">y =</span> mom)) <span class="sc">+</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">group =</span> which_moment), <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">shape =</span> <span class="fu">factor</span>(which_moment,</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">labels =</span> <span class="fu">paste0</span>(<span class="st">"q = "</span>, <span class="fu">unique</span>(which_moment), <span class="st">": H = "</span>, <span class="fu">round</span>(<span class="fu">unique</span>(scale), <span class="dv">4</span>))))) <span class="sc">+</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_comma</span>()) <span class="sc">+</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"a)"</span>, <span class="at">y =</span> <span class="st">"E[I&lt;sub&gt;d&lt;/sub&gt;&lt;sup&gt;q&lt;/sup&gt;]"</span>, <span class="at">x =</span> <span class="st">"Durações [h]"</span>, <span class="at">shape =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.08</span>),</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="st">"right"</span> , <span class="st">"top"</span>),</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(),        <span class="co"># formatação da legenda do eixo-y </span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>          <span class="co"># aspect.ratio = 1,</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>          <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">12</span>)); plot1</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Histogramas de R^2</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  plot2 <span class="ot">&lt;-</span> </span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(scale.moments, <span class="fu">aes</span>(<span class="at">x =</span> rsquared)) <span class="sc">+</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>which_moment, <span class="at">nrow =</span> <span class="fu">length</span>(which.moment), <span class="at">labeller =</span> <span class="fu">as_labeller</span>(<span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="st">"q = "</span>, x))) <span class="sc">+</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(count<span class="sc">/</span><span class="fu">sum</span>(count))), <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"yellow2"</span>, <span class="at">color =</span> <span class="st">"darkorange3"</span>) <span class="sc">+</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> median.rsquared, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># scale_x_continuous(limits = c(min.rsquared, 1)) +</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"b)"</span>, <span class="at">x =</span> <span class="st">"R²"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"none"</span>,</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.placement =</span> <span class="st">"inside"</span>,                      <span class="co"># fora dos rotulos do eixo-y</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),             <span class="co"># 'strip.' altera configurações do facet_wrap</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(),        <span class="co"># formatação da legenda do eixo-y </span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>          <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">12</span>)); plot2</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combinar c/ 'patchwork'</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>  plot1 <span class="sc">+</span> plot2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">widths =</span> <span class="fu">c</span>(<span class="fl">1.5</span>,<span class="dv">1</span>))</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.scale.all'</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>plot.scale.all</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-plot-scale-regional" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-plot-scale-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="script_duracao_subdiario_files/figure-html/fig-plot-scale-regional-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plot-scale-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para durações horárias.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a> acima contém dois gráficos principais. A <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a>(a) mostra os modelos regionais ajustados para os 3 primeiros momentos não centrais e os respectivos coeficientes de escala <span class="math inline">\(H\)</span> estimados a partir deles. Já a <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a>(b) apresenta histogramas do R², indicando a qualidade do ajuste do modelo linear aos dados. Nota-se que, para o intervalo de durações horários (1 a 24 h) há uma predominância de valores acima de 0,980 e mediana (entre os 3 momentos) igual a 0.998.</p>
+<p>Para a segunda, precisaremos separar os gráficos das estações usando <code>facet_wrap(~gauge_code)</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico avaliação individual dos modelos locais vs. regional</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plot.dim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">4</span>) <span class="co"># disposição dos gráficos</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir dados em 'local' e 'regional'</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>data.local <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">!=</span> <span class="st">"Regional"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>data.regional <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>gauge_code)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Rótulos</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> data.local <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">scale_local =</span> <span class="fu">mean</span>(scale),     <span class="co"># coeficiente de escala da estação</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_years =</span> <span class="fu">first</span>(n_years),      <span class="co"># número de anos da estação</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">rsquared =</span> <span class="fu">mean</span>(rsquared)) <span class="sc">%&gt;%</span> <span class="co"># R² resultante da regressão na estação</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">scale_regional =</span> <span class="fu">mean</span>(scale.regional[[<span class="st">"scale"</span>]])) <span class="co"># coeficiente de escala regional</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>plot.group <span class="ot">&lt;-</span> ({</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> d, <span class="at">y =</span> mom)) <span class="sc">+</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    ggforce<span class="sc">::</span><span class="fu">facet_wrap_paginate</span>(<span class="sc">~</span>gauge_code, <span class="at">nrow =</span> plot.dim[<span class="dv">1</span>], <span class="at">ncol =</span> plot.dim[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> data.regional, <span class="fu">aes</span>(<span class="at">group =</span> which_moment, <span class="at">linetype =</span> <span class="st">"Regional"</span>, <span class="at">color =</span> <span class="st">"Regional"</span>),</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> lm, <span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">data =</span> data.local, <span class="fu">aes</span>(<span class="at">group =</span> which_moment, <span class="at">linetype =</span> <span class="st">"Local"</span>, <span class="at">color =</span> <span class="st">"Local"</span>),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> lm, <span class="at">formula =</span> y<span class="sc">~</span>x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> data.local, <span class="fu">aes</span>(<span class="at">shape =</span> <span class="st">"Momentos observados"</span>),</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"steelblue4"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="at">data =</span> labels,</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"H = %.4f"</span>, scale_regional)),</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> <span class="fl">1.1</span>, <span class="at">vjust =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="fl">2.3</span>, <span class="at">color =</span> <span class="st">"grey10"</span>, <span class="at">family =</span> <span class="st">"mono"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="at">data =</span> labels,</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"H = %.4f"</span>, scale_local)),</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> <span class="fl">1.1</span>, <span class="at">vjust =</span> <span class="fl">3.5</span>, <span class="at">size =</span> <span class="fl">2.3</span>, <span class="at">color =</span> <span class="st">"steelblue4"</span>, <span class="at">family =</span> <span class="st">"mono"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="at">data =</span> labels,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"N = %.0f anos"</span>, n_years)),</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> <span class="fl">1.1</span>, <span class="at">vjust =</span> <span class="dv">5</span>, <span class="at">size =</span> <span class="fl">2.3</span>, <span class="at">color =</span> <span class="st">"steelblue4"</span>, <span class="at">family =</span> <span class="st">"mono"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="at">data =</span> labels,</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="cn">Inf</span>, <span class="at">y =</span> <span class="cn">Inf</span>, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"R² = %.3f"</span>, rsquared)),</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>              <span class="at">hjust =</span> <span class="fl">1.1</span>, <span class="at">vjust =</span> <span class="fl">6.5</span>, <span class="at">size =</span> <span class="fl">2.3</span>, <span class="at">color =</span> <span class="st">"steelblue4"</span>, <span class="at">family =</span> <span class="st">"mono"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_comma</span>()) <span class="sc">+</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">""</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Regional"</span> <span class="ot">=</span> <span class="st">"grey10"</span>, <span class="st">"Local"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>)) <span class="sc">+</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_linetype_manual</span>(<span class="at">name =</span> <span class="st">""</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Regional"</span> <span class="ot">=</span> <span class="st">"dashed"</span>, <span class="st">"Local"</span> <span class="ot">=</span> <span class="st">"solid"</span>)) <span class="sc">+</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_shape_manual</span>(<span class="at">name =</span> <span class="st">""</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Momentos observados"</span> <span class="ot">=</span> <span class="dv">17</span>)) <span class="sc">+</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"E[I&lt;sub&gt;d&lt;/sub&gt;&lt;sup&gt;q&lt;/sup&gt;]"</span>, <span class="at">x =</span> <span class="st">"Durações [h]"</span>) <span class="sc">+</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span>  <span class="st">"bottom"</span>,</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="sc">-</span><span class="dv">10</span>),</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.title.y =</span> ggtext<span class="sc">::</span><span class="fu">element_markdown</span>(), <span class="co"># formatação da legenda do eixo-y </span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.placement =</span> <span class="st">"outside"</span>,               <span class="co"># fora dos rotulos do eixo-y</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>),       <span class="co"># 'strip.' altera configurações do facet_wrap</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"white"</span>),</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>),</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>          <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">shape =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>))</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.group'</span></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>plot.group</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="script_duracao_subdiario_files/figure-html/visualização individual-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Pela quantidade de gráficos individuais, podemos subdividir a plotagem usando <code>ggforce::facet_wrap_paginate()</code> no lugar do <code>facet_wrap()</code> convencional. Com as dimensões especificadas em <code>plot.dim</code>, fazemos uma plotagem inicial para avaliar as dimensões do gráfico e em seguida podemos determinar quantas páginas seriam necessárias para que todas as estações sejam plotadas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot.seq <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n_pages</span>(plot.group) <span class="co"># número de páginas necessárias para plotar o gráfico completo</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir o gráfico acima em 'n_pages' e salvar cada um em uma lista</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plot.scale.each <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> plot.seq, <span class="at">FUN =</span> <span class="cf">function</span>(group){</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  plot.group <span class="sc">+</span> ggforce<span class="sc">::</span><span class="fu">facet_wrap_paginate</span>(<span class="sc">~</span>gauge_code, <span class="at">nrow =</span> plot.dim[<span class="dv">1</span>], <span class="at">ncol =</span> plot.dim[<span class="dv">2</span>], <span class="at">page =</span> group, <span class="at">scales =</span> <span class="st">"fixed"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.scale.each'</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="saídas-da-função" class="level4">
+<h4 class="anchored" data-anchor-id="saídas-da-função">Saídas da função</h4>
+<p>Por fim, basta organizarmos as saídas da função. Salvaremos os momentos calculados (<code>scale.moments</code>) caso viermos a precisar deles futuramente; os coeficientes <span class="math inline">\(H\)</span> locais e regionais de cada momento (<code>scale.coefficient</code>), calculado como:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar coeficientes de escala</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>scale.coefficient <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, which_moment) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">first</span>(n_years),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">scale =</span> <span class="fu">first</span>(scale),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">rsquared =</span> <span class="fu">first</span>(rsquared),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">se =</span> <span class="fu">first</span>(se)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">deparse</span>(which.duration))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.coefficient, <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  gauge_code which_moment n_years scale rsquared     se d       
+  &lt;chr&gt;      &lt;fct&gt;          &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   
+1 430120601A 1                  8 0.706    0.993 0.0490 c(1, 24)
+2 430120601A 2                  8 0.704    0.993 0.0503 c(1, 24)
+3 430120601A 3                  8 0.703    0.993 0.0513 c(1, 24)
+4 430350901A 1                  8 0.709    0.997 0.0315 c(1, 24)
+5 430350901A 2                  8 0.713    0.997 0.0356 c(1, 24)</code></pre>
+</div>
+</div>
+<p>e por fim os gráficos gerados da análise (<code>plot.scale.all</code> e <code>plot.scale.group</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar resultados</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"scale.moments"</span> <span class="ot">=</span> scale.moments[<span class="fu">c</span>(<span class="st">"gauge_code"</span>, <span class="st">"d"</span>, <span class="st">"which_moment"</span>, <span class="st">"mom"</span>)], <span class="co"># contém só os momentos de cada duração</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"scale.coefficient"</span> <span class="ot">=</span> scale.coefficient, <span class="co"># contém coeficiente de escala e informações sobre a regressão</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"plot.scale.all"</span> <span class="ot">=</span> plot.scale.all,       <span class="co"># gráfico para os dois momentos com todos os modelos + histograma de R²</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"plot.scale.each"</span> <span class="ot">=</span> plot.scale.each)     <span class="co"># gráficos individuais de um momento escolhido com modelo local + regional</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com os dados de entrada passados no início, nossa função terá o seguinte cabeçalho e deverá carregar os seguintes pacotes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fun_scale_invariance <span class="ot">&lt;-</span> <span class="cf">function</span>(df.imax,                   <span class="co"># data.frame com intensidades máximas anuais para diferentes durações</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                                 na.accept,                 <span class="co"># limite de falhas por ano [0,1]</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                                 min.years,                 <span class="co"># mínimo de anos em uma série</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">which.moment =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,       <span class="co"># quais momentos calcular</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">which.duration =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>), <span class="co"># intervalo de durações</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">min.duration =</span> <span class="dv">3</span>,          <span class="co"># nro. mínimo durações p/ regressão</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">font.family =</span> <span class="st">"serif"</span>,     <span class="co"># fonte gráficos</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">font.size =</span> <span class="dv">12</span>,            <span class="co"># tamanho fonte</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">plot.dim =</span> <span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">6</span>)          <span class="co"># nrow e ncol p/ gráfico c/ todas as estações</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>                                 ){</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pacotes</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)){</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Instalando gerenciador de pacotes 'pacman'..."</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  pacman<span class="sc">::</span><span class="fu">p_load</span>(pacman, tidyverse, patchwork, ggplot2, ggtext, ggforce)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A função final se encontra em <a href="scripts/funcoes/fun_scale_invariance_more_moments.R">fun_scale_invariance_more_moments</a>.</p>
+</section>
+</section>
+<section id="sec-run-duration" class="level3">
+<h3 class="anchored" data-anchor-id="sec-run-duration">Cálculo dos coeficientes para diferentes conjuntos de duração</h3>
+<p>Como foi dito anteriormente, faremos a análise descrita para diferentes conjuntos de duração, uma vez que é de nosso interesse avaliar se a relação de linearidade que vimos na <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a> calculada para durações horárias – <code>c(10/60, 10*24)</code> – também está presente nas durações sub-horárias – <code>c(10, 60)/60</code> – e nas diárias – <code>c(1, 10)*24</code> – e ainda se podemos usar um mesmo valor de <span class="math inline">\(H\)</span> para todas as durações – <code>c(10/60, 10*24)</code>.</p>
+<p>Para isso, vamos chamar nossa função criada:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_scale_invariance_more_moments.R"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>ler os dados de intensidades máximas anuais (removendo uma estação problemática em particular):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados subdiários</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_imax.parquet"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> df_imax[df_imax<span class="sc">$</span>gauge_code <span class="sc">!=</span> <span class="st">"SBPA"</span>,] <span class="co"># estação dando problema</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>definir os argumentos da função:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Argumentos</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>na.accept <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># percentual de falhas (0.2 -&gt; 20%)</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>min.years <span class="ot">&lt;-</span> <span class="dv">8</span>      <span class="co"># mínimo de anos na série</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>which.moment <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># qual momento usar de base p/ gerar figuras individuais</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>min.duration <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># mínimo de durações diferentes necessário</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>e definir em quais intervalos queremos que a hipótese de invariância de escala seja avaliada:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Avaliar diferentes modelos</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>duration.intervals <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">10</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">10</span><span class="sc">*</span><span class="dv">24</span>), <span class="co"># todas as durações</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">60</span>)<span class="sc">/</span><span class="dv">60</span>,    <span class="co"># sub-horários</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>),        <span class="co"># horários</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>)<span class="sc">*</span><span class="dv">24</span>)     <span class="co"># diários</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>e, finalmente, rodamos a função para cada intervalo de duração especificado acima utilizando uma versão do <code>lapply()</code> que também gera uma barra de progresso. Criaremos uma lista que conterá quatro objetos: 1) <code>scale.moments</code>, uma tabela (<code>tbl_df</code>) contendo os momentos calculados; 2) <code>scale.coefficient</code>, uma tabela (<code>tbl_df</code>) contendo os valores de coeficiente de escala estimados; 3) <code>plot.scale.all</code>, os gráficos regionais; e 4) <code>plot.scale.group</code>, os gráficos individualizados.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regressão + coeficiente de escala + plots</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>scale.invariance <span class="ot">&lt;-</span> pbapply<span class="sc">::</span><span class="fu">pblapply</span>(<span class="at">X =</span> duration.intervals, <span class="at">FUN =</span> <span class="cf">function</span>(interval){</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">fun_scale_invariance</span>(<span class="at">df.imax =</span> df_imax,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">na.accept =</span> na.accept,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">min.years =</span> min.years,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">which.moment =</span> which.moment,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">which.duration =</span> interval,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">min.duration =</span> <span class="dv">3</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                              <span class="at">font.family =</span> <span class="st">"serif"</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">font.size =</span> <span class="dv">12</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.dim =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">4</span>))</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>}); <span class="fu">names</span>(scale.invariance) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all"</span>, <span class="st">"subhourly"</span>, <span class="st">"hourly"</span>, <span class="st">"daily"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por fim, vamos salvar os arquivos gerados contendo os momentos (<code>scale.moments</code>) e os coeficientes de escala em si (<code>scale.coefficient</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrair resultados de 'scale.invariance'</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span>  scale.invariance, <span class="at">FUN =</span> <span class="cf">function</span>(interval){</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  interval<span class="sc">$</span>scale.moments</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>}); scale.moments <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.moments)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>scale.coefficient <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> scale.invariance, <span class="at">FUN =</span> <span class="cf">function</span>(interval){</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  interval<span class="sc">$</span>scale.coefficient</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>});  scale.coefficient <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.coefficient)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salvar arquivo</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">write_parquet</span>(<span class="at">x =</span> scale.coefficient, <span class="at">sink =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="resultados" class="level2">
+<h2 class="anchored" data-anchor-id="resultados">Resultados</h2>
+<p>A seguir são apresentados os resultados gerados na seção anterior.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-all-duration" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/scale_invariance/8 anos 20 prct/all_duration/plot_scale_invariance_all.png" class="img-fluid figure-img" width="944">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-all-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Modelo regional ajustado para cada um dos momentos e para todas as durações.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-subhourly" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-subhourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/scale_invariance/8 anos 20 prct/subhourly_duration/plot_scale_invariance_subhourly.png" class="img-fluid figure-img" width="944">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-subhourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Modelo regional ajustado para cada um dos momentos e para as durações sub-horárias.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-hourly" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/scale_invariance/8 anos 20 prct/hourly_duration/plot_scale_invariance_hourly.png" class="img-fluid figure-img" width="944">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Modelo regional ajustado para cada um dos momentos e para todas as horárias.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-daily" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/scale_invariance/8 anos 20 prct/daily_duration/plot_scale_invariance_daily.png" class="img-fluid figure-img" width="944">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Modelo regional ajustado para cada um dos momentos e para todas as diárias.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Observando as figuras geradas e a distribuição dos valores de R², é evidente a relação de invariância de escala em seu sentido amplo. Analisando regionalmente, nota-se que existe uma diferença perceptível entre os valores de <span class="math inline">\(H\)</span> estimados para as diferentes durações, mas é preciso investigar se essa diferença é de fato significativa do ponto de vista estatístico. O fato de essa diferença ser significantiva ou não impacta na decisão de se utilizar um único coeficiente para descrever a relação de invariância, ou se é necessário representar a “quebra” nas durações e, se sim, qual o impacto dessa decisão na prática da engenharia.</p>
+<p>A <a href="#tbl-resumo-escala-regional" class="quarto-xref">Tabela&nbsp;1</a> abaixo apresenta os coeficientes regionais médios entre os momentos.</p>
+<div class="cell">
+<div id="tbl-resumo-escala-regional" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumo-escala-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;1: Coeficiente de escala médio entre os momentos regionais.
+</figcaption>
+<div aria-describedby="tbl-resumo-escala-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Intervalo de durações</th>
+<th style="text-align: right;">Coeficiente de escala</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Todas</td>
+<td style="text-align: right;">0.684</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sub-horários</td>
+<td style="text-align: right;">0.530</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Horários</td>
+<td style="text-align: right;">0.671</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Diários</td>
+<td style="text-align: right;">0.716</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Em um primeiro momento, é possível levantar algumas discussões sobre os resultados. As estimativas regionais são sim diferentes para os diferentes grupos de durações. <span class="math inline">\(H\)</span>s para as durações sub-horárias são menores que aqueles para os horários, que por sua vez são menores que os diários. De maneira prática, essa declividade nas retas de regressão nos diz que a variação nas intensidades, para chuvas de menores durações, variam menos expressivamente em durações sub-horárias quando comparada às durações diárias.</p>
+<p>Ao mesmo tempo, precisamos discutir as limitações envolvidas na análise que impactariam essa interpretação, em especial à quantidade de observações utilizadas para ajustar os modelos de regressão linear. No total, 24 durações diferentes são utilizadas para ajustar o modelo “Horário” e 10 durações para o “Diário”. Quando olhamos o “Sub-horário”, porém, temos a limitação da resolução temporal da estação, isto é, o intervalo de tempo entre registros consecutivos que a estação opera por padrão.</p>
+<p>Nosso conjunto de dados possui estações que operam a cada 10, 15, 30 e 60 minutos. Estações de 10 minutos tiveram suas lâminas agregadas em 20, 30, 40, 50, 60, totalizando 6 durações diferentes; estações de 15 minutos em 30, 45 e 60, totalizando 4 durações. Para estações de 30 minutos, somente duas durações estão disponíveis (30 e 60) e para as de 60, somente esta. Para o ajuste do modelo de regressão, o parâmetro <code>min.duration</code> estebelece o número mínimo de durações que uma estação deve ter para que esse ajuste sequer tenha sentido, no caso adotamos <code>min.duration</code> igual a 3, o que removeria da análise as estações de 30 e 60 minutos. Portanto, temos disponível para a análise no máximo 6 durações para o ajuste – estas não muito longas – e em número menor – somente 16 estações.</p>
+<p>Esses são fatores que nos levariam a questionar inicialmente a validade dessa diferença. Até que ponto a variabilidade amostral influencia o valor do coeficiente ajustado e a incerteza em torno dessa estimativa?</p>
+<section id="intervalos-de-confiança" class="level3">
+<h3 class="anchored" data-anchor-id="intervalos-de-confiança">Intervalos de confiança</h3>
+<p>Podemos avaliar as incertezas nas estimativas de <span class="math inline">\(H\)</span> utilizando intervalos de confiança. Duas abordagens serão verificadas: uma preguiçosa e outra computacionalmente custosa. A primeira é calculando intervalos de confiança aproximados, onsiderando que os valores de <span class="math inline">\(H\)</span> se distribuem de maneira aproximadamente Normal. A segunda é calculando intervalos de confiança usando <em>bootstrap</em>.</p>
+<section id="aproximados" class="level4">
+<h4 class="anchored" data-anchor-id="aproximados">Aproximados</h4>
+<p>Os intervalos aproximados se baseiam nas estimativas de erro padrão resultantes do ajuste do modelo linear em cada estação – valores esses armazenados no dataframe gerado que contém os coeficientes de escala em . Leremos ele como <code>df_scale</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Os intervalos de 95% de confiança situam-se aproximadamente a uma distância de 1.96 do valor médio, portanto limites podem ser estimados da seguinte maneira:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> df_scale <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ci_lower =</span> scale <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>se, <span class="co"># limite inferior</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ci_upper =</span> scale <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se) <span class="co"># limite superior</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com esses limites em mãos, podemos partir para uma análise visual, comparando estações entre si e entre durações, verificando sobreposição de de intervalos de confiança, entre outros fatores relevantes. Para essa análise, calculamos a média entre os momentos.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ic-aproximado" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ic-aproximado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="script_duracao_subdiario_files/figure-html/fig-ic-aproximado-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ic-aproximado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Comparação dos intervalos de confiança aproximados das estimativas de coeficiente de escala calculados com durações sub-horárias, horárias, diárias e com todas as durações. Estações são ordenadas por tamanho das séries, começando com 8 anos (esquerda) e terminando com 17 (direita).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Do conjunto da <a href="#fig-ic-aproximado" class="quarto-xref">Figura&nbsp;6</a>, percebe-se que há muitas estações em que os limites estão sobrepostos e algumas em que são quase iguais. Algumas estações, porém, os limites são de fato desconexos indicando que haveria sim uma quebra do coeficiente de escala entre durações diárias e horárias. A análise dos intervalos das durações sub-horárias mostra como os valores estão distantes dos demais conjuntos, mas também como seus intervalos são maiores. Mesmo assim, em 5 das 16 estações com valores de <span class="math inline">\(H\)</span> estimados, os intervalos não se tocam.</p>
+</section>
+<section id="bootstrap" class="level4">
+<h4 class="anchored" data-anchor-id="bootstrap">Bootstrap</h4>
+</section>
+</section>
 </section>
 <section id="coeficientes-de-desagregação" class="level2">
 <h2 class="anchored" data-anchor-id="coeficientes-de-desagregação">Coeficientes de desagregação</h2>
-<p>Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>, pg. 17)</span>, apresentados abaixo na <a href="#tbl-coef-cetesb" class="quarto-xref">Tabela&nbsp;1</a>.</p>
+<section id="entendendo-o-coeficiente-de-escala" class="level3">
+<h3 class="anchored" data-anchor-id="entendendo-o-coeficiente-de-escala">Entendendo o coeficiente de escala</h3>
+<p>É fundamental o entendimento do efeito prático dos diferentes valores de <span class="math inline">\(H\)</span>. Coeficientes menores implicam que a inclinação da reta ajustada às diferentes durações será menor, acarretando em intensidades menores do que aquelas que seriam obtidas empregando um coeficiente de escala maior…</p>
+</section>
+<section id="brasil" class="level3">
+<h3 class="anchored" data-anchor-id="brasil">Brasil</h3>
+<p>Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>, pg. 17)</span>, apresentados abaixo na <a href="#tbl-coef-cetesb" class="quarto-xref">Tabela&nbsp;2</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados gerados em 'script_duracao_subdiario.R'</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="cell">
 <div id="tbl-coef-cetesb" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coef-cetesb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabela&nbsp;1: Coeficientes de desagregação sugeridos pela CETESB (1986) elaborados pelo DNOS.
+Tabela&nbsp;2: Coeficientes de desagregação sugeridos pela CETESB (1986) elaborados pelo DNOS.
 </figcaption>
 <div aria-describedby="tbl-coef-cetesb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -431,57 +1027,57 @@ C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 \tag{3}\]</span></span></p>
 <p>Dessa forma, podemos comparar os coeficientes estimados pelo DNOS <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>)</span> com os calculados através dos fatores de escala <span class="math inline">\(H\)</span> regionais da hipótese de invariância.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alterar nomes</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(df_scale<span class="sc">$</span>d)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>group.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Todas"</span>, <span class="st">"Sub-horários"</span>, <span class="st">"Horários"</span>, <span class="st">"Diários"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="at">object =</span> group.names, <span class="at">nm =</span> groups)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df.scale.mean <span class="ot">&lt;-</span> df_scale <span class="sc">%&gt;%</span> </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, d) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_if</span>(is.numeric, <span class="sc">~</span><span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="co"># calcular média entre os momentos</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">relative_width =</span> (ci_upper <span class="sc">-</span> ci_lower)<span class="sc">/</span>scale,  <span class="co"># largura relativa dos intervalos de confiança</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">d =</span> <span class="fu">recode</span>(d, <span class="sc">!!!</span>groups),                      <span class="co"># alterar nome das durações</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">d =</span> <span class="fu">factor</span>(d, <span class="at">levels =</span> group.names))           <span class="co"># estabelecer ordem dos grupos de duração</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Fatores de escala regionais</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>regional <span class="ot">&lt;-</span> df.scale.mean <span class="sc">%&gt;%</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Passar todos p/ base de 24 h e calcular coeficientes</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>relacao_mod <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="cn">NA</span>) <span class="co"># nova coluna p/ nome das relações</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>coef_mod <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)      <span class="co"># nova coluna p/ valor coeficientes de desagregação</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df.cetesb)){</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">&lt;=</span> <span class="dv">1</span>){</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i]<span class="sc">*</span><span class="dv">60</span>, <span class="st">" min/24 h"</span>)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">6</span>] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">2</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H sub-horários</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">==</span> <span class="dv">1</span>){</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i], <span class="st">" h/24 h"</span>)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i]</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">3</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H horários</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular coeficiente de desagregação c/ H regional</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  df.cetesb<span class="sc">$</span>coef_regional_all[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">1</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>}</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alterar nomes</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(df_scale<span class="sc">$</span>d)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>group.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Todas"</span>, <span class="st">"Sub-horários"</span>, <span class="st">"Horários"</span>, <span class="st">"Diários"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="at">object =</span> group.names, <span class="at">nm =</span> groups)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>df.scale.mean <span class="ot">&lt;-</span> df_scale <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, d) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_if</span>(is.numeric, <span class="sc">~</span><span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="co"># calcular média entre os momentos</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">relative_width =</span> (ci_upper <span class="sc">-</span> ci_lower)<span class="sc">/</span>scale,  <span class="co"># largura relativa dos intervalos de confiança</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">d =</span> <span class="fu">recode</span>(d, <span class="sc">!!!</span>groups),                      <span class="co"># alterar nome das durações</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">d =</span> <span class="fu">factor</span>(d, <span class="at">levels =</span> group.names))           <span class="co"># estabelecer ordem dos grupos de duração</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Fatores de escala regionais</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>regional <span class="ot">&lt;-</span> df.scale.mean <span class="sc">%&gt;%</span> </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Passar todos p/ base de 24 h e calcular coeficientes</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>relacao_mod <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="cn">NA</span>) <span class="co"># nova coluna p/ nome das relações</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>coef_mod <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)      <span class="co"># nova coluna p/ valor coeficientes de desagregação</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df.cetesb)){</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">&lt;=</span> <span class="dv">1</span>){</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i]<span class="sc">*</span><span class="dv">60</span>, <span class="st">" min/24 h"</span>)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">6</span>] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">2</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H sub-horários</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">==</span> <span class="dv">1</span>){</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>      df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i], <span class="st">" h/24 h"</span>)</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i]</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">3</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H horários</span></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular coeficiente de desagregação c/ H regional</span></span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>  df.cetesb<span class="sc">$</span>coef_regional_all[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">1</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>}</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A <a href="#tbl-comparacao-coef" class="quarto-xref">Tabela&nbsp;2</a> abaixo apresenta os coeficientes calculados. Dois conjuntos de coeficientes de desagregação foram gerados a partir da hipótese de invariância de escala: 1) utilizando fatores separados para as durações sub-horárias (<span class="math inline">\(H\)</span> igual a 0.53) e horárias (<span class="math inline">\(H\)</span> igual a 0.671); e 2) utilizando um único fator estimado utilizando todas as durações (<span class="math inline">\(H\)</span> igual a 0.684).</p>
+<p>A <a href="#tbl-comparacao-coef" class="quarto-xref">Tabela&nbsp;3</a> abaixo apresenta os coeficientes calculados. Dois conjuntos de coeficientes de desagregação foram gerados a partir da hipótese de invariância de escala: 1) utilizando fatores separados para as durações sub-horárias (<span class="math inline">\(H\)</span> igual a 0.53) e horárias (<span class="math inline">\(H\)</span> igual a 0.671); e 2) utilizando um único fator estimado utilizando todas as durações (<span class="math inline">\(H\)</span> igual a 0.684).</p>
 <div class="cell">
 <div id="tbl-comparacao-coef" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-comparacao-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabela&nbsp;2: Comparação entre coeficientes sugeridos pela CETESB e coeficientes de desagregação calculados a partir do fator de escala do modelo de invariância de escala <span class="math inline">\(H\)</span> regional com um modelo único para todas as durações e um fator de escala para durações sub-horárias e horárias.
+Tabela&nbsp;3: Comparação entre coeficientes sugeridos pela CETESB e coeficientes de desagregação calculados a partir do fator de escala do modelo de invariância de escala <span class="math inline">\(H\)</span> regional com um modelo único para todas as durações e um fator de escala para durações sub-horárias e horárias.
 </figcaption>
 <div aria-describedby="tbl-comparacao-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -575,6 +1171,7 @@ Tabela&nbsp;2: Comparação entre coeficientes sugeridos pela CETESB e coeficien
 </div>
 </div>
 </section>
+</section>
 <section id="aplicação-efeito-de-coeficientes-de-desagregação-diferentes" class="level2">
 <h2 class="anchored" data-anchor-id="aplicação-efeito-de-coeficientes-de-desagregação-diferentes">Aplicação: efeito de coeficientes de desagregação diferentes</h2>
 <p>Os valores obtidos são diferentes entre si, especialmente os coeficientes calculados considerando dois fatores regionais diferentes. Para avaliar qual a importância dessas diferenças, podemos avaliar uma série de máximos de precipitação diária (registrados em intervalos fixos às 9:00), derivar uma série de 24 h utilizando fatores de conversão como o de Hershfield <span class="citation" data-cites="hershfield1962">(<a href="#ref-hershfield1962" role="doc-biblioref">Hershfield 1962</a>)</span></p>
@@ -584,6 +1181,9 @@ Tabela&nbsp;2: Comparação entre coeficientes sugeridos pela CETESB e coeficien
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-casas-castillo2025" class="csl-entry" role="listitem">
+Casas-Castillo, María Del Carmen, Alba Llabrés-Brustenga, Raül Rodríguez-Solà, Anna Rius, e Àngel Redaño. 2025. <span>«Scaling Properties of Rainfall as a Basis for Intensity<span></span>Duration<span></span>Frequency Relationships and Their Spatial Distribution in Catalunya, NE Spain»</span>. <em>Climate</em> 13 (2): 37. <a href="https://doi.org/10.3390/cli13020037">https://doi.org/10.3390/cli13020037</a>.
+</div>
 <div id="ref-cetesb1986" class="csl-entry" role="listitem">
 CETESB. 1986. <em>Drenagem urbana: manual de projeto</em>. 3.ª ed. São Paulo: Companhia Ambiental do Estado de São Paulo.
 </div>
@@ -595,6 +1195,9 @@ Menabde, Merab, Alan Seed, e Geoff Pegram. 1999. <span>«<span>A simple scaling 
 </div>
 <div id="ref-Nguyen.1998" class="csl-entry" role="listitem">
 Nguyen, V. T. V., T. D. Nguyen, e H. Wang. 1998. <span>«<span>Regional estimation of short duration rainfall extremes</span>»</span>. <em>Water Science and Technology</em> 37 (11): 15–19. <a href="https://doi.org/10.2166/wst.1998.0425">https://doi.org/10.2166/wst.1998.0425</a>.
+</div>
+<div id="ref-Rodrigues.2023" class="csl-entry" role="listitem">
+Rodrigues, Guilherme, Wilson Fernandes, Veber Costa, e Eber Pinto. 2023. <span>«<span>Utilizing the Scale Invariance Principle for Deriving a Regional Intensity-Duration-Frequency Relationship in the Metropolitan Region of Belo Horizonte, Brazil</span>»</span>. <em>Journal of Hydrologic Engineering</em> 28 (7): 05023010. <a href="https://doi.org/10.1061/jhyeff.heeng-5934">https://doi.org/10.1061/jhyeff.heeng-5934</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
