@@ -114,7 +114,9 @@ df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parque
 # BOOTSTRAP ---------------------------------------------------------------
 
 # Calcular intervalos de confiança usando bootstrap
-R.boot <- 100
+R.boot <- 10
+n.cores <- parallelly::availableCores(omit = 1)
+cl <- parallelly::makeClusterPSOCK(n.cores)
 
 scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
   
@@ -126,9 +128,9 @@ scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
                                              which.duration = interval,
                                              min.duration = 3,
                                              R.boot = R.boot,
-                                             cl = cluster)
+                                             cl = cl)
   
-}); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
+}); parallelly::autoStopCluster(cl); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
 
 df.scale.boot.ci <- bind_rows(scale.boot.ci)
 
