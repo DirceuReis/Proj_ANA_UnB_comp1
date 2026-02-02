@@ -11,7 +11,7 @@ pacman::p_load(pacman,
                tidymodels,
                boot,
                patchwork,
-               parallel,
+               parallelly,
                ggtext,
                gghighlight,
                ggforce
@@ -114,7 +114,7 @@ df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parque
 # BOOTSTRAP ---------------------------------------------------------------
 
 # Calcular intervalos de confiança usando bootstrap
-R.boot <- 10
+R.boot <- 1e4
 n.cores <- parallelly::availableCores(omit = 1)
 cl <- parallelly::makeClusterPSOCK(n.cores)
 
@@ -134,8 +134,8 @@ scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
 
 df.scale.boot.ci <- bind_rows(scale.boot.ci)
 
-# arrow::write_parquet(df.scale.boot, sink = "base/gerados/df_scale_boot_hour.parquet")
-# df_scale_boot <- arrow::read_parquet(file = "base/gerados/df_scale_boot_hour.parquet")
+arrow::write_parquet(df.scale.boot.ci, sink = "base/gerados/df_scale_boot.parquet")
+df_scale_boot <- arrow::read_parquet(file = "base/gerados/df_scale_boot.parquet")
 
 
 # VISUALIZAÇÃO INTERVALOS DE CONFIANÇA ------------------------------------
@@ -178,18 +178,30 @@ ggsave(filename = "figuras/scale_invariance/scale_confidence_interval.png",
 
 # Com resultados do bootstrap
 df_scale_boot %>% 
-  group_by(gauge_code) %>% 
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names),
+         gauge_code = forcats::fct_reorder(gauge_code, n_year)) %>% 
+  group_by(gauge_code, d) %>% 
   summarise_all(~mean(.x, na.rm = TRUE)) %>% 
-  ggplot(aes(x = gauge_code, y = scale, ymin = ci_lower, ymax = ci_upper)) +
+  ggplot(aes(x = gauge_code, y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)) +
   geom_errorbar(width = 0, linewidth = 0.8, alpha = 0.6, position = position_dodge(width = 0.5)) +
   geom_point(pch = 16, size = 1.5, alpha = 0.9, position = position_dodge(width = 0.5)) +
+  scale_color_manual(values = colors) +
   scale_y_continuous(breaks = seq(0.3, 0.95, 0.1)) +
   labs(x = "", y = "H") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+  theme(legend.position = c(0.98,0.02),
+        legend.justification = c(1,0),
+        legend.key.spacing.y = unit(-2, "mm"),
+        legend.title = element_blank(),
+        legend.background = element_rect(color = "black", linewidth = 0.25),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
         plot.background = element_rect(color = "white"),
         panel.border = element_rect(color = "black", fill = NA),
         text = element_text(family = "serif", color = "black", size = 10))
+
+ggsave(filename = "figuras/scale_invariance/scale_ci_boot.png",
+       width = 16, height = 12, units = "cm", bg = "white")
 
 # Comparar dois ICs gerados
 bind_rows(
