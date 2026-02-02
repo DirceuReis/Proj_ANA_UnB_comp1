@@ -4,8 +4,10 @@ fun_fmax_agg <- function(data,
                          names = c("datetime", "rain_mm"),
                          tz = "UTC",
                          strict_complete_blocks = TRUE,
-                         anchor = c("year_start", "month_start", "day_start")) {
-  
+                         anchor = c("year_start", "month_start", "day_start"),
+                         anchor_offset_hours = 0,      # desloca o início do bloco
+                         return_block_info = TRUE){     #salva block_id/start/end e metadados
+ 
   anchor <- match.arg(anchor)
   
   if(!requireNamespace("pbapply", quietly = TRUE)) install.packages("pbapply")
@@ -35,7 +37,7 @@ fun_fmax_agg <- function(data,
     n <- length(dt)
     if(n < 2) return(NULL)
     
-    # base step em segundos (moda)
+    # base step em segundos
     dsec_all <- diff(as.numeric(dt))
     dsec_all <- dsec_all[is.finite(dsec_all) & dsec_all > 0]
     if(length(dsec_all) == 0) stop("Não foi possível inferir resolução base na estação ", gauge)
@@ -58,14 +60,19 @@ fun_fmax_agg <- function(data,
     
     # âncora em segundos, vetorizada e feita 1 vez
     if(anchor == "year_start"){
-      # 01/01 00:00 de cada ano
       anchor_time <- as.POSIXct(paste0(yr, "-01-01 00:00:00"), tz = tz)
     } else if(anchor == "month_start"){
       anchor_time <- as.POSIXct(paste0(yr, "-", sprintf("%02d", mo), "-01 00:00:00"), tz = tz)
     } else { # day_start
       anchor_time <- as.POSIXct(format(dt, "%Y-%m-%d 00:00:00"), tz = tz)
     }
-    anchor_num <- as.numeric(anchor_time)
+    
+    # desloca âncora em horas
+    if(!is.numeric(anchor_offset_hours) || length(anchor_offset_hours) != 1){
+      stop("anchor_offset_hours deve ser numérico escalar (ex.: 0, 9, 12).")
+    }
+    anchor_time <- anchor_time + lubridate::hours(anchor_offset_hours)
+    anchor_num  <- as.numeric(anchor_time)
     
     # anos únicos
     years <- sort(unique(yr))
@@ -101,10 +108,20 @@ fun_fmax_agg <- function(data,
       for(j in seq_along(years)){
         y <- years[j]
         idx_y <- which(key_year == y)
+        
         if(length(idx_y) == 0){
           out_year[[j]] <- data.frame(
-            gauge_code = gauge, d = d_hr, fmax = NA_real_,
-            date = as.POSIXct(NA, tz = tz), year = y,
+            gauge_code = gauge,
+            d = d_hr,
+            fmax = NA_real_,
+            date = as.POSIXct(NA, tz = tz),
+            year = y,
+            # info do bloco (NA)
+            block_id = NA_integer_,
+            block_start = as.POSIXct(NA, tz = tz),
+            block_end = as.POSIXct(NA, tz = tz),
+            anchor_type = anchor,
+            anchor_offset_hours = anchor_offset_hours,
             stringsAsFactors = FALSE
           )
           next
@@ -113,28 +130,58 @@ fun_fmax_agg <- function(data,
         sb <- sum_block[idx_y]
         if(all(is.na(sb))){
           out_year[[j]] <- data.frame(
-            gauge_code = gauge, d = d_hr, fmax = NA_real_,
-            date = as.POSIXct(NA, tz = tz), year = y,
+            gauge_code = gauge,
+            d = d_hr,
+            fmax = NA_real_,
+            date = as.POSIXct(NA, tz = tz),
+            year = y,
+            block_id = NA_integer_,
+            block_start = as.POSIXct(NA, tz = tz),
+            block_end = as.POSIXct(NA, tz = tz),
+            anchor_type = anchor,
+            anchor_offset_hours = anchor_offset_hours,
             stringsAsFactors = FALSE
           )
           next
         }
+        
         
         # máximo do acumulado (mm)
         sb_safe <- replace(sb, is.na(sb), -Inf)
         kmax <- which.max(sb_safe)
         
         fmax_depth <- sb[kmax]
-        date_start <- as.POSIXct(start_block[idx_y][kmax], origin = "1970-01-01", tz = tz)
+        bstart_num <- start_block[idx_y][kmax]
+        date_start <- as.POSIXct(bstart_num, origin = "1970-01-01", tz = tz)
+        date_end   <- date_start + as.difftime(bs, units = "secs")
         
-        out_year[[j]] <- data.frame(
-          gauge_code = gauge,
-          d = d_hr,
-          fmax = fmax_depth / d_hr,   # mm/h
-          date = date_start,
-          year = y,
-          stringsAsFactors = FALSE
-        )
+        key_k <- names(sum_block)[idx_y][kmax]
+        bid   <- as.integer(sub("^.*\\|", "", key_k))
+        
+        if(isTRUE(return_block_info)){
+          out_year[[j]] <- data.frame(
+            gauge_code = gauge,
+            d = d_hr,
+            fmax = fmax_depth / d_hr,  # mm/h
+            date = date_start,
+            year = y,
+            block_id = bid,
+            block_start = date_start,
+            block_end = date_end,
+            anchor_type = anchor,
+            anchor_offset_hours = anchor_offset_hours,
+            stringsAsFactors = FALSE
+          )
+        } else {
+          out_year[[j]] <- data.frame(
+            gauge_code = gauge,
+            d = d_hr,
+            fmax = fmax_depth / d_hr,  # mm/h
+            date = date_start,
+            year = y,
+            stringsAsFactors = FALSE
+          )
+        }
       }
       
       res_all_d[[i]] <- do.call(rbind, out_year)
@@ -143,5 +190,7 @@ fun_fmax_agg <- function(data,
     do.call(rbind, res_all_d)
   })
   
-  do.call(rbind, out_gauge)
+  out <- do.call(rbind, out_gauge)
+  rownames(out) <- NULL
+  out
 }
