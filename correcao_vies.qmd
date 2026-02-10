@@ -1,31 +1,35 @@
 ---
-title: "Metodologias para Correção de Viés dos Dados Climáticos"
+title: "Metodologias para Correção de Viés dos Dados Climáticos de Precipitação"
 bibliography: referencias/ref_correcao_vies.bib
 ---
 
-## Metodologias para Correção de Viés dos Dados Climáticos
+## Metodologias para Correção de Viés dos Dados Climáticos de Precipitação
 
-Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (*Quantile Mapping* QM) proposta por Bárdossy & Pegram (2011) é forte candidata a ser empregada nesse projeto. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.
+A correção de viés é o ajuste estabelecido entre os dados históricos observados e os produtos obtidos pelos modelos climáticos, de modo a reduzir a transferência de erros às projeções futuras. Tal correção é necessária uma vez que os modelos climáticos não conseguem representar perfeitamente as condições climáticas observadas e os dados dos modelos climáticos são comumente disponíveis em escala diária com reduzida resolução espacial (Eden et al 2012; Teutschebein e Seibert, 2012). 
 
-Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés.
+Existem diversas metodologias para correção de viés, todas denotadas de abordagens estatísticas. Destacam-se, neste sentido, os métodos *Delta Change* (DC) e o *Quantile Mapping* (Mapeamento de Quantis - QM), que são os mais comuns na literatura.
+
+Para a correção de viés dos dados climáticos, a metodologia de Mapeamento de Quantis é forte candidata a ser empregada nesse projeto. Esse método tem sido largamente utilizado dado seu alto desempenho em se tratando de eventos extremos focando no uso de quantis ao invés de séries temporais e reduzindo a propagação de erros (Teutschebein e Seibert, 2012; Hassanzadeh et al 2019). O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro (Wood et al. 2004; Bárdossy e Pegram 2011; Cannon et al. 2015). Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.
+
+A seguir serão apresentados as mais diversas variações dos métodos supracitados.
 
 ### *Delta Change*
 
-O método *Delta Change* aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas:
+O método *Delta Change*, também conhecido como fator de mudança, aplica fatores de variação obtidos a partir da diferença (para temperaturas) ou razão (para precipitação) entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas:
 
 $$
 \Delta = \frac{X_{GCM}^{proj}}{X_{GCM}^{hist}} 
 \tag{1}
-$$ Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.
+$$ Essa variação é então adicionada (para temperaturas) ou multiplicada (para precipitalções) à série temporal de observações para produzir as projeções futuras com correção de viés.
 
 $$
-X = X_{OBS}+\Delta
+X = X_{OBS}*\Delta
 \tag{2}
-$$ É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
+$$ É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição, pois não reproduz adequadamente as mudanças em variabilidade e caudas, importante para eventos extremos (Maraun, 2013; Papalexiou, 2018). Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
 
 ### *Equidistant Quantile Matching* (EQM)
 
-Baseado no QM o método EQM [@Srivastav.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
+Baseado no QM o método EQM [@Srivastav et al.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. Este método é aplicado diretamente às séries de máximas anuais de precipitação ao invés da série integrais de precipitação, o que reduz incertezas na análise de frequência de extremos (Hassanzadeh et al 2019). O EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
 
 Abaixo está a descrição do método:
 
@@ -96,7 +100,7 @@ $$
 
 Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
 
-(v) A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM $Y_{max,j}^{GCM}$ usando o princípio do mapeamento baseado em quantis. Trata-se de um *downscalig* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
+(v) A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM $Y_{max,j}^{GCM}$ usando o princípio do mapeamento baseado em quantis. Trata-se de um *downscaling* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
 
 $$
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
@@ -114,7 +118,7 @@ $$
 
 Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
 
-(vii) Encontrar uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:
+(vii) Encontrar uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes. Para o caso e GEV, por exemplo, a relação seria não-linear [@Silva.2021a]:
 
 $$
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
@@ -154,7 +158,7 @@ $$
 
 ### *Equidistant Quantile Matching non-stationary*
 
-O EQM também possui uma versão não estacionária que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado [@Silva.2021; @Silva.2021b]. Para a GEV não estacionária, os parâmetros variantes ($\mu$ e $\sigma$ - localização e escala) no tempo são derivados calculando o percentil 95 do valor do parâmetro de tendência pelas Equações $\hat{\mu}_{95} = Q_{95}(\hat{\mu}_1, \hat{\mu}_2, \ldots, \hat{\mu}_n)$ e $\hat{\sigma}_{95} = Q_{95}(\hat{\sigma}_1, \hat{\sigma}_2, \ldots, \hat{\sigma}_n)$. Os parâmetros do modelo calculados são então substituídos na Equação (16) e a intensidade ou profundidade da precipitação não estacionária é estimada.
+O método EQM é capaz de captar as mudanças entre os períodos presente e futuro, no entanto, a distribuição esatística aplicada às séries para obtenção dos quantis seguiu estacionária, isto é, com os parâmetros constantes. Neste sentido, foi desenvolvida a versão EQMNS (não estacionária), que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado [@Silva.2021a; @Silva.2021b]. Para a GEV não estacionária, os parâmetros variantes ($\mu$ e $\sigma$ - localização e escala) no tempo são derivados calculando o percentil 95 do valor do parâmetro de tendência pelas Equações $\hat{\mu}_{95} = Q_{95}(\hat{\mu}_1, \hat{\mu}_2, \ldots, \hat{\mu}_n)$ e $\hat{\sigma}_{95} = Q_{95}(\hat{\sigma}_1, \hat{\sigma}_2, \ldots, \hat{\sigma}_n)$. Os parâmetros do modelo calculados são então substituídos na Equação (16) e a intensidade ou profundidade da precipitação não estacionária é estimada.
 
 $$
 z_p = \mu - \frac{\sigma}{\xi} \left[\, 1 - \left\{ -\ln\!\left(1 - \frac{1}{T}\right)^{-\xi} \right\} \right]
@@ -175,7 +179,7 @@ $$
 \tag{18}
 $$
 
-Onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o $EQM_{NS}$ introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
+Onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o $EQM_{NS}$ introduz os efeitos da não estacionariedade na distribuição estatística das séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
 
 Semelhante ao EQM, o $EQM_{NS}$ utiliza o mapeamento delta de quantis, uma vez que preserva as mudanças relativas na média e nos quantis de precipitação obtidos a partir dos modelos climáticos. A distribuição de probabilidade cumulativa da precipitação gerada pelo GCM no período futuro ($F_{m,f}$ ) e a precipitação gerada pelo GCM no período de referência ($X_{m,h}$) são igualadas para estabelecer uma relação estatística (Equação (19)). Além disso, a mudança relativa entre o período histórico e o período futuro é dada pela Equação (20):
 
@@ -200,7 +204,7 @@ $$
 
 Outro método baseado no QM é o *Quantile–Quantile Downscaling* (QQD) [@Hassanzadeh.2014; @Hassanzadeh.2019] que é um método estatístico que combina *downscaling* e correção de viés ao ajustar quantil a quantil a distribuição simulada por modelos climáticos para coincidir com a distribuição observada em uma escala local. Em vez de apenas reduzir a escala espacial, o QQD também corrige sistematicamente as diferenças entre o clima simulado e o real, garantindo que a série resultante apresente características estatísticas (como média, variabilidade e extremos) mais próximas das observações históricas.
 
-O método é uma forma não linear e simbólica de *Quantile Mapping*, desenvolvida via Programação Genética (GP). O GP é uma técnica geral orientada por dados inspirada no conceito de evolução biológica.Uma forma especial de GP, a regressão genética simbólica (GSR), visa encontrar equações ótimas que possam relacionar o preditor ao predito por meio da busca aleatória adaptativa [@Hassanzadeh.2014].
+O método é uma forma não linear e simbólica de *Quantile Mapping*, desenvolvida via Programação Genética (GP). O GP é uma técnica geral orientada por dados inspirada no conceito de evolução biológica. Uma forma especial de GP, a regressão genética simbólica (GSR), visa encontrar equações ótimas que possam relacionar o preditor ao predito por meio da busca aleatória adaptativa [@Hassanzadeh.2014].
 
 O GP cria equações que relacionam o quantil do GCM $(Q_{GCM}(X))$ com o quantil local ajustado $(Q_{Local}(X))$. Assim, a estutrutra geral do mapeamento é:
 
@@ -222,9 +226,9 @@ $$
 
 Onde $F$ é a função de distribuição cumulativa; $F^{−1}$ sua inversa; $x$ o valor de $M_f$ (Modelo futuro) a ser reduzido e $M_h$ refere-se ao Modelo histórico;$O_h$ são as observações históricas e $D_f$ refere-se a saída futura em escala reduzida.
 
-Os autores afiram que equação (23) não é aplicável a valores novos, ou seja, para valores de $M_f$ fora do intervalo de valores de $M_h$. Quando isso ocorre, usa-se uma modificação da extrapolação padrão [@deque.2007]:
+Os autores afirmam que equação (23) não é aplicável a valores novos, ou seja, para valores de $M_f$ fora do intervalo de valores de $M_h$. Quando isso ocorre, usa-se uma modificação da extrapolação padrão [@deque.2007]:
 
-Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. [-@Ho.2012] em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de $X_o$ e $X_m$ é a mesma que a relação entre as distribuições de $X^{′}_o$ e $X^{′}_m$), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, $X^{′}_o = B(X^{′}_m)$, com uma função de transferência dada por $B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]$, onde $F_m$(.) é a função de distribuição cumulativa (CDF) de $X_m$ e $F^{-1}_o$(.) é a CDF inversa (a “função quantil”) de $X_o$.
+Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. [-@Ho.2012] em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de $X_o$ e $X_m$ é a mesma que a relação entre as distribuições de $X^{′}_o$ e $X^{′}_m$), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, $X^{′}_o = B(X^{′}_m)$, com uma função de transferência dada por $B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]$, onde $F_m$(.) é a função de distribuição cumulativa (CDF) de $X_m$ e $F^{-1}_o$(.) é a CDF inversa (a “função quantil”) de $X_o$. --- [DANIELE - NÃO ENTENDI].
 
 ![Diagrama esquemático do BCQM](figuras/bias.png) Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas. Fonte: [@Ho.2012].
 
@@ -232,9 +236,19 @@ Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis m
 
 ### *Kernel Density Distribution Mapping* (KDDM)
 
-Utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021]
+Utiliza densidades suavizadas por meio de funções kernel [@Lanzante.2021].
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
+
+### *Scale-Invariance Method (SIM)* [Daniele: inseri esse método]
+
+O método SIM, idealizado por Nguyen et al. (2007), é uma técnica de remoção de viés voltado a estimar quantis de extremos de precipitação em escalas subdiárias, partindo principalmente de extremos diários e usando relações de escala. Diferente do EQM e do QQD, o SIM foca em obter as propriedades estatísticas das séries de precipitações máximas subdiárias baseada nas séries diárias. O método é baseado em duas etapas:
+(i) um downscaling espacial que relaciona a precipitação de larga escala obtida via modelo climático com a precipitação estrema diária observada; e
+(ii) um downscaling temporal que descreve relacões entre as precipitações diárias e subdiárias usando a distribuiçao de GEV. Esta etapa é baseada no conceito de invariância de escala.
+
+De acordo com [@Hassanzadeh.2019], para correção de viés o método SIM tende a ser superior ao QQD e EQM, apresentando o menor erro relativo em reproduzir precipitações extremas no período observado. Por outro lado, precipitação intensa pode mudar de “regime” e, logo, a hipótese de invariância de escala pode falhar e o SIM ficar sensível à faixa de durações/estação analisada.
+
+<!--Daniele: revisei até aqui. Não me parece ser necessário o código, a não ser do que for selecionado para aplicar. Também devem ser revistas as referências. Não tenho certeza o modo de apresentação
 
 <!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
 
