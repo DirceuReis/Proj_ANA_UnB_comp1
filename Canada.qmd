@@ -79,7 +79,9 @@ X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\
 X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
 \tag{3}
-$$ Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerad; e $N_F$ é o número total de anos considerados para o período futuro
+$$ 
+
+Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerad; e $N_F$ é o número total de anos considerados para o período futuro
 
 (iv) Ajustar uma distribuição de probabilidade aos máximos diários do modelo GCM (cada uma das séries de máximos subdiários para os dados observados e máximos diários para os cenários futuros).
 
@@ -92,39 +94,49 @@ PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
 $$ $$
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
 \tag{6}
-$$ Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
+$$ Onde, $PDF$ representa a função de distribuição de probabilidade, $f()$ é a função, $\theta$ é o parâmetro da distribuição ajustada.
 
 (v) A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM $Y_{max,j}^{GCM}$ usando o princípio do mapeamento baseado em quantis. Trata-se de um *downscalig* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
 
 $$
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
 \tag{7}
-$$ Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; $CDF$ significa função de distribuição de probabilidade cumulativa; e $invCDF$ significa CDF inversa.
+$$ 
+
+Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; $CDF$ significa função de distribuição de probabilidade cumulativa; e $invCDF$ significa $CDF$ inversa.
 
 (vi) Estabelecer uma relação estatística semelhante de mapeamento quantílico que modele a mudança entre os máximos atuais do GCM e os máximos futuros do GCM. Trata-se de um *downscaling* temporal dos dados das simulações projetadas do GCM dos máximos diários para o GCM diário de referência:
 
 $$
 Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 \tag{8}
-$$ Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
+$$ 
 
-(vii) Encontre uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:
+Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
+
+(vii) Encontrar uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:
 
 $$
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
 \tag{9}
-$$ $$
+$$ 
+
+$$
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
 \tag{10}
-$$ (viii) Encontre uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
+$$ 
+(viii) Encontrar uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
 
 $$
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
 \tag{11}
-$$ $$
+$$ 
+
+$$
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
 \tag{12}
-$$ (ix) Para gerar dados subdiários máximos futuros, combine as equações acima em:
+$$ 
+(ix) Para gerar dados subdiários máximos futuros, combinar as equações acima em:
 
 $$
 X^{STN, future}_{\max,j} 
@@ -133,7 +145,9 @@ X^{STN, future}_{\max,j}
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}} 
 \right] 
 + b_{1} \tag{13}
-$$ (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
+$$ 
+
+(x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
 
 ![Fluxograma da metodologia aplicada no Canadá](figuras/guidelines_fluxograma_canada.jpg) Figura 1. Fluxograma da metodologia aplicada no Canadá
 
