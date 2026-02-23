@@ -5,9 +5,9 @@ bibliography: referencias/ref_correcao_vies.bib
 
 ## Metodologias para Correção de Viés dos Dados Climáticos
 
-Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (*Quantile Mapping* QM) proposta por Bárdossy & Pegram (2011) é forte candidata a ser empregada nesse projeto. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.
+Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (*Quantile Mapping* - QM), proposta por Bárdossy & Pegram (2011) é forte candidata a ser empregada nesse projeto. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada é a precipitação diária, ou valores resultantes das séries de máximos anuais.
 
-Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés.
+Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitui, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés.
 
 ### *Delta Change*
 
@@ -25,7 +25,7 @@ $$ É um método simples e útil quando há pouca necessidade de corrigir a form
 
 ### *Equidistant Quantile Matching* (EQM)
 
-Baseado no QM o método EQM [@Srivastav.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
+Baseado no QM, o método EQM [@Srivastav.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. O EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
 
 Abaixo está a descrição do método:
 
@@ -96,7 +96,7 @@ $$
 
 Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
 
-(v) A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM $Y_{max,j}^{GCM}$ usando o princípio do mapeamento baseado em quantis. Trata-se de um *downscalig* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
+(v) As distribuições de probabilidade cumulativas do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM $Y_{max,j}^{GCM}$ usando o princípio do mapeamento baseado em quantis. Trata-se de um *downscalig* espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:
 
 $$
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
@@ -161,7 +161,7 @@ z_p = \mu - \frac{\sigma}{\xi} \left[\, 1 - \left\{ -\ln\!\left(1 - \frac{1}{T}\
 \tag{16}
 $$
 
-No EQM original, a função de mapeamento de quantis realiza o *donwscaling* espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada [@Silva.2021]. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM ($F_{m,h}$) e a série subdiária ($x_{j,o,h}$) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM ($\hat{x}_{j,o,h}$) conforme mostrado na Equação (17):
+No EQM original, a função de mapeamento de quantis realiza o *donwscaling* espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada [@Silva.2021]. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM ($F_{m,h}$) e a série subdiária ($x_{j,o,h}$) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM ($\hat{x}_{j,o,h}$), conforme mostrado na Equação (17):
 
 $$
 \hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
@@ -222,7 +222,7 @@ $$
 
 Onde $F$ é a função de distribuição cumulativa; $F^{−1}$ sua inversa; $x$ o valor de $M_f$ (Modelo futuro) a ser reduzido e $M_h$ refere-se ao Modelo histórico;$O_h$ são as observações históricas e $D_f$ refere-se a saída futura em escala reduzida.
 
-Os autores afiram que equação (23) não é aplicável a valores novos, ou seja, para valores de $M_f$ fora do intervalo de valores de $M_h$. Quando isso ocorre, usa-se uma modificação da extrapolação padrão [@deque.2007]:
+Os autores afirmam que a equação (23) não é aplicável a valores novos, ou seja, para valores de $M_f$ fora do intervalo de valores de $M_h$. Quando isso ocorre, usa-se uma modificação da extrapolação padrão [@deque.2007]:
 
 Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. [-@Ho.2012] em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de $X_o$ e $X_m$ é a mesma que a relação entre as distribuições de $X^{′}_o$ e $X^{′}_m$), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, $X^{′}_o = B(X^{′}_m)$, com uma função de transferência dada por $B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]$, onde $F_m$(.) é a função de distribuição cumulativa (CDF) de $X_m$ e $F^{-1}_o$(.) é a CDF inversa (a “função quantil”) de $X_o$.
 
@@ -232,7 +232,7 @@ Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis m
 
 ### *Kernel Density Distribution Mapping* (KDDM)
 
-Utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021]
+O método *Kernel Density Distribution Mapping* utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021].
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
 

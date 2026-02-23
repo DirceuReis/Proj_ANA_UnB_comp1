@@ -62,55 +62,80 @@ ggplot(anos_por_estacao, aes(x = n_anos)) +
   theme_minimal()
 ```
 
-Adotou-se um mínimo de 7 anos de dados por estação, para garantir (i) um número mínimo de observações para a estimação da GEV em cada posto e (ii) um número suficientemente grande de estações na amostra, evitando ao mesmo tempo um custo computacional excessivo no ajuste do modelo hierárquico multisite.
+Adotou-se um mínimo de 8 anos de dados por estação, para garantir (i) um número mínimo de observações para a estimação da GEV em cada posto e (ii) um número suficientemente grande de estações na amostra, evitando ao mesmo tempo um custo computacional excessivo no ajuste do modelo hierárquico multisite.
+
+Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na > 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas.
 
 ```{r}
-estacoes_validas <- anos_por_estacao %>%
-filter(n_anos >= 7) %>%
-pull(gauge_code)
-
 # Estações usadas no ajuste do modelo Bayesiano (fit antigo); fixadas aqui para manter consistência após atualização do arquivo de entrada.
-estacoes <- c(
-  "430060402A","430120601A","430235201A","430300402A","430300403A","430350901A","430420002A",
-  "430450701A","430450704A","430460601A","430460603A","430510801A","430510802A","430620501A",
-  "430693201A","430700502A","430920901A","431020703A","431177501A","431320101A","431410001A",
-  "431410002A","431410003A","431440703A","431490202A","431490204A","431490221A","431540401A",
-  "431690707A","431720202A","431800201A","432000803A","432000805A","432040401A","432130301A",
-  "432145101A","432250903A","432250904A","432260802A","432300204A","70600000","86100600",
-  "87380000","88260000","A801","A802","A803","A804","A805",
-  "A808","A809","A811","A812","A813","A815","A826",
-  "A827","A828","A829","A831","A832","A833","A834",
-  "A836","A837","A838","A839","A840","A844","A852",
-  "A853","A854","A856","A879","A880","A883","A884",
-  "A894","SBPA"
-)
+# estacoes <- c(
+#   "430060402A","430120601A","430235201A","430300402A","430300403A","430350901A","430420002A",
+#   "430450701A","430450704A","430460601A","430460603A","430510801A","430510802A","430620501A",
+#   "430693201A","430700502A","430920901A","431020703A","431177501A","431320101A","431410001A",
+#   "431410002A","431410003A","431440703A","431490202A","431490204A","431490221A","431540401A",
+#   "431690707A","431720202A","431800201A","432000803A","432000805A","432040401A","432130301A",
+#   "432145101A","432250903A","432250904A","432260802A","432300204A","70600000","86100600",
+#   "87380000","88260000","A801","A802","A803","A804","A805",
+#   "A808","A809","A811","A812","A813","A815","A826",
+#   "A827","A828","A829","A831","A832","A833","A834",
+#   "A836","A837","A838","A839","A840","A844","A852",
+#   "A853","A854","A856","A879","A880","A883","A884",
+#   "A894","SBPA"
+# )
+# 
+# estacoes_validas <- estacoes
 
-estacoes_validas <- estacoes
+dur_keep_h <- seq(1,24,1)
+min_years  <- 8
 
-max_anuais_filtrado <- dados_agregados %>%
-filter(gauge_code %in% estacoes_validas)
-```
+dados_amax <- dados_agregados %>%
+  mutate(
+    year = as.integer(year),
+    d    = as.numeric(d),
+    imax = as.numeric(imax)
+  ) %>%
+  group_by(gauge_code, d, year) %>%
+  slice_max(imax, n = 1, with_ties = FALSE) %>%
+  ungroup()
 
-## Remoção de dados faltantes
+na_lim <- 0.2
+dados_amax_qc <- dados_amax %>%
+  filter(is.na(na_prct) | na_prct <= na_lim)
 
-Em cada combinação estação–ano, calculou-se a proporção de dados faltantes de imax e foram removidos os anos com mais de 80% de NA (prop_na \> 0,8). Dessa forma, apenas anos com cobertura mínima razoável são utilizados na estimação das distribuições extremas, resultando na exclusão de r n_anos_removidos anos-estação.
+dados_amax_qc <- dados_amax_qc %>%
+  filter(d %in% dur_keep_h)
 
-```{r}
-max_anuais_filtrado <- max_anuais_filtrado %>%
-group_by(gauge_code, year) %>%
-mutate(prop_na = mean(is.na(imax))) %>%
-ungroup() %>%
-filter(na_prct <= 0.8) %>%
-select(-prop_na)
+years_stats <- dados_amax_qc %>%
+  group_by(gauge_code, d) %>%
+  summarise(
+    n_years_valid = sum(!is.na(imax)),
+    n_years_total = n_distinct(year),
+    .groups = "drop"
+  )
 
-dados_modelo <- max_anuais_filtrado %>%
+dados_filtrado <- dados_amax_qc %>%
+  left_join(years_stats, by = c("gauge_code", "d")) %>%
+  filter(n_years_valid >= min_years) %>%  
   filter(!is.na(imax)) %>%
-  arrange(gauge_code, year, d)
+  select(gauge_code, year, d, imax, date, na_prct, mon_filter, n_max, n_years_valid, n_years_total)
 
-dados_modelo <- dados_modelo %>%
-  filter(d >= 1 & d <=24)
+years_stats %>%
+  filter(n_years_valid > min_years) %>%
+  count(d, name = "n_gauges_pass")
 
-#dados_modelo <- dados_modelo[-which(dados_modelo$imax==0),]
+dados_modelo <- dados_filtrado %>%
+  mutate(
+    duration_h = as.integer(d),
+    year = as.integer(year),
+    imax = as.numeric(imax)
+  ) %>%
+  filter(duration_h %in% dur_keep_h) %>%
+  group_by(gauge_code, duration_h) %>%
+  mutate(n_years_valid = n_distinct(year[!is.na(imax)])) %>%
+  ungroup() %>%
+  filter(n_years_valid >= min_years) %>%
+  filter(!is.na(imax)) %>% 
+  select(gauge_code, year, duration_h, imax)
 ```
 
 ### Estatísticas descritivas por duração
@@ -118,7 +143,7 @@ dados_modelo <- dados_modelo %>%
 ```{r}
 summary_dur <- dados_modelo %>%
   filter(!is.na(imax)) %>%
-  group_by(d) %>%
+  group_by(duration_h) %>%
   summarise(
     mediana = median(imax),
     q90     = quantile(imax, 0.9),
@@ -126,7 +151,7 @@ summary_dur <- dados_modelo %>%
     .groups = "drop"
   )
 
-ggplot(summary_dur, aes(x = d)) +
+ggplot(summary_dur, aes(x = duration_h)) +
   geom_line(aes(y = mediana)) +
   geom_point(aes(y = mediana)) +
   geom_line(aes(y = q90), linetype = 2) +
@@ -163,7 +188,7 @@ title = "Variação espacial das intensidades extremas") +
 theme_minimal()
 ```
 
-A Figura mostra a distribuição da média de log(imax) por estação. O desvio-padrão global de log(imax), calculado a partir de todas as observações agregadas, é igual a 0,62. Já o desvio-padrão entre estações, obtido a partir das médias de log(imax) por posto, é de aproximadamente 0,12. Isso significa que apenas cerca de 20% da variabilidade total está associada a diferenças sistemáticas entre estações, enquanto a maior parte decorre da variabilidade interna a cada posto (variabilidade interanual e entre durações).
+A Figura mostra a distribuição da média de log(imax) por estação. O desvio-padrão global de log(imax), calculado a partir de todas as observações agregadas, é igual a 0,61. Já o desvio-padrão entre estações, obtido a partir das médias de log(imax) por posto, é de aproximadamente 0,12. Isso significa que apenas cerca de 20% da variabilidade total está associada a diferenças sistemáticas entre estações, enquanto a maior parte decorre da variabilidade interna a cada posto (variabilidade interanual e entre durações).
 
 Em termos práticos, esses resultados indicam que as estações não são completamente homogêneas, existe um gradiente espacial de intensidades extremas, como sugerido pelo espalhamento do histograma, mas também não são tão distintas a ponto de justificar ajustes totalmente independentes (non-pooling). Essa combinação de heterogeneidade moderada e forte componente comum é justamente o cenário em que modelos hierárquicos com partial pooling são mais adequados: as estações “compartilham informação” por meio dos hiperparâmetros regionais, mas preservam diferenças locais nos parâmetros da GEV. Isso ajuda a estabilizar as estimativas em postos com poucas observações, evitando o superajuste, ao mesmo tempo em que mantém a capacidade de representar padrões espaciais reais nas intensidades extremas.
 
@@ -177,7 +202,7 @@ suppressWarnings(evd::fgev(x, std.err = FALSE))
 fit_gev_by_duration <- function(df_station) {
 df_station %>%
 filter(!is.na(imax)) %>%
-group_by(d) %>%
+group_by(duration_h) %>%
 summarise(vals = list(imax), .groups = "drop") %>%
 filter(lengths(vals) >= 3) %>%
 mutate(
@@ -187,7 +212,7 @@ mu      = map_dbl(fit, ~ if (is.null(.x)) NA_real_ else .x$estimate["loc"]),
 sigma   = map_dbl(fit, ~ if (is.null(.x)) NA_real_ else .x$estimate["scale"]),
 xi      = map_dbl(fit, ~ if (is.null(.x)) NA_real_ else .x$estimate["shape"])
 ) %>%
-select(d, mu, sigma, xi)
+select(duration_h, mu, sigma, xi)
 }
 
 ajustes_por_estacao <- dados_modelo %>%
@@ -199,7 +224,7 @@ ajustes_df <- bind_rows(ajustes_por_estacao, .id = "station")
 
 y_lim <- range(ajustes_df$mu, na.rm = TRUE)
 
-ggplot(ajustes_df, aes(x = log(d), y = mu)) +
+ggplot(ajustes_df, aes(x = log(duration_h), y = mu)) +
 geom_line(aes(group = station), alpha = 0.5) +
 geom_point(aes(color = station)) +
 coord_cartesian(ylim = y_lim) +  
@@ -288,39 +313,46 @@ A média global $\xi_{\text{bar}}$ recebe uma prior do tipo Beta reescalada para
 Antes do ajuste Bayesiano, os dados são organizados em um formato compatível com o bloco `data` do modelo Stan. A partir do `dados_modelo`, constrói-se um data frame auxiliar:
 
 ```{r build-stan-data}
-df <- dados_modelo %>% 
+df <- dados_modelo %>%
   mutate(
-    gauge      = as.integer(factor(gauge_code)),      # índices 1..n_gauge
-    dur_factor = factor(d, levels = sort(unique(d))), # refaz os níveis de duração
-    dur_id     = as.integer(dur_factor)               # índices 1..K (contíguos)
-  ) %>% 
-  arrange(gauge, dur_id)                              # ordenação final
+    gauge = as.integer(factor(gauge_code)),
+    dur_factor = factor(duration_h, levels = sort(unique(duration_h))),
+    dur_id = as.integer(dur_factor)
+  ) %>%
+  arrange(gauge, dur_id, year)
 
-y           <- df$imax
-gauge_id    <- df$gauge
+y <- df$imax
+gauge_id <- df$gauge
 duration_id <- df$dur_id
-D           <- sort(unique(df$d))                     # vetor de durações em horas
+D <- sort(unique(df$duration_h)) # horas
 
 stan_data <- list(
-  N_obs       = length(y),                   # número total de observações
-  y           = as.numeric(y),               # máximas anuais
-  n_gauge     = length(unique(gauge_id)),    # número de estações G
-  K           = length(D),                   # número de durações K
-  gauge_id    = gauge_id,                    # índice da estação (1..G) para cada y[i]
-  duration_id = duration_id,                 # índice da duração (1..K) para cada y[i]
-  D           = D,                           # vetor com as K durações (em horas)
-  D0          = 24,                          # duração de referência (24 h)
-  S           = length(unique(gauge_id))     # sinônimo de n_gauge usado no Stan
+  N_obs = length(y),
+  y = as.numeric(y),
+  n_gauge = length(unique(gauge_id)),
+  K = length(D),
+  gauge_id = as.integer(gauge_id),
+  duration_id = as.integer(duration_id),
+  D = as.numeric(D),
+  D0 = 24
 )
 
+# Checagens
 stopifnot(
-  all(stan_data$gauge_id    <= stan_data$n_gauge),
-  all(stan_data$duration_id <= stan_data$K)
+  all(stan_data$gauge_id >= 1),
+  all(stan_data$duration_id >= 1),
+  all(stan_data$gauge_id <= stan_data$n_gauge),
+  all(stan_data$duration_id <= stan_data$K),
+  identical(stan_data$D, sort(unique(stan_data$D)))
 )
 
+# Diagnóstico rápido do que entrou
+cat("Gauges:", stan_data$n_gauge, "\n")
+cat("Durations (h):", paste(stan_data$D, collapse = ", "), "\n")
+cat("N_obs:", stan_data$N_obs, "\n")
 ```
 
-Neste arranjo, cada observação de máxima anual é associada a dois índices inteiros: gauge_id[i] indica a estação e duration_id[i] indica a duração. Esses índices são usados no Stan para recuperar os parâmetros correspondentes dentro das estruturas matriciais $\mu[d,g],\sigma[d,g]$ e $\xi[d,g]$.
+Neste arranjo, cada observação de máxima anual é associada a dois índices inteiros: gauge_id\[i\] indica a estação e duration_id\[i\] indica a duração. Esses índices são usados no Stan para recuperar os parâmetros correspondentes dentro das estruturas matriciais $\mu[d,g],\sigma[d,g]$ e $\xi[d,g]$.
 
 ```{r}
 modelo_multistation_com_partial_pooling.stan <- "
@@ -471,23 +503,26 @@ init_vals <- list(
 rstan_options(auto_write = TRUE)
 options(mc.cores = 5)
 
-#sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
+sm <- stan_model(model_code = modelo_multistation_com_partial_pooling.stan)
 
-#fit_dbg <- sampling(
-#sm,
-#data   = stan_data,
-#chains = 5,
-#warmup = 2000,
-#iter   = 4000,
-#thin   = 10,
-#seed   = 123,
-#init   = replicate(5, init_vals, simplify = FALSE),
-#control = list(adapt_delta = 0.99, max_treedepth = 15),
-#refresh = 200
-#)
+fit <- sampling(
+  sm,
+  data   = stan_data,
+  chains = 5,
+  warmup = 2000,
+  iter   = 4000,
+  
+  thin   = 10,
+  seed   = 123,
+  init   = replicate(5, init_vals, simplify = FALSE),
+  control = list(adapt_delta = 0.99, max_treedepth = 15),
+  refresh = 200
+  )
+fit <- readRDS("C:\\Users\\laris\\OneDrive\\3. UFC\\UFC - 2026\\Art. 01_BHM\\fit_pooling_partial_8anos.rds")
+
 ```
 
-Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d[d] para μ e zero para σ), enquanto $\eta$ e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
+Os parâmetros mu_log e sigma_log são inicializados próximos das medianas e desvios-padrão empíricos de cada duração, replicados em todas as estações, o que posiciona as cadeias em uma região plausível do espaço de parâmetros e tende a reduzir o tempo de adaptação do Hamiltonian Monte Carlo. Os parâmetros de estação alpha e beta são inicializados como pequenas perturbações em torno de valores consistentes com a duração de referência (med_d\[d\] para μ e zero para σ), enquanto $\eta$ e theta são sorteados em intervalos compatíveis com a interpretação física de expoente de escala e deslocamento de duração.
 
 Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixas estreitas, e a média global da forma é inicializada em xi_bar = 0. Esses valores iniciais não fixam a solução, mas ajudam a evitar problemas de convergência associados a pontos de partida pouco informativos ou numericamente instáveis.
 
@@ -641,45 +676,27 @@ Os hiperparâmetros tau_mu, tau_sigma e tau_xi recebem valores iniciais em faixa
 #check_all_diagnostics(fit)
 ```
 
-check_all_diagnostics(fit)
-[1] "n_eff / iter looks reasonable for all parameters"
-[1] "Rhat looks reasonable for all parameters"
-[1] "0 of 1000 iterations ended with a divergence (0%)"
-[1] "0 of 1000 iterations saturated the maximum tree depth of 15 (0%)"
-[1] "E-FMI indicated no pathological behavior"
+check_all_diagnostics(fit) \[1\] "n_eff / iter looks reasonable for all parameters" \[1\] "Rhat looks reasonable for all parameters" \[1\] "0 of 1000 iterations ended with a divergence (0%)" \[1\] "0 of 1000 iterations saturated the maximum tree depth of 15 (0%)" \[1\] "E-FMI indicated no pathological behavior"
 
 # Resultados Parciais
 
-As amostras geradas pelo Stan são extraídas por meio de `rstan::extract(fit)`,
-resultando em arrays tridimensionais para cada parâmetro do modelo, com
-dimensões `[iter × K × S]`, correspondentes às iterações do MCMC, às durações
-e às estações, respectivamente. Para transformar essa estrutura em um formato
-analítico, desenvolveu-se a função `summarize_param()`, que resume cada
-parâmetro por duração e estação, calculando sua mediana posterior e os
-intervalos creíveis de 95%.
+As amostras geradas pelo Stan são extraídas por meio de `rstan::extract(fit)`, resultando em arrays tridimensionais para cada parâmetro do modelo, com dimensões `[iter × K × S]`, correspondentes às iterações do MCMC, às durações e às estações, respectivamente. Para transformar essa estrutura em um formato analítico, desenvolveu-se a função `summarize_param()`, que resume cada parâmetro por duração e estação, calculando sua mediana posterior e os intervalos creíveis de 95%.
 
-O resultado é um data frame “arrumado” contendo, para cada combinação
-(estação, duração), as estimativas:
+O resultado é um data frame “arrumado” contendo, para cada combinação (estação, duração), as estimativas:
 
-- mediana posterior;
-- limites inferior e superior do IC95%;
-- valor da duração real (`Duration`);
-- identificação da estação (`Estacao`);
-- nome do parâmetro (`Param`).
+-   mediana posterior;
+-   limites inferior e superior do IC95%;
+-   valor da duração real (`Duration`);
+-   identificação da estação (`Estacao`);
+-   nome do parâmetro (`Param`).
 
-Esses resumos posteriores são então combinados com as estimativas obtidas a
-partir do ajuste GEV ordinário (`ajustes_df`), permitindo comparação direta
-entre o modelo hierárquico e as estimativas locais independentes. Essa
-comparação é visualizada por meio da função `plot_param()`, que plota, para
-cada estação, a mediana posterior (linha), o IC95% (faixa sombreada) e os
-parâmetros da GEV ordinária (pontos vermelhos) ao longo da escala
-logarítmica da duração.
+Esses resumos posteriores são então combinados com as estimativas obtidas a partir do ajuste GEV ordinário (`ajustes_df`), permitindo comparação direta entre o modelo hierárquico e as estimativas locais independentes. Essa comparação é visualizada por meio da função `plot_param()`, que plota, para cada estação, a mediana posterior (linha), o IC95% (faixa sombreada) e os parâmetros da GEV ordinária (pontos vermelhos) ao longo da escala logarítmica da duração.
 
 ```{r}
 library(tidyr)
 #retorna listas contendo arrays com TODAS as amostras MCMC dos parâmetros.
-#posterior_samples <- rstan::extract(fit)
-#saveRDS(posterior_samples, "base/fit_stan/posterior_samples.rds")
+posterior_samples <- rstan::extract(fit)
+saveRDS(posterior_samples, "base/fit_stan/posterior_samples.rds")
 posterior_samples <- readRDS("base/fit_stan/posterior_samples.rds")
 
 # mapeamento estacao_id -> Estacao
@@ -716,7 +733,7 @@ summarize_param <- function(arr_iks, param_name, Dvec) {
 # função para juntar posterior resumido com ajustes ordinários
 join_with_ordinary <- function(df_post, ajustes_df, col_ordinary, rename_to) {
   ajustes_sel <- ajustes_df %>%
-    rename(Estacao = station, Duration = d) %>%
+    rename(Estacao = station, Duration = duration_h) %>%
     select(Estacao, Duration, !!col_ordinary)
   df_post %>%
     left_join(ajustes_sel, by = c("Estacao", "Duration")) %>%
@@ -772,7 +789,6 @@ p_mu; p_sigma; p_xi
 
 ```
 
-
 ```{r plotando-por-duração-da-série-parte-1}
 anos_por_estacao <- dados_modelo %>%
   group_by(gauge_code) %>%
@@ -784,14 +800,14 @@ anos_por_estacao <- dados_modelo %>%
 df_years <- anos_por_estacao %>%
   mutate(
     grupo = case_when(
-      n_years %in% c(18,15,14) ~ "Longas (18,15,14 anos)",
+      n_years %in% c(17,14) ~ "Longas (17,14 anos)",
       n_years %in% c(13) ~ "13 anos",
       n_years %in% c(12) ~ "12 anos",
       n_years %in% c(11) ~ "11 anos",
       n_years %in% c(10) ~ "10 anos",
       n_years %in% c(9)  ~ "9 anos",
       n_years %in% c(8)  ~ "8 anos",
-      n_years %in% c(7)  ~ "7 anos",
+      #n_years %in% c(7)  ~ "7 anos",
       TRUE ~ "Outras"
     )
   )
@@ -802,14 +818,13 @@ df_xi_comb    <- df_xi_comb    %>% left_join(df_years, by = "Estacao")
 
 # Usar o grupo para ver as estações de acordo com a duração
 p_xi_longas <- plot_param(
-  df_xi_comb %>% filter(grupo == "Longas (18,15,14 anos)"),
+  df_xi_comb %>% filter(grupo == "Longas (17,14 anos)"),
   "xi_gev",
-  expression(mu),
-  "μ – Estações com séries longas (18-14 anos)",
+  expression(xi),
+  "xi – Estações com séries longas (17-14 anos)",
   ncol = 5
 )
 ```
-
 
 ```{r}
 grupos_validos <- df_mu_comb %>% 
@@ -823,13 +838,13 @@ plot_param_grupo <- function(df_comb, grupo_name) {
   plot_param(
     df_sub,
     "xi_gev", #mudar dependendo do plot
-    expression(mu),
+    expression(xi),
     paste0("μ – Estações com ", grupo_name),
     ncol = 5
   )
 }
 
-plots_mu <- lapply(grupos_validos, function(g) plot_param_grupo(df_mu_comb, g))
+#plots_mu <- lapply(grupos_validos, function(g) plot_param_grupo(df_mu_comb, g))
 
 #names(plots_mu) <- grupos_validos
 
@@ -837,35 +852,28 @@ plots_xi <- lapply(grupos_validos, function(g) plot_param_grupo(df_xi_comb, g))
 
 names(plots_xi) <- grupos_validos
 
-plots_xi[[5]]
+plots_xi[[3]]
 ```
 
 ## Posterior dos parâmetros por estação ($\eta$, θ e α)
-Nesta seção analisamos a distribuição posterior dos parâmetros **H**, **θ** e
-**α** do modelo hierárquico. Esses parâmetros controlam, respectivamente:
 
-- **$\eta$**: o expoente da relação intensidade–duração, determinando a inclinação
-  das curvas IDF para cada estação;
-- **θ**: o deslocamento da duração, que ajusta o comportamento da curva para
-  durações curtas;
-- **α**: o nível da curva de intensidade na duração de referência.
+Nesta seção analisamos a distribuição posterior dos parâmetros **H**, **θ** e **α** do modelo hierárquico. Esses parâmetros controlam, respectivamente:
 
-O objetivo desta análise é comparar o comportamento posterior desses
-parâmetros entre estações, levando em conta o comprimento da série de
-cada uma. Como diferentes estações possuem diferentes números de anos de dados
-(n_anos), agrupamos as estações conforme seu comprimento:
+-   $\eta$: o expoente da relação intensidade–duração, determinando a inclinação das curvas IDF para cada estação;
+-   **θ**: o deslocamento da duração, que ajusta o comportamento da curva para durações curtas;
+-   **α**: o nível da curva de intensidade na duração de referência.
 
-- **Longas (18, 15, 14 anos)**
-- **13 anos**
-- **12 anos**
-- **11 anos**
-- **10 anos**
-- **9 anos**
-- **8 anos**
-- **7 anos**
+O objetivo desta análise é comparar o comportamento posterior desses parâmetros entre estações, levando em conta o comprimento da série de cada uma. Como diferentes estações possuem diferentes números de anos de dados (n_anos), agrupamos as estações conforme seu comprimento:
 
-Geramos então os gráficos posteriores de $\eta$, θ e α para cada grupo, evitando
-misturar estações com volumes muito distintos de informação.
+-   **Longas (17, 14 anos)**
+-   **13 anos**
+-   **12 anos**
+-   **11 anos**
+-   **10 anos**
+-   **9 anos**
+-   **8 anos**
+
+Geramos então os gráficos posteriores de $\eta$, θ e α para cada grupo, evitando misturar estações com volumes muito distintos de informação.
 
 A estação SBPA apresenta um comportamento bem distinto das demais com o valor alto de $\eta$, e baixo $\alpha$.
 
@@ -964,13 +972,13 @@ plots_posterior <- lapply(grupos_validos, function(g) {
 
 names(plots_posterior) <- grupos_validos
 
-plots_posterior[[7]]
+plots_posterior[[1]]
 
 ```
 
 ## Mapas interpolados dos parâmetros H e θ com identificação das estações
 
-Os parâmetros **$\eta$** e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de $\eta$ e θ.
+Os parâmetros $\eta$ e **θ** do modelo de escala intensidade–duração foram estimados para cada estação pluviométrica. Para visualizar sua variação espacial no estado do Rio Grande do Sul, realizamos uma interpolação espacial do tipo *Inverse Distance Weighting* (IDW) sobre uma grade regular, gerando campos contínuos de $\eta$ e θ.
 
 Além disso, incluímos no mapa o código de cada estação e o número de anos de dados disponíveis, de modo a facilitar a avaliação da confiabilidade local da estimativa.
 
@@ -1070,11 +1078,16 @@ st_transform(4326)
 grid_pol <- st_make_grid(rs, cellsize = 0.1, what = "polygons")
 grid_sf  <- st_sf(geometry = grid_pol) %>% st_intersection(rs)
 
-interpolar_campo <- function(pts_sf, grid_sf, var_name) {
+interpolar_campo <- function(pts_sf, grid_sf, var_name,
+                             idp = 2.0) {
 form <- as.formula(paste(var_name, "~ 1"))
-g <- gstat::gstat(formula = form, data = pts_sf,
-nmax = 10, set = list(idp = 2.0))
-predict(g, newdata = grid_sf)
+g <- gstat::idw(
+    formula = form,
+    locations = pts_sf,
+    newdata = grid_sf,
+    #nmax = nmax,
+    idp = idp
+  )
 }
 
 H_grid     <- interpolar_campo(stations_Htheta_sf, grid_sf, "H") %>% mutate(param = "H")
@@ -1112,7 +1125,6 @@ theme_minimal()
 
 p_H | p_theta
 ```
-
 
 ## Plotagem dos parametros por intervalo
 
@@ -1201,6 +1213,7 @@ p_H | p_theta
 ```
 
 ## Plot com parametros geomorfologicos
+
 ```{r}
 library(sf)
 
@@ -1307,6 +1320,7 @@ p_H_geo1
 ```
 
 ## Plot com o MDE
+
 ```{r}
 library(elevatr)
 
