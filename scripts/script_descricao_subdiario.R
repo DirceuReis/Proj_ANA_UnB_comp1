@@ -1,7 +1,7 @@
 # PACOTES -----------------------------------------------------------------
 
 # Limpar ambiente
-rm(list = ls()); gc()
+rm(list = ls()); invisible(gc())
 
 # Pacotes
 if(!require(pacman)) install.packages("pacman")
@@ -26,6 +26,7 @@ source("scripts/funcoes/fun_boot_lratio.R") # estimar intervalos de confiança c
 
 # Dados
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
+# df_imax <- df_imax[df_imax$gauge_code != "SBPA",]
 
 
 # QUALIDADE DOS DADOS -----------------------------------------------------
@@ -70,11 +71,11 @@ plot.anos.estacao <- ({
           legend.position =  "none",
           plot.background = element_rect(color = "white"),
           panel.border = element_rect(color = "black", fill = NA),
-          text = element_text(size = 10, family = "serif"))
-}) # fim 'plot.anos.estacao'
+          text = element_text(size = 12, family = "serif"))
+}); plot.anos.estacao # fim 'plot.anos.estacao'
 
-# ggsave(filename = "figuras/fig_anos_estacao.png", plot = plot.anos.estacao,
-#        width = 16, height = 14, units = "cm", dpi = 200)
+ggsave(filename = "figuras/fig_anos_estacao.png", plot = plot.anos.estacao,
+       width = 16, height = 16, units = "cm", dpi = 200)
 
 # FORMA DOS DADOS ---------------------------------------------------------
 
@@ -193,3 +194,51 @@ plot_tau4_lm <- df_est %>%
 #        width = 210, height = 297, dpi = 300, units = "mm",
 #        # device = cairo_pdf,
 #        ) # cairo_pdf plota textos c/ fontes que não são padrão
+
+
+# SAZONALIDADE ------------------------------------------------------------
+
+# Usar um plot de rosa dos ventos
+na.accept <- 0.2    # percentual de falhas (0.2 -> 20%)
+min.years <- 8      # mínimo de anos na série
+which.moment <- 1:3 # qual momento usar de base p/ gerar figuras individuais
+min.duration <- 3   # mínimo de durações diferentes necessário
+which.duration <- c(1, 24)
+
+# Alice sugeriu fazer a barra usando 'position_stack'
+# e a cor indicando "intervalos" de intensidade
+# ou um heatmap
+plot.month.frequency1 <- {
+  df_imax %>%
+    filter(na_prct <= na.accept,              # filtrar anos por porcentagem de falhas
+           d %in% c(1, 2, 4, 6, 8, 12, 18, 24),
+           # d %in% c(24, 48, 72, 140, 240),
+    ) %>% # filtrar durações dentro do intervalo
+    group_by(gauge_code) %>%                  # agrupar por estação
+    filter(n_distinct(d) >= min.duration,     # só estações com pelo menos 'min.duration'
+           n_distinct(year) >= min.years) %>% # so estações com pelo menos 'min.years'
+    ungroup() %>% 
+    mutate(month = factor(lubridate::month(date, label = TRUE))) %>%
+    # mutate(month = factor(lubridate::month(date))) %>%
+    group_by(month, d) %>% 
+    reframe(n_imax = n()) %>% 
+    ggplot(aes(x = month, y = n_imax, fill = month)) +
+    geom_col(color = "black", linewidth = 0.3, alpha = 0.8, width = 0.8, show.legend = FALSE) +
+    facet_wrap(~d, ncol = 4, labeller = labeller(d = ~paste(.x, "h"))) +
+    scale_y_continuous(expand = c(0,0)) +
+    coord_radial() +
+    labs(x = "", y = "Frequência de máximos anuais") +
+    theme_minimal() +
+    theme(axis.text.y = element_blank(),
+          axis.text.x = element_text(size = 8, margin = margin(b = 1)),
+          axis.ticks = element_blank(),
+          panel.grid.minor = element_blank(),
+          strip.text = element_text(face = "bold"),
+          plot.background = element_rect(color = "white"),
+          # panel.border = element_rect(color = "black", fill = NA),
+          text = element_text(size = 10, family = "serif")) +
+    guides(theta = guide_axis_theta(angle = 0))
+}; plot.month.frequency1
+
+ggsave(plot = plot.month.frequency1, filename = "figuras/month_frequency_imax_days.png",
+       width = 16, height = 5, units = "cm", dpi = 300)

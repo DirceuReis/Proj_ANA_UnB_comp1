@@ -157,8 +157,9 @@ lim.x <-
 # Plotar estações subdiárias e diárias lado a lado
 plot.select.gauges <- ({
 
-  plot.subdaily <-
-    ggplot(data = df.select.subdaily, aes(datetime, rain_mm)) +
+  plot.subdaily <- df.select.subdaily %>% 
+    mutate(gauge_code = factor(gauge_code, levels = c("A809", "A844", "A801"))) %>% 
+    ggplot(aes(datetime, rain_mm)) +
     facet_wrap(~gauge_code, nrow = length(unique(df.select.subdaily$gauge_code))) +
     # geom_vline(data = df.select.subdaily %>% filter(is.na(rain_mm)), aes(xintercept = datetime), color = "yellow", alpha = 0.5, linewidth = 0.2) +
     geom_line(linewidth = 0.3) +
@@ -171,8 +172,9 @@ plot.select.gauges <- ({
           plot.background = element_rect(color = "white"),
           panel.border = element_rect(color = "black", fill = NA),); plot.subdaily
 
-  plot.daily <-
-    ggplot(data = df.select.daily, aes(datetime, rain_mm)) +
+  plot.daily <- df.select.daily %>% 
+    mutate(gauge_code = factor(gauge_code, levels = c("83927", "83916", "83967"))) %>% 
+    ggplot(aes(datetime, rain_mm)) +
     facet_wrap(~gauge_code, nrow = length(unique(df.select.daily$gauge_code))) +
     # geom_vline(data = df.select.daily %>% filter(is.na(rain_mm)), aes(xintercept = datetime), color = "yellow", alpha = 0.5, linewidth = 0.2) +
     geom_line(linewidth = 0.3) +
@@ -197,8 +199,8 @@ plot.select.gauges <- ({
 
 plot.select.gauges
 
-# ggsave(plot = plot.select.gauges, filename = "figuras/data_for_hyetos/plot_select_gauges.png",
-#        width = 16, height = 14, units = "cm", dpi = 300)
+ggsave(plot = plot.select.gauges, filename = "figuras/data_for_hyetos/plot_select_gauges.png",
+       width = 16, height = 14, units = "cm", dpi = 300)
 
 # Plotar mapa com localização das estações
 # basemap <- maptiles::get_tiles(sf.rs, provider = "OpenStreetMap", zoom = 10)

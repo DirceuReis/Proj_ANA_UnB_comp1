@@ -7,6 +7,7 @@ fun_scale_invariance_boot <- function(df.imax,                   # data.frame co
                                       which.moment = 1:3,        # quais momentos calcular
                                       which.duration = c(1, 24), # intervalo de durações
                                       min.duration = 3,          # mínimo de durações p/ cálculo
+                                      ci.boot.method = "bca",    # método p/ intervalos de confiança
                                       R.boot = 1e4,              # réplicas bootstrap
                                       cl = NULL){
   
@@ -16,6 +17,12 @@ fun_scale_invariance_boot <- function(df.imax,                   # data.frame co
     message("Instalando gerenciador de pacotes 'pacman'...")
   }
   pacman::p_load(pacman, dplyr, tidyr, purrr, pbapply, broom, boot)
+  
+  # Mensagens
+  message("Calculando intervalos de confiança bootstrap...\n")
+  message("Durações: ", which.duration[1], " a ", which.duration[2], " horas")
+  message("Nro. réplicas bootstrap: ", R.boot)
+  message("Método IC: ", ci.boot.method, "\n")
   
   # MOMENTOS --------------------------------------------------------------
   
@@ -69,12 +76,16 @@ fun_scale_invariance_boot <- function(df.imax,                   # data.frame co
   ls.data <- split(x = data, f = data$gauge_code)
   ls.boot <- pbapply::pblapply(X = ls.data, FUN = function(gauge){
     
+    d.groups <- factor(gauge$d)                     # bootstrap estratificado
     boot.obj <- boot::boot(data = gauge,            # série de 1 estação
                            statistic = fun.lm.boot, # função a ser calculada
                            R = R.boot,              # nro. replicas
-                           strata = gauge$d)        # reamostrar por durações
+                           strata = d.groups)       # reamostrar por durações
     
-    boot.ci <- broom::tidy(boot.obj, conf.int = TRUE) %>% # calcular IC95 'perc'
+    # Calcular alguma estatística de qualidade do bootstrap
+    
+    boot.ci <- broom::tidy(boot.obj, conf.int = TRUE,
+                           conf.method = ci.boot.method) %>% # calcular IC95 'bca'
       mutate(d = deparse(which.duration),                # criar coluna intervalo duração
              n_year = n_distinct(gauge$year),            # criar coluna nro. anos
              which_moment = row_number(),                # criar coluna momentos

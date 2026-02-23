@@ -44,16 +44,25 @@ fun_filter_set <- function(data,
     
     # Resumir e filtrar dados
     message("\nAplicando filtros...")
-    valid_gauges <- data %>%
-      mutate(year = lubridate::year(datetime)) %>%
-      group_by(gauge_code, year) %>%
-      summarise(fail_prct = sum(is.na(rain_mm))/n() * 100, .groups = "drop") %>% # calcular % falhas
-      group_by(gauge_code) %>%
-      summarise(valid_years = sum(fail_prct <= na_accept * 100)) %>% # nro anos que atende
-      filter(valid_years >= min_years) %>%                           # o criterio de falhas
-      pull(gauge_code)                                               # extrair so codigo estacoes            
+    # valid_gauges <- data %>%
+    #   mutate(year = lubridate::year(datetime)) %>%
+    #   group_by(gauge_code, year) %>%
+    #   summarise(fail_prct = sum(is.na(rain_mm))/n() * 100, .groups = "drop") %>% # calcular % falhas
+    #   group_by(gauge_code) %>%
+    #   summarise(valid_years = sum(fail_prct <= na_accept * 100)) %>% # nro anos que atende
+    #   filter(valid_years >= min_years) %>%                           # o criterio de falhas
+    #   pull(gauge_code)                                               # extrair so codigo estacoes    
     
-    data <- data[data$gauge_code %in% valid_gauges,]
+    data <- data %>% 
+      mutate(year = lubridate::year(datetime)) %>% 
+      group_by(gauge_code, year) %>% 
+      mutate(na_prct = sum(is.na(rain_mm)/n())) %>% 
+      ungroup() %>% 
+      filter(if_else(year == 2024, TRUE, na_prct <= na_accept)) %>% 
+      group_by(gauge_code) %>% 
+      filter(n_distinct(year) >= min_years) %>% 
+      ungroup()
+    
     
   }
   

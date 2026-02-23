@@ -2,6 +2,7 @@
 # PACOTES -----------------------------------------------------------------
 
 rm(list = ls()); invisible(gc())
+set.seed(1234)
 
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(pacman,
@@ -22,14 +23,14 @@ pacman::p_load(pacman,
 
 # Regressão linear e análise invariância de escala
 # source("scripts/funcoes/fun_scale_invariance.R")
-source("scripts/funcoes/fun_scale_invariance_more_moments.R")
-source("scripts/funcoes/fun_scale_invariance_boot.R")
+source("scripts/funcoes/fun_scale_invariance.R")
+source("scripts/funcoes/fun_scale_block_boot.R")
+source("scripts/funcoes/fun_scale_strat_boot.R")
 
 # LER DADOS ---------------------------------------------------------------
 
 # Dados subdiários
 df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
-df_imax <- df_imax[df_imax$gauge_code != "SBPA",] # estação dando problema
 
 
 # APLICAR FUNÇÃO 'fun_scale_invariance' -----------------------------------
@@ -104,24 +105,46 @@ scale.coefficient <- lapply(X = scale.invariance, FUN = function(interval){
 # DIFERENÇA ESTATÍSTICA ---------------------------------------------------
 
 # Intervalos normais aproximados
-scale.coefficient$ci_lower <- scale.coefficient$scale - 1.96*scale.coefficient$se
-scale.coefficient$ci_upper <- scale.coefficient$scale + 1.96*scale.coefficient$se
-
 arrow::write_parquet(x = scale.coefficient, sink = "base/gerados/df_scale_coefficient.parquet")
 df_scale <- arrow::read_parquet(file = "base/gerados/df_scale_coefficient.parquet")
 
 
 # BOOTSTRAP ---------------------------------------------------------------
 
-# Calcular intervalos de confiança usando bootstrap
-R.boot <- 10
-n.cores <- parallelly::availableCores(omit = 1)
-cl <- parallelly::makeClusterPSOCK(n.cores)
+# Calcular intervalos de confiança locais
+R.boot <- 1e4
+disagg.list <- list(NULL,
+                    c(5, 10, 15, 20, 25, 30)/60,
+                    c(1, 6, 8, 10, 12),
+                    NULL)
 
-scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
+scale.boot.ci <- lapply(X = seq_along(duration.intervals), FUN = function(i){
+  
+  fun_scale_strat_boot(df.imax = df_imax,
+                       na.accept = na.accept,
+                       min.years = min.years,
+                       which.moment = 1,
+                       which.duration = duration.intervals[[i]],
+                       disagg.seq = disagg.list[[i]],
+                       min.duration = 3,
+                       R.boot = R.boot)
+  
+}); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
+
+df.scale.boot.ci <- bind_rows(scale.boot.ci)
+
+arrow::write_parquet(df.scale.boot.ci, sink = "base/gerados/df_scale_strat_boot.parquet")
+# df_scale_boot_ci <- arrow::read_parquet(file = "base/gerados/df_scale_boot_ci.parquet")
+
+# REFAZER, não usar essa estratégia mais, CONFERIR 'TAREFAS'
+# Calcular intervalos de confiança regionais
+regional.imax <- df_imax %>% mutate(gauge_code = "Regional") # criar uma nova "estação"
+
+# REFAZER!!!
+scale.boot.ci.regional <- lapply(X = duration.intervals, FUN = function(interval){
   
   message("Estimando intervalo de ", interval[1], " a ", interval[2], " h...")
-  df.scale.boot <- fun_scale_invariance_boot(df.imax = df_imax,
+  df.scale.boot <- fun_scale_invariance_boot(df.imax = regional.imax,
                                              na.accept = na.accept,
                                              min.years = min.years,
                                              which.moment = 1:3,
@@ -130,12 +153,23 @@ scale.boot.ci <- lapply(X = duration.intervals, FUN = function(interval){
                                              R.boot = R.boot,
                                              cl = cl)
   
-}); parallelly::autoStopCluster(cl); names(scale.boot.ci) <- c("all", "subhourly", "hourly", "daily")
+  invisible(gc())
+  
+  return(df.scale.boot)
+  
+}); parallelly::autoStopCluster(cl); names(scale.boot.ci.regional) <- c("all", "subhourly", "hourly", "daily")
 
-df.scale.boot.ci <- bind_rows(scale.boot.ci)
+df.scale.boot.ci.regional <- bind_rows(scale.boot.ci.regional)
 
-# arrow::write_parquet(df.scale.boot, sink = "base/gerados/df_scale_boot_hour.parquet")
-# df_scale_boot <- arrow::read_parquet(file = "base/gerados/df_scale_boot_hour.parquet")
+# É importante ressaltar aqui que a coluna n_years é referente ao número de anos
+# distintos de cada estação (calculado com a função 'n_distinct').
+# No contexto da análise dos ICs das estimativas regionais, como estamos usando
+# um tbl_df que todas as estações se tornaram uma única estação 'Regional' isso
+# perde a relevância, já que indica somente que há um número X de anos diferentes
+# ao longo de todas as estações e não o número de observações que foram usadas
+
+arrow::write_parquet(x = df.scale.boot.ci.regional, sink = "base/gerados/df_scale_regional_boot_ci.parquet")
+# df.scale.boot.ci.regional <- arrow::read_parquet(file = "base/gerados/df_scale_regional_boot_ci.parquet")
 
 
 # VISUALIZAÇÃO INTERVALOS DE CONFIANÇA ------------------------------------
@@ -148,10 +182,18 @@ colors <- c("Todas" = "black", "Sub-horários" = "orange", "Horários" = "steelb
 
 # Intervalos normais aproximados
 # Todas as durações no mesmo gráfico
+order <- df_scale %>% 
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names)) %>% 
+  filter(d == "Horários") %>% 
+  arrange(scale) %>% 
+  pull(gauge_code) %>% 
+  unique()
+
 df_scale %>% 
   mutate(d = recode(d, !!!groups),
          d = factor(d, levels = group.names),
-         gauge_code = forcats::fct_reorder(gauge_code, n_years)) %>% 
+         gauge_code = factor(gauge_code, levels = order)) %>% 
   group_by(gauge_code, d) %>% 
   summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
   ggplot(aes(x = gauge_code, y = scale, ymin = ci_lower, ymax = ci_upper, color = d)) +
@@ -169,6 +211,7 @@ df_scale %>%
         legend.title = element_blank(),
         legend.background = element_rect(color = "black", linewidth = 0.25),
         axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        # axis.text.x = ggtext::element_markdown(angle = 90, hjust = 1, vjust = 0.5),
         plot.background = element_rect(color = "white"),
         panel.border = element_rect(color = "black", fill = NA),
         text = element_text(family = "serif", color = "black", size = 10))
@@ -177,19 +220,59 @@ ggsave(filename = "figuras/scale_invariance/scale_confidence_interval.png",
        width = 16, height = 12, units = "cm", bg = "white")
 
 # Com resultados do bootstrap
-df_scale_boot %>% 
-  group_by(gauge_code) %>% 
-  summarise_all(~mean(.x, na.rm = TRUE)) %>% 
-  ggplot(aes(x = gauge_code, y = scale, ymin = ci_lower, ymax = ci_upper)) +
+df.scale.boot.ci %>% 
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names),
+         gauge_code = forcats::fct_reorder(gauge_code, n_year)) %>% 
+  group_by(gauge_code, d) %>% 
+  summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
+  ggplot(aes(x = gauge_code, y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)) +
   geom_errorbar(width = 0, linewidth = 0.8, alpha = 0.6, position = position_dodge(width = 0.5)) +
   geom_point(pch = 16, size = 1.5, alpha = 0.9, position = position_dodge(width = 0.5)) +
   scale_y_continuous(breaks = seq(0.3, 0.95, 0.1)) +
+  scale_color_manual(values = colors) +
   labs(x = "", y = "H") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+  theme(legend.position = c(0.98,0.02),
+        legend.justification = c(1,0),
+        legend.key.spacing.y = unit(-2, "mm"),
+        legend.title = element_blank(),
+        legend.background = element_rect(color = "black", linewidth = 0.25),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
         plot.background = element_rect(color = "white"),
         panel.border = element_rect(color = "black", fill = NA),
         text = element_text(family = "serif", color = "black", size = 10))
+
+ggsave(filename = "figuras/scale_invariance/scale_confidence_interval_bootstrap.png",
+       width = 16, height = 12, units = "cm", bg = "white")
+
+# Verificar sobreposição dos intervalos de confiança dos expoentes
+# de escala regionais
+df.scale.boot.ci.regional %>%
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names)) %>% 
+  group_by(gauge_code, d) %>% 
+  summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
+  # ggplot(aes(x = d, y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)) +
+  ggplot(aes(x = gauge_code, y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)) +
+  # geom_errorbar(width = 0, linewidth = 2, alpha = 0.5) +
+  geom_errorbar(width = 0, linewidth = 2, alpha = 0.5, position = position_dodge(width = 0.5)) +
+  # geom_point(shape = 16, size = 3, alpha = 0.9) +
+  geom_point(shape = 16, size = 3, alpha = 0.9, position = position_dodge(width = 0.5)) +
+  scale_color_manual(values = colors) +
+  coord_flip() +
+  labs(x = "", y = "H", color = "Durações") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.title.position = "top",
+        axis.text.y = element_blank(),
+        legend.title = element_text(hjust = 0.5),
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 10))
+
+ggsave(filename = "figuras/scale_invariance/scale_confidence_interval_regional.png",
+       width = 16, height = 10, units = "cm", bg = "white")
 
 # Comparar dois ICs gerados
 bind_rows(

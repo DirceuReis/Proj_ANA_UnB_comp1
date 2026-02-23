@@ -191,12 +191,16 @@ window.Quarto = {
  <span class="dropdown-text">Leitura das séries de precipitação subdiária</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_imax_subdiario.qmd vss">
+    <a class="dropdown-item" href="./script_imax_subdiario.html">
  <span class="dropdown-text">Geração das intensidades máximas anuais</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./script_descricao_subdiario.html">
  <span class="dropdown-text">Análise e descrição dos subdiários</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./resultados_preliminares.html">
+ <span class="dropdown-text">Modelo GEV multisite com pooling parcial</span></a>
   </li>  
     </ul>
   </li>
@@ -266,7 +270,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#coeficientes-de-desagregação" id="toc-coeficientes-de-desagregação" class="nav-link" data-scroll-target="#coeficientes-de-desagregação">Coeficientes de desagregação</a>
   <ul class="collapse">
-  <li><a href="#entendendo-o-coeficiente-de-escala" id="toc-entendendo-o-coeficiente-de-escala" class="nav-link" data-scroll-target="#entendendo-o-coeficiente-de-escala">Entendendo o coeficiente de escala</a></li>
+  <li><a href="#entendendo-o-expoente-de-escala" id="toc-entendendo-o-expoente-de-escala" class="nav-link" data-scroll-target="#entendendo-o-expoente-de-escala">Entendendo o expoente de escala</a></li>
   <li><a href="#brasil" id="toc-brasil" class="nav-link" data-scroll-target="#brasil">Brasil</a></li>
   </ul></li>
   <li><a href="#aplicação-efeito-de-coeficientes-de-desagregação-diferentes" id="toc-aplicação-efeito-de-coeficientes-de-desagregação-diferentes" class="nav-link" data-scroll-target="#aplicação-efeito-de-coeficientes-de-desagregação-diferentes">Aplicação: efeito de coeficientes de desagregação diferentes</a></li>
@@ -289,7 +293,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">23/01/2026 14:46:16</p>
+      <p class="date">03/02/2026 09:42:59</p>
     </div>
   </div>
   
@@ -926,17 +930,13 @@ Figura&nbsp;6: Comparação dos intervalos de confiança aproximados das estimat
 </section>
 <section id="coeficientes-de-desagregação" class="level2">
 <h2 class="anchored" data-anchor-id="coeficientes-de-desagregação">Coeficientes de desagregação</h2>
-<section id="entendendo-o-coeficiente-de-escala" class="level3">
-<h3 class="anchored" data-anchor-id="entendendo-o-coeficiente-de-escala">Entendendo o coeficiente de escala</h3>
-<p>É fundamental o entendimento do efeito prático dos diferentes valores de <span class="math inline">\(H\)</span>. Coeficientes menores implicam que a inclinação da reta ajustada às diferentes durações será menor, acarretando em intensidades menores do que aquelas que seriam obtidas empregando um coeficiente de escala maior…</p>
+<section id="entendendo-o-expoente-de-escala" class="level3">
+<h3 class="anchored" data-anchor-id="entendendo-o-expoente-de-escala">Entendendo o expoente de escala</h3>
+<p>É fundamental o entendimento do efeito prático dos diferentes valores de <span class="math inline">\(H\)</span>. Expoentes menores implicam que a inclinação da reta ajustada às diferentes durações será menor, acarretando em intensidades menores do que aquelas que seriam obtidas empregando um expoente de escala maior…</p>
 </section>
 <section id="brasil" class="level3">
 <h3 class="anchored" data-anchor-id="brasil">Brasil</h3>
 <p>Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>, pg. 17)</span>, apresentados abaixo na <a href="#tbl-coef-cetesb" class="quarto-xref">Tabela&nbsp;2</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados gerados em 'script_duracao_subdiario.R'</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="cell">
 <div id="tbl-coef-cetesb" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -949,7 +949,7 @@ Tabela&nbsp;2: Coeficientes de desagregação sugeridos pela CETESB (1986) elabo
 <thead>
 <tr class="header">
 <th style="text-align: center;">Relação entre alturas pluviométricas</th>
-<th style="text-align: center;">Coeficiente (CETESB)</th>
+<th style="text-align: center;">Coeficiente CETESB</th>
 </tr>
 </thead>
 <tbody>
@@ -1025,7 +1025,29 @@ C_P = \frac{I_d}{I_D} \times \left( \frac{d}{D} \right) = C_I \times \left( \fra
 <p><span id="eq-coef-desagregacao"><span class="math display">\[
 C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 \tag{3}\]</span></span></p>
-<p>Dessa forma, podemos comparar os coeficientes estimados pelo DNOS <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>)</span> com os calculados através dos fatores de escala <span class="math inline">\(H\)</span> regionais da hipótese de invariância.</p>
+<p>Dessa forma, podemos comparar os coeficientes estimados pelo DNOS <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>)</span> com os calculados através dos fatores de escala <span class="math inline">\(H\)</span> regionais da hipótese de invariância. Uma vez que a aplicação principal de coeficientes como este é para desagregar quantis de chuva estimados a partir de séries de precipitações máximas anuais diárias em durações subdiárias, adotou-se como duração base a duração de 24 h. A seguir, serão calculados três conjuntos de coeficientes de desagregação:</p>
+<ol type="1">
+<li>Coeficiente CETESB: coeficiente de desagregação de <span class="citation" data-cites="cetesb1986">CETESB (<a href="#ref-cetesb1986" role="doc-biblioref">1986</a>)</span> reescrito para a base comum de 24 h, calculados em <code>df.cetesb$coef_mod</code>;</li>
+<li>Coeficiente Regional (Expoentes Específicos): coeficientes de desagregação estimados a partir de um expoente de escala específico para cada duração. Para o caso das durações sub-horárias, a desagregação em intensidades de 24 h para <span class="math inline">\(d &lt;\)</span> 1 h levará em conta tanto o expoente de escala referente às durações sub-horárias como aquele referente às durações horárias através da multiplicação entre <span class="math inline">\(C_P^{(1 h/24 h)}\)</span>, utilizando <span class="math inline">\(H_{1\ h&lt; d&lt;24\ h}\)</span>, pelo <span class="math inline">\(C_P^{(&lt; 1h/1 h)}\)</span>, este utilizando <span class="math inline">\(H_{d &lt; 1\ h}\)</span>, calculados em <code>df.cetesb$coef_regional_multi</code>;</li>
+<li>Coeficiente Regional (Expoente Geral): coeficientes de desagregação estimados a partir do expoente de escala estimado para todas as durações consideradas, isto é, um único valor de <span class="math inline">\(H\)</span> ajustado para durações desde as sub-horárias até as horárias, calculados em <code>df.cetesb$coef_regional_all</code>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir novo intervalo de durações</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>which.duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">24</span>) <span class="co"># de 10 min a 24 h</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>df.scale.hour <span class="ot">&lt;-</span> <span class="fu">fun_scale_invariance</span>(<span class="at">df.imax =</span> df_imax,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">na.accept =</span> na.accept,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">min.years =</span> min.years,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">which.moment =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">which.duration =</span> which.duration,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">min.duration =</span> <span class="dv">3</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>regional.scale.hour <span class="ot">&lt;-</span> df.scale.hour<span class="sc">$</span>scale.coefficient <span class="sc">%&gt;%</span> </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_if</span>(is.numeric, <span class="sc">~</span><span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(scale)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alterar nomes</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(df_scale<span class="sc">$</span>d)</span>
@@ -1046,33 +1068,38 @@ C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 <span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Passar todos p/ base de 24 h e calcular coeficientes</span></span>
 <span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>relacao_mod <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="cn">NA</span>) <span class="co"># nova coluna p/ nome das relações</span></span>
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>coef_mod <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)      <span class="co"># nova coluna p/ valor coeficientes de desagregação</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df.cetesb)){</span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">&lt;=</span> <span class="dv">1</span>){</span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i]<span class="sc">*</span><span class="dv">60</span>, <span class="st">" min/24 h"</span>)</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">6</span>] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">2</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H sub-horários</span></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">==</span> <span class="dv">1</span>){</span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>      df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>coef_regional_all <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>df.cetesb<span class="sc">$</span>coef_regional_multi <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular primeiro os horários e depois os sub-horários</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="co"># pq já vai ter o resultado do 1 h/24 h p/ multiplicar os sub-horários</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df.cetesb)){</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Coeficiente de desagregação usando só expoente de escala horário</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(df.cetesb<span class="sc">$</span>d2[i] <span class="sc">&gt;</span> <span class="dv">1</span>){</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i], <span class="st">" h/24 h"</span>)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i]</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>(<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">3</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>) <span class="co"># H horários</span></span>
 <span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i], <span class="st">" h/24 h"</span>)</span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i]</span>
-<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">3</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>} <span class="co"># H horários</span></span>
-<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular coeficiente de desagregação c/ H regional</span></span>
-<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>  df.cetesb<span class="sc">$</span>coef_regional_all[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>{<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">1</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>}</span>
-<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Coeficiente de desagregação usando expoente horário * sub-horário</span></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>relacao_mod[i] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df.cetesb<span class="sc">$</span>d1[i]<span class="sc">*</span><span class="dv">60</span>, <span class="st">" min/24 h"</span>)</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_mod[i] <span class="ot">&lt;-</span> df.cetesb<span class="sc">$</span>coef_pdmax[i] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">6</span>] <span class="sc">*</span> df.cetesb<span class="sc">$</span>coef_pdmax[<span class="dv">7</span>]</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>    df.cetesb<span class="sc">$</span>coef_regional_multi[i] <span class="ot">&lt;-</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>      (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">1</span>)<span class="sc">^</span>(<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">2</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="co"># H sub-horários</span></span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>      (<span class="dv">1</span><span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>(<span class="sc">-</span>regional[regional<span class="sc">$</span>d <span class="sc">==</span> group.names[<span class="dv">3</span>],][[<span class="st">"scale"</span>]] <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Coeficiente de desagregação c/ expoente de escala comum aos sub-horários e horários</span></span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>  df.cetesb<span class="sc">$</span>coef_regional_all[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>(<span class="sc">-</span>regional.scale.hour <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A <a href="#tbl-comparacao-coef" class="quarto-xref">Tabela&nbsp;3</a> abaixo apresenta os coeficientes calculados. Dois conjuntos de coeficientes de desagregação foram gerados a partir da hipótese de invariância de escala: 1) utilizando fatores separados para as durações sub-horárias (<span class="math inline">\(H\)</span> igual a 0.53) e horárias (<span class="math inline">\(H\)</span> igual a 0.671); e 2) utilizando um único fator estimado utilizando todas as durações (<span class="math inline">\(H\)</span> igual a 0.684).</p>
+<p>A <a href="#tbl-comparacao-coef" class="quarto-xref">Tabela&nbsp;3</a> abaixo apresenta os coeficientes calculados.</p>
 <div class="cell">
 <div id="tbl-comparacao-coef" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1083,84 +1110,84 @@ Tabela&nbsp;3: Comparação entre coeficientes sugeridos pela CETESB e coeficien
 <div class="cell-output-display">
 <table class="do-not-create-environment cell table table-sm table-striped small">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 15%">
-<col style="width: 30%">
 <col style="width: 26%">
+<col style="width: 13%">
+<col style="width: 27%">
+<col style="width: 32%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: center;">Relação entre alturas pluviométricas</th>
-<th style="text-align: center;">Coeficiente (CETESB)</th>
-<th style="text-align: center;">Coeficiente Regional (Múltiplos Fatores)</th>
-<th style="text-align: center;">Coeficiente Regional (Único Fator)</th>
+<th style="text-align: center;">Coeficiente CETESB</th>
+<th style="text-align: center;">Coeficiente Regional (Expoente Geral)</th>
+<th style="text-align: center;">Coeficiente Regional (Expoentes Específicos)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">5 min/24 h</td>
 <td style="text-align: center;">0.11</td>
-<td style="text-align: center;">0.07</td>
-<td style="text-align: center;">0.17</td>
+<td style="text-align: center;">0.15</td>
+<td style="text-align: center;">0.11</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">10 min/24 h</td>
 <td style="text-align: center;">0.17</td>
-<td style="text-align: center;">0.10</td>
-<td style="text-align: center;">0.21</td>
+<td style="text-align: center;">0.19</td>
+<td style="text-align: center;">0.15</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">15 min/24 h</td>
 <td style="text-align: center;">0.22</td>
-<td style="text-align: center;">0.12</td>
-<td style="text-align: center;">0.24</td>
+<td style="text-align: center;">0.22</td>
+<td style="text-align: center;">0.18</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">20 min/24 h</td>
 <td style="text-align: center;">0.25</td>
-<td style="text-align: center;">0.13</td>
-<td style="text-align: center;">0.26</td>
+<td style="text-align: center;">0.24</td>
+<td style="text-align: center;">0.21</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">25 min/24 h</td>
 <td style="text-align: center;">0.28</td>
-<td style="text-align: center;">0.15</td>
-<td style="text-align: center;">0.28</td>
+<td style="text-align: center;">0.26</td>
+<td style="text-align: center;">0.23</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">30 min/24 h</td>
-<td style="text-align: center;">0.31</td>
-<td style="text-align: center;">0.16</td>
-<td style="text-align: center;">0.29</td>
+<td style="text-align: center;">0.23</td>
+<td style="text-align: center;">0.28</td>
+<td style="text-align: center;">0.25</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">1 h/24 h</td>
 <td style="text-align: center;">0.42</td>
 <td style="text-align: center;">0.35</td>
-<td style="text-align: center;">0.37</td>
+<td style="text-align: center;">0.35</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">6 h/24 h</td>
 <td style="text-align: center;">0.72</td>
 <td style="text-align: center;">0.63</td>
-<td style="text-align: center;">0.64</td>
+<td style="text-align: center;">0.63</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">8 h/24 h</td>
 <td style="text-align: center;">0.78</td>
+<td style="text-align: center;">0.69</td>
 <td style="text-align: center;">0.70</td>
-<td style="text-align: center;">0.71</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">10 h/24 h</td>
 <td style="text-align: center;">0.82</td>
 <td style="text-align: center;">0.75</td>
-<td style="text-align: center;">0.76</td>
+<td style="text-align: center;">0.75</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">12 h/24 h</td>
 <td style="text-align: center;">0.85</td>
-<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">0.79</td>
 <td style="text-align: center;">0.80</td>
 </tr>
 </tbody>

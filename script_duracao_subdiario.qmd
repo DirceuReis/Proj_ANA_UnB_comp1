@@ -3,7 +3,7 @@ title: "Análise da estrutura temporal das intensidades máximas anuais"
 date: last-modified
 date-format: "DD/MM/YYYY HH:mm:ss"
 bibliography: referencias/ref_desagregacao.bib
-monofontoptions: Scale = 0.85
+monofontoptions: Scale = 0.7
 ---
 
 ```{r pacotes}
@@ -608,7 +608,6 @@ n.gauge.subhour <- df_scale %>%
   pull(n)
 ```
 
-
 Nosso conjunto de dados possui estações que operam a cada 10, 15, 30 e 60 minutos. Estações de 10 minutos tiveram suas lâminas agregadas em 20, 30, 40, 50, 60, totalizando 6 durações diferentes; estações de 15 minutos em 30, 45 e 60, totalizando 4 durações. Para estações de 30 minutos, somente duas durações estão disponíveis (30 e 60) e para as de 60, somente esta. Para o ajuste do modelo de regressão, o parâmetro `min.duration` estebelece o número mínimo de durações que uma estação deve ter para que esse ajuste sequer tenha sentido, no caso adotamos `min.duration` igual a `r min.duration`, o que removeria da análise as estações de 30 e 60 minutos. Portanto, temos disponível para a análise no máximo 6 durações para o ajuste – estas não muito longas – e em número menor – somente `r n.gauge.subhour` estações.
 
 Esses são fatores que nos levariam a questionar inicialmente a validade dessa diferença. Até que ponto a variabilidade amostral influencia o valor do coeficiente ajustado e a incerteza em torno dessa estimativa?
@@ -686,19 +685,13 @@ Do conjunto da @fig-ic-aproximado, percebe-se que há muitas estações em que o
 
 ## Coeficientes de desagregação
 
-### Entendendo o coeficiente de escala
+### Entendendo o expoente de escala
 
-É fundamental o entendimento do efeito prático dos diferentes valores de $H$. Coeficientes menores implicam que a inclinação da reta ajustada às diferentes durações será menor, acarretando em intensidades menores do que aquelas que seriam obtidas empregando um coeficiente de escala maior...
+É fundamental o entendimento do efeito prático dos diferentes valores de $H$. Expoentes menores implicam que a inclinação da reta ajustada às diferentes durações será menor, acarretando em intensidades menores do que aquelas que seriam obtidas empregando um expoente de escala maior...
 
 ### Brasil
 
 Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações [@cetesb1986, pg. 17], apresentados abaixo na @tbl-coef-cetesb.
-
-```{r ler dados df_scale}
-
-# Dados gerados em 'script_duracao_subdiario.R'
-df_scale <- arrow::read_parquet("base/gerados/df_scale_coefficient.parquet")
-```
 
 ```{r tabela coeficientes cetesb}
 #| echo: false
@@ -712,7 +705,7 @@ df.cetesb <- data.frame(relacao = c("5 min/30 min", "10 min/30 min", "15 min/30 
                         d2 = c(rep(0.5, 5), 1, rep(24, 5)),
                         coef_pdmax = c(0.34, 0.54, 0.7, 0.81, 0.91, 0.74, 0.42, 0.72, 0.78, 0.82, 0.85))
 
-col.names <- c("Relação entre alturas pluviométricas", "Coeficiente (CETESB)")
+col.names <- c("Relação entre alturas pluviométricas", "Coeficiente CETESB")
 knitr::kable(x = df.cetesb[-c(2,3)], digits = 2, align = "c", col.names = col.names)
 
 ```
@@ -748,7 +741,30 @@ $$
 C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 $$ {#eq-coef-desagregacao}
 
-Dessa forma, podemos comparar os coeficientes estimados pelo DNOS [@cetesb1986] com os calculados através dos fatores de escala $H$ regionais da hipótese de invariância.
+Dessa forma, podemos comparar os coeficientes estimados pelo DNOS [@cetesb1986] com os calculados através dos fatores de escala $H$ regionais da hipótese de invariância. Uma vez que a aplicação principal de coeficientes como este é para desagregar quantis de chuva estimados a partir de séries de precipitações máximas anuais diárias em durações subdiárias, adotou-se como duração base a duração de 24 h. A seguir, serão calculados três conjuntos de coeficientes de desagregação:
+
+1.  Coeficiente CETESB: coeficiente de desagregação de @cetesb1986 reescrito para a base comum de 24 h, calculados em `df.cetesb$coef_mod`;
+2.  Coeficiente Regional (Expoentes Específicos): coeficientes de desagregação estimados a partir de um expoente de escala específico para cada duração. Para o caso das durações sub-horárias, a desagregação em intensidades de 24 h para $d <$ 1 h levará em conta tanto o expoente de escala referente às durações sub-horárias como aquele referente às durações horárias através da multiplicação entre $C_P^{(1 h/24 h)}$, utilizando $H_{1\ h< d<24\ h}$, pelo $C_P^{(< 1h/1 h)}$, este utilizando $H_{d < 1\ h}$, calculados em `df.cetesb$coef_regional_multi`;
+3.  Coeficiente Regional (Expoente Geral): coeficientes de desagregação estimados a partir do expoente de escala estimado para todas as durações consideradas, isto é, um único valor de $H$ ajustado para durações desde as sub-horárias até as horárias, calculados em `df.cetesb$coef_regional_all`.
+
+```{r expoente de escala sub-horário--horário}
+
+# Definir novo intervalo de durações
+which.duration <- c(10/60, 24) # de 10 min a 24 h
+
+df.scale.hour <- fun_scale_invariance(df.imax = df_imax,
+                                      na.accept = na.accept,
+                                      min.years = min.years,
+                                      which.moment = 1:3,
+                                      which.duration = which.duration,
+                                      min.duration = 3)
+
+regional.scale.hour <- df.scale.hour$scale.coefficient %>% 
+  filter(gauge_code == "Regional") %>% 
+  group_by(gauge_code) %>% 
+  summarise_if(is.numeric, ~mean(.x, na.rm = TRUE)) %>% 
+  pull(scale)
+```
 
 ```{r calculo comparação cetesb coeficientes desagregação}
 
@@ -771,46 +787,52 @@ regional <- df.scale.mean %>%
 # Passar todos p/ base de 24 h e calcular coeficientes
 df.cetesb$relacao_mod <- as.character(NA) # nova coluna p/ nome das relações
 df.cetesb$coef_mod <- as.numeric(NA)      # nova coluna p/ valor coeficientes de desagregação
+df.cetesb$coef_regional_all <- as.numeric(NA)
+df.cetesb$coef_regional_multi <- as.numeric(NA)
+
+# Calcular primeiro os horários e depois os sub-horários
+# pq já vai ter o resultado do 1 h/24 h p/ multiplicar os sub-horários
 
 for(i in 1:nrow(df.cetesb)){
   
-  if(df.cetesb$d2[i] <= 1){
-    
-    df.cetesb$relacao_mod[i] <- paste0(df.cetesb$d1[i]*60, " min/24 h")
-    df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i] * df.cetesb$coef_pdmax[6] * df.cetesb$coef_pdmax[7]
-    df.cetesb$coef_regional_multi[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[2],][["scale"]] + 1} # H sub-horários
-    
-    if(df.cetesb$d2[i] == 1){
-      df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i] * df.cetesb$coef_pdmax[7]
-    }
-    
-  } else{
+  # Coeficiente de desagregação usando só expoente de escala horário
+  if(df.cetesb$d2[i] > 1){
     
     df.cetesb$relacao_mod[i] <- paste0(df.cetesb$d1[i], " h/24 h")
     df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i]
-    df.cetesb$coef_regional_multi[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[3],][["scale"]] + 1} # H horários
+    df.cetesb$coef_regional_multi[i] <- (df.cetesb$d1[i]/24)^(-regional[regional$d == group.names[3],][["scale"]] + 1) # H horários
+    
+  } else{
+    
+    # Coeficiente de desagregação usando expoente horário * sub-horário
+    df.cetesb$relacao_mod[i] <- paste0(df.cetesb$d1[i]*60, " min/24 h")
+    df.cetesb$coef_mod[i] <- df.cetesb$coef_pdmax[i] * df.cetesb$coef_pdmax[6] * df.cetesb$coef_pdmax[7]
+    df.cetesb$coef_regional_multi[i] <-
+      (df.cetesb$d1[i]/1)^(-regional[regional$d == group.names[2],][["scale"]] + 1) * # H sub-horários
+      (1/24)^(-regional[regional$d == group.names[3],][["scale"]] + 1)
     
   }
   
-  # Calcular coeficiente de desagregação c/ H regional
-  df.cetesb$coef_regional_all[i] <- (df.cetesb$d1[i]/24)^{-regional[regional$d == group.names[1],][["scale"]] + 1}
+  # Coeficiente de desagregação c/ expoente de escala comum aos sub-horários e horários
+  df.cetesb$coef_regional_all[i] <- (df.cetesb$d1[i]/24)^(-regional.scale.hour + 1)
   
 }
 
 ```
 
-A @tbl-comparacao-coef abaixo apresenta os coeficientes calculados. Dois conjuntos de coeficientes de desagregação foram gerados a partir da hipótese de invariância de escala: 1) utilizando fatores separados para as durações sub-horárias ($H$ igual a `r round(regional[regional$d == "Sub-horários",][["scale"]], 3)`) e horárias ($H$ igual a `r round(regional[regional$d == "Horários",][["scale"]], 3)`); e 2) utilizando um único fator estimado utilizando todas as durações ($H$ igual a `r round(regional[regional$d == "Todas",][["scale"]], 3)`).
+A @tbl-comparacao-coef abaixo apresenta os coeficientes calculados.
 
 ```{r tabela comparacao}
 #| echo: false
 #| label: tbl-comparacao-coef
 #| tbl-cap: Comparação entre coeficientes sugeridos pela CETESB e coeficientes de desagregação calculados a partir do fator de escala do modelo de invariância de escala $H$ regional com um modelo único para todas as durações e um fator de escala para durações sub-horárias e horárias.
 
-col.names <- c(col.names, "Coeficiente Regional (Múltiplos Fatores)", "Coeficiente Regional (Único Fator)")
+col.names <- c(col.names, "Coeficiente Regional (Expoente Geral)", "Coeficiente Regional (Expoentes Específicos)")
 
 df.cetesb %>% 
   select(-c("relacao", "d1", "d2", "coef_pdmax")) %>% 
   knitr::kable(digits = 2, align = "c", col.names = col.names)
+
 ```
 
 ## Aplicação: efeito de coeficientes de desagregação diferentes
