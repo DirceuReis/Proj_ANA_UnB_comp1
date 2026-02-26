@@ -53,7 +53,7 @@ for(i in 1:nrow(df.cetesb)){
 colors <- c("Todas" = "black",
             "Sub-horários" = "orange",
             "Horários" = "steelblue2",
-            "Diários" =  "green",
+            "Diários" =  "green3",
             "CETESB" = "midnightblue",
             "IC<sub>R</sub> 95%" = "grey")
 
@@ -63,7 +63,7 @@ filter_coef <- c(1, 6, 12)
 order <- df.scale.boot %>%
   filter(d == "Horários", which_variable == "scale") %>% 
   arrange(statistic) %>% 
-  pull(gauge_code) %>% 
+  pull(gauge_code) %>%
   unique()
 
 # Dados locais
@@ -84,8 +84,8 @@ df.regional <- df.scale.boot %>%
          d_target %in% filter_coef) %>% 
   select(-gauge_code) # evitar conflitos c/ ggplot
 
-ggplot(mapping = aes(color = d)) +
-  facet_wrap(~d_target, ncol = 1, labeller = as_labeller(function(x) paste0(x, "/24 h"))) +
+plot.coef.disag <- ggplot(mapping = aes(color = d)) +
+  facet_wrap(~d_target, ncol = 3, labeller = as_labeller(function(x) paste0(x, "/24 h"))) +
   geom_rect(data = df.regional, alpha = 0.4, color = "transparent", linewidth = 0,
             aes(xmin = 0, xmax = Inf, ymin = ci_lower, ymax = ci_upper, fill = "IC<sub>R</sub> 95%")) +
   geom_hline(data = df.cetesb %>% filter(d1 %in% filter_coef), linetype = "dashed",
@@ -100,14 +100,40 @@ ggplot(mapping = aes(color = d)) +
   theme(legend.position = "bottom",
         legend.text = ggtext::element_markdown(),
         axis.title.y = ggtext::element_markdown(),
-        axis.text.x = element_text(angle = 90, hjust = 1),
+        axis.text.x = element_text(angle = 90, hjust = 1, size = 7),
         plot.background = element_rect(color = "white"),
         panel.border = element_rect(color = "black", fill = NA))
 
-ggsave(filename = "figuras/scale_invariance/coef_desagregacao_block.png", bg = "white",
-       width = 16, height = 20, units = "cm", dpi = 300)
+# ggsave(filename = "figuras/scale_invariance/coef_desagregacao_block.png", bg = "white",
+#        width = 16, height = 20, units = "cm", dpi = 300)
   
 # Interessante que quanto mais distante da duração base 'D' (ex. 24 h), maiores ficam
 # os intervalos de confiança, oq pode ser reflexo da propagação de erro e que
 # próximo do final das durações alvo 'd' (ex. 1 h) o ajuste do modelo linear já
 # não seja tão bom
+
+
+# COMPARAÇÃO COEFICIENTES -------------------------------------------------
+
+# Comparação coeficientes locais vs. regionais
+df.local %>% 
+  select(gauge_code, d, d_target, statistic) %>% 
+  mutate(local = statistic,
+         regional = rep(df.regional$statistic, n_distinct(gauge_code)),
+         cetesb = rep(df.cetesb[df.cetesb$d_target %in% filter_coef,][["coef_cetesb"]], n_distinct(gauge_code)),
+         rel_dif__regional_local = (regional - local)/regional*100,
+         rel_dif__cetesb_regional = (cetesb - regional)/cetesb*100,
+         rel_dif__cetesb_local = (cetesb - local)/cetesb*100) %>% 
+  pivot_longer(cols = starts_with("rel_dif__"),
+               names_to = "rel_dif",
+               names_prefix = "rel_dif__",
+               values_to = "values") %>% 
+  mutate(rel_dif = factor(rel_dif, c("regional_local", "cetesb_local", "cetesb_regional"))) %>% 
+  ggplot(aes(x = rel_dif, y = values, color = rel_dif)) +
+  geom_jitter() +
+  stat_boxplot() +
+  theme(legend.position = "none")
+
+# Comparação coeficientes locais vs. CETESB
+
+# Comparação coeficientes regionais vs. CETESB

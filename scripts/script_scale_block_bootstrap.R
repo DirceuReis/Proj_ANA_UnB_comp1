@@ -22,7 +22,7 @@ source("scripts/funcoes/fun_scale_block_boot.R")
 # Argumentos
 na.accept <- 0.2
 min.years <- 8
-which.moment <- 1
+which.moment <- 1:3
 min.duration <- 3
 
 # Intervalos de duração
@@ -48,18 +48,37 @@ ls.scale.boot <- lapply(X = seq_along(duration.intervals), FUN = function(i){
   fun_scale_block_boot(df.imax = df.imax,
                        na.accept = na.accept,
                        min.years = min.years,
+                       offset = FALSE, # não estimar parâmetro de offset das durações (theta)
                        which.duration = duration.intervals[[i]],
                        which.moment = which.moment,
                        d.target = disag.list[[i]],
-                       min.duration =  3,
                        ci.boot.method = ci.boot.method,
                        R.boot = R.boot,
                        return.boot = TRUE)
   
 })
 
+# Rodar bootstrap por bloco + offset (theta)
+ls.scale.boot.offset <- lapply(X = seq_along(duration.intervals), FUN = function(i){
+  
+  fun_scale_block_boot(df.imax = df.imax,
+                       na.accept = na.accept,
+                       min.years = min.years,
+                       offset = TRUE, # estimar parâmetror de offset das durações (theta)
+                       which.moment = 1:3,
+                       which.duration = duration.intervals[[i]],
+                       d.target = disag.list[[i]],
+                       block.length = block.length,
+                       ci.boot.method = ci.boot.method,
+                       R.boot = R.boot, 
+                       return.boot = TRUE)
+  
+})
+
 df.scale.boot <- bind_rows(ls.scale.boot)
+df.scale.boot.offset <- bind_rows(ls.scale.boot.offset)
 arrow::write_parquet(x = df.scale.boot, sink = "base/gerados/scale_invariance/df_scale_block_boot.pqt")
+arrow::write_parquet(x = df.scale.boot.offset, sink = "base/gerados/scale_invariance/df_scale_block_boot_offset.pqt")
 
 
 # VISUALIZAÇÃO INTERVALOS DE CONFIANÇA ------------------------------------
