@@ -102,9 +102,9 @@ plot.coef.disag <- ggplot(mapping = aes(color = d)) +
         axis.title.y = ggtext::element_markdown(),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 7),
         plot.background = element_rect(color = "white"),
-        panel.border = element_rect(color = "black", fill = NA))
+        panel.border = element_rect(color = "black", fill = NA)); plot.coef.disag
 
-# ggsave(filename = "figuras/scale_invariance/coef_desagregacao_block.png", bg = "white",
+# ggsave(filename = "figuras/scale_invariance/workshop/coef_desagregacao_block.png", bg = "white",
 #        width = 16, height = 20, units = "cm", dpi = 300)
   
 # Interessante que quanto mais distante da duração base 'D' (ex. 24 h), maiores ficam
@@ -115,25 +115,76 @@ plot.coef.disag <- ggplot(mapping = aes(color = d)) +
 
 # COMPARAÇÃO COEFICIENTES -------------------------------------------------
 
+pacman::p_load(latex2exp)
+
+coef.colors <- c("Regional vs. Local" = "yellow2", "CETESB vs. Local" = "steelblue", "CETESB vs. Regional" = "midnightblue")
+coef.shapes <- c("Regional vs. Local" = NULL, "CETESB vs. Local" = NULL, "CETESB vs. Regional" = 21)
+
+# CETESB vs. REGIONAl
+
+
 # Comparação coeficientes locais vs. regionais
-df.local %>% 
+compare.coef <- df.local %>% 
   select(gauge_code, d, d_target, statistic) %>% 
   mutate(local = statistic,
          regional = rep(df.regional$statistic, n_distinct(gauge_code)),
          cetesb = rep(df.cetesb[df.cetesb$d_target %in% filter_coef,][["coef_cetesb"]], n_distinct(gauge_code)),
-         rel_dif__regional_local = (regional - local)/regional*100,
-         rel_dif__cetesb_regional = (cetesb - regional)/cetesb*100,
-         rel_dif__cetesb_local = (cetesb - local)/cetesb*100) %>% 
+         rel_dif__regional_local = (regional - local)/regional,
+         rel_dif__cetesb_regional = (cetesb - regional)/cetesb,
+         rel_dif__cetesb_local = (cetesb - local)/cetesb) %>% 
   pivot_longer(cols = starts_with("rel_dif__"),
                names_to = "rel_dif",
                names_prefix = "rel_dif__",
-               values_to = "values") %>% 
-  mutate(rel_dif = factor(rel_dif, c("regional_local", "cetesb_local", "cetesb_regional"))) %>% 
-  ggplot(aes(x = rel_dif, y = values, color = rel_dif)) +
-  geom_jitter() +
-  stat_boxplot() +
-  theme(legend.position = "none")
+               values_to = "values")
 
-# Comparação coeficientes locais vs. CETESB
+compare.coef %>%
+  mutate(rel_dif = factor(rel_dif,
+                          levels = c("regional_local", "cetesb_local"),
+                          labels = c("Regional vs. Local", "CETESB vs. Local")),
+         d_target = factor(d_target,
+                           labels = paste0(unique(d_target), "/24 h"))) %>% 
+  filter(rel_dif != "cetesb_regional") %>% 
+  ggplot(aes(x = d_target, y = values, fill = rel_dif)) +
+  geom_point(position = position_jitterdodge(),
+             alpha = 0.6, size = 1, color = "grey", show.legend = FALSE) +
+  stat_boxplot(geom = "errorbar", linewidth = 0.4) +
+  geom_boxplot(alpha = 1, linewidth = 0.4, outlier.shape = 4, outlier.size = 2,
+               whisker.linetype = "dotted", whisker.colour = "transparent") +
+  labs(x = "Desagregação", y = "C<sub>P</sub> DR", fill = "",
+       caption = latex2exp::TeX(input = r"($DR = \frac{C_P^{(R/C)} - C_P^{(L)}}{C_P^{(R/C)}} \times 100$)", italic = TRUE)) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = coef.colors) +
+  theme_minimal() +
+  theme(legend.position =  c(1,0),
+        legend.justification = c(1,0),
+        legend.text = element_text(size = 9),
+        legend.key.spacing.y = unit(-2, "mm"),
+        axis.title.y = ggtext::element_markdown(),        # formatação da legenda do eixo-y 
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 12))
 
-# Comparação coeficientes regionais vs. CETESB
+ggsave(filename = "figuras/scale_invariance/workshop/comparacao_coefs.png", bg = "white",
+       width = 16, height = 12, units = "cm", dpi = 300)
+
+# Extrair dados
+## Mediana por d_target
+compare.coef %>% 
+  filter(rel_dif != "cetesb_regional",
+         d_target == 1) %>% 
+  group_by(rel_dif, d_target) %>% 
+  summarise(min = min(values)*100,
+            q50 = median(values)*100,
+            max = max(values)*100)
+ 
+
+compare.coef %>% 
+  filter(rel_dif == "cetesb_local",
+         d_target == 1) %>% 
+  select(gauge_code, rel_dif, values) %>% 
+  # arrange(desc(values)) %>% 
+  arrange(values) %>% 
+  head(1)
+
+
+compare.coef[which.max(compare.coef$values),][["gauge_code"]]

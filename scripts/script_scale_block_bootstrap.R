@@ -1,5 +1,6 @@
 
 rm(list = ls()); invisible(gc())
+set.seed(1234)
 
 
 # PACOTES -----------------------------------------------------------------
@@ -67,13 +68,25 @@ ls.scale.boot.offset <- lapply(X = seq_along(duration.intervals), FUN = function
                        offset = TRUE, # estimar parâmetror de offset das durações (theta)
                        which.moment = 1:3,
                        which.duration = duration.intervals[[i]],
-                       d.target = disag.list[[i]],
+                       d.target = disag.list[[i]], 
                        block.length = block.length,
                        ci.boot.method = ci.boot.method,
                        R.boot = R.boot, 
                        return.boot = TRUE)
   
 })
+
+teste <-   fun_scale_block_boot(df.imax = df.imax,
+                                na.accept = na.accept,
+                                min.years = min.years,
+                                offset = TRUE, # estimar parâmetror de offset das durações (theta)
+                                which.moment = 1:3,
+                                which.duration = duration.intervals[[2]],
+                                d.target = disag.list[[2]],
+                                block.length = block.length,
+                                ci.boot.method = ci.boot.method,
+                                R.boot = R.boot, 
+                                return.boot = TRUE)
 
 df.scale.boot <- bind_rows(ls.scale.boot)
 df.scale.boot.offset <- bind_rows(ls.scale.boot.offset)
@@ -102,7 +115,6 @@ df.scale <- df.scale.boot %>%
   select(gauge_code, n_year, d, statistic, ci_lower, ci_upper)
 
 colors <- c("Todas" = "black", "Sub-horários" = "orange", "Horários" = "steelblue2", "Diários" =  "green3")
-
 
 # Ordem baseado nos scale's horários
 order <- df.scale.boot %>% 
@@ -171,3 +183,80 @@ ggplot(mapping = aes(y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)
 
 ggsave(filename = "figuras/scale_invariance/scale_confidence_interval_block_bootstrap_regional.png",
        width = 16, height = 12, units = "cm", dpi = 300, bg = "white")
+
+
+# VISUALIZAÇÃO C/ OFFSET --------------------------------------------------
+
+rm(list = ls()); invisible(gc())
+
+# Ler e organizar dados de expoente de escala e intervalos de confiança
+df.scale.boot.offset <- arrow::read_parquet("base/gerados/scale_invariance/df_scale_block_boot_offset.pqt")
+
+groups <- unique(df.scale.boot.offset$d)
+group.names <- c("Todas", "Sub-horários", "Horários", "Diários")
+groups <- setNames(object = group.names, nm = groups)
+
+df.scale.boot.offset <- df.scale.boot.offset %>% 
+  mutate(d = recode(d, !!!groups),
+         d = factor(d, levels = group.names))
+
+# Filtrar expoentes de escala 'scale'
+df.scale <- df.scale.boot.offset %>% 
+  filter(which_variable == "scale",
+         which_moment == 1,
+         d != "Todas") %>% 
+  select(gauge_code, n_year, d, statistic, ci_lower, ci_upper)
+
+# Filtrar parâmetros de posiçãõ 'offset'
+df.offset <- df.scale.boot.offset %>% 
+  filter(which_variable == "offset",
+         which_moment == 1,
+         d != "Todas") %>% 
+  select(gauge_code, n_year, d, statistic, ci_lower, ci_upper)
+
+colors <- c("Todas" = "black", "Sub-horários" = "orange", "Horários" = "steelblue2", "Diários" =  "green3")
+
+# Ordem baseada nos scale's horários
+order <- df.scale %>% 
+  filter(d == "Horários") %>% 
+  arrange(statistic) %>% 
+  pull(gauge_code) %>% 
+  unique()
+
+# Dados locais
+df.scale.local <- df.scale %>% 
+  mutate(gauge_code = factor(gauge_code, levels = order)) %>% 
+  filter(gauge_code != "Regional")
+
+df.offset.local <- df.offset %>% 
+  mutate(gauge_code = factor(gauge_code, levels = order)) %>% 
+  filter(gauge_code != "Regional")
+
+# Dados regionais
+df.scale.regional <- df.scale %>% 
+  filter(gauge_code == "Regional") %>% 
+  select(-gauge_code)
+
+df.offset.regional <- df.offset %>% 
+  filter(gauge_code == "Regional") %>% 
+  select(-gauge_code)
+
+dodge.width <- 1
+
+# Comparações locais
+ggplot(mapping = aes(y = statistic, ymin = ci_lower, ymax = ci_upper, color = d)) +
+  geom_errorbar(data = df.scale.local, aes(x = gauge_code), width = 0, linewidth = 0.8, alpha = 0.5, position = position_dodge(width = dodge.width)) +
+  geom_point(data = df.scale.local, aes(x = gauge_code), shape = 16, size = 1.5, alpha = 0.9, position = position_dodge(dodge.width)) +
+  labs(x = "", y = "H", color = "Faixa de duração") +
+  scale_color_manual(values = colors, aesthetics = c("color", "fill")) + 
+  theme_minimal() +
+  theme(legend.position = c(0.02,0.02),
+        legend.justification = c(0,0),
+        legend.key.spacing.y = unit(-2, "mm"),
+        legend.margin = margin(l = 2, r = 2, unit = "mm"),
+        legend.background = element_rect(color = "black", linewidth = 0.25),
+        legend.title = element_blank(),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.background = element_rect(color = "white"),
+        panel.border = element_rect(color = "black", fill = NA),
+        text = element_text(family = "serif", color = "black", size = 12))

@@ -34,7 +34,7 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
     install.packages("pacman")
     message("Instalando gerenciador de pacotes 'pacman'...")
   }
-  pacman::p_load(pacman, dplyr, tidyr, purrr, pbapply, broom, boot)
+  pacman::p_load(pacman, dplyr, tidyr, purrr, pbapply, boot, parallelly)
   
   # Mensagens
   message("\nCalculando intervalos de confiança bootstrap com `boot::tsboot()` e `broom::tidy.boot()`")
@@ -66,7 +66,7 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
   # O primeiro argumento da função é o 'parâmetro' a ser otimizado
   fun.obj <- function(offset, data.matrix, d, mom){
     
-    if(offset < 0 || offset > 10) return(1e9)
+    if(offset < 0 | offset > 10) return(1e9)
     
     # Calcular momentos
     moments <- apply(X = data.matrix, MARGIN = 2, function(imax) mean(imax^mom, na.rm = TRUE))
@@ -76,7 +76,8 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
     
     # Regressão linear
     fit <- lm(log(moments) ~ log(offset.durations))
-    scale <- -coef(fit)[2]/mom
+    scale <- -coef(fit)[[2]]/mom
+    
     var.model <- (sigma(fit)/mom)^2
     
     return(var.model)
@@ -139,7 +140,12 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
         optimal.offset <- optimal$minimum
         
         # Regressão linear
-        return(fun.lm(offset = optimal.offset, data.matrix = data.matrix, d = d, mom = mom))
+        res <- fun.lm(offset = optimal.offset, data.matrix = data.matrix, d = d, mom = mom)
+        
+        # Testar expoente de escala
+        if(res[[1]] < 0 | res[[1]] > 1) res <- fun.lm(offset = 0, data.matrix = data.matrix, d = d, mom = mom)
+        
+        return(res)
         
       } else{
         
@@ -187,6 +193,10 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
       
     }
     
+    # Processamento paralelo
+    which.parallel.mode <- if(.Platform$OS.type == "windows") "snow" else "multicore"
+    n.cores <- parallelly::availableCores(omit = 1)
+    
     # Calcular bootstrap p/ série temporal
     boot.obj <- boot::tsboot(tseries = data.matrix,
                              statistic = function(x){
@@ -196,7 +206,12 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
                                            offset = offset)},
                              R = R.boot,
                              l = block.length,
-                             sim = "fixed")
+                             sim = "fixed",
+                             parallel = which.parallel.mode,
+                             ncpus = n.cores,
+                             cl = NULL)
+    
+    invisible(gc())
     
     # Estimar intervalos de confiança
     names.statistic <- names(boot.obj$t0)
