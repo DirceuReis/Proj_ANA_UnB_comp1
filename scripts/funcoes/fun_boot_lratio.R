@@ -5,10 +5,12 @@
 fun_boot_lratio <- function(data,                  # tbl_df: c/ máximos anuais p/ durações diferentes
                             rep = 2000,            # nro. réplicas bootstrap
                             which_lratio = c(3,4), # quais lmom ratio estimar: um (ou todos) de c(3,4)
+                            na_accept = 0.2,       # percentual máximo de falhas anual
+                            min_years = 8,         # nro. mínimo de anos
                             signf = 0.05,          # nível de significância
                             ci_type = "all",       # norm, stud, basic, perc, bca
                             # return_rep = FALSE,    # retornar as réplicas bootstrap
-                            col_names = c("imax", "ds", "gauge_code")){
+                            col_names = c("imax", "d", "gauge_code")){
   
   # Pacotes
   if(!require(pacman)) install.packages("pacman")

@@ -66,7 +66,7 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
   # O primeiro argumento da função é o 'parâmetro' a ser otimizado
   fun.obj <- function(offset, data.matrix, d, mom){
     
-    if(offset < 0 | offset > 10) return(1e9)
+    # if(offset < 0 | offset > 10) return(1e9)
     
     # Calcular momentos
     moments <- apply(X = data.matrix, MARGIN = 2, function(imax) mean(imax^mom, na.rm = TRUE))
@@ -132,7 +132,7 @@ fun_scale_block_boot <- function(df.imax,                   # data.frame com int
         
         # Otimização
         optimal <- optimize(f = fun.obj,
-                            interval = c(0, 10),
+                            interval = c(0, max(d)),
                             data.matrix = data.matrix,
                             d = d,
                             mom = mom)

@@ -9,9 +9,7 @@ pacman::p_load(
   pacman,
   tidyverse,
   arrow,
-  lubridate,
   lmom,
-  ggplot2,   
   patchwork, # combinar gráficos
   xtable,    # printa tabelas latex
   boot       # bootstrap
@@ -25,16 +23,18 @@ font_size <- 10
 source("scripts/funcoes/fun_boot_lratio.R") # estimar intervalos de confiança c/ bootstrap p/ razões de l-momentos
 
 # Dados
-df_imax <- arrow::read_parquet(file = "base/gerados/df_imax.parquet")
+df.imax <- arrow::read_parquet(file = "base/gerados/df_imax.pqt")
+df.info <- arrow::read_parquet(file = "base/gerados/df_subdaily_info.pqt")
 # df_imax <- df_imax[df_imax$gauge_code != "SBPA",]
 
 
 # QUALIDADE DOS DADOS -----------------------------------------------------
 
 # Manter somente estação, falhas e anos
-df.quality <- df_imax %>% 
-  select(gauge_code, year, na_prct) %>% 
-  group_by(gauge_code, year) %>% 
+df.quality <- df.imax %>% 
+  mutate(responsible = df.info$responsible[match(gauge_code, df.info$gauge_code)]) %>% 
+  select(gauge_code, responsible, year, na_prct) %>% 
+  group_by(gauge_code, responsible, year) %>% 
   reframe(na_prct = first(na_prct)*100)
 
 # Limites de falha e mínimo de anos
@@ -52,6 +52,8 @@ grid <-
       nrow()                    # contar qtas estações
   })) # fim 'grid'
 
+resp_names <- paste(unique(df.info$responsible), collapse = ", ")
+
 # Visualização
 color <- c("green4", "lightgreen", "orange", "#F10000")
 plot.anos.estacao <- ({
@@ -62,35 +64,47 @@ plot.anos.estacao <- ({
     geom_text(aes(label = n_gauges), vjust = -0.3, size = 3, family = "serif") +
     facet_wrap(~threshold, nrow = 4, labeller = labeller(threshold = function(x) paste0(x, "% falhas"))) +
     scale_x_continuous(breaks = seq(min(grid$min_years), max(grid$min_years), by = 1)) +
-    scale_y_continuous(limits = c(0, 450)) +
+    scale_y_continuous(limits = c(0, max(grid$n_gauges) + 50)) +
     scale_fill_manual(values = color) +
     labs(x = "Número de anos por estação",
-         y = "Número de estações") +
+         y = "Número de estações",
+         caption =  paste0("Responsáveis: ", resp_names)) +
     theme_minimal() +
     theme(strip.text = element_text(face = "bold"),
           legend.position =  "none",
+          plot.caption = element_text(size = 8),
           plot.background = element_rect(color = "white"),
           panel.border = element_rect(color = "black", fill = NA),
           text = element_text(size = 12, family = "serif"))
 }); plot.anos.estacao # fim 'plot.anos.estacao'
 
-ggsave(filename = "figuras/fig_anos_estacao.png", plot = plot.anos.estacao,
+ggsave(filename = "figuras/plot_anos_estacao.png", plot = plot.anos.estacao,
        width = 16, height = 16, units = "cm", dpi = 200)
+
 
 # FORMA DOS DADOS ---------------------------------------------------------
 
+# Filtros
+na.accept <- 0.2
+min.years <- 8
+which.durations <- c(1/6, 0.25, 1, 6, 12, 24, 48, 72, 120, 240)
+
 # L-momentos
 df_est <- df_imax %>% 
-  na.omit() %>% 
-  group_by(gauge_code, ds, time_steps) %>%    # calcular estatísticas: 
-  reframe(tau3 = lmom::samlmu(imax)[[3]],     # L-assimetria
-          tau4 = lmom::samlmu(imax)[[4]]) %>% # L-curtose
-  filter(gauge_code != "SBPA")
+  filter(na_prct <= na.accept,
+         d %in% which.durations) %>% 
+  group_by(gauge_code) %>% 
+  filter(n_distinct(year) >= min.years) %>% 
+  ungroup() %>% 
+  group_by(gauge_code, d) %>%             # calcular estatísticas: 
+  reframe(n_year = n_distinct(year),
+          tau3 = lmom::samlmu(imax)[[3]], # L-assimetria
+          tau4 = lmom::samlmu(imax)[[4]]) # L-curtose
   
 # Tabela resumo p/ tau3
 df_summary_tau3 <- df_est %>% 
   na.omit() %>% 
-  group_by(ds) %>% 
+  group_by(d) %>% 
   reframe(min = min(tau3),
           q0.25 = quantile(tau3, 0.25),
           mean = mean(tau3, na.rm = TRUE),
@@ -103,7 +117,7 @@ df_summary_tau3 <- df_est %>%
 # Tabela resumo p/ tau4
 df_summary_tau4 <- df_est %>% 
   na.omit() %>% 
-  group_by(ds) %>% 
+  group_by(d) %>% 
   reframe(min = min(tau4),
           q0.25 = quantile(tau4, 0.25),
           mean = mean(tau4, na.rm = TRUE),
@@ -120,14 +134,21 @@ print(xtable(x = df_summary_tau4, digits = 3), include.rownames = FALSE)
 
 # BOOTSTRAP L-CURTOSE -----------------------------------------------------
 
+data <- df_imax %>% 
+  filter(na_prct <= na.accept) %>% 
+  group_by(gauge_code) %>% 
+  filter(n_distinct(year) >= min.years)
+
+# REFAZER usando o corpo da função de bootstrap por blocos
+
 # Realizar um procedimento bootstrap p/ estimar intervalos de confiança
 # p/ estimativas de L-curtose e do coeficiente angular da regressão linear
-df_lratio_ci <- fun_boot_lratio(data = df_imax,
+df_lratio_ci <- fun_boot_lratio(data = data,
                                 rep = 2000,
                                 which_lratio = 4,
                                 signf = 0.05,
-                                ci_type = "norm",
-                                col_names = c("imax", "ds", "gauge_code"))
+                                ci_type = "perc",
+                                col_names = c("imax", "d", "gauge_code", "na_prct", "year"))
 
 # Adicionar intervalos de confiança em 'df_est'
 df_est <- merge(df_est, df_lratio_ci[, c("gauge_code", "ds", "ci_l", "ci_u")], by = c("gauge_code", "ds"), all.x = TRUE)

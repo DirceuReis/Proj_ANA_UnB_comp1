@@ -76,18 +76,6 @@ ls.scale.boot.offset <- lapply(X = seq_along(duration.intervals), FUN = function
   
 })
 
-teste <-   fun_scale_block_boot(df.imax = df.imax,
-                                na.accept = na.accept,
-                                min.years = min.years,
-                                offset = TRUE, # estimar parâmetror de offset das durações (theta)
-                                which.moment = 1:3,
-                                which.duration = duration.intervals[[2]],
-                                d.target = disag.list[[2]],
-                                block.length = block.length,
-                                ci.boot.method = ci.boot.method,
-                                R.boot = R.boot, 
-                                return.boot = TRUE)
-
 df.scale.boot <- bind_rows(ls.scale.boot)
 df.scale.boot.offset <- bind_rows(ls.scale.boot.offset)
 arrow::write_parquet(x = df.scale.boot, sink = "base/gerados/scale_invariance/df_scale_block_boot.pqt")
