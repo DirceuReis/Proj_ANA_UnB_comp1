@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Proj. IDF Brasil ANA/UnB - Metodologias para Correção de Viés dos Dados Climáticos</title>
+<title>Metodologias para Correção de Viés dos Dados Climáticos – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -50,15 +85,17 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -87,7 +124,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -101,7 +138,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -120,19 +157,21 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -148,26 +187,30 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Scripts</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-scripts">    
         <li>
-    <a class="dropdown-item" href="./script_leitura_subdiario.html">
+    <a class="dropdown-item" href="./script_leitura_subdiario.qmd">
  <span class="dropdown-text">Leitura das séries de precipitação subdiária</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_descricao_subdiario.html">
+    <a class="dropdown-item" href="./script_imax_subdiario.qmd">
+ <span class="dropdown-text">Geração das intensidades máximas anuais</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./script_descricao_subdiario.qmd">
  <span class="dropdown-text">Análise e descrição dos subdiários</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_imax_subdiario.html">
- <span class="dropdown-text">Geração das intensidades máximas anuais</span></a>
+    <a class="dropdown-item" href="./resultados_preliminares.html">
+ <span class="dropdown-text">Modelo GEV multisite com pooling parcial</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-revisão-bibliográfica" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-revisão-bibliográfica" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Revisão Bibliográfica</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-revisão-bibliográfica">    
@@ -184,7 +227,7 @@ window.Quarto = {
  <span class="dropdown-text">Regionalização</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Sensoriamento_remoto.qmd">
+    <a class="dropdown-item" href="./Sensoriamento_remoto.html">
  <span class="dropdown-text">Sensoriamento remoto</span></a>
   </li>  
         <li>
@@ -207,7 +250,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -223,6 +266,7 @@ window.Quarto = {
   <ul>
   <li><a href="#metodologias-para-correção-de-viés-dos-dados-climáticos" id="toc-metodologias-para-correção-de-viés-dos-dados-climáticos" class="nav-link active" data-scroll-target="#metodologias-para-correção-de-viés-dos-dados-climáticos">Metodologias para Correção de Viés dos Dados Climáticos</a>
   <ul class="collapse">
+  <li><a href="#delta-change" id="toc-delta-change" class="nav-link" data-scroll-target="#delta-change"><em>Delta Change</em></a></li>
   <li><a href="#equidistant-quantile-matching-eqm" id="toc-equidistant-quantile-matching-eqm" class="nav-link" data-scroll-target="#equidistant-quantile-matching-eqm"><em>Equidistant Quantile Matching</em> (EQM)</a></li>
   <li><a href="#equidistant-quantile-matching-non-stationary" id="toc-equidistant-quantile-matching-non-stationary" class="nav-link" data-scroll-target="#equidistant-quantile-matching-non-stationary"><em>Equidistant Quantile Matching non-stationary</em></a></li>
   <li><a href="#quantilequantile-downscaling" id="toc-quantilequantile-downscaling" class="nav-link" data-scroll-target="#quantilequantile-downscaling"><em>Quantile–Quantile Downscaling</em></a></li>
@@ -259,11 +303,23 @@ window.Quarto = {
 
 <section id="metodologias-para-correção-de-viés-dos-dados-climáticos" class="level2">
 <h2 class="anchored" data-anchor-id="metodologias-para-correção-de-viés-dos-dados-climáticos">Metodologias para Correção de Viés dos Dados Climáticos</h2>
-<p>Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (<em>Quantile Mapping</em> QM) proposta por Bárdossy &amp; Pegram (2011) é forte candidata a ser empregada nesse projeto. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada será a precipitação diária ou os valores resultantes das séries de máximos anuais.</p>
-<p>Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o <em>Delta Change</em>, que constitue, junto com o QM, a base conceitual de muitos procedimentos modernos de <em>downscaling</em> e ajuste de viés. O método <em>Delta Change</em> aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas.</p>
+<p>Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quantil (<em>Quantile Mapping</em> - QM), proposta por Bárdossy &amp; Pegram (2011) é forte candidata a ser empregada nesse projeto. O método é baseado na comparação das funções cumulativas de probabilidade da variável observada e da variável estimada por um modelo climático no período atual e futuro. Nesse caso, a variável analisada é a precipitação diária, ou valores resultantes das séries de máximos anuais.</p>
+<p>Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o <em>Delta Change</em>, que constitui, junto com o QM, a base conceitual de muitos procedimentos modernos de <em>downscaling</em> e ajuste de viés.</p>
+<section id="delta-change" class="level3">
+<h3 class="anchored" data-anchor-id="delta-change"><em>Delta Change</em></h3>
+<p>O método <em>Delta Change</em> aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas:</p>
+<p><span class="math display">\[
+\Delta = \frac{X_{GCM}^{proj}}{X_{GCM}^{hist}}
+\tag{1}
+\]</span> Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.</p>
+<p><span class="math display">\[
+X = X_{OBS}+\Delta
+\tag{2}
+\]</span> É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.</p>
+</section>
 <section id="equidistant-quantile-matching-eqm" class="level3">
 <h3 class="anchored" data-anchor-id="equidistant-quantile-matching-eqm"><em>Equidistant Quantile Matching</em> (EQM)</h3>
-<p>Baseado no QM o método EQM <span class="citation" data-cites="Srivastav.2014 Simonovic.2016 Simonovic.2017">(<a href="#ref-Srivastav.2014" role="doc-biblioref">Srivastav, Schardong, e Simonovic 2014</a>; <a href="#ref-Simonovic.2016" role="doc-biblioref">Simonovic et al. 2016</a>; <a href="#ref-Simonovic.2017" role="doc-biblioref">Simonovic, Schardong, e Sandink 2017</a>)</span> é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. o EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.</p>
+<p>Baseado no QM, o método EQM <span class="citation" data-cites="Srivastav.2014 Simonovic.2016 Simonovic.2017">(<a href="#ref-Srivastav.2014" role="doc-biblioref">Srivastav, Schardong, e Simonovic 2014</a>; <a href="#ref-Simonovic.2016" role="doc-biblioref">Simonovic et al. 2016</a>; <a href="#ref-Simonovic.2017" role="doc-biblioref">Simonovic, Schardong, e Sandink 2017</a>)</span> é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. O EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.</p>
 <p>Abaixo está a descrição do método:</p>
 <ol type="i">
 <li>Extrair máximos subdiários dos dados observados em um determinado local:</li>
@@ -277,7 +333,7 @@ x_{3,\max}^{STN,5\min} &amp; x_{3,\max}^{STN,10\min} &amp; \cdots &amp; x_{3,\ma
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 x_{N,\max}^{STN,5\min} &amp; x_{N,\max}^{STN,10\min} &amp; \cdots &amp; x_{N,\max}^{STN,24hr}
 \end{bmatrix}
-\tag{1}
+\tag{3}
 \]</span></p>
 <p>Onde, <span class="math inline">\(x_{i,\max}^{STN,j}\)</span> é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e <span class="math inline">\(N\)</span> é o número total de anos.</p>
 <ol start="2" type="i">
@@ -292,7 +348,7 @@ X^{GCM}_{3,\text{max}} \\
 \vdots \\
 X^{GCM}_{N,\text{max}}
 \end{bmatrix}
-\tag{2}
+\tag{4}
 \]</span></p>
 <p>Onde, <span class="math inline">\(X_{i,\max}^{GCM}\)</span> representa a precipitação diária máxima do modelo GCM no i-ésimo ano e <span class="math inline">\(N\)</span> é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).</p>
 <ol start="3" type="i">
@@ -307,7 +363,7 @@ X^{GCM,RCP26}_{3,\text{max}} &amp; X^{GCM,RCP45}_{3,\text{max}} &amp; X^{GCM,RCP
 \vdots &amp; \vdots &amp; \vdots \\
 X^{GCM,RCP26}_{N_F,\text{max}} &amp; X^{GCM,RCP45}_{N_F,\text{max}} &amp; X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
-\tag{3}
+\tag{5}
 \]</span></p>
 <p>Onde, <span class="math inline">\(X_{\max}^{GCM,Fut}\)</span> representa a precipitação diária máxima para os cenários futuros considerados; e <span class="math inline">\(N_F\)</span> é o número total de anos considerados para o período futuro.</p>
 <ol start="4" type="i">
@@ -315,23 +371,23 @@ X^{GCM,RCP26}_{N_F,\text{max}} &amp; X^{GCM,RCP45}_{N_F,\text{max}} &amp; X^{GCM
 </ol>
 <p><span class="math display">\[
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
-\tag{4}
+\tag{6}
 \]</span></p>
 <p><span class="math display">\[
 PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
-\tag{5}
+\tag{7}
 \]</span></p>
 <p><span class="math display">\[
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
-\tag{6}
+\tag{8}
 \]</span></p>
 <p>Onde, <span class="math inline">\(PDF\)</span> representa a função de distribuição de probabilidade, $f()% é a função, <span class="math inline">\(\theta\)</span> é o parâmetro da distribuição ajustada.</p>
 <ol start="22" type="a">
-<li>A distribuição de probabilidade cumulativa do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM <span class="math inline">\(Y_{max,j}^{GCM}\)</span> usando o princípio do mapeamento baseado em quantis. Trata-se de um <em>downscalig</em> espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:</li>
+<li>As distribuições de probabilidade cumulativas do GCM e da série subdiária são equiparadas para estabelecer uma relação estatística entre elas e obter a série subdiária modelada pelo GCM <span class="math inline">\(Y_{max,j}^{GCM}\)</span> usando o princípio do mapeamento baseado em quantis. Trata-se de um <em>downscalig</em> espacial dos dados dos máximos diários do GCM para os máximos subdiários observados:</li>
 </ol>
 <p><span class="math display">\[
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
-\tag{7}
+\tag{9}
 \]</span></p>
 <p>Onde, <span class="math inline">\(Y_{max,j}^{STN}\)</span> é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; <span class="math inline">\(CDF\)</span> significa função de distribuição de probabilidade cumulativa; e <span class="math inline">\(invCDF\)</span> significa CDF inversa.</p>
 <ol start="6" type="i">
@@ -339,7 +395,7 @@ Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
 </ol>
 <p><span class="math display">\[
 Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
-\tag{8}
+\tag{10}
 \]</span></p>
 <p>Onde, <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> é a correspondência quantílica entre o período de referência e o período de projeção.</p>
 <ol start="7" type="i">
@@ -347,22 +403,22 @@ Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 </ol>
 <p><span class="math display">\[
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
-\tag{9}
+\tag{11}
 \]</span></p>
 <p><span class="math display">\[
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
-\tag{10}
+\tag{12}
 \]</span></p>
 <ol start="8" type="i">
 <li>Encontrar uma função apropriada para relacionar <span class="math inline">\(Y_{max}^{GCM,Fut}\)</span> e <span class="math inline">\(X_{max}^{GCM}\)</span>:</li>
 </ol>
 <p><span class="math display">\[
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
-\tag{11}
+\tag{13}
 \]</span></p>
 <p><span class="math display">\[
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
-\tag{12}
+\tag{14}
 \]</span></p>
 <ol start="9" type="i">
 <li>Para gerar dados subdiários máximos futuros, combinar as equações acima em:</li>
@@ -374,7 +430,7 @@ X^{STN, future}_{\max,j}
 \frac{X^{GCM, future}_{\max} - b_{2}}{a_{2}}
 \right]
 + b_{1}
-\tag{13}
+\tag{15}
 \]</span></p>
 <ol start="24" type="a">
 <li>Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.</li>
@@ -382,35 +438,35 @@ X^{STN, future}_{\max,j}
 </section>
 <section id="equidistant-quantile-matching-non-stationary" class="level3">
 <h3 class="anchored" data-anchor-id="equidistant-quantile-matching-non-stationary"><em>Equidistant Quantile Matching non-stationary</em></h3>
-<p>O EQM também possui uma versão não estacionária que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado <span class="citation" data-cites="Silva.2021 Silva.2021b">(<a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>; <a href="#ref-Silva.2021b" role="doc-biblioref">Feitoza Silva et al. 2021</a>)</span>. Para a GEV não estacionária, os parâmetros variantes (<span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma\)</span> - localização e escala) no tempo são derivados calculando o percentil 95 do valor do parâmetro de tendência pelas Equações <span class="math inline">\(\hat{\mu}_{95} = Q_{95}(\hat{\mu}_1, \hat{\mu}_2, \ldots, \hat{\mu}_n)\)</span> e <span class="math inline">\(\hat{\sigma}_{95} = Q_{95}(\hat{\sigma}_1, \hat{\sigma}_2, \ldots, \hat{\sigma}_n)\)</span>. Os parâmetros do modelo calculados são então substituídos na Equação (14) e a intensidade ou profundidade da precipitação não estacionária é estimada.</p>
+<p>O EQM também possui uma versão não estacionária que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado <span class="citation" data-cites="Silva.2021 Silva.2021b">(<a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>; <a href="#ref-Silva.2021b" role="doc-biblioref">Feitoza Silva et al. 2021</a>)</span>. Para a GEV não estacionária, os parâmetros variantes (<span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma\)</span> - localização e escala) no tempo são derivados calculando o percentil 95 do valor do parâmetro de tendência pelas Equações <span class="math inline">\(\hat{\mu}_{95} = Q_{95}(\hat{\mu}_1, \hat{\mu}_2, \ldots, \hat{\mu}_n)\)</span> e <span class="math inline">\(\hat{\sigma}_{95} = Q_{95}(\hat{\sigma}_1, \hat{\sigma}_2, \ldots, \hat{\sigma}_n)\)</span>. Os parâmetros do modelo calculados são então substituídos na Equação (16) e a intensidade ou profundidade da precipitação não estacionária é estimada.</p>
 <p><span class="math display">\[
 z_p = \mu - \frac{\sigma}{\xi} \left[\, 1 - \left\{ -\ln\!\left(1 - \frac{1}{T}\right)^{-\xi} \right\} \right]
-\tag{14}
-\]</span></p>
-<p>No EQM original, a função de mapeamento de quantis realiza o <em>donwscaling</em> espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada <span class="citation" data-cites="Silva.2021">(<a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>)</span>. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM (<span class="math inline">\(F_{m,h}\)</span>) e a série subdiária (<span class="math inline">\(x_{j,o,h}\)</span>) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM (<span class="math inline">\(\hat{x}_{j,o,h}\)</span>) conforme mostrado na Equação (15):</p>
-<p><span class="math display">\[
-\hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
-\tag{15}
-\]</span></p>
-<p>Onde <span class="math inline">\(\hat{x}\)</span> é o quantil máximo anual na escala da estação, <span class="math inline">\(F\)</span> é a função de distribuição cumulativa e <span class="math inline">\(F^{-1}\)</span> é sua inversa. <span class="math inline">\(j,o,h\)</span> correspondem a cada dado de precipitação observado subdiário (<span class="math inline">\(‘j’\)</span>) (<span class="math inline">\(‘o’\)</span>) no período histórico-base (<span class="math inline">\(‘h’\)</span>), enquanto <span class="math inline">\(‘m’\)</span> permanece como os dados modelados. Os quantis extraídos de cada par _{j,o,h} e <span class="math inline">\(x_{m,h}\)</span> são igualados para estabelecer uma relação funcional na forma da Equação (16):</p>
-<p><span class="math display">\[
-\hat{x}_{j,o,h} = \frac{a_j + x_{m,h}}{b_j + c_j x_{m,h}} + \frac{d_j}{x_{m,h}}
 \tag{16}
 \]</span></p>
+<p>No EQM original, a função de mapeamento de quantis realiza o <em>donwscaling</em> espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada <span class="citation" data-cites="Silva.2021">(<a href="#ref-Silva.2021" role="doc-biblioref">Silva et al. 2021</a>)</span>. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM (<span class="math inline">\(F_{m,h}\)</span>) e a série subdiária (<span class="math inline">\(x_{j,o,h}\)</span>) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM (<span class="math inline">\(\hat{x}_{j,o,h}\)</span>), conforme mostrado na Equação (17):</p>
+<p><span class="math display">\[
+\hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
+\tag{17}
+\]</span></p>
+<p>Onde <span class="math inline">\(\hat{x}\)</span> é o quantil máximo anual na escala da estação, <span class="math inline">\(F\)</span> é a função de distribuição cumulativa e <span class="math inline">\(F^{-1}\)</span> é sua inversa. <span class="math inline">\(j,o,h\)</span> correspondem a cada dado de precipitação observado subdiário (<span class="math inline">\(‘j’\)</span>) (<span class="math inline">\(‘o’\)</span>) no período histórico-base (<span class="math inline">\(‘h’\)</span>), enquanto <span class="math inline">\(‘m’\)</span> permanece como os dados modelados. Os quantis extraídos de cada par _{j,o,h} e <span class="math inline">\(x_{m,h}\)</span> são igualados para estabelecer uma relação funcional na forma da Equação (18):</p>
+<p><span class="math display">\[
+\hat{x}_{j,o,h} = \frac{a_j + x_{m,h}}{b_j + c_j x_{m,h}} + \frac{d_j}{x_{m,h}}
+\tag{18}
+\]</span></p>
 <p>Onde <span class="math inline">\(a_j\)</span>, <span class="math inline">\(b_j\)</span>, <span class="math inline">\(c_j\)</span> e <span class="math inline">\(d_j\)</span> são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o <em>downscaling</em> espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o <span class="math inline">\(EQM_{NS}\)</span> introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.</p>
-<p>Semelhante ao EQM, o <span class="math inline">\(EQM_{NS}\)</span> utiliza o mapeamento delta de quantis, uma vez que preserva as mudanças relativas na média e nos quantis de precipitação obtidos a partir dos modelos climáticos. A distribuição de probabilidade cumulativa da precipitação gerada pelo GCM no período futuro (<span class="math inline">\(F_{m,f}\)</span> ) e a precipitação gerada pelo GCM no período de referência (<span class="math inline">\(X_{m,h}\)</span>) são igualadas para estabelecer uma relação estatística (Equação (17)). Além disso, a mudança relativa entre o período histórico e o período futuro é dada pela Equação (18):</p>
+<p>Semelhante ao EQM, o <span class="math inline">\(EQM_{NS}\)</span> utiliza o mapeamento delta de quantis, uma vez que preserva as mudanças relativas na média e nos quantis de precipitação obtidos a partir dos modelos climáticos. A distribuição de probabilidade cumulativa da precipitação gerada pelo GCM no período futuro (<span class="math inline">\(F_{m,f}\)</span> ) e a precipitação gerada pelo GCM no período de referência (<span class="math inline">\(X_{m,h}\)</span>) são igualadas para estabelecer uma relação estatística (Equação (19)). Além disso, a mudança relativa entre o período histórico e o período futuro é dada pela Equação (20):</p>
 <p><span class="math display">\[
 \hat{x}_{m,h} = F_{m,h}^{-1}\left[ F_{m,f}(x_{m,f}) \right]
-\tag{17}
+\tag{19}
 \]</span></p>
 <p><span class="math display">\[
 \Delta_m = \frac{x_{m,f}}{\hat{x}_{m,h}}
-\tag{18}
+\tag{20}
 \]</span></p>
-<p>Onde <span class="math inline">\(m,f\)</span> corresponde aos dados modelados (<span class="math inline">\(‘m’\)</span>) no período de projeção futuro (<span class="math inline">\(‘f’\)</span>), e <span class="math inline">\(\Delta_m\)</span> é a mudança relativa. A série subdiária máxima futura projetada (<span class="math inline">\(X_j,f\)</span> )) na escala da estação é então gerada usando a Equação (16) substituindo <span class="math inline">\(x_{m,h}\)</span> por <span class="math inline">\(\hat{x}_{m,h}\)</span> e multiplicando-a pela mudança relativa Dm da Equação (18), conforme dado pela Equação (19):</p>
+<p>Onde <span class="math inline">\(m,f\)</span> corresponde aos dados modelados (<span class="math inline">\(‘m’\)</span>) no período de projeção futuro (<span class="math inline">\(‘f’\)</span>), e <span class="math inline">\(\Delta_m\)</span> é a mudança relativa. A série subdiária máxima futura projetada (<span class="math inline">\(X_j,f\)</span> )) na escala da estação é então gerada usando a Equação (18) substituindo <span class="math inline">\(x_{m,h}\)</span> por <span class="math inline">\(\hat{x}_{m,h}\)</span> e multiplicando-a pela mudança relativa Dm da Equação (20), conforme dado pela Equação (21):</p>
 <p><span class="math display">\[
 x_{j,f} = \Delta_m \cdot \hat{x}_{j,o,h}
-\tag{19}
+\tag{21}
 \]</span></p>
 </section>
 <section id="quantilequantile-downscaling" class="level3">
@@ -420,7 +476,7 @@ x_{j,f} = \Delta_m \cdot \hat{x}_{j,o,h}
 <p>O GP cria equações que relacionam o quantil do GCM <span class="math inline">\((Q_{GCM}(X))\)</span> com o quantil local ajustado <span class="math inline">\((Q_{Local}(X))\)</span>. Assim, a estutrutra geral do mapeamento é:</p>
 <p><span class="math display">\[
 Q_{Local}(x) = aQ_{GCM}(x) + f[Q_{GCM}(x)]
-\tag{20}
+\tag{22}
 \]</span></p>
 <p>Onde <span class="math inline">\(aQ_{GCM}(x)\)</span> pode ser considerado a parte principal das relações extraídas que descrevem a maior parte da variância. O termo <span class="math inline">\(a\)</span> em cada relação é um coeficiente numérico; <span class="math inline">\(f[Q_{GCM}(x)]\)</span> é uma função não linear gerada automaticamente pelo algoritmo GP.</p>
 </section>
@@ -429,19 +485,166 @@ Q_{Local}(x) = aQ_{GCM}(x) + f[Q_{GCM}(x)]
 <p>O método BCQM corrige diretamente as funções de distribuição cumulativa (CDFs) <span class="citation" data-cites="Lanzante.2018 Lanzante.2021">(<a href="#ref-Lanzante.2018" role="doc-biblioref"><strong>Lanzante.2018?</strong></a>; <a href="#ref-Lanzante.2021" role="doc-biblioref">Lanzante et al. 2021</a>)</span>. Ele é calculado como:</p>
 <p><span class="math display">\[
 F_{DF}(x) = F_{Oh}[F^{-1}_{Mh}(x)]
-\tag{21}
+\tag{23}
 \]</span></p>
 <p>Onde <span class="math inline">\(F\)</span> é a função de distribuição cumulativa; <span class="math inline">\(F^{−1}\)</span> sua inversa; <span class="math inline">\(x\)</span> o valor de <span class="math inline">\(M_f\)</span> (Modelo futuro) a ser reduzido e <span class="math inline">\(M_h\)</span> refere-se ao Modelo histórico;<span class="math inline">\(O_h\)</span> são as observações históricas e <span class="math inline">\(D_f\)</span> refere-se a saída futura em escala reduzida.</p>
-<p>Os autores afiram que equação (21) não é aplicável a valores novos, ou seja, para valores de <span class="math inline">\(M_f\)</span> fora do intervalo de valores de <span class="math inline">\(M_h\)</span>. Quando isso ocorre, usa-se uma modificação da extrapolação padrão <span class="citation" data-cites="deque.2007">(<a href="#ref-deque.2007" role="doc-biblioref"><strong>deque.2007?</strong></a>)</span>:</p>
+<p>Os autores afirmam que a equação (23) não é aplicável a valores novos, ou seja, para valores de <span class="math inline">\(M_f\)</span> fora do intervalo de valores de <span class="math inline">\(M_h\)</span>. Quando isso ocorre, usa-se uma modificação da extrapolação padrão <span class="citation" data-cites="deque.2007">(<a href="#ref-deque.2007" role="doc-biblioref"><strong>deque.2007?</strong></a>)</span>:</p>
 <p>Lanzante et al. <span class="citation" data-cites="Lanzante.2018">(<a href="#ref-Lanzante.2018" role="doc-biblioref"><strong>Lanzante.2018?</strong></a>)</span> afirmam que se referem ao BCQM inspirados pelo trabalho de Ho et al. <span class="citation" data-cites="Ho.2012">(<a href="#ref-Ho.2012" role="doc-biblioref">2012</a>)</span> em que a estratégia de correção de viés pressupõe que as discrepâncias do modelo permanecem constantes ao longo do tempo (ou seja, a relação entre as distribuições de <span class="math inline">\(X_o\)</span> e <span class="math inline">\(X_m\)</span> é a mesma que a relação entre as distribuições de <span class="math inline">\(X^{′}_o\)</span> e <span class="math inline">\(X^{′}_m\)</span>), ver Figs. 1a,b. Isso permite que previsões de observáveis futuros sejam obtidas mapeando de simulações futuras do modelo, <span class="math inline">\(X^{′}_o = B(X^{′}_m)\)</span>, com uma função de transferência dada por <span class="math inline">\(B(X^{′}_m) = F^{-1}_o[F_{m}(X^{′}_m)]\)</span>, onde <span class="math inline">\(F_m\)</span>(.) é a função de distribuição cumulativa (CDF) de <span class="math inline">\(X_m\)</span> e <span class="math inline">\(F^{-1}_o\)</span>(.) é a CDF inversa (a “função quantil”) de <span class="math inline">\(X_o\)</span>.</p>
-<p><img src="figuras/bias.png" class="img-fluid" alt="Diagrama esquemático do BCQM"> Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas.</p>
-<p>Onde, <!-- ainda falta terminar essa parte--></p>
+<p><img src="figuras/bias.png" class="img-fluid" alt="Diagrama esquemático do BCQM"> Figura 1. (a) mostra o diagrama esquemático para calibração das projetoões do modelo climático: correção de viés; (b) mostra um exemplo da função de densidade de probabilidade (PDF) das variávei envolvidas. Fonte: <span class="citation" data-cites="Ho.2012">(<a href="#ref-Ho.2012" role="doc-biblioref">Ho et al. 2012</a>)</span>.</p>
+<p>Onde <span class="math inline">\(X_o\)</span> são as variáveis observadas no presente; <span class="math inline">\(X_m\)</span> são as variáveis modeladas no presente; <span class="math inline">\(X^{′}_o\)</span> são as variáveis projetadas para o futuro e <span class="math inline">\(X^{′}_m\)</span> são as variáveis modeladas no futuro.</p>
 </section>
 <section id="kernel-density-distribution-mapping-kddm" class="level3">
 <h3 class="anchored" data-anchor-id="kernel-density-distribution-mapping-kddm"><em>Kernel Density Distribution Mapping</em> (KDDM)</h3>
-<p>Utiliza densidades suavizadas por meio de funções kernel<span class="citation" data-cites="Lanzante.2021">(<a href="#ref-Lanzante.2021" role="doc-biblioref">Lanzante et al. 2021</a>)</span></p>
+<p>O método <em>Kernel Density Distribution Mapping</em> utiliza densidades suavizadas por meio de funções kernel<span class="citation" data-cites="Lanzante.2021">(<a href="#ref-Lanzante.2021" role="doc-biblioref">Lanzante et al. 2021</a>)</span>.</p>
 <p>O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar <span class="math inline">\(O_h\)</span> e <span class="math inline">\(M_h\)</span>. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. <span class="citation" data-cites="Lanzante.2021">(<a href="#ref-Lanzante.2021" role="doc-biblioref">2021</a>)</span>, na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).</p>
-<!--vale a pena descrever por completo esse método?-->
+<!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
+<div style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">##' Bias correction of climate model output using KDDM.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##' This is the description of the function.  It's the first full</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##' paragraph, and should briefly describe what the function does.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">##' Third and subsequent paragraphs are details: a long section shown</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">##' after the argument that goes into detail about how the function</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##' works.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param bcdata The data to be bias-corrected.  A list with elements</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##' named "obs", "cur", and "fut".</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param norm The type of normalization to use.  See</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##' \code{\link{normalize}} for more details.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param minobs The minimum number of data points to attempt a bias</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="do">##' correction.  If there are fewer that this many values in the</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="do">##' observations or in the current period model output (e.g., for</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">##' precipitation in a very dry location), the bias correction falls</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="do">##' back on a simple scaling by the ratio of obs mean to cur mean.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="do">##' (If the ratio is undefined,  future values are passed through</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="do">##' unchanged.)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param dmap Logical; if TRUE, returns the \code{\link{distmap}}</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="do">##' object generated during bias correction as an element named "dmap"</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="do">##' in the returned list.  N.B.: This option defaults to FALSE because</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="do">##' the distmap object is significantly larger than the inputs and</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">##' outputs of this function combined.</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="do">##' </span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param ... Arguments to pass to \code{\link{distmap}}.</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">##' </span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="do">##' @return The return value of the function.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="do">##' @examples</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="do">##' x &lt;- "example code"</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="do">##' y &lt;- "more example code"</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="do">##' paste(x, y)</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="do">##' @importFrom stats predict</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="do">##' </span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="do">##' @export</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>biascorrect <span class="ot">&lt;-</span> <span class="cf">function</span>(bcdata, <span class="at">norm=</span><span class="st">"zscore"</span>, <span class="at">minobs=</span><span class="dv">250</span>, <span class="at">dmap=</span><span class="cn">FALSE</span>, ...){</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="do">## If there's too little data to get a good estimate of the PDF for</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="do">## either obs or cur, it's not possible to bias-correct using KDDM;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="do">## fall back to simple ratio scaling.  Also set an uncorrectable</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="do">## attribute, in case knowing where this has happened is of</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="do">## interest.</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">sum</span>(<span class="fu">is.finite</span>(<span class="fu">unlist</span>(bcdata<span class="sc">$</span>obs))) <span class="sc">&lt;</span> minobs <span class="sc">|</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>     <span class="fu">sum</span>(<span class="fu">is.finite</span>(<span class="fu">unlist</span>(bcdata<span class="sc">$</span>cur))) <span class="sc">&lt;</span> minobs ){</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    muobs <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">unlist</span>(bcdata<span class="sc">$</span>obs), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    mucur <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">unlist</span>(bcdata<span class="sc">$</span>cur), <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    ratio <span class="ot">&lt;-</span> muobs <span class="sc">/</span> mucur</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.finite</span>(ratio)){</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>      muobs <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>      mucur <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>      ratio <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    unfixable <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>      x<span class="sc">@</span>uncorrectable <span class="ot">&lt;-</span> <span class="fu">is.finite</span>(x)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>      x <span class="sc">*</span> ratio</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">rapply</span>(bcdata, unfixable, <span class="at">how=</span><span class="st">"replace"</span>)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    result<span class="sc">$</span>obs <span class="ot">&lt;-</span> bcdata<span class="sc">$</span>obs</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(dmap){ result<span class="sc">$</span>distmap <span class="ot">&lt;-</span> <span class="fu">distmap</span>(<span class="fu">c</span>(<span class="dv">0</span>,mucur),<span class="fu">c</span>(<span class="dv">0</span>,muobs)) }</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>  <span class="do">## normalize the three data components</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(norm<span class="sc">==</span><span class="st">"boxcox"</span>){</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>      <span class="do">## You can't really apply an adjustment to the denormalization</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>      <span class="do">## for Box-Cox; you need to use the same parameter values you</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>      <span class="do">## used for the obs or things go wonky.  This means that you</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>      <span class="do">## also want to use the same params over all times in both cur</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>      <span class="do">## and fut, so that you're not discarding any climate change</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>      <span class="do">## signal when you normalize.  Given that, it makes sense to use</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>      <span class="do">## a single value for all three, so we pool data to fit gamma to</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>      <span class="do">## get the best compromise value.</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>      gamma <span class="ot">&lt;-</span> <span class="fu">megamma</span>(<span class="fu">unlist</span>(bcdata, <span class="at">use.names=</span><span class="cn">FALSE</span>))</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>      nbcd <span class="ot">&lt;-</span> <span class="fu">rapply</span>(bcdata, normalize, <span class="at">how=</span><span class="st">"replace"</span>, <span class="at">norm=</span>norm, <span class="at">gamma=</span>gamma)</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>        nbcd <span class="ot">&lt;-</span> <span class="fu">rapply</span>(bcdata, normalize, <span class="at">how=</span><span class="st">"replace"</span>, <span class="at">norm=</span>norm)</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    <span class="do">## construct distribution mapping</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    mapping <span class="ot">&lt;-</span> <span class="fu">distmap</span>(<span class="fu">unlist</span>(nbcd<span class="sc">$</span>cur), <span class="fu">unlist</span>(nbcd<span class="sc">$</span>obs), ...)</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>    <span class="do">## apply KDDM transfer function</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>    <span class="do">## note: could skip predict(obs), but need its norm atts for next step</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>    fixed <span class="ot">&lt;-</span> <span class="fu">rapply</span>(nbcd, <span class="cf">function</span>(x){<span class="fu">predict</span>(mapping, x)}, <span class="at">how=</span><span class="st">"replace"</span>)</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>    <span class="do">## extract &amp; average normalization attributes</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">rapply</span>(fixed, attributes, <span class="at">how=</span><span class="st">"replace"</span>)</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">lapply</span>(adj, renest)</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">lapply</span>(adj, <span class="cf">function</span>(x){<span class="fu">lapply</span>(x, <span class="cf">function</span>(y){<span class="fu">unlist</span>(y)})})</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">lapply</span>(adj, <span class="cf">function</span>(x){x<span class="sc">$</span>norm<span class="ot">&lt;-</span><span class="cn">NULL</span>; x})</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">rapply</span>(adj, mean, <span class="at">how=</span><span class="st">"replace"</span>)</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Probably fix for entire month missing; need to test.</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="co">#    adj &lt;- rapply(adj, mean, how="replace", na.rm=TRUE)</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">renest</span>(adj)</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    <span class="do">## calculate adjustments for denormalization</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    shift <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    scale <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>    pscale <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(norm <span class="sc">==</span> <span class="st">"zscore"</span>){</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>        shift  <span class="ot">&lt;-</span> adj<span class="sc">$</span>mu<span class="sc">$</span>obs <span class="sc">-</span> adj<span class="sc">$</span>mu<span class="sc">$</span>cur</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>        scale  <span class="ot">&lt;-</span> adj<span class="sc">$</span>sigma<span class="sc">$</span>obs   <span class="sc">/</span> adj<span class="sc">$</span>sigma<span class="sc">$</span>cur</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(norm <span class="sc">==</span> <span class="st">"boxcox"</span>){</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>        shift <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>        pscale <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(norm <span class="sc">==</span> <span class="st">"scale"</span>){</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>        scale <span class="ot">&lt;-</span> adj<span class="sc">$</span>mu2<span class="sc">$</span>obs <span class="sc">/</span> adj<span class="sc">$</span>mu2<span class="sc">$</span>cur</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>    <span class="do">## no adjustments for range or identity norms</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>    <span class="do">## denormalize bias-corrected data</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>    result<span class="sc">$</span>obs <span class="ot">&lt;-</span> bcdata<span class="sc">$</span>obs</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>    result<span class="sc">$</span>cur <span class="ot">&lt;-</span> <span class="fu">rapply</span>(fixed<span class="sc">$</span>cur, denormalize, <span class="at">how=</span><span class="st">"replace"</span>,</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>                         <span class="at">shift=</span>shift, <span class="at">scale=</span>scale, <span class="at">pscale=</span>pscale)</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>    result<span class="sc">$</span>fut <span class="ot">&lt;-</span> <span class="fu">rapply</span>(fixed<span class="sc">$</span>fut, denormalize, <span class="at">how=</span><span class="st">"replace"</span>,</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>                         <span class="at">shift=</span>shift, <span class="at">scale=</span>scale, <span class="at">pscale=</span>pscale)</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(dmap){ result<span class="sc">$</span>distmap <span class="ot">&lt;-</span> mapping }</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="quantile-delta-mapping-qdm" class="level3">
 <h3 class="anchored" data-anchor-id="quantile-delta-mapping-qdm"><em>Quantile Delta Mapping</em> (QDM)</h3>
@@ -449,20 +652,130 @@ F_{DF}(x) = F_{Oh}[F^{-1}_{Mh}(x)]
 <p>A forma aditiva é:</p>
 <p><span class="math display">\[
 D_f(x) = x + \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big) - F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
-\tag{22}
+\tag{24}
 \]</span></p>
 <p>E a forma multiplicativa é:</p>
 <p><span class="math display">\[
 D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
-\tag{23}
-\]</span> O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).</p>
+\tag{25}
+\]</span></p>
+<p>O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC). <!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português--></p>
+<div style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quantile delta mapping bias correction for preserving changes in quantiles</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: QDM is equivalent to the equidistant and equiratio forms of quantile</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mapping (Cannon et al., 2015).</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cannon, A.J., Sobie, S.R., and Murdock, T.Q. 2015. Bias correction of</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  simulated precipitation by quantile mapping: How well do methods preserve</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  relative changes in quantiles and extremes? Journal of Climate,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  28: 6938-6959. doi:10.1175/JCLI-D-14-00754.1</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(o.c, m.c, m.p, <span class="at">ratio=</span><span class="cn">FALSE</span>, <span class="at">trace=</span><span class="fl">0.05</span>, <span class="at">trace.calc=</span><span class="fl">0.5</span><span class="sc">*</span>trace,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">jitter.factor=</span><span class="dv">0</span>, <span class="at">n.tau=</span><span class="cn">NULL</span>, <span class="at">ratio.max=</span><span class="dv">2</span>, <span class="at">ratio.max.trace=</span><span class="dv">10</span><span class="sc">*</span>trace,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">ECBC=</span><span class="cn">FALSE</span>, <span class="at">ties=</span><span class="st">'first'</span>, <span class="at">subsample=</span><span class="cn">NULL</span>, <span class="at">pp.type=</span><span class="dv">7</span>){</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># o = vector of observed values; m = vector of modelled values</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># c = current period;  p = projected period</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ratio = TRUE --&gt; preserve relative trends in a ratio variable</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># trace = 0.05 --&gt; replace values less than trace with exact zeros</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># trace.calc = 0.5*trace --&gt; treat values below trace.calc as censored</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># jitter.factor = 0.01 --&gt; jitter to accommodate ties</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># n.tau = NULL --&gt; number of empirical quantiles (NULL=sample length)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ratio.max = 2 --&gt; maximum delta when values are less than ratio.max.trace</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ratio.max.trace = 10*trace --&gt; values below which ratio.max is applied</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ECBC = TRUE --&gt; apply Schaake shuffle to enforce o.c temporal sequencing</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># subsample = NULL --&gt; use this number of repeated subsamples of size n.tau</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  to calculate empirical quantiles (e.g., when o.c, m.c, and m.p are of</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  very different size)</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># pp.type = 7 --&gt; plotting position type used in quantile</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># tau.m-p = F.m-p(x.m-p)</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># delta.m = x.m-p {/,-} F.m-c^-1(tau.m-p)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># xhat.m-p = F.o-c^-1(tau.m-p) {*,+} delta.m</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If jitter.factor &gt; 0, apply a small amount of jitter to accommodate ties</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># due to limited measurement precision</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(jitter.factor<span class="sc">==</span><span class="dv">0</span> <span class="sc">&amp;&amp;</span> </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>      (<span class="fu">length</span>(<span class="fu">unique</span>(o.c))<span class="sc">==</span><span class="dv">1</span> <span class="sc">||</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>       <span class="fu">length</span>(<span class="fu">unique</span>(m.c))<span class="sc">==</span><span class="dv">1</span> <span class="sc">||</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>       <span class="fu">length</span>(<span class="fu">unique</span>(m.p))<span class="sc">==</span><span class="dv">1</span>)){</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        jitter.factor <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(.Machine<span class="sc">$</span>double.eps)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(jitter.factor <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        o.c <span class="ot">&lt;-</span> <span class="fu">jitter</span>(o.c, jitter.factor)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        m.c <span class="ot">&lt;-</span> <span class="fu">jitter</span>(m.c, jitter.factor)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        m.p <span class="ot">&lt;-</span> <span class="fu">jitter</span>(m.p, jitter.factor)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For ratio data, treat exact zeros as left censored values less than</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># trace.calc</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(ratio){</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        epsilon <span class="ot">&lt;-</span> .Machine<span class="sc">$</span>double.eps</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        o.c[o.c <span class="sc">&lt;</span> trace.calc] <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fu">sum</span>(o.c <span class="sc">&lt;</span> trace.calc), <span class="at">min=</span>epsilon,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">max=</span>trace.calc)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        m.c[m.c <span class="sc">&lt;</span> trace.calc] <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fu">sum</span>(m.c <span class="sc">&lt;</span> trace.calc), <span class="at">min=</span>epsilon,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">max=</span>trace.calc)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        m.p[m.p <span class="sc">&lt;</span> trace.calc] <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fu">sum</span>(m.p <span class="sc">&lt;</span> trace.calc), <span class="at">min=</span>epsilon,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">max=</span>trace.calc)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate empirical quantiles</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">length</span>(m.p)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">is.null</span>(n.tau)) n.tau <span class="ot">&lt;-</span> n</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    tau <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length=</span>n.tau)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(subsample)){</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        quant.o.c <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(<span class="fu">apply</span>(<span class="fu">replicate</span>(subsample,</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">sample</span>(o.c, <span class="at">size=</span><span class="fu">length</span>(tau))),</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">2</span>, quantile, <span class="at">probs=</span>tau, <span class="at">type=</span>pp.type,</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names=</span><span class="cn">FALSE</span>))</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        quant.m.c <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(<span class="fu">apply</span>(<span class="fu">replicate</span>(subsample,</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">sample</span>(m.c, <span class="at">size=</span><span class="fu">length</span>(tau))),</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">2</span>, quantile, <span class="at">probs=</span>tau, <span class="at">type=</span>pp.type,</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names=</span><span class="cn">FALSE</span>))</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        quant.m.p <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(<span class="fu">apply</span>(<span class="fu">replicate</span>(subsample,</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">sample</span>(m.p, <span class="at">size=</span><span class="fu">length</span>(tau))),</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">2</span>, quantile, <span class="at">probs=</span>tau, <span class="at">type=</span>pp.type,</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names=</span><span class="cn">FALSE</span>))</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span>{</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>        quant.o.c <span class="ot">&lt;-</span> <span class="fu">quantile</span>(o.c, tau, <span class="at">type=</span>pp.type, <span class="at">names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>        quant.m.c <span class="ot">&lt;-</span> <span class="fu">quantile</span>(m.c, tau, <span class="at">type=</span>pp.type, <span class="at">names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>        quant.m.p <span class="ot">&lt;-</span> <span class="fu">quantile</span>(m.p, tau, <span class="at">type=</span>pp.type, <span class="at">names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply quantile delta mapping bias correction</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>    tau.m.p <span class="ot">&lt;-</span> <span class="fu">approx</span>(quant.m.p, tau, m.p, <span class="at">rule=</span><span class="dv">2</span>, <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y    </span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(ratio){</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>        approx.t.qmc.tmp <span class="ot">&lt;-</span> <span class="fu">approx</span>(tau, quant.m.c, tau.m.p, <span class="at">rule=</span><span class="dv">2</span>,</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>        delta.m <span class="ot">&lt;-</span> m.p<span class="sc">/</span>approx.t.qmc.tmp</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>        delta.m[(delta.m <span class="sc">&gt;</span> ratio.max) <span class="sc">&amp;</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>                (approx.t.qmc.tmp <span class="sc">&lt;</span> ratio.max.trace)] <span class="ot">&lt;-</span> ratio.max</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>        mhat.p <span class="ot">&lt;-</span> <span class="fu">approx</span>(tau, quant.o.c, tau.m.p, <span class="at">rule=</span><span class="dv">2</span>,</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y<span class="sc">*</span>delta.m</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span>{</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>        delta.m <span class="ot">&lt;-</span> m.p <span class="sc">-</span> <span class="fu">approx</span>(tau, quant.m.c, tau.m.p, <span class="at">rule=</span><span class="dv">2</span>,</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>                                <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>        mhat.p <span class="ot">&lt;-</span> <span class="fu">approx</span>(tau, quant.o.c, tau.m.p, <span class="at">rule=</span><span class="dv">2</span>,</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y <span class="sc">+</span> delta.m</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    mhat.c <span class="ot">&lt;-</span> <span class="fu">approx</span>(quant.m.c, quant.o.c, m.c, <span class="at">rule=</span><span class="dv">2</span>,</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>                     <span class="at">ties=</span><span class="st">'ordered'</span>)<span class="sc">$</span>y</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For ratio data, set values less than trace to zero</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(ratio){</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>        mhat.c[mhat.c <span class="sc">&lt;</span> trace] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>        mhat.p[mhat.p <span class="sc">&lt;</span> trace] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(ECBC){</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>        <span class="co"># empirical copula coupling/Schaake shuffle</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="fu">length</span>(mhat.p)<span class="sc">==</span><span class="fu">length</span>(o.c)){</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>            mhat.p <span class="ot">&lt;-</span> <span class="fu">sort</span>(mhat.p)[<span class="fu">rank</span>(o.c, <span class="at">ties.method=</span>ties)]</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span>{</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>            <span class="fu">stop</span>(<span class="st">'Schaake shuffle failed due to incompatible lengths'</span>)</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">mhat.c=</span>mhat.c, <span class="at">mhat.p=</span>mhat.p)</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="presrat-prat" class="level3">
 <h3 class="anchored" data-anchor-id="presrat-prat">PresRat (PRAT)</h3>
 <p>O método PresRat estende o QDM incluindo um fator de correção médio <span class="citation" data-cites="Lanzante.2021">(<a href="#ref-Lanzante.2021" role="doc-biblioref">Lanzante et al. 2021</a>)</span>. Cada valor de <span class="math inline">\(D_f\)</span> calculado a partir de (23) é multiplicado por um fator de correção <span class="math inline">\(K\)</span> específico para o mês do calendário:</p>
 <p><span class="math display">\[
 K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
-\tag{24}
+\tag{26}
 \]</span></p>
 <p>Onde as barras indicam as médias climatológicas ao longo de um mês.</p>
 </section>
@@ -472,14 +785,16 @@ K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
 <p>Willems <span class="citation" data-cites="Willems.2013">(<a href="#ref-Willems.2013" role="doc-biblioref">2013</a>)</span> afirma que o fator de perturbação é calculado nos quantis de intensidade de precipitação em dias chuvosos como a razão entre a intensidade de precipitação da simulação de cenário sobre a intensidade de precipitação da simulação de controle para a mesma probabilidade de excedência empírica <span class="math inline">\((p)\)</span> ou período de retorno:</p>
 <p><span class="math display">\[
 \varphi({p}) = \frac{I_s({p})}{I_c({p})}
-\tag{25}
-\]</span> onde <span class="math inline">\(\varphi({p})\)</span> é o fator de perturbação quantílica; <span class="math inline">\(I_c({p})\)</span> o quantil de precipitação da simulação de controle; <span class="math inline">\(I_s({p})\)</span> o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, <span class="math inline">\(I(1)\geq I(2)\geq...\geq I(n_g)\)</span>, a probabilidade de excedência <span class="math inline">\(p\)</span> de qualquer intensidade de precipitação diária <span class="math inline">\(I(k_g)\)</span> é calculada empiricamente como a razão <span class="math inline">\((\frac{kg} {ng})\)</span> do número de classificação <span class="math inline">\(k_g\)</span> sobre o número total de dias <span class="math inline">\(n_g\)</span> do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.</p>
+\tag{27}
+\]</span></p>
+<p>Onde <span class="math inline">\(\varphi({p})\)</span> é o fator de perturbação quantílica; <span class="math inline">\(I_c({p})\)</span> o quantil de precipitação da simulação de controle; <span class="math inline">\(I_s({p})\)</span> o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, <span class="math inline">\(I(1)\geq I(2)\geq...\geq I(n_g)\)</span>, a probabilidade de excedência <span class="math inline">\(p\)</span> de qualquer intensidade de precipitação diária <span class="math inline">\(I(k_g)\)</span> é calculada empiricamente como a razão <span class="math inline">\((\frac{kg} {ng})\)</span> do número de classificação <span class="math inline">\(k_g\)</span> sobre o número total de dias <span class="math inline">\(n_g\)</span> do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.</p>
 <p>Para períodos de retorno elevados, devido à aleatoriedade nos dados empíricos, os períodos de retorno empíricos podem diferir significativamente dos períodos de retorno teóricos derivados das distribuições de probabilidade calibradas. Por essa razão, Willems <span class="citation" data-cites="Willems.2013">(<a href="#ref-Willems.2013" role="doc-biblioref">2013</a>)</span> aplica distribuições teóricas exponenciais de dois componentes para valores extremos.</p>
 <p>Essas distribuições são calibradas aos dados empíricos e aplicadas, conforme abaixo, para derivar os fatores de perturbação dos quantis:</p>
 <p><span class="math display">\[
 \varphi({p}) = \frac{G^{-1}_s({p})}{G^{-1}_c({p})}
-\tag{26}
-\]</span> Onde <span class="math inline">\(G_s_\)</span> é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; <span class="math inline">\(G_c\)</span> calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (26), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (25).</p>
+\tag{28}
+\]</span></p>
+<p>Onde <span class="math inline">\(G_s_\)</span> é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; <span class="math inline">\(G_c\)</span> calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (28), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (27).</p>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Silva.2021b" class="csl-entry" role="listitem">
 Feitoza Silva, Daniele, Slobodan Simonovic, Andre Schardong, e Joel Avruch Goldenfum. 2021. <span>«Introducing <span>Non-Stationarity Into</span> the <span>Development</span> of <span>Intensity-Duration-Frequency Curves</span> Under a <span>Changing Climate</span>»</span>. <em>Water</em> 13 (8): 1008. <a href="https://doi.org/10.3390/w13081008">https://doi.org/10.3390/w13081008</a>.
@@ -522,43 +837,58 @@ Willems, P. 2013. <span>«Revision of Urban Drainage Design Rules After Assessme
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -566,162 +896,184 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copiada");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copiada");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -729,185 +1081,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
 
 

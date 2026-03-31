@@ -3,9 +3,9 @@ project:
   output-dir: docs
   render: 
     - "*.qmd"
-    # - "!script_descricao_subdiario.qmd"
-    # - "!script_leitura_subdiario.qmd"
-    # - "!script_imax_subdiario.qmd"
+    - "!script_descricao_subdiario.qmd"
+    - "!script_leitura_subdiario.qmd"
+    - "!script_imax_subdiario.qmd"
 
 website:
   title: "Proj. IDF Brasil ANA/UnB"

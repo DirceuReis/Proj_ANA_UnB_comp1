@@ -14,6 +14,7 @@ subtitle: "Componente 1 do projeto Riscos de eventos extremos: drenagem urbana e
 ### Pesquisadores bolsistas do projeto
 
 -   Bruno Silva Pereira (Pesquisador doutor colaborador, PTARH/UnB)
+-   Daniele Feitoza Silva (Pesquisadora doutora colaboradora, PTARH/UnB)
 -   Filipe Carvalho Lemos (Pesquisador, UFPB)
 -   Larissa Zaira Rafael Rolim (Pesquisadora doutora colaboradora, PTARH/UnB)
 
@@ -26,8 +27,9 @@ subtitle: "Componente 1 do projeto Riscos de eventos extremos: drenagem urbana e
 
 ### Colaboradores
 
--   Emerson Freitas da Silva (Pesquisador, UFPB)
+-   Alain de Gois Barbosa (Pesquisador, UFMG)
 -   Christian Chadwick (Professor, Universidad Adolfo Ibáñez, Chile)
+-   Emerson Freitas da Silva (Pesquisador, UFPB)
 -   Luna Gripp Simões Alves (Pesquisadora: estágio pós-doutoral, UFMG)
 -   Veber Afonso Figueiredo Costa (Professor, UFMG)
 

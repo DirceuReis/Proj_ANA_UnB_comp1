@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Proj. IDF Brasil ANA/UnB - Análise da estrutura temporal das intensidades máximas anuais</title>
+<title>Análise da estrutura temporal das intensidades máximas anuais – Proj. IDF Brasil ANA/UnB</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,8 +21,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -84,15 +85,17 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -121,7 +124,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -135,7 +138,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -154,19 +157,21 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Procurar"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -182,20 +187,20 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Scripts</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-scripts">    
         <li>
-    <a class="dropdown-item" href="./script_leitura_subdiario.html">
+    <a class="dropdown-item" href="./script_leitura_subdiario.qmd">
  <span class="dropdown-text">Leitura das séries de precipitação subdiária</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_imax_subdiario.html">
+    <a class="dropdown-item" href="./script_imax_subdiario.qmd">
  <span class="dropdown-text">Geração das intensidades máximas anuais</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./script_descricao_subdiario.html">
+    <a class="dropdown-item" href="./script_descricao_subdiario.qmd">
  <span class="dropdown-text">Análise e descrição dos subdiários</span></a>
   </li>  
         <li>
@@ -205,7 +210,7 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-revisão-bibliográfica" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-revisão-bibliográfica" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Revisão Bibliográfica</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-revisão-bibliográfica">    
@@ -222,7 +227,7 @@ window.Quarto = {
  <span class="dropdown-text">Regionalização</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Sensoriamento_remoto.qmd">
+    <a class="dropdown-item" href="./Sensoriamento_remoto.html">
  <span class="dropdown-text">Sensoriamento remoto</span></a>
   </li>  
         <li>
@@ -245,7 +250,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -293,7 +298,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">03/02/2026 09:42:59</p>
+      <p class="date">31/03/2026 08:56:04</p>
     </div>
   </div>
   
@@ -354,10 +359,10 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <p>Seguindo a metodologia acima, podemos construir uma função – que chamaremos de <code>fun_scale_invariance</code> – para ajustar um modelo linear a <code>n</code> momentos não centrais de intensidades de múltiplas durações e obter uma estimativa do coeficiente de escala <span class="math inline">\(H\)</span>, além de permitir uma avaliação sobre a validade ou não da hipótese de invariância de escala na região. Na análise que faremos, separaremos os ajustes em intervalos de duração diferentes. Isso porque também nos interessa avaliar se os valores de <span class="math inline">\(H\)</span> ajustados são muito diferentes para as durações sub-horárias, horárias, diárias e considerando todas as durações.</p>
 <section id="construção-dos-modelos" class="level3">
 <h3 class="anchored" data-anchor-id="construção-dos-modelos">Construção dos modelos</h3>
-<p>Começamos importando as séries de intensidades máximas anuais para diferentes durações calculadas em <a href="./script_imax_subdiario.html">Máximos anuais de intensidade</a> no arquivo <code>df_imax.parquet</code>.</p>
+<p>Começamos importando as séries de intensidades máximas anuais para diferentes durações calculadas em <a href="script_imax_subdiario.qmd">Máximos anuais de intensidade</a> no arquivo <code>df_imax.parquet</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df.imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_imax.parquet"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.imax, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df.imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_imax.parquet"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.imax, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 8
   gauge_code     d  imax date                 year na_prct mon_filter n_max
@@ -371,15 +376,15 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 </div>
 <p>Esta tabela foi gerada sem aplicar filtros, mas contém, na coluna <code>na_prct</code>, uma forma que permite que o façamos agora. Definiremos dois critérios para validar as estações que serão utilizadas para a análise: <code>na.accept</code>, um percentual mínimo de falhas anuais; e <code>min.years</code>, qual o número mínimo de anos que uma estação deverá ter com <code>na_prct &lt;= na.accept</code> para que seja incluída na análise. Adicionalmente, para uma regressão linear é interessante que tenhamos pelo menos três pontos diferentes. Isso é importante quando avaliarmos as estações por intervalos de duração. São poucas as estações</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>na.accept <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># percentual de falhas (0.2 -&gt; 20%)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>na.accept <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># percentual de falhas (0.2 -&gt; 20%)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>min.years <span class="ot">&lt;-</span> <span class="dv">8</span>      <span class="co"># mínimo de anos na série</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>which.moment <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># qual momento usar de base p/ gerar figuras individuais</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>min.duration <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># mínimo de durações diferentes necessário</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>which.duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>) <span class="co"># uma faixa de duração para a análise</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>which.duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>) <span class="co"># uma faixa de duração para a análise</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Primeiro manteremos os anos que apresentarem um percentual de falhas <code>data$na_prct</code> inferior a 20% e selecionaremos um intervalo de durações para análise (ex. entre 1 e 24 horas). Em seguida, agrupando os dados por estação, selecionaremos somente aquelas que contiverem ao menos 3 durações distintas e 8 anos usando <code>dplyr::n_distinct(d)</code> e <code>dplyr::n_distinct(year)</code> respectivamente.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df.imax <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df.imax <span class="sc">%&gt;%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(na_prct <span class="sc">&lt;=</span> na.accept,              <span class="co"># filtrar anos por porcentagem de falhas</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">between</span>(d, which.duration[<span class="dv">1</span>], which.duration[<span class="dv">2</span>])) <span class="sc">%&gt;%</span> <span class="co"># filtrar durações dentro do intervalo</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span>                  <span class="co"># agrupar por estação</span></span>
@@ -387,7 +392,7 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">n_distinct</span>(year) <span class="sc">&gt;=</span> min.years) <span class="sc">%&gt;%</span> <span class="co"># so estações com pelo menos 'min.years'</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()                                 <span class="co"># desagrupar</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 8
   gauge_code     d  imax date                 year na_prct mon_filter n_max
@@ -403,14 +408,14 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <h4 class="anchored" data-anchor-id="momentos">Momentos</h4>
 <p>Feito isso calculamos os momentos não centrais. Queremos que o cálculo seja feito para quaisquer <code>n</code> momentos que possam ser passados para uma sequência <code>which.moment</code>, o que pode ser feito utilizando as funções <code>purrr::map_()</code>. Essas funções executam uma função qualquer dentro da estrutura do <code>dplyr</code>. Imaginemos então que queremos criar uma nova coluna para cada <code>1:n</code> momento não central desejado. Podemos criar essas novas colunas usando a função <code>dplyr::tibble()</code>, que na prática criará uma tabela, e adicionar essas novas colunas ao nosso dataframe <code>data</code> “mapeando” a função <code>tibble()</code> através do <code>purrr::map_dfc()</code> e esse <code>tibble</code> será criado com base em cada momento dentro do vetor <code>which.moment</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais locais (p/ cada estação)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais locais (p/ cada estação)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df.mom.local <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, d) <span class="sc">%&gt;%</span> </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">n</span>(),</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>          purrr<span class="sc">::</span><span class="fu">map_dfc</span>(<span class="at">.x =</span> which.moment,</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">.f =</span> <span class="sc">~</span> <span class="fu">tibble</span>(<span class="st">"mom{.x}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(imax<span class="sc">^</span>.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.mom.local, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df.mom.local, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 6
   gauge_code     d n_years  mom1  mom2    mom3
@@ -426,31 +431,31 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <p>Mais informações sobre as funções <code>map_()</code> podem ser obtidas em <a href="https://purrr.tidyverse.org/reference/map.html"><code>purrr::map()</code></a>. Sobre o operador <code>:=</code> (<em>dynamic dots</em>), referenciamos <code>?rlang::</code>:=`.</p>
 <p>Também é de interesse obter uma perspectiva regional para fins de comparação, isto é, determinar um modelo de <span class="math inline">\(H\)</span> único para o conjunto, como se todas as estações fizessem parte da mesma série. Portando, em vez de agrupar por <code>gauge_code</code> e por duração <code>d</code>, agruparemos somente por <code>d</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais regionais</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular 'which.moment' momentos centrais regionais</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.mom.regional <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(d) <span class="sc">%&gt;%</span> </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">n</span>(),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>          purrr<span class="sc">::</span><span class="fu">map_dfc</span>(which.moment, <span class="sc">~</span> <span class="fu">tibble</span>(<span class="st">"mom{.x}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(imax<span class="sc">^</span>.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>          purrr<span class="sc">::</span><span class="fu">map_dfc</span>(which.moment, <span class="sc">~</span> <span class="fu">tibble</span>(<span class="st">"mom{.x}"</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(imax<span class="sc">^</span>.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Podemos agora juntar os dois conjuntos em um único dataframe <code>df.mom</code> e reorganizar os dados de um formato “<em>wide</em>” (com várias colunas) para um formato “<em>long</em>” (com várias linhas) usando <code>dplyr::pivot_longer()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.mom.regional<span class="sc">$</span>gauge_code <span class="ot">&lt;-</span> <span class="st">"Regional"</span>                <span class="co"># adicionar coluna</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.mom.regional<span class="sc">$</span>gauge_code <span class="ot">&lt;-</span> <span class="st">"Regional"</span>                <span class="co"># adicionar coluna</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df.mom <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df.mom.local, df.mom.regional) <span class="sc">%&gt;%</span>  <span class="co"># juntar</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span><span class="fu">c</span>(gauge_code, d, n_years),       <span class="co"># manter essas colunas</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"which_moment"</span>),  <span class="co"># novas colunas</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">"(mom)(</span><span class="sc">\\</span><span class="st">d+)"</span>) <span class="sc">%&gt;%</span>       <span class="co"># colunas c/ valores</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">which_moment =</span> <span class="fu">as.numeric</span>(which_moment))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">which_moment =</span> <span class="fu">as.numeric</span>(which_moment))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="regressão-linear" class="level4">
 <h4 class="anchored" data-anchor-id="regressão-linear">Regressão linear</h4>
 <p>Para a regressão linear em si, antes dividiremos nossos dados em uma lista, cada objeto desta lista contendo o dataframe de uma única estação:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ls.mom <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="at">x =</span> df.mom, <span class="at">f =</span> df.mom<span class="sc">$</span>gauge_code)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ls.mom <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="at">x =</span> df.mom, <span class="at">f =</span> df.mom<span class="sc">$</span>gauge_code)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Usaremos <code>lapply()</code> para iterar sobre cada objeto dessa lista e executar sobre eles uma sequência de operações: 1) calcular os logaritmos das durações e dos momentos; 2) ajustar um modelo linear usando <code>lm()</code> sobre <code>log(mom) ~ log(d)</code>; 3) extrair estatísticas do modelo linear ajustado (R², coeficiente angular, erro padrão); e 4) calcular, a partir do coeficiente angular do modelo, o coeficiente de escala <span class="math inline">\(H\)</span>. Também será necessário separar os dataframes dentro de <code>ls.mom</code> por momento, para que o ajuste dos modelos seja feito corretamente:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> ls.mom, <span class="at">FUN =</span> <span class="cf">function</span>(gauge){</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> ls.mom, <span class="at">FUN =</span> <span class="cf">function</span>(gauge){</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> gauge<span class="sc">$</span>gauge_code[<span class="dv">1</span>] <span class="co"># código da estação</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -489,7 +494,7 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformar em tbl_df</span></span>
 <span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.moments)</span>
 <span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.moments, <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.moments, <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  gauge_code n_years d which_moment   mom  coef_reg    scale rsquared
 1 430120601A       8 1            1 46.90 -0.706307 0.706307 0.993362
@@ -510,7 +515,7 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <h4 class="anchored" data-anchor-id="visualização">Visualização</h4>
 <p>Por fim, criaremos um conjunto de gráficos que apresentem de forma clara os resultados obtidos. Construiremos duas figuras: 1) uma apresentando os modelos regionais calculados, ilustrando o comportamento da invariância de escala à nível de região; 2) e outra comparando localmente os modelos de <span class="math inline">\(H\)</span> locais com o regional. Para a primeira figura, temos:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coeficiente de escala regional de cada momento</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coeficiente de escala regional de cada momento</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>scale.regional <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span> </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, which_moment) <span class="sc">%&gt;%</span> </span>
@@ -568,9 +573,9 @@ q=3: &amp; \quad \log(E[I_d^3]) = \log(f(3)) + (-3H)\log(d).
 <span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.scale.all'</span></span>
 <span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>plot.scale.all</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>plot.scale.all</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fig-plot-scale-regional" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-plot-scale-regional" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-plot-scale-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="script_duracao_subdiario_files/figure-html/fig-plot-scale-regional-1.png" class="img-fluid figure-img" width="672">
@@ -585,7 +590,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <p>A <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a> acima contém dois gráficos principais. A <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a>(a) mostra os modelos regionais ajustados para os 3 primeiros momentos não centrais e os respectivos coeficientes de escala <span class="math inline">\(H\)</span> estimados a partir deles. Já a <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a>(b) apresenta histogramas do R², indicando a qualidade do ajuste do modelo linear aos dados. Nota-se que, para o intervalo de durações horários (1 a 24 h) há uma predominância de valores acima de 0,980 e mediana (entre os 3 momentos) igual a 0.998.</p>
 <p>Para a segunda, precisaremos separar os gráficos das estações usando <code>facet_wrap(~gauge_code)</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico avaliação individual dos modelos locais vs. regional</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico avaliação individual dos modelos locais vs. regional</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plot.dim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">4</span>) <span class="co"># disposição dos gráficos</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir dados em 'local' e 'regional'</span></span>
@@ -646,7 +651,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.group'</span></span>
 <span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>plot.group</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>plot.group</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -657,19 +662,19 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 </div>
 <p>Pela quantidade de gráficos individuais, podemos subdividir a plotagem usando <code>ggforce::facet_wrap_paginate()</code> no lugar do <code>facet_wrap()</code> convencional. Com as dimensões especificadas em <code>plot.dim</code>, fazemos uma plotagem inicial para avaliar as dimensões do gráfico e em seguida podemos determinar quantas páginas seriam necessárias para que todas as estações sejam plotadas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot.seq <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n_pages</span>(plot.group) <span class="co"># número de páginas necessárias para plotar o gráfico completo</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot.seq <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n_pages</span>(plot.group) <span class="co"># número de páginas necessárias para plotar o gráfico completo</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividir o gráfico acima em 'n_pages' e salvar cada um em uma lista</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plot.scale.each <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> plot.seq, <span class="at">FUN =</span> <span class="cf">function</span>(group){</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  plot.group <span class="sc">+</span> ggforce<span class="sc">::</span><span class="fu">facet_wrap_paginate</span>(<span class="sc">~</span>gauge_code, <span class="at">nrow =</span> plot.dim[<span class="dv">1</span>], <span class="at">ncol =</span> plot.dim[<span class="dv">2</span>], <span class="at">page =</span> group, <span class="at">scales =</span> <span class="st">"fixed"</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.scale.each'</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}) <span class="co"># fim 'plot.scale.each'</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="saídas-da-função" class="level4">
 <h4 class="anchored" data-anchor-id="saídas-da-função">Saídas da função</h4>
 <p>Por fim, basta organizarmos as saídas da função. Salvaremos os momentos calculados (<code>scale.moments</code>) caso viermos a precisar deles futuramente; os coeficientes <span class="math inline">\(H\)</span> locais e regionais de cada momento (<code>scale.coefficient</code>), calculado como:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar coeficientes de escala</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar coeficientes de escala</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>scale.coefficient <span class="ot">&lt;-</span> scale.moments <span class="sc">%&gt;%</span> </span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code, which_moment) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">n_years =</span> <span class="fu">first</span>(n_years),</span>
@@ -678,7 +683,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">se =</span> <span class="fu">first</span>(se)) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">deparse</span>(which.duration))</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.coefficient, <span class="dv">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scale.coefficient, <span class="dv">5</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 7
   gauge_code which_moment n_years scale rsquared     se d       
@@ -692,15 +697,15 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 </div>
 <p>e por fim os gráficos gerados da análise (<code>plot.scale.all</code> e <code>plot.scale.group</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar resultados</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar resultados</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"scale.moments"</span> <span class="ot">=</span> scale.moments[<span class="fu">c</span>(<span class="st">"gauge_code"</span>, <span class="st">"d"</span>, <span class="st">"which_moment"</span>, <span class="st">"mom"</span>)], <span class="co"># contém só os momentos de cada duração</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"scale.coefficient"</span> <span class="ot">=</span> scale.coefficient, <span class="co"># contém coeficiente de escala e informações sobre a regressão</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"plot.scale.all"</span> <span class="ot">=</span> plot.scale.all,       <span class="co"># gráfico para os dois momentos com todos os modelos + histograma de R²</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"plot.scale.each"</span> <span class="ot">=</span> plot.scale.each)     <span class="co"># gráficos individuais de um momento escolhido com modelo local + regional</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"plot.scale.each"</span> <span class="ot">=</span> plot.scale.each)     <span class="co"># gráficos individuais de um momento escolhido com modelo local + regional</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Com os dados de entrada passados no início, nossa função terá o seguinte cabeçalho e deverá carregar os seguintes pacotes:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fun_scale_invariance <span class="ot">&lt;-</span> <span class="cf">function</span>(df.imax,                   <span class="co"># data.frame com intensidades máximas anuais para diferentes durações</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fun_scale_invariance <span class="ot">&lt;-</span> <span class="cf">function</span>(df.imax,                   <span class="co"># data.frame com intensidades máximas anuais para diferentes durações</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                                 na.accept,                 <span class="co"># limite de falhas por ano [0,1]</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                                 min.years,                 <span class="co"># mínimo de anos em uma série</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">which.moment =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,       <span class="co"># quais momentos calcular</span></span>
@@ -720,7 +725,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  ...</span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A função final se encontra em <a href="scripts/funcoes/fun_scale_invariance_more_moments.R">fun_scale_invariance_more_moments</a>.</p>
 </section>
@@ -730,33 +735,33 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <p>Como foi dito anteriormente, faremos a análise descrita para diferentes conjuntos de duração, uma vez que é de nosso interesse avaliar se a relação de linearidade que vimos na <a href="#fig-plot-scale-regional" class="quarto-xref">Figura&nbsp;1</a> calculada para durações horárias – <code>c(10/60, 10*24)</code> – também está presente nas durações sub-horárias – <code>c(10, 60)/60</code> – e nas diárias – <code>c(1, 10)*24</code> – e ainda se podemos usar um mesmo valor de <span class="math inline">\(H\)</span> para todas as durações – <code>c(10/60, 10*24)</code>.</p>
 <p>Para isso, vamos chamar nossa função criada:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_scale_invariance_more_moments.R"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/funcoes/fun_scale_invariance_more_moments.R"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>ler os dados de intensidades máximas anuais (removendo uma estação problemática em particular):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados subdiários</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados subdiários</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_imax.parquet"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> df_imax[df_imax<span class="sc">$</span>gauge_code <span class="sc">!=</span> <span class="st">"SBPA"</span>,] <span class="co"># estação dando problema</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>df_imax <span class="ot">&lt;-</span> df_imax[df_imax<span class="sc">$</span>gauge_code <span class="sc">!=</span> <span class="st">"SBPA"</span>,] <span class="co"># estação dando problema</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>definir os argumentos da função:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Argumentos</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Argumentos</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>na.accept <span class="ot">&lt;-</span> <span class="fl">0.2</span>    <span class="co"># percentual de falhas (0.2 -&gt; 20%)</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>min.years <span class="ot">&lt;-</span> <span class="dv">8</span>      <span class="co"># mínimo de anos na série</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>which.moment <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="co"># qual momento usar de base p/ gerar figuras individuais</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>min.duration <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># mínimo de durações diferentes necessário</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>min.duration <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># mínimo de durações diferentes necessário</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>e definir em quais intervalos queremos que a hipótese de invariância de escala seja avaliada:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Avaliar diferentes modelos</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Avaliar diferentes modelos</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>duration.intervals <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">10</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">10</span><span class="sc">*</span><span class="dv">24</span>), <span class="co"># todas as durações</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">60</span>)<span class="sc">/</span><span class="dv">60</span>,    <span class="co"># sub-horários</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">24</span>),        <span class="co"># horários</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>)<span class="sc">*</span><span class="dv">24</span>)     <span class="co"># diários</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>)<span class="sc">*</span><span class="dv">24</span>)     <span class="co"># diários</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>e, finalmente, rodamos a função para cada intervalo de duração especificado acima utilizando uma versão do <code>lapply()</code> que também gera uma barra de progresso. Criaremos uma lista que conterá quatro objetos: 1) <code>scale.moments</code>, uma tabela (<code>tbl_df</code>) contendo os momentos calculados; 2) <code>scale.coefficient</code>, uma tabela (<code>tbl_df</code>) contendo os valores de coeficiente de escala estimados; 3) <code>plot.scale.all</code>, os gráficos regionais; e 4) <code>plot.scale.group</code>, os gráficos individualizados.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regressão + coeficiente de escala + plots</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regressão + coeficiente de escala + plots</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>scale.invariance <span class="ot">&lt;-</span> pbapply<span class="sc">::</span><span class="fu">pblapply</span>(<span class="at">X =</span> duration.intervals, <span class="at">FUN =</span> <span class="cf">function</span>(interval){</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">fun_scale_invariance</span>(<span class="at">df.imax =</span> df_imax,</span>
@@ -769,11 +774,11 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">font.size =</span> <span class="dv">12</span>,</span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.dim =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">4</span>))</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>}); <span class="fu">names</span>(scale.invariance) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all"</span>, <span class="st">"subhourly"</span>, <span class="st">"hourly"</span>, <span class="st">"daily"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>}); <span class="fu">names</span>(scale.invariance) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all"</span>, <span class="st">"subhourly"</span>, <span class="st">"hourly"</span>, <span class="st">"daily"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Por fim, vamos salvar os arquivos gerados contendo os momentos (<code>scale.moments</code>) e os coeficientes de escala em si (<code>scale.coefficient</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrair resultados de 'scale.invariance'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrair resultados de 'scale.invariance'</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>scale.moments <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span>  scale.invariance, <span class="at">FUN =</span> <span class="cf">function</span>(interval){</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  interval<span class="sc">$</span>scale.moments</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>}); scale.moments <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.moments)</span>
@@ -783,7 +788,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>});  scale.coefficient <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(scale.coefficient)</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salvar arquivo</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">write_parquet</span>(<span class="at">x =</span> scale.coefficient, <span class="at">sink =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">write_parquet</span>(<span class="at">x =</span> scale.coefficient, <span class="at">sink =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -792,7 +797,7 @@ Figura&nbsp;1: Modelo regional ajustado para cada um dos momentos e para duraç�
 <p>A seguir são apresentados os resultados gerados na seção anterior.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-all-duration" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-all-duration" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-all-duration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figuras/scale_invariance/8 anos 20 prct/all_duration/plot_scale_invariance_all.png" class="img-fluid figure-img" width="944">
@@ -806,7 +811,7 @@ Figura&nbsp;2: Modelo regional ajustado para cada um dos momentos e para todas a
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-subhourly" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-subhourly" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-subhourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figuras/scale_invariance/8 anos 20 prct/subhourly_duration/plot_scale_invariance_subhourly.png" class="img-fluid figure-img" width="944">
@@ -820,7 +825,7 @@ Figura&nbsp;3: Modelo regional ajustado para cada um dos momentos e para as dura
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-hourly" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-hourly" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-hourly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figuras/scale_invariance/8 anos 20 prct/hourly_duration/plot_scale_invariance_hourly.png" class="img-fluid figure-img" width="944">
@@ -834,7 +839,7 @@ Figura&nbsp;4: Modelo regional ajustado para cada um dos momentos e para todas a
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-daily" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-daily" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figuras/scale_invariance/8 anos 20 prct/daily_duration/plot_scale_invariance_daily.png" class="img-fluid figure-img" width="944">
@@ -849,14 +854,14 @@ Figura&nbsp;5: Modelo regional ajustado para cada um dos momentos e para todas a
 <p>Observando as figuras geradas e a distribuição dos valores de R², é evidente a relação de invariância de escala em seu sentido amplo. Analisando regionalmente, nota-se que existe uma diferença perceptível entre os valores de <span class="math inline">\(H\)</span> estimados para as diferentes durações, mas é preciso investigar se essa diferença é de fato significativa do ponto de vista estatístico. O fato de essa diferença ser significantiva ou não impacta na decisão de se utilizar um único coeficiente para descrever a relação de invariância, ou se é necessário representar a “quebra” nas durações e, se sim, qual o impacto dessa decisão na prática da engenharia.</p>
 <p>A <a href="#tbl-resumo-escala-regional" class="quarto-xref">Tabela&nbsp;1</a> abaixo apresenta os coeficientes regionais médios entre os momentos.</p>
 <div class="cell">
-<div id="tbl-resumo-escala-regional" class="cell quarto-float anchored">
+<div id="tbl-resumo-escala-regional" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumo-escala-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;1: Coeficiente de escala médio entre os momentos regionais.
 </figcaption>
 <div aria-describedby="tbl-resumo-escala-regional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="do-not-create-environment cell table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">Intervalo de durações</th>
@@ -898,18 +903,18 @@ Tabela&nbsp;1: Coeficiente de escala médio entre os momentos regionais.
 <h4 class="anchored" data-anchor-id="aproximados">Aproximados</h4>
 <p>Os intervalos aproximados se baseiam nas estimativas de erro padrão resultantes do ajuste do modelo linear em cada estação – valores esses armazenados no dataframe gerado que contém os coeficientes de escala em . Leremos ele como <code>df_scale</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(<span class="at">file =</span> <span class="st">"base/gerados/df_scale_coefficient.parquet"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Os intervalos de 95% de confiança situam-se aproximadamente a uma distância de 1.96 do valor médio, portanto limites podem ser estimados da seguinte maneira:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> df_scale <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_scale <span class="ot">&lt;-</span> df_scale <span class="sc">%&gt;%</span> </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ci_lower =</span> scale <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>se, <span class="co"># limite inferior</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ci_upper =</span> scale <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se) <span class="co"># limite superior</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ci_upper =</span> scale <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se) <span class="co"># limite superior</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Com esses limites em mãos, podemos partir para uma análise visual, comparando estações entre si e entre durações, verificando sobreposição de de intervalos de confiança, entre outros fatores relevantes. Para essa análise, calculamos a média entre os momentos.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-ic-aproximado" class="quarto-figure quarto-figure-center quarto-float anchored">
+<div id="fig-ic-aproximado" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ic-aproximado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="script_duracao_subdiario_files/figure-html/fig-ic-aproximado-1.png" class="img-fluid figure-img" width="672">
@@ -938,14 +943,14 @@ Figura&nbsp;6: Comparação dos intervalos de confiança aproximados das estimat
 <h3 class="anchored" data-anchor-id="brasil">Brasil</h3>
 <p>Há no Brasil um histórico de utilização de coeficientes de desagregação entre lâminas de precipitação de diferentes durações <span class="citation" data-cites="cetesb1986">(<a href="#ref-cetesb1986" role="doc-biblioref">CETESB 1986</a>, pg. 17)</span>, apresentados abaixo na <a href="#tbl-coef-cetesb" class="quarto-xref">Tabela&nbsp;2</a>.</p>
 <div class="cell">
-<div id="tbl-coef-cetesb" class="cell quarto-float anchored">
+<div id="tbl-coef-cetesb" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coef-cetesb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;2: Coeficientes de desagregação sugeridos pela CETESB (1986) elaborados pelo DNOS.
 </figcaption>
 <div aria-describedby="tbl-coef-cetesb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="do-not-create-environment cell table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: center;">Relação entre alturas pluviométricas</th>
@@ -1032,7 +1037,7 @@ C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 <li>Coeficiente Regional (Expoente Geral): coeficientes de desagregação estimados a partir do expoente de escala estimado para todas as durações consideradas, isto é, um único valor de <span class="math inline">\(H\)</span> ajustado para durações desde as sub-horárias até as horárias, calculados em <code>df.cetesb$coef_regional_all</code>.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir novo intervalo de durações</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definir novo intervalo de durações</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>which.duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">/</span><span class="dv">60</span>, <span class="dv">24</span>) <span class="co"># de 10 min a 24 h</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>df.scale.hour <span class="ot">&lt;-</span> <span class="fu">fun_scale_invariance</span>(<span class="at">df.imax =</span> df_imax,</span>
@@ -1046,10 +1051,10 @@ C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gauge_code <span class="sc">==</span> <span class="st">"Regional"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gauge_code) <span class="sc">%&gt;%</span> </span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_if</span>(is.numeric, <span class="sc">~</span><span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(scale)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(scale)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alterar nomes</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alterar nomes</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">unique</span>(df_scale<span class="sc">$</span>d)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>group.names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Todas"</span>, <span class="st">"Sub-horários"</span>, <span class="st">"Horários"</span>, <span class="st">"Diários"</span>)</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="at">object =</span> group.names, <span class="at">nm =</span> groups)</span>
@@ -1097,18 +1102,18 @@ C_P = \left( \frac{d}{D} \right)^{-H + 1}.
 <span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Coeficiente de desagregação c/ expoente de escala comum aos sub-horários e horários</span></span>
 <span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>  df.cetesb<span class="sc">$</span>coef_regional_all[i] <span class="ot">&lt;-</span> (df.cetesb<span class="sc">$</span>d1[i]<span class="sc">/</span><span class="dv">24</span>)<span class="sc">^</span>(<span class="sc">-</span>regional.scale.hour <span class="sc">+</span> <span class="dv">1</span>)</span>
 <span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A <a href="#tbl-comparacao-coef" class="quarto-xref">Tabela&nbsp;3</a> abaixo apresenta os coeficientes calculados.</p>
 <div class="cell">
-<div id="tbl-comparacao-coef" class="cell quarto-float anchored">
+<div id="tbl-comparacao-coef" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-comparacao-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;3: Comparação entre coeficientes sugeridos pela CETESB e coeficientes de desagregação calculados a partir do fator de escala do modelo de invariância de escala <span class="math inline">\(H\)</span> regional com um modelo único para todas as durações e um fator de escala para durações sub-horárias e horárias.
 </figcaption>
 <div aria-describedby="tbl-comparacao-coef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="do-not-create-environment cell table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 26%">
 <col style="width: 13%">
@@ -1228,43 +1233,58 @@ Rodrigues, Guilherme, Wilson Fernandes, Veber Costa, e Eber Pinto. 2023. <span>�
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1272,162 +1292,184 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copiada");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copiada");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
-    };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
         }
-        return container.innerHTML
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1435,185 +1477,161 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
 
 
