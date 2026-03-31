@@ -48,6 +48,9 @@ website:
         text: Blog
       - href: links.qmd
         text: links
+      - href: teste.qmd
+        text: teste
+
 
 format:
   html:
