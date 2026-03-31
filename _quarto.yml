@@ -38,7 +38,7 @@ website:
           - href: climate_models.qmd
             text: IDF e as mudanças do clima
           - href: guidelines.qmd
-            text: Exemplos de esudos de caráter nacional
+            text: Exemplos de estudos de caráter nacional
           
       #- text: "Tutoriais"
       #  menu: 
