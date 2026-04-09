@@ -1,4 +1,0 @@
-"gauge_subdaily" "gauge_daily" "distance_m" "n_years_daily" "n_years_subdaily"
-"A809" "83927" 0 91 12
-"A844" "83916" 14.7404960513582 88 13
-"A801" "83967" 0 62 17

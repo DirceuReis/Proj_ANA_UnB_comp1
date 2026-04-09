@@ -70,8 +70,8 @@ df.data <- df.data %>%
 # EXPORTAR BRUTO ----------------------------------------------------------
 
 # Parquet
-write_parquet(df.data, sink = "base/gerados/df_subdaily_data.pqt")
-write_parquet(df.info, sink = "base/gerados/df_subdaily_info.pqt")
+write_parquet(df.data, sink = "base/gerados/df_subdaily_data.pqt", compression = "gzip", compression_level = 5)
+write_parquet(df.info, sink = "base/gerados/df_subdaily_info.pqt", compression = "gzip", compression_level = 5)
 
 invisible(gc())
 
