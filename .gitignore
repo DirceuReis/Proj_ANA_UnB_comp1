@@ -7,5 +7,5 @@
 
 **/*.quarto_ipynb
 
-base/temp/*         # pasta temporária para salvar arquivos gerados
+base/temp/          # pasta temporária para salvar arquivos gerados
 !base/temp/.gitkeep # exceção p/ arquivo .gitkeep p/ criar a pasta temp

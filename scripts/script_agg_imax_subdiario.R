@@ -25,8 +25,9 @@ min.years <- 0 # 8
 
 # Funções
 source("scripts/funcoes/fun_filter_set.R") # preencher datas e filtrar
-source("scripts/funcoes/fun_group_ts.R")     # agrupar por time_step
+source("scripts/funcoes/fun_group_ts.R")   # agrupar por time_step
 source("scripts/funcoes/fun_imax_agg.R")   # agregar por durações e calcular intensidade máxima anual
+source("scripts/funcoes/fun_imax_agg_wateryear.R") # agregar por durações e calcular intensidade máxima anual por ano hidrológico
 
 # Preencher datas e filtrar conforme 'na_accept' e 'min_years'
 df.data <-  fun_filter_set(data = df.data,
@@ -44,7 +45,8 @@ data.by.time <- fun_group_ts(data.ls, ts_name = "time_step") # agrupar em duraç
 d.subhour <- c(10, 15, 20, 30, 40, 45, 50) # durações sub-horárias
 d.subdaily <- seq(1, 23)                   # durações subdiárias
 d.daily <- 1:10                            # durações diárias
-durations <- c(d.subhour/60, d.subdaily, d.daily*24) # durações
+durations <- c(d.subhour/60, d.subdaily, d.daily*24)  # durações
+which.mon <- c(8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7) # ano hidrológico
 time.steps <- names(data.by.time)          # lista de time_steps
 
 # Aplicar função 'fun_imax_agg' p/ cada grupo de durações
@@ -56,12 +58,20 @@ imax.ls <- lapply(X = time.steps, FUN = function(ts){
   
   message(paste0("\nProcessando conjunto de estações com resolução de ", ds*60, " minutos..."))
   
-  out <- fun_imax_agg(data = current.ts,
-                      durations = valid.durations,
-                      which.mon = 1:12,
-                      names = c("datetime", "rain_mm"))
+  # A função fun_imax_agg() foi substituída pela função imax.wateryear
+  # que calcula imax agora considerando o ano hidrológico estabelecido
+  # conforme `which.mon` (pegando a primeira observação `which.mon[1]`)
+  # como o início do ano hidrológico
+  out <- imax.wateryear(data = current.ts,
+                        durations = valid.durations,
+                        which.mon = which.mon,
+                        names = c("datetime", "rain_mm"))
   
 }) # fim 'imax.ls'
+
+# Agosto foi definido como início do ano hidrológico baseado nas avaliações feitas
+# em `dry_months_frequency.R`, que possibilitou identificar meses com baixa frequência
+# de intensidades máximas anuais
 
 rm(df.data, data.ls, data.by.time); invisible(gc())
 

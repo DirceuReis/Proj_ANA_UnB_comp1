@@ -1,6 +1,6 @@
 ---
 title: "A premissa do simple scale"
-description: "ermite estimar quatis de chuva para escalas temporais mais refindas com base em escalas mais grosseiras"
+description: "Permite estimar quatis de chuva para escalas temporais mais refindas com base em escalas mais grosseiras"
 author: "Dirceu Reis"
 date: "04/06/2025"
 categories: 

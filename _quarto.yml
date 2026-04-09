@@ -39,11 +39,7 @@ website:
             text: IDF e as mudanças do clima
           - href: guidelines.qmd
             text: Exemplos de estudos de caráter nacional
-          
-      #- text: "Tutoriais"
-      #  menu: 
-      #    - href: tutorial/rs_subdaily_read_hdf_all.qmd
-      #      text: Leitura de arquivo hdf
+  
       - href: Blog/index.qmd
         text: Blog
       - href: links.qmd

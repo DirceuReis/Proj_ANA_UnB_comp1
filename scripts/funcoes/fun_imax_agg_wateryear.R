@@ -110,7 +110,7 @@ imax.wateryear <- function(data,             # lista contendo as séries das est
                           "wateryear" = yr,       # ano hidrológico em que ocorre o máximo (alterar dps p/ ano_hidro)
                           "na_prct_yr" = na.prct.yr,         # porcentagem de falhas por ano
                           "na_prct_mon" = na.prct.mon,       # porcentagem de falhas no mês do máximo
-                          "mon_filter" = deparse(which.mon), # meses usados p/ análise
+                          "mon_filter" = deparse(which.mon)  # meses usados p/ análise
                           # "n_max" = n.max
                           )      # número de máximos iguais
          
