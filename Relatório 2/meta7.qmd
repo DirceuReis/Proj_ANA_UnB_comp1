@@ -3,3 +3,121 @@ title: "Meta 7 — Extremos Subdiários e IDFs"
 ---
 
 Esta meta desenvolve curvas IDF a partir dos dados subdiários de pluviógrafos do INMET e CEMADEN, considerando durações de 10 minutos a 24 horas. Inclui ajuste de distribuições de extremos, invariância de escala e pooling parcial.
+
+#7.1 Seleção das séries
+##Brasil
+estações INMET;
+estações CEMADEN;
+estações aprovadas pelo QC da Meta 3;
+anos válidos;
+resolução temporal;
+disponibilidade das séries.
+#7.2 Construção dos acumulados móveis
+10 min;
+15 min;
+20 min;
+25 min;
+30 min;
+60 min;
+360 min;
+480 min;
+600 min;
+720 min;
+1.440 min.
+
+#7.3 Construção das séries AMAX
+
+Para estação × duração:
+
+calcular acumulados móveis;
+obter máximo anual;
+identificar ano;
+identificar duração;
+consolidar banco AMAX.
+#7.4 Ajuste das distribuições
+GEV;
+parâmetros de localização;
+escala;
+forma;
+testes de aderência;
+quantis.
+TR
+2;
+5;
+10;
+25;
+50;
+100;
+200 anos.
+#7.5 Curvas IDF
+calcular intensidade;
+ajustar relação IDF;
+gerar curva por estação;
+gerar tabela de intensidades;
+representar incerteza.
+#7.6 Invariância de escala
+componente a(T);
+componente b(d);
+estimar θ;
+estimar η;
+avaliar dependência com duração;
+avaliar independência dos parâmetros em relação ao TR;
+verificar coerência entre durações.
+
+# 7.7 Modelo Bayesiano
+definir prioris;
+definir hiperprioris;
+incorporar priori regional de ξ;
+modelar μ;
+modelar σ;
+estimar θ;
+estimar η;
+implementar MCMC;
+avaliar convergência;
+avaliar R;
+gerar posteriores;
+gerar quantis;
+obter intervalos de credibilidade;
+gerar curvas IDF.
+
+##RS
+
+Pooling parcial/regionalização
+compartilhar informação entre estações;
+estimar parâmetros regionais;
+estimar ξ;
+estimar θ;
+estimar η;
+estabilizar estimativas de séries curtas;
+avaliar incertezas.
+
+#7.8 Modelo max-estável
+implementar modelo espacial;
+incorporar dependência espacial;
+incluir covariáveis;
+incorporar pooling parcial;
+estimar parâmetros;
+gerar IDFs;
+comparar modelo espacialmente dependente;
+comparar modelo condicionalmente independente.
+
+##RS
+
+Aqui pode entrar a parte metodológica mais detalhada:
+
+comparação entre estruturas;
+análise de convergência;
+comparação de desempenho;
+análise da influência do pooling;
+análise da dependência espacial.
+
+# 7.9 Produtos da Meta 7
+curvas IDF por estação;
+diferentes durações;
+diferentes períodos de retorno;
+parâmetros regionais;
+parâmetros das distribuições;
+interpretação hidrológica;
+comparação invariância × CETESB;
+relatório técnico;
+scripts R/Python.

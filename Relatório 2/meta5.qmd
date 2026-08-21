@@ -3,3 +3,72 @@ title: "Meta 5 — Extremos Diários e IDFs"
 ---
 
 Esta meta trata da construção das séries de máximos anuais de precipitação acumulada em 1, 2, 3, 4, 5, 6, 7 e 10 dias e do desenvolvimento das respectivas curvas IDF. Inclui o ajuste de modelos de extremos, a modelagem Bayesiana e a avaliação de abordagens espaciais, utilizando o Rio Grande do Sul como área de aprofundamento metodológico e validação.
+
+# 5.1 Preparação das séries
+## Brasil
+selecionar estações ANA;
+aplicar critérios mínimos de disponibilidade;
+calcular acumulados móveis de 1 dia;
+2 dias;
+3 dias;
+4 dias;
+5 dias;
+6 dias;
+7 dias;
+10 dias;
+extrair máximos anuais para cada duração;
+consolidar banco AMAX.
+## RS
+realizar o mesmo processamento;
+usar o RS para análises mais detalhadas dos modelos.
+
+#5.2 Ajustes de extremos
+
+Para estação × duração:
+
+ajustar GEV;
+estimar μ;
+estimar σ;
+estimar ξ;
+avaliar incertezas;
+obter quantis para:
+TR 2;
+5;
+10;
+25;
+50;
+100;
+200 anos.
+
+# 5.3 Modelo Bayesiano
+definir prioris;
+definir hiperprioris;
+incorporar priori regional de ξ;
+modelar μ;
+modelar σ;
+estimar θ;
+estimar η;
+implementar MCMC;
+avaliar convergência;
+avaliar R;
+gerar posteriores;
+gerar quantis;
+obter intervalos de credibilidade;
+gerar curvas IDF.
+
+#5.4 Relação IDF
+implementar formulação de Koutsoyiannis;
+componente de frequência a(T);
+componente de duração b(d);
+calcular intensidades;
+avaliar coerência entre durações.
+
+#5.5 Produtos da Meta 5
+estimativas por estação;
+estimativas por duração;
+estimativas por TR;
+parâmetros GEV;
+curvas IDF;
+incertezas;
+scripts em R.
+
