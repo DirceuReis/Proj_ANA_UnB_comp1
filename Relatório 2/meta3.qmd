@@ -1,0 +1,5 @@
+---
+title: "Meta 3 — Base Hidroclimática Nacional"
+---
+
+Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional consistente, com destaque para ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, Xavier e NEX-GDDP-CMIP6, além de preparar o recorte do Rio Grande do Sul para as análises metodológicas subsequentes.

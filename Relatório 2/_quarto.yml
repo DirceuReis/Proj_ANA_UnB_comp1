@@ -1,0 +1,71 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+
+website:
+  title: "Proj. IDF Brasil ANA/UnB"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+
+      - text: "Meta 3"
+        menu:
+          - href: meta3_brasil.qmd
+            text: Organização da base de dados - Brasil
+
+      - text: "Meta 5"
+        menu:
+          - href: meta5_brasil.qmd
+            text: IDFs para precipitação diária - Brasil
+          - href: meta5_rs.qmd
+            text: Modelagem e análises no Rio Grande do Sul
+
+      - text: "Meta 6"
+        menu:
+          - href: meta6_brasil.qmd
+            text: Correção de viés dos dados climáticos - Brasil
+
+      - text: "Meta 7"
+        menu:
+          - href: meta7_brasil.qmd
+            text: IDFs subdiárias INMET/CEMADEN - Brasil
+          - href: meta7_rs.qmd
+            text: Modelagem regional e validação no Rio Grande do Sul
+
+      - text: "Meta 8"
+        menu:
+          - href: meta8_estacoes.qmd
+            text: Não estacionariedade em pluviômetros e pluviógrafos
+          - href: meta8_grade.qmd
+            text: Não estacionariedade nos dados em grade
+          - href: meta8_rs.qmd
+            text: Análises detalhadas no Rio Grande do Sul
+
+    right:
+      - text: "Scripts"
+        menu:
+          - href: scripts_meta3.qmd
+            text: Meta 3 - Base de dados
+          - href: scripts_meta5.qmd
+            text: Meta 5 - IDFs diárias
+          - href: scripts_meta6.qmd
+            text: Meta 6 - Correção de viés
+          - href: scripts_meta7.qmd
+            text: Meta 7 - IDFs subdiárias
+          - href: scripts_meta8.qmd
+            text: Meta 8 - Não estacionariedade
+
+format:
+  html:
+    theme: zephyr
+    css: styles.css
+    toc: true
+    lang: pt
+
+editor: visual
+
+execute:
+  freeze: auto

@@ -1,0 +1,5 @@
+---
+title: "Meta 5 — Extremos Diários e IDFs"
+---
+
+Esta meta trata da construção das séries de máximos anuais de precipitação acumulada em 1, 2, 3, 4, 5, 6, 7 e 10 dias e do desenvolvimento das respectivas curvas IDF. Inclui o ajuste de modelos de extremos, a regionalização do parâmetro de forma da GEV, a modelagem Bayesiana e a avaliação de abordagens espaciais, utilizando o Rio Grande do Sul como área de aprofundamento metodológico e validação.

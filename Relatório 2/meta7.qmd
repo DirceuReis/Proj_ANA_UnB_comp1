@@ -1,0 +1,5 @@
+---
+title: "Meta 7 — Extremos Subdiários e IDFs"
+---
+
+Esta meta desenvolve curvas IDF a partir dos dados subdiários de pluviógrafos do INMET e CEMADEN, considerando durações de 10 minutos a 24 horas. Inclui ajuste de distribuições de extremos, invariância de escala, pooling parcial e regionalização, além da comparação com o procedimento tradicional de desagregação da CETESB. O Rio Grande do Sul será utilizado para análises metodológicas e validação detalhada.

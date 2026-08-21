@@ -1,0 +1,5 @@
+---
+title: "Meta 8 — Não Estacionariedade dos Extremos"
+---
+
+Esta meta avalia a existência de mudanças temporais nas séries de precipitação extrema, incluindo tendências graduais e mudanças abruptas. As análises abrangem pluviômetros, pluviógrafos, a base Xavier e o NEX-GDDP-CMIP6 antes e após a correção de viés, buscando verificar a coerência das tendências observadas e modeladas em escala nacional e com aprofundamento no Rio Grande do Sul.
