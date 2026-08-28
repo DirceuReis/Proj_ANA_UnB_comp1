@@ -2,122 +2,222 @@
 title: "Meta 7 — Extremos Subdiários e IDFs"
 ---
 
-Esta meta desenvolve curvas IDF a partir dos dados subdiários de pluviógrafos do INMET e CEMADEN, considerando durações de 10 minutos a 24 horas. Inclui ajuste de distribuições de extremos, invariância de escala e pooling parcial.
+Esta meta foi desenvolvida para a obtenção de curvas intensidade–duração–frequência (IDF) a partir das séries subdiárias de precipitação das estações selecionadas e consolidadas no âmbito da Meta 3. Foram consideradas durações entre 10 minutos e 24 horas, adequadas à análise de eventos críticos para drenagem urbana, controle de cheias, dimensionamento hidráulico e avaliação de risco hidrológico.
+
+A metodologia combinou a Teoria de Valores Extremos, o ajuste da distribuição Generalizada de Valores Extremos (GEV), a análise da dependência dos extremos em relação à duração e a inferência Bayesiana. A estrutura metodológica foi fundamentada nos princípios de invariância de escala apresentados por Koutsoyiannis, Kozonis e Manetas (1998) e em aplicações de modelos GEV dependentes da duração e modelos Bayesianos hierárquicos para extremos de precipitação, como discutido por Blanchet et al. (2016) e Lima, Kwon e Kim (2018).
+
+A etapa nacional foi conduzida por meio de uma abordagem Bayesiana local, ou non-pooled, entre estações. Assim, os dados de uma estação não foram utilizados para modificar diretamente os parâmetros de outra estação. A coerência entre as diferentes durações foi imposta dentro de cada posto por uma estrutura de escala. Posteriormente, o Rio Grande do Sul foi adotado como área de estudo para avaliar o compartilhamento parcial de informação entre estações, especialmente para a estimação do parâmetro de forma da GEV.
 
 #7.1 Seleção das séries
-##Brasil
-estações INMET;
-estações CEMADEN;
-estações aprovadas pelo QC da Meta 3;
-anos válidos;
-resolução temporal;
-disponibilidade das séries.
-#7.2 Construção dos acumulados móveis
-10 min;
-15 min;
-20 min;
-25 min;
-30 min;
-60 min;
-360 min;
-480 min;
-600 min;
-720 min;
-1.440 min.
 
-#7.3 Construção das séries AMAX
+A base analisada foi composta por registros subdiários de precipitação provenientes de estações pluviométricas e pluviográficas. A seleção das séries foi condicionada aos procedimentos de controle de qualidade estabelecidos na Meta 3, incluindo a identificação de falhas, duplicidades, inconsistências temporais, valores fisicamente incompatíveis e períodos com disponibilidade insuficiente de dados.
 
-Para estação × duração:
+A disponibilidade foi avaliada para cada combinação de estação, duração e ano. Para cada duração analisada, o número esperado de janelas de agregação em um ano foi calculado com base na resolução temporal nativa de cada registro. Anos com mais de 20% de janelas de agregação ausentes ou inválidas, ou com dados válidos insuficientes para identificar um máximo anual confiável, foram excluídos antes da extração das séries AMAX. Não foi realizado preenchimento de valores ausentes de precipitação para a estimação dos extremos. O limiar de 20% foi adotado como critério operacional de completude dos dados, em consonância com estudos anteriores sobre precipitação extrema (Najibi et al., 2020).
 
-calcular acumulados móveis;
-obter máximo anual;
-identificar ano;
-identificar duração;
-consolidar banco AMAX.
-#7.4 Ajuste das distribuições
-GEV;
-parâmetros de localização;
-escala;
-forma;
-testes de aderência;
-quantis.
-TR
-2;
-5;
-10;
-25;
-50;
-100;
-200 anos.
-#7.5 Curvas IDF
-calcular intensidade;
-ajustar relação IDF;
-gerar curva por estação;
-gerar tabela de intensidades;
-representar incerteza.
-#7.6 Invariância de escala
-componente a(T);
-componente b(d);
-estimar θ;
-estimar η;
-avaliar dependência com duração;
-avaliar independência dos parâmetros em relação ao TR;
-verificar coerência entre durações.
+Após essa etapa, foram mantidas apenas as séries estação–duração com pelo menos oito máximos anuais válidos. Esse limiar foi adotado como critério operacional para conciliar a disponibilidade limitada de dados subdiários e a necessidade de preservar a representatividade espacial da rede. Reconhece-se que séries mais longas são desejáveis para a estimação robusta de quantis extremos, especialmente para períodos de retorno elevados, como discutido por Papalexiou e Koutsoyiannis (2013). Para cada estação aprovada, foram consolidadas informações sobre instituição de origem, resolução temporal, período disponível, número de anos válidos e durações efetivamente analisadas.
+
+
+#7.2 Construção dos acumulados móveis 
+
+Os acumulados de precipitação foram obtidos por janelas móveis aplicadas às séries subdiárias originais. Foram analisadas as durações de 10, 15, 20, 25, 30, 60, 360, 480, 600, 720 e 1.440 minutos.
+
+Para cada duração (d), foi calculada a soma da precipitação em todas as janelas temporais possíveis com comprimento igual a (d). O uso de janelas móveis permitiu identificar eventos intensos que não coincidiram necessariamente com horários fixos de observação. Essa estratégia foi particularmente relevante nas menores durações, para as quais o uso de intervalos fixos poderia subestimar os maiores acumulados efetivamente ocorridos.
+
+Os acumulados foram inicialmente expressos em milímetros. Após a identificação dos máximos anuais, os valores foram convertidos em intensidade média pela divisão da lâmina acumulada pela duração correspondente, resultando em intensidades expressas em mm/h.
+
+<!--colocar talvez o nome do script e linkar ao produto -->
+
+Para cada combinação de estação, duração e ano, foi identificado o maior acumulado móvel válido. Esse valor constituiu a série de máximos anuais, ou AMAX (annual maxima), utilizada na análise de frequência.
+
+Cada observação foi identificada por estação, duração e ano:
+
+$$
+y_{s,d,t},
+$$
+
+em que $y_{s,d,t}$ representa a intensidade máxima anual observada na estação (s), para a duração (d), no ano (t).
+
+A utilização de máximos anuais permitiu aplicar a abordagem de blocos da Teoria de Valores Extremos. Sob condições assintóticas adequadas, os máximos de blocos anuais podem ser representados pela distribuição GEV (Naghettini, 2017; Gu et al., 2022). O banco AMAX consolidado está disponivel em
+
+<!--pensar em como vai ser disponibilizado esses dados-->
+
+
+#7.4 Ajuste das distribuições GEV; parâmetros de localização; escala; forma; quantis. TR 2; 5; 10; 25; 50; 100; 200 anos. 
+#7.5 Curvas IDF calcular intensidade; ajustar relação IDF; gerar curva por estação; gerar tabela de intensidades; representar incerteza. 
+#7.6 Invariância de escala componente a(T); componente b(d); estimar θ; estimar H; avaliar dependência com duração; avaliar independência dos parâmetros em relação ao TR; verificar coerência entre durações.
 
 # 7.7 Modelo Bayesiano
-definir prioris;
-definir hiperprioris;
-incorporar priori regional de ξ;
-modelar μ;
-modelar σ;
-estimar θ;
-estimar η;
-implementar MCMC;
-avaliar convergência;
-avaliar R;
-gerar posteriores;
-gerar quantis;
-obter intervalos de credibilidade;
-gerar curvas IDF.
+
+A etapa nacional foi implementada por meio de um modelo Bayesiano GEV ajustado separadamente para cada estação. Portanto, o modelo foi non-pooled entre estações: as observações de um posto não participaram diretamente da estimação dos parâmetros de outro. Para cada estação, entretanto, as séries de máximos anuais das diferentes durações foram ajustadas conjuntamente, permitindo compartilhar informação entre durações por meio da estrutura de escala e da regularização local do parâmetro de forma.
+
+Para uma estação (s), o máximo anual observado no ano (t), para a duração (d), foi representado por:
+
+$$
+Y_{s,d,t}\sim
+\operatorname{GEV}(\mu_{s,d},\sigma_{s,d},\xi_{s,d}),
+$$
+
+em que $\mu_{s,d}$ é o parâmetro de localização, $\sigma_{s,d}>0$ é o parâmetro de escala e $\xi_{s,d}$ é o parâmetro de forma. A função de distribuição acumulada, para $\xi_{s,d}\neq0$, foi definida por:
+
+$$
+G(y\mid\mu,\sigma,\xi)=
+\exp\left\{
+-\left[
+1+\xi\left(\frac{y-\mu}{\sigma}\right)
+\right]^{-1/\xi}
+\right\}.
+$$
+
+sujeita a:
+
+$$
+\sigma>0
+\qquad\text{e}\qquad
+1+\xi\left(\frac{y-\mu}{\sigma}\right)>0.
+$$
+
+Para valores de $\xi$ próximos de zero, foi utilizada a forma limite de Gumbel:
+
+$$
+G(y\mid\mu,\sigma,0)=
+\exp\left[
+-\exp\left(
+-\frac{y-\mu}{\sigma}
+\right)
+\right].
+$$
+
+A estrutura de invariância de escala foi incorporada diretamente ao modelo Bayesiano. A dependência entre as durações foi incorporada aos parâmetros de localização e escala na escala logarítmica. Adotando-se $D_0=24$ h como duração de referência, foi especificado:
+
+$$
+\log(\mu_{s,d})\sim
+\mathcal N
+\left[
+\alpha_s-
+H_s\log\left(
+\frac{d+\theta_s}{D_0+\theta_s}
+\right),
+\tau_{\mu,s}^{2}
+\right],
+$$
+
+$$
+\log(\sigma_{s,d})\sim
+\mathcal N
+\left[
+\beta_s-
+H_s\log\left(
+\frac{d+\theta_s}{D_0+\theta_s}
+\right),
+\tau_{\sigma,s}^{2}
+\right].
+$$
+
+Os parâmetros $\alpha_s$ e $\beta_s$ representaram, respectivamente, os níveis médios de $\log(\mu)$ e $\log(\sigma)$ na duração de referência. A igualdade entre esses níveis médios e os parâmetros das 24 h ocorreu em expectativa, pois cada duração apresentou desvios próprios controlados por $\tau_{\mu,s}^{2}$ e $\tau_{\sigma,s}^{2}$.
+
+O expoente $H_s$, limitado ao intervalo ((0,1)), controlou a redução das intensidades extremas com o aumento da duração. Como o termo logarítmico é negativo quando $d<D_0$, valores positivos de $H_s$ implicaram valores médios maiores de $\mu_{s,d}$ e $\sigma_{s,d}$ nas menores durações. O parâmetro $\theta_s$, limitado ao intervalo $(0,10)$, controlou a curvatura da relação, sobretudo nas durações curtas. Essa estrutura foi baseada no princípio de invariância de escala de Koutsoyiannis, Kozonis e Manetas (1998), mas permitiu desvios específicos por duração em torno da tendência média.
+
+O parâmetro de forma foi estimado separadamente para cada duração:
+
+O parâmetro $H$ controlou a redução da intensidade extrema com o aumento da duração, enquanto ($\theta$) permitiu representar a curvatura da relação nas menores durações. A normalização pela duração $D_0$ garantiu que:
+
+$$
+\xi_{s,d}\sim
+\mathcal{N}\left(\bar{\xi}_s,\tau_{\xi_s}^{2}\right),
+\qquad
+-0.5\leq \xi_{s,d}\leq 0.5.
+$$
+
+Cada duração apresentou um valor próprio de $\xi_{s,d}$, mas esses valores foram regularizados em torno de uma média local da estação, $\bar{\xi}_s$. Esse é um compartilhamento de informação entre durações dentro da mesma estação, e não entre estações.
+
+A média local da cauda também foi limitada ao intervalo $[-0,5;0,5]$ e recebeu uma priori Beta reescalada:
+
+$$
+\bar{\xi}_s \sim \operatorname{Beta}_{[-0.5,\,0.5]}(9,6).
+$$
+
+Essa priori concentrou maior probabilidade em valores moderados de forma, preservando flexibilidade para caudas positivas ou negativas dentro da faixa definida. A variância (\tau_{\xi,s}^{2}) quantificou a heterogeneidade de (\xi) entre as durações da estação.
+
+As demais prioris foram:
+
+$$
+\alpha_s\sim\mathcal N(0,10^{3}),
+\qquad
+\beta_s\sim\mathcal N(0,10^{3}),
+$$
+
+$$
+H_s\sim\operatorname{Beta}(1,1),
+$$
+
+$$
+\theta_s\sim\operatorname{Uniforme}(0,10),
+$$
+
+$$
+\tau_{\mu,s}^{2}\sim
+\operatorname{Inv\text{-}Gamma}(0,01,0,01),
+$$
+
+$$
+\tau_{\sigma,s}^{2}\sim
+\operatorname{Inv\text{-}Gamma}(0,01,0,01),
+$$
+
+$$
+\tau_{\xi,s}^{2}\sim
+\operatorname{Inv\text{-}Gamma}(0,01,0,01).
+$$
+
+A inferência foi realizada no Stan por Monte Carlo Hamiltoniano, utilizando o algoritmo No-U-Turn Sampler. Para cada estação, foram utilizadas múltiplas cadeias independentes, período de aquecimento e amostras posteriores após a adaptação do algoritmo. A convergência foi avaliada pela estatística $\hat{R}$, pelo tamanho efetivo de amostra, pela inspeção dos trace plots, pela ocorrência de transições divergentes e por alertas de profundidade máxima da árvore.
+
+A log-verossimilhança foi armazenada ponto a ponto para cada máximo anual no bloco de quantidades geradas. Esses valores foram utilizados para calcular PSIS-LOO e WAIC e para comparar especificações alternativas do modelo. A comparação não se baseou apenas nesses critérios, mas também na estabilidade dos níveis de retorno, na coerência das curvas entre durações e na plausibilidade hidrológica das extrapolações.
+
+Para cada amostra posterior, os níveis de retorno foram calculados para os períodos de retorno de 2, 5, 10, 25, 50, 100 e 200 anos. Para $\xi_{s,d}\neq0$, utilizou-se:
+
+$$
+z_{s,d,T}
+=
+\mu_{s,d}
++
+\frac{\sigma_{s,d}}{\xi_{s,d}}
+\left\{
+\left[
+-\log\left(1-\frac{1}{T}\right)
+\right]^{-\xi_{s,d}}
+-1
+\right\}.
+$$
+
+Quando $\xi_{s,d}$ se aproximou de zero, utilizou-se:
+
+$$
+z_{s,d,T}
+=
+\mu_{s,d}
+-
+\sigma_{s,d}
+\log\left[
+-\log\left(1-\frac{1}{T}\right)
+\right].
+$$
+
+Como as séries AMAX foram expressas em intensidade, os níveis de retorno corresponderam diretamente às intensidades de projeto que compuseram as curvas IDF. Para cada combinação de estação, duração e período de retorno, foram obtidas a mediana posterior, os quantis de 2,5% e 97,5% e os intervalos de credibilidade de 95%.
+
+Dessa forma, a incerteza das curvas IDF incorporou simultaneamente a incerteza dos parâmetros de localização, escala e forma, a incerteza da relação de escala e os desvios específicos de cada duração. A abordagem foi especialmente relevante para séries curtas, nas quais a estimação independente da cauda pode produzir níveis de retorno excessivamente instáveis (Blanchet et al., 2016; Lima, Kwon e Kim, 2018).
 
 ##RS
 
-Pooling parcial/regionalização
-compartilhar informação entre estações;
-estimar parâmetros regionais;
-estimar ξ;
-estimar θ;
-estimar η;
-estabilizar estimativas de séries curtas;
-avaliar incertezas.
+Pooling parcial/regionalização compartilhar informação entre estações; estimar parâmetros regionais; estimar ξ; estimar θ; estimar η; estabilizar estimativas de séries curtas; avaliar incertezas.
 
-#7.8 Modelo max-estável
-implementar modelo espacial;
-incorporar dependência espacial;
-incluir covariáveis;
-incorporar pooling parcial;
-estimar parâmetros;
-gerar IDFs;
-comparar modelo espacialmente dependente;
-comparar modelo condicionalmente independente.
+#7.8 Modelo max-estável implementar modelo espacial; incorporar dependência espacial; incluir covariáveis; incorporar pooling parcial; estimar parâmetros; gerar IDFs; comparar modelo espacialmente dependente; comparar modelo condicionalmente independente.
 
 ##RS
 
 Aqui pode entrar a parte metodológica mais detalhada:
 
-comparação entre estruturas;
-análise de convergência;
-comparação de desempenho;
-análise da influência do pooling;
-análise da dependência espacial.
+comparação entre estruturas; análise de convergência; comparação de desempenho; análise da influência do pooling; análise da dependência espacial.
 
 # 7.9 Produtos da Meta 7
-curvas IDF por estação;
-diferentes durações;
-diferentes períodos de retorno;
-parâmetros regionais;
-parâmetros das distribuições;
-interpretação hidrológica;
-comparação invariância × CETESB;
-relatório técnico;
-scripts R/Python.
+
+curvas IDF por estação; diferentes durações; diferentes períodos de retorno; parâmetros regionais; parâmetros das distribuições; interpretação hidrológica; comparação invariância × CETESB; relatório técnico; scripts R/Python.
