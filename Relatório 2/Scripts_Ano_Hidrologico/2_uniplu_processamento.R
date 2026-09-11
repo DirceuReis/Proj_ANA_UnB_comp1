@@ -15,8 +15,8 @@ library(arrow)
 library(readr)
 
 # --- caminhos (saídas nesta pasta; Uniplu fora) ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_FLUXO <- "Git_ANA/Proj_ANA_UnB_comp1/Relatório 2/Scripts_Ano_Hidrologico"
+DIR_DADOS <- #Caminho dados do Uniplu
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
