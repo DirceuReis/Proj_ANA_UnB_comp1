@@ -398,6 +398,8 @@ write_excel_csv(tab_uf, file.path(DIR_DF, "df_hidro_rbar_hibrido_uf.csv"))
 # ---------------------------------------------------------------------------
 # Mapas (legenda circular + pontos maiores / figura mais compacta)
 # ---------------------------------------------------------------------------
+BASE_SIZE <- 8
+FIG_WIDTH <- 15   # cm
 meses_lab <- c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
                "Jul", "Ago", "Set", "Out", "Nov", "Dez")
 
@@ -407,10 +409,10 @@ ufs <- read_state(year = 2020, showProgress = FALSE) %>%
 br <- read_country(year = 2020, showProgress = FALSE) %>% st_transform(4326)
 sul_ufs <- ufs %>% filter(estado %in% UF_SUL)
 
-tema_mapa <- theme_void() +
+tema_mapa <- theme_void(base_size = BASE_SIZE) +
   theme(
-    plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
-    plot.subtitle = element_text(hjust = 0.5, size = 8.5, color = "grey35"),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = BASE_SIZE),
+    plot.subtitle = element_text(hjust = 0.5, size = BASE_SIZE, color = "grey35"),
     legend.position = "none",
     plot.background = element_rect(fill = "white", color = NA),
     plot.margin = margin(4, 4, 2, 4)
@@ -425,12 +427,12 @@ legenda_circular <- function() {
     ) +
     geom_text(
       aes(x = (xmin + xmax) / 2, y = 1.22, label = lab),
-      size = 3.2, fontface = "bold", color = "grey15"
+      size = BASE_SIZE / .pt, fontface = "bold", color = "grey15"
     ) +
     scale_fill_manual(values = unname(cores_mes), guide = "none") +
     coord_polar(theta = "x", start = -pi / 2 - pi / 12, direction = 1) +
     ylim(0, 1.45) +
-    theme_void() +
+    theme_void(base_size = BASE_SIZE) +
     theme(plot.margin = margin(0, 0, 2, 0))
 }
 
@@ -462,9 +464,9 @@ mapa_mes <- function(df, col_mes, titulo, sub = NULL, bbox = NULL,
   g
 }
 
-salvar_mapa_legenda <- function(g_mapa, arquivo, w = 1800, h = 2100) {
-  g_out <- g_mapa / legenda_circular() + plot_layout(heights = c(8.2, 1.8))
-  ggsave(arquivo, g_out, width = w, height = h, units = "px", dpi = 180, bg = "white")
+salvar_mapa_legenda <- function(g_mapa, arquivo, altura = 18) {
+  g_out <- g_mapa / legenda_circular() + plot_layout(heights = c(8.3, 1.7))
+  ggsave(arquivo, g_out, width = FIG_WIDTH, height = altura, units = "cm", dpi = 300, bg = "white")
 }
 
 sub_txt <- paste0(
@@ -477,18 +479,28 @@ g_leg <- legenda_circular()
 salvar_mapa_legenda(
   mapa_mes(sta, "mes_hibrido_rbar",
            "Ano hidrológico — híbrido rbar (Uniplu)", sub_txt, pt_size = 1.25),
-  file.path(DIR_OUT_PIC, "fig_brasil_hibrido_rbar.png"),
-  w = 1800, h = 2100
-)
+  file.path(DIR_OUT_PIC, "fig_brasil_hibrido_rbar.png"))
 
 salvar_mapa_legenda(
   mapa_mes(sta %>% filter(is_sul), "mes_hibrido_rbar",
            "Sul — ano hidrológico híbrido rbar", sub_txt, BB_SUL, pt_size = 2.3),
-  file.path(DIR_OUT_PIC, "fig_sul_hibrido_rbar.png"),
-  w = 1700, h = 2000
-)
+  file.path(DIR_OUT_PIC, "fig_sul_hibrido_rbar.png"))
 
-tema_fonte <- tema_mapa + theme(legend.position = "right")
+tema_fonte <- tema_mapa +
+  theme(
+    legend.position = "right",
+    
+    legend.title = element_text(
+      size = BASE_SIZE
+    ),
+    
+    legend.text = element_text(
+      size = BASE_SIZE
+    ),
+    
+    legend.key.height = unit(0.45, "cm"),
+    legend.key.width  = unit(0.45, "cm")
+  )
 
 g_fonte_br <- ggplot() +
   geom_sf(data = br, fill = "grey96", color = "grey35", linewidth = 0.3) +
@@ -508,7 +520,7 @@ g_fonte_br <- ggplot() +
     name = "Fonte"
   ) +
   labs(
-    title = "Fonte do híbrido rbar — Brasil",
+    #title = "Fonte do híbrido rbar — Brasil",
     subtitle = paste0(
       "θ+π: ", sum(sta$fonte_hibrido_rbar == "theta_pi"),
       "  |  último mês seco: ", sum(sta$fonte_hibrido_rbar == "ultimo_mes_seco")
@@ -517,7 +529,7 @@ g_fonte_br <- ggplot() +
   tema_fonte
 ggsave(
   file.path(DIR_OUT_PIC, "fig_brasil_fonte_hibrido.png"),
-  g_fonte_br, width = 1800, height = 1900, units = "px", dpi = 180, bg = "white"
+  g_fonte_br, width = FIG_WIDTH, height = 10, units = "cm", dpi = 300, bg = "white"
 )
 
 g_fonte_sul <- ggplot() +
@@ -543,7 +555,7 @@ g_fonte_sul <- ggplot() +
     expand = FALSE
   ) +
   labs(
-    title = paste0("Sul — fonte do híbrido rbar (", RBAR_HI, ")"),
+    #title = paste0("Sul — fonte do híbrido rbar (", RBAR_HI, ")"),
     subtitle = paste0(
       "θ+π: ", sum(sta$is_sul & sta$fonte_hibrido_rbar == "theta_pi"),
       "  |  último mês seco: ",
@@ -553,7 +565,7 @@ g_fonte_sul <- ggplot() +
   tema_fonte
 ggsave(
   file.path(DIR_OUT_PIC, "fig_sul_fonte_hibrido.png"),
-  g_fonte_sul, width = 1700, height = 1900, units = "px", dpi = 180, bg = "white"
+  g_fonte_sul, width = FIG_WIDTH, height = 10, units = "cm", dpi = 300, bg = "white"
 )
 
 g_rbar <- ggplot() +
@@ -574,7 +586,7 @@ g_rbar <- ggplot() +
   tema_fonte
 ggsave(
   file.path(DIR_OUT_PIC, "fig_rbar_brasil.png"),
-  g_rbar, width = 1800, height = 1900, units = "px", dpi = 180, bg = "white"
+  g_rbar, width = FIG_WIDTH, height = 8, units = "cm", dpi = 300, bg = "white"
 )
 
 g_hist <- sta %>%
@@ -592,12 +604,7 @@ g_hist <- sta %>%
   theme(legend.position = "none")
 ggsave(
   file.path(DIR_OUT_PIC, "fig_hist_rbar.png"),
-  g_hist, width = 1400, height = 1700, units = "px", dpi = 150, bg = "white"
-)
-
-ggsave(
-  file.path(DIR_OUT_PIC, "fig_legenda_meses.png"),
-  g_leg, width = 900, height = 900, units = "px", dpi = 150, bg = "white"
+  g_hist, width = BASE_SIZE, height = 20, units = "cm", dpi = 300, bg = "white"
 )
 
 message("Tabelas: ", DIR_DF)
