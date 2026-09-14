@@ -9,7 +9,7 @@ library(extremefit)
 library(evd)
 
 # --- caminhos (saídas nesta pasta; Uniplu fora) ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
@@ -18,8 +18,6 @@ DIR_OUT      <- file.path(DIR_FLUXO, "resultados", OUT_TAG)
 DIR_DF       <- file.path(DIR_OUT, "dataframes")
 DIR_ANALYZED <- file.path(DIR_OUT, "stations_analyzed")
 MIN_YEARS_GOOD <- 30
-
-setwd(DIR_FLUXO)
 
 pot_station <- function(sta, serie, r = 1) {
 
