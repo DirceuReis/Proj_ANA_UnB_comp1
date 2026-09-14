@@ -27,41 +27,45 @@ library(arrow)
 library(lubridate)
 
 # --- caminhos ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_FLUXO <- "Relatório 2/Scripts_Maximas"
+DIR_DADOS <- "Relatório 2/Scripts_Ano_Hidrologico"
 
-OUT_TAG <- "BR"
-TEST_UF <- NULL   # NULL = Brasil; ex. "CE"
+TEST_UF <- NULL   # NULL = Brasil; ex.: "CE", "RS"
+
+OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) {
+  "BR"
+} else {
+  TEST_UF
+}
+
+DIR_ANO_HIDRO <- file.path("Relatório 2/Scripts_Ano_Hidrologico")
+DIR_OUT_HIDRO <- file.path(DIR_ANO_HIDRO,"resultados",OUT_TAG)
+DIR_DF_HIDRO <- file.path(DIR_OUT_HIDRO, "dataframes")
 
 DIR_OUT       <- file.path(DIR_FLUXO, "resultados", OUT_TAG)
 DIR_DF        <- file.path(DIR_OUT, "dataframes")
 DIR_SUB_CACHE <- file.path(DIR_OUT, "subdiario_cache")
-DIR_SUBDIARIO <- file.path(DIR_DADOS, "subdiario_br")
-DIR_DF_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "dataframes")
+DIR_SUBDIARIO <- file.path(file.path("base/fonte/consolidado/subdiario_br"))
 DIR_FUNS <- file.path(DIR_FLUXO, "funs")
 
-setwd(DIR_FLUXO)
 dir.create(DIR_DF, recursive = TRUE, showWarnings = FALSE)
 
 source(file.path(DIR_FUNS, "fun_filter_set.R"))
 source(file.path(DIR_FUNS, "fun_group_ts.R"))
 source(file.path(DIR_FUNS, "fun_imax_wateryear.R"))
 
-# Durações (horas): sub-hora + 1–23 h + 1–10 dias
+# Durações (horas): sub-hora + 1–23 h
 DURATIONS_HR <- c(
   c(10, 15, 20, 30, 40, 45, 50) / 60,
-  1:23,
-  (1:10) * 24
+  1:24
 )
 
 meses_pt <- c("jan", "fev", "mar", "abr", "mai", "jun",
               "jul", "ago", "set", "out", "nov", "dez")
 
 achar_rds <- function(nome) {
-  p1 <- file.path(DIR_DF, nome)
-  p2 <- file.path(DIR_DF_FALLBACK, nome)
-  if (file.exists(p1)) return(p1)
-  if (file.exists(p2)) return(p2)
+  p <- file.path(DIR_DF_HIDRO, nome)
+  if (file.exists(p)) return(p)
   NULL
 }
 
