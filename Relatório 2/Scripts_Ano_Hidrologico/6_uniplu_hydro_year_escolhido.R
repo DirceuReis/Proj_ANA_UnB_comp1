@@ -604,7 +604,7 @@ g_hist <- sta %>%
   theme(legend.position = "none")
 ggsave(
   file.path(DIR_OUT_PIC, "fig_hist_rbar.png"),
-  g_hist, width = BASE_SIZE, height = 20, units = "cm", dpi = 300, bg = "white"
+  g_hist, width = FIG_WIDTH, height = 10, units = "cm", dpi = 300, bg = "white"
 )
 
 message("Tabelas: ", DIR_DF)
@@ -613,3 +613,4 @@ message(
   "Concluído — híbrido rbar ≥ ", RBAR_HI,
   " | último mês seco recalculado (SECO_FRAC = ", SECO_FRAC, ")."
 )
+
