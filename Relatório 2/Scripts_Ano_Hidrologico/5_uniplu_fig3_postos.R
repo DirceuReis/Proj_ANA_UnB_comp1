@@ -10,7 +10,7 @@ library(ggplot2)
 library(lubridate)
 
 # --- caminhos (saídas nesta pasta) ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
@@ -20,7 +20,9 @@ DIR_DF        <- file.path(DIR_OUT, "dataframes")
 DIR_PIC       <- file.path(DIR_OUT, "pictures")
 DIR_POSTOS_UF <- file.path(DIR_PIC, "fig3_postos_uf")
 
-setwd(DIR_FLUXO)
+BASE_SIZE <- 8
+FIG_WIDTH <- 15   # cm
+
 dir.create(DIR_PIC, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_POSTOS_UF, recursive = TRUE, showWarnings = FALSE)
 
@@ -63,14 +65,14 @@ plot_fig3_postos <- function(df, titulo) {
     geom_text(
       data = df_txt,
       aes(x = pos_x, y = pos_y, label = label),
-      fontface = "bold", size = 12 / .pt
+      fontface = "bold", size =  BASE_SIZE / .pt
     ) +
     annotate(
       "text",
       x = 0.025,
       y = c(0.25, 0.5, 0.75) + 0.02,
       label = c("0.25", "0.50", "0.75"),
-      size = 9 / .pt, hjust = 0, vjust = 0, fontface = "bold"
+      size =  BASE_SIZE / .pt, hjust = 0, vjust = 0, fontface = "bold"
     ) +
     annotate("path", x = 1.00 * x_circle, y = 1.00 * y_circle,
              color = "black", linewidth = 0.5) +
@@ -89,7 +91,7 @@ plot_fig3_postos <- function(df, titulo) {
     ) +
     coord_fixed(xlim = c(-1.25, 1.25), ylim = c(-1.25, 1.25)) +
     labs(title = titulo) +
-    theme_classic() +
+    theme_classic(  base_size = BASE_SIZE ) +
     theme(
       axis.title = element_blank(),
       axis.text  = element_blank(),
@@ -100,13 +102,15 @@ plot_fig3_postos <- function(df, titulo) {
 }
 
 salvar_fig3 <- function(g, caminho) {
+  
   ggsave(
     filename = caminho,
     plot = g,
-    width = 3200,
-    height = 2800,
-    units = "px",
-    dpi = 300
+    width = FIG_WIDTH,
+    height = 15,
+    units = "cm",
+    dpi = 300,
+    bg = "white"
   )
 }
 
