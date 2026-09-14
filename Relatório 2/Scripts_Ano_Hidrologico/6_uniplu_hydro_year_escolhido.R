@@ -1,4 +1,4 @@
-﻿# Ano hidrológico Uniplu — método HÍBRIDO rbar (critério final adotado)
+# Ano hidrológico Uniplu — método HÍBRIDO rbar (critério final adotado)
 #
 # Regra:
 #   se rbar >= 0,30 → θ+π (mês oposto aos extremos)
@@ -26,8 +26,7 @@ library(lubridate)
 library(patchwork)
 
 # --- caminhos ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
@@ -37,10 +36,7 @@ DIR_DF       <- file.path(DIR_OUT, "dataframes")
 DIR_PIC      <- file.path(DIR_OUT, "pictures")
 DIR_OUT_PIC  <- file.path(DIR_PIC, "ano_hidro_rbar_hibrido")
 DIR_ANALYZED <- file.path(DIR_OUT, "stations_analyzed")
-DIR_DF_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "dataframes")
-DIR_ANALYZED_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "stations_analyzed")
 
-setwd(DIR_FLUXO)
 dir.create(DIR_DF, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_OUT_PIC, recursive = TRUE, showWarnings = FALSE)
 
@@ -63,10 +59,8 @@ UF_SUL <- c("RS", "SC", "PR")
 BB_SUL <- c(xmin = -58.5, xmax = -47.0, ymin = -34.2, ymax = -21.8)
 
 achar_rds <- function(nome) {
-  p1 <- file.path(DIR_DF, nome)
-  p2 <- file.path(DIR_DF_FALLBACK, nome)
-  if (file.exists(p1)) return(p1)
-  if (file.exists(p2)) return(p2)
+  p <- file.path(DIR_DF, nome)
+  if (file.exists(p)) return(p)
   stop("Arquivo não encontrado: ", nome)
 }
 
@@ -75,7 +69,6 @@ dir_analyzed <- function() {
       length(list.files(DIR_ANALYZED, pattern = "_analyzed\\.rds$")) > 0L) {
     return(DIR_ANALYZED)
   }
-  if (dir.exists(DIR_ANALYZED_FALLBACK)) return(DIR_ANALYZED_FALLBACK)
   stop("Pasta stations_analyzed não encontrada.")
 }
 
