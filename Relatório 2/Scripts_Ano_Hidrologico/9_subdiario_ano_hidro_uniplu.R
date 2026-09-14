@@ -25,17 +25,15 @@ library(arrow)
 library(patchwork)
 
 # --- caminhos ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
 DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
 
 OUT_TAG <- "BR"
 DIR_OUT      <- file.path(DIR_FLUXO, "resultados", OUT_TAG)
 DIR_DF       <- file.path(DIR_OUT, "dataframes")
 DIR_PIC      <- file.path(DIR_OUT, "pictures", "subdiario_uniplu")
-DIR_SUBDIARIO <- file.path(DIR_DADOS, "subdiario_br")
-DIR_DF_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "dataframes")
+DIR_SUBDIARIO <- file.path("base/fonte/consolidado/subdiario_br")
 
-setwd(DIR_FLUXO)
 dir.create(DIR_DF, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_PIC, recursive = TRUE, showWarnings = FALSE)
 
@@ -80,10 +78,8 @@ rbar_meses <- function(meses) {
 }
 
 achar_rds <- function(nome) {
-  p1 <- file.path(DIR_DF, nome)
-  p2 <- file.path(DIR_DF_FALLBACK, nome)
-  if (file.exists(p1)) return(p1)
-  if (file.exists(p2)) return(p2)
+  p <- file.path(DIR_DF, nome)
+  if (file.exists(p)) return(p)
   NULL
 }
 
@@ -257,13 +253,16 @@ write_excel_csv(tab_uf, file.path(DIR_DF, "df_subdiario_ano_hidro_uniplu_uf.csv"
 # ---------------------------------------------------------------------------
 # Mapas
 # ---------------------------------------------------------------------------
+BASE_SIZE <- 8
+FIG_WIDTH <- 15   # cm
+
 ufs <- read_state(year = 2020, showProgress = FALSE) %>% st_transform(4326)
 br  <- read_country(year = 2020, showProgress = FALSE) %>% st_transform(4326)
 
 tema <- theme_void() +
   theme(
-    plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
-    plot.subtitle = element_text(hjust = 0.5, size = 8.5, color = "grey35"),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = BASE_SIZE),
+    plot.subtitle = element_text(hjust = 0.5, size = BASE_SIZE, color = "grey35"),
     legend.position = "none",
     plot.background = element_rect(fill = "white", color = NA)
   )
@@ -277,12 +276,12 @@ legenda_circular <- function() {
     ) +
     geom_text(
       aes(x = (xmin + xmax) / 2, y = 1.22, label = lab),
-      size = 3.2, fontface = "bold", color = "grey15"
+      size = BASE_SIZE / .pt, fontface = "bold", color = "grey15"
     ) +
     scale_fill_manual(values = unname(cores_mes), guide = "none") +
     coord_polar(theta = "x", start = -pi / 2 - pi / 12, direction = 1) +
     ylim(0, 1.45) +
-    theme_void() +
+    theme_void(base_size = BASE_SIZE) +
     theme(plot.margin = margin(0, 0, 2, 0))
 }
 
@@ -296,18 +295,18 @@ g_mes <- ggplot() +
   ) +
   scale_color_manual(values = cores_mes, drop = FALSE) +
   labs(
-    title = "Subdiário — mês de início (vizinhança Uniplu)",
-    subtitle = paste0(
-      "mancha → moda; transição → média circ. ponderada | k=", K_NN,
-      " | n=", nrow(res)
-    )
+    title = "Subdiário — mês de início (vizinhança Uniplu)"
+    # subtitle = paste0(
+    #   "mancha → moda; transição → média circ. ponderada | k=", K_NN,
+    #   " | n=", nrow(res)
+#    )
   ) +
   tema
 
 ggsave(
   file.path(DIR_PIC, "fig_subdiario_mes_inicio_uniplu.png"),
   g_mes / legenda_circular() + plot_layout(heights = c(8.2, 1.8)),
-  width = 1800, height = 2100, units = "px", dpi = 180, bg = "white"
+  width = 15, height = 17, units = "cm", dpi = 300, bg = "white"
 )
 
 g_cls <- ggplot() +
@@ -327,18 +326,18 @@ g_cls <- ggplot() +
     )
   ) +
   labs(
-    title = "Classificação espacial (vizinhança Uniplu)",
-    subtitle = paste0(
-      "Mancha se f_moda ≥ ", F_MODA_MIN, " ou R̄ ≥ ", RBAR_CIRC_MIN,
-      " | k = ", K_NN
-    )
+    title = "Classificação espacial (vizinhança Uniplu)"#,
+    # subtitle = paste0(
+    #   "Mancha se f_moda ≥ ", F_MODA_MIN, " ou R̄ ≥ ", RBAR_CIRC_MIN,
+    #   " | k = ", K_NN
+    # )
   ) +
   tema +
   theme(legend.position = "right")
 
 ggsave(
   file.path(DIR_PIC, "fig_subdiario_mancha_transicao.png"),
-  g_cls, width = 1800, height = 1900, units = "px", dpi = 180, bg = "white"
+  g_cls, width = 15, height = 14, units = "cm", dpi = 300, bg = "white"
 )
 
 message("Tabelas: ", DIR_DF)
