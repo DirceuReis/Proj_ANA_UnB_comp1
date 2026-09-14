@@ -13,8 +13,8 @@ library(geobr)
 library(patchwork)
 
 # --- caminhos (saídas nesta pasta; shapefiles fora) ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
+DIR_DADOS <- "Relatório 2/Scripts_Ano_Hidrologico"
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
@@ -25,9 +25,27 @@ DIR_DF       <- file.path(DIR_OUT, "dataframes")
 DIR_PIC      <- file.path(DIR_OUT, "pictures")
 DIR_SETAS_UF <- file.path(DIR_PIC, "fig3_setas_uf")
 
-setwd(DIR_FLUXO)
 dir.create(DIR_PIC, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_SETAS_UF, recursive = TRUE, showWarnings = FALSE)
+
+BASE_SIZE <- 8        # tudo em 8 pt
+FIG_WIDTH <- 15       # largura em cm
+
+tema_base <- theme_bw(base_size = BASE_SIZE) +
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background  = element_rect(fill = "white", color = NA),
+    panel.grid       = element_blank(),
+    text             = element_text(size = BASE_SIZE, color = "black"),
+    axis.title       = element_text(size = BASE_SIZE, color = "black"),
+    axis.text        = element_text(size = BASE_SIZE, color = "black"),
+    legend.title     = element_text(size = BASE_SIZE, color = "black"),
+    legend.text      = element_text(size = BASE_SIZE, color = "black"),
+    plot.title       = element_text(size = BASE_SIZE, color = "black", face = "bold"),
+    strip.text       = element_text(size = BASE_SIZE, color = "black"),
+    legend.key       = element_rect(fill = "white"),
+    legend.spacing.y = unit(0.2, "cm")
+  )
 
 america <- st_read(file.path(DIR_SHP, "america_do_sul.gpkg"), quiet = TRUE)
 brasil  <- america %>% filter(nome == "Brasil")
@@ -63,67 +81,85 @@ stations <- stations %>%
 stations <- stations %>%
   mutate(s1 = scales::rescale(rbar, to = c(0.05, 1.5)))
 
+meses_pt <- c("jan", "fev", "mar", "abr", "mai", "jun",
+              "jul", "ago", "set", "out", "nov", "dez")
+
 stations <- stations %>%
-  mutate(mes_color = letters[as.integer(month(dmy("1-1-1999") + round(theta * 180 / pi) - 1))])
+  mutate(
+    s1 = scales::rescale(rbar, to = c(0.05, 1.5)),
+    mes_color = meses_pt[
+      as.integer(
+        month(dmy("1-1-1999") + round(theta * 180 / pi) - 1)
+      )
+    ],
+    mes_color = factor(mes_color, levels = meses_pt)
+  )
 
 col_month <- brewer.pal(n = 6, name = "Spectral")
 col_month <- c(col_month, rev(col_month))
 
-g <-
+g_brasil <-
   ggplot() +
   geom_sf(data = america, fill = "grey88", linewidth = 0.1) +
-  geom_sf(data = brasil,  fill = "grey78", alpha = 0.4, linewidth = 0.6) +
-  geom_sf(data = hidrografia2, col = "darkblue", alpha = 0.6) +
-  geom_sf(data = hidrografia3, col = "darkblue", alpha = 0.3) +
-  geom_sf(data = hidrografia4, col = "darkblue", alpha = 0.1) +
+  geom_sf(data = brasil,  fill = "grey78", alpha = 0.4, linewidth = 0.4) +
+  geom_sf(data = hidrografia2, color = "darkblue", alpha = 0.6, linewidth = 0.2) +
+  geom_sf(data = hidrografia3, color = "darkblue", alpha = 0.3, linewidth = 0.15) +
+  geom_sf(data = hidrografia4, color = "darkblue", alpha = 0.1, linewidth = 0.1) +
   geom_spoke(
     data = stations,
     aes(x = long, y = lat, angle = theta, color = mes_color, radius = s1),
-    linewidth = 0.4,
-    arrow = arrow(length = unit(.1, "cm"))
+    linewidth = 0.35,
+    arrow = arrow(length = unit(0.08, "cm"))
   ) +
-  scale_colour_manual(name = "site", values = col_month) +
-  scale_radius(labels = NULL, trans = "identity", range = c(.5, 3), guide = "none") +
+  scale_colour_manual(
+    name = "Mês típico do extremo",
+    values = col_month
+  ) +
+  scale_radius(
+    labels = NULL,
+    trans = "identity",
+    range = c(0.5, 3),
+    guide = "none"
+  ) +
   coord_sf(
     xlim = limite[c(1, 3)],
     ylim = limite[c(2, 4)],
     expand = FALSE
   ) +
   labs(x = "Longitude", y = "Latitude") +
-  annotation_scale(location = "br", bar_cols = c("black", "white")) +
+  annotation_scale(
+    location = "br",
+    bar_cols = c("black", "white"),
+    text_cex = 0.6
+  ) +
   annotation_north_arrow(
-    location = "br", which_north = "true",
-    pad_x = unit(0.7, "in"), pad_y = unit(0.3, "in"),
+    location = "br",
+    which_north = "true",
+    pad_x = unit(0.7, "in"),
+    pad_y = unit(0.3, "in"),
     style = north_arrow_fancy_orienteering(
       fill = c("black", "white"),
       line_col = "grey20"
-    )
+    ),
+    height = unit(0.8, "cm"),
+    width  = unit(0.8, "cm")
   ) +
-  theme_bw() +
+  tema_base +
   theme(
-    panel.background = element_rect(fill = "white", color = NA),
-    plot.background = element_rect(fill = "white", color = NA),
-    panel.grid = element_blank(),
-    text = element_text(size = 12, color = "black"),
-    axis.text = element_text(size = 12, color = "black"),
-    title = element_text(size = 12, color = "black", face = "bold"),
-    legend.key = element_rect(fill = "white"),
-    legend.justification = "top",
-    legend.text = element_text(size = 12, color = "black"),
-    legend.spacing.y = unit(0.3, "cm")
+    legend.position = "right",
+    legend.justification = "top"
   )
 
 ggsave(
   filename = file.path(DIR_PIC, "fig3_uniplu.png"),
-  plot = g,
-  scale = 1,
-  width = 3200,
-  height = 2650,
-  units = "px",
+  plot = g_brasil,
+  width = FIG_WIDTH,
+  height = 12,
+  units = "cm",
   dpi = 300
 )
 
-message("Salvo pictures/fig3_uniplu.png (", nrow(stations), " postos)")
+message("Salvo: ", file.path(DIR_PIC, "fig3_uniplu.png"))
 
 # Segunda figura: recorte por estado com malha do geobr
 meses_pt <- c("jan", "fev", "mar", "abr", "mai", "jun",
@@ -145,38 +181,32 @@ ufs <- read_state(year = 2020, showProgress = FALSE) %>%
   filter(abbrev_state %in% unique(stations$estado)) %>%
   mutate(estado = abbrev_state)
 
-tema_mapa <- theme_bw() +
+tema_mapa_uf <- tema_base +
   theme(
-    panel.background = element_rect(fill = "white", color = NA),
-    plot.background = element_rect(fill = "white", color = NA),
-    panel.grid = element_blank(),
     axis.ticks = element_blank(),
-    text = element_text(size = 11, color = "black"),
-    axis.text = element_text(size = 9, color = "black"),
-    strip.background = element_rect(fill = "white"),
     legend.position = "bottom"
   )
 
 n_uf <- n_distinct(stations$estado)
-dir_uf <- DIR_SETAS_UF
-dir.create(dir_uf, recursive = TRUE, showWarnings = FALSE)
 
 plots_uf <- list()
+
 for (uf in sort(unique(stations$estado))) {
   pol <- ufs %>% filter(abbrev_state == uf)
   sta_uf <- stations %>% filter(estado == uf)
-  if (nrow(pol) == 0 || nrow(sta_uf) == 0) {
-    next
-  }
-  bb <- st_bbox(pol)
+  
+  if (nrow(pol) == 0 || nrow(sta_uf) == 0) next
+  
+  bb  <- st_bbox(pol)
   pad <- max(1.6, max(sta_uf$s1, na.rm = TRUE) * 1.25)
+  
   g_one <- ggplot() +
-    geom_sf(data = pol, fill = "white", color = "black", linewidth = 0.5) +
+    geom_sf(data = pol, fill = "white", color = "black", linewidth = 0.35) +
     geom_spoke(
       data = sta_uf,
       aes(x = long, y = lat, angle = theta, color = mes_pico_lab, radius = s1),
-      linewidth = 0.4,
-      arrow = arrow(length = unit(0.1, "cm"))
+      linewidth = 0.35,
+      arrow = arrow(length = unit(0.08, "cm"))
     ) +
     scale_colour_manual(
       name = "Mês típico do extremo",
@@ -190,33 +220,38 @@ for (uf in sort(unique(stations$estado))) {
       clip = "off"
     ) +
     labs(title = uf, x = "Longitude", y = "Latitude") +
-    tema_mapa +
+    tema_mapa_uf +
     theme(
       plot.title = element_text(face = "bold", hjust = 0.5),
       legend.position = "none"
     )
-
+  
   plots_uf[[uf]] <- g_one
+  
   ggsave(
-    filename = file.path(dir_uf, paste0(uf, ".png")),
+    filename = file.path(DIR_SETAS_UF, paste0(uf, ".png")),
     plot = g_one,
-    width = 2000,
-    height = 1800,
-    units = "px",
-    dpi = 150
+    width = FIG_WIDTH,
+    height = 11,
+    units = "cm",
+    dpi = 300
   )
 }
 
-g_painel <- wrap_plots(plots_uf, ncol = min(4, max(1, n_uf)))
+# Painel com todos os estados
+ncol_panel <- min(4, max(1, n_uf))
+nrow_panel <- ceiling(n_uf / ncol_panel)
+
+g_painel <- wrap_plots(plots_uf, ncol = ncol_panel)
 
 ggsave(
   filename = file.path(DIR_PIC, "fig3_uniplu_estados.png"),
   plot = g_painel,
-  width = min(4800, 1400 * min(4, max(1, n_uf))),
-  height = min(4000, 1200 * ceiling(n_uf / min(4, max(1, n_uf)))),
-  units = "px",
-  dpi = 150
+  width = FIG_WIDTH,
+  height = max(8, 3.8 * nrow_panel),
+  units = "cm",
+  dpi = 300
 )
-message("Salvo pictures/fig3_uniplu_estados.png")
-message("Salvo mapas por UF em pictures/fig3_setas_uf/")
 
+message("Salvo: ", file.path(DIR_PIC, "fig3_uniplu_estados.png"))
+message("Salvo mapas por UF em: ", DIR_SETAS_UF)
