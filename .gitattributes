@@ -1,1 +1,2 @@
 base/gerados/**/*.pqt filter=lfs diff=lfs merge=lfs -text
+Relatório[[:space:]]2/Scripts_Maximas/resultados/BR/dataframes/df_imax_uniplu_hidro.csv filter=lfs diff=lfs merge=lfs -text

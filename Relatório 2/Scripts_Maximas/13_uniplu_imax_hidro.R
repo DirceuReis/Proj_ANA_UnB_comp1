@@ -22,21 +22,22 @@ library(readr)
 library(lubridate)
 
 # --- caminhos ---
-DIR_FLUXO <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro/Scripts_Fluxo_AnoHidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_FLUXO <- "Relatório 2/Scripts_Maximas"
+DIR_DADOS <- "Relatório 2/Scripts_Ano_Hidrologico"
 
 OUT_TAG <- "BR"
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE"
+
+DIR_ANO_HIDRO <- file.path("Relatório 2/Scripts_Ano_Hidrologico")
+DIR_OUT_HIDRO <- file.path(DIR_ANO_HIDRO,"resultados",OUT_TAG)
+DIR_DF_HIDRO <- file.path(DIR_OUT_HIDRO, "dataframes")
 
 DIR_OUT      <- file.path(DIR_FLUXO, "resultados", OUT_TAG)
 DIR_DF       <- file.path(DIR_OUT, "dataframes")
 DIR_CACHE    <- file.path(DIR_OUT, "uniplu_cache", "imax_by_uf")
 DIR_ANALYZED <- file.path(DIR_OUT, "stations_analyzed")
-DIR_DF_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "dataframes")
-DIR_ANALYZED_FALLBACK <- file.path(DIR_DADOS, "resultados", OUT_TAG, "stations_analyzed")
 DIR_FUNS <- file.path(DIR_FLUXO, "funs")
 
-setwd(DIR_FLUXO)
 dir.create(DIR_DF, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_CACHE, recursive = TRUE, showWarnings = FALSE)
 
@@ -50,10 +51,8 @@ meses_pt <- c("jan", "fev", "mar", "abr", "mai", "jun",
               "jul", "ago", "set", "out", "nov", "dez")
 
 achar_rds <- function(nome) {
-  p1 <- file.path(DIR_DF, nome)
-  p2 <- file.path(DIR_DF_FALLBACK, nome)
-  if (file.exists(p1)) return(p1)
-  if (file.exists(p2)) return(p2)
+  p <- file.path(DIR_DF_HIDRO, nome)
+  if (file.exists(p)) return(p)
   NULL
 }
 
