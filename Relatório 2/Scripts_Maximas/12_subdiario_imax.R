@@ -10,7 +10,7 @@
 #
 # Entrada:
 #   df_subdiario_ano_hidro_uniplu.rds   (passo 9)
-#   df_subdiario_inventario.rds 
+#   df_subdiario_inventario.rds
 #   subdiario_br/<UF>/*_data.parquet
 # Saída:
 #   dataframes/df_imax_subdiario.*
@@ -19,6 +19,8 @@
 # Uso:
 #   Rscript Scripts_Fluxo_AnoHidrologico/12_subdiario_imax.R
 #
+# NOTA: fun_filter_set devolve time_step em SEGUNDOS.
+#   O script reconverte para MINUTOS antes do imax.
 
 library(dplyr)
 library(tidyr)
@@ -161,10 +163,10 @@ for (uf in ufs) {
     all_imax[[uf]] <- readRDS(f_ckpt)
     next
   }
-
+  
   rast_uf <- rastreio %>% filter(estado == uf)
   if (nrow(rast_uf) == 0L) next
-
+  
   data_files <- list.files(
     file.path(DIR_SUBDIARIO, uf),
     pattern = "_data\\.parquet$",
@@ -174,7 +176,7 @@ for (uf in ufs) {
     message("[", uf, "] sem parquet em subdiario_br/", uf)
     next
   }
-
+  
   message("[", uf, "] lendo ", length(data_files),
           " arquivos | postos=", nrow(rast_uf))
   chunks <- vector("list", length(data_files))
@@ -191,19 +193,19 @@ for (uf in ufs) {
   raw <- bind_rows(chunks)
   rm(chunks)
   invisible(gc())
-
+  
   raw <- raw %>% filter(gauge_code %in% rast_uf$gauge_code)
   if (nrow(raw) == 0L) {
     message("[", uf, "] sem cruzamento posto×dados")
     next
   }
-
+  
   meta <- rast_uf %>%
     select(gauge_code, time_step, responsible, mes_inicio)
   raw <- raw %>%
     left_join(meta, by = "gauge_code") %>%
     filter(is.finite(time_step), time_step >= 1L)
-
+  
   message("[", uf, "] preenchendo grades temporais (fun_filter_set)...")
   filled <- tryCatch(
     fun_filter_set(
@@ -219,41 +221,47 @@ for (uf in ufs) {
   )
   rm(raw)
   invisible(gc())
-
+  
   if (is.null(filled) || nrow(filled) == 0L) {
     message("[", uf, "] nenhuma série preenchida")
     next
   }
-
+  
+  # fun_filter_set devolve time_step em SEGUNDOS (*60).
+  # Voltar para MINUTOS antes de agrupar / calcular imax (d em HORAS).
+  filled <- filled %>%
+    mutate(time_step = as.numeric(time_step) / 60)
+  
   data.ls <- split(filled, filled$gauge_code)
   rm(filled)
   invisible(gc())
-
+  
   data.by.time <- fun_group_ts(data.ls, ts_name = "time_step")
   time.steps <- names(data.by.time)
   message("[", uf, "] resoluções: ", paste(time.steps, collapse = ", "), " min")
-
+  
   start_map <- setNames(as.integer(rast_uf$mes_inicio), rast_uf$gauge_code)
-
+  
   imax.ls <- lapply(time.steps, function(ts) {
     current.ts <- data.by.time[[ts]]
+    # ts em minutos → passo temporal em horas
     ds <- as.numeric(ts) / 60
     valid.durations <- DURATIONS_HR[(DURATIONS_HR / ds) %% 1 < 1e-6]
-
+    
     if (length(valid.durations) == 0L) {
       message("[", uf, "] ts=", ts, " min — sem durações compatíveis")
       return(NULL)
     }
-
+    
     message(
       "[", uf, "] ts=", ts, " min | durações=", length(valid.durations),
       " | postos=", length(current.ts)
     )
-
+    
     current.imax <- lapply(current.ts, function(df) df[, c("datetime", "rain_mm")])
     names(current.imax) <- names(current.ts)
     sm <- start_map[names(current.imax)]
-
+    
     out <- tryCatch(
       fun_imax_wateryear(
         data = current.imax,
@@ -267,16 +275,16 @@ for (uf in ufs) {
         NULL
       }
     )
-
+    
     if (is.null(out) || nrow(out) == 0L) return(NULL)
     out$time_step_min <- as.integer(ts)
     out
   })
-
+  
   imax_uf <- bind_rows(imax.ls[!vapply(imax.ls, is.null, logical(1))])
   rm(data.ls, data.by.time, imax.ls)
   invisible(gc())
-
+  
   if (nrow(imax_uf) > 0L) {
     imax_uf$estado <- uf
     saveRDS(imax_uf, f_ckpt)
