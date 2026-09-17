@@ -1,18 +1,15 @@
-#' Agrupa lista de séries temporais por resolução (time_step)
-#'
-#' @param ls      Lista nomeada de data.frames (um por posto).
-#' @param ts_name Nome da coluna com o passo temporal (em minutos).
-#' @return Lista cujos elementos são sub-listas agrupadas por time_step.
-fun_group_ts <- function(ls, ts_name = "time_step") {
+# Essa função agrupa uma lista com séries temeporais em diferentes resoluções
+# temporais em listas 
 
-  time_steps <- vapply(ls, function(df) {
+fun_group_ts <- function(ls, ts_name){
+  
+  time_steps <- sapply(ls, function(df){
     ts <- unique(df[[ts_name]])
-    if (length(ts) > 1L) {
-      warning("Data.frame com múltiplos '", ts_name,
-              "' — usando o primeiro valor.")
-    }
-    ts[1L]
-  }, numeric(1))
-
-  split(ls, time_steps)
+    if(length(ts) > 1) warning("Um ou mais data.frames possuem múltiplos 'time_steps'. Utilizando primeiro valor.")
+    return(ts[1])
+  })
+  
+  grouped_list <- split(ls, time_steps)
+  return(grouped_list)
+  
 }

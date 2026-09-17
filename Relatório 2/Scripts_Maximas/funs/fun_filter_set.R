@@ -25,37 +25,6 @@ fun_filter_set <- function(data,
     stop("\nArgument 'data' must be a data.frame (data.table or tibble), not a ", class(data), ".")
   }
   
-  # ALTERADO: se 'time_step' não existir, inferir a partir do datetime
-  if(!col_names[4] %in% names(data)){
-    
-    data <- data %>%
-      arrange(.data[[col_names[1]]], .data[[col_names[3]]]) %>%
-      group_by(.data[[col_names[1]]]) %>%
-      mutate(
-        !!col_names[4] := {
-          
-          dt_diff <- as.numeric(
-            diff(.data[[col_names[3]]]),
-            units = "mins"
-          )
-          
-          dt_diff <- dt_diff[is.finite(dt_diff) & dt_diff > 0]
-          
-          if(length(dt_diff) == 0){
-            NA_real_
-          } else{
-            median(dt_diff, na.rm = TRUE)
-          }
-        }
-      ) %>%
-      ungroup()
-  }
-  
-  # ALTERADO: se 'responsible' não existir, criar coluna
-  if(!col_names[5] %in% names(data)){
-    data[[col_names[5]]] <- "UNKNOWN"
-  }
-  
   # Check if names(df) is the same as 'col.names' argument
   # Essa forma não confere se a ordem é a mesma
   if(sum(is.element(col_names[1:5], names(data))) != 5){
@@ -87,8 +56,7 @@ fun_filter_set <- function(data,
         date_min <- lubridate::floor_date(min(df[[col_names[3]]], na.rm = TRUE), unit = "year")
         date_max <- lubridate::ceiling_date(max(df[[col_names[3]]], na.rm = TRUE), unit = "year") - 1
         
-        # ALTERADO: era !any(...); agora verifica se TODOS são finitos
-        if(!all(is.finite(c(as.numeric(date_min), as.numeric(date_max), time_step)))){
+        if(!any(is.finite(c(date_min, date_max, time_step)))){
           warning("time_step: ", time_step)
           warning("date_min: ", date_min)
           warning("date_max: ", date_max)
@@ -105,11 +73,8 @@ fun_filter_set <- function(data,
         
         # Extract start and end dates
         date <- lubridate::date(df[[col_names[3]]]) # remover 'time'
-        
-        # ALTERADO: adicionado na.rm = TRUE
-        date_min <- lubridate::floor_date(min(date, na.rm = TRUE), unit = "year")
-        date_max <- lubridate::ceiling_date(max(date, na.rm = TRUE), unit = "year") - 1
-        
+        date_min <- lubridate::floor_date(min(date), unit = "year")
+        date_max <- lubridate::ceiling_date(max(date), unit = "year") - 1
         seq_date <- seq(from = date_min, to = date_max, by = "day")
         
         # Fill new rainfall sequence by matching date between new sequence and date(df$datetime)
@@ -140,24 +105,15 @@ fun_filter_set <- function(data,
       gauge_code <- df[[col_names[1]]][1]
       resp <- df[[col_names[5]]][1]
       
-      # ALTERADO: evita erro se todos os datetime forem NA
-      if(all(is.na(df[[col_names[3]]]))){
-        warning("Estação ", gauge_code, " possui todos os datetime = NA.")
-        return(NULL)
-      }
-      
       # Extrair datas de início e fim da série
-      # ALTERADO: adicionado na.rm = TRUE para evitar "'to' must be a finite number"
-      date_min <- lubridate::floor_date(min(df[[col_names[3]]], na.rm = TRUE), unit = "year")
-      date_max <- lubridate::ceiling_date(max(df[[col_names[3]]], na.rm = TRUE), unit = "year") - 1
+      date_min <- lubridate::floor_date(min(df[[col_names[3]]]), unit = "year")
+      date_max <- lubridate::ceiling_date(max(df[[col_names[3]]]), unit = "year") - 1
       
       # Construir nova sequência de datas
       df$delta <- difftime(df[[col_names[3]]], dplyr::lag(df[[col_names[3]]]), units = "mins")     # calcular deltas
       seq_date <- seq(from = date_min, to = date_max, by = time_step)                              # datas
-      
-      # ALTERADO: estas linhas precisam existir; sem elas a função retornava apenas seq_date
       seq_rain <- df[[col_names[2]]][fastmatch::fmatch(x = seq_date, table = df[[col_names[3]]])]  # buscar rain_mm
-      seq_delta <- df$delta[fastmatch::fmatch(x = seq_date, table = df[[col_names[3]]])]             # buscar deltas
+      seq_delta <- df$delta[fastmatch::fmatch(x = seq_date, table = df[[col_names[3]]])] # buscar deltas
       
       # A nova sequência de deltas é importante p/ determinar a posição dos dados que devem ser ajustados
       # Construir tabela final (ainda vai ser corrigida)
@@ -173,18 +129,15 @@ fun_filter_set <- function(data,
       # de forma vetorizada
       delta <- df$delta
       condition <- !is.na(delta) & delta > 10 & delta <= 60 # vetor de TRUE/FALSE
-      valid <- which(condition)                              # indices de condition == TRUE
-      valid <- valid[valid >= 2]                             # começa a partir da segunda linha
+      valid <- which(condition)                                      # indices de condition == TRUE
+      valid <- valid[valid >= 2]                                     # começa a partir da segunda linha
       interval <- as.integer((delta[valid]/10)) - 1
       
       # Encontrar quais índices devem ser corrigidos (zerados)
       zeros <- unlist(mapply(function(i, n){
         if(n > 0) seq(i - 1, max(1, i - n), -1)
-        
-        # ALTERADO: era interger(0)
-        else integer(0)
-        
-      }, valid, interval))
+        else interger(0)
+      },  valid, interval))
       
       df[[col_names[2]]][zeros] <- 0
       
@@ -213,11 +166,6 @@ fun_filter_set <- function(data,
     # Combinar listas
     list_filled <- c(list_filled_cemaden, list_filled_others)
     
-    # ALTERADO: remover eventuais NULLs, por exemplo postos CEMADEN sem datetime
-    list_filled <- list_filled[
-      !vapply(list_filled, is.null, logical(1))
-    ]
-    
     # Sound alert
     beepr::beep(sound = 10)
     invisible(gc())
@@ -228,12 +176,8 @@ fun_filter_set <- function(data,
   
   # Preencher datas
   message("\nPreenchendo datas...")
-  
-  # ALTERADO: antes estava daily = FALSE; agora respeita o argumento da função
-  list_filled <- fun_fill_dates(df = data, daily = daily, col_names = col_names)
-  
-  # ALTERADO: unname() evita que os códigos dos postos interfiram no bind_rows
-  data <- bind_rows(unname(list_filled))
+  list_filled <- fun_fill_dates(df = data, daily = FALSE, col_names = col_names)
+  data <- bind_rows(list_filled)
   
   # Filtrar estações
   if(isTRUE(filter)){
