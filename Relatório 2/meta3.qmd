@@ -144,10 +144,33 @@ tabela_inventario |>
   )
 ```
 
-## 3.2 BR-DWGD
+## 1.2 BR-DWGD
 
-Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° incluindo diferentes informações, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.
+Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.
 
-Toda a base do BR-DWGD pode ser obtida através do site [UNIPLU-BR no GitHub](https://github.com/LARHENA/UNIPLU-BR). Os dados são armazenados em arquivos tipo .zip. Cada arquivo .zip contém dois arquivos em formato .parquet: (i) table_info.parquet (metadados das estações); e (ii) table_data.parquet (séries de dados).
+Toda a base do BR-DWGD pode ser obtida através do site [BR-DWGD no GitHub](https://github.com/AlexandreCandidoXavier/BR-DWGD).
 
+\[Explicação geral de como os dados foram postos em grade\]
 
+# 2. Metodologia de Controle de Qualidade
+
+De acordo com Lemos et al. (2026), os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de outlier, seguindo originalmente conforme reportados pelas agências. Desta forma, aplicou-se metodologia de controle de qualidade.
+
+A metodologia foi aplicada de maneira diferente considerando os dados de resolução temporal diária e sub-diária.
+
+## 2.1 Séries Diárias
+
+Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade e consistência a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais:
+(a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil.
+(b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
+
+Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Foram identificadas 12.640 estações, para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A @fig-estacoes-diaria apresenta o mapa geral das estações de base diária.
+
+![Figura 5. Estações de monitoramento de precipitação de resolução diária.](Scripts_Controle_Qualidade/Figuras/Figura 6. Inventário Diário.png){#fig-estacoes-diaria width="100%"}
+### 2.1.1 QC Básico
+
+Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Nos últimos anos, chuvas diárias na ordem de 
+The initial phase involves the identification and elimination of specific erroneous data 
+points. This refers to instances such as the occurrence of physically implausible precipitation 
+quantities that include negative values and values that exceed extreme events within the study 
+region. The upper limit threshold of 450.0 mm.day-1 was adopted for the whole temporal
