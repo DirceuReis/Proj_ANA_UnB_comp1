@@ -136,7 +136,7 @@ fun_filter_set <- function(data,
       # Encontrar quais índices devem ser corrigidos (zerados)
       zeros <- unlist(mapply(function(i, n){
         if(n > 0) seq(i - 1, max(1, i - n), -1)
-        else interger(0)
+        else integer(0)
       },  valid, interval))
       
       df[[col_names[2]]][zeros] <- 0
