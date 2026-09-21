@@ -93,9 +93,9 @@ acumulado de 5 dias
 
 #8.4.1 Caracterização dos dados - número de células; - cobertura espacial; - estatísticas da precipitação máxima mensal anual; - distribuição espacial dos valores.
 
-![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos.png) Figura 8
+![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png) Figura 8
 
-![proporção de sigs com dados do Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier.png) Figura 9
+![proporção de sigs com dados do Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png) Figura 9
 
 #8.4.2 MK #8.4.3 MK+MTFPW #8.4.4 MK+MTFPW+FDR
 
