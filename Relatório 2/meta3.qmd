@@ -160,17 +160,14 @@ A metodologia foi aplicada de maneira diferente considerando os dados de resolu�
 
 ## 2.1 Séries Diárias
 
-Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade e consistência a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais:
-(a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil.
-(b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
+Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade e consistência a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais: (a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil. (b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
 
 Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Foram identificadas 12.640 estações, para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A @fig-estacoes-diaria apresenta o mapa geral das estações de base diária.
 
-![Figura 5. Estações de monitoramento de precipitação de resolução diária.](Scripts_Controle_Qualidade/Figuras/Figura 6. Inventário Diário.png){#fig-estacoes-diaria width="100%"}
+![Figura 6. Estações de monitoramento de precipitação de resolução diária.](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Inventário%20Diário.png){#fig-estacoes-diaria width="100%"}\
+
 ### 2.1.1 QC Básico
 
-Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Nos últimos anos, chuvas diárias na ordem de 
-The initial phase involves the identification and elimination of specific erroneous data 
-points. This refers to instances such as the occurrence of physically implausible precipitation 
-quantities that include negative values and values that exceed extreme events within the study 
-region. The upper limit threshold of 450.0 mm.day-1 was adopted for the whole temporal
+Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo (Carmona et al., 2023). Desse modo, considerou-se como limite superior 600 mm/dia.
+
+
