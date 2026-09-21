@@ -71,7 +71,7 @@ Série -\> MTFPW -\> MK -\> p-valores -\> FDR -\> significância espacial - EQUA
 
 ![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
 
-![máximas totais anual, acumulado 3 e 5 dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/chuvas_final.png) Figura 3.
+![máximas totais anual dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/chuvas_final.png) Figura 3.
 
 #8.3.2 MK; MK+MTFPW; MK+MTFPW+FDR
 
@@ -79,23 +79,16 @@ máxima diária
 
 ![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx1D_sig_RH.png) Figura 4.
 
-acumulado de 3 dias
 
-![Resultado para chuva máxima acumulada de 3 dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx3D_sig_RH.png) Figura 5.
-
-acumulado de 5 dias
-
-![Resultado para chuva máxima acumulada de 5 dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx5D_sig_RH.png) Figura 6.
-
-![Porporção de sing por RH para máxima anual, acumulado 3 dias e 5 dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs.png) Figura 7.
+![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs.png) Figura 5.
 
 #8.4 Resultados Xavier
 
 #8.4.1 Caracterização dos dados - número de células; - cobertura espacial; - estatísticas da precipitação máxima mensal anual; - distribuição espacial dos valores.
 
-![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png) Figura 8
+![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png) Figura 6
 
-![proporção de sigs com dados do Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png) Figura 9
+![proporção de sigs com dados do Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png) Figura 7
 
 #8.4.2 MK #8.4.3 MK+MTFPW #8.4.4 MK+MTFPW+FDR
 
