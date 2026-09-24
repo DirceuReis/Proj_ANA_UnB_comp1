@@ -20,6 +20,13 @@ Para cada posto, foi calculado o número de dias com observações e calculada a
 
 Para os dados diários, como etapa de controle de qualidade, foram removidos os valores inferiores ou iguais a 1 mm e valores superiores a 650 mm. Foram considerados válidos apenas os anos que apresentaram cobertura temporal igual ou superior a 80% e com no mínimo 30 anos de dados. Os subdiários cobertura temporal igual ou superior a 80% e com no mínimo 8 anos de dados.
 
+Para os dados provenientes dos postos pluviométricos e pluviográficos do UNIPLU, o mesmo princípio foi utilizado para a construção das séries anuais de extremos, considerando-se, para cada estação, o maior valor diário de precipitação registrado em cada ano. Assim, para uma estação (s):
+
+$$
+\max_{d\in y}
+P_{s,d}
+$$ em que (P\_{s,d}) representa a precipitação diária observada na estação (s).
+
 Ao final do processamento, foi obtida uma série temporal anual para cada estação selecionada, contendo os valores das precipitações máximas diárias e subdiárias, acompanhados das informações de identificação e localização das estações.
 
 -   fonte dos dados;
@@ -35,17 +42,33 @@ obs: colocar um mapa da distribuição das estações sobre as 12 RHs?
 
 #8.1.2 Dados em grade - Xavier
 
+Utilizou-se a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), os dados correspondem ao conjunto elaborado por Xavier et al.,, disponibilizada em formato NetCDF, para o cálculo da precipitação máxima diária anual.
+
+A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado naquele ano. Esse valor corresponde à precipitação máxima diária anual.
+
+O cálculo foi realizado no ambiente R, utilizando a biblioteca ncdf4 para leitura dos arquivos NetCDF e funções de manipulação de dados para organização dos resultados.
+
 -   Xavier (falar sobre a base/pubicação);
 -   período 1961–2025;
--   resolução espacial;
--   resolução temporal mensal;
--   variável utilizada;
--   tratamento do NetCDF;
--   cobertura espacial.
+
+O cálculo foi realizado individualmente para cada célula espacial. Dessa forma, para uma célula localizada nas coordenadas ((i,j)), o Rx1day do ano (y) foi definido como:
+
+$$
+\max_{d\in y}
+P_{i,j,d}
+$$
+
+em que (P\_{i,j,d}) representa a precipitação diária na célula ((i,j)) no dia (d), e (y) representa o ano analisado.
+
+Dessa forma, os dados foram organizados como séries temporais anuais de Rx1day, sendo cada série associada a uma unidade espacial de análise: célula da grade, no caso do Xavier, ou posto pluviométrico/pluviográfico, no caso do UNIPLU.
+
+Após a construção das séries de Rx1day, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao *Modified Trend-Free Pre-Whitening* (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método *False Discovery Rate* (MK + MTFPW + FDR).
 
 #8.2 Metodologia
 
-#8.2.1
+A análise de tendências foi realizada a partir de duas fontes de dados de precipitação: (i) os dados em grade de Xavier/BR-DWGD e (ii) os dados observados de postos pluviométricos e pluviográficos provenientes do banco de dados UNIPLU. A utilização dessas duas fontes permitiu avaliar o comportamento temporal dos extremos de precipitação tanto a partir de uma representação espacial em grade quanto a partir de séries históricas.
+
+Embora as duas fontes apresentem diferentes características espaciais e temporais, bem como diferentes formas de obtenção e registro dos dados, a análise foi estruturada a partir de índices de precipitação associados a diferentes escalas temporais.
 
 -   tratamento de valores ausentes;
 -   organização das séries temporais;
@@ -54,6 +77,57 @@ obs: colocar um mapa da distribuição das estações sobre as 12 RHs?
 -   espacialização dos dados.
 
 #8.2.2 Teste de Mann-Kendall
+
+Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.
+
+Para cada série temporal (X_1,X_2,\\ldots,X_n), a estatística (S) foi calculada pela comparação entre todos os pares de observações:
+
+$$
+S =
+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^{n}
+\operatorname{sgn}(X_j-X_i)
+$$
+
+em que:
+
+$$
+\operatorname{sgn}(X_j-X_i)=
+\begin{cases}
++1, & X_j-X_i>0\
+0, & X_j-X_i=0\
+-1, & X_j-X_i<0
+\end{cases}
+$$\
+
+Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo e os valores negativos indicam predominância de reduções.
+
+Neste caso, os empates entre observações foram considerados no cálculo da variância. A variância de (S) foi calculada por:
+
+$$
+\sum_{p=1}^{g}
+t_p(t_p-1)(2t_p+5)
+}{18}
+$$ em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados.
+
+A estatística padronizada (Z) também foi calculada pela equação a seguir:
+
+$$
+Z=
+\begin{cases}
+\dfrac{S-1}{\sqrt{\operatorname{Var}(S)}}, & S>0\
+0, & S=0\
+\dfrac{S+1}{\sqrt{\operatorname{Var}(S)}}, & S<0
+\end{cases}
+$$ O *p-value* bilateral foi obtido por: $$
+p=2\left[1-\Phi(|Z|)\right]
+$$ em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
+
+Foi adotado nível de significância de 5% ((\alpha=0,05)). Assim, uma série foi considerada estatisticamente significativa quando: $$
+p<0,05
+$$ A direção da tendência foi determinada pelo sinal da estatística (Z). Valores positivos de (Z) foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.
+
+O teste MK foi aplicado individualmente às séries correspondentes às células da grade Xavier e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
 
 -   finalidade do teste;
 -   hipótese nula;
