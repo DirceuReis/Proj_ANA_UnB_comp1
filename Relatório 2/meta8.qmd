@@ -12,7 +12,15 @@ Organização dos dados por Região Hidrográfica
 -   células do Xavier também foram espacialmente associadas às RHs;
 -   as análises foram realizadas individualmente para cada RH.
 
-#8.1.1 Dados de postos pluviométricos e pluviógrafos
+#8.1.1 Dados de pluviómetros e pluviógrafos
+
+Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do *Unified Brazilian Rainfall Dataset* (UNIPLU) (Das Neves Almeida et al., 2025) para calcular as precipitações máximas anuais. Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.
+
+Para cada posto, foi calculado o número de dias com observações e calculada a razão entre os dias observados e o número de dias esperados no respectivo ano, considerando-se 365 dias para anos comuns e 366 dias para anos bissextos.
+
+Para os dados diários, como etapa de controle de qualidade, foram removidos os valores inferiores ou iguais a 1 mm e valores superiores a 650 mm. Foram considerados válidos apenas os anos que apresentaram cobertura temporal igual ou superior a 80% e com no mínimo 30 anos de dados. Os subdiários cobertura temporal igual ou superior a 80% e com no mínimo 8 anos de dados.
+
+Ao final do processamento, foi obtida uma série temporal anual para cada estação selecionada, contendo os valores das precipitações máximas diárias e subdiárias, acompanhados das informações de identificação e localização das estações.
 
 -   fonte dos dados;
 -   período;
@@ -92,4 +100,7 @@ máxima diária
 #8.5 Teste de Pettit nos dados de Xavier ![mapa anos de quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png) Figura 8
 
 ![tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_depois_quebra.png) Figura 8
+
+![mudança de tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png) Figura 8
+
 #8.6 Considerações Finais
