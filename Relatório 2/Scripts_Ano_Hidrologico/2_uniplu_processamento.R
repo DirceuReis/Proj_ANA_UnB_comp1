@@ -15,8 +15,9 @@ library(arrow)
 library(readr)
 
 # --- caminhos (saídas nesta pasta; Uniplu fora) ---
-DIR_FLUXO <- "Git_ANA/Proj_ANA_UnB_comp1/Relatório 2/Scripts_Ano_Hidrologico"
-DIR_DADOS <- #Caminho dados do Uniplu
+DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
+DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+#Caminho dados do Uniplu
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF
@@ -35,12 +36,10 @@ TIME_STEP_DAILY <- "1440"
 MIN_YEARS_ZIP <- 30
 MAX_NA_DAYS <- 73   # 20% de 365 dias
 MIN_YEARS_GOOD <- 30
-SKIP_EXISTING_YEAR <- TRUE
-
-setwd(DIR_FLUXO)
+SKIP_EXISTING_YEAR <- FALSE
 
 analyse_station_uniplu <- function(sta) {
-
+  
   sta <- sta %>%
     mutate(
       codigo = as.character(codigo),
@@ -51,32 +50,32 @@ analyse_station_uniplu <- function(sta) {
     group_by(codigo, dt) %>%
     summarise(p = mean(p, na.rm = TRUE), .groups = "drop") %>%
     mutate(p = ifelse(is.nan(p), NA_real_, p))
-
+  
   if (nrow(sta) < 365) {
     return(list(is.null = TRUE, sta = sta))
   }
-
+  
   dt.min <- min(sta$dt, na.rm = TRUE)
   dt.max <- max(sta$dt, na.rm = TRUE)
-
+  
   sta <- sta %>%
     complete(dt = seq.Date(dt.min, dt.max, by = "day")) %>%
     fill(codigo, .direction = "downup")
-
+  
   return_null <- FALSE
-
+  
   ano.m <- year(dt.max)
   uni.p <- length(unique(sta$p))
   dry.d <- sum(sta$p < 0.5, na.rm = TRUE) / nrow(sta)
-
+  
   if (uni.p < 15) {
     return_null <- TRUE
   }
-
+  
   if (is.finite(dry.d) && dry.d >= 0.995) {
     return_null <- TRUE
   }
-
+  
   sta <- sta %>%
     mutate(
       p3  = slide_dbl(p, sum, .before = 0, .after = 2,  .complete = TRUE, na.rm = TRUE),
@@ -85,7 +84,7 @@ analyse_station_uniplu <- function(sta) {
       p15 = slide_dbl(p, sum, .before = 0, .after = 14, .complete = TRUE, na.rm = TRUE),
       p30 = slide_dbl(p, sum, .before = 0, .after = 29, .complete = TRUE, na.rm = TRUE)
     )
-
+  
   return(list(
     is.null = return_null,
     err     = tibble(codigo = unique(sta$codigo),
@@ -113,61 +112,56 @@ message("Zips a ler: ", n_zips)
 # ---------------------------------------------------------------------------
 f_inv <- file.path(DIR_INV, "uniplu_daily_inventory.rds")
 
-if (file.exists(f_inv) && is.null(TEST_UF)) {
-  inv <- readRDS(f_inv)
-  message("Inventário já existe: ", nrow(inv), " linhas")
-} else {
-  inv_list <- vector("list", n_zips)
-  for (i in seq_along(zips)) {
-    zp <- zips[i]
-    bn <- tools::file_path_sans_ext(basename(zp))
-    parts <- strsplit(bn, "_", fixed = TRUE)[[1]]
-    uf_zip <- parts[1]
-    year_zip <- as.integer(parts[2])
-
-    tmp <- tempfile()
-    dir.create(tmp)
-    ok <- tryCatch({
-      unzip(zp, files = "table_info.parquet", exdir = tmp, junkpaths = TRUE)
-      TRUE
-    }, error = function(e) FALSE)
-
-    if (!ok || !file.exists(file.path(tmp, "table_info.parquet"))) {
-      unlink(tmp, recursive = TRUE)
-      next
-    }
-
-    info <- read_parquet(file.path(tmp, "table_info.parquet")) %>%
-      mutate(time_step = as.character(time_step)) %>%
-      filter(time_step == TIME_STEP_DAILY) %>%
-      transmute(
-        codigo       = as.character(gauge_code),
-        city         = as.character(city),
-        estado       = as.character(state),
-        lat          = as.numeric(lat),
-        long         = as.numeric(long),
-        time_step    = time_step,
-        network      = as.character(network),
-        responsible  = as.character(responsible),
-        elevation    = as.numeric(elevation),
-        uf_zip       = uf_zip,
-        year_zip     = year_zip
-      )
-
-    inv_list[[i]] <- info
+inv_list <- vector("list", n_zips)
+for (i in seq_along(zips)) {
+  zp <- zips[i]
+  bn <- tools::file_path_sans_ext(basename(zp))
+  parts <- strsplit(bn, "_", fixed = TRUE)[[1]]
+  uf_zip <- parts[1]
+  year_zip <- as.integer(parts[2])
+  
+  tmp <- tempfile()
+  dir.create(tmp)
+  ok <- tryCatch({
+    unzip(zp, files = "table_info.parquet", exdir = tmp, junkpaths = TRUE)
+    TRUE
+  }, error = function(e) FALSE)
+  
+  if (!ok || !file.exists(file.path(tmp, "table_info.parquet"))) {
     unlink(tmp, recursive = TRUE)
-
-    if (i %% 200 == 0) {
-      message("inventário ", i, "/", n_zips)
-    }
+    next
   }
-
-  inv <- bind_rows(inv_list)
-  if (is.null(TEST_UF)) {
-    saveRDS(inv, f_inv)
+  
+  info <- read_parquet(file.path(tmp, "table_info.parquet")) %>%
+    mutate(time_step = as.character(time_step)) %>%
+    filter(time_step == TIME_STEP_DAILY) %>%
+    transmute(
+      codigo       = as.character(gauge_code),
+      city         = as.character(city),
+      estado       = as.character(state),
+      lat          = as.numeric(lat),
+      long         = as.numeric(long),
+      time_step    = time_step,
+      network      = as.character(network),
+      responsible  = as.character(responsible),
+      elevation    = as.numeric(elevation),
+      uf_zip       = uf_zip,
+      year_zip     = year_zip
+    )
+  
+  inv_list[[i]] <- info
+  unlink(tmp, recursive = TRUE)
+  
+  if (i %% 200 == 0) {
+    message("inventário ", i, "/", n_zips)
   }
-  message("Inventário diário: ", nrow(inv), " posto-ano")
 }
+
+inv <- bind_rows(inv_list)
+if (is.null(TEST_UF)) {
+  saveRDS(inv, f_inv)
+}
+message("Inventário diário: ", nrow(inv), " posto-ano")
 
 sta_years <- inv %>%
   group_by(codigo) %>%
@@ -186,12 +180,12 @@ sta_years <- inv %>%
 
 # mais de 30 anos nos arquivos zip (ainda sem olhar falhas)
 keep <- sta_years %>%
-  filter(n_years_zip > MIN_YEARS_ZIP)
+  filter(n_years_zip >= MIN_YEARS_ZIP)
 
 saveRDS(sta_years, file.path(DIR_DF, "uniplu_daily_sta_years.rds"))
 saveRDS(keep,      file.path(DIR_DF, "uniplu_daily_keep30.rds"))
 message("Postos diários: ", nrow(sta_years),
-        " | com >", MIN_YEARS_ZIP, " anos: ", nrow(keep))
+        " | com >=", MIN_YEARS_ZIP, " anos: ", nrow(keep))
 
 keep_codes <- keep$codigo
 
@@ -202,14 +196,14 @@ for (i in seq_along(zips)) {
   zp <- zips[i]
   bn <- tools::file_path_sans_ext(basename(zp))
   f_out <- file.path(DIR_YEAR, paste0(bn, ".parquet"))
-
+  
   if (SKIP_EXISTING_YEAR && file.exists(f_out)) {
     next
   }
-
+  
   parts <- strsplit(bn, "_", fixed = TRUE)[[1]]
   year_zip <- as.integer(parts[2])
-
+  
   tmp <- tempfile()
   dir.create(tmp)
   ok <- tryCatch({
@@ -217,33 +211,33 @@ for (i in seq_along(zips)) {
           exdir = tmp, junkpaths = TRUE)
     TRUE
   }, error = function(e) FALSE)
-
+  
   if (!ok) {
     unlink(tmp, recursive = TRUE)
     next
   }
-
+  
   f_info <- file.path(tmp, "table_info.parquet")
   f_data <- file.path(tmp, "table_data.parquet")
   if (!file.exists(f_info) || !file.exists(f_data)) {
     unlink(tmp, recursive = TRUE)
     next
   }
-
+  
   info <- read_parquet(f_info) %>%
     mutate(
       codigo    = as.character(gauge_code),
       time_step = as.character(time_step)
     ) %>%
     filter(time_step == TIME_STEP_DAILY, codigo %in% keep_codes)
-
+  
   if (nrow(info) == 0) {
     unlink(tmp, recursive = TRUE)
     next
   }
-
+  
   daily_codes <- unique(info$codigo)
-
+  
   dat <- read_parquet(f_data) %>%
     transmute(
       codigo = as.character(gauge_code),
@@ -251,11 +245,11 @@ for (i in seq_along(zips)) {
       dt     = as.Date(datetime)
     ) %>%
     filter(codigo %in% daily_codes, !is.na(dt))
-
+  
   if (nrow(dat) > 0) {
     write_parquet(dat, f_out)
   }
-
+  
   unlink(tmp, recursive = TRUE)
   if (i %% 100 == 0) {
     message("extração ", i, "/", n_zips)
@@ -303,34 +297,34 @@ for (k in seq_len(n_chunk)) {
   i1 <- (k - 1) * chunk_n + 1
   i2 <- min(k * chunk_n, n_cod)
   chunk <- cods[i1:i2]
-
+  
   raw <- ds %>%
     filter(codigo %in% chunk) %>%
     collect()
-
+  
   for (cod in chunk) {
     count.all <- count.all + 1
     sta <- raw %>% filter(codigo == cod)
-
+    
     sta.analysed <- tryCatch(
       analyse_station_uniplu(sta),
       error = function(e) NULL
     )
-
+    
     if (!is.null(sta.analysed) && !isTRUE(sta.analysed$is.null)) {
       sta.ok <- sta.analysed$sta
-
+      
       df <- sta.ok %>%
         mutate(ano = year(dt)) %>%
         group_by(ano) %>%
         summarise(n = sum(is.na(p)), .groups = "drop") %>%
         filter(n <= MAX_NA_DAYS)
-
+      
       year.size <- nrow(df)
-      if (year.size > MIN_YEARS_GOOD) {
+      if (year.size >= MIN_YEARS_GOOD) {
         count.val <- count.val + 1
         saveRDS(sta.ok, file.path(DIR_ANALYZED, paste0(cod, "_analyzed.rds")))
-
+        
         meta <- keep %>% filter(codigo == cod)
         df_sta <- df_sta %>%
           add_row(
@@ -346,16 +340,15 @@ for (k in seq_len(n_chunk)) {
           )
       }
     }
-
+    
     if (count.all %% 50 == 0) {
       message("qualidade ", count.all, "/", n_cod, " válidas: ", count.val)
     }
   }
-
+  
   rm(raw)
   gc(verbose = FALSE)
 }
 
 saveRDS(df_sta, file.path(DIR_DF, "out_analise_uniplu.rds"))
-message("Postos válidos (> ", MIN_YEARS_GOOD, " anos bons): ", nrow(df_sta))
-
+message("Postos válidos (>= ", MIN_YEARS_GOOD, " anos bons): ", nrow(df_sta))
