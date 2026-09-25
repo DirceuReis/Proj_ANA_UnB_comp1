@@ -304,7 +304,7 @@ sel_diario_qc20 <- df_imax %>%
   group_by(gauge_code, estado) %>%
   summarise(
     n_duracoes=n_distinct(d_days),
-    n_duracoes_30anos=sum(n_anos_validos > 30),
+    n_duracoes_30anos=sum(n_anos_validos >= 30),
     min_anos=min(n_anos_validos),
     med_anos=median(n_anos_validos),
     max_anos=max(n_anos_validos),
