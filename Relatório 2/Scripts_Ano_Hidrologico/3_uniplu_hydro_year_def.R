@@ -64,7 +64,7 @@ pot_station <- function(sta, serie, r = 1) {
 sta.inf <- readRDS(file.path(DIR_DF, "out_analise_uniplu.rds"))
 
 sta.inf <- sta.inf %>%
-  filter(year.size > MIN_YEARS_GOOD)
+  filter(year.size >= MIN_YEARS_GOOD)
 
 if (!is.null(TEST_UF)) {
   sta.inf <- sta.inf %>% filter(estado == TEST_UF)
