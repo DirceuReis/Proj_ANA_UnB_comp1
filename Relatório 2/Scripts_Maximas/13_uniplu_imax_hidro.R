@@ -37,6 +37,7 @@ NA_ACCEPT_HYDRO <- 0.20
 APPLY_QC_HYDRO <- TRUE
 DURATIONS_DAY <- c(1L,2L,3L,4L,5L,6L,7L,10L)
 DURATIONS_HR <- DURATIONS_DAY*24
+FORCE_RECALC <- TRUE
 meses_pt <- c("jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez")
 
 dir.create(DIR_DF,recursive=TRUE,showWarnings=FALSE)
@@ -87,7 +88,7 @@ for(uf in ufs){
   
   f_ckpt <- file.path(DIR_CACHE,paste0(uf,"_imax.rds"))
   
-  if(file.exists(f_ckpt)){
+  if(file.exists(f_ckpt) && !FORCE_RECALC){
     message("\n[",uf,"] checkpoint encontrado — carregando")
     all_imax[[uf]] <- readRDS(f_ckpt)
     next
@@ -355,3 +356,4 @@ message(F_OUT_RDS)
 message(F_OUT_PQT)
 message(F_OUT_CSV)
 message("Cache por UF: ",DIR_CACHE)
+
