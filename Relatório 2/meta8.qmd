@@ -12,7 +12,22 @@ Organização dos dados por Região Hidrográfica
 -   células do Xavier também foram espacialmente associadas às RHs;
 -   as análises foram realizadas individualmente para cada RH.
 
-#8.1.1 Dados de postos pluviométricos e pluviógrafos
+#8.1.1 Dados de pluviómetros e pluviógrafos
+
+Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do *Unified Brazilian Rainfall Dataset* (UNIPLU) (Das Neves Almeida et al., 2025) para calcular as precipitações máximas anuais. Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.
+
+Para cada posto, foi calculado o número de dias com observações e calculada a razão entre os dias observados e o número de dias esperados no respectivo ano, considerando-se 365 dias para anos comuns e 366 dias para anos bissextos.
+
+Para os dados diários, como etapa de controle de qualidade, foram removidos os valores inferiores ou iguais a 1 mm e valores superiores a 650 mm. Foram considerados válidos apenas os anos que apresentaram cobertura temporal igual ou superior a 80% e com no mínimo 30 anos de dados. Os subdiários cobertura temporal igual ou superior a 80% e com no mínimo 8 anos de dados.
+
+Para os dados provenientes dos postos pluviométricos e pluviográficos do UNIPLU, o mesmo princípio foi utilizado para a construção das séries anuais de extremos, considerando-se, para cada estação, o maior valor diário de precipitação registrado em cada ano. Assim, para uma estação (s):
+
+$$
+\max_{d\in y}
+P_{s,d}
+$$ em que (P\_{s,d}) representa a precipitação diária observada na estação (s).
+
+Ao final do processamento, foi obtida uma série temporal anual para cada estação selecionada, contendo os valores das precipitações máximas diárias e subdiárias, acompanhados das informações de identificação e localização das estações.
 
 -   fonte dos dados;
 -   período;
@@ -27,71 +42,139 @@ obs: colocar um mapa da distribuição das estações sobre as 12 RHs?
 
 #8.1.2 Dados em grade - Xavier
 
+Utilizou-se a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), os dados correspondem ao conjunto elaborado por Xavier et al.,, disponibilizada em formato NetCDF, para o cálculo da precipitação máxima diária anual.
+
+A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado naquele ano. Esse valor corresponde à precipitação máxima diária anual.
+
+O cálculo foi realizado no ambiente R, utilizando a biblioteca ncdf4 para leitura dos arquivos NetCDF e funções de manipulação de dados para organização dos resultados.
+
 -   Xavier (falar sobre a base/pubicação);
 -   período 1961–2025;
--   resolução espacial;
--   resolução temporal mensal;
--   variável utilizada;
--   tratamento do NetCDF;
--   cobertura espacial.
+
+O cálculo foi realizado individualmente para cada célula espacial. Dessa forma, para uma célula localizada nas coordenadas ((i,j)), o Rx1day do ano (y) foi definido como:
+
+$$
+\max_{d\in y}
+P_{i,j,d}
+$$
+
+em que (P\_{i,j,d}) representa a precipitação diária na célula ((i,j)) no dia (d), e (y) representa o ano analisado.
+
+Dessa forma, os dados foram organizados como séries temporais anuais de Rx1day, sendo cada série associada a uma unidade espacial de análise: célula da grade, no caso do Xavier, ou posto pluviométrico/pluviográfico, no caso do UNIPLU.
+
+Após a construção das séries de Rx1day, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao *Modified Trend-Free Pre-Whitening* (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método *False Discovery Rate* (MK + MTFPW + FDR).
 
 #8.2 Metodologia
 
-#8.2.1 
+A análise de tendências foi realizada a partir de duas fontes de dados de precipitação: (i) os dados em grade de Xavier/BR-DWGD e (ii) os dados observados de postos pluviométricos e pluviográficos provenientes do banco de dados UNIPLU. A utilização dessas duas fontes permitiu avaliar o comportamento temporal dos extremos de precipitação tanto a partir de uma representação espacial em grade quanto a partir de séries históricas.
 
-- tratamento de valores ausentes;
-- organização das séries temporais;
-- período analisado;
-- critérios de validade das séries;
-- espacialização dos dados.
+Embora as duas fontes apresentem diferentes características espaciais e temporais, bem como diferentes formas de obtenção e registro dos dados, a análise foi estruturada a partir de índices de precipitação associados a diferentes escalas temporais.
+
+-   tratamento de valores ausentes;
+-   organização das séries temporais;
+-   período analisado;
+-   critérios de validade das séries;
+-   espacialização dos dados.
 
 #8.2.2 Teste de Mann-Kendall
 
-- finalidade do teste;
-- hipótese nula;
-- estatística Z;
-- p-valor;
-- nível de significância;
-- classificação da tendência em crescente, decrescente ou não significativa.
-- equações
+Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.
+
+Para cada série temporal (X_1,X_2,\\ldots,X_n), a estatística (S) foi calculada pela comparação entre todos os pares de observações:
+
+$$
+S =
+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^{n}
+\operatorname{sgn}(X_j-X_i)
+$$
+
+em que:
+
+$$
+\operatorname{sgn}(X_j-X_i)=
+\begin{cases}
++1, & X_j-X_i>0\
+0, & X_j-X_i=0\
+-1, & X_j-X_i<0
+\end{cases}
+$$\
+
+Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo e os valores negativos indicam predominância de reduções.
+
+Neste caso, os empates entre observações foram considerados no cálculo da variância. A variância de (S) foi calculada por:
+
+$$
+\sum_{p=1}^{g}
+t_p(t_p-1)(2t_p+5)
+}{18}
+$$ em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados.
+
+A estatística padronizada (Z) também foi calculada pela equação a seguir:
+
+$$
+Z=
+\begin{cases}
+\dfrac{S-1}{\sqrt{\operatorname{Var}(S)}}, & S>0\
+0, & S=0\
+\dfrac{S+1}{\sqrt{\operatorname{Var}(S)}}, & S<0
+\end{cases}
+$$ O *p-value* bilateral foi obtido por: $$
+p=2\left[1-\Phi(|Z|)\right]
+$$ em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
+
+Foi adotado nível de significância de 5% ((\alpha=0,05)). Assim, uma série foi considerada estatisticamente significativa quando: $$
+p<0,05
+$$ A direção da tendência foi determinada pelo sinal da estatística (Z). Valores positivos de (Z) foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.
+
+O teste MK foi aplicado individualmente às séries correspondentes às células da grade Xavier e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
+
+-   finalidade do teste;
+-   hipótese nula;
+-   estatística Z;
+-   p-valor;
+-   nível de significância;
+-   classificação da tendência em crescente, decrescente ou não significativa.
+-   equações
 
 #8.2.3 Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
 
-Série temporal -> identificação da autocorrelação -> MTFPW -> série corrigida -> MK -> tendência
-- EQUAÇÕES
+Série temporal -\> identificação da autocorrelação -\> MTFPW -\> série corrigida -\> MK -\> tendência - EQUAÇÕES
 
 #8.2.4 Controle da *False Discovery Rate* – FDR
 
-Série -> MTFPW -> MK -> p-valores -> FDR -> significância espacial
-- EQUAÇÕES
-
+Série -\> MTFPW -\> MK -\> p-valores -\> FDR -\> significância espacial - EQUAÇÕES
 
 #8.3 Resultados Pluviómetros e pluviógrafos
 
-#8.3.1 Caracterização dos dados
-Estações:
-- número de estações;
-- distribuição espacial;
-- quantidade por RH;
-- período das séries;
-- estatísticas descritivas.
+#8.3.1 Caracterização dos dados Estações: - número de estações; - distribuição espacial; - quantidade por RH; - período das séries; - estatísticas descritivas.
 
+![Espacialização das estações pluviométricas por número de anos disponíveis](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png) Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas
 
-#8.3.2 MK
-#8.3.3 MK+MTFPW
-#8.3.4 MK+MTFPW+FDR
+![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
 
+![máximas totais anual dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/chuvas_final.png) Figura 3.
+
+#8.3.2 MK; MK+MTFPW; MK+MTFPW+FDR
+
+máxima diária
+
+![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx1D_sig_RH.png) Figura 4.
+
+![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs.png) Figura 5.
 
 #8.4 Resultados Xavier
 
-#8.4.1 Caracterização dos dados
-- número de células;
-- cobertura espacial;
-- estatísticas da precipitação máxima mensal anual;
-- distribuição espacial dos valores.
+#8.4.1 Caracterização dos dados - número de células; - cobertura espacial; - estatísticas da precipitação máxima mensal anual; - distribuição espacial dos valores.
 
-#8.4.2 MK
-#8.4.3 MK+MTFPW
-#8.4.4 MK+MTFPW+FDR
+![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png) Figura 6
 
-#8.5 Considerações Finais
+![proporção de sigs com dados do Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png) Figura 7
+
+#8.5 Teste de Pettit nos dados de Xavier ![mapa anos de quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png) Figura 8
+
+![tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_depois_quebra.png) Figura 8
+
+![mudança de tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png) Figura 8
+
+#8.6 Considerações Finais

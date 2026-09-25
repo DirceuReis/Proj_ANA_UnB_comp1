@@ -1,5 +1,299 @@
 ---
 title: "Meta 3 — Base Hidroclimática Nacional"
+format:
+  html:
+    css: styles.css
 ---
 
-Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional consistente, com destaque para ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, Xavier e NEX-GDDP-CMIP6.
+Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional de qualidade e consistente, com destaque para dados observados obtidos da base do UNIPLU-BR (Das Neves Almeida et al., 2025; Lemos et al., 2026), de responsabilidade da ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, entre outros; e dados em grade obtidos pelo BR-DWGD (Xavier et al., 2022) e NEX-GDDP-CMIP6 (NASA).
+
+# 1. Bases de Dados
+
+## 1.1 UNIPLU-BR
+
+Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) (Das Neves Almeida et al., 2025; Lemos et al., 2026), que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
+
+- **CEMADEN**: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.
+- **INMET**: Instituto Nacional de Meteorologia.
+- **ANA (Hidroweb)**: Agência Nacional de Águas e Saneamento Básico.
+- **ANA (Telemetria)**: Agência Nacional de Águas e Saneamento Básico.
+- **ICEA**: Instituto de Controle do Espaço Aéreo.
+
+Toda a base do UNIPLU-BR pode ser obtida através do site [UNIPLU-BR no GitHub](https://github.com/LARHENA/UNIPLU-BR). Os dados são armazenados em arquivos tipo .zip. Cada arquivo .zip contém dois arquivos em formato .parquet: (i) table_info.parquet (metadados das estações); e (ii) table_data.parquet (séries de dados).
+
+Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do UNIPLU-BR cobre o período de 1855 a 2026, consolidando aproximadamente 2,2 bilhões de registros de precipitação em mais de 21.000 estações. As informações obtidas possuem resolução temporal variada, entre intervalos de 10 minutos até 24 horas e discretização diária (obtida das 9h às 9h). A distribuição desses registros, por fonte é detalhada na @tbl-fontes-uniplu e @fig-mapa-estacoes.
+
+```{r}
+#| label: tbl-fontes-uniplu
+#| tbl-cap: "Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR."
+
+library(gt)
+library(dplyr)
+
+tabela_fontes <- data.frame(
+  Fonte = c("CEMADEN", "Hidroweb", "ICEA", "INMET diário", 
+            "INMET sub-diário", "Telemetria", "Total"),
+  `Resolução temporal` = c("Sub-diário", "Diário", "Sub-diário", "Diário", 
+                           "Sub-diário", "Sub-diário", NA),
+  `Número médio de anos` = c(7.53, 33.67, 35.40, 43.54, 14.85, 7.26, NA),
+  `Quantidade de estações` = c(5045, 12051, 182, 589, 629, 2818, 21314),
+  `Ano Início – Ano Fim` = c("2014 – 2025", "1855 – 2025", "1951 – 2025",
+                             "1889 – 2025", "2000 – 2025", "2014 – 2025", NA),
+  check.names = FALSE
+)
+
+tabela_fontes |> 
+  gt() |> 
+  cols_align(align = "left", columns = Fonte) |> 
+  cols_align(align = "center", columns = c(`Número médio de anos`,
+                                           `Resolução temporal`,
+                                           `Quantidade de estações`, 
+                                           `Ano Início – Ano Fim`)) |> 
+  fmt_number(
+    columns = `Número médio de anos`,
+    decimals = 2,
+    dec_mark = ",",
+    sep_mark = "."
+  ) |> 
+  fmt_number(
+    columns = `Quantidade de estações`,
+    decimals = 0,
+    sep_mark = "."
+  ) |> 
+  sub_missing(columns = everything(), missing_text = "—") |> 
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(rows = Fonte == "Total")
+  ) |> 
+  tab_style(
+    style = cell_text(weight = "bold", color = "black"),
+    locations = cells_column_labels(everything())
+  ) |> 
+  tab_style(
+    style = cell_text(color = "black"),
+    locations = cells_body(columns = everything())
+  ) |> 
+  opt_row_striping()
+```
+
+A @fig-mapa-estacoes apresenta a distribuição espacial das estações de precipitação por fonte da informação inserida na base do UNIPLU-BR, cuja densidade geral é apresentada na @fig-densidade. Observa-se uma maior densidade de estações no Estado do Rio de Janeiro e Distrito Federal, seguido de São Paulo, Santa Catarina e Espírito Santo. De maneira geral, as regiões Sul e Sudeste possuem densidade de estações de monitoramento similares. Na região Nordeste, destacam-se os estados do Ceará, Pernambuco e Alagoas. Regiões Centro-Oeste e Norte brasileiro são as mais desproporcionais em número de estações.
+
+![Figura 1. Distribuição espacial das estações de monitoramento do UNIPLU-BR.](Scripts_Controle_Qualidade/Figuras/Figura%201.%20Inventário.png){#fig-mapa-estacoes width="100%"}
+
+![Figura 2. Densidade das estações de monitoramento de chuva por Estado, em km², por estação.](Scripts_Controle_Qualidade/Figuras/Figura%202.%20Densidade%20de%20estações.png){#fig-densidade width="100%"}
+
+Na @fig-anos-atividade é apresentado o número de anos em atividade das estações de monitoramento. Observa-se longas séries de dados especialmente nos estados de São Paulo, Paraná e Ceará. No tocante ao número de estações por agência ou instituição responsável, o CEMADEN, Telemetria e SGB-CPRM se destacam com o maior número de estações em operação (@fig-estacoes-instituicao). Essas 3 (três) instituições são de nível federal. CEMADEN e Telemetria, especialmente, tiveram fortes investimentos em número de estações desde o início do monitoramento de precipitação em razão dos desastres de origem natural, em 2014. O DAEE-SP em São Paulo (atualmente SP Águas), é uma instituição estadual e, portanto, possui toda sua rede inserida no território paulista, assim como o IAT (Instituto Água e Terra), no Paraná, e a FUNCEME (Fundação Cearense de Meteorologia e Recursos Hídricos), no Ceará.
+
+![Figura 3. Distribuição das estações por anos de atividade entre 1855 e 2025.](Scripts_Controle_Qualidade/Figuras/Figura%203.%20Mapa%20anos_atividade.png){#fig-anos-atividade width="100%"}
+
+![Figura 4. Número de estações de monitoramento da precipitação por instituição responsável (acima de 250 estações).](Scripts_Controle_Qualidade/Figuras/Figura%204.%20Estações%20por%20instituição.png){#fig-estacoes-instituicao width="100%"}
+
+A base de dados do UNIPLU-BR possui estações cuja resolução temporal é diária e sub-diária. Na @fig-estacoes-resolucao apresenta-se o número de estações por ano e resolução temporal, a partir da qual se observa densificação da base de dados diária ocorreu em meados da década de 1960, atingindo seu pico em meados de 1975; por outro lado, a atividade das estações de resolução sub-diária se iniciou em 1960, por estações do INMET e ICEA, intensificando-se apenas a partir de 2016, à medida que eventos intensos se tornaram mais frequentes e o CEMADEN iniciou sua operação.
+
+![Figura 5. Número de estações de monitoramento da precipitação por ano e resolução temporal.](Scripts_Controle_Qualidade/Figuras/Figura%205.%20Estações%20por%20ano%20e%20resolução%20temporal.png){#fig-estacoes-resolucao width="100%"}
+
+A estrutura dos dados brutos do UNIPLU-BR consiste em 2 (dois) metadados: (i) informação de estações de chuva, incluindo colunas com dados de código da estação, cidade, coordenadas geográficas, elevação topográfica da estação, discretização temporal, rede fonte da informação, agência ou instituição responsável pela operação das estações, e UTC (Tempo Universal Coordenado); e (ii) série de dados, contendo código da estação, data e tempo da leitura e precipitação em mm.
+
+```{r}
+#| label: tbl-inventario-uniplu
+#| tbl-cap: "Tabela 2. Síntese das informações contidas nos arquivos do inventário do UNIPLU-BR"
+
+library(gt)
+library(dplyr)
+
+tabela_inventario <- data.frame(
+  grupo = c(rep("Informação das estações de chuva (Rainfall gauge information, table_info.parquet)", 8),
+            rep("Informação da série temporal de dados de precipitação (Time Series, table_data.parquet)", 3)),
+  Coluna = c("gauge_code", "city / state", "lat / long", "elevation", 
+             "time_step", "network", "responsible", "utc",
+             "gauge_code", "datetime", "rain_mm"),
+  Descricao = c(
+    "Identificador da estação (ID)",
+    "Localização da estação",
+    "Coordenadas geográficas, em graus decimais",
+    "Altitude em que a estação se localiza, acima do nível do mar (metros)",
+    "Resolução temporal estimada do dado (1.440 minutos = 24 horas/diária)",
+    "Fonte da informação (e.g., Hidroweb)",
+    "Agência responsável pela operação da estação de monitoramento (e.g., ANA ou SGB-CPRM)",
+    "Horário local relativo ao Meridiano de Greenwich (-3 para o horário de Brasília)",
+    "Identificador da estação (ID)",
+    "Dia e hora da leitura",
+    "Volume de precipitação registrado durante o tempo, em milímetros"
+  ),
+  check.names = FALSE
+)
+
+tabela_inventario |> 
+  gt(groupname_col = "grupo") |> 
+  cols_label(
+    Coluna = "Coluna",
+    Descricao = "Descrição"
+  ) |> 
+  cols_align(align = "center", columns = c(Coluna, Descricao)) |> 
+  tab_style(
+    style = cell_text(weight = "bold", color = "black"),
+    locations = cells_column_labels(everything())
+  ) |> 
+  tab_style(
+    style = cell_text(weight = "bold", color = "black", align = "center"),
+    locations = cells_row_groups(everything())
+  ) |> 
+  tab_style(
+    style = cell_text(color = "black"),
+    locations = cells_body(columns = everything())
+  )
+```
+
+## 1.2 BR-DWGD
+
+Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.
+
+Toda a base do BR-DWGD pode ser obtida através do site [BR-DWGD no GitHub](https://github.com/AlexandreCandidoXavier/BR-DWGD).
+
+\[Explicação geral de como os dados foram postos em grade\]
+
+# 2. Metodologia de Controle de Qualidade
+
+De acordo com Lemos et al. (2026), os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de outlier, seguindo originalmente conforme reportados pelas agências. Desta forma, aplicou-se metodologia de controle de qualidade.
+
+A metodologia foi aplicada de maneira diferente considerando os dados de resolução temporal diária e sub-diária.
+
+## 2.1 Séries Diárias
+
+Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade e consistência a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais: (a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil. (b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
+
+Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações; no entanto, em se tratando de análise de eventos extremos, em que são necessárias séries de precipitações mais longas, foi aplicado um filtro adicional de descarte de estações com menos de 30 anos de dados, resultando em 6.182 estações (49% do total), para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A @fig-estacoes-diaria-30 apresenta o mapa geral das estações de base diária.
+
+![Figura 6. Estações de monitoramento de precipitação de resolução diária (30 anos ou mais.](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Inventário%20Diário%20(30%20anos%20ou%20mais).png){#fig-estacoes-diaria-30 width="100%"}
+
+### 2.1.1 QC Básico
+
+Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo (Carmona et al., 2023). Desse modo, considerou-se como limite superior 700 mm/dia.
+
+A aplicação deste controle de qualidade indicou como problemática aos dados: (i) dias seguidos de valores diários acima de 1.000 mm; (ii) valores diários acima de 6.000 mm, possivelmente em razão de erros na digitação; e (iii) valores diários acima de 700 mm em poucos meses em um mesmo ano. Após aplicação do QC Básico, aproximadamente 0,0003% do total dos registros (362 registros) foram excluídos, por possuirem valores de precipitação superior a 700 mm/dia. Não foram identificados registros negativos. De todos os dados excluidos assumiu-se que se tratavam de dados errôneos, não se tratavam de outliers.
+
+### 2.1.2 QC Absoluto
+
+Neste controle de qualidade cada série de precipitações diárias é utilizada na estimativa do Índice de Qualidade (IQ) por ano de acordo com a @eq-iq abaixo:
+
+$$IQ = \frac{P + Q_1 + Q_2 + Q_3}{4}$$ {#eq-iq}
+
+O IQ compreende 4 (quatro) variáveis que consolida problemas comuns identificados em séries de precipitações. São eles:
+
+- **P**: representa a disponibilidade de dados. Porcentagem de dados válidos em relação ao total de dados em um determinado ano, @eq-p:
+
+$$P = 100 \cdot \frac{k}{n}$$ {#eq-p}
+
+em que $k$ é o número de dias com dado válido no ano; e $n$ é o número de dias do ano (365, ou 366 em anos bissextos). Varia de 0 a 100%.
+
+- **Q1**: representa a distribuição das lacunas nas séries. Avalia a distribuição de lacunas, penalizando a presença de lacunas extensas em detrimento de pequenas lacunas. O cálculo de Q1 é indicado na @eq-q1:
+
+$$Q_1 = 100 - 100 \cdot \frac{2\,n_{lacuna} + L_{lacuna}^{max}}{n}$$ {#eq-q1}
+
+em que $n_{lacuna}$ é o número de dias sem dado no ano; e $L_{lacuna}^{max}$ é a extensão, em dias, da maior sequência contínua de dias sem dado. Varia de −200 a 100%. O valor máximo corresponde ao ano sem nenhuma falha. Em um ano sem registros, $n_{lacuna} = n$ e $L_{lacuna}^{max} = n$, logo $Q_1 = -200$. Valores negativos ocorrem quando as falhas superam cerca de um terço do ano.
+
+- **Q2**: detecta se há há dias da semana com menos registros de chuva que os demais, o que indicaria falhas sistemáticas de registro. É calculado pelo coeficiente de variação do número de dias chuvosos em cada dia da semana ao longo do ano (@eq-q2).
+
+$$Q_2 = 100 - 100 \cdot CV, \qquad CV = \frac{\sigma_{s}}{\mu_{s}}$$ {#eq-q2}
+
+em que $CV$ é o coeficiente de variação do número de dias chuvosos registrados em cada dia da semana ao longo do ano; $\sigma_{s}$ é o desvio-padrão e $\mu_{s}$ a média das sete contagens (domingos chuvosos, segundas chuvosas, e assim por diante). Varia de −164,58 a 100%. O valor máximo corresponde ao ano em que os dias chuvosos se distribuem igualmente entre os sete dias da semana, situação em que $CV = 0$.
+
+- **Q3**: representa a presença de valores atípicos (*outliers*) na série. É a porcentagem de dias do ano em que a precipitação registrada não ultrapassou o limiar de valor atípico (@eq-q3). O limiar é definido para cada mês do calendário como o terceiro quartil somado a 1,5 vez a amplitude interquartil das precipitações diárias maiores que 0 mm daquele mês (@eq-limiar). Os quartis são calculados considerando toda a série histórica da estação, e não apenas o ano avaliado: um dia de janeiro de 1990, por exemplo, é comparado ao limiar obtido com todos os meses de janeiro disponíveis na estação. Adotou-se o multiplicador 1,5 na amplitude interquartil (Llabrés-Brustenga et al., 2019; Estévez et al., 2022; Vidal-Barbosa, 2024).
+
+$$Q_3 = 100 \cdot \frac{n - n_{out}}{n}$$ {#eq-q3}
+
+em que $n_{out}$ é o número de dias do ano cuja precipitação excedeu o limiar de valor atípico $P_{out}$, definido na @eq-limiar, e $n$ é o número de dias do ano, como definido na @eq-p. Varia de 0 a 100%. É a razão entre os dias que não excederam o limiar de valor atípico e o total de dias do ano (@eq-q3). O valor máximo corresponde ao ano sem nenhum dia acima do limiar, e o mínimo, à situação hipotética em que todos os dias do ano o excedem.
+
+$$P_{out,m} = Q_{3,m} + 1{,}5 \cdot IQR_m, \qquad IQR_m = Q_{3,m} - Q_{1,m}$$ {#eq-limiar}
+
+em que $P_{out,m}$ é o limiar de valor atípico do mês $m$; $Q_{1,m}$ e $Q_{3,m}$ são, respectivamente, o primeiro e o terceiro quartis das precipitações diárias maiores que 0 mm registradas no mês $m$; e $IQR_m$ é a amplitude interquartil desse mesmo conjunto. Os quartis são calculados sobre todos os anos da série histórica da estação, e não apenas sobre o ano avaliado.
+
+Obtidas as variáveis, o IQ de cada estação por ano foi dado pela média das variáveis. Os resultados de IQ e P foram então classificados de acordo com as regras da @tbl-classificacao.
+
+```{r}
+#| label: tbl-classificacao
+#| tbl-cap: "Tabela 3. Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (Vidal-Barbosa, 2024)."
+
+library(gt)
+library(dplyr)
+
+tabela_classificacao <- data.frame(
+  Classe    = c("Excelente", "Boa", "Aceitável", "Baixa", "Muito Baixa"),
+  P         = c("≥ 99", "≥ 95", "≥ 90", "–", "–"),
+  Q         = c("≥ 90", "≥ 85", "≥ 80", "≥ 50", "–"),
+  Qualidade = c("Alta Qualidade", "Alta Qualidade", "Alta Qualidade",
+                "Baixa Qualidade", "Baixa Qualidade"),
+  check.names = FALSE
+)
+
+tabela_classificacao |> 
+  gt() |> 
+  cols_label(
+    Classe    = "Classe",
+    P         = "P (disponibilidade)",
+    Q         = "IQ (índice de qualidade)",
+    Qualidade = "Qualidade absoluta"
+  ) |> 
+  cols_align(align = "center", columns = c(Classe, P, Q, Qualidade)) |> 
+  tab_style(
+    style = cell_text(weight = "bold", color = "black"),
+    locations = cells_column_labels(everything())
+  ) |> 
+  tab_style(
+    style = cell_text(color = "black"),
+    locations = cells_body(columns = everything())
+  )
+```
+
+A @fig-series apresenta a média de cada parâmetro em cada ano-calendário. Três períodos se distinguem. Até 1887, a base contém uma única estação, com cerca de 3% dos dias registrados, de modo que a média nacional reflete apenas essa série. Entre 1888 e 1910, o número de estações cresce de 3 para 68, e as médias oscilam fortemente. A partir de 1911, com mais de 160 estações, as curvas se estabilizam.
+
+O parâmetro P atinge seu valor máximo em 2018 (93,8%) e apresenta reduções pontuais, como a de 1991 (82,4%). O Q1 acompanha o P, por construção, já que ambos dependem dos dias ausentes. O Q2 mantém-se entre 58,3 e 82,7 em todo o período estabilizado, sem tendência aparente. O Q3 é o parâmetro mais estável de todos, variando entre 97,0 e 99,3 em toda a série.
+
+O último ano da série (2025) apresenta queda acentuada em todos os parâmetros (P = 57,3%, Q1 = −26,0), decorrente do fato de os registros estarem incompletos na data de extração dos dados: as 2.205 estações ativas nesse ano possuem, em mediana, 243 dias registrados. Trata-se, portanto, de artefato de coleta, e não de deterioração da rede.
+
+![Figura 7. Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura%207.%20Series%20anuais%20P%20Q1%20Q2%20Q3.png){#fig-series width="100%"}
+
+A @tbl-classificacao-resultado apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 282.194 séries estação-ano (83,0%) como de Alta Qualidade e 57.890 (17,0%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (70,3%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 22.546 (6,6% do total geral) correspondem a anos sem nenhum registro dentro do período de operação da estação, e os demais reúnem anos com cobertura insuficiente, lacunas concentradas ou ambos.
+
+```{r}
+#| label: tbl-classificacao-resultado
+#| tbl-cap: "Tabela 4. Classificação de qualidade dos anos-estação das séries diárias."
+
+library(gt)
+library(dplyr)
+library(readxl)
+
+resumo_classificacao <- data.frame(
+  Classe             = c("Excelente", "Boa", "Aceitável", "Baixa", "Muito Baixa"),
+  qualidade_absoluta = c("Alta Qualidade", "Alta Qualidade", "Alta Qualidade",
+                         "Baixa Qualidade", "Baixa Qualidade"),
+  estacao_anos       = c(238942, 24793, 18459, 20639, 37251),
+  pct                = c(70.26, 7.29, 5.43, 6.07, 10.95),
+  check.names = FALSE
+)
+
+
+resumo_classificacao |>
+  gt() |>
+  cols_label(
+    Classe             = "Classe",
+    qualidade_absoluta = "Qualidade absoluta",
+    estacao_anos       = "Anos-estação",
+    pct                = "Percentual (%)"
+  ) |>
+  fmt_number(columns = estacao_anos, decimals = 0, sep_mark = ".", dec_mark = ",") |>
+  fmt_number(columns = pct, decimals = 2, sep_mark = ".", dec_mark = ",") |>
+  cols_align(align = "center", columns = everything()) |>
+  tab_style(
+    style = cell_text(weight = "bold", color = "black"),
+    locations = cells_column_labels(everything())
+  ) |>
+  tab_style(
+    style = cell_text(color = "black"),
+    locations = cells_body(columns = everything())
+  )
+```
+
+Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.087 estações das 6.182 avaliadas (82,3%). A base final reúne 256.968 séries estação-ano e 93.365.320 registros diários, conforme indicado na @fig-estacoes-QC-final.
+
+![Figura 8. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%208.%20Estacoes%20finais.png){#fig-estacoes-QC-final width="100%"}
