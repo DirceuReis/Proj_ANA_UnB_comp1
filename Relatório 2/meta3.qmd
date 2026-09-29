@@ -148,11 +148,15 @@ tabela_inventario |>
 
 Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.
 
+Os dados de grade foram provenientes de interpolação dos dados observados das estações da ANA e do INMET. Para a precipitação, foram utilizados 11.473 pluviômetros. Os autores aplicaram dois procedimentos de consistência: (i) O primeiro descartou valores fora de limiares pré-estabelecidos, sendo 0 mm \< pr \< 450 mm para a precipitação (Liebmann e Allured, 2005); e (ii) o segundo consistiu em teste visual de homogeneidade, comparando cada série às das estações vizinhas, conforme Xavier et al. (2016).
+
+Após os procedimentos de consistência foram obtidos por interpolação. A espacialização foi feita por bacia hidrográfica, a partir do uso do método do inverso da distância (IDW), dada sua performance na validação cruzada pela aplicação de métricas de desempenho.
+
+Junto às grades das variáveis, o BR-DWGD disponibiliza duas grades de controle diárias: (i) o número de estações ou pluviômetros existentes dentro da célula (Count); e (ii) a distância da célula à estação mais próxima com dado observado (dist_nearest). Esses controles permitem avaliar, célula a célula e dia a dia, o quanto o valor interpolado se apoia em observação próxima ou em extrapolação. Essa informação é relevante porque a densidade da rede é bastante desproporcional. Nas bacias do Atlântico Central e do Atlântico Sul há ao menos um pluviômetro a cada 50 km, o equivalente a um a cada 580 km². Já na bacia Amazônica, a densidade era de um pluviômetro a cada 150.000 km² entre 1961 e 1980, melhorando para um a cada 7.600 km² entre 1991 e 2020. O número máximo de pluviômetros com dado disponível simultaneamente foi de 5.972, entre as décadas de 1970 e 1980, o que corresponde a um a cada 1.425 km², ainda abaixo da densidade de um a cada 575 km² recomendada pela WMO (2008) para planícies interiores.
+
 Toda a base do BR-DWGD pode ser obtida através do site [BR-DWGD no GitHub](https://github.com/AlexandreCandidoXavier/BR-DWGD).
 
-\[Explicação geral de como os dados foram postos em grade\]
-
-# 2. Metodologia de Controle de Qualidade
+# 2. Metodologia de Controle de Qualidade da base do UNIPLU-BR
 
 De acordo com Lemos et al. (2026), os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de outlier, seguindo originalmente conforme reportados pelas agências. Desta forma, aplicou-se metodologia de controle de qualidade.
 
@@ -212,14 +216,14 @@ Obtidas as variáveis, o IQ de cada estação por ano foi dado pela média das v
 
 ```{r}
 #| label: tbl-classificacao
-#| tbl-cap: "Tabela 3. Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (Vidal-Barbosa, 2024)."
+#| tbl-cap: "Tabela 3. Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (adaptado de Vidal-Barbosa, 2024)."
 
 library(gt)
 library(dplyr)
 
 tabela_classificacao <- data.frame(
   Classe    = c("Excelente", "Boa", "Aceitável", "Baixa", "Muito Baixa"),
-  P         = c("≥ 99", "≥ 95", "≥ 90", "–", "–"),
+  P         = c("≥ 95", "≥ 90", "≥ 80", "–", "–"),
   Q         = c("≥ 90", "≥ 85", "≥ 80", "≥ 50", "–"),
   Qualidade = c("Alta Qualidade", "Alta Qualidade", "Alta Qualidade",
                 "Baixa Qualidade", "Baixa Qualidade"),
@@ -253,7 +257,7 @@ O último ano da série (2025) apresenta queda acentuada em todos os parâmetros
 
 ![Figura 7. Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura%207.%20Series%20anuais%20P%20Q1%20Q2%20Q3.png){#fig-series width="100%"}
 
-A @tbl-classificacao-resultado apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 282.194 séries estação-ano (83,0%) como de Alta Qualidade e 57.890 (17,0%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (70,3%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 22.546 (6,6% do total geral) correspondem a anos sem nenhum registro dentro do período de operação da estação, e os demais reúnem anos com cobertura insuficiente, lacunas concentradas ou ambos.
+A @tbl-classificacao-resultado apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 282.194 séries estação-ano (83,9%) como de Alta Qualidade e 57.890 (16,1%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (72,5%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 22.546 (6,6% do total geral) correspondem a anos sem nenhum registro dentro do período de operação da estação, e os demais reúnem anos com cobertura insuficiente, lacunas concentradas ou ambos.
 
 ```{r}
 #| label: tbl-classificacao-resultado
@@ -267,8 +271,8 @@ resumo_classificacao <- data.frame(
   Classe             = c("Excelente", "Boa", "Aceitável", "Baixa", "Muito Baixa"),
   qualidade_absoluta = c("Alta Qualidade", "Alta Qualidade", "Alta Qualidade",
                          "Baixa Qualidade", "Baixa Qualidade"),
-  estacao_anos       = c(238942, 24793, 18459, 20639, 37251),
-  pct                = c(70.26, 7.29, 5.43, 6.07, 10.95),
+  estacao_anos       = c(246475, 28399, 10297, 17662, 37251),
+  pct                = c(72.47, 8.35, 3.03, 5.19, 10.95),
   check.names = FALSE
 )
 
@@ -294,6 +298,24 @@ resumo_classificacao |>
   )
 ```
 
-Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.087 estações das 6.182 avaliadas (82,3%). A base final reúne 256.968 séries estação-ano e 93.365.320 registros diários, conforme indicado na @fig-estacoes-QC-final.
+Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.145 estações das 6.182 avaliadas (83,2%). A base final reúne 261.242 séries estação-ano e 94.785.374 registros diários, conforme indicado na @fig-estacoes-QC-final.
 
 ![Figura 8. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%208.%20Estacoes%20finais.png){#fig-estacoes-QC-final width="100%"}
+
+## 2.2 Séries Sub-diárias
+
+O controle de qualidade dos dados sub-diários do UNIPLU-BR foram provenientes da metodologia descrita no Relatório "Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias", de XXX de 20XX. \[atualizar\]
+
+Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção anterior, tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros do IQ foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. Dessa forma, os autores optaram por um procedimento de avaliação qualitativa assistida, estruturado em 5 (cinco) etapas.
+
+(a) Filtragem inicial: foram filtradas as estações cuja fonte de dados fosse o CEMADEN, ANA (Telemetria) e INMET sub-diário. Para o INMET, as séries de resolução diária foram incorporadas à análise no período posterior a 2014, como suporte comparativo para a classificação das estações sub-diárias.
+
+(b) Análise visual comparativa: cada estação foi comparada às cinco estações mais próximas por meio de nove conjuntos de gráficos (precipitações anuais, precipitações mensais, precipitações diárias, precipitações máximas diárias, localização das estações, altitude, correlação das precipitações mensais, correlação das precipitações diárias e soma cumulativa das precipitações diárias). Inconsistências foram identificadas por mudanças repentinas de inclinação nas curvas ou pela permanência em patamar constante enquanto as vizinhas registram precipitação. Cada estação recebeu os rótulos "Boa", "Ruim" ou "Dúvida", atribuídos de forma independente por dois pesquisadores. Nas estações classificadas como "Ruim", o avaliador registrou o tipo de problema, e.g. chuva constante ao longo do tempo, valores sistematicamente acima ou abaixo das vizinhas, ou ausência de dados em dias com chuva registrada nas estações próximas. Os casos de dúvida e as divergências entre os dois avaliadores foram arbitrados por um terceiro pesquisador, com consulta a outras redes pluviométricas. Ao final, as estações foram classificadas, ano a ano, como HQ (*High Quality*) ou PQ (*Poor Quality*).
+
+(c) Separação dos eventos chuvosos: As estações HQ seguiram para análise detalhada, na qual as séries foram segmentadas em eventos chuvosos segundo critérios como o Mínimo Intervalo de Tempo entre eventos (MIT) e a lâmina mínima precipitada. Foram avaliados 3 (três) MITs (30 minutos, 6 horas e 24 horas) e lâmina mínima de 1 mm por evento. Para cada estação, ano e MIT, foram calculadas 14 variáveis, a saber: precipitação, total anual, número de eventos, lâmina média, duração média, intensidade média e tempo seco médio, com seus respectivos desvios-padrão e valores máximos.
+
+(d) Análise espacial dos eventos: as características dos eventos foram analisadas espacialmente no usando o GeoDa (Anselin, 2024), ferramenta de análise de dados espaciais, com apoio de gráficos de coordenadas paralelas. Foram adotadas premissas segundo a primeira Lei de Tobler: postos próximos devem apresentar comportamento semelhante. Nessa etapa, estações cujos valores médios são compatíveis com os vizinhos, mas cuja dispersão ou cujos máximos destoam, foram sinalizadas como duvidosas e devolvidas à análise visual. O procedimento foi conduzido de forma independente para cada MIT, uma vez que anomalias se manifestam, com frequência, em apenas um deles.
+
+(e) Reanálise visual: por fim, todas as redes passaram por uma revalidação. Na primeira análise visual, a seleção de vizinhas baseia-se apenas na distância, de modo que uma estação podia ter sido comparada somente a séries igualmente inconsistentes. Na reanálise, consideraram-se como vizinhas exclusivamente as estações já classificadas como HQ, de qualquer rede. Isso permitiu tanto excluir séries com erros remanescentes quanto reclassificar como HQ estações antes rotuladas como PQ, cujas inconsistências aparentes decorriam da baixa qualidade das vizinhas originais.
+
+Conforme apresentado na @tbl-fontes-uniplu, 8.674 estações do UNIPLU-BR se tratavam de estações de monitoramento sub-diário. A partir da aplicação do controle de qualidade aqui mencionado, foram classificadas como HQ, em pelo menos um ano da série, 3.217 estações do CEMADEN, 1.638 da Telemetria, 574 do INMET sub-diário e 255 do INMET diário.

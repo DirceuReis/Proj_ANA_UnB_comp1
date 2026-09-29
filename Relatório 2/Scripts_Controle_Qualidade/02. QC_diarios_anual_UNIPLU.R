@@ -26,7 +26,7 @@ library(ggspatial)
 
 ##### 2. Caminhos --------------------------------------------------------------
 entrada_diarias  <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/01. Series_Diarias"
-saida         <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/02a. QC_diarios_anual"
+saida         <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/02. QC_diarios_anual"
 dir.create(saida, showWarnings = FALSE, recursive = TRUE)
 
 # série diária bruta (sem QC) e inventário (filtrado por Hidroweb diário e INMET diario)
@@ -63,7 +63,6 @@ cat(sprintf(
 ))
 
 cat("Estações remanescentes (span >=", LIMIAR_ANOS, "anos):", nrow(inventario_diario_final), "\n")
-
 
 ## Mapa estações de séries diárias - para QC -----------------------------------
 brasil_sf <- geobr::read_state(year = 2020, showProgress = FALSE)
@@ -173,8 +172,6 @@ p_basico <- ggplot(resumo_basico, aes(x = categoria, y = pmax(n, 1))) +
 
 ggsave(file.path(saida, "fig_qc_basico_resumo.png"), p_basico, width = 7, height = 5, dpi = 600)
 cat("Resumo do QC Básico (dados + gráfico) salvo em:", saida, "\n")
-
-########################################################################
 
 ##### 5. QC Absoluto --------------------------------------------------------------------
 
@@ -326,9 +323,9 @@ qc_anual[, ano_falho := n_dias_com_dado >= 0.9 * n_dias_ano & n_dias_chuva_posit
 
 qc_anual[, rotulo := fcase(
   ano_falho,    "Muito Baixa",
-  P >= 99 & Q >= 90, "Excelente",
-  P >= 95 & Q >= 85, "Boa",
-  P >= 90 & Q >= 80, "Aceitável",
+  P >= 95 & Q >= 90, "Excelente",
+  P >= 90 & Q >= 85, "Boa",
+  P >= 80 & Q >= 80, "Aceitável",
   Q >= 50,           "Baixa",
   default =          "Muito Baixa")]
 
@@ -343,11 +340,17 @@ resumo_rotulo <- qc_anual[, .(estacao_anos = .N), by = .(rotulo, qualidade_absol
   order(match(rotulo, c("Excelente", "Boa", "Aceitável", "Baixa", "Muito Baixa")))][
     , pct := round(100 * estacao_anos / sum(estacao_anos), 2)]
 
-cat(sprintf("\nAnos degenerados (>= 90%% de cobertura, 0 dias de chuva): %d\n", sum(qc_anual$ano_degenerado)))
-print(resumo_rotulo)
+cat(sprintf("\nAnos sem chuva (>= 90%% de cobertura, 0 dias de chuva): %d\n", sum(qc_anual$ano_falho)))
 
 fwrite(qc_anual, file.path(saida, "controle_qualidade_anual.csv"))
 write_xlsx(resumo_rotulo, file.path(saida, "classificacao_resumo.xlsx"))
+
+# média nacional por ano
+qc_anual_medio <- qc_anual[, .(n_estacoes = uniqueN(gauge_code),
+                               P = mean(P), Q1 = mean(Q1), Q2 = mean(Q2),
+                               Q3 = mean(Q3), Q = mean(Q)), by = ano][order(ano)]
+
+write_xlsx(qc_anual_medio, file.path(saida, "qc_serie_anual_nacional.xlsx"))
 
 ##### 6. Série diária (só anos de Alta Qualidade) --------------------------------------
 
@@ -415,11 +418,9 @@ cat(sprintf("Série final: %d dias | %d estações | %d estação-anos\n",
             nrow(serie_diaria_final), uniqueN(serie_diaria_final$gauge_code),
             uniqueN(serie_diaria_final[, .(gauge_code, year(date))])))
 
-##### 9. Resultados por variável: série anual nacional ------------------------------------------
+##### 9. Figuras - P, Q1, Q2 e Q3 ao longo do tempo --------------------------------------
 
-##### 6. Figuras - P, Q1, Q2 e Q3 ao longo do tempo --------------------------------------
-
-painel_serie <- function(v, rotulo) {
+Figura7 <- function(v, rotulo) {
   ggplot(qc_anual_medio, aes(x = ano, y = .data[[v]])) +
     geom_line(color = "black", linewidth = 0.3) +
     geom_point(color = "black", shape = 4, size = 0.9) +
@@ -434,11 +435,55 @@ painel_serie <- function(v, rotulo) {
           axis.title  = element_text(size = 14, color = "black"))
 }
 
-Figura7 <- (painel_serie("P",  "(a)") |
-                    painel_serie("Q1", "(b)")) /
-  (painel_serie("Q2", "(c)") |
-     painel_serie("Q3", "(d)"))
+Figura7 <- (Figura7("P",  "(a)") |
+              Figura7("Q1", "(b)")) /
+  (Figura7("Q2", "(c)") |
+     Figura7("Q3", "(d)"))
 
 ggsave(file.path(saida, "Figura 7. Series anuais P Q1 Q2 Q3.png"), Figura7,
        width = 14, height = 8, units = "in", dpi = 300)
 
+##### 10. Figura final --------------------------------------
+
+mapa_finais    <- estacoes_finais %>% filter(!is.na(lat), !is.na(long))
+mapa_finais_sf <- st_as_sf(mapa_finais, coords = c("long", "lat"), crs = 4674)
+estados_finais_sf <- brasil_sf %>% filter(abbrev_state %in% unique(mapa_finais$state))
+
+Figura8 <- ggplot() +
+  geom_sf(data = estados_finais_sf, fill = "grey95", color = "grey50", linewidth = 0.4) +
+  geom_sf(data = mapa_finais_sf, aes(color = network, shape = network),
+          size = 2.2, alpha = 0.75) +
+  scale_color_manual(values = rede_cores, name = "Rede") +
+  scale_shape_manual(values = rede_formas, name = "Rede") +
+  guides(color = guide_legend(override.aes = list(size = 6))) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw() +
+  theme(
+    legend.position = "right",
+    legend.text     = element_text(size = 22),
+    legend.title    = element_text(size = 22, face = "bold"),
+    axis.text.x     = element_text(size = 22, color = "black"),
+    axis.text.y     = element_text(size = 22, color = "black"),
+    axis.title      = element_text(size = 22, color = "black")
+  ) +
+  annotation_scale(location = "bl", width_hint = 0.3,
+                   text_cex   = 1.7,
+                   height     = unit(0.35, "cm"),
+                   line_width = 1.2,
+                   text_pad   = unit(0.2, "cm")) +
+  annotation_north_arrow(
+    location = "bl",
+    pad_y  = unit(0.8, "cm"),
+    height = unit(2.0, "cm"),
+    width  = unit(2.0, "cm"),
+    style  = north_arrow_fancy_orienteering(
+      text_size  = 22,
+      line_width = 1.2,
+      text_face  = "bold")) +
+  coord_sf(xlim = c(min(mapa_finais$long) - 0.5, max(mapa_finais$long) + 0.5),
+           ylim = c(min(mapa_finais$lat)  - 0.5, max(mapa_finais$lat)  + 0.5))
+
+ggsave(file.path(saida, "Figura 8. Estacoes da serie diaria final.png"), Figura8,
+       width = 16, height = 12, units = "in", dpi = 300)
+
+cat("Figura 8. Estacoes da serie diaria final.png salvo.\n")
