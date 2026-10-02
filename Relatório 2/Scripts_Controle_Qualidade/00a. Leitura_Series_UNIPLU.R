@@ -1,5 +1,4 @@
-## Extração, Caracterização e Séries Diárias (convencionais e automáticas) - UNIPLU-BR
-##
+## Extração e Caracterização (convencionais e automáticas) - UNIPLU-BR
 
 ##### instalar pacotes (rodar só uma vez) #####
 #install.packages(c("dplyr","readr","ggplot2","arrow","lubridate","tidyr","stringr"))
@@ -15,11 +14,11 @@ library(stringr)
 
 ##### 2. Caminhos --------------------------------------------------------------------
 # Pasta onde estão os arquivos .zip do UNIPLU-BR
-base_path <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/Dados/UNIPLU_BR"
+dados <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/Dados/UNIPLU_BR"
 
 # Pasta de saída
-out_path <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
-dir.create(out_path, showWarnings = FALSE, recursive = TRUE)
+saida <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
+dir.create(saida, showWarnings = FALSE, recursive = TRUE)
 
 ##### 3. Função de leitura dos ZIPs -----------------------------------------------------------
 read_UNIPLU_BR <- function(zip_path, table = "table_data") {
@@ -63,9 +62,8 @@ read_UNIPLU_BR <- function(zip_path, table = "table_data") {
 }
 
 ##### 4. Detectar arquivos disponíveis na pasta -----------------------------------------------------------
-# Detecta automaticamente todos os arquivos "UF_ANO.zip" presentes na pasta.
-# Ajuste os filtros abaixo caso queira restringir o processamento.
-zip_files <- list.files(base_path, pattern = "^[A-Za-z]{2}_[0-9]{4}\\.zip$")
+
+zip_files <- list.files(dados, pattern = "^[A-Za-z]{2}_[0-9]{4}\\.zip$")
 
 file_index <- tibble(
   file  = zip_files,
@@ -73,8 +71,8 @@ file_index <- tibble(
   year  = as.integer(str_extract(zip_files, "[0-9]{4}"))
 )
 
-states_filter <- NULL   # ex.: c("AC", "RS")  |  NULL = todos os estados disponíveis
-years_filter  <- NULL   # ex.: 2000:2020      |  NULL = todos os anos disponíveis
+states_filter <- NULL
+years_filter  <- NULL
 
 if (!is.null(states_filter)) file_index <- filter(file_index, state %in% states_filter)
 if (!is.null(years_filter))  file_index <- filter(file_index, year  %in% years_filter)
@@ -85,123 +83,107 @@ cat("Arquivos encontrados na pasta:", length(zip_files), "\n")
 cat("Arquivos selecionados para processamento:", nrow(file_index), "\n")
 cat("Estados:", paste(unique(file_index$state), collapse = ", "), "\n")
 
-##### 5. Conversão para série diária -----------------------------------------------------------
-# Regra de agregação diária:
-#  - Estações com time_step >= 1440 min (já diárias): mantém a data do próprio registro.
-#  - Estações sub-diárias (time_step < 1440 min): aplica a convenção do "dia
-#    hidrológico" 9h-9h (corte às 12h UTC), replicando a lógica usada no
-#    exemplo da rede CEMADEN em "00. Leitura Uniplu.R", generalizada para
-#    qualquer rede sub-diária.
-LIMIAR_DIA_CHUVOSO <- 1  # mm; limiar (WMO) para contar um "dia chuvoso"
-
-to_daily_generic <- function(df_data, df_info) {
-
-  df <- df_data %>%
-    left_join(df_info %>% select(gauge_code, time_step), by = "gauge_code") %>%
-    mutate(time_step = suppressWarnings(as.numeric(time_step)))
-
-  # --- estações já diárias ---
-  df_daily_native <- df %>%
-    filter(is.na(time_step) | time_step >= 1440) %>%
-    mutate(date = as.Date(datetime)) %>%
-    group_by(gauge_code, date) %>%
-    summarise(rain_mm = sum(rain_mm, na.rm = TRUE), .groups = "drop")
-
-  # --- estações sub-diárias: dia hidrológico 9h-9h ---
-  df_sub <- df %>% filter(!is.na(time_step) & time_step < 1440)
-
-  if (nrow(df_sub) > 0) {
-    offset_sec <- 12 * 3600  # 12h UTC ~ 9h local (UTC-3)
-    df_sub <- df_sub %>%
-      mutate(
-        datetime = as.POSIXct(datetime, tz = "UTC"),
-        day_cut = as.POSIXct(
-          floor((as.numeric(datetime) - offset_sec - 1) / 86400) * 86400 +
-            offset_sec + 86400,
-          origin = "1970-01-01", tz = "UTC"
-        )
-      ) %>%
-      group_by(gauge_code, day_cut) %>%
-      summarise(rain_mm = sum(rain_mm, na.rm = TRUE), .groups = "drop") %>%
-      arrange(gauge_code, day_cut) %>%
-      group_by(gauge_code) %>%
-      mutate(rain_mm = lag(rain_mm, 1)) %>%
-      ungroup() %>%
-      filter(!is.na(rain_mm)) %>%
-      rename(date = day_cut) %>%
-      mutate(date = as.Date(date))
-  } else {
-    df_sub <- tibble(gauge_code = character(), date = as.Date(character()), rain_mm = numeric())
-  }
-
-  bind_rows(df_daily_native, df_sub) %>% arrange(gauge_code, date)
+##### 5. Resumo -----------------------------------------------------------
+resumir_zip <- function(df_data, df_info, ano) {
+  
+  df_data %>%
+    select(gauge_code, datetime, rain_mm) %>%
+    group_by(gauge_code) %>%
+    summarise(
+      n_registros    = n(),
+      n_na           = sum(is.na(rain_mm)),
+      primeiro       = if (all(is.na(datetime))) as.POSIXct(NA, tz = "UTC") else min(datetime, na.rm = TRUE),
+      ultimo         = if (all(is.na(datetime))) as.POSIXct(NA, tz = "UTC") else max(datetime, na.rm = TRUE),
+      n_dias         = n_distinct(as.Date(datetime[!is.na(datetime)])),
+      chuva_total_mm = sum(rain_mm, na.rm = TRUE),
+      chuva_max      = suppressWarnings(max(rain_mm, na.rm = TRUE)),
+      data_chuva_max = if (all(is.na(rain_mm)) || all(is.na(datetime))) as.POSIXct(NA, tz = "UTC")
+      else datetime[which.max(rain_mm)],
+      n_reg_chuva    = sum(rain_mm > 0, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      chuva_max       = ifelse(is.finite(chuva_max), chuva_max, NA_real_),
+      sem_dado_valido = n_registros == n_na,
+      ano             = ano
+    ) %>%
+    left_join(
+      df_info %>% 
+        distinct(gauge_code, .keep_all = TRUE) %>%
+        select(gauge_code, city, state, lat, long, elevation,
+               time_step, network, responsible, UTC),
+      by = "gauge_code"
+    )
 }
 
-##### 6. Loop de leitura + processamento de todos os arquivos -----------------------------------------------------------
-daily_list <- list()
-info_list  <- list()
+##### 6. Loop de leitura + resumo de todos os arquivos -----------------------------------------------------------
+
+resumos <- vector("list", nrow(file_index))
 
 for (i in seq_len(nrow(file_index))) {
-  f      <- file_index$file[i]
-  path_i <- file.path(base_path, f)
-
-  cat(sprintf("[%d/%d] Lendo %s...\n", i, nrow(file_index), f))
-
-  df_data_i <- read_UNIPLU_BR(path_i, "table_data")
+  
+  path_i <- file.path(dados, file_index$file[i])
+  
   df_info_i <- read_UNIPLU_BR(path_i, "table_info")
-
-  if (nrow(df_data_i) == 0 || nrow(df_info_i) == 0) next
-
-  info_list[[length(info_list) + 1]] <- df_info_i
-
+  df_data_i <- read_UNIPLU_BR(path_i, "table_data")
+  
+  if (nrow(df_info_i) == 0 || nrow(df_data_i) == 0) next
+  
+  # o dado bruto não traz fuso; o instante é rotulado UTC, sem deslocamento
   df_data_i$datetime <- as.POSIXct(df_data_i$datetime, tz = "UTC")
-  daily_i <- to_daily_generic(df_data_i, df_info_i)
-
-  if (nrow(daily_i) > 0) daily_list[[length(daily_list) + 1]] <- daily_i
+  
+  resumos[[i]] <- resumir_zip(df_data_i, df_info_i, file_index$year[i])
+  
+  if (i %% 100 == 0 || i == nrow(file_index))
+    cat(sprintf("  %d/%d arquivos\n", i, nrow(file_index)))
 }
 
-# séries diárias consolidadas
-df_daily <- bind_rows(daily_list) %>%
-  distinct(gauge_code, date, .keep_all = TRUE) %>%
-  arrange(gauge_code, date)
+resumo_por_ano <- bind_rows(resumos)
+write_csv(resumo_por_ano, file.path(saida, "resumo_estacao_ano.csv"))
 
-# metadados consolidados
-df_info_total <- bind_rows(info_list) %>%
-  distinct(gauge_code, .keep_all = TRUE)
+cat("Resumo por estação e ano:", nrow(resumo_por_ano), "linhas\n")
+cat("Estação-anos sem nenhuma medição:", sum(resumo_por_ano$sem_dado_valido), "\n")
 
-cat("\nTotal de registros diários:", nrow(df_daily), "\n")
-cat("Total de estações mapeadas:", nrow(df_info_total), "\n")
+##### 7. Inventário das estações ----------------------------------------------------------------
 
-##### 7. Inventário das estações -----------------------------------------------------------
-inventario <- df_daily %>%
+inventario <- resumo_por_ano %>%
   group_by(gauge_code) %>%
   summarise(
-    data_inicio           = min(date),
-    data_fim               = max(date),
-    n_dias_com_dado        = n(),
-    n_dias_periodo         = as.integer(data_fim - data_inicio) + 1,
-    pct_completude         = round(100 * n_dias_com_dado / n_dias_periodo, 1),
-    n_anos                 = round(n_dias_periodo / 365.25, 1),
-    n_dias_chuva           = sum(rain_mm > LIMIAR_DIA_CHUVOSO, na.rm = TRUE),
-    chuva_total_mm         = round(sum(rain_mm, na.rm = TRUE), 1),
-    chuva_media_diaria_mm  = round(mean(rain_mm, na.rm = TRUE), 2),
-    chuva_max_diaria_mm    = round(max(rain_mm, na.rm = TRUE), 1),
-    data_chuva_max         = date[which.max(rain_mm)],
+    n_registros    = sum(n_registros),
+    n_na           = sum(n_na),
+    n_dias         = sum(n_dias),
+    n_anos         = n_distinct(ano),                  # anos com algum registro
+    ano_inicio     = min(ano),
+    ano_fim        = max(ano),
+    span_anos      = max(ano) - min(ano) + 1,
+    data_inicio    = suppressWarnings(min(primeiro, na.rm = TRUE)),
+    data_fim       = suppressWarnings(max(ultimo,   na.rm = TRUE)),
+    chuva_total_mm = round(sum(chuva_total_mm, na.rm = TRUE), 1),
+    chuva_max      = suppressWarnings(max(chuva_max, na.rm = TRUE)),
+    data_chuva_max = if (all(is.na(chuva_max))) as.POSIXct(NA, tz = "UTC")
+    else data_chuva_max[which.max(chuva_max)],
+    n_reg_chuva    = sum(n_reg_chuva),
     .groups = "drop"
   ) %>%
+  mutate(
+    chuva_max       = ifelse(is.finite(chuva_max), chuva_max, NA_real_),
+    data_inicio     = as.POSIXct(ifelse(is.finite(data_inicio), data_inicio, NA), tz = "UTC"),
+    data_fim        = as.POSIXct(ifelse(is.finite(data_fim),    data_fim,    NA), tz = "UTC"),
+    sem_dado_valido = n_registros == n_na              # estação sem nenhuma medição
+  ) %>%
   left_join(
-    df_info_total %>%
-      select(gauge_code, city, state, lat, long, elevation, time_step, network, responsible),
+    resumo_por_ano %>%
+      arrange(gauge_code, desc(ano)) %>%               # metadados do ano mais recente
+      distinct(gauge_code, .keep_all = TRUE) %>%
+      select(gauge_code, city, state, lat, long, elevation,
+             time_step, network, responsible, UTC),
     by = "gauge_code"
   ) %>%
-  relocate(city, state, lat, long, elevation, network, responsible, .after = gauge_code) %>%
   arrange(state, city)
 
-write_csv(inventario, file.path(out_path, "inventario_estacoes.csv"))
-cat("Inventário salvo em:", file.path(out_path, "inventario_estacoes.csv"), "\n")
+write_csv(inventario, file.path(saida, "inventario_estacoes.csv"))
 
-##### 8. Séries diárias (salvar em disco) -----------------------------------------------------------
-write_parquet(df_daily, file.path(out_path, "series_diarias.parquet"))
-# alternativa em csv (arquivo maior, mas legível em qualquer software):
-# write_csv(df_daily, file.path(out_path, "series_diarias.csv"))
-cat("Séries diárias salvas em:", file.path(out_path, "series_diarias.parquet"), "\n")
+cat("Inventário salvo:", nrow(inventario), "estações\n")
+cat("Estações sem nenhuma medição:", sum(inventario$sem_dado_valido), "\n")
+print(inventario %>% count(network, name = "estacoes") %>% arrange(desc(estacoes)))
+
