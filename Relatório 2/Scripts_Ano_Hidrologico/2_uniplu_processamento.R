@@ -5,6 +5,8 @@
 # Uniplu não traz nível de consistência; usa a série diária publicada
 # só postos com mais de 30 anos nos zips, e depois year.size > 30
 # (ano bom = no máximo 20% de falhas, 73 dias)
+# Retira valores acima de 1500 mm
+# Adiciona flag entre 700 e 1500 mm
 
 library(dplyr)
 library(tidyr)
@@ -16,7 +18,7 @@ library(readr)
 
 # --- caminhos (saídas nesta pasta; Uniplu fora) ---
 DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_DADOS <- "C:/Users/Adm/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
 #Caminho dados do Uniplu
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
@@ -44,12 +46,24 @@ analyse_station_uniplu <- function(sta) {
     mutate(
       codigo = as.character(codigo),
       dt     = as.Date(dt),
-      p      = as.numeric(p)
+      p      = as.numeric(p),
+      
+      # Flag para valores suspeitos
+      flag_p_gt_700 = !is.na(p) & p > 700,
+      
+      # Valores acima de 1500 mm são eliminados
+      p = ifelse(p > 1500, NA_real_, p)
     ) %>%
     filter(!is.na(dt)) %>%
     group_by(codigo, dt) %>%
-    summarise(p = mean(p, na.rm = TRUE), .groups = "drop") %>%
-    mutate(p = ifelse(is.nan(p), NA_real_, p))
+    summarise(
+      p = mean(p, na.rm = TRUE),
+      flag_p_gt_700 = any(flag_p_gt_700, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      p = ifelse(is.nan(p), NA_real_, p)
+    )
   
   if (nrow(sta) < 365) {
     return(list(is.null = TRUE, sta = sta))
