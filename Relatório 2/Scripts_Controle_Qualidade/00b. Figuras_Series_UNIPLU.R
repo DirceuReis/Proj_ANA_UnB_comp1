@@ -1,7 +1,5 @@
 ## FIGURAS DO INVENTÁRIO - UNIPLU-BR
 ##
-## Insumos:  00. Series/inventario_estacoes.csv
-##           00. Series/series_diarias.parquet
 ##
 
 ##### 1. Library imports --------------------------------------------------------------------------------------------------
@@ -16,16 +14,27 @@ library(ggspatial)
 library(scales)
 
 ##### 2. Caminhos  ----------------------------------------------------------------------------------------------------------
-path <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
+dados <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
 
-##### 3. Insumos: inventário e contorno dos estados  ------------------------------------------------------------------------
-inventario <- read_csv(file.path(path, "inventario_estacoes.csv"),
-                       col_types = cols(gauge_code = col_character(), .default = col_guess()))
+##### 3. Inventário e contorno dos estados  ------------------------------------------------------------------------
+inventario <- read_csv(file.path(dados, "inventario_estacoes.csv"),
+                       col_types = cols(gauge_code = col_character(),
+                                        time_step  = col_character(),
+                                        .default   = col_guess()))
+
+resumo_por_ano <- read_csv(file.path(dados, "resumo_estacao_ano.csv"),
+                           col_types = cols(gauge_code = col_character(),
+                                            time_step  = col_character(),
+                                            .default   = col_guess()))
+
 mapa_dados <- inventario %>% filter(!is.na(lat), !is.na(long))
 
 brasil_sf <- geobr::read_state(year = 2020, showProgress = FALSE)
 brasil_sf$area_km2 <- as.numeric(sf::st_area(brasil_sf)) / 1e6   # área geodésica (m² -> km²)
+mil <- label_number(big.mark = ".", decimal.mark = ",", accuracy = 1)
+
 cat("inventário:", nrow(inventario), "estações |", nrow(mapa_dados), "com coordenada\n")
+cat("resumo por ano:", nrow(resumo_por_ano), "linhas estação-ano\n")
 
 ##### 4. Figura 1. Mapa das estações por rede  ------------------------------------------------------------------------
 
@@ -83,7 +92,7 @@ Figura1 <- ggplot() +
   coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
            ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
 
-ggsave(file.path(path, "Figura 1. Inventário.png"), Figura1, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 1. Inventário.png"), Figura1, width = 16, height = 12, dpi = 300)
 cat("Figura 1. Inventário.png salvo.\n")
 
 ##### 5. Figura 2. Densidade de estações por UF ------------------------------------------------------
@@ -136,12 +145,12 @@ Figura2 <- ggplot(uf_sf) +
   coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
            ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
 
-ggsave(file.path(path, "Figura 2. Densidade de estações.png"), Figura2, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 2. Densidade de estações.png"), Figura2, width = 16, height = 12, dpi = 300)
 cat("Figura 2. Densidade de estações.png.\n")
 
 ##### 6. Figura 3. Mapa de pontos: nº de anos em atividade  ---------------------------------------------------
 
-TETO_ANOS <- 100
+TETO_ANOS <- 70
 
 Figura3 <- ggplot() +
   geom_sf(data = brasil_sf, fill = "grey97", color = "grey40", linewidth = 0.3) +
@@ -186,7 +195,7 @@ Figura3 <- ggplot() +
   coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
            ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
 
-ggsave(file.path(path, "Figura 3. Mapa anos_atividade.png"), Figura3, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 3. Mapa anos_atividade.png"), Figura3, width = 16, height = 12, dpi = 300)
 cat("Figura 3. Mapa anos_atividade.png salvo \n")
 
 ##### 7. Figura 4. Estações por instituição responsável  ------------------------------------------------------------------------
@@ -198,7 +207,6 @@ responsavel_numero <- inventario %>%
   filter(n > LIMIAR_AGENCIA) %>%
   arrange(desc(n))
 
-
 Figura4 <- ggplot(responsavel_numero, aes(x = reorder(responsible, -n), y = n)) +
   geom_col(fill = "grey50") +
   geom_text(aes(label = mil(n)), vjust = -0.4, size = 22, size.unit = "pt") +
@@ -209,8 +217,7 @@ Figura4 <- ggplot(responsavel_numero, aes(x = reorder(responsible, -n), y = n)) 
         axis.text.y = element_text(size = 22, color = "black"),
         axis.title  = element_text(size = 22, color = "black"))
     
-    
-ggsave(file.path(path, "Figura 4. Estações por instituição.png"), Figura4, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 4. Estações por instituição.png"), Figura4, width = 16, height = 12, dpi = 300)
 cat("Figura 4. Estações por instituição salva. Agências acima do limiar:", nrow(responsavel_numero), "\n")
 
 ##### 8. Figura 5. Estações por ano, por resolução  ------------------------------------------------------------------------
@@ -218,9 +225,8 @@ cat("Figura 4. Estações por instituição salva. Agências acima do limiar:", 
 ANO_MIN  <- 1855
 ANO_MAX  <- 2025
 PASSO_X  <- 5
-RECONTAR <- TRUE
-COR_DIA  <- "#4C78A8"
-COR_SUB  <- "#F58518"
+COR_DIARIA  <- "#4C78A8"
+COR_SUBDIARIA  <- "#F58518"
 
 SUB <- c("CEMADEN", "Telemetria", "INMET subdiário", "ICEA")
 resol_temporal <- inventario %>%
@@ -232,22 +238,13 @@ resol_temporal <- inventario %>%
   select(gauge_code, resolucao)
 print(count(resol_temporal, resolucao))
 
-arq_numero <- file.path(path, "estacoes_por_ano.csv")
-if (RECONTAR) {
-  t0 <- Sys.time()
-  cat("buscando na série diária (163 milhões de linhas), ~15 s...\n")
-  soma_estacoes_ano <- open_dataset(file.path(path, "series_diarias.parquet")) %>%
-    filter(!is.na(rain_mm)) %>%
-    mutate(ano = year(date)) %>%
-    count(ano, gauge_code) %>%
-    collect() %>%
-    left_join(resol_temporal, by = "gauge_code") %>%
-    count(ano, resolucao, name = "estacoes")
-  write_csv(estacoes, arq_numero)
-  cat(sprintf("contagem pronta em %.1f min\n", as.numeric(difftime(Sys.time(), t0, units = "mins"))))
-} else {
-  soma_estacoes_ano <- read_csv(arq_numero, show_col_types = FALSE)
-}
+soma_estacoes_ano <- resumo_por_ano %>%
+  filter(!sem_dado_valido) %>%
+  left_join(resol_temporal, by = "gauge_code") %>%
+  distinct(gauge_code, ano, resolucao) %>%
+  count(ano, resolucao, name = "estacoes")
+
+write_csv(soma_estacoes_ano, file.path(dados, "estacoes_por_ano.csv"))
 
 # grade completa de anos: anos sem estação aparecem como zero
 soma_estacoes_ano <- soma_estacoes_ano %>%
@@ -255,6 +252,7 @@ soma_estacoes_ano <- soma_estacoes_ano %>%
   complete(ano = ANO_MIN:ANO_MAX, resolucao = c("Diária", "Sub-diária"),
            fill = list(estacoes = 0)) %>%
   mutate(resolucao = factor(resolucao, c("Diária", "Sub-diária")))
+
 cat("máximo de estações simultâneas:\n")
 print(soma_estacoes_ano %>% group_by(resolucao) %>% slice_max(estacoes, n = 1) %>% ungroup())
 
@@ -263,18 +261,18 @@ Figura5 <- ggplot(soma_estacoes_ano, aes(ano, estacoes, fill = resolucao)) +
   facet_wrap(~resolucao, ncol = 1, scales = "free_y",
              labeller = as_labeller(c("Diária" = "Resolução diária",
                                       "Sub-diária" = "Resolução sub-diária"))) +
-  scale_fill_manual(values = c("Diária" = COR_DIA, "Sub-diária" = COR_SUB), guide = "none") +
+  scale_fill_manual(values = c("Diária" = COR_DIARIA, "Sub-diária" = COR_SUBDIARIA), guide = "none") +
   scale_x_continuous(breaks = seq(ANO_MIN, ANO_MAX, by = PASSO_X), expand = expansion(mult = 0.01)) +
-  scale_y_continuous(labels = label_number(big.mark = ".", decimal.mark = ",", accuracy = 1),
-                     expand = expansion(mult = c(0, 0.05))) +
+  scale_y_continuous(labels = mil, expand = expansion(mult = c(0, 0.05))) +
   labs(x = "Ano", y = "Número de estações") +
   theme_bw(base_size = 22) +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 22, color = "black"),
-        axis.text.y = element_text(color = "black",size = 22),
+        axis.text.y = element_text(color = "black", size = 22),
         strip.background = element_rect(fill = "grey92", color = NA),
         strip.text = element_text(face = 2, hjust = 0, size = 22))
 
-ggsave(file.path(path, "Figura 5. Estações por ano por resolução.png"), Figura5, width = 16, height = 12, dpi = 300, bg = "white")
+ggsave(file.path(dados, "Figura 5. Estações por ano por resolução.png"), Figura5,
+       width = 16, height = 12, units = "in", dpi = 300, bg = "white")
 cat("Figura 5. Estações por ano por resolução salva.\n")
