@@ -151,17 +151,17 @@ Série -\> MTFPW -\> MK -\> p-valores -\> FDR -\> significância espacial - EQUA
 
 ![Espacialização das estações pluviométricas por número de anos disponíveis](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png) Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas
 
-![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
+![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges_AH.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
 
-![máximas totais anual dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/chuvas_final.png) Figura 3.
+![IMAX](Scripts_Análise_Tendência/resultados/figuras_tendencia/graf_imax_AH.png) Figura 3.
 
 #8.3.2 MK; MK+MTFPW; MK+MTFPW+FDR
 
 máxima diária
 
-![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx1D_sig_RH.png) Figura 4.
+![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_imax_AH_RH.png) Figura 4.
 
-![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs.png) Figura 5.
+![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs_1d_AH.png) Figura 5.
 
 #8.4 Resultados Xavier
 
