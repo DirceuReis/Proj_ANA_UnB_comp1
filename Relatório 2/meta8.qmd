@@ -6,122 +6,80 @@ Esta meta avalia a existência de mudanças temporais nas séries de precipitaç
 
 #8.1 Dados utilizados
 
-Organização dos dados por Região Hidrográfica
+Para o realização da análise de tendência, foram utilizadas diferentes fontes de dados de precipitação, contemplando informações provenientes de postos pluviométricos e pluviógrafos, bem como dados espacialmente distribuídos em grade.
 
--   estações foram espacialmente associadas às RHs;
--   células do Xavier também foram espacialmente associadas às RHs;
--   as análises foram realizadas individualmente para cada RH.
+Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do UNIPLU (Das Neves Almeida et al., 2025). Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.
 
-#8.1.1 Dados de pluviómetros e pluviógrafos
+Também foi utilizada a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), elaborada por Xavier et al. e disponibilizada em formato NetCDF. A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado, obtendo-se, assim, a série de precipitação máxima diária anual para cada célula.
 
-Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do *Unified Brazilian Rainfall Dataset* (UNIPLU) (Das Neves Almeida et al., 2025) para calcular as precipitações máximas anuais. Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.
+Para a organização espacial dos dados e a realização das análises, tanto os postos pluviométricos e pluviógrafos quanto as células da base de dados em grade de Xavier et al. foram associadas às respectivas Regiões Hidrográficas (RHs). Essa associação foi realizada por meio da localização espacial de cada posto e de cada célula da grade, permitindo identificar a Região Hidrográfica à qual cada ponto de observação ou célula pertence.
 
-Para cada posto, foi calculado o número de dias com observações e calculada a razão entre os dias observados e o número de dias esperados no respectivo ano, considerando-se 365 dias para anos comuns e 366 dias para anos bissextos.
+Após essa classificação espacial, os dados foram organizados de acordo com as RHs, de modo que as análises estatísticas e de tendência fossem realizadas individualmente para cada RH. Essa abordagem permitiu avaliar a distribuição espacial dos resultados e identificar possíveis diferenças no comportamento das séries de precipitação entre as diferentes Regiões Hidrográficas.
 
-Para os dados diários, como etapa de controle de qualidade, foram removidos os valores inferiores ou iguais a 1 mm e valores superiores a 650 mm. Foram considerados válidos apenas os anos que apresentaram cobertura temporal igual ou superior a 80% e com no mínimo 30 anos de dados. Os subdiários cobertura temporal igual ou superior a 80% e com no mínimo 8 anos de dados.
-
-Para os dados provenientes dos postos pluviométricos e pluviográficos do UNIPLU, o mesmo princípio foi utilizado para a construção das séries anuais de extremos, considerando-se, para cada estação, o maior valor diário de precipitação registrado em cada ano. Assim, para uma estação (s):
-
-$$
-\max_{d\in y}
-P_{s,d}
-$$ em que (P\_{s,d}) representa a precipitação diária observada na estação (s).
-
-Ao final do processamento, foi obtida uma série temporal anual para cada estação selecionada, contendo os valores das precipitações máximas diárias e subdiárias, acompanhados das informações de identificação e localização das estações.
-
--   fonte dos dados;
--   período;
--   número de estações;
--   localização;
--   critérios de seleção;
--   variável/índice analisado;
--   tratamento dos dados;
--   associação das estações às RHs por localização espacial.
-
-obs: colocar um mapa da distribuição das estações sobre as 12 RHs?
-
-#8.1.2 Dados em grade - Xavier
-
-Utilizou-se a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), os dados correspondem ao conjunto elaborado por Xavier et al.,, disponibilizada em formato NetCDF, para o cálculo da precipitação máxima diária anual.
-
-A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado naquele ano. Esse valor corresponde à precipitação máxima diária anual.
-
-O cálculo foi realizado no ambiente R, utilizando a biblioteca ncdf4 para leitura dos arquivos NetCDF e funções de manipulação de dados para organização dos resultados.
-
--   Xavier (falar sobre a base/pubicação);
--   período 1961–2025;
-
-O cálculo foi realizado individualmente para cada célula espacial. Dessa forma, para uma célula localizada nas coordenadas ((i,j)), o Rx1day do ano (y) foi definido como:
-
-$$
-\max_{d\in y}
-P_{i,j,d}
-$$
-
-em que (P\_{i,j,d}) representa a precipitação diária na célula ((i,j)) no dia (d), e (y) representa o ano analisado.
-
-Dessa forma, os dados foram organizados como séries temporais anuais de Rx1day, sendo cada série associada a uma unidade espacial de análise: célula da grade, no caso do Xavier, ou posto pluviométrico/pluviográfico, no caso do UNIPLU.
-
-Após a construção das séries de Rx1day, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao *Modified Trend-Free Pre-Whitening* (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método *False Discovery Rate* (MK + MTFPW + FDR).
+Após a construção das séries, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao *Modified Trend-Free Pre-Whitening* (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método *False Discovery Rate* (MK + MTFPW + FDR). A análise de tendência foi aplicada individualmente a cada base de dados.
 
 #8.2 Metodologia
 
-A análise de tendências foi realizada a partir de duas fontes de dados de precipitação: (i) os dados em grade de Xavier/BR-DWGD e (ii) os dados observados de postos pluviométricos e pluviográficos provenientes do banco de dados UNIPLU. A utilização dessas duas fontes permitiu avaliar o comportamento temporal dos extremos de precipitação tanto a partir de uma representação espacial em grade quanto a partir de séries históricas.
-
-Embora as duas fontes apresentem diferentes características espaciais e temporais, bem como diferentes formas de obtenção e registro dos dados, a análise foi estruturada a partir de índices de precipitação associados a diferentes escalas temporais.
-
--   tratamento de valores ausentes;
--   organização das séries temporais;
--   período analisado;
--   critérios de validade das séries;
--   espacialização dos dados.
+A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de Xavier et al. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.
 
 #8.2.2 Teste de Mann-Kendall
 
 Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.
 
-Para cada série temporal (X_1,X_2,\\ldots,X_n), a estatística (S) foi calculada pela comparação entre todos os pares de observações:
+Para cada série temporal ((X_1,X_2,\ldots,X_n)), as observações foram inicialmente transformadas em postos, considerando os valores empatados pelo método do menor posto. Em seguida, a estatística (S) foi calculada pela comparação entre todos os pares de observações:
 
 $$
 S =
 \sum_{i=1}^{n-1}
 \sum_{j=i+1}^{n}
-\operatorname{sgn}(X_j-X_i)
+\operatorname{sgn}(R_j-R_i)
 $$
 
-em que:
+em que (R_i) e (R_j) representam os postos das observações (X_i) e (X_j), respectivamente, e:
 
 $$
-\operatorname{sgn}(X_j-X_i)=
+\operatorname{sgn}(R_j-R_i)=
 \begin{cases}
-+1, & X_j-X_i>0\
-0, & X_j-X_i=0\
--1, & X_j-X_i<0
++1, & R_j-R_i>0\\
+0, & R_j-R_i=0\\
+-1, & R_j-R_i<0
 \end{cases}
-$$\
+$$
 
-Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo e os valores negativos indicam predominância de reduções.
+Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.
 
-Neste caso, os empates entre observações foram considerados no cálculo da variância. A variância de (S) foi calculada por:
+Os empates entre observações foram considerados no cálculo da variância de (S). A variância foi calculada por:
 
 $$
-\sum_{p=1}^{g}
+\operatorname{Var}(S)=
+\frac{
+n(n-1)(2n+5)
+-
+\displaystyle\sum_{p=1}^{g}
 t_p(t_p-1)(2t_p+5)
 }{18}
-$$ em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados.
+$$
 
-A estatística padronizada (Z) também foi calculada pela equação a seguir:
+em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados e (g) corresponde ao número de grupos de valores empatados.
+
+A estatística padronizada (Z) foi calculada por:
 
 $$
 Z=
 \begin{cases}
-\dfrac{S-1}{\sqrt{\operatorname{Var}(S)}}, & S>0\
-0, & S=0\
+\dfrac{S-1}{\sqrt{\operatorname{Var}(S)}}, & S>0\\[8pt]
+0, & S=0\\[8pt]
 \dfrac{S+1}{\sqrt{\operatorname{Var}(S)}}, & S<0
 \end{cases}
-$$ O *p-value* bilateral foi obtido por: $$
+$$
+
+O *p-value* bilateral foi obtido por:
+
+$$
 p=2\left[1-\Phi(|Z|)\right]
-$$ em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
+$$
+
+em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
 
 Foi adotado nível de significância de 5% ((\alpha=0,05)). Assim, uma série foi considerada estatisticamente significativa quando: $$
 p<0,05
@@ -139,6 +97,45 @@ O teste MK foi aplicado individualmente às séries correspondentes às células
 
 #8.2.3 Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
 
+A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW, conforme o procedimento descrito por @Souza e Reis Jr. (2022).
+
+O método foi aplicado individualmente a cada série temporal e estruturado em etapas sucessivas:
+
+(i) estimativa da tendência por meio da inclinação de Sen;
+
+(ii) remoção da tendência da série;
+
+(iii) estimativa da autocorrelação de primeira ordem ((r_1));
+
+(iv) correção do viés da estimativa de (r_1);
+
+(v) verificação da significância da autocorrelação; e
+
+(vi) aplicação do procedimento de *pre-whitening* quando a autocorrelação foi considerada estatisticamente significativa.
+
+### Estimativa da tendência
+
+Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen. Para uma série temporal com (n) observações, foram calculadas as inclinações entre todos os pares de observações:
+
+$$
+\beta_{ij} =
+\frac{X_j-X_i}{j-i},
+\qquad j>i
+$$
+
+em que \(X_i\) e \(X_j\) representam os valores da série nos instantes \(i\) e \(j\), respectivamente. A inclinação de Sen (\(\beta\)) foi obtida pela mediana de todas as inclinações \(\beta_{ij}\):
+
+$$
+\beta =
+\operatorname{mediana}
+\left(
+\beta_{ij}
+\right)
+$$
+
+Essa estimativa foi utilizada para remover a tendência da série antes da avaliação da autocorrelação.
+
+
 Série temporal -\> identificação da autocorrelação -\> MTFPW -\> série corrigida -\> MK -\> tendência - EQUAÇÕES
 
 #8.2.4 Controle da *False Discovery Rate* – FDR
@@ -151,17 +148,17 @@ Série -\> MTFPW -\> MK -\> p-valores -\> FDR -\> significância espacial - EQUA
 
 ![Espacialização das estações pluviométricas por número de anos disponíveis](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png) Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas
 
-![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
+![Base de dados das estações pluviométricas por RH](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges_AH.png) Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica
 
-![máximas totais anual dias](Scripts_Análise_Tendência/resultados/figuras_tendencia/chuvas_final.png) Figura 3.
+![IMAX](Scripts_Análise_Tendência/resultados/figuras_tendencia/graf_imax_AH.png) Figura 3.
 
 #8.3.2 MK; MK+MTFPW; MK+MTFPW+FDR
 
 máxima diária
 
-![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_qx1D_sig_RH.png) Figura 4.
+![Resultado para chuva máxima diária anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_imax_AH_RH.png) Figura 4.
 
-![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs.png) Figura 5.
+![Porporção de sing por RH para máxima anual](Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs_1d_AH.png) Figura 5.
 
 #8.4 Resultados Xavier
 
