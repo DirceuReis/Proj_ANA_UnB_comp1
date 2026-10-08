@@ -135,12 +135,155 @@ $$
 
 Essa estimativa foi utilizada para remover a tendência da série antes da avaliação da autocorrelação.
 
+### Remoção da tendência
 
-Série temporal -\> identificação da autocorrelação -\> MTFPW -\> série corrigida -\> MK -\> tendência - EQUAÇÕES
+Após a estimativa da inclinação de Sen, a tendência foi removida da série original. Para isso, foi utilizada a expressão:
+
+$$
+X_t^{d}=X_t-\beta t
+$$
+
+em que \(X_t^{d}\) representa o valor da série sem tendência no instante \(t\), \(X_t\) corresponde ao valor original da série, \(\beta\) é a inclinação de Sen e \(t\) representa a posição temporal da observação.
+
+A série sem tendência foi utilizada exclusivamente para a estimativa da autocorrelação de primeira ordem. A aplicação posterior do procedimento de *pre-whitening*, quando necessária, foi realizada sobre a série original.
+
+### Estimativa da autocorrelação de primeira ordem
+
+A autocorrelação de primeira ordem (\(r_1\)) foi estimada a partir da série sem tendência. Inicialmente, foi calculada a média da série por:
+
+$$
+\overline{X^d}
+=
+\frac{1}{n}
+\sum_{t=1}^{n}X_t^d
+$$
+
+Em seguida, o coeficiente de autocorrelação de primeira ordem foi obtido por:
+
+$$
+r_1=
+\frac{
+\displaystyle\sum_{t=1}^{n-1}
+\left(X_t^d-\overline{X^d}\right)
+\left(X_{t+1}^d-\overline{X^d}\right)
+}{
+\displaystyle\sum_{t=1}^{n}
+\left(X_t^d-\overline{X^d}\right)^2
+}
+$$
+
+em que \(r_1\) representa a correlação entre observações consecutivas da série sem tendência.
+
+### Correção do viés da autocorrelação
+
+A estimativa de \(r_1\) foi posteriormente corrigida para reduzir o viés associado à estimativa da autocorrelação em séries finitas. A autocorrelação corrigida foi calculada por:
+
+$$
+r_1^{*}
+=
+\frac{nr_1+2}{n-4}
+$$
+
+em que \(r_1^{*}\) representa a autocorrelação de primeira ordem corrigida e \(n\) corresponde ao número de observações da série.
+
+### Identificação da autocorrelação significativa
+
+Para determinar se a autocorrelação de primeira ordem era estatisticamente significativa, foi utilizado um intervalo de confiança de 95%. Os limites inferior e superior foram calculados por:
+
+$$
+\rho_{1,\mathrm{inf}}
+=
+\frac{-1-1,96\sqrt{n-2}}{n-1}
+$$
+
+e
+
+$$
+\rho_{1,\mathrm{sup}}
+=
+\frac{-1+1,96\sqrt{n-2}}{n-1}
+$$
+
+A série foi considerada sem autocorrelação significativa quando o valor de \(r_1\) permaneceu dentro desse intervalo:
+
+$$
+\rho_{1,\mathrm{inf}}
+\leq r_1
+\leq
+\rho_{1,\mathrm{sup}}
+$$
+
+Quando \(r_1\) permaneceu dentro dos limites estabelecidos, a série foi considerada independente para fins da análise de tendência, não sendo aplicado o procedimento de *pre-whitening*. Nesse caso, a série original foi mantida para a aplicação do teste de Mann–Kendall.
+
+Por outro lado, quando \(r_1\) apresentou valor inferior ao limite inferior ou superior ao limite superior, a autocorrelação foi considerada significativa:
+
+$$
+r_1 < \rho_{1,\mathrm{inf}}
+\quad\text{ou}\quad
+r_1 > \rho_{1,\mathrm{sup}}
+$$
+
+Nessa situação, foi aplicado o procedimento MTFPW.
+
+### Aplicação do *pre-whitening*
+
+Quando identificada autocorrelação significativa, o procedimento de *pre-whitening* foi aplicado à série temporal original, utilizando a autocorrelação corrigida \(r_1^{*}\). A série corrigida foi obtida por:
+
+$$
+Y_t=
+X_t-r_1^{*}X_{t-1},
+\qquad t=2,\ldots,n
+$$
+
+em que \(Y_t\) representa a série após a aplicação do *pre-whitening*, \(X_t\) corresponde à série original e \(r_1^{*}\) representa a estimativa corrigida da autocorrelação de primeira ordem.
+
+Dessa forma, a série sem tendência foi utilizada para estimar e avaliar a autocorrelação, enquanto o *pre-whitening* foi aplicado diretamente à série original. Quando a autocorrelação não foi significativa, nenhuma transformação foi aplicada e a série original foi mantida.
+
+Após a aplicação do procedimento MTFPW, quando necessário, o teste de Mann–Kendall foi aplicado à série resultante. Assim, para cada unidade espacial de análise, foram obtidos a estimativa da inclinação de Sen, o coeficiente de autocorrelação de primeira ordem, o coeficiente corrigido, a indicação da presença ou ausência de autocorrelação significativa e a série utilizada na etapa subsequente do teste de tendência.
+
 
 #8.2.4 Controle da *False Discovery Rate* – FDR
 
-Série -\> MTFPW -\> MK -\> p-valores -\> FDR -\> significância espacial - EQUAÇÕES
+Considerando que a análise de tendência foi realizada simultaneamente para diversas séries temporais, correspondentes aos postos pluviométricos e pluviógrafos e às células da grade de Xavier et al., foi aplicado o procedimento de Benjamini–Hochberg (@colocar a ref) para o controle da *False Discovery Rate*. A aplicação desse procedimento teve como objetivo controlar a proporção esperada de resultados falsamente significativos entre as hipóteses rejeitadas, reduzindo a ocorrência de falsos positivos decorrentes da realização simultânea de múltiplos testes estatísticos.
+
+O procedimento foi aplicado ao conjunto de *p-values* obtidos nas análises de tendência. Inicialmente, foram considerados apenas os valores de *p* válidos, ou seja, aqueles que não apresentavam valores ausentes ou infinitos. Em seguida, os *p-values* foram ordenados em ordem crescente:
+
+$$
+p_{(1)} \leq p_{(2)} \leq \ldots \leq p_{(m)}
+$$
+
+em que \(p_{(j)}\) representa o \(j\)-ésimo menor *p-value* e \(m\) corresponde ao número total de *p-values* válidos considerados na análise.
+
+Para cada posição \(j\), foi calculado um valor crítico de acordo com:
+
+$$
+d_{(j)} =
+\frac{j\alpha}{m}
+$$
+
+em que \(j\) representa a posição do *p-value* ordenado, \(\alpha\) corresponde ao nível de significância adotado e \(m\) representa o número total de testes considerados.
+
+Foi então identificado o maior valor de \(j\) que satisfazia a condição:
+
+$$
+p_{(j)} < \frac{j\alpha}{m}
+$$
+
+O maior índice que atende a essa condição foi denominado \(j^*\). Quando não houve nenhum *p-value* que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando \(j^*\) foi identificado, todas as hipóteses correspondentes aos *p-values* ordenados de \(p_{(1)}\) até \(p_{(j^*)}\) foram consideradas estatisticamente significativas.
+
+Assim, a regra de decisão do procedimento pode ser expressa por:
+
+$$
+p_{(j)} < \frac{j\alpha}{m},
+\qquad j=j^*
+$$
+
+sendo \(j^*\) o maior índice que satisfaz essa condição.
+
+Foi adotado nível de significância de 5% \((\alpha=0,05)\). Após a identificação das hipóteses significativas na ordem crescente dos *p-values*, os resultados foram novamente associados às respectivas unidades espaciais, preservando a correspondência original entre cada *p-value* e sua estação ou célula da grade.
+
+Dessa forma, o procedimento permitiu obter a significância estatística final das tendências considerando simultaneamente os múltiplos testes realizados. Para cada unidade espacial, o resultado após o controle da FDR foi classificado como significativo ou não significativo, permitindo a representação e a avaliação da distribuição espacial das tendências.
+
 
 #8.3 Resultados Pluviómetros e pluviógrafos
 
