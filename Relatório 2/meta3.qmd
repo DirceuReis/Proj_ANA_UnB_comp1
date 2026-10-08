@@ -36,7 +36,7 @@ tabela_fontes <- data.frame(
   `Resolução temporal` = c("Sub-diário", "Diário", "Sub-diário", "Diário", 
                            "Sub-diário", "Sub-diário", NA),
   `Número médio de anos com dados` = c(7.99, 32.37, 34.02, 39.30, 15.21, 6.63, NA),
-  `Quantidade de estações` = c(5061, 12051, 182, 589, 629, 2819, 21314),
+  `Quantidade de estações` = c(5061, 12051, 182, 589, 629, 2819, 21331),
   `Ano Início – Ano Fim` = c("2014 – 2025", "1855 – 2025", "1951 – 2025",
                              "1889 – 2025", "2000 – 2025", "2014 – 2025", NA),
   check.names = FALSE
@@ -164,19 +164,31 @@ A metodologia foi aplicada de maneira diferente considerando os dados de resolu�
 
 ## 2.1 Séries Diárias
 
-Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade e consistência a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais: (a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil. (b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
+### 2.1.1 Análise de consistência
 
-Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações; no entanto, em se tratando de análise de eventos extremos, em que são necessárias séries de precipitações mais longas, foi aplicado um filtro adicional de descarte de estações com menos de 30 anos de dados, resultando em 6.078 estações (48,1% do total), para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A @fig-estacoes-diaria-30 apresenta o mapa geral das estações de base diária.
+O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações.
+
+Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo, por exemplo, verificou-se se a estação X se mantém com as mesmas informações de descrição ao longo de todos os anos do inventário, como unidade da federação, latitude, longitude, altitude, discretização temporal, entre outras. Das 12.640 estações diárias, 211 (1,7%) apresentaram alteração em ao menos um metadado, sendo essa ocorrência mais concentrada nas estações do Inmet diário.
+
+As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais, o que resultou em diferenças de até 1 km de distância entre a maioria das estações com mudanças. Outras divergências observadas eram no nome do município, em razão do uso ou não de acentos, ou estado em que a estação pertence. Nenhuma das 211 estações verificadas indicou a necessidade de ajustes.
+
+Ainda, aplicou-se a verificação de duplicatas, de modo a identificar pares estação e data repetidas. A análise não indicou nenhuma duplicata na base de dados díária.
+
+### 2.1.2 Controle de Qualidade
+
+Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade a base de dados. O método considerado neste estudo foi proposto por Estévez et al. (2022), que combina dois passos principais: (a) QC Básico: detecção de dados "errôneos", como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil. (b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.
+
+Em se tratando de análise de eventos extremos, em que são necessárias séries de precipitações mais longas, foi aplicado um filtro de descarte de estações com menos de 30 anos de dados, resultando em 6.078 estações (48,1% do total), para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A @fig-estacoes-diaria-30 apresenta o mapa geral das estações de base diária.
 
 ![Figura 6. Estações de monitoramento de precipitação de resolução diária (30 anos ou mais).](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Inventário%20Diário%2030%20anos%20ou%20mais.png){#fig-estacoes-diaria-30 width="100%"}
 
-### 2.1.1 QC Básico
+#### 2.1.2.1 QC Básico
 
 Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo (Carmona et al., 2023). Desse modo, considerou-se como limite superior 700 mm/dia.
 
 A aplicação deste controle de qualidade indicou como problemática aos dados: (i) dias seguidos de valores diários acima de 1.000 mm; (ii) valores diários acima de 6.000 mm, possivelmente em razão de erros na digitação; e (iii) valores diários acima de 700 mm em poucos meses em um mesmo ano. Após aplicação do QC Básico, aproximadamente 0,0003% do total dos registros (346 registros) foram excluídos, por possuirem valores de precipitação superior a 700 mm/dia. Não foram identificados registros negativos. De todos os dados excluidos assumiu-se que se tratavam de dados errôneos, não se tratavam de outliers.
 
-### 2.1.2 QC Absoluto
+#### 2.1.2.2 QC Absoluto
 
 Neste controle de qualidade cada série de precipitações diárias é utilizada na estimativa do Índice de Qualidade (IQ) por ano de acordo com a @eq-iq abaixo:
 
@@ -318,4 +330,21 @@ Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade de
 
 (e) Reanálise visual: por fim, todas as redes passaram por uma revalidação. Na primeira análise visual, a seleção de vizinhas baseia-se apenas na distância, de modo que uma estação podia ter sido comparada somente a séries igualmente inconsistentes. Na reanálise, consideraram-se como vizinhas exclusivamente as estações já classificadas como HQ, de qualquer rede. Isso permitiu tanto excluir séries com erros remanescentes quanto reclassificar como HQ estações antes rotuladas como PQ, cujas inconsistências aparentes decorriam da baixa qualidade das vizinhas originais.
 
-Conforme apresentado na @tbl-fontes-uniplu, 8.674 estações do UNIPLU-BR se tratavam de estações de monitoramento sub-diário. A partir da aplicação do controle de qualidade aqui mencionado, foram classificadas como HQ, em pelo menos um ano da série, 3.217 estações do CEMADEN, 1.638 da Telemetria, 574 do INMET sub-diário e 255 do INMET diário.
+Conforme apresentado na @tbl-fontes-uniplu, 8.691 estações do UNIPLU-BR se tratam de estações de monitoramento de precipitação sub-diário; novamente, em se tratando de análise de eventos extremos, foi aplicado um filtro adicional de descarte de estações com menos de 8 anos de dados, resultando em 5.265 estações (60,6 % do total). A @fig-estacoes-sub-8 apresenta o mapa geral das estações de base sub-diária com mais de 8 anos de dados. Com a filtragem de séries com mais de 8 anos, a rede Telemetria foi a mais afetada, perdendo mais da metade das estações.
+
+![Figura 9. Estações de monitoramento de precipitação de resolução sub-diária (8 anos ou mais).](Scripts_Controle_Qualidade/Figuras/Figura%209.%20Mapa%20estacoes%20subdiarias%208%20anos%20ou%20mais.png){#fig-estacoes-sub-8 width="100%"}
+
+Na sequência, foram realizadas verificações exploratórias à base sub-diária,a saber: (i)
+
+
+
+
+### 2.2.1 Análise de consistência
+
+O inventário das estações de monitoramento subdiário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações sub-diárias, cuja fonte de dados seria o CEMADEN, Telemetria, ICEA e Inmet subdiário. Esses filtros resultaram em 8.691 estações.
+
+Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo. Das 8.691 estações, 1.775 (20,4%) apresentaram alteração em ao menos um metadado, com maior concentração nas estações do CEMADEN.
+
+As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais, o que resultou em diferenças de até 1 km de distância entre a maioria das estações com mudanças. Outras divergências observadas eram no nome do município, em razão do uso ou não de acentos, ou estado em que a estação pertence. Nenhuma das 211 estações verificadas indicou a necessidade de ajustes.
+
+Ainda, aplicou-se a verificação de duplicatas, de modo a identificar pares estação e data repetidas. A análise não indicou nenhuma duplicata na base de dados díária.
