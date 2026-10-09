@@ -1,12 +1,7 @@
 ---
-title: "Definição do ano hidrológico das séries de precipitação"
-lang: pt-BR
-format:
-  html:
-    toc: true
-    number-sections: false
+title: "Metodologia do Ano Hidrológico"
+format: html
 bibliography: referencias_ano_hidrologico.bib
-csl: null
 ---
 
 ## Definição do ano hidrológico
