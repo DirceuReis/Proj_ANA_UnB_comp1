@@ -11,6 +11,7 @@ library(RColorBrewer)
 library(scales)
 library(geobr)
 library(patchwork)
+library(grid)
 
 # --- caminhos (saídas nesta pasta; shapefiles fora) ---
 DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
@@ -28,24 +29,26 @@ DIR_SETAS_UF <- file.path(DIR_PIC, "fig3_setas_uf")
 dir.create(DIR_PIC, recursive = TRUE, showWarnings = FALSE)
 dir.create(DIR_SETAS_UF, recursive = TRUE, showWarnings = FALSE)
 
-BASE_SIZE <- 8        # tudo em 8 pt
-FIG_WIDTH <- 15       # largura em cm
+font <- "sans"
+fontsize <- 8
+textsize <- fontsize / .pt
 
-tema_base <- theme_bw(base_size = BASE_SIZE) +
-  theme(
-    panel.background = element_rect(fill = "white", color = NA),
-    plot.background  = element_rect(fill = "white", color = NA),
-    panel.grid       = element_blank(),
-    text             = element_text(size = BASE_SIZE, color = "black"),
-    axis.title       = element_text(size = BASE_SIZE, color = "black"),
-    axis.text        = element_text(size = BASE_SIZE, color = "black"),
-    legend.title     = element_text(size = BASE_SIZE, color = "black"),
-    legend.text      = element_text(size = BASE_SIZE, color = "black"),
-    plot.title       = element_text(size = BASE_SIZE, color = "black", face = "bold"),
-    strip.text       = element_text(size = BASE_SIZE, color = "black"),
-    legend.key       = element_rect(fill = "white"),
-    legend.spacing.y = unit(0.2, "cm")
-  )
+FIG_WIDTH <- 15
+
+tema_base <- theme_bw() +
+  theme(panel.grid = element_blank(), axis.ticks = element_line(linewidth = 0.3),
+        legend.background = element_blank(), legend.key = element_blank(),
+        legend.key.height = unit(fontsize, "pt" ),
+        strip.background = element_blank(),
+        text = element_text( family = font, size = fontsize),
+        axis.text = element_text(family = font, size = fontsize),
+        axis.title = element_text(family = font, size = fontsize),
+        legend.title = element_text(family = font, size = fontsize),
+        legend.text = element_text(family = font, size = fontsize),
+        strip.text = element_text(family = font, size = fontsize),
+        panel.spacing.y = unit( 0.5, "pt"),
+        plot.margin = margin( t = 5, r = 5, b = 5, l = 5)
+        )
 
 america <- st_read(file.path(DIR_SHP, "america_do_sul.gpkg"), quiet = TRUE)
 brasil  <- america %>% filter(nome == "Brasil")
@@ -95,13 +98,27 @@ stations <- stations %>%
     mes_color = factor(mes_color, levels = meses_pt)
   )
 
-col_month <- brewer.pal(n = 6, name = "Spectral")
+#col_month <- brewer.pal(n = 6, name = "Spectral")
+col_month <- c(
+  "jan" = "#3B4CC0",
+  "fev" = "#6F58C9",
+  "mar" = "#9C4DC4",
+  "abr" = "#C43A9A",
+  "mai" = "#E34A6F",
+  "jun" = "#F26B38",
+  "jul" = "#F4A62A",
+  "ago" = "#D8C63A",
+  "set" = "#8FCB3C",
+  "out" = "#35B779",
+  "nov" = "#1FA4A9",
+  "dez" = "#2A78B8"
+)
 col_month <- c(col_month, rev(col_month))
 
 g_brasil <-
   ggplot() +
-  geom_sf(data = america, fill = "grey88", linewidth = 0.1) +
-  geom_sf(data = brasil,  fill = "grey78", alpha = 0.4, linewidth = 0.4) +
+  geom_sf(data = america, fill = "grey95", color = "grey75", linewidth = 0.15) +
+  geom_sf(data = brasil,  fill = "grey98", color = "grey50",, alpha = 0.4, linewidth = 0.4) +
   geom_sf(data = hidrografia2, color = "darkblue", alpha = 0.6, linewidth = 0.2) +
   geom_sf(data = hidrografia3, color = "darkblue", alpha = 0.3, linewidth = 0.15) +
   geom_sf(data = hidrografia4, color = "darkblue", alpha = 0.1, linewidth = 0.1) +
@@ -129,26 +146,76 @@ g_brasil <-
   labs(x = "Longitude", y = "Latitude") +
   annotation_scale(
     location = "br",
-    bar_cols = c("black", "white"),
-    text_cex = 0.6
+    width_hint = 0.20,
+    height = unit( 1.5, "mm"), text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
   ) +
   annotation_north_arrow(
-    location = "br",
-    which_north = "true",
-    pad_x = unit(0.7, "in"),
-    pad_y = unit(0.3, "in"),
-    style = north_arrow_fancy_orienteering(
-      fill = c("black", "white"),
-      line_col = "grey20"
+    location = "tr",
+    width = unit(
+      1,
+      "cm"
     ),
-    height = unit(0.8, "cm"),
-    width  = unit(0.8, "cm")
+    height = unit(
+      1,
+      "cm"
+    ),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
+      )
+    )
   ) +
+  
+  labs( x = NULL, y = NULL ) +
+  
   tema_base +
+  
   theme(
-    legend.position = "right",
-    legend.justification = "top"
+    # sem coordenadas nos eixos
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    
+    # legenda horizontal
+    legend.position = "bottom",
+    legend.justification = "center",
+    legend.direction = "horizontal",
+    
+    legend.key.spacing.x = unit(
+      fontsize,
+      "pt"
+    ),
+    
+    legend.spacing.x = unit(
+      1,
+      "pt"
+    ),
+    
+    legend.margin = margin(
+      t = -3
+    )
+  ) +
+  
+  guides(
+  color = guide_legend(
+    nrow = 2,
+    byrow = TRUE,
+    title.position = "top",
+    override.aes = list(
+      linewidth = 1.0
+    )
   )
+)
+
 
 ggsave(
   filename = file.path(DIR_PIC, "fig3_uniplu.png"),

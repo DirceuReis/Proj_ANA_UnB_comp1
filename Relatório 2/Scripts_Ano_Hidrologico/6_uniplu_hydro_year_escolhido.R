@@ -524,12 +524,33 @@ write_excel_csv(
 # ---------------------------------------------------------------------------
 # Mapas
 # ---------------------------------------------------------------------------
-BASE_SIZE <- 8
+library(ggspatial)
+library(grid)
+
+font <- "sans"
+fontsize <- 8
+textsize <- fontsize / .pt
+
 FIG_WIDTH <- 15
 
 meses_lab <- c(
   "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
   "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+)
+
+cores_mes <- c(
+  "1"  = "#3B4CC0",
+  "2"  = "#6F58C9",
+  "3"  = "#9C4DC4",
+  "4"  = "#C43A9A",
+  "5"  = "#E34A6F",
+  "6"  = "#F26B38",
+  "7"  = "#F4A62A",
+  "8"  = "#D8C63A",
+  "9"  = "#8FCB3C",
+  "10" = "#35B779",
+  "11" = "#1FA4A9",
+  "12" = "#2A78B8"
 )
 
 ufs <- read_state(year = 2020, showProgress = FALSE) %>%
@@ -542,23 +563,45 @@ br <- read_country(year = 2020, showProgress = FALSE) %>%
 sul_ufs <- ufs %>%
   filter(estado %in% UF_SUL)
 
-tema_mapa <- theme_void(base_size = BASE_SIZE) +
+tema_mapa <- theme_bw() +
   theme(
-    plot.title = element_text(face = "bold", hjust = 0.5, size = BASE_SIZE),
-    plot.subtitle = element_text(hjust = 0.5, size = BASE_SIZE, color = "grey35"),
-    legend.position = "none",
-    plot.background = element_rect(fill = "white", color = NA),
-    plot.margin = margin(4, 4, 2, 4)
+    panel.grid = element_blank(),
+    
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    
+    text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.background = element_blank(),
+    legend.key = element_blank(),
+    
+    legend.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    strip.background = element_blank(),
+    
+    strip.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    plot.margin = margin( t = 5, r = 5, b = 5, l = 5)
   )
 
 legenda_circular <- function() {
   
-  d <- tibble(
-    mes = 1:12,
-    lab = meses_lab,
-    xmin = 0:11,
-    xmax = 1:12
-  )
+  d <- tibble(mes = 1:12, lab = meses_lab, xmin = 0:11, xmax = 1:12 )
   
   ggplot(d) +
     geom_rect(
@@ -576,8 +619,7 @@ legenda_circular <- function() {
     theme(plot.margin = margin(0, 0, 2, 0))
 }
 
-mapa_mes <- function(df, col_mes, titulo, sub = NULL, bbox = NULL,
-                     pt_size = 1.2) {
+mapa_mes <- function( df, col_mes, bbox = NULL, pt_size = 1.2 ) {
   
   d <- df %>%
     filter(
@@ -587,216 +629,482 @@ mapa_mes <- function(df, col_mes, titulo, sub = NULL, bbox = NULL,
     ) %>%
     mutate(
       mes_f = factor(
-        as.character(as.integer(.data[[col_mes]])),
-        levels = as.character(1:12)
+        as.character(
+          as.integer(
+            .data[[col_mes]]
+          )
+        ),
+        levels = as.character(
+          1:12
+        )
       )
     )
   
   g <- ggplot() +
-    geom_sf(
-      data = if (is.null(bbox)) br else sul_ufs,
-      fill = "grey96", color = "grey35", linewidth = 0.3
-    ) +
-    geom_sf(
-      data = if (is.null(bbox)) ufs else sul_ufs,
-      fill = NA, color = "grey55", linewidth = 0.18
-    ) +
-    geom_point(
-      data = d,
-      aes(x = long, y = lat, color = mes_f),
-      size = pt_size, alpha = 0.92, stroke = 0
-    ) +
-    scale_color_manual(values = cores_mes, drop = FALSE) +
-    labs(title = titulo, subtitle = sub) +
-    tema_mapa
+    
+    # -------------------------------------------------------------------------
+  # Brasil / Sul
+  # -------------------------------------------------------------------------
+  
+  geom_sf( data = if (is.null(bbox)) br else sul_ufs, fill = "grey98", color = "grey50", linewidth = 0.40) +
+    
+    # -------------------------------------------------------------------------
+  # Estados
+  # -------------------------------------------------------------------------
+  
+  geom_sf( data = if (is.null(bbox)) ufs else sul_ufs, fill = NA, color = "grey65", linewidth = 0.18 ) +
+    
+    # -------------------------------------------------------------------------
+  # Estações
+  # -------------------------------------------------------------------------
+  
+  geom_point(data = d, aes( x = long, y = lat, color = mes_f ),
+    size = pt_size, alpha = 0.90, stroke = 0 ) +
+    
+    # -------------------------------------------------------------------------
+  # Cores
+  # -------------------------------------------------------------------------
+  
+  scale_color_manual( name = "Mês", values = cores_mes, breaks = as.character( 1:12 ),
+    labels = meses_lab, drop = FALSE ) +
+    
+    # -------------------------------------------------------------------------
+  # Barra de escala
+  # -------------------------------------------------------------------------
+  
+  annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
+    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ),
+    line_width = 0.4 ) +
+    
+    # -------------------------------------------------------------------------
+  # Rosa dos ventos
+  # -------------------------------------------------------------------------
+  
+  annotation_north_arrow( location = "tr", width = unit( 1, "cm" ),
+    height = unit( 1, "cm" ),
+    which_north = "true",
+    style = north_arrow_nautical( text_family = font, text_size = fontsize,
+      fill = c( "black", "aliceblue" ) ) ) +
+    
+    labs( x = NULL, y = NULL ) +
+    
+    tema_mapa +
+    
+    theme(
+      legend.position = "bottom",
+      legend.justification = "center",
+      legend.direction = "horizontal",
+      
+      legend.key.width = unit( 12, "pt"),
+      legend.key.height = unit( 8, "pt" ),
+      legend.key.spacing.x = unit( 2, "pt" ),
+      legend.spacing.x = unit( 1, "pt" ) ) +
+    
+    guides( color = guide_legend( nrow = 2, byrow = TRUE,
+        title.position = "top", override.aes = list( size = 2.5, alpha = 1 )
+      )
+    )
   
   if (!is.null(bbox)) {
-    g <- g +
-      coord_sf(
-        xlim = bbox[c("xmin", "xmax")],
-        ylim = bbox[c("ymin", "ymax")],
-        expand = FALSE
-      )
+    
+    g <- g + coord_sf( xlim = bbox[ c( "xmin", "xmax" ) ],
+        ylim = bbox[ c( "ymin", "ymax" ) ], expand = FALSE )
   }
-  
   g
 }
 
-salvar_mapa_legenda <- function(g_mapa, arquivo, altura = 18) {
-  
-  g_out <- g_mapa / legenda_circular() +
-    plot_layout(heights = c(8.3, 1.7))
-  
-  ggsave(
-    arquivo, g_out,
-    width = FIG_WIDTH, height = altura,
-    units = "cm", dpi = 300, bg = "white"
-  )
-}
+g_hibrido_br <- mapa_mes( sta, "mes_hibrido_rbar", pt_size = 1.25 )
 
-sub_txt <- paste0(
-  "rbar ≥ ", RBAR_HI,
-  " → θ+π; senão → último mês seco (≤mín+",
-  100 * SECO_FRAC,
-  "% amp.) | n = ", nrow(sta)
+ggsave( file.path( DIR_OUT_PIC, "fig_brasil_hibrido_rbar.png" ),
+  g_hibrido_br, width = FIG_WIDTH, height = 12, units = "cm", dpi = 600,
+  bg = "white"
 )
 
-g_leg <- legenda_circular()
 
-salvar_mapa_legenda(
-  mapa_mes(
-    sta,
-    "mes_hibrido_rbar",
-    "Ano hidrológico — híbrido rbar (Uniplu)",
-    sub_txt,
-    pt_size = 1.25
+# =============================================================================
+# MAPA DO SUL — ANO HIDROLÓGICO HÍBRIDO
+# =============================================================================
+
+g_hibrido_sul <- mapa_mes(
+  sta %>%
+    filter(
+      is_sul
+    ),
+  "mes_hibrido_rbar",
+  bbox = BB_SUL,
+  pt_size = 2.3
+)
+
+ggsave(
+  file.path(
+    DIR_OUT_PIC,
+    "fig_sul_hibrido_rbar.png"
   ),
-  file.path(DIR_OUT_PIC, "fig_brasil_hibrido_rbar.png")
+  g_hibrido_sul,
+  width = FIG_WIDTH,
+  height = 11,
+  units = "cm",
+  dpi = 600,
+  bg = "white"
 )
 
-salvar_mapa_legenda(
-  mapa_mes(
-    sta %>% filter(is_sul),
-    "mes_hibrido_rbar",
-    "Sul — ano hidrológico híbrido rbar",
-    sub_txt,
-    BB_SUL,
-    pt_size = 2.3
-  ),
-  file.path(DIR_OUT_PIC, "fig_sul_hibrido_rbar.png")
+
+# =============================================================================
+# MAPA DA FONTE DO MÉTODO — BRASIL
+# =============================================================================
+
+cores_fonte <- c(
+  "theta_pi" = "#0072B2",
+  "ultimo_mes_seco" = "#D55E00"
 )
 
-tema_fonte <- tema_mapa +
-  theme(
-    legend.position = "right",
-    legend.title = element_text(size = BASE_SIZE),
-    legend.text = element_text(size = BASE_SIZE),
-    legend.key.height = unit(0.45, "cm"),
-    legend.key.width = unit(0.45, "cm")
-  )
+labels_fonte <- c(
+  "theta_pi" = expression(theta + pi),
+  "ultimo_mes_seco" = "Último mês seco"
+)
 
 g_fonte_br <- ggplot() +
+  
   geom_sf(
     data = br,
-    fill = "grey96", color = "grey35", linewidth = 0.3
+    fill = "grey98",
+    color = "grey50",
+    linewidth = 0.40
   ) +
+  
   geom_sf(
     data = ufs,
-    fill = NA, color = "grey55", linewidth = 0.15
+    fill = NA,
+    color = "grey65",
+    linewidth = 0.18
   ) +
+  
   geom_point(
     data = sta,
-    aes(x = long, y = lat, color = fonte_hibrido_rbar),
-    size = 1.2, alpha = 0.92, stroke = 0
+    aes(
+      x = long,
+      y = lat,
+      color = fonte_hibrido_rbar
+    ),
+    size = 1.2,
+    alpha = 0.90,
+    stroke = 0
   ) +
+  
   scale_color_manual(
-    values = c(
-      theta_pi = "#1b9e77",
-      ultimo_mes_seco = "#d95f02"
-    ),
-    labels = c(
-      theta_pi = paste0("θ+π (rbar ≥ ", RBAR_HI, ")"),
-      ultimo_mes_seco = paste0(
-        "Último mês seco (rbar < ", RBAR_HI,
-        "; limiar ", 100 * SECO_FRAC, "%)"
-      )
-    ),
-    name = "Fonte"
+    name = "Fonte",
+    values = cores_fonte,
+    labels = labels_fonte
   ) +
-  labs(
-    subtitle = paste0(
-      "θ+π: ", sum(sta$fonte_hibrido_rbar == "theta_pi"),
-      "  |  último mês seco: ",
-      sum(sta$fonte_hibrido_rbar == "ultimo_mes_seco")
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(
+      1.5,
+      "mm"
+    ),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(
+      1,
+      "cm"
+    ),
+    height = unit(
+      1,
+      "cm"
+    ),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
+      )
     )
   ) +
-  tema_fonte
+  
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  
+  tema_mapa +
+  
+  theme(
+    legend.position = "bottom",
+    legend.justification = "center"
+  ) +
+  
+  guides(
+    color = guide_legend(
+      nrow = 1,
+      title.position = "left",
+      override.aes = list(
+        size = 2.5,
+        alpha = 1
+      )
+    )
+  )
 
 ggsave(
-  file.path(DIR_OUT_PIC, "fig_brasil_fonte_hibrido.png"),
+  file.path(
+    DIR_OUT_PIC,
+    "fig_brasil_fonte_hibrido.png"
+  ),
   g_fonte_br,
-  width = FIG_WIDTH, height = 10,
-  units = "cm", dpi = 300, bg = "white"
+  width = FIG_WIDTH,
+  height = 10,
+  units = "cm",
+  dpi = 600,
+  bg = "white"
 )
+
+
+# =============================================================================
+# MAPA DA FONTE — SUL
+# =============================================================================
 
 g_fonte_sul <- ggplot() +
+  
   geom_sf(
     data = sul_ufs,
-    fill = "grey96", color = "grey40", linewidth = 0.3
+    fill = "grey98",
+    color = "grey50",
+    linewidth = 0.40
   ) +
+  
   geom_point(
-    data = sta %>% filter(is_sul),
-    aes(x = long, y = lat, color = fonte_hibrido_rbar),
-    size = 2.3, alpha = 0.95, stroke = 0
+    data = sta %>%
+      filter(
+        is_sul
+      ),
+    aes(
+      x = long,
+      y = lat,
+      color = fonte_hibrido_rbar
+    ),
+    size = 2.3,
+    alpha = 0.90,
+    stroke = 0
   ) +
+  
   scale_color_manual(
-    values = c(
-      theta_pi = "#1b9e77",
-      ultimo_mes_seco = "#d95f02"
+    name = "Fonte",
+    values = cores_fonte,
+    labels = labels_fonte
+  ) +
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(
+      1.5,
+      "mm"
     ),
-    labels = c(
-      theta_pi = paste0("θ+π (rbar ≥ ", RBAR_HI, ")"),
-      ultimo_mes_seco = paste0(
-        "Último mês seco (rbar < ", RBAR_HI,
-        "; limiar ", 100 * SECO_FRAC, "%)"
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(
+      1,
+      "cm"
+    ),
+    height = unit(
+      1,
+      "cm"
+    ),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
       )
-    ),
-    name = "Fonte"
-  ) +
-  coord_sf(
-    xlim = BB_SUL[c("xmin", "xmax")],
-    ylim = BB_SUL[c("ymin", "ymax")],
-    expand = FALSE
-  ) +
-  labs(
-    subtitle = paste0(
-      "θ+π: ",
-      sum(sta$is_sul & sta$fonte_hibrido_rbar == "theta_pi"),
-      "  |  último mês seco: ",
-      sum(sta$is_sul & sta$fonte_hibrido_rbar == "ultimo_mes_seco")
     )
   ) +
-  tema_fonte
+  
+  coord_sf(
+    xlim = BB_SUL[
+      c(
+        "xmin",
+        "xmax"
+      )
+    ],
+    ylim = BB_SUL[
+      c(
+        "ymin",
+        "ymax"
+      )
+    ],
+    expand = FALSE
+  ) +
+  
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  
+  tema_mapa +
+  
+  theme(
+    legend.position = "bottom"
+  )
 
 ggsave(
-  file.path(DIR_OUT_PIC, "fig_sul_fonte_hibrido.png"),
+  file.path(
+    DIR_OUT_PIC,
+    "fig_sul_fonte_hibrido.png"
+  ),
   g_fonte_sul,
-  width = FIG_WIDTH, height = 10,
-  units = "cm", dpi = 300, bg = "white"
+  width = FIG_WIDTH,
+  height = 10,
+  units = "cm",
+  dpi = 600,
+  bg = "white"
 )
+
+
+# =============================================================================
+# MAPA DE RBAR
+# =============================================================================
 
 g_rbar <- ggplot() +
+  
   geom_sf(
     data = br,
-    fill = "grey96", color = "grey35", linewidth = 0.3
+    fill = "grey98",
+    color = "grey50",
+    linewidth = 0.40
   ) +
+  
   geom_sf(
     data = ufs,
-    fill = NA, color = "grey55", linewidth = 0.15
+    fill = NA,
+    color = "grey65",
+    linewidth = 0.18
   ) +
+  
   geom_point(
     data = sta,
-    aes(x = long, y = lat, color = rbar),
-    size = 1.15, alpha = 0.92, stroke = 0
+    aes(
+      x = long,
+      y = lat,
+      color = rbar
+    ),
+    size = 1.15,
+    alpha = 0.90,
+    stroke = 0
   ) +
+  
   scale_color_viridis_c(
     option = "C",
-    limits = c(0, 1),
-    name = "rbar",
-    breaks = c(0, 0.2, 0.3, 0.5, 0.75, 1)
+    limits = c(
+      0,
+      1
+    ),
+    name = expression(bar(r)),
+    breaks = c(
+      0,
+      0.2,
+      0.3,
+      0.5,
+      0.75,
+      1
+    )
   ) +
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(
+      1.5,
+      "mm"
+    ),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(
+      1,
+      "cm"
+    ),
+    height = unit(
+      1,
+      "cm"
+    ),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
+      )
+    )
+  ) +
+  
   labs(
-    title = "Concentração dos extremos (rbar)",
-    subtitle = paste0("Limiar do híbrido = ", RBAR_HI)
+    x = NULL,
+    y = NULL
   ) +
-  tema_fonte
+  
+  tema_mapa +
+  
+  theme(
+    legend.position = "bottom",
+    legend.key.width = unit(
+      28,
+      "pt"
+    ),
+    legend.key.height = unit(
+      5,
+      "pt"
+    )
+  )
 
 ggsave(
-  file.path(DIR_OUT_PIC, "fig_rbar_brasil.png"),
+  file.path(
+    DIR_OUT_PIC,
+    "fig_rbar_brasil.png"
+  ),
   g_rbar,
-  width = FIG_WIDTH, height = 8,
-  units = "cm", dpi = 300, bg = "white"
+  width = FIG_WIDTH,
+  height = 8,
+  units = "cm",
+  dpi = 600,
+  bg = "white"
 )
+
+
+# =============================================================================
+# HISTOGRAMA DE RBAR
+# =============================================================================
 
 g_hist <- sta %>%
   mutate(
@@ -806,33 +1114,90 @@ g_hist <- sta %>%
       "Resto do Brasil"
     )
   ) %>%
-  ggplot(aes(x = rbar, fill = regiao)) +
+  ggplot(
+    aes(
+      x = rbar
+    )
+  ) +
+  
   geom_histogram(
     bins = 30,
-    alpha = 0.75,
-    position = "identity",
-    color = "white"
+    fill = "grey75",
+    color = "grey30",
+    linewidth = 0.25
   ) +
+  
   geom_vline(
     xintercept = RBAR_HI,
     linetype = "dashed",
-    color = "grey20"
+    linewidth = 0.5
   ) +
-  facet_wrap(~regiao, ncol = 1, scales = "free_y") +
+  
+  facet_wrap(
+    ~regiao,
+    ncol = 1,
+    scales = "free_y"
+  ) +
+  
   labs(
-    title = "Distribuição de rbar",
-    subtitle = paste0("Tracejado = limiar híbrido ", RBAR_HI),
-    x = "rbar",
-    y = "N postos"
+    x = expression(bar(r)),
+    y = "Número de estações"
   ) +
-  theme_bw(base_size = 11) +
-  theme(legend.position = "none")
+  
+  theme_bw() +
+  
+  theme(
+    panel.grid = element_blank(),
+    
+    axis.ticks = element_line(
+      linewidth = 0.3
+    ),
+    
+    text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    strip.background = element_blank(),
+    
+    strip.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    panel.border = element_rect(
+      linewidth = 0.4
+    ),
+    
+    plot.margin = margin(
+      t = 5,
+      r = 5,
+      b = 5,
+      l = 5
+    )
+  )
 
 ggsave(
-  file.path(DIR_OUT_PIC, "fig_hist_rbar.png"),
+  file.path(
+    DIR_OUT_PIC,
+    "fig_hist_rbar.png"
+  ),
   g_hist,
-  width = FIG_WIDTH, height = 10,
-  units = "cm", dpi = 300, bg = "white"
+  width = FIG_WIDTH,
+  height = 10,
+  units = "cm",
+  dpi = 600,
+  bg = "white"
 )
 
 message("Tabelas: ", DIR_DF)
