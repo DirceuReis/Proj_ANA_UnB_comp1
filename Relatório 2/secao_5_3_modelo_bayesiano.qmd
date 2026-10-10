@@ -1,0 +1,163 @@
+---
+bibliography: referencias_bayesiano.bib
+---
+
+## 5.3 Modelo Bayesiano {#sec-modelo-bayesiano}
+
+### 5.3.1 Formulação probabilística e preparação das séries
+
+As máximas anuais de precipitação associadas a diferentes durações foram modeladas mediante a distribuição Generalizada de Valores Extremos (GEV), amplamente utilizada na análise de extremos hidrológicos [@coles2001]. A implementação foi realizada individualmente por estação, sem compartilhamento de parâmetros entre estações (non-pooled espacialmente), mas com uma estrutura hierárquica que vincula os parâmetros das diferentes durações de uma mesma estação.
+
+Foram consideradas as durações de 1, 2, 3, 4, 5, 6, 7 e 10 dias, correspondentes a 24, 48, 72, 96, 120, 144, 168 e 240 horas, respectivamente. Para garantir uma extensão mínima das séries utilizadas na inferência estatística, foram incluídas apenas as estações com pelo menos 30 anos válidos de observações.
+
+Nesse contexto, seja $Y_{j,k,t}$ a intensidade máxima anual de precipitação registrada na estação $j$, para a duração $d_k$ e o ano hidrológico $t$. Cada observação foi representada por uma distribuição marginal GEV, condicionada aos parâmetros de localização ($\mu_{j,k}$), escala ($\sigma_{j,k}$) e forma ($\xi_{j,k}$), conforme a seguinte expressão:
+
+$$
+Y_{j,k,t}\mid\mu_{j,k},\sigma_{j,k},\xi_{j,k}\sim
+\operatorname{GEV}(\mu_{j,k},\sigma_{j,k},\xi_{j,k}),
+$$
+
+com $\mu_{j,k}>0$, $\sigma_{j,k}>0$ e $-0{,}5<\xi_{j,k}<0{,}5$. Sua função de distribuição acumulada é
+
+$$
+F(y)=\exp\left\{-\left[1+\xi\left(\frac{y-\mu}{\sigma}\right)\right]^{-1/\xi}\right\},
+\qquad 1+\xi\frac{y-\mu}{\sigma}>0,
+$$
+
+para $\xi\neq0$. No limite $\xi\rightarrow0$, obtém-se a distribuição de Gumbel, $F(y)=\exp\{-\exp[-(y-\mu)/\sigma]\}$. Os parâmetros $\mu$, $\sigma$ e $\xi$ representam, respectivamente, localização, escala e forma da distribuição GEV. A função de verossimilhança foi construída a partir do produto das densidades marginais GEV, considerando as observações correspondentes às diferentes durações de cada estação. Essa formulação, denominada *independence likelihood*, constitui um caso particular de verossimilhança composta (*composite likelihood*) e tem sido empregada na estimação bayesiana de relações intensidade–duração–frequência (IDF) [@vandevyver2015]. Sua utilização permite realizar a inferência dos parâmetros marginais sem a necessidade de especificar uma distribuição multivariada para representar explicitamente a dependência entre máximos de diferentes durações, cuja modelagem pode introduzir complexidade adicional e dificuldades de estimação diante da extensão limitada das séries hidrológicas [@boukhelifa2018]. No presente estudo, essa abordagem foi combinada com uma estrutura hierárquica que relaciona os parâmetros probabilísticos das diferentes durações por meio de funções de escala e distribuições a priori compartilhadas, permitindo incorporar a coerência paramétrica entre durações sem especificar sua estrutura de dependência estocástica.
+
+### 5.3.2 Relações de escala entre durações
+
+Seguindo a formulação hierárquica bayesiana proposta por Lima et al. (2018), a dependência dos parâmetros de localização e escala da distribuição GEV em relação à duração foi representada por relações de invariância de escala (*scaling invariance*). Nessa abordagem, os logaritmos dos parâmetros apresentam distribuições normais cujas médias são determinadas por uma função comum da duração, tomando-se como referência $d_0=24$ horas. Para cada estação $j$ e duração $d_k$, foram adotadas as seguintes relações:
+
+$$
+\log(\mu_{j,k}) \sim \mathcal{N}\left[
+\alpha_j-H_j\log\left(\frac{d_k+\theta_j}{d_0+\theta_j}\right),
+\tau_{\mu,j}^{2}
+\right]
+$$
+
+$$
+\log(\sigma_{j,k}) \sim \mathcal{N}\left[
+\beta_j-H_j\log\left(\frac{d_k+\theta_j}{d_0+\theta_j}\right),
+\tau_{\sigma,j}^{2}
+\right]
+$$
+
+em que $\alpha_j$ e $\beta_j$ representam os parâmetros de referência na escala logarítmica, $H_j$ é o expoente de escala comum aos parâmetros de localização e escala, e $\theta_j$ é o parâmetro de deslocamento da duração. As hipervariâncias $\tau_{\mu,j}^{2}$ e $\tau_{\sigma,j}^{2}$ controlam a dispersão dos parâmetros em torno das relações de escala esperadas. Dessa forma, a abordagem preserva a estrutura de invariância de escala proposta por Lima et al. (2018), incorporando flexibilidade probabilística à estimação dos parâmetros GEV para as diferentes durações.
+
+### 5.3.3 Distribuições a priori e hiperpriori
+
+Foram especificadas, independentemente para cada estação, as seguintes distribuições a priori:
+
+$$
+\begin{aligned}
+\alpha_j,\beta_j &\sim \mathcal N(0,10^6),\\
+H_j&\sim\operatorname{Beta}(1,1),\quad 0<H_j<1,\\
+\theta_j&\sim\operatorname{Uniforme}(0,10),\\
+\tau^2_{\mu,j},\tau^2_{\sigma,j},\tau^2_{\xi,j}&\sim\operatorname{InvGamma}(0{,}01,0{,}01).
+\end{aligned}
+$$
+
+As distribuições normais amplas para $\alpha$ e $\beta$ foram usadas como escolhas de baixa concentração a priori na escala logarítmica. Para o expoente de escala $H_j$, adotou-se uma distribuição Beta uniforme no intervalo $(0,1)$, compatível com a representação da redução das intensidades extremas à medida que a duração aumenta. O parâmetro $\theta_j$, responsável pelo deslocamento da duração nas relações de escala, recebeu uma distribuição uniforme no intervalo de 0 a 10 horas. As variâncias dos efeitos hierárquicos foram modeladas por distribuições inversa-gama, com parâmetros de forma e escala iguais a 0,01, utilizadas para controlar a dispersão dos parâmetros de cada duração em torno das tendências centrais.
+
+A utilização de distribuições inversa-gama para parâmetros de variância constitui uma escolha recorrente em formulações bayesianas hierárquicas. Entretanto, distribuições com hiperparâmetros pequenos não são necessariamente não informativas, podendo influenciar a concentração das distribuições posteriores, conforme discutido por Gelman (2006). Dessa forma, essas hiperprioris foram adotadas como parte da especificação probabilística do modelo, reconhecendo-se sua influência potencial sobre a regularização entre durações.
+
+Para o parâmetro central de forma da distribuição GEV, adotou-se uma distribuição Beta generalizada, seguindo a parametrização apresentada por Lima et al. (2018) e fundamentada na proposta de regularização bayesiana de Martins e Stedinger (2000):
+
+$$
+\bar{\xi}_j\sim\mathcal{B}(9,6,-0.5,0.5)
+$$
+em que os dois primeiros argumentos representam os parâmetros de forma da distribuição Beta e os dois últimos definem seu intervalo de suporte. Essa especificação apresenta média igual a 0,1 e favorece valores moderadamente positivos do parâmetro de forma, mantendo a possibilidade de estimativas negativas. A distribuição foi adotada considerando a convenção de sinal da GEV utilizada neste estudo, na qual valores positivos de $\xi$ estão associados a caudas superiores pesadas.
+
+Na estrutura hierárquica empregada, $\bar{\xi}j$ representa o parâmetro central de forma da estação, em torno do qual são regularizados os parâmetros específicos das diferentes durações, $\xi{j,k}$. Dessa forma, a distribuição Beta estabelece a informação prévia sobre o comportamento do parâmetro de forma, enquanto a variância hierárquica $\tau_{\xi,j}^{2}$ controla sua variabilidade entre durações.
+
+### 5.3.4 Inferência e implementação computacional
+
+A distribuição posterior de cada estação foi definida, proporcionalmente, pelo produto da verossimilhança GEV e das distribuições a priori e hierárquicas acima. A implementação foi desenvolvida em R com o pacote `rstan` e código probabilístico em Stan. Os parâmetros foram estimados por amostragem MCMC com o amostrador Hamiltoniano adaptativo de Stan (NUTS).
+
+Foram executadas **cinco cadeias independentes**, com **20.000 iterações por cadeia**, descartando-se as **10.000 iniciais para aquecimento/adaptação**. Aplicou-se *thinning* de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em `adapt_delta = 0.999` e `max_treedepth = 17`. Os valores iniciais de $H$, $\theta$, $\alpha$, $\beta$, $\bar\xi$, $\xi_k$ e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.
+
+
+### 5.3.5 Diagnóstico de convergência e adequação da amostragem
+
+A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência $\widehat R$ por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (*bulk-ESS* e *tail-ESS*), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (*E-BFMI*). O diagnóstico $\widehat R$ compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação [@vehtari2021; @standiagnostics]. Adota-se como referência operacional conservadora $\widehat R<1{,}05$, além da inspeção de ESS e da ausência de divergências. 
+
+### 5.3.6 Quantis de retorno, incerteza posterior e curvas IDF
+
+Após a estimação dos parâmetros da distribuição GEV, os quantis associados aos diferentes períodos de retorno foram determinados a partir da função quantílica da distribuição, permitindo estabelecer as relações intensidade–duração–frequência (IDF). Para uma duração $d_k$, estação $j$ e período de retorno $T$, o quantil de retorno é definido como o valor cuja probabilidade anual de excedência corresponde a $1/T$. Considerando as amostras posteriores dos parâmetros de localização, escala e forma, sua expressão é dada por:
+
+$$
+q^{(s)}_{T,j,k}=
+\mu^{(s)}_{j,k}+
+\frac{\sigma^{(s)}_{j,k}}{\xi^{(s)}_{j,k}}
+\left\{
+\left[-\log\left(1-\frac{1}{T}\right)\right]^{-\xi^{(s)}_{j,k}}-1
+\right\},
+\qquad \xi^{(s)}_{j,k}\neq 0,
+$$
+
+em que $s$ identifica uma amostra da distribuição posterior conjunta dos parâmetros GEV. Para valores de $\xi^{(s)}_{j,k}$ iguais a zero, utilizou-se a expressão correspondente ao caso limite da distribuição de Gumbel:
+
+$$
+q^{(s)}_{T,j,k}=
+\mu^{(s)}_{j,k}-
+\sigma^{(s)}_{j,k}
+\log\left[
+-\log\left(1-\frac{1}{T}\right)
+\right].
+$$
+
+A incerteza associada aos quantis de retorno foi representada por meio das distribuições posteriores, utilizando-se a mediana como estimativa central e os percentis de 2,5% e 97,5% para delimitar os intervalos de credibilidade de 95%. Essa abordagem permite caracterizar a variabilidade das estimativas de precipitação extrema associada à incerteza dos parâmetros do modelo bayesiano.
+
+As relações IDF foram estabelecidas para as oito durações analisadas, de 1 a 10 dias, considerando diferentes períodos de retorno. As estimativas centrais e os limites dos intervalos de credibilidade foram organizados em tabelas específicas por estação pluviométrica, posteriormente consolidadas para a análise do conjunto de estações.
+
+### 5.3.6 Resultados
+
+Foram avaliados 5.258 ajustes do modelo Bayesiano, correspondentes às estações pluviométricas selecionadas para a análise de máximos anuais de precipitação em escala diária. Nenhuma estação apresentou valor máximo da estatística $\widehat{R}$ superior a 1,05, indicando ausência de problemas acentuados de convergência entre cadeias segundo esse critério. Entretanto, foram identificadas divergências nas trajetórias do amostrador em 333 estações (6,33% do total), enquanto as demais 4.925 estações (93,67%) não apresentaram divergências nas amostras posteriores retidas.
+
+A Figura @fig-diagnostico-bayesiano apresenta a distribuição espacial das estações avaliadas, distinguindo aquelas com ocorrência de divergências. Observa-se que essas estações estão distribuídas por diferentes regiões do território brasileiro, sem concentração exclusiva em uma determinada região. As divergências representam alertas associados à exploração da geometria da distribuição posterior pelo algoritmo de amostragem, não implicando necessariamente ausência de convergência segundo a estatística $\widehat{R}$.
+
+![Distribuição espacial das estações pluviométricas avaliadas e identificação dos ajustes bayesianos com divergências no amostrador MCMC.](figuras/mapa_estacoes_diagnostico_BR.png){#fig-diagnostico-bayesiano width=90% fig-align="center"}
+A análise dos parâmetros estruturais do modelo Bayesiano considerou as medianas das distribuições posteriores obtidas individualmente para as 5.258 estações pluviométricas. A caracterização nacional foi realizada a partir da distribuição dessas medianas entre estações, permitindo avaliar a variabilidade espacial das estimativas, sem pressupor a existência de uma distribuição posterior nacional conjunta.
+
+Entre os parâmetros associados à relação de invariância de escala, o expoente $H$ apresentou distribuição relativamente concentrada, com mediana nacional de 0,656 e intervalo interquartil entre 0,618 e 0,694. Os percentis de 5% e 95% corresponderam a 0,564 e 0,752, respectivamente, enquanto os valores mínimo e máximo foram 0,372 e 0,962. Assim, apesar da variabilidade entre estações, a maior parte das estimativas permaneceu concentrada em torno de 0,65, indicando relativa regularidade no comportamento da relação de escala entre os parâmetros da distribuição GEV e a duração das precipitações extremas (Figura @fig-distribuicao-parametros). Do ponto de vista hidrológico, o expoente $H$ controla a taxa de redução das tendências centrais dos parâmetros de localização e escala da GEV à medida que a duração aumenta. Valores mais elevados de $H$ indicam um decréscimo proporcional mais acentuado dessas tendências, mantidos constantes os demais parâmetros da relação de escala. Entretanto, valores elevados de $H$ não implicam necessariamente intensidades extremas absolutas maiores ou menores, uma vez que estas também dependem dos parâmetros de referência e da forma da distribuição.
+
+::: {layout-ncol=2}
+![Distribuição das medianas posteriores de $H$.](figuras/distribuicao_H_BR.png){#fig-h-hist}
+
+![Distribuição das medianas posteriores de $\bar{\xi}$.](figuras/distribuicao_xi_bar_BR.png){#fig-xi-hist}
+:::
+
+O parâmetro central de forma, $\bar{\xi}$, apresentou maior dispersão entre as estações, com mediana nacional de 0,017 e intervalo interquartil entre −0,050 e 0,084. Os percentis de 5% e 95% foram −0,144 e 0,190, respectivamente. Essa distribuição evidencia a coexistência de estações com valores centrais de forma negativos e positivos, indicando heterogeneidade nas características das caudas das distribuições de extremos. Valores positivos estão associados a distribuições GEV com caudas superiores pesadas, enquanto valores negativos correspondem a distribuições com limite superior finito. Como $\bar{\xi}$ representa o parâmetro central da estrutura hierárquica, essa interpretação caracteriza a tendência geral da estação, sendo os parâmetros $\xi_{j,k}$ responsáveis pela representação específica de cada duração (Figura @fig-distribuicao-parametros).
+
+A distribuição espacial de $H$ revelou diferenças regionais (Figura @fig-mapa-h). As maiores estimativas interpoladas, superiores a 0,72, ocorreram predominantemente no extremo Sul do Brasil, além de áreas localizadas do Nordeste e de outras regiões. Valores intermediários, sobretudo entre 0,60 e 0,68, abrangeram extensas áreas do território nacional. Esse padrão sugere diferenças regionais na taxa de variação das características estatísticas dos extremos de precipitação com a duração, com redução proporcional mais acentuada das tendências centrais de localização e escala nas regiões com valores mais elevados de $H$.
+
+![Distribuição espacial interpolada das medianas posteriores do expoente de escala $H$, obtida por ponderação pelo inverso da distância (IDW) a partir das estimativas das estações pluviométricas.](figuras/mapa_H_interpolado_quantis.png){#fig-mapa-h width=95% fig-align="center"}
+
+O parâmetro central de forma, $\bar{\xi}$, também apresentou heterogeneidade espacial (Figura @fig-mapa-xi). Valores positivos, especialmente entre 0,05 e 0,15, foram observados em porções do Sul, Sudeste e Nordeste, enquanto valores negativos ocorreram de forma descontínua em diferentes regiões do país. Essa distribuição indica que o comportamento das caudas dos extremos pluviométricos não é espacialmente uniforme, com coexistência de regiões caracterizadas por tendências centrais de forma positivas, negativas ou próximas de zero. Cabe destacar que os padrões espaciais apresentados foram obtidos por interpolação das medianas posteriores estimadas individualmente em cada estação, utilizando o método de ponderação pelo inverso da distância (IDW). Portanto, os mapas constituem representações exploratórias da variabilidade espacial dos parâmetros, e não superfícies estimadas diretamente pelo modelo Bayesiano. Além disso, a interpolação não propaga explicitamente as incertezas posteriores individuais, nem modela a dependência espacial ou os efeitos da distribuição desigual das estações pluviométricas.
+
+![Distribuição espacial interpolada das medianas posteriores do parâmetro central de forma $\bar{\xi}$, obtida por ponderação pelo inverso da distância (IDW) a partir das estimativas das estações pluviométricas.](figuras/mapa_xi_bar_interpolado_BR.png){#fig-mapa-xi width=95% fig-align="center"}
+
+Os demais parâmetros estruturais foram sintetizados para caracterizar o comportamento global dos ajustes. As medianas nacionais de $\alpha$ e $\beta$ foram 1,06 e −0,199, respectivamente, enquanto as variâncias hierárquicas apresentaram medianas de 0,00553 para $\tau_{\mu}^{2}$, 0,00978 para $\tau_{\sigma}^{2}$ e 0,00924 para $\tau_{\xi}^{2}$. Esses parâmetros descrevem as condições centrais de referência das relações de escala e a dispersão dos parâmetros específicos das diferentes durações em torno das estruturas hierárquicas adotadas.
+
+Parâmetros da distribuição GEV
+
+Os parâmetros da distribuição Generalizada de Valores Extremos (GEV) foram analisados para as oito durações consideradas, entre 1 e 10 dias, a partir das medianas das distribuições posteriores estimadas individualmente nas 5.258 estações pluviométricas. A síntese nacional foi realizada por meio de estatísticas descritivas dessas estimativas, permitindo caracterizar a variação dos parâmetros de localização ($\mu$), escala ($\sigma$) e forma ($\xi$) em função da duração, bem como sua heterogeneidade entre estações (Figura @fig-gev-duracao).
+
+O parâmetro de localização, $\mu$, apresentou redução sistemática com o aumento da duração. A mediana entre estações diminuiu de 2,94 mm/h para a duração de 1 dia para 1,94 mm/h em 2 dias, 1,51 mm/h em 3 dias e 0,734 mm/h em 10 dias. Esse comportamento foi acompanhado pela diminuição da dispersão absoluta entre estações, com intervalo interquartil de 2,66 a 3,24 mm/h para 1 dia e de 0,655 a 0,822 mm/h para 10 dias. Essa redução indica que as intensidades características dos máximos anuais se tornam progressivamente menores à medida que aumenta o intervalo de agregação temporal, comportamento compatível com a estrutura de invariância de escala adotada no modelo.
+
+![Variação dos parâmetros da distribuição GEV em função da duração: localização ($\mu$), escala ($\sigma$) e forma ($\xi$). As linhas representam as medianas entre estações; as faixas cinza-escuras correspondem aos intervalos interquartis (P25–P75) e as faixas cinza-claras aos intervalos entre os percentis 5% e 95% das medianas posteriores.](figuras/parametros_GEV_por_duracao.png){#fig-gev-duracao width=100% fig-align="center"}
+
+O parâmetro de escala, $\sigma$, apresentou comportamento semelhante, com redução de sua mediana nacional de 0,831 mm/h para 1 dia para 0,546 mm/h em 2 dias e 0,202 mm/h em 10 dias. O intervalo interquartil também apresentou estreitamento em termos absolutos, passando de 0,737–0,950 mm/h para 0,179–0,233 mm/h entre as durações extremas analisadas. Como $\sigma$ caracteriza a dispersão da distribuição GEV, sua redução indica menor escala de variabilidade das intensidades máximas anuais nas durações mais longas. A diminuição simultânea de $\mu$ e $\sigma$ evidencia um comportamento coerente com as relações hierárquicas de invariância de escala, nas quais ambos os parâmetros são vinculados à duração por um expoente comum $H$, embora sejam admitidos desvios específicos para cada duração.
+
+Em contraste, o parâmetro de forma, $\xi$, apresentou variações relativamente pequenas em sua tendência central ao longo das durações. As medianas nacionais permaneceram próximas de zero, variando de 0,0218 para 1 dia a 0,00496 para 10 dias. Entretanto, os intervalos interquartis abrangeram valores negativos e positivos em todas as durações, sendo de −0,0487 a 0,0930 para 1 dia. Esse comportamento indica que, embora as estimativas centrais estejam próximas da condição limite de Gumbel ($\xi=0$), persistem diferenças entre estações quanto às características das caudas das distribuições de extremos.
+
+A relativa estabilidade de $\xi$ ao longo das durações merece destaque, uma vez que a formulação adotada não impõe um parâmetro de forma constante, permitindo que $\xi_{j,k}$ assuma valores distintos para cada duração. Apesar dessa flexibilidade, as medianas nacionais permaneceram próximas entre si, e as faixas delimitadas pelos percentis de 5% e 95% apresentaram considerável sobreposição ao longo das oito durações. Esse comportamento sugere que a hipótese de invariância do parâmetro de forma em relação à duração pode constituir uma aproximação plausível para a representação dos extremos pluviométricos em escala diária. Essa interpretação é compatível com a estrutura de regularização hierárquica adotada, na qual os parâmetros específicos de cada duração são estimados em torno de um parâmetro central comum à estação, $\bar{\xi}$. Contudo, a estabilidade observada na síntese nacional não demonstra necessariamente a constância de $\xi$ em cada estação, uma vez que os intervalos apresentados representam a dispersão entre estações, e não a incerteza posterior das diferenças entre durações. Assim, os resultados fornecem evidência descritiva favorável à investigação dessa hipótese.
+
+
+
+## Referências bibliográficas
+
+::: {#refs}
+:::

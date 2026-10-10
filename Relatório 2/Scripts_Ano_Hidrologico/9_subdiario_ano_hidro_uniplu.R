@@ -369,7 +369,7 @@ library(readr)
 # =============================================================================
 
 DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
-DIR_DADOS <- "C:/Users/laris/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_DADOS <- "C:/Users/Adm/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
 DIR_ZIP <- file.path(DIR_DADOS, "Dados_Uniplu")
 
 TEST_UF <- NULL
@@ -733,7 +733,34 @@ write_excel_csv(
 # Mapas
 # -----------------------------------------------------------------------------
 
-BASE_SIZE <- 8
+library(ggspatial)
+library(grid)
+
+font <- "sans"
+fontsize <- 8
+textsize <- fontsize / .pt
+
+FIG_WIDTH <- 15
+
+cores_mes <- c(
+  "1"  = "#3B4CC0",
+  "2"  = "#6F58C9",
+  "3"  = "#9C4DC4",
+  "4"  = "#C43A9A",
+  "5"  = "#E34A6F",
+  "6"  = "#F26B38",
+  "7"  = "#F4A62A",
+  "8"  = "#D8C63A",
+  "9"  = "#8FCB3C",
+  "10" = "#35B779",
+  "11" = "#1FA4A9",
+  "12" = "#2A78B8"
+)
+
+meses_lab <- c(
+  "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+  "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+)
 
 ufs <- geobr::read_state(year=2020, showProgress=FALSE) %>%
   st_transform(4326)
@@ -741,14 +768,33 @@ ufs <- geobr::read_state(year=2020, showProgress=FALSE) %>%
 br <- geobr::read_country(year=2020, showProgress=FALSE) %>%
   st_transform(4326)
 
-tema <- theme_void() +
+tema_mapa <- theme_bw() +
   theme(
-    plot.title=element_text(face="bold", hjust=0.5, size=BASE_SIZE),
-    legend.position="none",
-    plot.background=element_rect(fill="white", color=NA)
+    panel.grid = element_blank(),
+    
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    
+    legend.background = element_blank(),
+    legend.key = element_blank(),
+    
+    legend.key.height = unit(fontsize, "pt"),
+    
+    strip.background = element_blank(),
+    
+    text = element_text(family = font, size = fontsize ),
+    
+    legend.title = element_text( family = font, size = fontsize),
+    
+    legend.text = element_text(family = font, size = fontsize),
+    
+    panel.spacing.y = unit( 0.5, "pt" ),
+    
+    plot.margin = margin( 5, 5, 5, 5 )
   )
 
-legenda_circular <- function(){
+# legenda_circular <- function(){
   
   d <- tibble(
     mes=1:12,
@@ -770,60 +816,77 @@ legenda_circular <- function(){
     coord_polar(theta="x", start=-pi/2-pi/12, direction=1) +
     ylim(0, 1.45) +
     theme_void()
-}
+# }
 
-# Mapa mês inicial
-
+dados_mes <- res %>%
+    filter( is.finite(mes_inicio) ) %>%
+    mutate( mes_inicio_f = factor( mes_inicio, levels = 1:12, labels = meses_lab ) )
+  
 g_mes <- ggplot() +
-  geom_sf(data = br, fill = "grey96", color = "grey40", linewidth = 0.25) +
-  geom_sf(data = ufs, fill = NA, color = "grey60", linewidth = 0.12) +
-  geom_point(
-    data = res %>% filter(is.finite(mes_inicio)),
-    aes(x = long, y = lat, color = factor(mes_inicio, levels = 1:12)),
-    size = 1.1, alpha = 0.9
-  ) +
-  scale_color_manual(values = cores_mes, drop = FALSE) +
-  labs(title = "Uniplu subdiário — mês de início") +
-  tema
+    geom_sf(data = br, fill = "grey98", color = "grey50", linewidth = 0.40 ) +
+    geom_sf( data = ufs, fill = NA, color = "grey65", linewidth = 0.18 ) +
+    geom_point( data = dados_mes, aes( x = long, y = lat, color = mes_inicio_f ),
+      size = 1.15, alpha = 0.90, stroke = 0 ) +
+    scale_color_manual( name = "Mês de início", values = setNames( cores_mes, meses_lab ), drop = FALSE ) +
+    annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
+      text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ), line_width = 0.4 ) +
+    annotation_north_arrow( location = "tr", width = unit( 1, "cm" ),
+      height = unit( 1, "cm" ),
+      which_north = "true", style = north_arrow_nautical( text_family = font, text_size = fontsize,
+        fill = c( "black", "aliceblue" ) ) ) +
+    labs( x = NULL, y = NULL ) +
+    
+    tema_mapa +
+    theme(
+      legend.position = "bottom",
+      legend.justification = "center",
+      legend.direction = "horizontal",
+      legend.key.width = unit( 12, "pt" ),
+      legend.key.height = unit( 8, "pt" ),
+      legend.key.spacing.x = unit( 2, "pt" ),
+      legend.spacing.x = unit( 1, "pt" ) ) +
+    guides( color = guide_legend( nrow = 2, byrow = TRUE, title.position = "top",
+        override.aes = list( size = 2.5, alpha = 1 ) ) )
+  
+  ggsave( filename = file.path( DIR_PIC, "fig_uniplu_subdiario_mes_inicio.png" ),
+    plot = g_mes, width = FIG_WIDTH, height = 15, units = "cm", dpi = 600, bg = "white" )
+  
 
-fig_mes_inicio <- g_mes / legenda_circular() +
-  plot_layout(heights = c(8.2, 1.8))
+cores_classe <- c( "mancha" = "#0072B2", "transicao" = "#D55E00" )
 
-fig_mes_inicio
-
-ggsave(
-  file.path(DIR_PIC, "fig_uniplu_subdiario_mes_inicio.png"),
-  fig_mes_inicio,
-  width = 15, height = 17, units = "cm", dpi = 300, bg = "white"
-)
-
-# Mapa mancha/transição
+labels_classe <- c( "mancha" = paste0( "Mancha (",
+    sum( res$classe_espacial == "mancha", na.rm = TRUE ), ")" ),
+  "transicao" = paste0( "Transição (", sum( res$classe_espacial == "transicao", na.rm = TRUE ),
+    ")" ) )
 
 g_cls <- ggplot() +
-  geom_sf(data=br, fill="grey96", color="grey40", linewidth=0.25) +
-  geom_sf(data=ufs, fill=NA, color="grey60", linewidth=0.12) +
-  geom_point(
-    data=res,
-    aes(x=long, y=lat, color=classe_espacial),
-    size=1, alpha=0.9
-  ) +
-  scale_color_manual(
-    values=c(mancha="#2166AC", transicao="#D6604D"),
-    name=NULL,
-    labels=c(
-      mancha=paste0("Mancha (", sum(res$classe_espacial=="mancha"), ")"),
-      transicao=paste0("Transição (", sum(res$classe_espacial=="transicao"), ")")
-    )
-  ) +
-  labs(title="Uniplu subdiário — classificação espacial") +
-  tema +
-  theme(legend.position="right")
+  geom_sf( data = br, fill = "grey98", color = "grey50", linewidth = 0.40 ) +
+  geom_sf( data = ufs, fill = NA, color = "grey65", linewidth = 0.18 ) +
+  geom_point( data = res, aes( x = long, y = lat, color = classe_espacial ),
+    size = 1.10, alpha = 0.90, stroke = 0 ) +
+  scale_color_manual( name = "Classificação espacial", values = cores_classe,
+    labels = labels_classe ) +
+  annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
+    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ),
+    line_width = 0.4 ) +
+  annotation_north_arrow( location = "tr", width = unit( 1, "cm" ),
+    height = unit( 1, "cm" ),
+    which_north = "true",
+    style = north_arrow_nautical(text_size = fontsize, fill = c( "black", "aliceblue" ) ) ) +
+  labs( x = NULL, y = NULL ) +
+  
+  tema_mapa +
+  theme(
+    legend.position = "bottom",
+    legend.justification = "center",
+    legend.direction = "horizontal",
+    legend.key.width = unit( 12, "pt" ),
+    legend.key.height = unit( 8, "pt" ) ) +
+  guides( color = guide_legend( nrow = 1, byrow = TRUE, title.position = "left",
+      override.aes = list( size = 2.5, alpha = 1 ) ) )
 
-ggsave(
-  file.path(DIR_PIC, "fig_uniplu_subdiario_mancha_transicao.png"),
-  g_cls,
-  width=15, height=14, units="cm", dpi=300, bg="white"
-)
+ggsave( filename = file.path( DIR_PIC, "fig_uniplu_subdiario_mancha_transicao.png" ),
+  plot = g_cls, width = FIG_WIDTH, height = 15, units = "cm", dpi = 600, bg = "white" )
 
 message("\nTabelas: ", DIR_DF)
 message("Figuras: ", DIR_PIC)

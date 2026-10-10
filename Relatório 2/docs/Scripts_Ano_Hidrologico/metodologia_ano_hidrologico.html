@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Metodologia do Ano Hidrológico – Proj. IDF Brasil ANA/UnB</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.qmd"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 3</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-3">    
+        <li>
+    <a class="dropdown-item" href="../meta3_brasil.qmd">
+ <span class="dropdown-text">Organização da base de dados - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 5</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-5">    
+        <li>
+    <a class="dropdown-item" href="../meta5_brasil.qmd">
+ <span class="dropdown-text">IDFs para precipitação diária - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta5_rs.qmd">
+ <span class="dropdown-text">Modelagem e análises no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-6" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 6</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-6">    
+        <li>
+    <a class="dropdown-item" href="../meta6_brasil.qmd">
+ <span class="dropdown-text">Correção de viés dos dados climáticos - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-7" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 7</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-7">    
+        <li>
+    <a class="dropdown-item" href="../meta7_brasil.qmd">
+ <span class="dropdown-text">IDFs subdiárias INMET/CEMADEN - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta7_rs.qmd">
+ <span class="dropdown-text">Modelagem regional e validação no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-8" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 8</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-8">    
+        <li>
+    <a class="dropdown-item" href="../meta8_estacoes.qmd">
+ <span class="dropdown-text">Não estacionariedade em pluviômetros e pluviógrafos</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_grade.qmd">
+ <span class="dropdown-text">Não estacionariedade nos dados em grade</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_rs.qmd">
+ <span class="dropdown-text">Análises detalhadas no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Scripts</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-scripts">    
+        <li>
+    <a class="dropdown-item" href="../scripts_meta3.qmd">
+ <span class="dropdown-text">Meta 3 - Base de dados</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta5.qmd">
+ <span class="dropdown-text">Meta 5 - IDFs diárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta6.qmd">
+ <span class="dropdown-text">Meta 6 - Correção de viés</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta7.qmd">
+ <span class="dropdown-text">Meta 7 - IDFs subdiárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta8.qmd">
+ <span class="dropdown-text">Meta 8 - Não estacionariedade</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#definição-do-ano-hidrológico" id="toc-definição-do-ano-hidrológico" class="nav-link active" data-scroll-target="#definição-do-ano-hidrológico">Definição do ano hidrológico</a>
+  <ul class="collapse">
+  <li><a href="#preparação-e-seleção-das-séries-diárias-de-referência" id="toc-preparação-e-seleção-das-séries-diárias-de-referência" class="nav-link" data-scroll-target="#preparação-e-seleção-das-séries-diárias-de-referência">Preparação e seleção das séries diárias de referência</a></li>
+  <li><a href="#identificação-de-eventos-extremos-e-análise-de-sazonalidade" id="toc-identificação-de-eventos-extremos-e-análise-de-sazonalidade" class="nav-link" data-scroll-target="#identificação-de-eventos-extremos-e-análise-de-sazonalidade">Identificação de eventos extremos e análise de sazonalidade</a></li>
+  <li><a href="#critério-para-a-determinação-do-mês-inicial-do-ano-hidrológico" id="toc-critério-para-a-determinação-do-mês-inicial-do-ano-hidrológico" class="nav-link" data-scroll-target="#critério-para-a-determinação-do-mês-inicial-do-ano-hidrológico">Critério para a determinação do mês inicial do ano hidrológico</a></li>
+  <li><a href="#transferência-espacial-do-mês-inicial-do-ano-hidrológico-às-estações-subdiárias" id="toc-transferência-espacial-do-mês-inicial-do-ano-hidrológico-às-estações-subdiárias" class="nav-link" data-scroll-target="#transferência-espacial-do-mês-inicial-do-ano-hidrológico-às-estações-subdiárias">Transferência espacial do mês inicial do ano hidrológico às estações subdiárias</a></li>
+  </ul></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados">Resultados</a>
+  <ul class="collapse">
+  <li><a href="#sazonalidade-circular-dos-eventos-extremos" id="toc-sazonalidade-circular-dos-eventos-extremos" class="nav-link" data-scroll-target="#sazonalidade-circular-dos-eventos-extremos">Sazonalidade circular dos eventos extremos</a></li>
+  <li><a href="#definição-do-ano-hidrológico-nas-estações-subdiárias" id="toc-definição-do-ano-hidrológico-nas-estações-subdiárias" class="nav-link" data-scroll-target="#definição-do-ano-hidrológico-nas-estações-subdiárias">Definição do ano hidrológico nas estações subdiárias</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Metodologia do Ano Hidrológico</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="definição-do-ano-hidrológico" class="level2">
+<h2 class="anchored" data-anchor-id="definição-do-ano-hidrológico">Definição do ano hidrológico</h2>
+<p>A definição do ano hidrológico buscou estabelecer, para cada estação pluviométrica, um intervalo anual coerente com a sazonalidade local de ocorrência dos eventos extremos de precipitação. A utilização de um calendário hidrológico adequado reduz a possibilidade de que eventos de uma mesma estação chuvosa sejam separados artificialmente pelo limite entre dois anos civis. A metodologia foi inspirada na análise de sazonalidade de eventos extremos de Bayliss e Jones (1993), empregada no relatório da ANA/UFMG sobre regionalização de vazões máximas anuais no Rio Grande do Sul <span class="citation" data-cites="bayliss1993 anaUFMG2025">(<a href="#ref-bayliss1993" role="doc-biblioref">Bayliss e Jones 1993</a>; <a href="#ref-anaUFMG2025" role="doc-biblioref">Agência Nacional de Águas e Saneamento Básico e Universidade Federal de Minas Gerais 2025</a>)</span>. No presente trabalho, a abordagem foi adaptada às séries diárias de precipitação em escala nacional e complementada por critérios de climatologia mensal e transferência espacial do mês inicial às estações subdiárias.</p>
+<section id="preparação-e-seleção-das-séries-diárias-de-referência" class="level3">
+<h3 class="anchored" data-anchor-id="preparação-e-seleção-das-séries-diárias-de-referência">Preparação e seleção das séries diárias de referência</h3>
+<p>Para a definição do ano hidrológico, foram utilizadas séries diárias de precipitação provenientes da base UNIPLU, abrangendo estações pluviométricas distribuídas pelo território brasileiro. A seleção das séries considerou critérios de disponibilidade temporal, completude e consistência dos registros, buscando assegurar a representatividade das informações utilizadas na caracterização da sazonalidade dos eventos extremos.</p>
+<p>Foram selecionadas estações com pelo menos 30 anos de observações válidas, admitindo-se um percentual máximo de 20% de falhas por ano. Adicionalmente, foram aplicados critérios de consistência para identificar registros potencialmente inconsistentes e séries com baixa variabilidade pluviométrica. Valores diários de precipitação superiores a 1.500 mm foram tratados como ausentes, enquanto aqueles superiores a 700 mm foram sinalizados para verificação. Também foram excluídas séries com menos de 15 valores distintos de precipitação ou nas quais pelo menos 99,5% dos dias apresentavam precipitação inferior a 0,5 mm, caracterizando registros com ocorrência praticamente inexistente de precipitação significativa. Esses procedimentos buscaram reduzir a influência de inconsistências e de séries pouco informativas na caracterização da sazonalidade dos eventos extremos, utilizada posteriormente para definir o mês de início do ano hidrológico.</p>
+</section>
+<section id="identificação-de-eventos-extremos-e-análise-de-sazonalidade" class="level3">
+<h3 class="anchored" data-anchor-id="identificação-de-eventos-extremos-e-análise-de-sazonalidade">Identificação de eventos extremos e análise de sazonalidade</h3>
+<p>Para caracterizar a sazonalidade dos eventos extremos de precipitação, foi adotada a abordagem de séries de duração parcial (<em>Peaks Over Threshold</em> – POT), na qual são identificados os eventos que excedem um determinado limiar de precipitação. Diferentemente da seleção de um único máximo anual, essa abordagem permite considerar múltiplos eventos extremos ao longo de cada ano, proporcionando uma representação mais abrangente de sua distribuição sazonal. O limiar de excedência foi determinado individualmente para cada estação, utilizando o procedimento adaptativo proposto por Durrieu et al. <span class="citation" data-cites="durrieu2015 durrieu2018">(<a href="#ref-durrieu2015" role="doc-biblioref">2015</a>, <a href="#ref-durrieu2018" role="doc-biblioref">2018</a>)</span>, seguido da identificação de picos representativos de eventos distintos .</p>
+<p>A época de ocorrência de cada pico <span class="math inline">\(i\)</span>, na estação <span class="math inline">\(j\)</span>, foi representada pelo dia ordinal do ano <span class="math inline">\(D_{j,i}\)</span>, convertido em ângulo no ciclo anual conforme o procedimento circular apresentado no relatório ANA/UFMG <span class="citation" data-cites="anaUFMG2025">(<a href="#ref-anaUFMG2025" role="doc-biblioref">Agência Nacional de Águas e Saneamento Básico e Universidade Federal de Minas Gerais 2025</a>)</span>, pela <a href="#eq-angulo-evento" class="quarto-xref">Equação&nbsp;1</a>:</p>
+<p><span id="eq-angulo-evento"><span class="math display">\[
+\phi_{j,i}=\frac{2\pi D_{j,i}}{365}.
+\tag{1}\]</span></span></p>
+<p>As componentes médias do vetor circular foram calculadas por <a href="#eq-componentes-circulares" class="quarto-xref">Equação&nbsp;2</a></p>
+<p><span id="eq-componentes-circulares"><span class="math display">\[
+\bar x_j=\frac{1}{n_j}\sum_{i=1}^{n_j}\cos(\phi_{j,i}),\qquad
+\bar y_j=\frac{1}{n_j}\sum_{i=1}^{n_j}\sin(\phi_{j,i}),
+\tag{2}\]</span></span></p>
+<p>em que <span class="math inline">\(n_j\)</span> é a quantidade de eventos POT identificados na estação. A direção média da ocorrência dos extremos foi obtida a partir de <span class="math inline">\(\bar x_j\)</span> e <span class="math inline">\(\bar y_j\)</span>, com ajuste do quadrante, de forma equivalente à função <span class="math inline">\(\operatorname{atan2}(\bar y_j,\bar x_j)\)</span>. A concentração sazonal foi quantificada pelo comprimento do vetor resultante médio, conforme a <a href="#eq-concentracao-circular" class="quarto-xref">Equação&nbsp;3</a>:</p>
+<p><span id="eq-concentracao-circular"><span class="math display">\[
+\bar r_j=\sqrt{\bar x_j^2+\bar y_j^2},\qquad 0\leq\bar r_j\leq1.
+\tag{3}\]</span></span></p>
+<p>Valores próximos de um indicam concentração dos eventos em uma época semelhante do ano, enquanto valores próximos de zero indicam maior dispersão circular ou compensação de concentrações em épocas opostas.</p>
+</section>
+<section id="critério-para-a-determinação-do-mês-inicial-do-ano-hidrológico" class="level3">
+<h3 class="anchored" data-anchor-id="critério-para-a-determinação-do-mês-inicial-do-ano-hidrológico">Critério para a determinação do mês inicial do ano hidrológico</h3>
+<p>Como a sazonalidade dos extremos varia entre regiões brasileiras, a definição do mês inicial foi realizada por um procedimento híbrido, combinando a direção média dos eventos POT com a climatologia mensal de precipitação. O limiar de concentração <span class="math inline">\(\bar r_j=0{,}30\)</span> foi adotado como critério operacional de decisão.</p>
+<p>Para estações com <span class="math inline">\(\bar r_j\geq0{,}30\)</span>, o mês de início foi definido a partir da direção diametralmente oposta à ocorrência média dos eventos extremos, conforme a <a href="#eq-inicio-oposto" class="quarto-xref">Equação&nbsp;4</a>:</p>
+<p><span id="eq-inicio-oposto"><span class="math display">\[
+\phi^{\mathrm{ini}}_j=(\bar\phi_j+\pi)\bmod 2\pi.
+\tag{4}\]</span></span></p>
+<p>A direção resultante foi convertida em mês do calendário. Esse procedimento buscou posicionar a transição entre anos hidrológicos aproximadamente no período oposto à época predominante dos extremos, reduzindo a possibilidade de fragmentação da estação de eventos intensos.</p>
+<p>Para estações com <span class="math inline">\(\bar r_j&lt;0{,}30\)</span>, considerou-se a sazonalidade dos totais mensais de precipitação. Foram inicialmente calculados os totais para cada combinação de ano civil e mês. Para cada mês do calendário, foi então obtida a mediana dos totais mensais válidos, <span class="math inline">\(P_{j,m}^{\mathrm{med}}\)</span>. Definiram-se como meses relativamente secos aqueles que satisfizeram a <a href="#eq-meses-secos" class="quarto-xref">Equação&nbsp;5</a>:</p>
+<p><span id="eq-meses-secos"><span class="math display">\[
+P_{j,m}^{\mathrm{med}}\leq P_{j,\min}^{\mathrm{med}}+0{,}15\left(P_{j,\max}^{\mathrm{med}}-P_{j,\min}^{\mathrm{med}}\right).
+\tag{5}\]</span></span></p>
+<p>Os meses classificados como secos foram examinados como uma sequência circular de 12 meses, permitindo que um mesmo intervalo seco atravessasse dezembro e janeiro. O mês adotado como referência foi o último mês do maior bloco consecutivo de meses secos. Em situações particulares sem amplitude sazonal positiva, ou nas quais todos os meses foram classificados como secos, a rotina recorreu ao mês de menor mediana mensal. O procedimento forneceu um mês inicial para cada estação diária de referência e registrou o critério responsável por sua escolha, permitindo distinguir os casos definidos pela direção oposta dos extremos daqueles definidos pela climatologia mensal.</p>
+</section>
+<section id="transferência-espacial-do-mês-inicial-do-ano-hidrológico-às-estações-subdiárias" class="level3">
+<h3 class="anchored" data-anchor-id="transferência-espacial-do-mês-inicial-do-ano-hidrológico-às-estações-subdiárias">Transferência espacial do mês inicial do ano hidrológico às estações subdiárias</h3>
+<p>Para atribuir um ano hidrológico às estações subdiárias, os meses iniciais definidos nas séries diárias de referência foram transferidos espacialmente por vizinhança. O inventário de estações subdiárias contemplou resoluções temporais inferiores a 1.440 minutos e selecionou postos presentes em pelo menos oito anos distintos de arquivos da base, com coordenadas geográficas válidas. Esse critério de oito anos foi aplicado à presença nos arquivos de inventário.</p>
+<p>Para cada estação subdiária foram identificadas as dez estações diárias de referência mais próximas pelo algoritmo de k-vizinhos mais próximos (<span class="math inline">\(k=10\)</span>). Em cada vizinhança foram calculadas a proporção da classe modal dos meses de início, <span class="math inline">\(f_{\mathrm{moda}}\)</span>, e uma medida de concentração circular desses meses, <span class="math inline">\(R_{\mathrm{loc}}\)</span>. A estação subdiária foi classificada como pertencente a uma área de predominância local (<em>mancha</em>) quando <span class="math inline">\(f_{\mathrm{moda}}\geq0{,}70\)</span> ou <span class="math inline">\(R_{\mathrm{loc}}\geq0{,}75\)</span>. Nesse caso, o mês inicial atribuído foi a moda não ponderada dos dez meses vizinhos. Nas demais situações, interpretadas operacionalmente como áreas de transição, aplicou-se a média circular ponderada dos meses dos vizinhos.</p>
+<p>Para esse cálculo, o mês <span class="math inline">\(m_l\)</span> de cada vizinho <span class="math inline">\(l\)</span> foi convertido em ângulo <span class="math inline">\(\gamma_l=2\pi(m_l-1)/12\)</span>. Os pesos foram definidos por <a href="#eq-pesos-vizinhos" class="quarto-xref">Equação&nbsp;6</a></p>
+<p><span id="eq-pesos-vizinhos"><span class="math display">\[
+w_l=\frac{\max(\bar r_l,0{,}05)}{\max(\widetilde d_l,0{,}1)},
+\tag{6}\]</span></span></p>
+<p>em que <span class="math inline">\(\widetilde d_l\)</span> representa a distância aproximada em quilômetros entre a estação subdiária e a estação diária vizinha. O ângulo médio ponderado foi obtido pela <a href="#eq-media-circular-ponderada" class="quarto-xref">Equação&nbsp;7</a></p>
+<p><span id="eq-media-circular-ponderada"><span class="math display">\[
+\bar\gamma=\operatorname{atan2}\!\left(\sum_{l=1}^{10}w_l\sin\gamma_l,\sum_{l=1}^{10}w_l\cos\gamma_l\right),
+\tag{7}\]</span></span></p>
+<p>posteriormente convertido em mês do calendário . O uso de pesos combinando proximidade espacial e concentração sazonal buscou dar maior influência às estações mais próximas e com sinal sazonal mais definido.</p>
+</section>
+</section>
+<section id="resultados" class="level2">
+<h2 class="anchored" data-anchor-id="resultados">Resultados</h2>
+<section id="sazonalidade-circular-dos-eventos-extremos" class="level3">
+<h3 class="anchored" data-anchor-id="sazonalidade-circular-dos-eventos-extremos">Sazonalidade circular dos eventos extremos</h3>
+<p>A análise circular dos eventos extremos de precipitação revelou padrões espaciais distintos na época predominante de sua ocorrência ao longo do território brasileiro (<a href="#fig-vetores-rbar" class="quarto-xref">Figura&nbsp;1</a>). A direção dos vetores representa a época típica dos extremos, enquanto seu comprimento é proporcional ao índice de concentração sazonal, <span class="math inline">\(\bar{r}\)</span>. Em grande parte do Brasil Central, Sudeste e interior do país, predominaram eventos associados aos meses de novembro a janeiro. No Nordeste setentrional e na faixa litorânea oriental, destacaram-se ocorrências entre março e maio, enquanto na porção norte do país foram identificadas direções médias associadas principalmente aos meses de março a junho. A Região Sul, por sua vez, apresentou maior heterogeneidade direcional, com menor definição de uma época predominante de ocorrência dos extremos.</p>
+<div id="fig-vetores-rbar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-vetores-rbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/ano_hidro_rbar_hibrido/fig3_uniplu.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vetores-rbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Vetores resultantes médios da análise circular dos eventos extremos de precipitação.
+</figcaption>
+</figure>
+</div>
+<p>Essa diferenciação regional também foi evidenciada pela distribuição de <span class="math inline">\(\bar{r}\)</span> (<a href="#fig-distribuicao-rbar" class="quarto-xref">Figura&nbsp;2</a>). Nas estações situadas fora da Região Sul, os valores concentraram-se predominantemente entre 0,50 e 0,75, com frequência máxima próxima de 0,65, indicando maior concentração temporal dos eventos extremos. Em contraste, as estações do Rio Grande do Sul, Santa Catarina e Paraná apresentaram, em sua maioria, valores inferiores a 0,30, com maior frequência entre 0,05 e 0,15. Esse comportamento evidencia uma sazonalidade menos definida dos extremos na Região Sul, em comparação com grande parte do restante do território nacional.</p>
+<div id="fig-distribuicao-rbar" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-distribuicao-rbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/ano_hidro_rbar_hibrido/fig_hist_rbar.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distribuicao-rbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Distribuição do índice de concentração sazonal dos eventos extremos de precipitação (<span class="math inline">\(\bar{r}\)</span>), distinguindo as estações da Região Sul (RS, SC e PR) das demais regiões brasileiras. A linha tracejada indica o limiar de 0,30 adotado para a definição do critério híbrido.
+</figcaption>
+</figure>
+</div>
+<p>As diferenças identificadas na concentração sazonal fundamentaram a utilização de um procedimento híbrido para estabelecer o início do ano hidrológico. Nas estações com <span class="math inline">\(\bar{r}\geq0{,}30\)</span>, adotou-se a direção oposta à ocorrência média dos extremos (<span class="math inline">\(\bar{\phi}+\pi\)</span>), enquanto nos demais casos o mês inicial foi definido a partir da climatologia mensal de precipitação. A distribuição espacial desses critérios (<a href="#fig-fonte-ano-hidro" class="quarto-xref">Figura&nbsp;3</a>) mostrou predominância da primeira abordagem nas regiões Norte, Nordeste, Centro-Oeste e Sudeste. Na Região Sul, especialmente no Rio Grande do Sul e em porções de Santa Catarina e Paraná, prevaleceu o critério baseado no último mês do maior período climatologicamente seco. A distribuição observada evidencia a necessidade de considerar diferentes características de sazonalidade na definição dos limites anuais das séries pluviométricas.</p>
+<div id="fig-fonte-ano-hidro" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fonte-ano-hidro-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/ano_hidro_rbar_hibrido/fig_brasil_fonte_hibrido.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fonte-ano-hidro-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Distribuição espacial dos critérios utilizados para determinar o início do ano hidrológico nas estações diárias. Em azul, estações com início definido pela direção oposta à ocorrência média dos extremos (<span class="math inline">\(\bar{\phi}+\pi\)</span>), para <span class="math inline">\(\bar{r}\geq0,30\)</span>; em laranja, estações com início definido pelo último mês do maior período climatologicamente seco, para <span class="math inline">\(\bar{r}&lt;0,30\)</span>.
+</figcaption>
+</figure>
+</div>
+<p>A aplicação do procedimento híbrido permitiu determinar o mês de início do ano hidrológico para 5.659 estações pluviométricas diárias (<a href="#fig-ano-hidro-diario" class="quarto-xref">Figura&nbsp;4</a>). Em grande parte do Brasil Central e do interior do Sudeste, predominaram os meses de junho e julho, com ocorrência de agosto em áreas de transição. No Nordeste, observou-se maior diversidade espacial, com meses iniciais entre agosto e setembro em áreas interiores e entre setembro e novembro em porções do norte e do leste da região. Na Região Norte, os meses de início variaram espacialmente, com predomínio de junho a setembro em extensas áreas do território.</p>
+<div id="fig-ano-hidro-diario" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ano-hidro-diario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/ano_hidro_rbar_hibrido//fig_brasil_hibrido_rbar.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ano-hidro-diario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Distribuição espacial do mês de início do ano hidrológico nas estações pluviométricas diárias brasileiras, determinado pela combinação da sazonalidade dos extremos e da climatologia mensal de precipitação.
+</figcaption>
+</figure>
+</div>
+<p>Na Região Sul, a distribuição dos meses iniciais apresentou maior heterogeneidade, com predominância de agosto em partes do Paraná e de Santa Catarina e ocorrência de meses entre março e julho em diferentes áreas do Rio Grande do Sul. Esse padrão reflete a maior participação do critério climatológico na definição do ano hidrológico nessa região. Em conjunto, os resultados permitiram estabelecer uma referência temporal espacialmente diferenciada para a organização das séries de máximos anuais, considerando tanto a época predominante dos eventos extremos quanto a sazonalidade dos totais mensais de precipitação.</p>
+</section>
+<section id="definição-do-ano-hidrológico-nas-estações-subdiárias" class="level3">
+<h3 class="anchored" data-anchor-id="definição-do-ano-hidrológico-nas-estações-subdiárias">Definição do ano hidrológico nas estações subdiárias</h3>
+<p>A partir dos meses de início determinados para as estações diárias de referência, realizou-se sua transferência espacial para as estações subdiárias da base UNIPLU. A aplicação do procedimento permitiu atribuir o mês inicial do ano hidrológico, preservando, em linhas gerais, os padrões regionais identificados na análise das séries diárias.</p>
+<p>A classificação espacial indicou predominância de estações situadas em áreas de concordância local, denominadas <em>manchas</em>, que compreenderam 4.943 postos (93,8% do total). As demais 328 estações (6,2%) foram classificadas como áreas de transição, caracterizadas por menor concordância entre os meses de início das estações diárias vizinhas (<a href="#fig-classificacao-subdiario" class="quarto-xref">Figura&nbsp;5</a>). A distribuição espacial dessas classes mostrou que as áreas de transição se concentraram principalmente na Região Sul, especialmente no Rio Grande do Sul, além de ocorrências localizadas no litoral oriental do Nordeste e em outras regiões do território nacional.</p>
+<div id="fig-classificacao-subdiario" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-classificacao-subdiario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/uniplu_subdiario/fig_uniplu_subdiario_mancha_transicao.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-classificacao-subdiario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Distribuição espacial das estações subdiárias segundo a classificação utilizada na transferência do mês inicial do ano hidrológico.
+</figcaption>
+</figure>
+</div>
+<p>A maior concentração de áreas de transição no Sul é coerente com a heterogeneidade dos meses de início identificada anteriormente nas estações diárias, onde a menor concentração sazonal dos extremos favoreceu a utilização do critério climatológico. Nessas regiões, a existência de diferentes meses de início entre postos próximos reduz a predominância de uma única classe na vizinhança, justificando a aplicação da média circular ponderada. Em contrapartida, a predominância de <em>manchas</em> em grande parte do país indica maior concordância espacial dos meses atribuídos às estações diárias de referência.</p>
+<p>A distribuição espacial dos meses de início transferidos às estações subdiárias apresentou padrões semelhantes aos observados na base diária (<a href="#fig-mes-inicio-subdiario" class="quarto-xref">Figura&nbsp;6</a>). No Brasil Central e em extensas áreas do Sudeste, predominaram meses próximos de junho e julho, enquanto no Nordeste foram observados meses mais tardios, especialmente entre agosto e outubro, com variações nas áreas litorâneas. Na Região Norte, verificou-se maior diversidade de meses, acompanhando as diferenças regionais de sazonalidade. Já na Região Sul, os meses atribuídos apresentaram maior heterogeneidade espacial, sobretudo no Rio Grande do Sul, onde foram identificadas diferentes épocas de início em localidades relativamente próximas.</p>
+<div id="fig-mes-inicio-subdiario" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mes-inicio-subdiario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="resultados/BR/pictures/uniplu_subdiario/fig_uniplu_subdiario_mes_inicio.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mes-inicio-subdiario-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Distribuição espacial do mês de início do ano hidrológico atribuído às estações pluviométricas subdiárias da base UNIPLU, a partir da transferência espacial das informações das estações diárias de referência.
+</figcaption>
+</figure>
+</div>
+<p>A correspondência entre os padrões observados nas bases diária e subdiária decorre da própria estrutura de transferência espacial adotada, não constituindo uma validação independente dos meses atribuídos. Entretanto, a predominância de áreas com concordância local indica que, para a maior parte das estações subdiárias, a atribuição do mês inicial foi baseada em informações espacialmente consistentes entre os postos diários vizinhos. Nas áreas de transição, o uso da média circular ponderada permitiu considerar simultaneamente diferentes referências sazonais, evitando a imposição de uma única classe modal em regiões com maior heterogeneidade.</p>
+<p>Dessa forma, o procedimento estabeleceu uma referência temporal individualizada para as estações subdiárias, incorporando as diferenças regionais de sazonalidade e permitindo organizar os registros de precipitação segundo anos hidrológicos específicos. Os meses de início obtidos foram posteriormente utilizados na consolidação das séries de máximos anuais de precipitação para as diferentes durações subdiárias, constituindo uma etapa preparatória para o controle de qualidade e a análise de frequência dos eventos extremos.</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-anaUFMG2025" class="csl-entry" role="listitem">
+Agência Nacional de Águas e Saneamento Básico, e Universidade Federal de Minas Gerais. 2025. <span>«Regionalização de vazões máximas diárias anuais do Estado do Rio Grande do Sul: relatório final»</span>. Belo Horizonte: ANA e UFMG.
+</div>
+<div id="ref-bayliss1993" class="csl-entry" role="listitem">
+Bayliss, A. C., e R. C. Jones. 1993. <span>«Peaks-Over-Threshold Database: Summary Statistics and Seasonality»</span>. 121. Wallingford, UK: Institute of Hydrology.
+</div>
+<div id="ref-durrieu2018" class="csl-entry" role="listitem">
+Durrieu, G., I. Grama, K. Jaunatre, Q. K. Pham, e J. M. Tricot. 2018. <span>«extremefit: A Package for Extreme Quantiles»</span>. <em>Journal of Statistical Software</em> 87 (12): 1–20. <a href="https://doi.org/10.18637/jss.v087.i12">https://doi.org/10.18637/jss.v087.i12</a>.
+</div>
+<div id="ref-durrieu2015" class="csl-entry" role="listitem">
+Durrieu, G., I. Grama, Q. Pham, e J. M. Tricot. 2015. <span>«Nonparametric adaptive estimator of extreme conditional tail probabilities quantiles»</span>. <em>Extremes</em> 18: 437–78.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,28 @@
+/* Parágrafos justificados */
+p {
+  text-align: justify;
+}
+
+/* Espaçamento entre parágrafos */
+p {
+  margin-bottom: 1em;
+}
+
+/* Tabelas */
+table {
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+}
+
+/* Legendas de figuras e tabelas */
+.figure-caption, caption {
+  font-size: 0.9em;
+  font-style: italic;
+  text-align: center;
+}
