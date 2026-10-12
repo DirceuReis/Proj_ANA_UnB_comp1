@@ -33,6 +33,15 @@ start.dgev <- function(i.jd, durations, scale.inv){
   xi <- mean(par.d[3,])                     # average xi
   # xi <- ifelse(abs(xi) >= 0.5, prior.info[1], xi)
   xi <- min(0.5 - 1e-6, max(-0.5 + 1e-6, xi))
+
+  # Check validity
+  A <- (durations + theta)^H
+  yA <- sweep(i.jd, 2, A, "*")
+  B <- yA/sigma0 - mut
+  z.id <- 1 - xi*B
+  if(any(z.id <= 0)){
+    warning("`start` parameters may result in invalid iterations.")
+  }
   
   names <- c("mut", "sigma0", "xi", "H", "theta")
   
@@ -40,11 +49,14 @@ start.dgev <- function(i.jd, durations, scale.inv){
   
 } # fim 'start.dgev()'
 
+
 #' @title Função de log-verossimilhança da d-GEV
 #' ACHO QUE NÃO PRECISARIA DE UM ARGUMENTO `durations` AQUI PQ
 #' A DURAÇÃO JÁ É O NOME DAS COLUNAS DE `i.jd`
 nll.dgev <- function(param, durations, i.jd, prior.info){
   
+  # if(any(is.infinite(param))) return(1e10)
+
   # Parâmetros iniciais
   mut <- param[1]    # posição: mu~
   sigma0 <- param[2] # escala: sigma0
@@ -59,10 +71,9 @@ nll.dgev <- function(param, durations, i.jd, prior.info){
   D <- ncol(i.jd)
   
   # Limites teóricos
-  if(any(durations + theta <= 0)) return(1e6 + abs(min(durations + theta))*1e4) # impedir offset negativo
-  if(theta < 0) return(1e6 + abs(theta)*1e4)    # impedir offset negativo
-  if(sigma0 <= 0) return(1e6 + abs(sigma0)*1e4) # impedir escala GEV nulo
-  if(H < 1e-6 || H > 1 - 1e-6) return(1e6 + abs(H)*1e4)  # restrição invariância de escala
+  if(sigma0 <=0) return(1e6 + 1e6*abs(sigma0))        # impedir escala GEV negativo ou nulo
+  if(H <= 0 || H >= 1) return(1e6 + 1e6*abs(H - 0.5)) # impedir H fora de 0 e 1
+  if(theta < 0) return(1e6 + 1e6*abs(theta))          # impedir theta negativo
   
   # Calcular termos z.id = 1 - xi*(i.jd*(d + theta)^H)/sigma - mu~)
   # Função sweep() realiza uma operação nas linhas ou colunas de euma matriz
@@ -108,7 +119,10 @@ nll.dgev <- function(param, durations, i.jd, prior.info){
 } # fim 'nll.dgev()'
 
 #' @title Função gradiente log-verossimilhança
-grad.ll.dgev <- function(param, durations, i.jd, prior.info){
+grad.nll.dgev <- function(param, durations, i.jd, prior.info){
+
+  # g <- numeric(5)
+  # if(any(is.infinite(param))) return(rep(1e10, 5))
   
   # Parameters
   mut <- param[1]
@@ -121,17 +135,39 @@ grad.ll.dgev <- function(param, durations, i.jd, prior.info){
   N <- nrow(i.jd)
   D <- ncol(i.jd)
   
-  if(any(ds + theta <= 0) || sigma0 <= 0 || H < 0 || H > 1 - 1e-6){
-    return(rep(1e6, 5))
-  }
-  
-  # Variáveis aumuliares
+  # # Verificações
+  # if(sigma0 <=0) g[2] <- 1e6 + 1e6*abs(sigma0); return(g)        # impedir escala GEV negativo ou nulo
+  # if(H <= 0 || H >= 1) g[4] <- 1e6 + 1e6*abs(H - 0.5); return(g) # impedir H fora de 0 e 1
+  # if(theta < 0) g[5] <- 1e6 + 1e6*abs(theta); return(g)          # impedir theta negativo
+    
+  # Variáveis auxiliares
   A <- (ds + theta)^H
   yA <- sweep(x = i.jd, MARGIN = 2, STATS = A, FUN = "*") # produto: i.jd * Ad
   B <- yA/sigma0 - mut                                    # i.jd*A/sigma0 - mut
   z.id <- 1 - xi*B
+
+    
+  if (any(z.id <= 1e-6)){
+    idx <- which.min(z.id)
+    ij <- arrayInd(idx, dim(z.id))
+    i.star <- ij[1]; j.star <- ij[2]
+
+    d.star <- ds[j.star] + theta
+    yA.star <- i.jd[i.star, j.star] * d.star^H
+    B.star <- yA.star / sigma0 - mut
+    ldt <- log(d.star)
+
+    g <- c(
+      mut = -1e4*xi,
+      sigma0 = -1e4*xi * yA.star / sigma0^2,
+      xi = 1e4*B.star,
+      H = 1e4*xi*yA.star * ldt / sigma0,
+      theta = 1e4*xi * yA.star * H / (d.star * sigma0)
+    )
+    return(g)   # note: grad.nll.dgev already returns the *nll* gradient
+  }
   
-  if(any(z.id <= 0)) return(rep(1e6, 5))
+  # if(any(z.id <= 0)) return(rep(0, 5)) # tem que retornar 0
   
   # Pre-calcular termos com z.id
   z.inv <- 1/z.id
@@ -184,7 +220,7 @@ grad.ll.dgev <- function(param, durations, i.jd, prior.info){
   grad <- setNames(c(dl.dmut, dl.dsigma0, dl.dxi, dl.dH, dl.dtheta), par.names)
   return(-grad)
   
-} # fim 'grad.ll.dgev()'
+} # fim 'grad.nll.dgev()'
 
 
 ## FUNÇÕES PRINCIPAIS -----------------------------------------------------
@@ -203,9 +239,9 @@ grad.ll.dgev <- function(param, durations, i.jd, prior.info){
 fdgev <- function(i.jd, # antes 'data.gg'
                   prior.info = NULL,
                   cols = c("gauge_code", "year", "duration", "imax"),
-                  method = c("Nelder-Mead", "L-BFGS-B"),
+                  method = c("L-BFGS-B", "Nelder-Mead"),
                   scale.inv = c("wide", "strict"),
-                  maxit = 1e6){
+                  maxit = 1e4){
   
   
   #### CHECAGENS ----
@@ -215,7 +251,7 @@ fdgev <- function(i.jd, # antes 'data.gg'
   # if(sum(is.element(cols, names(data.gg))) != length(cols)) stop("Colunas indicadas em 'cols' devem estar contidas em 'data.gg'\ncols: ", cols, "\nnames(data.gg): ", names(data.gg))
   if(!is.matrix(i.jd)) stop("'i.jd' must be an n.years x d matrix containing 'imax' values")
   
-  method <- match.arg(method, c("Nelder-Mead", "L-BFGS-B"))
+  method <- match.arg(method, c("L-BFGS-B", "Nelder-Mead"))
   scale.inv <- match.arg(scale.inv, c("wide", "strict"))
   
   #### CÁLCULOS ----
@@ -234,9 +270,11 @@ fdgev <- function(i.jd, # antes 'data.gg'
   # Usando "L-BFGS-B"
   if(method == "L-BFGS-B"){
     fit <- tryCatch(
-      optim(par = start, fn = nll.dgev, gr = grad.ll.dgev, method = "L-BFGS-B", lower = lower, upper = upper, hessian = TRUE,
-            durations = durations, i.jd = i.jd, prior.info = prior.info,
-            control = list(maxit = maxit, factr = 1e9, pgtol = 1e-8)),
+      # optim(par = start, fn = nll.dgev, gr = grad.nll.dgev, method = "L-BFGS-B", lower = lower, upper = upper, 
+      optim(par = start, fn = nll.dgev, gr = NULL, method = "L-BFGS-B", lower = lower, upper = upper, 
+            hessian = TRUE, durations = durations, i.jd = i.jd, prior.info = prior.info,
+            # control = list(maxit = maxit, factr = 1e9, pgtol = 1e-8)),
+            control = list(maxit = maxit, factr = 1e7, pgtol = 1e-8, ndeps = c(rep(1e-5, 4), 1e-6))),
       error = function(e){
         # warning("Erro na estação'", gg, "': ", e$message, ".\nOtimizando com Nelder-Mead.")
         warning("Error: ", conditionMessage(e))
@@ -244,8 +282,18 @@ fdgev <- function(i.jd, # antes 'data.gg'
       }
     )
     
-    if(!is.null(fit) && fit$convergence == 0) return(fit)
+    if(!is.null(fit) && fit$convergence == 0){
+      fit$method <- "L-BFGS-B"
+      fit$fallback <- FALSE # show no message
+      fit$fallback_message <- NA_character_
+      return(fit)
+    }
   }
+
+  # If L-BFGS-B was successfull, then the function is already over,
+  # if not, then store convergence error and message
+  lbfgs.convergence <- fit$convergence
+  lbfgs.message <- fit$message
   
   # Usando Nelder-Mead
   fit <- tryCatch(
@@ -258,11 +306,10 @@ fdgev <- function(i.jd, # antes 'data.gg'
       return(NULL)
     }
   )
-  
-  # if(fit$value == 1e6) warning("\nErro na estação '", gg, "': não houve otimmização.\nRetornando parâmetros iniciais:\n", paste(round(start, 4), collapse = " "))
-  # 
-  # return(fit)
-  
+
+  fit$fallback <- TRUE
+  fit$fallback_message <- lbfgs.message
+  return(fit)
   
 }
 
@@ -351,24 +398,33 @@ prof.grad.dgev <- function(par.free, which.par, par.value, i.jd, durations, prio
   full <- numeric(length(par.free) + 1) # build 'new' parameters vector
   full[which.par] <- par.value          # fixed value for current parameter
   full[-which.par] <- par.free          # remaining parameters to be optimized
-  gr <- grad.ll.dgev(full, durations, i.jd, prior.info)
+  gr <- grad.nll.dgev(full, durations, i.jd, prior.info)
   
   gr[-which.par]
 
 }
 
 # Find the 'roots' of the profile log-likelihood function
-roots.proflik <- function(i.jd, ds, step, conf, par, i, ll, lower, upper, prior.info){
+roots.proflik <- function(i.jd, ds, step, conf, par, i, ll, lower, upper, prior.info, profile.maxit){
 
-  val.i <- par[[i]]
+  # val.i <- par[[i]]
+  val.i <- par[[i]] + step
   last.par <- par
   npar <- length(par)
   lim <- ll - qchisq(conf, 1)/2
   parnames <- c("mut", "sigma0", "xi", "H", "theta")
 
   result <- list()
+  n.iter <- 0L
+  maxit.hit <- FALSE
 
   while(ll > lim && !is.na(ll)){
+
+    n.iter <- n.iter + 1L
+    if(n.iter > profile.maxit){
+      maxit.hit <- TRUE
+      break
+    }
 
     last.ll <- ll
     if(i == 2){
@@ -444,15 +500,18 @@ roots.proflik <- function(i.jd, ds, step, conf, par, i, ll, lower, upper, prior.
 
   } # end of 'while' search
 
+  if(length(result) == 0) return(NULL)
+
   prof.par <- do.call(rbind, result)
   colnames(prof.par) <- c(parnames, "loglik", "slope")
-
+  attr(prof.par, "profile.maxit.reached") <- maxit.hit
+  attr(prof.par, "profile.n.iter") <- n.iter
   return(prof.par)
 
 }
 
 # Estimate profile likelihood confidence intervals for d-GEV parameters
-ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info){
+ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info, profile.maxit){
 
   # message("Estimating parameter CIs...")
   lower <- c(-Inf, 1e-6, ifelse(is.null(prior.info), -Inf, -0.5 + 1e-6), 1e-6, 0)
@@ -466,7 +525,7 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
 
     # Search left (lower CI limit)
     if(par[i] > lower[i] + step.par){
-      left <- roots.proflik(i.jd, ds, -step.par, conf, par, i, max.ll, lower, upper, prior.info)
+      left <- roots.proflik(i.jd, ds, -step.par, conf, par, i, max.ll, lower, upper, prior.info, profile.maxit)
     } else{
       # message(sprintf("Optimal `%s` is at the edge of its domain`, returning `ci_lower == par[i]`", parnames[i]))
       left <- matrix(c(par, max.ll, 0), nrow = 1)
@@ -476,7 +535,7 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
     
     # Search right (upper CI limit)
     if(par[i] < upper[i] - step.par){
-      right <- roots.proflik(i.jd, ds, step.par, conf, par, i, max.ll, lower, upper, prior.info)
+      right <- roots.proflik(i.jd, ds, step.par, conf, par, i, max.ll, lower, upper, prior.info, profile.maxit)
     } else{
       # message(sprintf("Optimal `%s` is at the edge of its domain`, returning `ci_upper == par[i]`", parnames[i]))
       right <- matrix(c(par, max.ll, 0), nrow = 1)
@@ -484,10 +543,17 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
       colnames(right) <- c(parnames, "loglik", "slope")
     }
     
+    # See whether max profile iterations was hit
+    left.maxit <- isTRUE(attr(left, "profile.maxit.reached"))
+    right.maxit <- isTRUE(attr(right, "profile.maxit.reached"))
+    left.n <- if(is.null(attr(left, "profile.n.iter"))) NA_integer_ else attr(left, "profile.n.iter")
+    right.n <- if(is.null(attr(right, "profile.n.iter"))) NA_integer_ else attr(right, "profile.n.iter")
+
     proflik <- rbind(left, right)
     proflik <- proflik[order(proflik[,i]),]
     ci.lower <- min(proflik[,i], na.rm = TRUE)
     ci.upper <- max(proflik[,i], na.rm = TRUE)
+
     ll.max.proflik <- max(proflik[,"loglik"], na.rm = TRUE)
     par.max.proflik <- proflik[which.max(proflik[,"loglik"]), seq_len(length(par))]
     if(par[i] != 0){
@@ -518,7 +584,7 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
     profile <- proflik[,c(parnames[i], "loglik", "slope")]
     colnames(profile) <- c("par", "loglik", "slope")
     out <- list(
-      ci = data.frame(
+      ci = tibble(
         gauge_code = gg,
         parname = parnames[i],
         par = unname(par[i]),
@@ -532,12 +598,19 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
         prior = deparse(prior.info),
         n_profile = nrow(proflik),
         message = message, # if message == 1, 'prof.pars' should be checked
+        profile_maxit = as.integer(left.maxit || right.maxit),
+        profile_maxit_side = 
+          if(left.maxit && right.maxit) "both"
+          else if(left.maxit) "left"
+          else if(right.maxit) "right"
+          else "none",
+        profile_niter = max(left.n, right.n, na.rm = TRUE),
         conf = conf,
         step = step.par
       ),
       prof.par = unlist(proflik[which.max(proflik[,"loglik"]), seq_len(length(par) + 1)]), # + 1 pega o loglik
       # prof.par = out.par,
-      profile = cbind(
+      profile = bind_cols(
         gauge_code = gg, # keep as comment to avoid having to call it inside every function
         parname = parnames[i], as.data.frame(profile)
       )
@@ -555,7 +628,7 @@ ciprof.par <- function(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
     new.par <- unlist(prof.par[which.max(prof.par$loglik), seq_len(length(par))])
     new.max <- max(profile[,"loglik"], na.rm = TRUE)
     results$par <- new.par
-    results$max <- new.max
+    results$max_ll <- new.max
   }
   
   return(list(ci = results, profile = profile))
@@ -604,7 +677,7 @@ q.dgev.vec <- function(param, d, p){
   
 }
 
-roots.proflik.q <- function(step, q0, i.jd, par, ds, d, p, conf, ll, lower, upper, prior.info){
+roots.proflik.q <- function(step, q0, i.jd, par, ds, d, p, conf, ll, lower, upper, prior.info, profile.maxit){
 
   npar <- length(par)
   last.par.free <- par[-1]
@@ -612,8 +685,16 @@ roots.proflik.q <- function(step, q0, i.jd, par, ds, d, p, conf, ll, lower, uppe
   parnames <- c("mut", "sigma0", "xi", "H", "theta")
 
   result <- list()
+  n.iter <- 0L
+  maxit.hit <- FALSE
   
   while(ll > lim && !is.na(ll)){
+
+    n.iter <- n.iter + 1L
+    if(n.iter > profile.maxit){
+      maxit.hit <- TRUE
+      break
+    }
   
     fit.prof <- tryCatch(
       optim(
@@ -689,13 +770,15 @@ roots.proflik.q <- function(step, q0, i.jd, par, ds, d, p, conf, ll, lower, uppe
   if(length(result) == 0) return(NULL)
   prof.par <- do.call(rbind, result)
   colnames(prof.par) <- c("d", sprintf("q_%g", rp), parnames, "loglik")
+  attr(prof.par, "profile.maxit,reached") <- maxit.hit
+  attr(prof.par, "profile.n.iter") <- n.iter
   
   return(prof.par)
 
 }
 
 # Estimate profile likelihood confidence intervals for quantiles
-ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step, lltol, gg, prior.info){
+ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step, lltol, gg, prior.info, profile.maxit = 500L){
 
   # message("Estimating quantile CIs...")
 
@@ -717,15 +800,30 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
       
       d <- grid[i, "d"]
       rp <- grid[i, "rp"]
-      # message(sprintf("d: %g h | return_period: %g years", d, rp))
+      message(sprintf("d: %6.3f h | return_period: %g years", d, rp))
       p <- 1 - 1/rp # non-excceedence probability
       q0 <- q.dgev.vec(par, d, p) # original quantile estimate
-      step.q <- if(abs(q0) > 1e-5) step*abs(q0)*0.1 else step
+
+      step.q <- if(abs(q0) > 1e-5) step*abs(q0) else step
       # step.q <- max(abs(step*q0), step) + 1e-7
-      left <- roots.proflik.q(-step.q, q0, i.jd, par, ds, d, p, conf, max.ll, lower, upper, prior.info) # search right
-      right <- roots.proflik.q(step.q, q0, i.jd, par, ds, d, p, conf, max.ll, lower, upper, prior.info) # search left
-  
+      left <- roots.proflik.q(-step.q, q0, i.jd, par, ds, d, p, conf, max.ll, lower, upper, prior.info, profile.maxit) # search right
+      right <- roots.proflik.q(step.q, q0, i.jd, par, ds, d, p, conf, max.ll, lower, upper, prior.info, profile.maxit) # search left
+
+      # See whether max profile iterations was hit
+      left.maxit <- isTRUE(attr(left, "profile.maxit.reached"))
+      right.maxit <- isTRUE(attr(right, "profile.maxit.reached"))
+      left.n <- if(is.null(attr(left, "profile.n.iter"))) NA_integer_ else attr(left, "profile.n.iter")
+      right.n <- if(is.null(attr(right, "profile.n.iter"))) NA_integer_ else attr(right, "profile.n.iter")
+
+      # 1. sign flips of consecutive loglik differences
       proflik <- rbind(left, right)
+      proflik <- proflik[!duplicated(proflik[, 2]), , drop = FALSE]
+      # q <- proflik[,2]; ll <- proflik[,"loglik"]
+      # o <- order(q); q <- q[o]; ll <- ll[o]
+      # dl <- diff(ll)
+      # s <- sign(dl)
+      # sign_flips <- sum(diff(s) != 0, na.rm = TRUE)
+  
       q.name <- sprintf("q_%g", rp)
       ci.lower <- min(proflik[,q.name], na.rm = TRUE)
       ci.upper <- max(proflik[,q.name], na.rm = TRUE)
@@ -741,7 +839,7 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
       profile <- proflik[order(proflik[,q.name]),][,c(q.name, "loglik")]
       colnames(profile) <- c("q", "loglik")
       out <- list(
-        ci = data.frame(
+        ci = tibble(
           gauge_code = gg,
           d = d,
           return_period = rp,
@@ -753,6 +851,13 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
           prior = deparse(prior.info),
           n_profile = nrow(proflik),
           flag_shape = if(abs(par[3]) > 0.5) 1 else 0, # flag '1' whenever |xi| is larger than 0.
+          profile_maxit = as.integer(left.maxit || right.maxit),
+          profile_maxit_side = 
+            if(left.maxit && right.maxit) "both"
+            else if(left.maxit) "left"
+            else if(right.maxit) "right"
+            else "none",
+          profile_niter = max(left.n, right.n, na.rm = TRUE),
           censored_ci = censored,
           conf = conf,
           step = step.q,
@@ -760,7 +865,7 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
           error_message = NA_character_
         ),
         # prof.par = unlist(proflik[which.max(proflik[,"loglik"]), seq_len(npar + 1)]),
-        profile = cbind(
+        profile = bind_cols(
           gauge_code = gg, d = d,
           return_period = rp, as.data.frame(profile),
           error = 0L
@@ -772,7 +877,7 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
     }, error = function(e){
 
       list(
-        ci = data.frame(
+        ci = tibble(
           gauge_code = gg, 
           d = d,
           return_period = rp, 
@@ -790,13 +895,16 @@ ciprof.q <- function(i.jd, ds, durations, return.period, par, max.ll, conf, step
           error = 1L,
           error_message = conditionMessage(e)
         ),
-        profile = data.frame(
+        profile = tibble(
           gauge_code = gg,
           d = d,
           return_period = rp,
           q = NA_real_,
           loglik = NA_real_,
-          error = 1L
+          error = 1L,
+          profile_maxit = NA_integer_,
+          profile_maxit_side = NA_character_,
+          profile_niter = NA_integer_
         )
       )
 
@@ -821,7 +929,8 @@ fitprof.dgev <- function(
   return.period, durations = NULL,
   cols = c("gauge_code", "year", "duration", "imax"),
   conf = 0.95, lltol = 0.005, step = 0.005,
-  method = "L-BFGS-B", scale.inv = "wide"
+  method = "L-BFGS-B", scale.inv = "wide",
+  profile.maxit = 200L
 ){
 
   #### CHECAGENS ----
@@ -841,22 +950,24 @@ fitprof.dgev <- function(
   
   #### CÁLCULOS ----
 
+  n <- length(data)
   message("Fitting d-GEV distribution, estimating quantiles and confidence intervals with 'profile likelihood'.")
-  message(">> No. gauges: ", length(data))
+  message(">> No. gauges: ", n)
   message(">> Durations [h]: ", paste(if(is.null(durations)) "all available" else durations, collapse = ", "))
   message(">> Return periods [years]: ", paste(return.period, collapse = ", "))
   message(">> Prior information: ", deparse(prior.info))
   message(">> Search step: ", step)
   message(">> Confidence level for profile likelihood CIs: ", paste0(conf*100, "%"))
 
-  ls.res <- pbapply::pblapply(data, function(data.gg){
-  # ls.res <- lapply(data, function(data.gg){
+  ls.res <- lapply(seq_along(data), function(i){
+  # ls.res <- pbapply::pblapply(seq_along(data), function(i){
 
+    data.gg <- data[[i]]
     gg <- unique(data.gg[[cols[1]]])
 
-    # message(rep("=", getOption("width")))
-    # message(sprintf("Gauge: %s", gg))
-    # message(rep("-", getOption("width")))
+    message(rep("=", getOption("width")))
+    message(sprintf("Gauge: %-10s | %5d out of %-5d (%5.2f%%)", gg, i, n, i/n*100))
+    message(rep("-", getOption("width")))
 
     res <- tryCatch({
 
@@ -871,7 +982,8 @@ fitprof.dgev <- function(
         na.omit() |> 
         as.matrix()
       
-      ds <- as.integer(gsub("d_", "", colnames(i.jd))) # duration vector
+      # ds <- as.integer(gsub("d_", "", colnames(i.jd))) # duration vector
+      ds <- as.double(gsub("d_", "", colnames(i.jd))) # duration vector (as.integer turns to 0 all d < 1 h)
       
       # This case does not require a loop thorugh all durations as they
       # are alll fitted in the same model
@@ -890,8 +1002,17 @@ fitprof.dgev <- function(
       max.ll <- -fit$value
   
       # Confidence intervals
-      ls.ci.par <- ciprof.par(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info)
-      ls.ci.q <- ciprof.q(i.jd, ds, durations, return.period, par, max.ll, conf, step, lltol, gg, prior.info)
+      message("Estimating parameter CIs...")
+      ls.ci.par <- ciprof.par(i.jd, ds, par, max.ll, conf, step, lltol, gg, prior.info, profile.maxit)
+      message(sprintf(
+        "mut: %3.3f | sigma0: %3.3f | xi:  %3.3f | H: %3.3f | theta: %3.3f",
+        par[1], par[2], par[3], par[4], par[5]
+      ))
+      message(rep("-", getOption("width")))
+      message("Estimating quantile CIs...")
+      ls.ci.q <- ciprof.q(i.jd, ds, durations, return.period, par, max.ll, conf, step, lltol, gg, prior.info, profile.maxit)
+
+      invisible(gc())
   
       return(list(
         gauge_code = gg, 
