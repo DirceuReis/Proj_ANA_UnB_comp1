@@ -1,0 +1,1123 @@
+---
+title: "Metodologia_idf_explicação"
+format: html
+editor: visual
+---
+
+# Modelos regionais com invariância de escala
+
+Este documento avalia modelos Bayesianos regionais para máximos anuais de intensidade de precipitação. A formulação central assume que os parâmetros de localização e escala da distribuição GEV variam com a duração da chuva segundo uma relação de invariância de escala. A principal diferença entre os modelos avaliados está na estrutura adotada para o parâmetro de forma $\xi$, responsável pelo comportamento da cauda da distribuição.
+
+Assim, os modelos compartilham a mesma estrutura para $\mu$ e $\sigma$, mas diferem na forma como representam $\xi$. Essa organização evita repetir a formulação completa em cada modelo e permite concentrar a comparação na hipótese física e estatística associada à cauda dos extremos.
+
+##1. Formulação comum aos modelos
+
+Todos os modelos avaliados assumem que os máximos anuais de intensidade de precipitação seguem uma distribuição GEV:
+
+$$
+Y_{i,d,t} \sim GEV(\mu_{i,d},\sigma_{i,d},\xi_{i,d}),
+$$ em que $Y_{i,d,t}$ representa o máximo anual de intensidade de precipitação na estação $i$, duração $d$ e ano $t$.
+
+A estrutura de invariância de escala é comum aos modelos e é aplicada aos parâmetros logarítmicos de localização e escala:
+
+$$
+\log(\mu_{i,d})
+\sim
+\mathcal{N}
+\left[
+\alpha_i
+-
+H_i
+\log
+\left(
+\frac{d+\theta_i}{24+\theta_i}
+\right),
+\tau_\mu^2
+\right],
+$$
+
+e
+
+$$
+\log(\sigma_{i,d})
+\sim
+\mathcal{N}
+\left[
+\beta_i
+-
+H_i
+\log
+\left(
+\frac{d+\theta_i}{24+\theta_i}
+\right),
+\tau_\sigma^2
+\right].
+$$
+
+Nesta parametrização, $\alpha_i$ e $\beta_i$ representam, respectivamente, $\log(\mu_{i,24})$ e $\log(\sigma_{i,24})$, isto é, os parâmetros de localização e escala associados à duração de referência de 24 h.
+
+O parâmetro $H_i$ controla a taxa de variação da intensidade com a duração. Valores maiores de $H_i$ indicam redução mais acentuada da intensidade com o aumento da duração. O parâmetro $\theta_i$ suaviza a relação de escala, evitando uma transição excessivamente rígida nas menores durações.
+
+As prioris comuns aos modelos regionais são:
+
+A principal diferença entre os modelos avaliados está na estrutura assumida para o parâmetro de forma ($\xi$). Foram considerados modelos com cauda comum, cauda dependente da duração, cauda dependente da estação e cauda dependente da combinação estação-duração. Dessa forma, busca-se avaliar se a premissa adotada para ($\xi$) altera de forma relevante as estimativas regionais, os níveis de retorno e o comportamento das curvas IDF.
+
+$$
+\alpha_i \sim \mathcal{N}(0,1000^2),
+$$
+
+$$
+\beta_i \sim \mathcal{N}(0,1000^2),
+$$
+
+$$
+H_i \sim \text{Beta}(1,1),
+\qquad
+0 \leq H_i \leq 1,
+$$
+
+$$
+\theta_i \sim \text{Uniform}(0,10),
+$$
+
+$$
+\tau_\mu^2 \sim \text{Inv-Gamma}(0.01,0.01),
+$$
+
+$$
+\tau_\sigma^2 \sim \text{Inv-Gamma}(0.01,0.01).
+$$
+
+A diferença entre os modelos está na estrutura assumida para o parâmetro de forma $\xi$. Para manter $\xi$ em um intervalo fisicamente plausível, utiliza-se suporte restrito:
+
+$$
+-0.5 \leq \xi \leq 0.5.
+$$
+
+Quando uma média regional da cauda é estimada, denotada por $\bar{\xi}$, utiliza-se a priori geofísica reescalada:
+
+$$
+\bar{\xi} \sim B(9,6,-0.5,0.5).
+$$
+
+A tabela a seguir resume como o parâmetro de forma é representado em cada modelo. Em todos os casos, a estrutura para $\mu_{i,d}$ e $\sigma_{i,d}$ permanece a mesma; a diferença está apenas no nível em que a cauda é compartilhada ou permitida variar.
+
+| Modelo | Parâmetro usado na GEV | Estrutura da cauda | Interpretação |
+|:-----------------|:----------------:|:----------------:|:-----------------|
+| $\xi$ único regional | $\xi$ | $\xi_{i,d}=\bar{\xi}$ | Todas as estações e durações compartilham exatamente o mesmo valor de cauda. |
+| $\xi$ por duração | $\xi_d$ | $\xi_d \sim \mathcal{N}(\bar{\xi},\tau_\xi^2)$ | A cauda varia entre durações, mas cada duração compartilha informação por meio da média regional $\bar{\xi}$. |
+| $\xi$ por estação | $\xi_i$ | $\xi_i \sim \mathcal{N}(\bar{\xi},\tau_\xi^2)$ | A cauda varia entre estações, mas cada estação compartilha informação por meio da média regional $\bar{\xi}$. |
+| $\xi$ por estação-duração | $\xi_{i,d}$ | $\xi_{i,d} \sim \mathcal{N}(\bar{\xi},\tau_\xi^2)$ | A cauda varia por estação e duração, mas com encolhimento para a média regional $\bar{\xi}$. |
+
+## 2. Leitura, organização e preparação dos dados para o Stan
+
+Esta etapa organiza os máximos anuais de precipitação que serão usados nos modelos Bayesianos. O objetivo é construir uma base consistente para a modelagem regional, mantendo apenas observações válidas, durações entre 1 e 24 h e estações com cobertura mínima suficiente em todas as durações avaliadas.
+
+Foram considerados apenas pares estação-duração com pelo menos 8 anos válidos. Além disso, cada combinação estação-duração-ano deve possuir apenas um máximo anual. Quando há duplicatas, mantém-se o maior valor registrado, preservando a interpretação de máximo anual.
+
+Ao final desta etapa, são gerados os principais objetos usados no restante do documento:
+
+-   `dados_modelo`: base final filtrada, contendo estação, ano, duração e máximo anual;
+-   `dados_stan`: base final com índices numéricos de estação e duração;
+-   `gauge_lookup`: tabela de correspondência entre código da estação e índice usado no Stan;
+-   `duration_lookup`: tabela de correspondência entre duração e índice usado no Stan;
+-   `stan_data_regional`: lista de dados usada nos modelos regionais;
+-   `make_stan_data_station()`: função auxiliar para gerar dados de modelos ajustados separadamente por estação.
+
+A duração de referência adotada em todos os modelos é $D_0 = 24 \text{ h}$.
+
+```{r}
+# 1. LEITURA, ORGANIZAÇÃO E PREPARAÇÃO DOS DADOS PARA O STAN
+
+library(arrow)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+library(rstan)
+library(evd)
+library(tibble)
+
+# 1.1. Parâmetros gerais
+
+# Durações consideradas na modelagem
+durations_allowed <- 1:24
+# Número mínimo de anos válidos exigido por série estação-duração
+min_years <- 8
+min_n_durations <- length(durations_allowed)
+D0_val <- 24
+
+# 1.2. Leitura dos dados
+
+dados_agregados <- read_parquet(
+  "C:\\Users\\Adm\\OneDrive\\3. UFC\\UFC - 2026\\Art. 01_BHM\\df_imax_fellipe.pqt"
+)
+
+dados_agregados <- dados_agregados %>%
+  mutate(
+    gauge_code = as.character(gauge_code) |> trimws(),
+    duration_h = as.numeric(d),
+    year = as.integer(year),
+    imax = as.numeric(imax)
+  ) %>%
+  filter(
+    duration_h %in% durations_allowed,
+    !is.na(gauge_code),
+    !is.na(duration_h),
+    !is.na(year)
+  )
+
+duplicatas_ano <- dados_agregados %>%
+  count(gauge_code, duration_h, year) %>%
+  filter(n > 1)
+
+cat("Número de combinações estação-duração-ano duplicadas:", nrow(duplicatas_ano), "\n")
+
+# Se houver duplicatas, mantém o maior máximo anual.
+dados_agregados <- dados_agregados %>%
+  group_by(gauge_code, duration_h, year) %>%
+  summarise(
+    imax = max(imax, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    imax = ifelse(is.infinite(imax), NA_real_, imax)
+  )
+
+# 1.3. Contagem de anos válidos por estação e duração
+
+years_stats <- dados_agregados %>%
+  group_by(gauge_code, duration_h) %>%
+  summarise(
+    n_years_valid = sum(is.finite(imax)),
+    n_years_total = n_distinct(year),
+    .groups = "drop"
+  )
+
+resumo_filtro_estacoes <- years_stats %>%
+  group_by(gauge_code) %>%
+  summarise(
+    n_duracoes_total = n_distinct(duration_h),
+    n_duracoes_validas = sum(n_years_valid >= min_years, na.rm = TRUE),
+    min_years_valid = min(n_years_valid, na.rm = TRUE),
+    max_years_valid = max(n_years_valid, na.rm = TRUE),
+    med_years_valid = median(n_years_valid, na.rm = TRUE),
+    passa_filtro = n_duracoes_validas >= min_n_durations,
+    .groups = "drop"
+  )
+
+estacoes_aprovadas <- resumo_filtro_estacoes %>%
+  filter(passa_filtro) %>%
+  pull(gauge_code)
+
+cat("Número de estações aprovadas:", length(estacoes_aprovadas), "\n")
+
+dados_modelo <- dados_agregados %>%
+  filter(
+    gauge_code %in% estacoes_aprovadas,
+    duration_h %in% durations_allowed,
+    is.finite(imax),
+    imax > 0
+  ) %>%
+  group_by(gauge_code, duration_h) %>%
+  mutate(
+    n_years_valid = n_distinct(year)
+  ) %>%
+  ungroup() %>%
+  filter(
+    n_years_valid >= min_years
+  ) %>%
+  select(
+    gauge_code,
+    year,
+    duration_h,
+    imax
+  ) %>%
+  arrange(
+    gauge_code,
+    duration_h,
+    year
+  )
+
+# Resumo da base final
+resumo_dados_modelo <- dados_modelo %>%
+  group_by(gauge_code, duration_h) %>%
+  summarise(
+    n_years = n_distinct(year),
+    imax_min = min(imax, na.rm = TRUE),
+    imax_med = median(imax, na.rm = TRUE),
+    imax_max = max(imax, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+cat("Número final de estações:", n_distinct(dados_modelo$gauge_code), "\n")
+cat(
+  "Número final de séries estação-duração:",
+  n_distinct(paste(dados_modelo$gauge_code, dados_modelo$duration_h)),
+  "\n"
+)
+cat("Número total de observações:", nrow(dados_modelo), "\n")
+
+# 1.4. Preparação da base para o Stan
+
+dados_stan_base <- dados_modelo %>%
+  filter(
+    !is.na(gauge_code),
+    !is.na(year),
+    is.finite(duration_h),
+    is.finite(imax),
+    duration_h > 0,
+    imax > 0
+  ) %>%
+  mutate(
+    gauge_code = as.character(gauge_code),
+    year = as.integer(year),
+    duration_h = as.numeric(duration_h),
+    imax = as.numeric(imax)
+  ) %>%
+  arrange(gauge_code, duration_h, year)
+
+# Índice das estações
+gauge_lookup <- dados_stan_base %>%
+  distinct(gauge_code) %>%
+  arrange(gauge_code) %>%
+  mutate(gauge_id = row_number())
+
+# Índice das durações
+duration_lookup <- dados_stan_base %>%
+  distinct(duration_h) %>%
+  arrange(duration_h) %>%
+  mutate(duration_id = row_number())
+
+# Vetor de durações usado na estrutura de escala
+D_vals <- duration_lookup %>%
+  arrange(duration_id) %>%
+  pull(duration_h)
+
+# Garante que a duração de referência existe nos dados
+if (!(D0_val %in% D_vals)) {
+  stop("A duração de referência D0 = 24 h não está presente nos dados.")
+}
+
+# Base final com índices para o Stan
+dados_stan <- dados_stan_base %>%
+  left_join(gauge_lookup, by = "gauge_code") %>%
+  left_join(duration_lookup, by = "duration_h") %>%
+  arrange(gauge_id, duration_id, year)
+
+resumo_dados_stan <- tibble(
+  N_obs = nrow(dados_stan),
+  n_estacoes = n_distinct(dados_stan$gauge_id),
+  n_duracoes = n_distinct(dados_stan$duration_id),
+  duracao_min = min(dados_stan$duration_h, na.rm = TRUE),
+  duracao_max = max(dados_stan$duration_h, na.rm = TRUE),
+  D0 = D0_val
+)
+
+# 1.5. Lista de dados para os modelos regionais
+stan_data_regional <- list(
+  N_obs = nrow(dados_stan),
+  y = as.numeric(dados_stan$imax),
+  
+  # Nome usado nos modelos Stan regionais
+  n_gauge = nrow(gauge_lookup),
+  
+  J = nrow(gauge_lookup),
+  
+  K = nrow(duration_lookup),
+  
+  gauge_id = as.integer(dados_stan$gauge_id),
+  duration_id = as.integer(dados_stan$duration_id),
+  
+  D = as.numeric(D_vals),
+  D0 = as.numeric(D0_val)
+)
+
+str(stan_data_regional)
+
+# 1.6. Função auxiliar para modelos ajustados por estação
+# Esta função será usada no modelo local nonpooled.
+# Ela cria uma lista de dados para ajustar uma estação por vez.
+
+make_stan_data_station <- function(gauge_sel,
+                                   dados = dados_stan,
+                                   D0 = D0_val) {
+  
+  dados_i <- dados %>%
+    filter(gauge_code == gauge_sel) %>%
+    arrange(duration_h, year)
+  
+  if (nrow(dados_i) == 0) {
+    stop("Estação não encontrada nos dados.")
+  }
+  
+  duration_lookup_i <- dados_i %>%
+    distinct(duration_h) %>%
+    arrange(duration_h) %>%
+    mutate(duration_id_local = row_number())
+  
+  dados_i <- dados_i %>%
+    select(-duration_id) %>%
+    left_join(duration_lookup_i, by = "duration_h") %>%
+    arrange(duration_id_local, year)
+  
+  list(
+    N_obs = nrow(dados_i),
+    y = as.numeric(dados_i$imax),
+    
+    K = nrow(duration_lookup_i),
+    duration_id = as.integer(dados_i$duration_id_local),
+    
+    D = as.numeric(duration_lookup_i$duration_h),
+    D0 = as.numeric(D0)
+  )
+}
+
+```
+
+## 3. Modelos Stan
+
+```{r}
+# 3.1. MODELO LOCAL NONPOOLED COM ESTRUTURA DE ESCALA
+# Ajustado separadamente para cada estação
+
+modelo_nonpooled_total_por_estacao_stan <- "
+functions {
+
+  // Log-verossimilhança da distribuição GEV.
+  real gev_lpdf(real y, real mu, real sigma, real xi) {
+
+    real z = (y - mu) / sigma;
+
+    // Caso limite de Gumbel: xi próximo de zero
+    if (fabs(xi) < 1e-12) {
+
+      return -log(sigma) - z - exp(-z);
+
+    } else {
+
+      real t = 1 + xi * z;
+
+      // Condição de suporte da GEV
+      if (t <= 0) return negative_infinity();
+
+      return -log(sigma)
+             - (1 + 1 / xi) * log(t)
+             - pow(t, -1 / xi);
+    }
+  }
+}
+
+data {
+
+  int<lower=1> N_obs;  // Número total de observações da estação ajustada
+  vector[N_obs] y; // Máximos anuais observados
+  int<lower=1> K; // Número de durações
+  int<lower=1, upper=K> duration_id[N_obs]; // Índice da duração de cada observação
+  vector<lower=0>[K] D;// Vetor com as durações em horas
+  real<lower=0> D0;// Duração de referência
+}
+
+parameters {
+
+  // Parâmetros da relação de escala na duração de referência
+  real alpha;
+  real beta;
+
+  // Expoente de escala e parâmetro de suavização
+  real<lower=0, upper=1> H;
+  real<lower=0, upper=10> theta;
+
+  // Parâmetros por duração na escala logarítmica
+  vector[K] mu_log;
+  vector[K] sigma_log;
+
+  // Cauda por duração dentro da estação
+  vector<lower=-0.5, upper=0.5>[K] xi_d;
+
+  // Média local da cauda da estação
+  real<lower=-0.5, upper=0.5> xi_bar;
+
+  // Variâncias em torno da estrutura de escala
+  real<lower=0> tau2_mu;
+  real<lower=0> tau2_sigma;
+  real<lower=0> tau2_xi;
+}
+
+transformed parameters {
+
+  // Parâmetros positivos da GEV
+  vector[K] mu;
+  vector[K] sigma;
+
+  for (k in 1:K) {
+    mu[k] = exp(mu_log[k]);
+    sigma[k] = exp(sigma_log[k]);
+  }
+}
+
+model {
+
+  // Priors vagas para os parâmetros na duração de referência
+  alpha ~ normal(0, 1e3);
+  beta  ~ normal(0, 1e3);
+
+  // Prior uniforme em [0,1] para o expoente de escala
+  H ~ beta(1, 1);
+
+  // Priors vagas para as variâncias hierárquicas
+  tau2_mu    ~ inv_gamma(0.01, 0.01);
+  tau2_sigma ~ inv_gamma(0.01, 0.01);
+  tau2_xi    ~ inv_gamma(0.01, 0.01);
+
+  // Prior geofísica reescalada para a média local da cauda
+  // Equivalente a: xi_bar ~ B(9,6,-0.5,0.5)
+  {
+    real a = -0.5;
+    real b =  0.5;
+    real p = 9;
+    real q = 6;
+    real lbetaf = lgamma(p) + lgamma(q) - lgamma(p + q);
+
+    target += -lbetaf
+      + (p - 1) * log(xi_bar - a)
+      + (q - 1) * log(b - xi_bar)
+      - (p + q - 1) * log(b - a);
+  }
+
+  // Estrutura de escala para mu e sigma
+  // e estrutura hierárquica local para xi_d
+  for (k in 1:K) {
+
+    real s_log = log((D[k] + theta) / (D0 + theta));
+
+    real mm = alpha - H * s_log;
+    real ss = beta  - H * s_log;
+
+    mu_log[k]    ~ normal(mm, sqrt(tau2_mu));
+    sigma_log[k] ~ normal(ss, sqrt(tau2_sigma));
+    xi_d[k] ~ normal(xi_bar, sqrt(tau2_xi));
+  }
+
+  // Verossimilhança
+  for (i in 1:N_obs) {
+
+    int k = duration_id[i];
+
+    target += gev_lpdf(
+      y[i] |
+      mu[k],
+      sigma[k],
+      xi_d[k]
+    );
+  }
+}
+
+generated quantities {
+
+  // Log-verossimilhança ponto a ponto para LOO/WAIC
+  vector[N_obs] log_lik;
+
+  for (i in 1:N_obs) {
+
+    int k = duration_id[i];
+
+    log_lik[i] = gev_lpdf(
+      y[i] |
+      mu[k],
+      sigma[k],
+      xi_d[k]
+    );
+  }
+}
+"
+```
+
+```{r}
+# 3.2. MODELO REGIONAL COM XI ÚNICO
+# xi_{i,d} = xi_bar
+
+modelo_bhm_xi_common_stan <- "
+functions {
+  real gev_lpdf(real y, real mu, real sigma, real xi) {
+    real z = (y - mu) / sigma;
+
+    if (fabs(xi) < 1e-12) {
+      return -log(sigma) - z - exp(-z);
+    } else {
+      real t = 1 + xi * z;
+
+      if (t <= 0) return negative_infinity();
+
+      return -log(sigma)
+             - (1 + 1 / xi) * log(t)
+             - pow(t, -1 / xi);
+    }
+  }
+}
+
+data {
+
+  int<lower=1> N_obs;
+  vector[N_obs] y;
+
+  int<lower=1> n_gauge;
+  int<lower=1> K;
+
+  int<lower=1, upper=n_gauge> gauge_id[N_obs];
+  int<lower=1, upper=K> duration_id[N_obs];
+
+  vector<lower=0>[K] D;
+  real<lower=0> D0;
+}
+
+parameters {
+
+  vector[n_gauge] alpha;
+  vector[n_gauge] beta;
+
+  vector<lower=0, upper=1>[n_gauge] H;
+  vector<lower=0, upper=10>[n_gauge] theta;
+
+  matrix[K, n_gauge] mu_log;
+  matrix[K, n_gauge] sigma_log;
+
+  real<lower=0> tau2_mu;
+  real<lower=0> tau2_sigma;
+
+  // No modelo comum, xi_bar é diretamente a cauda usada na GEV.
+  real<lower=-0.5, upper=0.5> xi_bar;
+}
+
+transformed parameters {
+
+  matrix[K, n_gauge] mu;
+  matrix[K, n_gauge] sigma;
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+      mu[k, g] = exp(mu_log[k, g]);
+      sigma[k, g] = exp(sigma_log[k, g]);
+    }
+  }
+}
+
+model {
+
+  alpha ~ normal(0, 1e3);
+  beta  ~ normal(0, 1e3);
+
+  H ~ beta(1, 1);
+
+  tau2_mu    ~ inv_gamma(0.01, 0.01);
+  tau2_sigma ~ inv_gamma(0.01, 0.01);
+
+  // Prior geofísica reescalada:
+  // xi_bar ~ B(9,6,-0.5,0.5)
+  {
+    real a = -0.5;
+    real b =  0.5;
+    real p = 9;
+    real q = 6;
+    real lbetaf = lgamma(p) + lgamma(q) - lgamma(p + q);
+
+    target += -lbetaf
+              + (p - 1) * log(xi - a)
+              + (q - 1) * log(b - xi)
+              - (p + q - 1) * log(b - a);
+  }
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+
+      real s_log = log((D[k] + theta[g]) / (D0 + theta[g]));
+
+      real mm = alpha[g] - H[g] * s_log;
+      real ss = beta[g]  - H[g] * s_log;
+
+      mu_log[k, g]    ~ normal(mm, sqrt(tau2_mu));
+      sigma_log[k, g] ~ normal(ss, sqrt(tau2_sigma));
+    }
+  }
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    target += gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_bar
+    );
+  }
+}
+
+generated quantities {
+
+  vector[N_obs] log_lik;
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    log_lik[i] = gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_bar
+    );
+  }
+}
+"
+```
+
+```{r}
+# 3.3. MODELO REGIONAL COM XI POR DURAÇÃO
+# xi_{i,d} = xi_d
+modelo_bhm_xi_d_stan <- "
+functions {
+  real gev_lpdf(real y, real mu, real sigma, real xi) {
+    real z = (y - mu) / sigma;
+
+    if (fabs(xi) < 1e-12) {
+      return -log(sigma) - z - exp(-z);
+    } else {
+      real t = 1 + xi * z;
+
+      if (t <= 0) return negative_infinity();
+
+      return -log(sigma)
+             - (1 + 1 / xi) * log(t)
+             - pow(t, -1 / xi);
+    }
+  }
+}
+
+data {
+
+  int<lower=1> N_obs;
+  vector[N_obs] y;
+
+  int<lower=1> n_gauge;
+  int<lower=1> K;
+
+  int<lower=1, upper=n_gauge> gauge_id[N_obs];
+  int<lower=1, upper=K> duration_id[N_obs];
+
+  vector<lower=0>[K] D;
+  real<lower=0> D0;
+}
+
+parameters {
+
+  vector[n_gauge] alpha;
+  vector[n_gauge] beta;
+
+  vector<lower=0, upper=1>[n_gauge] H;
+  vector<lower=0, upper=10>[n_gauge] theta;
+
+  matrix[K, n_gauge] mu_log;
+  matrix[K, n_gauge] sigma_log;
+
+  // Cauda específica de cada duração
+  vector<lower=-0.5, upper=0.5>[K] xi_d;
+
+  // Média regional da cauda
+  real<lower=-0.5, upper=0.5> xi_bar;
+
+  real<lower=0> tau2_mu;
+  real<lower=0> tau2_sigma;
+  real<lower=0> tau2_xi;
+}
+
+transformed parameters {
+
+  matrix[K, n_gauge] mu;
+  matrix[K, n_gauge] sigma;
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+      mu[k, g] = exp(mu_log[k, g]);
+      sigma[k, g] = exp(sigma_log[k, g]);
+    }
+  }
+}
+
+model {
+
+  alpha ~ normal(0, 1e3);
+  beta  ~ normal(0, 1e3);
+
+  H ~ beta(1, 1);
+
+  tau2_mu    ~ inv_gamma(0.01, 0.01);
+  tau2_sigma ~ inv_gamma(0.01, 0.01);
+  tau2_xi    ~ inv_gamma(0.01, 0.01);
+
+  // xi_bar ~ B(9,6,-0.5,0.5)
+  {
+    real a = -0.5;
+    real b =  0.5;
+    real p = 9;
+    real q = 6;
+    real lbetaf = lgamma(p) + lgamma(q) - lgamma(p + q);
+
+    target += -lbetaf
+              + (p - 1) * log(xi_bar - a)
+              + (q - 1) * log(b - xi_bar)
+              - (p + q - 1) * log(b - a);
+  }
+
+  // Estrutura hierárquica da cauda por duração
+  for (k in 1:K) {
+    xi_d[k] ~ normal(xi_bar, sqrt(tau2_xi));
+  }
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+
+      real s_log = log((D[k] + theta[g]) / (D0 + theta[g]));
+
+      real mm = alpha[g] - H[g] * s_log;
+      real ss = beta[g]  - H[g] * s_log;
+
+      mu_log[k, g]    ~ normal(mm, sqrt(tau2_mu));
+      sigma_log[k, g] ~ normal(ss, sqrt(tau2_sigma));
+    }
+  }
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    target += gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_d[k]
+    );
+  }
+}
+
+generated quantities {
+
+  vector[N_obs] log_lik;
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    log_lik[i] = gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_d[k]
+    );
+  }
+}
+"
+```
+
+```{r}
+# 3.4. MODELO REGIONAL COM XI POR ESTAÇÃO
+# xi_{i,d} = xi_j
+modelo_bhm_xi_j_stan <- "
+functions {
+  real gev_lpdf(real y, real mu, real sigma, real xi) {
+    real z = (y - mu) / sigma;
+
+    if (fabs(xi) < 1e-12) {
+      return -log(sigma) - z - exp(-z);
+    } else {
+      real t = 1 + xi * z;
+
+      if (t <= 0) return negative_infinity();
+
+      return -log(sigma)
+             - (1 + 1 / xi) * log(t)
+             - pow(t, -1 / xi);
+    }
+  }
+}
+
+data {
+
+  int<lower=1> N_obs;
+  vector[N_obs] y;
+
+  int<lower=1> n_gauge;
+  int<lower=1> K;
+
+  int<lower=1, upper=n_gauge> gauge_id[N_obs];
+  int<lower=1, upper=K> duration_id[N_obs];
+
+  vector<lower=0>[K] D;
+  real<lower=0> D0;
+}
+
+parameters {
+
+  vector[n_gauge] alpha;
+  vector[n_gauge] beta;
+
+  vector<lower=0, upper=1>[n_gauge] H;
+  vector<lower=0, upper=10>[n_gauge] theta;
+
+  matrix[K, n_gauge] mu_log;
+  matrix[K, n_gauge] sigma_log;
+
+  // Cauda específica de cada estação
+  vector<lower=-0.5, upper=0.5>[n_gauge] xi_j;
+
+  // Média regional da cauda
+  real<lower=-0.5, upper=0.5> xi_bar;
+
+  real<lower=0> tau2_mu;
+  real<lower=0> tau2_sigma;
+  real<lower=0> tau2_xi;
+}
+
+transformed parameters {
+
+  matrix[K, n_gauge] mu;
+  matrix[K, n_gauge] sigma;
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+      mu[k, g] = exp(mu_log[k, g]);
+      sigma[k, g] = exp(sigma_log[k, g]);
+    }
+  }
+}
+
+model {
+
+  alpha ~ normal(0, 1e3);
+  beta  ~ normal(0, 1e3);
+
+  H ~ beta(1, 1);
+
+  tau2_mu    ~ inv_gamma(0.01, 0.01);
+  tau2_sigma ~ inv_gamma(0.01, 0.01);
+  tau2_xi    ~ inv_gamma(0.01, 0.01);
+
+  // xi_bar ~ B(9,6,-0.5,0.5)
+  {
+    real a = -0.5;
+    real b =  0.5;
+    real p = 9;
+    real q = 6;
+    real lbetaf = lgamma(p) + lgamma(q) - lgamma(p + q);
+
+    target += -lbetaf
+              + (p - 1) * log(xi_bar - a)
+              + (q - 1) * log(b - xi_bar)
+              - (p + q - 1) * log(b - a);
+  }
+
+  // Estrutura hierárquica da cauda por estação
+  for (g in 1:n_gauge) {
+    xi_j[g] ~ normal(xi_bar, sqrt(tau2_xi));
+  }
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+
+      real s_log = log((D[k] + theta[g]) / (D0 + theta[g]));
+
+      real mm = alpha[g] - H[g] * s_log;
+      real ss = beta[g]  - H[g] * s_log;
+
+      mu_log[k, g]    ~ normal(mm, sqrt(tau2_mu));
+      sigma_log[k, g] ~ normal(ss, sqrt(tau2_sigma));
+    }
+  }
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    target += gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_j[g]
+    );
+  }
+}
+
+generated quantities {
+
+  vector[N_obs] log_lik;
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    log_lik[i] = gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_j[g]
+    );
+  }
+}
+"
+```
+
+```{r}
+# ============================================================
+# 2.5. MODELO REGIONAL COM XI POR ESTAÇÃO-DURAÇÃO
+# xi_{i,d} = xi_{d,j}
+# ============================================================
+
+modelo_bhm_xi_jd_stan <- "
+functions {
+  real gev_lpdf(real y, real mu, real sigma, real xi) {
+    real z = (y - mu) / sigma;
+
+    if (fabs(xi) < 1e-12) {
+      return -log(sigma) - z - exp(-z);
+    } else {
+      real t = 1 + xi * z;
+
+      if (t <= 0) return negative_infinity();
+
+      return -log(sigma)
+             - (1 + 1 / xi) * log(t)
+             - pow(t, -1 / xi);
+    }
+  }
+}
+
+data {
+
+  int<lower=1> N_obs;
+  vector[N_obs] y;
+
+  int<lower=1> n_gauge;
+  int<lower=1> K;
+
+  int<lower=1, upper=n_gauge> gauge_id[N_obs];
+  int<lower=1, upper=K> duration_id[N_obs];
+
+  vector<lower=0>[K] D;
+  real<lower=0> D0;
+}
+
+parameters {
+
+  vector[n_gauge] alpha;
+  vector[n_gauge] beta;
+
+  vector<lower=0, upper=1>[n_gauge] H;
+  vector<lower=0, upper=10>[n_gauge] theta;
+
+  matrix[K, n_gauge] mu_log;
+  matrix[K, n_gauge] sigma_log;
+
+  // Cauda específica de cada combinação duração-estação
+  matrix<lower=-0.5, upper=0.5>[K, n_gauge] xi_jd;
+
+  // Média regional da cauda
+  real<lower=-0.5, upper=0.5> xi_bar;
+
+  real<lower=0> tau2_mu;
+  real<lower=0> tau2_sigma;
+  real<lower=0> tau2_xi;
+}
+
+transformed parameters {
+
+  matrix[K, n_gauge] mu;
+  matrix[K, n_gauge] sigma;
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+      mu[k, g] = exp(mu_log[k, g]);
+      sigma[k, g] = exp(sigma_log[k, g]);
+    }
+  }
+}
+
+model {
+
+  alpha ~ normal(0, 1e3);
+  beta  ~ normal(0, 1e3);
+
+  H ~ beta(1, 1);
+
+  tau2_mu    ~ inv_gamma(0.01, 0.01);
+  tau2_sigma ~ inv_gamma(0.01, 0.01);
+  tau2_xi    ~ inv_gamma(0.01, 0.01);
+
+  // xi_bar ~ B(9,6,-0.5,0.5)
+  {
+    real a = -0.5;
+    real b =  0.5;
+    real p = 9;
+    real q = 6;
+    real lbetaf = lgamma(p) + lgamma(q) - lgamma(p + q);
+
+    target += -lbetaf
+              + (p - 1) * log(xi_bar - a)
+              + (q - 1) * log(b - xi_bar)
+              - (p + q - 1) * log(b - a);
+  }
+
+  for (g in 1:n_gauge) {
+    for (k in 1:K) {
+
+      real s_log = log((D[k] + theta[g]) / (D0 + theta[g]));
+
+      real mm = alpha[g] - H[g] * s_log;
+      real ss = beta[g]  - H[g] * s_log;
+
+      mu_log[k, g]    ~ normal(mm, sqrt(tau2_mu));
+      sigma_log[k, g] ~ normal(ss, sqrt(tau2_sigma));
+
+      // Estrutura hierárquica da cauda por estação-duração
+      xi_jd[k, g] ~ normal(xi_bar, sqrt(tau2_xi));
+    }
+  }
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    target += gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_jd[k, g]
+    );
+  }
+}
+
+generated quantities {
+
+  vector[N_obs] log_lik;
+
+  for (i in 1:N_obs) {
+
+    int g = gauge_id[i];
+    int k = duration_id[i];
+
+    log_lik[i] = gev_lpdf(
+      y[i] |
+      mu[k, g],
+      sigma[k, g],
+      xi_jd[k, g]
+    );
+  }
+}
+"
+```
