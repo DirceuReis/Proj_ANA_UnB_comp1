@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Metodologia para a análise subdiária de precipitações extremas – Proj. IDF Brasil ANA/UnB</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.qmd"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 3</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-3">    
+        <li>
+    <a class="dropdown-item" href="../meta3_brasil.qmd">
+ <span class="dropdown-text">Organização da base de dados - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 5</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-5">    
+        <li>
+    <a class="dropdown-item" href="../meta5_brasil.qmd">
+ <span class="dropdown-text">IDFs para precipitação diária - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta5_rs.qmd">
+ <span class="dropdown-text">Modelagem e análises no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-6" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 6</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-6">    
+        <li>
+    <a class="dropdown-item" href="../meta6_brasil.qmd">
+ <span class="dropdown-text">Correção de viés dos dados climáticos - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-7" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 7</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-7">    
+        <li>
+    <a class="dropdown-item" href="../meta7_brasil.qmd">
+ <span class="dropdown-text">IDFs subdiárias INMET/CEMADEN - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta7_rs.qmd">
+ <span class="dropdown-text">Modelagem regional e validação no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-8" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 8</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-8">    
+        <li>
+    <a class="dropdown-item" href="../meta8_estacoes.qmd">
+ <span class="dropdown-text">Não estacionariedade em pluviômetros e pluviógrafos</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_grade.qmd">
+ <span class="dropdown-text">Não estacionariedade nos dados em grade</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_rs.qmd">
+ <span class="dropdown-text">Análises detalhadas no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Scripts</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-scripts">    
+        <li>
+    <a class="dropdown-item" href="../scripts_meta3.qmd">
+ <span class="dropdown-text">Meta 3 - Base de dados</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta5.qmd">
+ <span class="dropdown-text">Meta 5 - IDFs diárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta6.qmd">
+ <span class="dropdown-text">Meta 6 - Correção de viés</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta7.qmd">
+ <span class="dropdown-text">Meta 7 - IDFs subdiárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta8.qmd">
+ <span class="dropdown-text">Meta 8 - Não estacionariedade</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#metodologia-para-a-análise-subdiária-de-precipitações-extremas" id="toc-metodologia-para-a-análise-subdiária-de-precipitações-extremas" class="nav-link active" data-scroll-target="#metodologia-para-a-análise-subdiária-de-precipitações-extremas">Metodologia para a análise subdiária de precipitações extremas</a>
+  <ul class="collapse">
+  <li><a href="#seleção-das-séries-subdiárias" id="toc-seleção-das-séries-subdiárias" class="nav-link" data-scroll-target="#seleção-das-séries-subdiárias">Seleção das séries subdiárias</a></li>
+  <li><a href="#agregação-temporal-e-construção-das-séries-amax" id="toc-agregação-temporal-e-construção-das-séries-amax" class="nav-link" data-scroll-target="#agregação-temporal-e-construção-das-séries-amax">Agregação temporal e construção das séries AMAX</a></li>
+  <li><a href="#invariância-de-escala" id="toc-invariância-de-escala" class="nav-link" data-scroll-target="#invariância-de-escala">Invariância de escala</a>
+  <ul class="collapse">
+  <li><a href="#modelos-hierarquicos-bayesianos" id="toc-modelos-hierarquicos-bayesianos" class="nav-link" data-scroll-target="#modelos-hierarquicos-bayesianos">Modelos Hierarquicos Bayesianos</a></li>
+  <li><a href="#distribuições-a-priori-e-hiperpriori" id="toc-distribuições-a-priori-e-hiperpriori" class="nav-link" data-scroll-target="#distribuições-a-priori-e-hiperpriori">Distribuições a priori e hiperpriori</a></li>
+  <li><a href="#inferência-posterior-e-diagnósticos" id="toc-inferência-posterior-e-diagnósticos" class="nav-link" data-scroll-target="#inferência-posterior-e-diagnósticos">Inferência posterior e diagnósticos</a></li>
+  </ul></li>
+  <li><a href="#estudo-de-caso-no-rio-grande-do-sul-bayesiano" id="toc-estudo-de-caso-no-rio-grande-do-sul-bayesiano" class="nav-link" data-scroll-target="#estudo-de-caso-no-rio-grande-do-sul-bayesiano">Estudo de caso no Rio Grande do Sul (Bayesiano)</a>
+  <ul class="collapse">
+  <li><a href="#estruturas-alternativas-de-xi" id="toc-estruturas-alternativas-de-xi" class="nav-link" data-scroll-target="#estruturas-alternativas-de-xi">Estruturas alternativas de <span class="math inline">\(\xi\)</span></a></li>
+  </ul></li>
+  <li><a href="#quantis-de-retorno-incerteza-e-curvas-idf" id="toc-quantis-de-retorno-incerteza-e-curvas-idf" class="nav-link" data-scroll-target="#quantis-de-retorno-incerteza-e-curvas-idf">Quantis de retorno, incerteza e curvas IDF</a></li>
+  <li><a href="#resultados-rio-grande-do-sul" id="toc-resultados-rio-grande-do-sul" class="nav-link" data-scroll-target="#resultados-rio-grande-do-sul">Resultados Rio Grande do Sul</a>
+  <ul class="collapse">
+  <li><a href="#parâmetros-estruturais-e-parâmetros-da-distribuição-gev" id="toc-parâmetros-estruturais-e-parâmetros-da-distribuição-gev" class="nav-link" data-scroll-target="#parâmetros-estruturais-e-parâmetros-da-distribuição-gev">Parâmetros estruturais e parâmetros da distribuição GEV</a></li>
+  <li><a href="#curvas-intensidadeduraçãofrequência-idf" id="toc-curvas-intensidadeduraçãofrequência-idf" class="nav-link" data-scroll-target="#curvas-intensidadeduraçãofrequência-idf">Curvas intensidade–duração–frequência (IDF)</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Metodologia para a análise subdiária de precipitações extremas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="metodologia-para-a-análise-subdiária-de-precipitações-extremas" class="level1">
+<h1>Metodologia para a análise subdiária de precipitações extremas</h1>
+<p>Esta etapa teve como objetivo estimar relações intensidade–duração–frequência (IDF) a partir das séries subdiárias selecionadas e submetidas ao controle de qualidade na Meta 3. A análise combinou máximos anuais, a distribuição Generalizada de Valores Extremos (GEV) e inferência bayesiana com estrutura hierárquica entre durações, fundamentada nas relações de invariância de escala proposta por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>. Foram consideradas duas aplicações: uma abordagem local (<em>non-pooled</em>) entre estações, para o processamento nacional, e um estudo comparativo de estruturas alternativas de compartilhamento de informação no Rio Grande do Sul (RS).</p>
+<!-- Consolidar toda uma descrição dos modelos aplicados no RS e as premissas adotadas pelos modelos -->
+<section id="seleção-das-séries-subdiárias" class="level2">
+<h2 class="anchored" data-anchor-id="seleção-das-séries-subdiárias">Seleção das séries subdiárias</h2>
+<p>Foram utilizadas séries subdiárias de precipitação provenientes da base UNIPLU, selecionadas após os procedimentos de consistência e controle de qualidade descritos <!-- Verificar onde será colocado o novo controle de qualidade dos dados subdiários -->. A seleção foi realizada por combinação estação–duração–ano, de modo que os máximos anuais fossem obtidos a partir de períodos com cobertura observacional suficiente. O processamento adotou como referência um limite de 20% de falhas na resolução temporal nativa e um mínimo de oito anos aprovados por estação e duração.</p>
+<p>A análise foi organizada em duas etapas. Inicialmente, são apresentados os modelos avaliados para o Rio Grande do Sul (RS), com o objetivo de investigar diferentes hipóteses de compartilhamento de informação entre estações e durações. Essa análise foi desenvolvida anteriormente à definição individualizada do ano hidrológico e, portanto, utilizou séries de máximos anuais obtidas por agregação segundo o ano civil, compreendido entre janeiro e dezembro.</p>
+<p>Posteriormente, é apresentada a aplicação dos modelos em escala nacional, utilizando séries de máximos anuais organizadas de acordo com o mês inicial do ano hidrológico atribuído a cada estação. Dessa forma, as duas etapas compartilham a fundamentação probabilística e as relações de invariância de escala, mas diferem tanto nas hipóteses de compartilhamento dos parâmetros quanto na delimitação temporal dos blocos anuais.</p>
+</section>
+<section id="agregação-temporal-e-construção-das-séries-amax" class="level2">
+<h2 class="anchored" data-anchor-id="agregação-temporal-e-construção-das-séries-amax">Agregação temporal e construção das séries AMAX</h2>
+<p>A precipitação incremental foi agregada em janelas móveis, respeitando a resolução nativa de cada estação. Para uma duração <span class="math inline">\(d\)</span> expressa em minutos, o acumulado móvel <span class="math inline">\(A_{j,d}(t)\)</span> corresponde à soma dos incrementos observados na janela com término em <span class="math inline">\(t\)</span>. A intensidade máxima anual foi definida por:</p>
+<p><span id="eq-amax-subdiario"><span class="math display">\[
+y_{j,d,a}=\frac{60}{d}\max_{t\in\mathcal T_{j,d,a}} A_{j,d}(t),
+\tag{1}\]</span></span></p>
+<p>em que <span class="math inline">\(j\)</span> identifica a estação, <span class="math inline">\(a\)</span> o ano de referência e <span class="math inline">\(\mathcal T_{j,d,a}\)</span> o conjunto de janelas admissíveis. A conversão da lâmina acumulada em intensidade foi realizada antes do ajuste da GEV, de modo que <span class="math inline">\(y_{j,d,a}\)</span> já está expresso em mm/h. A agregação móvel permite identificar máximos que não coincidem com os horários fixos de observação <span class="citation" data-cites="coles2001">(<a href="#ref-coles2001" role="doc-biblioref">Coles 2001</a>)</span>.</p>
+</section>
+<section id="invariância-de-escala" class="level2">
+<h2 class="anchored" data-anchor-id="invariância-de-escala">Invariância de escala</h2>
+<p>A base física e estatística do modelo é a relação entre intensidade, duração e período de retorno <span class="math inline">\(T\)</span>, na qual a variação temporal pode ser descrita por uma função de escala <span class="citation" data-cites="koutsoyiannis1998 lima2018">(<a href="#ref-koutsoyiannis1998" role="doc-biblioref">Koutsoyiannis, Kozonis, e Manetas 1998</a>; <a href="#ref-lima2018" role="doc-biblioref">Lima, Kwon, e Kim 2018</a>)</span>:</p>
+<p><span id="eq-idf-invariancia-subdiario"><span class="math display">\[
+i(d,T)=\frac{a(T)}{(d+\theta)^H},\qquad 0&lt;H\leq1,\ \theta\geq0.
+\tag{2}\]</span></span></p>
+<p>A função <span class="math inline">\(a(T)\)</span> representa a dependência com a frequência, enquanto <span class="math inline">\((d+\theta)^{-H}\)</span> representa a variação com a duração.</p>
+<section id="modelos-hierarquicos-bayesianos" class="level3">
+<h3 class="anchored" data-anchor-id="modelos-hierarquicos-bayesianos">Modelos Hierarquicos Bayesianos</h3>
+<p>Seguindo a formulação hierárquica de <span class="citation" data-cites="lima2018">Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação <span class="math inline">\(j\)</span>, duração <span class="math inline">\(d_k\)</span> e ano <span class="math inline">\(a\)</span>, o modelo foi especificado pelas <a href="#eq-gev-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;3</a>, <a href="#eq-mu-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;4</a>, <a href="#eq-sigma-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;5</a> e <a href="#eq-xi-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;6</a>.</p>
+<p><span id="eq-gev-hierarquica-subdiario"><span class="math display">\[
+Y_{j,k,a}\sim\operatorname{GEV}
+(\mu_{j,k},\sigma_{j,k},\xi_{j,k}).
+\tag{3}\]</span></span></p>
+<p><span id="eq-mu-hierarquica-subdiario"><span class="math display">\[
+\log\mu_{j,k}\sim\mathcal N\left(
+\alpha_j-H_j\log\left(
+\frac{d_k+\theta_j}{d_0+\theta_j}
+\right),
+\tau_{\mu,j}^{2}
+\right).
+\tag{4}\]</span></span></p>
+<p><span id="eq-sigma-hierarquica-subdiario"><span class="math display">\[
+\log\sigma_{j,k}\sim\mathcal N\left(
+\beta_j-H_j\log\left(
+\frac{d_k+\theta_j}{d_0+\theta_j}
+\right),
+\tau_{\sigma,j}^{2}
+\right).
+\tag{5}\]</span></span></p>
+<p><span id="eq-xi-hierarquica-subdiario"><span class="math display">\[
+\xi_{j,k}\mid\bar\xi_j,\tau_{\xi,j}^{2}
+\propto\mathcal N\left(
+\bar\xi_j,\tau_{\xi,j}^{2}
+\right),
+\qquad -0{,}5&lt;\xi_{j,k}&lt;0{,}5.
+\tag{6}\]</span></span></p>
+<p>Nessa formulação, <span class="math inline">\(d_k\)</span> representa a duração analisada e <span class="math inline">\(d_0=24\)</span> h corresponde à duração de referência. Os parâmetros <span class="math inline">\(\alpha_j\)</span> e <span class="math inline">\(\beta_j\)</span> definem os níveis centrais de localização e escala na referência, enquanto <span class="math inline">\(H_j\)</span> e <span class="math inline">\(\theta_j\)</span> controlam a relação de escala com a duração. As variâncias <span class="math inline">\(\tau_{\mu,j}^{2}\)</span> e <span class="math inline">\(\tau_{\sigma,j}^{2}\)</span> permitem desvios das respectivas tendências, e <span class="math inline">\(\tau_{\xi,j}^{2}\)</span> regula a dispersão dos parâmetros de forma em torno de <span class="math inline">\(\bar\xi_j\)</span>. Todas as durações nas relações de escala foram expressas em horas, incluindo <span class="math inline">\(\theta_j\)</span>.</p>
+<p>A estrutura hierárquica permite compartilhar informação entre durações de uma mesma estação, sem impor igualdade entre seus parâmetros GEV. A restrição do parâmetro de forma corresponde ao suporte adotado na implementação, sendo a expressão proporcional à densidade normal utilizada no modelo.</p>
+</section>
+<section id="distribuições-a-priori-e-hiperpriori" class="level3">
+<h3 class="anchored" data-anchor-id="distribuições-a-priori-e-hiperpriori">Distribuições a priori e hiperpriori</h3>
+<p>Em todas as aplicações do modelo hierárquico bayesiano, as distribuições a priori e hiperpriori foram especificadas seguindo as famílias e os valores de hiperparâmetros usados na formulação de <span class="citation" data-cites="lima2018">Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, adotaram-se:</p>
+<p><span id="eq-priori-alpha-beta-subdiario"><span class="math display">\[
+\alpha_j,\beta_j\sim\mathcal N(0,10^6),
+\tag{7}\]</span></span></p>
+<p><span id="eq-priori-h-subdiario"><span class="math display">\[
+H_j\sim\operatorname{Beta}(1,1),\qquad 0&lt;H_j&lt;1,
+\tag{8}\]</span></span></p>
+<p><span id="eq-priori-theta-subdiario"><span class="math display">\[
+\theta_j\sim\operatorname{Uniforme}(0,10),
+\tag{9}\]</span></span></p>
+<p><span id="eq-priori-xi-subdiario"><span class="math display">\[
+\bar\xi_j\sim\mathcal B(9,6,-0{,}5,0{,}5),
+\tag{10}\]</span></span></p>
+<p><span id="eq-hiperprioris-subdiario"><span class="math display">\[
+\tau_{\mu,j}^{2},\tau_{\sigma,j}^{2},\tau_{\xi,j}^{2}
+\sim\operatorname{InvGamma}(0{,}01,0{,}01).
+\tag{11}\]</span></span></p>
+<p>A notação <span class="math inline">\(\mathcal B(a,b,l,u)\)</span> corresponde à distribuição Beta reescalada para o intervalo <span class="math inline">\((l,u)\)</span>. Para <span class="math inline">\(\bar\xi_j\)</span>, a média a priori é <span class="math inline">\(-0{,}5+9/(9+6)=0{,}1\)</span>. Essa escolha segue a regularização de parâmetros de forma em análises de extremos hidrológicos, relacionada à proposta de <span class="citation" data-cites="martins2000">Martins e Stedinger (<a href="#ref-martins2000" role="doc-biblioref">2000</a>)</span> e à convenção de sinal da GEV adotada por <span class="citation" data-cites="lima2018">Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>. A distribuição <span class="math inline">\(\operatorname{Beta}(1,1)\)</span> é uniforme em <span class="math inline">\((0,1)\)</span>, e as normais para <span class="math inline">\(\alpha_j\)</span> e <span class="math inline">\(\beta_j\)</span> são amplamente dispersas na escala logarítmica. As inversas-gama incidem sobre <strong>variâncias</strong>, não desvios-padrão; sua escolha não deve ser interpretada como necessariamente não informativa <span class="citation" data-cites="gelman2006">(<a href="#ref-gelman2006" role="doc-biblioref">Gelman 2006</a>)</span>.</p>
+<p>A especificação numérica segue o arcabouço de Lima et al.&nbsp;(2018), mas a <strong>estrutura de compartilhamento regional é diferente</strong>: na etapa nacional deste estudo, os hiperparâmetros <span class="math inline">\(\bar\xi_j\)</span>, <span class="math inline">\(\tau_{\mu,j}^2\)</span>, <span class="math inline">\(\tau_{\sigma,j}^2\)</span> e <span class="math inline">\(\tau_{\xi,j}^2\)</span> também são específicos por estação. Portanto, não houve <em>pooling</em> espacial, onde o compartilhamento ocorreu apenas entre durações do mesmo posto.</p>
+</section>
+<section id="inferência-posterior-e-diagnósticos" class="level3">
+<h3 class="anchored" data-anchor-id="inferência-posterior-e-diagnósticos">Inferência posterior e diagnósticos</h3>
+<!-- Talvez melhor falar disso nos resultados -->
+<p>A distribuição posterior de cada estação foi definida, proporcionalmente, pelo produto da verossimilhança GEV e das distribuições a priori e hierárquicas acima. A implementação foi desenvolvida em R com o pacote <code>rstan</code> e código probabilístico em Stan. Os parâmetros foram estimados por amostragem MCMC com o amostrador Hamiltoniano adaptativo de Stan (NUTS).</p>
+<p>Foram executadas <strong>cinco cadeias independentes</strong>, com <strong>20.000 iterações por cadeia</strong>, descartando-se as <strong>10.000 iniciais para aquecimento/adaptação</strong>. Aplicou-se <em>thinning</em> de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em <code>adapt_delta = 0.999</code> e <code>max_treedepth = 17</code>. Os valores iniciais de <span class="math inline">\(H\)</span>, <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\bar\xi\)</span>, <span class="math inline">\(\xi_k\)</span> e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.</p>
+<p>A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência <span class="math inline">\(\widehat R\)</span> por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (<em>bulk-ESS</em> e <em>tail-ESS</em>), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (<em>E-BFMI</em>). O diagnóstico <span class="math inline">\(\widehat R\)</span> compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação <span class="citation" data-cites="vehtari2021 standiagnostics">(<a href="#ref-vehtari2021" role="doc-biblioref">Vehtari et al. 2021</a>; <a href="#ref-standiagnostics" role="doc-biblioref"><strong>standiagnostics?</strong></a>)</span>. Adota-se como referência operacional conservadora <span class="math inline">\(\widehat R&lt;1{,}05\)</span>, além da inspeção de ESS e da ausência de divergências.</p>
+</section>
+</section>
+<section id="estudo-de-caso-no-rio-grande-do-sul-bayesiano" class="level2">
+<h2 class="anchored" data-anchor-id="estudo-de-caso-no-rio-grande-do-sul-bayesiano">Estudo de caso no Rio Grande do Sul (Bayesiano)</h2>
+<p>O RS foi utilizado para investigar estruturas alternativas para o parâmetro de forma da GEV, com o objetivo de examinar efeitos de restrições de homogeneidade e de compartilhamento espacial sobre a estimação de quantis extremos. Esta comparação utilizou máximos anuais organizados por ano civil, por ter sido conduzida antes da atribuição dos meses iniciais individuais do ano hidrológico.</p>
+<section id="estruturas-alternativas-de-xi" class="level3">
+<h3 class="anchored" data-anchor-id="estruturas-alternativas-de-xi">Estruturas alternativas de <span class="math inline">\(\xi\)</span></h3>
+<p>As hipóteses de comparação podem ser expressas pelas seguintes restrições ou relações, que diferenciam os níveis de compartilhamento de informação:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Estrutura</th>
+<th style="text-align: left;">Representação</th>
+<th style="text-align: left;">Compartilhamento</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Local (<em>non-pooled</em>)</td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}\)</span> regularizado em torno de <span class="math inline">\(\bar\xi_j\)</span></td>
+<td style="text-align: left;">Entre durações da mesma estação</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Constante entre durações</td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi_j\)</span></td>
+<td style="text-align: left;">Igualdade entre durações em cada estação</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Comum entre estações para cada duração</td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi_k\)</span></td>
+<td style="text-align: left;">Igualdade entre estações para uma duração</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Globalmente comum</td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi\)</span></td>
+<td style="text-align: left;">Igualdade entre estações e durações</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>Partial pooling</em> espacial</td>
+<td style="text-align: left;"><span class="math inline">\(\xi_j\)</span> associado a parâmetros regionais</td>
+<td style="text-align: left;">Regularização entre estações, sem igualdade obrigatória</td>
+</tr>
+</tbody>
+</table>
+<p>Os modelos avaliados no Rio Grande do Sul mantiveram a mesma estrutura hierárquica de invariância de escala para os parâmetros de localização e escala da distribuição GEV, fundamentada em Lima et al.&nbsp;(2018). Os parâmetros <span class="math inline">\(\alpha_j\)</span>, <span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(H_j\)</span> e <span class="math inline">\(\theta_j\)</span> foram estimados individualmente para cada estação, sem compartilhamento espacial. As diferentes especificações distinguiram-se exclusivamente pela estrutura atribuída ao parâmetro de forma <span class="math inline">\(\xi\)</span>, permitindo avaliar as consequências de diferentes hipóteses de constância, heterogeneidade e compartilhamento de informação sobre o comportamento das caudas da distribuição e as estimativas de precipitações extremas.</p>
+</section>
+</section>
+<section id="quantis-de-retorno-incerteza-e-curvas-idf" class="level2">
+<h2 class="anchored" data-anchor-id="quantis-de-retorno-incerteza-e-curvas-idf">Quantis de retorno, incerteza e curvas IDF</h2>
+<p>Após a estimação dos parâmetros GEV, os quantis correspondentes ao período de retorno <span class="math inline">\(T\)</span> foram obtidos para cada sorteio posterior <span class="math inline">\(s\)</span>. Para <span class="math inline">\(\xi_{j,k}^{(s)}\ne0\)</span>, utilizou-se a <a href="#eq-quantil-gev-subdiario" class="quarto-xref">Equação&nbsp;12</a>:</p>
+<p><span id="eq-quantil-gev-subdiario"><span class="math display">\[
+q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}+
+\frac{\sigma_{j,k}^{(s)}}{\xi_{j,k}^{(s)}}
+\left\{\left[-\log\left(1-\frac1T\right)\right]^{-\xi_{j,k}^{(s)}}-1\right\}.
+\tag{12}\]</span></span></p>
+<p>No limite de Gumbel, aplicou-se a <a href="#eq-quantil-gumbel-subdiario" class="quarto-xref">Equação&nbsp;13</a>:</p>
+<p><span id="eq-quantil-gumbel-subdiario"><span class="math display">\[
+q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}-
+\sigma_{j,k}^{(s)}\log\left[-\log\left(1-\frac1T\right)\right].
+\tag{13}\]</span></span></p>
+<p>Os quantis de retorno foram considerados para <span class="math inline">\(T=2\)</span>, 5, 10, 25, 50, 100 e 200 anos, conforme a análise proposta. A mediana dos valores <span class="math inline">\(q_{T,j,k}^{(s)}\)</span> representa a estimativa central, e os percentis de 2,5% e 97,5% caracterizam o intervalo de credibilidade pontual de 95%. Os quantis resultantes constituem diretamente as ordenadas das curvas IDF. Períodos de retorno longos relativamente ao comprimento das séries exigem cautela na interpretação da extrapolação <span class="citation" data-cites="coles2001">(<a href="#ref-coles2001" role="doc-biblioref">Coles 2001</a>)</span>.</p>
+</section>
+<section id="resultados-rio-grande-do-sul" class="level2">
+<h2 class="anchored" data-anchor-id="resultados-rio-grande-do-sul">Resultados Rio Grande do Sul</h2>
+<p>Os diagnósticos de amostragem indicaram comportamento geral satisfatório dos cinco modelos bayesianos ajustados às 52 estações do Rio Grande do Sul. Os valores máximos de <span class="math inline">\(\widehat{R}\)</span> variaram entre 1,014 e 1,019, permanecendo inferiores ao limite de 1,05 adotado na avaliação. Quanto às divergências, os modelos com <span class="math inline">\(\xi\)</span> comum, específico por duração e por estação–duração não apresentaram ocorrências, enquanto o modelo com <span class="math inline">\(\xi\)</span> específico por estação registrou duas divergências e o modelo <em>non-pooled</em>, 31 distribuídas em 14 estações.</p>
+<p>Na avaliação do PSIS-LOO, os modelos regionais apresentaram proporções reduzidas de observações com valores de Pareto-<span class="math inline">\(k\)</span> superiores a 0,7, entre 0,008% e 0,073%. O modelo <em>non-pooled</em> apresentou maior frequência de valores elevados, com 118 observações (0,96%) acima desse limite, incluindo três com Pareto-<span class="math inline">\(k&gt;1\)</span>. Esses resultados indicam maior necessidade de cautela na interpretação das estimativas preditivas desse modelo, particularmente para as observações mais influentes.</p>
+<p>A comparação preditiva dos cinco modelos bayesianos foi realizada por meio do critério PSIS-LOO, considerando as 12.288 observações utilizadas nos ajustes. O modelo com parâmetro de forma específico por estação (<span class="math inline">\(\xi_j\)</span>) apresentou o melhor desempenho, com ELPD-LOO de −26.365,1 (<strong>?@tbl-comparacao-loo</strong>). Em relação a esse modelo, as demais estruturas apresentaram diferenças de ELPD-LOO entre −320,1 e −402,5, indicando menor capacidade preditiva sob o critério adotado.</p>
+<table class="caption-top table">
+<caption>Comparação preditiva dos cinco modelos bayesianos no Rio Grande do Sul.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Modelo</th>
+<th style="text-align: right;">ELPD-LOO</th>
+<th style="text-align: right;"><span class="math inline">\(\Delta\)</span>ELPD (± EP)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\xi_j\)</span> — Por estação</td>
+<td style="text-align: right;"><strong>−26.365,1</strong></td>
+<td style="text-align: right;"><strong>0,0</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\xi_k\)</span> — Por duração</td>
+<td style="text-align: right;">−26.685,2</td>
+<td style="text-align: right;">−320,1 ± 22,2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\xi\)</span> — Comum</td>
+<td style="text-align: right;">−26.687,1</td>
+<td style="text-align: right;">−322,0 ± 21,0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}\)</span> — Estação–duração</td>
+<td style="text-align: right;">−26.687,1</td>
+<td style="text-align: right;">−322,0 ± 20,7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Local (<em>Non-pooled</em>)</td>
+<td style="text-align: right;">−26.767,5</td>
+<td style="text-align: right;">−402,5 ± 12,1</td>
+</tr>
+</tbody>
+</table>
+<p>: Valores de <span class="math inline">\(\Delta\)</span>ELPD calculados em relação ao modelo com maior ELPD-LOO; EP corresponde ao erro-padrão da diferença. Valores mais elevados de ELPD-LOO indicam melhor desempenho preditivo. {#tbl-comparacao-loo}</p>
+<p>Os resultados favoreceram a representação de <span class="math inline">\(\xi\)</span> variável entre estações, mas constante entre durações dentro de cada estação, com compartilhamento hierárquico regional. A maior flexibilidade do parâmetro de forma entre durações não proporcionou melhoria preditiva, enquanto o modelo <em>non-pooled</em> apresentou o desempenho menos favorável. Esses resultados referem-se às séries de máximos anuais organizadas segundo o ano civil e à avaliação preditiva pontual adotada.</p>
+<section id="parâmetros-estruturais-e-parâmetros-da-distribuição-gev" class="level3">
+<h3 class="anchored" data-anchor-id="parâmetros-estruturais-e-parâmetros-da-distribuição-gev">Parâmetros estruturais e parâmetros da distribuição GEV</h3>
+<p>A análise dos parâmetros estruturais revelou comportamento relativamente semelhante do expoente de escala <span class="math inline">\(H\)</span> entre os cinco modelos bayesianos. As medianas espaciais variaram de 0,711, no modelo com parâmetro de forma específico por estação (<span class="math inline">\(\xi_j\)</span>), a 0,735, no modelo com parâmetro de forma específico por duração (<span class="math inline">\(\xi_k\)</span>). As amplitudes interquartílicas permaneceram entre 0,059 e 0,068, indicando dispersões espaciais comparáveis entre as diferentes especificações. Para o modelo <span class="math inline">\(\xi_j\)</span>, que apresentou o melhor desempenho preditivo, a mediana espacial de <span class="math inline">\(H\)</span> foi de 0,711, com valores entre 0,610 e 0,909 nas estações analisadas.</p>
+<p>A distribuição das medianas posteriores de <span class="math inline">\(H\)</span> nas 52 estações apresentou comportamento semelhante entre os cinco modelos (<a href="#fig-distribuicao-h-rs" class="quarto-xref">Figura&nbsp;1</a>), com maior concentração de valores entre aproximadamente 0,68 e 0,77. Embora o modelo com <span class="math inline">\(\xi_j\)</span> específico por estação tenha apresentado mediana espacial ligeiramente inferior, as distribuições mostraram ampla sobreposição, indicando que as diferentes estruturas de compartilhamento do parâmetro de forma produziram padrões semelhantes para o expoente de escala.</p>
+<div id="fig-distribuicao-h-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-distribuicao-h-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/distribuicao_H_modelos.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-distribuicao-h-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Distribuição das medianas posteriores do expoente de escala <span class="math inline">\(H\)</span> nas 52 estações do Rio Grande do Sul, considerando os cinco modelos bayesianos avaliados. Os histogramas representam a distribuição entre estações, e as linhas contínuas correspondem às estimativas de densidade.
+</figcaption>
+</figure>
+</div>
+<p>A distribuição espacial de <span class="math inline">\(H\)</span> também apresentou padrões consistentes entre os modelos (<a href="#fig-mapa-h-rs" class="quarto-xref">Figura&nbsp;2</a>). Os maiores valores concentraram-se principalmente no oeste e noroeste do estado, enquanto estimativas relativamente menores foram observadas em setores centrais e orientais. As diferenças entre os mapas foram predominantemente locais, sem alterações expressivas na configuração espacial geral.</p>
+<div id="fig-mapa-h-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mapa-h-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/mapa_H_modelos.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mapa-h-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Distribuição espacial das medianas posteriores do expoente de escala <span class="math inline">\(H\)</span> nas 52 estações do Rio Grande do Sul, segundo os cinco modelos bayesianos avaliados. As superfícies foram obtidas por interpolação espacial dos valores estimados nas estações, representadas pelos pontos pretos.
+</figcaption>
+</figure>
+</div>
+<p>O parâmetro de deslocamento temporal <span class="math inline">\(\theta\)</span> apresentou maior variabilidade relativa entre estações, com medianas espaciais entre 0,360 e 0,521 h, dependendo do modelo. No modelo <span class="math inline">\(\xi_j\)</span>, a mediana foi de 0,360 h, com amplitude interquartílica de 0,315 h e valores entre 0,031 e 1,76 h.</p>
+<p>Os parâmetros de localização (<span class="math inline">\(\mu\)</span>) e escala (<span class="math inline">\(\sigma\)</span>) da distribuição GEV também apresentaram resultados próximos entre as especificações avaliadas. Para a duração de 24 horas, as medianas espaciais de <span class="math inline">\(\mu\)</span> variaram entre 4,13 e 4,25 mm/h, enquanto as de <span class="math inline">\(\sigma\)</span> permaneceram entre 0,939 e 0,970 mm/h. No modelo <span class="math inline">\(\xi_j\)</span>, foram obtidas medianas de 4,17 mm/h para <span class="math inline">\(\mu\)</span> e 0,939 mm/h para <span class="math inline">\(\sigma\)</span>, evidenciando diferenças relativamente pequenas em relação às demais estruturas.</p>
+<p>Em contrapartida, o parâmetro de forma <span class="math inline">\(\xi\)</span> apresentou diferenças mais expressivas entre os modelos, refletindo as restrições de compartilhamento adotadas. Para a duração de 24 horas, o modelo com <span class="math inline">\(\xi\)</span> globalmente comum estimou um valor de 0,024, enquanto o modelo com <span class="math inline">\(\xi\)</span> compartilhado por duração apresentou 0,040. O modelo regional com parâmetro específico por estação–duração apresentou mediana espacial de 0,026, com valores concentrados em um intervalo relativamente estreito. Já os modelos <span class="math inline">\(\xi_j\)</span> e <em>non-pooled</em> apresentaram maior heterogeneidade espacial, com medianas de 0,004 e 0,058, respectivamente.</p>
+<p>No modelo <span class="math inline">\(\xi_j\)</span>, as estimativas de forma foram negativas em 26 estações e positivas nas outras 26, variando de −0,412 a 0,390. Os percentis espaciais de 5% e 95% foram, respectivamente, −0,339 e 0,331. A presença de valores positivos e negativos indica heterogeneidade regional no comportamento estimado das caudas da distribuição GEV, não representada pelos modelos que impõem um único parâmetro de forma a todas as estações.</p>
+<p>Essa diferenciação também foi observada no modelo <em>non-pooled</em>, cujos valores de <span class="math inline">\(\xi\)</span> para 24 horas variaram de −0,306 a 0,338. Entretanto, a estrutura regional <span class="math inline">\(\xi_j\)</span> combinou a possibilidade de diferenças locais na forma da distribuição com uma regularização compartilhada entre estações, tendo apresentado o desempenho preditivo mais favorável na comparação realizada anteriormente.</p>
+<p>Em contrapartida, o parâmetro de forma <span class="math inline">\(\xi\)</span> apresentou diferenças mais expressivas entre os modelos, refletindo as restrições de compartilhamento adotadas. Para a duração de 24 horas, o modelo com <span class="math inline">\(\xi\)</span> globalmente comum estimou um valor de 0,024, enquanto o modelo com <span class="math inline">\(\xi\)</span> compartilhado por duração apresentou 0,040. O modelo regional com parâmetro específico por estação–duração apresentou mediana espacial de 0,026, com valores concentrados em um intervalo relativamente estreito. Já os modelos <span class="math inline">\(\xi_j\)</span> e <em>non-pooled</em> apresentaram maior heterogeneidade espacial, com medianas de 0,004 e 0,058, respectivamente.</p>
+<p>A distribuição espacial das estimativas de <span class="math inline">\(\xi\)</span> para 24 horas evidencia essas diferenças (<a href="#fig-mapa-xi-rs" class="quarto-xref">Figura&nbsp;3</a>). Os modelos com parâmetro de forma comum e específico por duração não apresentam variação entre estações, conforme suas respectivas restrições. O modelo regional com <span class="math inline">\(\xi_{j,k}\)</span> apresenta variação espacial bastante reduzida, enquanto os modelos <span class="math inline">\(\xi_j\)</span> e <em>non-pooled</em> revelam maior heterogeneidade, com alternância entre estimativas positivas e negativas. Nesses dois últimos modelos, observam-se valores predominantemente negativos em setores do norte e noroeste do estado, enquanto estimativas positivas aparecem de maneira mais localizada nas porções central, oriental e meridional. A semelhança geral entre esses padrões sugere que parte da heterogeneidade espacial é preservada mesmo com a regularização regional do parâmetro de forma.</p>
+<div id="fig-mapa-xi-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mapa-xi-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/mapa_xi_24h_modelos.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mapa-xi-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Distribuição espacial das medianas posteriores do parâmetro de forma <span class="math inline">\(\xi\)</span> da distribuição GEV para a duração de 24 horas, considerando os cinco modelos bayesianos avaliados no Rio Grande do Sul. Os pontos representam as estações utilizadas nos ajustes e as superfícies correspondem à interpolação espacial das estimativas.
+</figcaption>
+</figure>
+</div>
+<p>No modelo <span class="math inline">\(\xi_j\)</span>, as estimativas de forma foram negativas em 26 estações e positivas nas outras 26, variando de −0,412 a 0,390. Os percentis espaciais de 5% e 95% foram, respectivamente, −0,339 e 0,331. A presença de valores positivos e negativos indica heterogeneidade regional no comportamento estimado das caudas da distribuição GEV, não representada pelos modelos que impõem um único parâmetro de forma a todas as estações. Essa diferenciação também foi observada no modelo <em>non-pooled</em>, cujos valores de <span class="math inline">\(\xi\)</span> para 24 horas variaram de −0,306 a 0,338. Entretanto, a estrutura regional <span class="math inline">\(\xi_j\)</span> combinou a possibilidade de diferenças locais na forma da distribuição com uma regularização compartilhada entre estações, tendo apresentado o desempenho preditivo mais favorável na comparação realizada anteriormente.</p>
+<p>As diferenças entre os modelos também foram observadas na estação A801, utilizada para exemplificar o comportamento de <span class="math inline">\(\xi\)</span> ao longo das durações (<a href="#fig-xi-a801" class="quarto-xref">Figura&nbsp;4</a>). Nos modelos com parâmetro de forma constante entre durações, as estimativas permaneceram invariáveis, com valores próximos de 0,024 para o modelo global e −0,119 para o modelo <span class="math inline">\(\xi_j\)</span>. Já os modelos com variação por duração apresentaram alterações nas estimativas centrais, particularmente nas menores durações. O modelo <span class="math inline">\(\xi_k\)</span> apresentou valor positivo mais elevado em 1 hora, seguido de uma redução nas durações intermediárias, enquanto o modelo <em>non-pooled</em> manteve estimativas predominantemente negativas. Por sua vez, o modelo regional <span class="math inline">\(\xi_{j,k}\)</span> apresentou valores próximos de zero e relativamente estáveis.</p>
+<div id="fig-xi-a801" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-xi-a801-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/parametro_GEV_xi_A801.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-xi-a801-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Estimativas do parâmetro de forma <span class="math inline">\(\xi\)</span> da distribuição GEV em função da duração para a estação A801, segundo os cinco modelos bayesianos avaliados. As linhas representam as medianas posteriores e as faixas sombreadas correspondem aos intervalos de credibilidade de 95%.
+</figcaption>
+</figure>
+</div>
+<p>Apesar das diferenças entre as estimativas centrais, os intervalos de credibilidade apresentaram ampla sobreposição, especialmente entre os modelos com maior flexibilidade do parâmetro de forma. Esse resultado evidencia que a variação das medianas de <span class="math inline">\(\xi\)</span> entre durações não constitui, isoladamente, evidência conclusiva de mudanças sistemáticas no comportamento da cauda. Considerando também o desempenho preditivo anteriormente apresentado, os resultados favorecem a estrutura regional com parâmetro de forma específico por estação, que permite representar a heterogeneidade espacial sem exigir sua variação entre durações.</p>
+</section>
+<section id="curvas-intensidadeduraçãofrequência-idf" class="level3">
+<h3 class="anchored" data-anchor-id="curvas-intensidadeduraçãofrequência-idf">Curvas intensidade–duração–frequência (IDF)</h3>
+<p>As curvas intensidade–duração–frequência (IDF) obtidas pelos cinco modelos bayesianos foram analisadas para três estações representativas do Rio Grande do Sul: A801, 430120601A e A828 (<a href="#fig-idf-modelos-rs" class="quarto-xref">Figura&nbsp;5</a>). Em todas as estações e especificações, as intensidades estimadas diminuíram com o aumento da duração e aumentaram com o período de retorno, apresentando comportamento compatível com as relações IDF. Entretanto, observaram-se diferenças entre os modelos na magnitude das intensidades e na forma das curvas, particularmente nas estações A801 e A828.</p>
+<div id="fig-idf-modelos-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-idf-modelos-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/curvas_IDF_tres_estacoes_cinco_modelos.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-idf-modelos-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Curvas intensidade–duração–frequência (IDF) estimadas para as estações A801, 430120601A e A828, considerando os cinco modelos bayesianos e os períodos de retorno de 2, 10, 25, 50, 100 e 200 anos.
+</figcaption>
+</figure>
+</div>
+<p>Na estação 430120601A, as curvas apresentaram maior proximidade entre os modelos, indicando menor sensibilidade das estimativas IDF às diferentes estruturas adotadas para o parâmetro de forma. Na estação A801, o modelo com <span class="math inline">\(\xi_k\)</span> específico por duração apresentou alterações mais evidentes na inclinação das curvas, especialmente entre as durações de 3 e 6 horas. Já na estação A828, os modelos com <span class="math inline">\(\xi_j\)</span> específico por estação e <em>non-pooled</em> produziram intensidades mais elevadas para os maiores períodos de retorno, evidenciando maior sensibilidade das estimativas ao comportamento da cauda da distribuição GEV.</p>
+<p>A análise dos intervalos de credibilidade de 95% para os períodos de retorno de 2, 10 e 25 anos (<a href="#fig-idf-ic-menores-rs" class="quarto-xref">Figura&nbsp;6</a>) mostrou faixas relativamente estreitas na maior parte das combinações de estação e duração. Apesar das diferenças entre os valores centrais, os modelos apresentaram resultados próximos em diversas situações, particularmente na estação 430120601A. Na estação A828, entretanto, foram observadas diferenças mais expressivas nas intensidades estimadas pelo modelo <span class="math inline">\(\xi_j\)</span>, mesmo para períodos de retorno moderados.</p>
+<div id="fig-idf-ic-menores-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-idf-ic-menores-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_2_10_25.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-idf-ic-menores-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Curvas IDF e intervalos de credibilidade de 95% para os períodos de retorno de 2, 10 e 25 anos, nas estações A801, 430120601A e A828, considerando os cinco modelos bayesianos.
+</figcaption>
+</figure>
+</div>
+<p>Para os períodos de retorno de 50, 100 e 200 anos (<a href="#fig-idf-ic-maiores-rs" class="quarto-xref">Figura&nbsp;7</a>), observou-se maior afastamento entre as curvas e ampliação dos intervalos de credibilidade, sobretudo nos modelos que permitem maior variabilidade do parâmetro de forma. Esse comportamento foi mais evidente na estação A828, na qual os modelos <span class="math inline">\(\xi_j\)</span> e <em>non-pooled</em> apresentaram intensidades substancialmente superiores às estimadas pelas estruturas com cauda comum ou compartilhada por duração. Na estação 430120601A, as diferenças permaneceram relativamente pequenas, mesmo para os maiores períodos de retorno.</p>
+<div id="fig-idf-ic-maiores-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-idf-ic-maiores-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_50_100_200.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-idf-ic-maiores-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7: Curvas IDF e intervalos de credibilidade de 95% para os períodos de retorno de 50, 100 e 200 anos, nas estações A801, 430120601A e A828, considerando os cinco modelos bayesianos.
+</figcaption>
+</figure>
+</div>
+<p>Em conjunto, os resultados evidenciam que as diferentes hipóteses de compartilhamento do parâmetro de forma podem produzir estimativas IDF semelhantes em algumas estações, mas diferenças expressivas em outras, especialmente para eventos de maior período de retorno. A maior sensibilidade observada na estação A828 demonstra a importância de representar adequadamente a heterogeneidade local das caudas da distribuição. Esses resultados complementam a comparação preditiva, que favoreceu o modelo regional com <span class="math inline">\(\xi_j\)</span> específico por estação, embora as estimativas associadas aos períodos de retorno mais elevados permaneçam sujeitas à maior incerteza de extrapolação.</p>
+
+
+
+</section>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-coles2001" class="csl-entry" role="listitem">
+Coles, Stuart. 2001. <em>An Introduction to Statistical Modeling of Extreme Values</em>. Springer. <a href="https://doi.org/10.1007/978-1-4471-3675-0">https://doi.org/10.1007/978-1-4471-3675-0</a>.
+</div>
+<div id="ref-gelman2006" class="csl-entry" role="listitem">
+Gelman, Andrew. 2006. <span>«Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper)»</span>. <em>Bayesian Analysis</em> 1 (3): 515–34. <a href="https://doi.org/10.1214/06-BA117A">https://doi.org/10.1214/06-BA117A</a>.
+</div>
+<div id="ref-koutsoyiannis1998" class="csl-entry" role="listitem">
+Koutsoyiannis, Demetris, Dimitrios Kozonis, e Antonis Manetas. 1998. <span>«A mathematical framework for studying rainfall intensity-duration-frequency relationships»</span>. <em>Journal of Hydrology</em> 206: 118–35. <a href="https://doi.org/10.1016/S0022-1694(98)00097-3">https://doi.org/10.1016/S0022-1694(98)00097-3</a>.
+</div>
+<div id="ref-lima2018" class="csl-entry" role="listitem">
+Lima, Carlos H. R., Hyun-Han Kwon, e Yong-Tak Kim. 2018. <span>«A local-regional scaling-invariant Bayesian GEV model for estimating rainfall IDF curves in a future climate»</span>. <em>Journal of Hydrology</em> 566: 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
+</div>
+<div id="ref-martins2000" class="csl-entry" role="listitem">
+Martins, Eduardo S., e Jery R. Stedinger. 2000. <span>«Generalized maximum-likelihood generalized extreme-value quantile estimators for hydrologic data»</span>. <em>Water Resources Research</em>. <a href="https://doi.org/10.1029/1999WR900330">https://doi.org/10.1029/1999WR900330</a>.
+</div>
+<div id="ref-vehtari2021" class="csl-entry" role="listitem">
+Vehtari, Aki, Andrew Gelman, Daniel Simpson, Bob Carpenter, e Paul-Christian Bürkner. 2021. <span>«Rank-Normalization, Folding, and Localization: An Improved R-hat for Assessing Convergence of MCMC»</span>. <em>Bayesian Analysis</em> 16 (2): 667–718. <a href="https://doi.org/10.1214/20-BA1221">https://doi.org/10.1214/20-BA1221</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

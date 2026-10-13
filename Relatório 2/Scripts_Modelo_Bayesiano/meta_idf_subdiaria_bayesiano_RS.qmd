@@ -227,5 +227,3 @@ Para os períodos de retorno de 50, 100 e 200 anos (@fig-idf-ic-maiores-rs), obs
 ![Curvas IDF e intervalos de credibilidade de 95% para os períodos de retorno de 50, 100 e 200 anos, nas estações A801, 430120601A e A828, considerando os cinco modelos bayesianos.](figuras/curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_50_100_200.png){#fig-idf-ic-maiores-rs width="95%" fig-align="center"}
 
 Em conjunto, os resultados evidenciam que as diferentes hipóteses de compartilhamento do parâmetro de forma podem produzir estimativas IDF semelhantes em algumas estações, mas diferenças expressivas em outras, especialmente para eventos de maior período de retorno. A maior sensibilidade observada na estação A828 demonstra a importância de representar adequadamente a heterogeneidade local das caudas da distribuição. Esses resultados complementam a comparação preditiva, que favoreceu o modelo regional com $\xi_j$ específico por estação, embora as estimativas associadas aos períodos de retorno mais elevados permaneçam sujeitas à maior incerteza de extrapolação.
-
-
