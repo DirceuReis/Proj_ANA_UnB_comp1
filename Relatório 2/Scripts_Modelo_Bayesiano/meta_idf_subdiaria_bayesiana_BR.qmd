@@ -1,0 +1,31 @@
+---
+title: "meta_idf_subdiaria_bayesiana_BR"
+---
+
+### Aplicação nacional do modelo bayesiano às séries subdiárias
+
+A modelagem das precipitações extremas em escala subdiária foi realizada por meio da abordagem hierárquica bayesiana local (*non-pooled*), apresentada anteriormente no estudo de caso do Rio Grande do Sul. A formulação manteve a distribuição GEV, as distribuições a priori e a regularização hierárquica dos parâmetros entre durações de uma mesma estação, sem compartilhamento espacial de informações. Nesta etapa, entretanto, a relação de invariância de escala foi adaptada para representar separadamente o comportamento das precipitações em durações sub-horárias e horárias.
+
+Foram utilizadas as séries de máximos anuais provenientes da base UNIPLU, após os procedimentos de controle de qualidade e definição do ano hidrológico descritos nas seções anteriores. A seleção considerou estações com pelo menos oito anos válidos em todas as 24 durações horárias, de 1 a 24 horas, e em pelo menos duas durações sub-horárias entre 10, 15, 20, 30, 40, 45 e 50 minutos.
+
+Para representar as diferenças entre as escalas temporais, foi adotada uma relação de invariância de escala por partes, estabelecendo-se uma duração de transição de 1 hora ($d_b=1$ h) e mantendo-se a duração de referência de 24 horas ($d_0=24$ h). A função de escala foi definida conforme a @eq-escala-partes-br:
+
+$$
+\eta_j(d)=
+\begin{cases}
+-H_{L,j}\log\left(\dfrac{d+\theta_{L,j}}{d_0+\theta_{L,j}}\right),
+& d\geq d_b,\\[10pt]
+\eta_j(d_b)-H_{C,j}\log\left(\dfrac{d+\theta_{C,j}}{d_b+\theta_{C,j}}\right),
+& d<d_b,
+\end{cases}
+$$ {#eq-escala-partes-br}
+
+em que $H_{L,j}$ e $\theta_{L,j}$ representam, respectivamente, o expoente de escala e o parâmetro de deslocamento temporal para as durações iguais ou superiores a 1 hora, enquanto $H_{C,j}$ e $\theta_{C,j}$ correspondem aos parâmetros das durações sub-horárias. O termo $\eta_j(d_b)$ é calculado a partir do ramo horário, assegurando a continuidade da função no ponto de transição. Todas as durações e os parâmetros de deslocamento temporal foram expressos em horas.
+
+As médias das distribuições hierárquicas dos logaritmos dos parâmetros de localização e escala da GEV passaram a ser definidas por $\alpha_j+\eta_j(d_k)$ e $\beta_j+\eta_j(d_k)$, respectivamente, preservando as variâncias hierárquicas $\tau_{\mu,j}^{2}$ e $\tau_{\sigma,j}^{2}$. Assim, ambos os parâmetros permanecem relacionados à duração por uma função comum, mas com flexibilidade para apresentar diferentes taxas de variação nos intervalos sub-horário e horário.
+
+Os novos parâmetros estruturais receberam as mesmas famílias de distribuições a priori utilizadas anteriormente, com $H_{L,j},H_{C,j}\sim\operatorname{Beta}(1,1)$ e $\theta_{L,j},\theta_{C,j}\sim\operatorname{Uniforme}(0,10)$. O parâmetro de forma $\xi_{j,k}$ permaneceu específico por duração, com suporte entre −0,5 e 0,5 e regularização em torno de um parâmetro central $\bar{\xi}_j$, mantendo-se as demais prioris e hiperprioris da formulação original.
+
+A inferência foi realizada individualmente por estação, utilizando o algoritmo NUTS implementado em Stan. Foram executadas cinco cadeias de 20.000 iterações, com 10.000 destinadas ao aquecimento e fator de espaçamento (*thinning*) de 50, totalizando nominalmente 1.000 amostras posteriores retidas por estação. Os parâmetros de controle do amostrador foram definidos como `adapt_delta = 0.999` e `max_treedepth = 17`.
+
+A formulação por partes preservou a estrutura probabilística utilizada nas análises anteriores, introduzindo maior flexibilidade na representação da relação entre intensidade e duração. Essa adaptação permitiu considerar diferentes comportamentos de escala abaixo e acima de 1 hora, mantendo a continuidade da função e a estimação conjunta dos parâmetros GEV para todas as durações disponíveis em cada estação.
