@@ -5,6 +5,12 @@
 
 /.quarto/
 
+Relatório 2/.quarto/
+
+base/fonte/bruto/subdiario/sgb/dados_sub2.RDS
+
+base/fonte/consolidado/subdiario/RS_SGB_data.pqt
+
 **/*.quarto_ipynb
 
 base/temp/*

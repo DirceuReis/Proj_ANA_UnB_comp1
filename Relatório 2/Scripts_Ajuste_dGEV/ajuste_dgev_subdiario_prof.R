@@ -2,23 +2,31 @@
 # Os scripts atuais da d-GEV utilizam a parametrização da distribuição
 # em que o parâmetro de forma negativo representa a distribuição de 
 # cauda pesada (Fréchet), mas o nome dos parâmetros foi alterado para
-# corresponder à nomenclatura que estamos utilizando
+# corresponder à nomenclatura que estamos utilizando.
+#
+# Este script ajusta a d-GEV com informação a priori vinda da distribuição
+# Beta de Martins e Stedinger para o parâmetro de forma com média -0,10 e 
+# variância 0,122². O ajuste é feito com Máxima Verossimilhança Generalizada
+# e os intervalos de confiança são estimados com o método da verossimilhança
+# perfilada.
+
+rm(list = ls()); invisible(gc())
 
 # PACOTES ----------------------------------------------------------------
 
 library(dplyr)
 library(tidyr)
 library(pbapply)
+library(lmom)
 library(arrow)
 
 
 # CAMINHOS ---------------------------------------------------------------
 
 path.root <- "Relatório 2"
-path.funs <- file.path(path.root, "Scripts_Ajuste_dGEV", "funs", "fit_dgev.R")
-path.imax <- file.path(path.root, "Scripts_Maximas", "resultados", "BR", "dataframes", "df_imax_subdiario.parquet")
-# path.imax <- file.path(path.root, "Scripts_Ajuste_dGEV", "resultados", "subdiarios", "dataframes", "df_imax_subdiario.pqt")
-path.fit.ls <- file.path(path.root, "Scripts_Maximas", "resultados", "subdiarios", "fit")
+path.funs <- file.path(path.root, "Scripts_Ajuste_dGEV", "funs", "profile_likelihood", "fitprof_dgev.R")
+path.imax <- file.path(path.root, "Scripts_Maximas", "resultados", "BR", "dataframes", "imax_sem_iqr_subdiario_Uniplu.parquet")
+path.fit.ls <- file.path(path.root, "Scripts_Ajuste_dGEV", "resultados", "subdiarios", "fit", "profile_likelihood")
 
 
 # CARREGAR FUNCOES -------------------------------------------------------
@@ -47,6 +55,7 @@ imax.df <- imax.preqc.df |>
     n_distinct(wateryear) >= min.years
   ) |> 
   ungroup() |> 
+  rename(imax = imax_mm_h) |> 
   select(gauge_code, wateryear, d, imax)
 
 
@@ -60,7 +69,7 @@ scale.inv <- "wide"     # estimativas iniciais dos parametros de invariancia sim
 return.period <- c(2, 5, 10, 25, 50, 100, 200) # tempos de retorno
 conf <- 0.95            # nivel de confianca p/ intervalos de confianca
 maxit <- 1e8            # maximo de iteracoes p/ convergencia
-step <- 0.005           # passo p/ encontrar as raizes da funcao de verossimilhanca perfilada
+step <- 0.01            # passo p/ encontrar as raizes da funcao de verossimilhanca perfilada
 lltol <- 0.005          # tolerancia p/ diferenca entre maximas log-verossimilhancas
 
 # Ajustar d-GEV, estimar quantis e intervalos de confiança com verossimilhança perfilada
@@ -71,7 +80,23 @@ fit.ls <- fitprof.dgev(
   prior.info = prior,
   return.period = return.period,
   durations = durations,
-  cols = cols # deve seguir a ordem 1. gauge_code, 2. year, 3. duration, 4. imax
+  cols = cols, # deve seguir a ordem 1. gauge_code, 2. year, 3. duration, 4. imax
+  step = step,
+  profile.maxit = 500L
 )
 
-saveRDS(fit.ls, file.path(path.fit.ls, "df_dgev_subdiario.rds"))
+# Extrair e salvar resultados
+if(!dir.exists(path.fit.ls)) dir.create(path.fit.ls)
+
+# saveRDS(fit.ls, file.path(path.fit.ls, "ls_dgev_fit_subdiario.rds"))
+
+ls <- lapply(list.files(path.fit.ls, full.names = TRUE, pattern = "*.rds"), readRDS)
+par.df <- bind_rows(lapply(ls, `[[`, "par"))
+idf.df <- bind_rows(lapply(ls, `[[`, "idf"))
+profile.par <- bind_rows(lapply(ls, `[[`, "prof.par"))
+profile.idf <- bind_rows(lapply(ls, `[[`, "prof.q"))
+
+arrow::write_parquet(par.df, file.path(path.fit.ls, "df_subdiario_dgev_par.pqt"))     # parametros
+arrow::write_parquet(idf.df, file.path(path.fit.ls, "df_subdiario_dgev_idf_.pqt"))    # quantis
+arrow::write_parquet(profile.par, file.path(path.fit.ls, "df_subdiario_dgev_profpar.pqt")) # verossimilhanca parametros
+arrow::write_parquet(profile.idf, file.path(path.fit.ls, "df_subdiario_dgev_profidf.pqt")) # verossimilhanca quantis
