@@ -10,7 +10,7 @@ A definição do ano hidrológico buscou estabelecer, para cada estação pluvio
 
 ### Preparação e seleção das séries diárias de referência
 
-Para a definição do ano hidrológico, foram utilizadas séries diárias de precipitação provenientes da base UNIPLU, abrangendo estações pluviométricas distribuídas pelo território brasileiro. A seleção das séries considerou critérios de disponibilidade temporal, completude e consistência dos registros, buscando assegurar a representatividade das informações utilizadas na caracterização da sazonalidade dos eventos extremos.
+Para a definição do ano hidrológico, foram utilizadas séries diárias de precipitação provenientes da base UNIPLU, previamente descrita na Meta 3 deste relatório, abrangendo estações pluviométricas distribuídas pelo território brasileiro. A seleção das séries considerou critérios de disponibilidade temporal, completude e consistência dos registros, buscando assegurar a representatividade das informações utilizadas na caracterização da sazonalidade dos eventos extremos.
 
 Foram selecionadas estações com pelo menos 30 anos de observações válidas, admitindo-se um percentual máximo de 20% de falhas por ano. Adicionalmente, foram aplicados critérios de consistência para identificar registros potencialmente inconsistentes e séries com baixa variabilidade pluviométrica. Valores diários de precipitação superiores a 1.500 mm foram tratados como ausentes, enquanto aqueles superiores a 700 mm foram sinalizados para verificação. Também foram excluídas séries com menos de 15 valores distintos de precipitação ou nas quais pelo menos 99,5% dos dias apresentavam precipitação inferior a 0,5 mm, caracterizando registros com ocorrência praticamente inexistente de precipitação significativa. Esses procedimentos buscaram reduzir a influência de inconsistências e de séries pouco informativas na caracterização da sazonalidade dos eventos extremos, utilizada posteriormente para definir o mês de início do ano hidrológico.
 
@@ -23,7 +23,6 @@ A época de ocorrência de cada pico $i$, na estação $j$, foi representada pel
 $$
 \phi_{j,i}=\frac{2\pi D_{j,i}}{365}.
 $$ {#eq-angulo-evento}
-
 
 As componentes médias do vetor circular foram calculadas por @eq-componentes-circulares
 
@@ -68,7 +67,6 @@ Para cada estação subdiária foram identificadas as dez estações diárias de
 
 Para esse cálculo, o mês $m_l$ de cada vizinho $l$ foi convertido em ângulo $\gamma_l=2\pi(m_l-1)/12$. Os pesos foram definidos por @eq-pesos-vizinhos
 
-
 $$
 w_l=\frac{\max(\bar r_l,0{,}05)}{\max(\widetilde d_l,0{,}1)},
 $$ {#eq-pesos-vizinhos}
@@ -79,7 +77,7 @@ $$
 \bar\gamma=\operatorname{atan2}\!\left(\sum_{l=1}^{10}w_l\sin\gamma_l,\sum_{l=1}^{10}w_l\cos\gamma_l\right),
 $$ {#eq-media-circular-ponderada}
 
-posteriormente convertido em mês do calendário . O uso de pesos combinando proximidade espacial e concentração sazonal buscou dar maior influência às estações mais próximas e com sinal sazonal mais definido.
+posteriormente convertido em mês do calendário. O uso de pesos combinando proximidade espacial e concentração sazonal buscou dar maior influência às estações mais próximas e com sinal sazonal mais definido.
 
 ## Resultados
 

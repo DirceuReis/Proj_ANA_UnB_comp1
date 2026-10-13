@@ -1,6 +1,5 @@
 ---
 title: "Controle de qualidade e seleção das séries subdiárias de precipitação"
-bibliography: referencias_qc.bib
 ---
 
 ## Metodologia
@@ -15,12 +14,13 @@ Foram consideradas falhas impeditivas datas inválidas ou posteriores à referê
 
 As observações suspeitas foram identificadas por critérios complementares que incluíram valores elevados frente a limites de revisão específicos da rede, persistência de precipitação positiva constante, sequências prolongadas de registros nulos, alternância sistemática entre zero e precipitação positiva, predominância excepcional de zeros e sinalizações de qualidade provenientes da fonte. Também foi realizada uma avaliação de valores atípicos positivos separadamente para cada mês do calendário, de modo a considerar diferenças sazonais na distribuição da precipitação.
 
-Nesse último procedimento, para as observações positivas de um mesmo mês, o limite superior de sinalização foi calculado por:
+Nesse último procedimento, para as observações positivas de um mesmo mês, o limite superior de sinalização foi calculado pela @eq-limiar-iqr-mensal:
 
 $$
-u_{j,m}=Q_{3,j,m}+3\left(Q_{3,j,m}-Q_{1,j,m}\right),$$
+u_{j,m}=Q_{3,j,m}+3\left(Q_{3,j,m}-Q_{1,j,m}\right).
+$$ {#eq-limiar-iqr-mensal}
 
-em que $Q_{1,j,m}$ e $Q_{3,j,m}$ são os quartis das precipitações registradas por intervalo na estação $j$ e mês $m$. A avaliação foi aplicada quando havia pelo menos 50 observações positivas e intervalo interquartil estritamente positivo. As observações que excederam $\nu_{j,m}$ receberam uma sinalização de suspeita, não uma classificação automática de erro. Essa distinção é especialmente relevante na análise de extremos, na qual valores incomuns podem representar precisamente os eventos hidrológicos de maior interesse.
+em que $Q_{1,j,m}$ e $Q_{3,j,m}$ são os quartis das precipitações registradas por intervalo na estação $j$ e mês $m$. A avaliação foi aplicada quando havia pelo menos 50 observações positivas e intervalo interquartil estritamente positivo. As observações que excederam $u_{j,m}$ receberam uma sinalização de suspeita, não uma classificação automática de erro. Essa distinção é especialmente relevante na análise de extremos, na qual valores incomuns podem representar precisamente os eventos hidrológicos de maior interesse.
 
 Para o tratamento das observações, foi adotado o critério de exclusão dos registros inválidos (**FAIL**) e daqueles classificados como suspeitos (**SUSPECT**), exceto quando a única sinalização decorria do critério interquartil mensal. Essa exceção buscou preservar eventos extremos potencialmente legítimos, evitando sua exclusão apenas por apresentarem magnitudes elevadas em relação à distribuição mensal das precipitações.
 
