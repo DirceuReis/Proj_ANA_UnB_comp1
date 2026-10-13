@@ -1,0 +1,88 @@
+---
+title: "Controle de qualidade e seleção das séries subdiárias de precipitação"
+bibliography: referencias_qc.bib
+---
+
+## Metodologia
+
+### Base observacional e elegibilidade das estações
+
+O controle de qualidade (QC) foi aplicado aos registros subdiários de precipitação da base UNIPLU-BR, reunindo diferentes redes de monitoramento com resoluções temporais distintas. O procedimento foi concebido para preservar a informação sobre eventos extremos potencialmente legítimos, distinguindo observações inválidas daquelas que requerem avaliação adicional. A adoção de verificações de consistência, integridade temporal e rastreabilidade dos dados está alinhada aos princípios gerais de garantia da qualidade de observações meteorológicas descritos pela Organização Meteorológica Mundial [@wmo8]. Os valores dos limiares e as políticas de retenção apresentados a seguir constituem especificações do presente processamento, e não limites universais prescritos pela referência.
+
+A elegibilidade de cada estação foi examinada a partir do inventário e do histórico de metadados, considerando sua identificação, vinculação à rede e à unidade federativa, resolução de aquisição e disponibilidade da definição do mês inicial do ano hidrológico. Foram consideradas resoluções positivas e inferiores a 24 horas, compatíveis com a classificação subdiária. Mudanças de resolução ou inconsistências relevantes no histórico cadastral foram tratadas como impedimentos à utilização automática das séries até sua resolução. Assim, a seleção precedeu o QC das observações e evitou combinar, sem avaliação, séries submetidas a convenções temporais ou condições instrumentais distintas.
+
+### Verificações de consistência das observações
+
+As precipitações foram interpretadas como lâminas incrementais, em milímetros por intervalo de aquisição, associadas a registros temporais em UTC. O procedimento distinguiu duas classes de sinalização: **FAIL**, para registros que não atendiam a requisitos mínimos de utilização, e **SUSPECT**, para observações potencialmente inconsistentes que não deveriam ser descartadas sem consideração de seu contexto. Uma observação pôde apresentar mais de uma sinalização.
+
+Foram consideradas falhas impeditivas datas inválidas ou posteriores à referência temporal do processamento, precipitações ausentes, não finitas ou negativas, identificação inconsistente da estação, reprovação informada pela fonte, desalinhamento em relação à grade de aquisição e duplicidades conflitantes. No caso de registros repetidos com valores idênticos, preservou-se uma única ocorrência; havendo valores distintos para o mesmo instante, o horário foi invalidado. Essas verificações buscaram impedir a incorporação de erros evidentes ou ambiguidades temporais aos acumulados de precipitação.
+
+As observações suspeitas foram identificadas por critérios complementares que incluíram valores elevados frente a limites de revisão específicos da rede, persistência de precipitação positiva constante, sequências prolongadas de registros nulos, alternância sistemática entre zero e precipitação positiva, predominância excepcional de zeros e sinalizações de qualidade provenientes da fonte. Também foi realizada uma avaliação de valores atípicos positivos separadamente para cada mês do calendário, de modo a considerar diferenças sazonais na distribuição da precipitação.
+
+Nesse último procedimento, para as observações positivas de um mesmo mês, o limite superior de sinalização foi calculado por:
+
+$$
+u_{j,m}=Q_{3,j,m}+3\left(Q_{3,j,m}-Q_{1,j,m}\right),$$
+
+em que $Q_{1,j,m}$ e $Q_{3,j,m}$ são os quartis das precipitações registradas por intervalo na estação $j$ e mês $m$. A avaliação foi aplicada quando havia pelo menos 50 observações positivas e intervalo interquartil estritamente positivo. As observações que excederam $\nu_{j,m}$ receberam uma sinalização de suspeita, não uma classificação automática de erro. Essa distinção é especialmente relevante na análise de extremos, na qual valores incomuns podem representar precisamente os eventos hidrológicos de maior interesse.
+
+### Políticas de retenção e análise de sensibilidade
+
+Foram consideradas três políticas de tratamento das observações, diferenciadas pela decisão de retenção dos valores sinalizados. A política *review* remove registros classificados como **FAIL** e mantém observações **SUSPECT** para avaliação. A política *strict* exclui tanto registros **FAIL** quanto observações suspeitas não aceitas em revisão. Por fim, a política *strict_sem_iqr* preserva observações cuja única suspeita deriva do critério interquartil mensal, mantendo a exclusão das demais suspeitas não aceitas.
+
+A política *strict_sem_iqr* foi introduzida como análise de sensibilidade para reduzir o risco de descarte de extremos reais unicamente por sua posição na cauda da distribuição empírica. Ao mesmo tempo, preserva a exclusão de observações com inconsistências de outra natureza. A comparação das três políticas permitiu avaliar seus efeitos sobre a quantidade de estações e séries aprovadas e sobre as intensidades máximas anuais consolidadas.
+
+Para a rede CEMADEN, também foi considerada, na versão corrigida da rotina, a recuperação de posições ausentes em pequenas lacunas temporais, de até 60 minutos entre observações originais consecutivas, com resolução nativa de 10 minutos. Esse procedimento atribuiu zero exclusivamente aos horários intermediários efetivamente ausentes, desde que a lacuna e seus limites estivessem alinhados à grade temporal; registros originais, inclusive os rejeitados pelo QC, não foram substituídos. A quantidade de posições recuperadas foi registrada, inclusive quando presentes nas janelas de máximas. Trata-se de uma hipótese específica de reconstrução da série, cuja influência sobre a completude e os extremos deve ser considerada na interpretação dos resultados.
+
+### Agregação, completude anual e seleção das máximas
+
+Após o QC, os registros foram organizados segundo o mês inicial do ano hidrológico atribuído a cada estação. Para cada duração compatível com sua resolução nativa, foram obtidos acumulados móveis a partir de uma grade temporal regular, sem permitir que as janelas ultrapassassem as fronteiras do respectivo ano hidrológico. Os máximos anuais dos acumulados foram convertidos em intensidade média, em mm/h, dividindo-se a lâmina precipitada pela duração expressa em horas.
+
+Na implementação examinada, a agregação reproduziu uma regra legada de soma parcial: janelas com pelo menos uma observação válida puderam fornecer acumulados, enquanto janelas inteiramente ausentes foram invalidadas. Foram registrados indicadores de completude das janelas e de presença de posições ausentes na janela responsável pela máxima. Por essa razão, a aprovação do ano não deve ser interpretada como garantia de que todas as janelas candidatas à máxima estavam integralmente observadas.
+
+O critério principal de aprovação anual exigiu a existência de pelo menos uma janela utilizável e proporção de falhas na grade nativa não superior a 20%. Na seleção consolidada destinada às análises de sensibilidade, aplicou-se o filtro de falhas **estritamente inferior a 20%**, juntamente com a exigência de pelo menos oito máximos anuais válidos por combinação estação–duração. O percentual de janelas inválidas e a incompletude mensal foram documentados como diagnósticos, mas não integraram a condição efetiva de aprovação anual da rotina de máximas analisada.
+
+Esses critérios permitiram identificar a disponibilidade de informação para cada duração separadamente, sem impor que todas as estações apresentassem o mesmo conjunto de durações ou o mesmo comprimento de série. A composição final das séries foi definida após a aplicação da política de retenção selecionada e dos filtros de completude e extensão amostral.
+
+## Resultados e produtos
+
+### Abrangência do processamento e seleção final
+
+O catálogo UNIPLU-BR reuniu 21.395 estações. A associação ao inventário subdiário e à definição do mês inicial do ano hidrológico delimitou 8.687 estações candidatas. Desse conjunto, 694 apresentaram impedimentos associados à validação dos metadados, incluindo 435 por mudança de resolução, 248 por pendências cadastrais, oito por resolução subdiária inválida e três por associação a mais de uma unidade federativa. Outras 14 estações não apresentaram registros temporais válidos, resultando em 7.979 estações com processamento concluído.
+
+Após a aplicação dos filtros anuais e da exigência de pelo menos oito anos válidos por estação e duração, a política *review* reuniu 1.978 estações, em comparação com 1.973 para *strict_sem_iqr* e 1.954 para *strict*. A diferença de apenas cinco estações entre *review* e *strict_sem_iqr* indica que a exclusão de suspeitas de natureza diversa do critério interquartil teve efeito reduzido sobre o número total de estações elegíveis. Em contrapartida, a política mais restritiva resultou na exclusão de 24 estações em relação ao cenário de referência. Essas contagens, isoladamente, não quantificam as diferenças nos valores das máximas anuais, cuja avaliação requer comparação direta das séries correspondentes.
+
+| Política | Estações aprovadas | Diferença em relação a *review* |
+|:--|--:|--:|
+| *review* | 1.978 | — |
+| *strict_sem_iqr* | 1.973 | −5 |
+| *strict* | 1.954 | −24 |
+
+: Comparação do número de estações elegíveis sob as três políticas de controle de qualidade. {#tbl-qc-politicas}
+
+O conjunto *strict_sem_iqr* foi constituído por 1.076 estações CEMADEN, 461 de Telemetria, 421 do INMET subdiário e 15 do ICEA. Em relação ao conjunto *review*, a política *strict_sem_iqr* resultou em 120 séries estação–duração e 1.369 máximas anuais a menos. A composição por rede evidencia a contribuição predominante do CEMADEN e também a heterogeneidade das fontes observacionais incorporadas à análise.
+
+### Comparação com a consolidação anterior
+
+A comparação com a base previamente consolidada identificou 116 estações presentes em ambas as seleções, 1.857 exclusivas do processamento atual e seis presentes apenas na análise anterior. Essas diferenças foram investigadas considerando a seleção de estações, as regras de controle de qualidade, a definição do mês inicial do ano hidrológico e a elegibilidade dos anos e durações. Assim, diferenças no número de estações não foram interpretadas automaticamente como perda de dados ou inconsistência dos registros anteriores.
+
+Para as estações comuns, a comparação direta dos máximos anuais foi limitada às combinações com igual identificação da estação, duração, ano hidrológico e mês inicial. Nessa condição, foram obtidos 26.124 pares comparáveis, pertencentes a 106 das 116 estações comuns. A representação gráfica indicou elevada concordância visual para a maior parte das máximas, com diferenças localizadas que justificam a manutenção de uma verificação específica dos extremos afetados pelos procedimentos de QC e agregação. A comparação evidencia a importância de documentar as políticas de retenção e a referência temporal utilizada na consolidação das séries.
+
+### Produtos gerados
+
+O processamento produziu registros de observações com classificação de qualidade e sinalizações por tipo de ocorrência, indicadores de consistência e completude por estação, séries de máximos anuais por duração e política de QC e tabelas consolidadas de elegibilidade. Também foram produzidos diagnósticos comparativos entre os cenários de retenção, sínteses por rede, registros de execução e representações gráficas da distribuição espacial das estações, da concordância entre máximas e da disponibilidade temporal das séries.
+
+A documentação completa desses produtos permite rastrear a passagem dos registros originais às séries AMAX utilizadas na modelagem estatística e identificar, por estação e duração, as condições de aprovação e eventuais sinalizações remanescentes.
+
+<!-- Figuras sugeridas, caso os arquivos PNG sejam copiados para a pasta figuras/:
+
+![Composição das estações aprovadas por rede no cenário *strict_sem_iqr*.](figuras/02_estacoes_por_rede.png){#fig-qc-redes width=85% fig-align="center"}
+
+![Comparação das estações presentes nas análises anterior e atual.](figuras/03_comparacao_estacoes.png){#fig-qc-estacoes width=85% fig-align="center"}
+
+![Comparação das intensidades máximas anuais para combinações diretamente comparáveis entre as duas consolidações.](figuras/04_consolidado_vs_strict_sem_iqr.png){#fig-qc-comparacao-maximas width=95% fig-align="center"}
+
+![Distribuição espacial das estações comuns e exclusivas das duas análises.](figuras/08_mapa_estacoes_comuns_exclusivas.png){#fig-qc-mapa width=90% fig-align="center"}
+
+-->
+
