@@ -1,5 +1,6 @@
 ---
 title: "Metodologia"
+bibliography: "ref_metodologia_unificada.bib"
 ---
 
 Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries subdiárias de precipitação, previamente organizadas e descritas na Meta 3. Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas.
