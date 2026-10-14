@@ -1,0 +1,222 @@
+
+@article{koutsoyiannis1998,
+	title = {A mathematical framework for studying rainfall intensity-duration-frequency relationships},
+	author = {Koutsoyiannis, Demetris and Kozonis, Demosthenes and Manetas, Alexandros},
+	year = {1998},
+	month = {04},
+	date = {1998-04},
+	journal = {Journal of Hydrology},
+	pages = {118--135},
+	volume = {206},
+	number = {1-2},
+	doi = {10.1016/S0022-1694(98)00097-3},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0022169498000973},
+	langid = {en}
+}
+
+@article{menabde1999,
+	title = {A simple scaling model for extreme rainfall},
+	author = {Menabde, Merab and Seed, Alan and Pegram, Geoff},
+	year = {1999},
+	month = {01},
+	date = {1999-01},
+	journal = {Water Resources Research},
+	pages = {335--339},
+	volume = {35},
+	number = {1},
+	doi = {10.1029/1998WR900012},
+	url = {https://agupubs.onlinelibrary.wiley.com/doi/10.1029/1998WR900012},
+	langid = {en}
+}
+
+@book{nair2022,
+  title = {The Fundamentals of Heavy Tails: Properties,  Emergence,  and Estimation},
+  ISBN = {9781316511732},
+  url = {http://dx.doi.org/10.1017/9781009053730},
+  DOI = {10.1017/9781009053730},
+  publisher = {Cambridge University Press},
+  author = {Nair,  Jayakrishnan and Wierman,  Adam and Zwart,  Bert},
+  year = {2022},
+  month = May 
+}
+
+@book{coles2001,
+  author = {Coles, Stuart},
+  title = {An Introduction to Statistical Modeling of Extreme Values},
+  publisher = {Springer},
+  year = {2001},
+  doi = {10.1007/978-1-4471-3675-0}
+}
+@article{blanchet2016,
+  author = {Blanchet, Juliette and Ceresetti, D. and Molini{\'e}, Gilles and Creutin, Jean-Dominique},
+  title = {A regional GEV scale-invariant framework for Intensity--Duration--Frequency analysis},
+  journal = {Journal of Hydrology},
+  volume = {540},
+  pages = {82--95},
+  year = {2016},
+  doi = {10.1016/j.jhydrol.2016.06.007}
+}
+@article{lima2018,
+  author = {Lima, Carlos H. R. and Kwon, Hyun-Han and Kim, Yong-Tak},
+  title = {A local-regional scaling-invariant Bayesian GEV model for estimating rainfall IDF curves in a future climate},
+  journal = {Journal of Hydrology},
+  volume = {566},
+  pages = {73--88},
+  year = {2018},
+  doi = {10.1016/j.jhydrol.2018.08.075}
+}
+@article{vandevyver2015,
+  author = {Van de Vyver, Hans},
+  title = {Bayesian estimation of rainfall intensity--duration--frequency relationships},
+  journal = {Journal of Hydrology},
+  year = {2015},
+  doi = {10.1016/j.jhydrol.2015.08.036}
+}
+@article{martins2000,
+  author = {Martins, Eduardo S. and Stedinger, Jery R.},
+  title = {Generalized maximum-likelihood generalized extreme-value quantile estimators for hydrologic data},
+  journal = {Water Resources Research},
+  year = {2000},
+  doi = {10.1029/1999WR900330}
+}
+@article{papalexiou2013,
+  author = {Papalexiou, Simon Michael and Koutsoyiannis, Demetris},
+  title = {Battle of extreme value distributions: A global survey on extreme daily rainfall},
+  journal = {Water Resources Research},
+  volume = {49},
+  pages = {187--201},
+  year = {2013},
+  doi = {10.1029/2012WR012557}
+}
+@article{vehtari2021,
+  author = {Vehtari, Aki and Gelman, Andrew and Simpson, Daniel and Carpenter, Bob and B{\"u}rkner, Paul-Christian},
+  title = {Rank-Normalization, Folding, and Localization: An Improved R-hat for Assessing Convergence of MCMC},
+  journal = {Bayesian Analysis},
+  volume = {16},
+  number = {2},
+  pages = {667--718},
+  year = {2021},
+  doi = {10.1214/20-BA1221}
+}
+@article{vehtari2017,
+  author = {Vehtari, Aki and Gelman, Andrew and Gabry, Jonah},
+  title = {Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC},
+  journal = {Statistics and Computing},
+  volume = {27},
+  pages = {1413--1432},
+  year = {2017},
+  doi = {10.1007/s11222-016-9696-4}
+}
+
+@article{gelman2006,
+  author = {Gelman, Andrew},
+  title = {Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper)},
+  journal = {Bayesian Analysis},
+  volume = {1},
+  number = {3},
+  pages = {515--534},
+  year = {2006},
+  doi = {10.1214/06-BA117A}
+}
+
+@article{Almeida2025BRSDR,
+  author = {Almeida, Cristiano das Neves and others},
+  title = {The design of the {Brazilian Sub-Daily Rainfall} dataset ({BR-SDR}): two decades of high-time-resolution data in {Brazil}},
+  year = {2025},
+  journal = {Hydrological Sciences Journal},
+  volume = {70},
+  number = {11},
+  pages = {1850--1862},
+  doi = {10.1080/02626667.2025.2506193},
+  url = {https://doi.org/10.1080/02626667.2025.2506193},
+  urldate = {2026-10-08}
+}
+
+@misc{Copernicus2018ERA5,
+  author = {{Copernicus Climate Change Service}},
+  title = {{ERA5} hourly data on single levels from 1940 to present},
+  year = {2018},
+  doi = {10.24381/cds.adbb2d47},
+  url = {https://doi.org/10.24381/cds.adbb2d47},
+  urldate = {2025-12-31},
+  publisher = {Copernicus Climate Change Service (C3S) Climate Data Store (CDS)},
+  howpublished = {Copernicus Climate Change Service (C3S) Climate Data Store (CDS)},
+  note = {Conjunto de dados}
+}
+
+@article{Davison2012SpatialExtremes,
+  author = {Davison, A. C. and Padoan, S. A. and Ribatet, M.},
+  title = {Statistical modeling of spatial extremes},
+  year = {2012},
+  journal = {Statistical Science},
+  volume = {27},
+  number = {2},
+  pages = {161--186},
+  doi = {10.1214/11-STS376},
+  url = {https://doi.org/10.1214/11-STS376},
+  urldate = {2026-10-08}
+}
+
+@article{DellAira2026Langbein,
+  author = {Dell'Aira, F. and Cancelliere, A. and Meier, C. I.},
+  title = {Seventy-five years underestimating frequent events and other frequently underestimated implications of {Langbein}'s equation},
+  year = {2026},
+  journal = {Water Resources Research},
+  volume = {62},
+  number = {2},
+  pages = {e2025WR040530},
+  doi = {10.1029/2025WR040530},
+  url = {https://doi.org/10.1029/2025WR040530},
+  urldate = {2026-10-08},
+  eid = {e2025WR040530}
+}
+
+@article{Duarte2025IDF,
+  author = {Duarte, L. V. and others},
+  title = {A {Bayesian} approach to model {IDF} curves employing max-stable processes},
+  year = {2025},
+  journal = {Hydrological Sciences Journal},
+  volume = {70},
+  number = {16},
+  pages = {2934--2952},
+  doi = {10.1080/02626667.2025.2579874},
+  url = {https://doi.org/10.1080/02626667.2025.2579874},
+  urldate = {2026-10-08}
+}
+
+@article{Gardini2023Selection,
+  author = {Gardini, A.},
+  title = {Functional and variables selection in extreme value models for regional flood frequency analysis},
+  year = {2023},
+  journal = {Environmental and Ecological Statistics},
+  volume = {30},
+  number = {4},
+  pages = {715--739},
+  doi = {10.1007/s10651-023-00581-8},
+  url = {https://doi.org/10.1007/s10651-023-00581-8},
+  urldate = {2026-10-08}
+}
+
+@misc{Lemos2026UNIPLUBR,
+  author = {Lemos, F. C. and others},
+  title = {Unified {Brazilian} Rainfall Dataset ({UNIPLU-BR}): a standardized national database of point precipitation from major {Brazilian} monitoring networks},
+  year = {2026},
+  doi = {10.5281/zenodo.18883358},
+  url = {https://doi.org/10.5281/zenodo.18883358},
+  urldate = {2026-10-08},
+  publisher = {Zenodo},
+  howpublished = {Zenodo},
+  note = {Conjunto de dados}
+}
+
+@article{Lima2016BayesianGEV,
+  author = {Lima, C. H. R. and Lall, U. and Troy, T. and Devineni, N.},
+  title = {A hierarchical {Bayesian GEV} model for improving local and regional flood quantile estimates},
+  year = {2016},
+  journal = {Journal of Hydrology},
+  volume = {541},
+  pages = {816--823},
+  doi = {10.1016/j.jhydrol.2016.07.042},
+  url = {https://doi.org/10.1016/j.jhydrol.2016.07.042},
+  urldate = {2026-10-08}
+}
