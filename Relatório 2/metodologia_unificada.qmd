@@ -222,13 +222,13 @@ A distribuição posterior de cada estação foi definida, proporcionalmente, pe
 
 Foram executadas cinco cadeias independentes, com 20.000 iterações por cadeia, descartando-se as 10.000 iniciais para aquecimento/adaptação. Aplicou-se *thinning* de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em `adapt_delta = 0.999` e `max_treedepth = 17`. Os valores iniciais de $H$, $\theta$, $\alpha$, $\beta$, $\bar\xi$, $\xi_k$ e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.
 
-A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência $\widehat R$ por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (*bulk-ESS* e *tail-ESS*), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (*E-BFMI*). O diagnóstico $\widehat R$ compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação [@vehtari2021; @standiagnostics]. Adota-se como referência operacional conservadora $\widehat R<1{,}05$, além da inspeção de ESS e da ausência de divergências.
+A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência $\widehat R$ por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (*bulk-ESS* e *tail-ESS*), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (*E-BFMI*). O diagnóstico $\widehat R$ compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação [@vehtari2021]. Adota-se como referência operacional conservadora $\widehat R<1{,}05$, além da inspeção de ESS e da ausência de divergências.
 
 #### Estruturas alternativas de $\xi$
 
 O RS foi utilizado para investigar estruturas alternativas para o parâmetro de forma da GEV, com o objetivo de examinar efeitos de restrições de homogeneidade e de compartilhamento espacial sobre a estimação de quantis extremos. Esta comparação utilizou máximos anuais organizados por ano civil, por ter sido conduzida antes da atribuição dos meses iniciais individuais do ano hidrológico.
 
-As hipóteses de comparação podem ser expressas pelas seguintes restrições ou relações, que diferenciam os níveis de compartilhamento de informação:
+As hipóteses de comparação podem ser expressas pelas restrições e relações apresentadas na @tbl-estruturas-xi, que diferenciam os níveis de compartilhamento de informações entre estações e durações.
 
 | Estrutura | Representação | Compartilhamento |
 |:-----------------------|:-----------------------|:-----------------------|
@@ -237,6 +237,8 @@ As hipóteses de comparação podem ser expressas pelas seguintes restrições o
 | Comum entre estações para cada duração | $\xi_{j,k}=\xi_k$ | Igualdade entre estações para uma duração |
 | Globalmente comum | $\xi_{j,k}=\xi$ | Igualdade entre estações e durações |
 | *Partial pooling* espacial | $\xi_j$ associado a parâmetros regionais | Regularização entre estações, sem igualdade obrigatória |
+
+: Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados. {#tbl-estruturas-xi}
 
 Os modelos avaliados no Rio Grande do Sul mantiveram a mesma estrutura hierárquica de invariância de escala para os parâmetros de localização e escala da distribuição GEV, fundamentada em Lima et al. (2018). Os parâmetros $\alpha_j$, $\beta_j$, $H_j$ e $\theta_j$ foram estimados individualmente para cada estação, sem compartilhamento espacial. As diferentes especificações distinguiram-se exclusivamente pela estrutura atribuída ao parâmetro de forma $\xi$, permitindo avaliar as consequências de diferentes hipóteses de constância, heterogeneidade e compartilhamento de informação sobre o comportamento das caudas da distribuição e as estimativas de precipitações extremas.
 
