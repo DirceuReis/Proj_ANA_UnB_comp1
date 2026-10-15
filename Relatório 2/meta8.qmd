@@ -283,6 +283,31 @@ Foi adotado nível de significância de 5% ((\alpha=0,05)). Após a identificaç
 
 Dessa forma, o procedimento permitiu obter a significância estatística final das tendências considerando simultaneamente os múltiplos testes realizados. Para cada unidade espacial, o resultado após o controle da FDR foi classificado como significativo ou não significativo, permitindo a representação e a avaliação da distribuição espacial das tendências.
 
+#8.2.5 Teste de Pettit
+
+A identificação de possíveis mudanças nas séries temporais de precipitação máxima diária, provenientes dos dados em grade de Xavier, foi realizada por meio do teste não paramétrico de Pettitt. Esse procedimento permite identificar um ponto de mudança na distribuição de uma série temporal, dividindo-a em dois períodos com possíveis comportamentos distintos. A análise foi conduzida individualmente para cada célula da grade.
+
+ara cada série elegível, foi construída uma matriz de comparações pareadas entre os valores de precipitação, utilizando a função sinal da diferença entre as observações. A partir dessas comparações, calculou-se a estatística $(U_k)$ para cada possível posição de mudança $(k)$, definida pela soma dos sinais das diferenças entre as observações situadas antes e depois de cada posição candidata. A estatística do teste de Pettitt foi obtida pelo maior valor absoluto de $(U_k)$, conforme a expressão:
+
+$$
+K = \max_{1 \leq k < n} |U_k|
+$$
+
+em que $(K)$ representa a estatística do teste e $(n)$ corresponde ao número de observações válidas da série temporal. O ponto de quebra foi associado à posição em que o valor absoluto de $(U_k)$ atingiu seu máximo, sendo o respectivo ano registrado como o ano estimado da quebra.
+
+A significância estatística foi inicialmente avaliada por meio de uma aproximação do valor-p, calculada pela expressão:
+
+$$
+p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
+$$
+
+com os valores limitados ao intervalo máximo de 1. Nessa etapa, adotou-se o nível de significância de 5%, considerando-se evidência de quebra quando $(p < 0{,}05)$. Entretanto, como o procedimento foi aplicado simultaneamente a milhares de células da grade, os valores-p foram submetidos posteriormente à correção para múltiplos testes pelo método FDR, com nível de significância de 5%. Assim, foram classificadas como células com quebra estatisticamente significativa aquelas que permaneceram significativas após a correção FDR e apresentaram um ano de quebra identificado. As demais células foram classificadas como sem quebra significativa.
+
+Para as células com quebras significativas após o procedimento FDR, realizou-se uma análise complementar das tendências temporais, com o objetivo de investigar possíveis diferenças no comportamento da precipitação entre os períodos anterior e posterior à quebra. O período anterior foi definido pelas observações com ano menor ou igual ao ano estimado da quebra, enquanto o período posterior compreendeu as observações com ano estritamente maior que esse ano. Dessa forma, o ano da quebra foi incluído no segmento anterior, e os dois períodos foram analisados separadamente.
+
+Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descrita nos itens 8.2.2; 8.2.3 e 8.2.4.
+
+
 #8.3 Resultados Pluviómetros e pluviógrafos
 
 A análise de tendência foi aplicada a 5.258 postos pluviométricos distribuídos pelo território brasileiro, conforme apresentado na Figura 1. Quanto à extensão das séries históricas, 1.308 postos (24,9%) possuem registros com duração igual ou superior a 60 anos; 1.829 (34,8%) apresentam séries entre 45 e 59 anos; e 2.121 (40,3%) possuem séries entre 30 e 44 anos
@@ -327,10 +352,41 @@ Nas regiões do ANC e do ANO, as tendências crescentes também predominaram, co
 
 Em contraste, a Região Hidrográfica do SFR apresentou uma distribuição relativamente mais equilibrada entre as direções das tendências, com 124 células crescentes e 78 decrescentes. Embora as tendências crescentes ainda predominem, a proporção de tendências decrescentes nessa região foi superior à observada na maioria das demais regiões analisadas.
 
-#8.5 Teste de Pettit nos dados de Xavier ![mapa anos de quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png) Figura 7
+#8.5 Teste de Pettit nos dados de Xavier 
+
+Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de Xavier, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.
+
+A aplicação do teste de Pettitt às 71.007 séries de precipitação identificou 9.330 pontos com quebra estatisticamente significativa, enquanto 61.677 séries não apresentaram quebras significativas. Esses valores correspondem, respectivamente, a aproximadamente 13,1% e 86,9% do total analisado. Os resultados indicam que a maioria das séries não apresentou evidências estatísticas de mudanças abruptas ao longo do período analisado. Entretanto, a identificação de quebras significativas em cerca de 13,2% das séries evidencia a ocorrência de possíveis alterações no comportamento temporal da precipitação em parte da área de estudo. A figura abaixo mostra as células onde foram identificadas quebras significativa.
+
+
+![mapa anos de quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png) Figura 7
+
+Posteriormente, nas séries com quebra significativa identificada pelo teste de Pettitt, o teste de tendência foi reaplicado separadamente aos períodos anterior e posterior à quebra, a fim de avaliar possíveis diferenças na direção e na significância das tendências de precipitação entre esses dois intervalos.
+
+O teste de Pettitt evidenciou uma redução no número de séries com significância estatística após a quebra, tanto para o teste de MK quanto para o método MTFPW. Antes da quebra, o teste MK identificou 1.904 séries com tendências significativas, enquanto 7.426 não apresentaram significância. Após a quebra, o número de séries significativas diminuiu para 1.498, ao passo que 7.832 séries não apresentaram tendências estatisticamente significativas, correspondendo a uma redução de aproximadamente 21,3% no número de resultados significativos.
+
+Considerando a correção da autocorrelação temporal pelo método MTFPW, foram identificadas 1.779 séries significativas antes da quebra e 7.551 não significativas. Após a quebra, esses números passaram para 1.415 e 7.915, respectivamente, representando uma redução de aproximadamente 20,5% no número de séries significativas. A diminuição observada em ambos os procedimentos indica que as tendências estatisticamente significativas foram menos frequentes no período posterior à quebra.
+
+Após a correção pelo procedimento FDR no período anterior à quebra, foram identificadas 817 séries com tendências estatisticamente significativas, enquanto 8.513 não apresentaram significância. Após a quebra, o número de séries significativas foi reduzido para 276, ao passo que 9.054 séries permaneceram sem tendências significativas. Esses resultados correspondem a uma redução de aproximadamente 66,2% no número de séries com tendências significativas entre os dois períodos. Essa diminuição sugere que, nas séries analisadas, as tendências identificadas antes dos pontos de quebra foram menos frequentes após a ruptura.
+
+Na Figura 8 pode-se observar as diferenças na distribuição das categorias de tendência entre os dois períodos. Antes da quebra, figura superior, foram identificadas 19 séries com tendência crescente e 798 com tendência decrescente. Após a quebra, figura inferior, o número de séries com tendência crescente aumentou para 275, ao passo que apenas uma série apresentou tendência decrescente.
 
 ![tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_depois_quebra.png) Figura 8
 
+Esses resultados apresentam uma mudança na distribuição das tendências entre os períodos analisados, caracterizada pelo predomínio de tendências decrescentes antes da quebra e de tendências crescentes após a quebra. Entretanto, a maior parte das séries permaneceu sem tendência estatisticamente significativa em ambos os períodos.
+
+Ainda pós a aplicação do FDR observou-se as mudanças na direção da tendência antes e depois da quebra. A transição mais frequente foi a manutenção da condição de ausência de tendência estatisticamente significativa (NS → NS), observada em 8.362 séries. Esse resultado indica que, para a maioria das séries analisadas, não foram identificadas tendências significativas em nenhum dos dois períodos, considerando o critério estatístico adotado.
+
 ![mudança de tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png) Figura 9
 
+Entre as séries que apresentaram mudanças na direção das tendências, destacou-se a transição de decrescente para não significativa (Decrescente → NS), registrada em 673 casos. Esse resultado foi seguido pelas transições de não significativa para crescente (NS → Crescente), observada em 150 séries, e de decrescente para crescente (Decrescente → Crescente), identificada em 125 séries. Em menor número, 19 séries passaram de uma tendência crescente para não significativa (Crescente → NS), enquanto apenas uma apresentou transição de não significativa para decrescente (NS → Decrescente).
+
+De modo geral, os resultados evidenciam que a principal mudança após os pontos de quebra foi a ausência de significância estatística das tendências, especialmente em séries que anteriormente apresentavam tendência decrescente. Também foram observadas transições para tendências crescentes, embora em menor quantidade
+
 #8.6 Considerações Finais
+
+A análise das tendênciasda precipitação máxima diária, realizada com dados de postos pluviométricos do UNIPLU e com dados em grade de Xavier et al., permitiu identificar diferenças espaciais no comportamento das precipitações extremas nas Regiões Hidrográficas do Brasil. A aplicação sequencial dos testes de Mann–Kendall, MTFPW e da correção para múltiplos testes pelo procedimento FDR demonstrou a importância de considerar tanto a autocorrelação temporal quanto a multiplicidade das análises na identificação de tendências estatisticamente significativas. Nos dados observacionais, foram identificados 213 postos com tendências significativas após a aplicação do FDR, com predominância de tendências crescentes. Nos dados em grade, embora tenham sido observadas diferenças entre as regiões, também predominou a ocorrência de tendências crescentes entre as células que permaneceram significativas após as correções estatísticas. Destacaram-se, nesse contexto, as regiões do Atlântico Sul, Uruguai e do Atlântico Leste que apresentaram elevadas proporções de células com tendências significativas.
+
+A aplicação do teste de Pettitt às séries em grade complementou a análise ao permitir a identificação de possíveis mudanças abruptas no comportamento temporal da precipitação máxima diária. Entre as células analisadas, foram identificadas 9.330 séries com quebras estatisticamente significativas após a correção FDR. A análise segmentada dessas séries evidenciou diferenças importantes entre os períodos anterior e posterior à quebra: antes dela, predominaram as tendências decrescentes entre as séries significativas, enquanto, depois dela, houve forte predominância de tendências crescentes. Também foi observada uma redução expressiva no número de tendências significativas após a quebra, especialmente após a aplicação do FDR, passando de 817 séries antes da quebra para 276 depois dela. 
+
+Em conjunto, esses resultados indicam que a avaliação das tendências em toda a série histórica pode não representar integralmente as mudanças temporais ocorridas em determinadas regiões. Como passos futuros, recomenda-se aprofundar a investigação das diferenças regionais identificadas, comparando sistematicamente os resultados dos postos pluviométricos e pluviógrafos com os dados em grade de Xavier et al., de modo a avaliar a consistência espacial e temporal dos padrões observados. Também será importante investigar a distribuição dos anos de quebra e sua possível associação com variabilidades climáticas de grande escala.
