@@ -406,10 +406,10 @@ E[I_d^q] = \left(\frac{d}{D}\right)^{-qH}E[I_D^q].
 </section>
 <section id="modelos-hierárquicos-bayesianos-bhm" class="level3">
 <h3 class="anchored" data-anchor-id="modelos-hierárquicos-bayesianos-bhm">Modelos hierárquicos bayesianos (BHM)</h3>
-<p>Seguindo a formulação hierárquica de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação <span class="math inline">\(j\)</span>, duração <span class="math inline">\(d_k\)</span> e ano <span class="math inline">\(a\)</span>, o modelo foi especificado pelas <a href="#eq-gev-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;13</a>, <a href="#eq-mu-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;14</a>, <a href="#eq-sigma-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;15</a> e <a href="#eq-xi-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;16</a>.</p>
+<p>Seguindo a formulação hierárquica de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação <span class="math inline">\(j\)</span>, duração <span class="math inline">\(d_k\)</span> e ano <span class="math inline">\(i\)</span>, o modelo foi especificado pelas <a href="#eq-gev-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;13</a>, <a href="#eq-mu-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;14</a>, <a href="#eq-sigma-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;15</a> e <a href="#eq-xi-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;16</a>.</p>
 <p><span id="eq-gev-hierarquica-subdiario"><span class="math display">\[
-Y_{j,k,a}\sim\operatorname{GEV}
-(\mu_{j,k},\sigma_{j,k},\xi_{j,k}).
+Y_{j,k,i}\sim\operatorname{GEV}
+(\mu_{j,k},\sigma_{j,k},\xi_{j,k}), i = 1,..., N_{j,k}.
 \tag{13}\]</span></span></p>
 <p><span id="eq-mu-hierarquica-subdiario"><span class="math display">\[
 \log\mu_{j,k}\sim\mathcal N\left(
@@ -658,13 +658,43 @@ Tabela&nbsp;2: Configuração dos parâmetros de entrada utilizada nos modelos M
 <section id="estimativa-dos-parâmetros-em-locais-não-monitorados" class="level4">
 <h4 class="anchored" data-anchor-id="estimativa-dos-parâmetros-em-locais-não-monitorados">Estimativa dos parâmetros em locais não monitorados</h4>
 <p>A transferência das informações para locais onde não há monitoramento foi realizada por meio da derivação das distribuições condicionais dos erros de regressão de cada parâmetro da GEV para toda a área de estudo. Através dos semivariogramas, as covariâncias são utilizadas para estimar os efeitos residuais nos locais não monitorados, somando-se esses efeitos aos valores médios dos parâmetros, ou aos resultados das regressões, no caso dos modelos que utilizam covariáveis. De forma resumida, considera-se que o valor de determinado parâmetro em um ponto não monitorado é obtido através da soma do valor médio (ou do resultado da regressão), somado a um ajuste residual para aquele ponto <a href="#eq-1" class="quarto-xref">Equação&nbsp;24</a>. Esse resíduo, por sua vez, é representado por uma distribuição normal <a href="#eq-2" class="quarto-xref">Equação&nbsp;25</a>, com a média calculada pela <a href="#eq-3" class="quarto-xref">Equação&nbsp;26</a>, e a variância calculada pela <a href="#eq-4" class="quarto-xref">Equação&nbsp;27</a>.</p>
-<p><span id="eq-1"><span class="math display">\[ g_{\chi}\{\chi(\hat{s})\} = X_{\chi}(\hat{s})\beta_{\chi} + \varepsilon_{\chi}(\hat{s}).  \tag{24}\]</span></span></p>
-<p><span id="eq-2"><span class="math display">\[ p\left( \varepsilon_{\chi}(\hat{s}) \mid \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N), \boldsymbol{y}, \boldsymbol{x}_{\chi}, \boldsymbol{\phi}_{\chi} \right) = N\left( \mu_{\chi,\mathrm{conditional}}, \sigma_{\chi,\mathrm{conditional}}^{2} \right).  \tag{25}\]</span></span></p>
+<p><span id="eq-1"><span class="math display">\[
+g_{\chi}\{\chi(\mathbf{s}_0)\}
+=
+X_{\chi}(\mathbf{s}_0)\boldsymbol{\beta}_{\chi}
++
+\varepsilon_{\chi}(\mathbf{s}_0).
+\tag{24}\]</span></span></p>
+<p><span id="eq-2"><span class="math display">\[
+p\left(
+\varepsilon_{\chi}(\hat{s})
+\mid
+\varepsilon_{\chi}(s_1),\ldots,\varepsilon_{\chi}(s_m),
+\boldsymbol{y},\boldsymbol{x}_{\chi},\boldsymbol{\phi}_{\chi}
+\right)
+=
+\mathcal N\left(
+\mu_{\chi,\mathrm{conditional}},
+\sigma_{\chi,\mathrm{conditional}}^{2}
+\right).
+\tag{25}\]</span></span></p>
 <p><span id="eq-3"><span class="math display">\[
-\mu_{\chi,\mathrm{conditional}} = \Lambda_{\chi}\Sigma_{\chi}^{-1} \left( \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N) \right)^{T}  \tag{26}\]</span></span></p>
+\mu_{\chi,\mathrm{conditional}}
+=
+\Lambda_{\chi}\Sigma_{\chi}^{-1}
+\left(
+\varepsilon_{\chi}(s_1),\ldots,
+\varepsilon_{\chi}(s_m)
+\right)^{T}.
+\tag{26}\]</span></span></p>
 <p><span id="eq-4"><span class="math display">\[
-\sigma_{\chi,\mathrm{conditional}}^{2} = \delta_{\chi}^{2} - \Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T}
+\sigma_{\chi,\mathrm{conditional}}^{2}
+=
+\delta_{\chi}^{2}
+-
+\Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T}.
 \tag{27}\]</span></span></p>
+<p>Nas <a href="#eq-1" class="quarto-xref">Equação&nbsp;24</a>, <a href="#eq-2" class="quarto-xref">Equação&nbsp;25</a>, <a href="#eq-3" class="quarto-xref">Equação&nbsp;26</a> e <a href="#eq-4" class="quarto-xref">Equação&nbsp;27</a>, <span class="math inline">\(\chi\)</span> representa o parâmetro da relação IDF a ser estimado, <span class="math inline">\(g_{\chi}\)</span> sua função de ligação, <span class="math inline">\(\hat{s}\)</span> o local não monitorado e <span class="math inline">\(s_j\)</span> e <span class="math inline">\(s_h\)</span> as localizações das estações observadas, com <span class="math inline">\(j,h=1,\ldots,m\)</span>, sendo <span class="math inline">\(m\)</span> o número de estações. Os termos <span class="math inline">\(X_{\chi}(\hat{s})\)</span> e <span class="math inline">\(\beta_{\chi}\)</span> representam, respectivamente, o vetor de covariáveis no local de estimativa e seus coeficientes de regressão, enquanto <span class="math inline">\(\varepsilon_{\chi}(s)\)</span> corresponde ao efeito residual espacial. Na distribuição condicional, <span class="math inline">\(\boldsymbol{y}\)</span> representa os dados observados, <span class="math inline">\(\boldsymbol{x}_{\chi}\)</span> as covariáveis consideradas e <span class="math inline">\(\boldsymbol{\phi}_{\chi}\)</span> os parâmetros da estrutura espacial. Por sua vez, <span class="math inline">\(\mu_{\chi,\mathrm{conditional}}\)</span> e <span class="math inline">\(\sigma_{\chi,\mathrm{conditional}}^{2}\)</span> são a média e a variância condicionais, calculadas a partir da matriz de covariância entre estações <span class="math inline">\(\Sigma_{\chi}\)</span>, do vetor de covariâncias entre estas e o local não monitorado <span class="math inline">\(\Lambda_{\chi}\)</span> e da variância marginal do campo residual <span class="math inline">\(\delta_{\chi}^{2}\)</span>. Os sobrescritos <span class="math inline">\(-1\)</span> e <span class="math inline">\(T\)</span> indicam, respectivamente, a inversa matricial e a transposição.</p>
 <p>A <a href="#eq-3" class="quarto-xref">Equação&nbsp;26</a> descreve a média do efeito residual no local da estimativa, considerando que os pesos utilizados para combinar os resíduos variam em função dos valores de covariância entre cada estação de dados e o local não monitorado. A <a href="#eq-4" class="quarto-xref">Equação&nbsp;27</a> apresenta a variância do efeito residual no local não monitorado, que considera a diferença entre a variância marginal do campo residual (incerteza antes de considerar as estações) e a redução dessa variância proporcionada pelas estações disponíveis.</p>
 <p>A avaliação dos modelos MS e MS-COV foi realizada a partir das estações reservadas para validação, comparando-se as intensidades de precipitação estimadas com os respectivos valores observados. Foram utilizadas as métricas de raiz do erro quadrático médio (RMSE), erro absoluto médio (MAE), viés percentual (PBIAS), coeficiente de correlação (<span class="math inline">\(r\)</span>), eficiência de Nash–Sutcliffe (NSE) e eficiência de Kling–Gupta (KGE), conforme as formulações apresentadas anteriormente neste relatório.</p>
 

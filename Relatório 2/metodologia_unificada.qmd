@@ -3,8 +3,7 @@ title: "Metodologia"
 bibliography: "ref_metodologia_unificada.bib"
 ---
 
-Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries subdiárias de precipitação, previamente organizadas e descritas na Meta 3. Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas.
-Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação <!-- Melhorar aqui a descrição Tomas -->. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos *max-stable*, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados.
+Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries subdiárias de precipitação, previamente organizadas e descritas na Meta 3. Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas. Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação <!-- Melhorar aqui a descrição Tomas -->. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos *max-stable*, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados.
 
 ## Preparação das séries de precipitação e construção dos máximos anuais
 
@@ -144,11 +143,11 @@ A incorporação de informações regionais foi investigada por meio de três ab
 
 ### Modelos hierárquicos bayesianos (BHM)
 
-Seguindo a formulação hierárquica de @lima2018, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação $j$, duração $d_k$ e ano $a$, o modelo foi especificado pelas @eq-gev-hierarquica-subdiario, @eq-mu-hierarquica-subdiario, @eq-sigma-hierarquica-subdiario e @eq-xi-hierarquica-subdiario.
+Seguindo a formulação hierárquica de @lima2018, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação $j$, duração $d_k$ e ano $i$, o modelo foi especificado pelas @eq-gev-hierarquica-subdiario, @eq-mu-hierarquica-subdiario, @eq-sigma-hierarquica-subdiario e @eq-xi-hierarquica-subdiario.
 
 $$
-Y_{j,k,a}\sim\operatorname{GEV}
-(\mu_{j,k},\sigma_{j,k},\xi_{j,k}).
+Y_{j,k,i}\sim\operatorname{GEV}
+(\mu_{j,k},\sigma_{j,k},\xi_{j,k}), i = 1,..., N_{j,k}.
 $$ {#eq-gev-hierarquica-subdiario}
 
 $$
@@ -273,7 +272,7 @@ O estado do Rio Grande do Sul foi selecionado como área de estudo para a aplica
 
 As estações foram divididas aleatoriamente em dois conjuntos, sendo 80% destinadas à calibração dos parâmetros e 20% à validação dos modelos. Para a organização das séries de máximos anuais, foi adotado o ano civil, compreendido entre janeiro e dezembro.
 
-[INSERIR FIGURA 1 — Estações de monitoramento de precipitação subdiária utilizadas no estudo.]
+\[INSERIR FIGURA 1 — Estações de monitoramento de precipitação subdiária utilizadas no estudo.\]
 
 #### Formulação do modelo *max-stable*
 
@@ -293,10 +292,10 @@ A dependência espacial aparece em dois níveis nessa estrutura. No nível dos d
 
 As estimativas dos parâmetros das curvas IDFs foram realizadas via cadeias MCMC, utilizando 65 mil iterações, das quais as primeiras 50 mil foram descartadas como *burn-in*. Para análise da convergência das cadeias, foram observados os aspectos visuais das distribuições *a posteriori,* através da análise dos *traceplots*.
 
-A definição das informações iniciais utilizadas como entrada do modelo, entre elas os valores iniciais dos parâmetros da GEV, dos semivariogramas, e das diversas distribuições de referência foram baseadas na proposta de @Stephenson2016Durations. A partir dessa proposta inicial, foram testadas diversas combinações de valores, de forma a obter resultados mais estáveis, com a convergência dos parâmetros. As investigações envolveram variações nos valores de inicias dos parâmetros de dependência espacial 𝛼 e largura de banda (logbw), os desvios padrão das distribuições de referência para tais parâmetros, a distribuição *a priori* de logwb, e tamanho das células. Ao todo, foram realizados mais de 50 testes, da ordem de 6 a 8 horas de processamento para cada um deles. O conjunto de valores que gerou o resultado mais consistente foi então adotado como modelo “*baseline*” para incorporação do procedimento com as covariáveis.  Os parâmetros utilizados são apresentados na @tbl-parametros-ms.
+A definição das informações iniciais utilizadas como entrada do modelo, entre elas os valores iniciais dos parâmetros da GEV, dos semivariogramas, e das diversas distribuições de referência foram baseadas na proposta de @Stephenson2016Durations. A partir dessa proposta inicial, foram testadas diversas combinações de valores, de forma a obter resultados mais estáveis, com a convergência dos parâmetros. As investigações envolveram variações nos valores de inicias dos parâmetros de dependência espacial 𝛼 e largura de banda (logbw), os desvios padrão das distribuições de referência para tais parâmetros, a distribuição *a priori* de logwb, e tamanho das células. Ao todo, foram realizados mais de 50 testes, da ordem de 6 a 8 horas de processamento para cada um deles. O conjunto de valores que gerou o resultado mais consistente foi então adotado como modelo “*baseline*” para incorporação do procedimento com as covariáveis. Os parâmetros utilizados são apresentados na @tbl-parametros-ms.
 
 | Parâmetro | Descrição |
-|:---|:---|
+|:-----------------------------------|:-----------------------------------|
 | `Cell size = 0.25` | Tamanho das células |
 | `iters = 65000` | Número de iterações |
 | `alpha = 0.8` | Valor inicial do parâmetro de dependência espacial |
@@ -320,28 +319,58 @@ A definição das informações iniciais utilizadas como entrada do modelo, entr
 
 Considerando os padrões de precipitação observados no Rio Grande do Sul, que incorporam ao longo do ano chuvas convectivas e de larga escala, foram escolhidas como potenciais covariáveis fisiográficas a elevação e distância em relação à costa leste, de onde vem grande parte da umidade que chega ao estado. Além disso, foram testadas também informações obtidas de dados de satélite, a partir do produto de reanálise ERA5 disponibilizado pelo Copernicus Climate Change Service (C3S) por meio do Climate Data Store: precipitação total anual, precipitação convectiva anual e precipitação em larga escala anual [@Copernicus2018ERA5]. Cada uma das 5 covariáveis foram testadas para estimativa dos parâmetros de escala, posição e expoente de escala.
 
-[INSERIR FIGURA 2 — Covariáveis utilizadas: (A) elevação, (B) distância à costa leste, (C) precipitação total média anual, (D) precipitação convectiva média anual e (E) precipitação de larga escala média anual.]
+\[INSERIR FIGURA 2 — Covariáveis utilizadas: (A) elevação, (B) distância à costa leste, (C) precipitação total média anual, (D) precipitação convectiva média anual e (E) precipitação de larga escala média anual.\]
 
 A metodologia para análise das covariáveis foi realizada com base no procedimento descrito a seguir (Figura 3). Na Fase 1, as 5 covariáveis foram testadas separadamente para cada parâmetro. A partir da observação dos coeficientes de regressão obtidos para cada par covariável-parâmetro, foram consideradas ‘importantes’ aquelas covariáveis cujos coeficientes apresentavam-se integralmente (2,5 a 97,5% dos seus valores) acima ou abaixo de zero, deixando claro o sinal da correlação. Na Fase 2, foi identificado um modelo para cada parâmetro, incluindo todas as covariáveis consideradas importantes na fase anterior. Na Fase 3, foram testadas juntas essas covariáveis, unindo os parâmetros de escala e posição e suas covariáveis, todos em um mesmo modelo. Na Fase 4, o modelo reuniu todas as covariáveis consideradas importantes nas fases anteriores, reunindo incorporando, além do parâmetro de escala e de posição, o expoente de escala. As covariáveis consideradas importantes nessa fase foram incorporadas a um modelo único final de covariáveis, chamado de MS-COV. Na avaliação, esse modelo foi comparado ao modelo original, chamado de MS.
 
-[INSERIR FIGURA 3 — Fluxograma das quatro fases de seleção e incorporação das covariáveis.]
+\[INSERIR FIGURA 3 — Fluxograma das quatro fases de seleção e incorporação das covariáveis.\]
 
 #### Estimativa dos parâmetros em locais não monitorados
 
 A transferência das informações para locais onde não há monitoramento foi realizada por meio da derivação das distribuições condicionais dos erros de regressão de cada parâmetro da GEV para toda a área de estudo. Através dos semivariogramas, as covariâncias são utilizadas para estimar os efeitos residuais nos locais não monitorados, somando-se esses efeitos aos valores médios dos parâmetros, ou aos resultados das regressões, no caso dos modelos que utilizam covariáveis. De forma resumida, considera-se que o valor de determinado parâmetro em um ponto não monitorado é obtido através da soma do valor médio (ou do resultado da regressão), somado a um ajuste residual para aquele ponto @eq-1. Esse resíduo, por sua vez, é representado por uma distribuição normal @eq-2, com a média calculada pela @eq-3, e a variância calculada pela @eq-4.
 
-$$ g_{\chi}\{\chi(\hat{s})\} = X_{\chi}(\hat{s})\beta_{\chi} + \varepsilon_{\chi}(\hat{s}). $$ {#eq-1}
+$$
+g_{\chi}\{\chi(\mathbf{s}_0)\}
+=
+X_{\chi}(\mathbf{s}_0)\boldsymbol{\beta}_{\chi}
++
+\varepsilon_{\chi}(\mathbf{s}_0).
+$$ {#eq-1}
 
-$$ p\left( \varepsilon_{\chi}(\hat{s}) \mid \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N), \boldsymbol{y}, \boldsymbol{x}_{\chi}, \boldsymbol{\phi}_{\chi} \right) = N\left( \mu_{\chi,\mathrm{conditional}}, \sigma_{\chi,\mathrm{conditional}}^{2} \right). $$ {#eq-2}
+$$
+p\left(
+\varepsilon_{\chi}(\hat{s})
+\mid
+\varepsilon_{\chi}(s_1),\ldots,\varepsilon_{\chi}(s_m),
+\boldsymbol{y},\boldsymbol{x}_{\chi},\boldsymbol{\phi}_{\chi}
+\right)
+=
+\mathcal N\left(
+\mu_{\chi,\mathrm{conditional}},
+\sigma_{\chi,\mathrm{conditional}}^{2}
+\right).
+$$ {#eq-2}
 
-$$ 
-\mu_{\chi,\mathrm{conditional}} = \Lambda_{\chi}\Sigma_{\chi}^{-1} \left( \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N) \right)^{T} $$ {#eq-3}
+$$
+\mu_{\chi,\mathrm{conditional}}
+=
+\Lambda_{\chi}\Sigma_{\chi}^{-1}
+\left(
+\varepsilon_{\chi}(s_1),\ldots,
+\varepsilon_{\chi}(s_m)
+\right)^{T}.
+$$ {#eq-3}
 
-$$ 
-\sigma_{\chi,\mathrm{conditional}}^{2} = \delta_{\chi}^{2} - \Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T} 
+$$
+\sigma_{\chi,\mathrm{conditional}}^{2}
+=
+\delta_{\chi}^{2}
+-
+\Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T}.
 $$ {#eq-4}
+
+Nas @eq-1, @eq-2, @eq-3 e @eq-4, $\chi$ representa o parâmetro da relação IDF a ser estimado, $g_{\chi}$ sua função de ligação, $\hat{s}$ o local não monitorado e $s_j$ e $s_h$ as localizações das estações observadas, com $j,h=1,\ldots,m$, sendo $m$ o número de estações. Os termos $X_{\chi}(\hat{s})$ e $\beta_{\chi}$ representam, respectivamente, o vetor de covariáveis no local de estimativa e seus coeficientes de regressão, enquanto $\varepsilon_{\chi}(s)$ corresponde ao efeito residual espacial. Na distribuição condicional, $\boldsymbol{y}$ representa os dados observados, $\boldsymbol{x}_{\chi}$ as covariáveis consideradas e $\boldsymbol{\phi}_{\chi}$ os parâmetros da estrutura espacial. Por sua vez, $\mu_{\chi,\mathrm{conditional}}$ e $\sigma_{\chi,\mathrm{conditional}}^{2}$ são a média e a variância condicionais, calculadas a partir da matriz de covariância entre estações $\Sigma_{\chi}$, do vetor de covariâncias entre estas e o local não monitorado $\Lambda_{\chi}$ e da variância marginal do campo residual $\delta_{\chi}^{2}$. Os sobrescritos $-1$ e $T$ indicam, respectivamente, a inversa matricial e a transposição.
 
 A @eq-3 descreve a média do efeito residual no local da estimativa, considerando que os pesos utilizados para combinar os resíduos variam em função dos valores de covariância entre cada estação de dados e o local não monitorado. A @eq-4 apresenta a variância do efeito residual no local não monitorado, que considera a diferença entre a variância marginal do campo residual (incerteza antes de considerar as estações) e a redução dessa variância proporcionada pelas estações disponíveis.
 
 A avaliação dos modelos MS e MS-COV foi realizada a partir das estações reservadas para validação, comparando-se as intensidades de precipitação estimadas com os respectivos valores observados. Foram utilizadas as métricas de raiz do erro quadrático médio (RMSE), erro absoluto médio (MAE), viés percentual (PBIAS), coeficiente de correlação ($r$), eficiência de Nash–Sutcliffe (NSE) e eficiência de Kling–Gupta (KGE), conforme as formulações apresentadas anteriormente neste relatório.
-
