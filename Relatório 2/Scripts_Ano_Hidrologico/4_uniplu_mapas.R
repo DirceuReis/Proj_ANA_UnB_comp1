@@ -115,39 +115,92 @@ col_month <- c(
 )
 col_month <- c(col_month, rev(col_month))
 
+library(geobr)
+
+uf.sf <- geobr::read_state(
+  year = 2020,
+  showProgress = FALSE
+)
+
+br.sf <- geobr::read_country(
+  year = 2020,
+  showProgress = FALSE
+)
+
+# garantir o mesmo CRS
+uf.sf <- sf::st_transform(uf.sf, 4326)
+br.sf <- sf::st_transform(br.sf, 4326)
+
+bbox.br <- sf::st_bbox(br.sf)
+
 g_brasil <-
   ggplot() +
-  geom_sf(data = america, fill = "grey95", color = "grey75", linewidth = 0.15) +
-  geom_sf(data = brasil,  fill = "grey98", color = "grey50",, alpha = 0.4, linewidth = 0.4) +
-  geom_sf(data = hidrografia2, color = "darkblue", alpha = 0.6, linewidth = 0.2) +
-  geom_sf(data = hidrografia3, color = "darkblue", alpha = 0.3, linewidth = 0.15) +
-  geom_sf(data = hidrografia4, color = "darkblue", alpha = 0.1, linewidth = 0.1) +
+  
+  # Estados: preenchimento + divisas estaduais
+  geom_sf(
+    data = uf.sf,
+    fill = "grey98",
+    color = "grey50",
+    linewidth = 0.35
+  ) +
+  
+  # Contorno externo do Brasil
+  geom_sf(
+    data = br.sf,
+    fill = NA,
+    color = "grey25",
+    linewidth = 0.50
+  ) +
+  
   geom_spoke(
     data = stations,
-    aes(x = long, y = lat, angle = theta, color = mes_color, radius = s1),
+    aes(
+      x = long,
+      y = lat,
+      angle = theta,
+      color = mes_color,
+      radius = s1
+    ),
     linewidth = 0.35,
-    arrow = arrow(length = unit(0.08, "cm"))
+    arrow = arrow(
+      length = unit(0.08, "cm")
+    )
   ) +
+  
   scale_colour_manual(
     name = "Mês típico do extremo",
     values = col_month
   ) +
+  
   scale_radius(
     labels = NULL,
     trans = "identity",
     range = c(0.5, 3),
     guide = "none"
   ) +
+  
   coord_sf(
-    xlim = limite[c(1, 3)],
-    ylim = limite[c(2, 4)],
+    xlim = c(
+      bbox.br["xmin"],
+      bbox.br["xmax"]
+    ),
+    ylim = c(
+      bbox.br["ymin"],
+      bbox.br["ymax"]
+    ),
     expand = FALSE
   ) +
-  labs(x = "Longitude", y = "Latitude") +
+  
+  labs(
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  
   annotation_scale(
     location = "br",
     width_hint = 0.20,
-    height = unit( 1.5, "mm"), text_family = font,
+    height = unit(1.5, "mm"),
+    text_family = font,
     text_cex = 0.6,
     bar_cols = c(
       "black",
@@ -155,16 +208,11 @@ g_brasil <-
     ),
     line_width = 0.4
   ) +
+  
   annotation_north_arrow(
     location = "tr",
-    width = unit(
-      1,
-      "cm"
-    ),
-    height = unit(
-      1,
-      "cm"
-    ),
+    width = unit(1, "cm"),
+    height = unit(1, "cm"),
     which_north = "true",
     style = north_arrow_nautical(
       text_family = font,
@@ -176,16 +224,9 @@ g_brasil <-
     )
   ) +
   
-  labs( x = NULL, y = NULL ) +
-  
   tema_base +
   
   theme(
-    # sem coordenadas nos eixos
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    
-    # legenda horizontal
     legend.position = "bottom",
     legend.justification = "center",
     legend.direction = "horizontal",
@@ -206,15 +247,15 @@ g_brasil <-
   ) +
   
   guides(
-  color = guide_legend(
-    nrow = 2,
-    byrow = TRUE,
-    title.position = "top",
-    override.aes = list(
-      linewidth = 1.0
+    color = guide_legend(
+      nrow = 2,
+      byrow = TRUE,
+      title.position = "top",
+      override.aes = list(
+        linewidth = 1.0
+      )
     )
   )
-)
 
 
 ggsave(
