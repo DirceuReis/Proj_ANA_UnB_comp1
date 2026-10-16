@@ -8,7 +8,7 @@ format:
 Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional de qualidade e consistente, com destaque para dados observados obtidos da base do UNIPLU-BR (Das Neves Almeida et al., 2025; Lemos et al., 2026), de responsabilidade da ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, entre outros; e dados em grade obtidos pelo BR-DWGD (Xavier et al., 2022) e NEX-GDDP-CMIP6 (NASA).
 
 # 1. Bases de Dados
-
+ijhgjhjgyjyh
 ## 1.1 UNIPLU-BR
 
 Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) (Das Neves Almeida et al., 2025; Lemos et al., 2026), que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
