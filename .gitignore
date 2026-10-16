@@ -15,3 +15,7 @@ base/fonte/consolidado/subdiario/RS_SGB_data.pqt
 
 base/temp/*
 !base/temp/.gitkeep
+
+"Relatório 2/.quarto/"
+"Relatório 2/.quarto/project-cache/deno-kv-file"
+"Relatório 2/.quarto/docs/search.json"
