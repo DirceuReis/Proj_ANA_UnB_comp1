@@ -649,7 +649,18 @@ estacoes_div_sf <- estacoes_sf %>%
 
 brasil <- geobr::read_state(
   year = 2020
+) |>
+  st_transform(4674)
+
+brasil_union <- st_as_sf(
+  st_union(
+    st_make_valid(brasil)
+  )
 )
+
+st_crs(brasil_union) <- st_crs(4674)
+
+bbox_br <- st_bbox(brasil_union)
 
 # =============================================================================
 # 2. MAPA
@@ -690,20 +701,35 @@ theme_set(
 p_mapa <- ggplot() +
   
   # Estados
-  geom_sf( data = brasil, fill = "grey95", color = "grey70", linewidth = 0.20 ) +
+  geom_sf(
+    data = brasil,
+    fill = "grey98",
+    color = "grey50",
+    linewidth = 0.25
+  ) +
   
-  # Contorno do Brasil
-  geom_sf(data = brasil, fill = NA, color = "grey50", linewidth = 0.4 ) +
+  # Contorno externo
+  geom_sf(
+    data = brasil_union,
+    fill = NA,
+    color = "grey25",
+    linewidth = 0.45
+  ) +
   
   # Todas as estações
-  geom_sf( data = estacoes_sf, aes(color = "Todas as estações"), size = 0.1, alpha = 0.70 ) +
+  geom_sf(
+    data = estacoes_sf,
+    aes(color = "Todas as estações"),
+    size = 0.10,
+    alpha = 0.70
+  ) +
   
   # Estações com divergência
   geom_sf(
     data = estacoes_div_sf,
     aes(color = "Com divergência"),
-    size = 0.1,
-    alpha = 0.70
+    size = 0.35,
+    alpha = 0.90
   ) +
   
   scale_color_manual(
@@ -727,65 +753,74 @@ p_mapa <- ggplot() +
     )
   ) +
   
-  # Barra de escala
   annotation_scale(
     location = "br",
     width_hint = 0.20,
     height = unit(1.5, "mm"),
     text_family = font,
     text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
+    bar_cols = c("black", "aliceblue"),
     line_width = 0.4
   ) +
   
-  # Seta do norte
   annotation_north_arrow(
     location = "tr",
     width = unit(1, "cm"),
     height = unit(1, "cm"),
+    pad_x = unit(0.30, "cm"),
+    pad_y = unit(0.30, "cm"),
     which_north = "true",
     style = north_arrow_nautical(
       text_family = font,
       text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
+      fill = c("black", "aliceblue")
     )
   ) +
   
-  labs(
-    x = NULL,
-    y = NULL
+  coord_sf(
+    crs = st_crs(4674),
+    xlim = c(
+      bbox_br["xmin"],
+      bbox_br["xmax"]
+    ),
+    ylim = c(
+      bbox_br["ymin"],
+      bbox_br["ymax"]
+    ),
+    expand = FALSE
   ) +
   
-  coord_sf(
-    crs = st_crs(4674)
+  labs(
+    x = "Longitude",
+    y = "Latitude"
   ) +
+  
+  theme_bw() +
   
   theme(
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
     
-    # Legenda embaixo
+    axis.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.ticks = element_line(
+      linewidth = 0.3
+    ),
+    
+    axis.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
     legend.position = "bottom",
     legend.justification = "center",
-    
-    legend.key.spacing.x = unit(
-      fontsize * 2,
-      "pt"
-    ),
-    legend.margin = margin(
-      t = -5,
-      l = -2
-    ),
-    legend.spacing.x = unit(
-      -4,
-      "pt"
-    ),
     
     plot.margin = margin(
       t = 5,
@@ -794,7 +829,6 @@ p_mapa <- ggplot() +
       l = 5
     )
   )
-
 print(p_mapa)
 
 ggsave(
@@ -1278,17 +1312,17 @@ annotation_north_arrow(
   ) +
   
   labs(
-    x = NULL,
-    y = NULL
+    x = "Longitude",
+    y = "Latitude"
   ) +
   
   theme_bw() +
   
   theme(
     panel.grid = element_blank(),
-    
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
+    # 
+    # axis.text = element_blank(),
+    # axis.ticks = element_blank(),
     
     text = element_text(
       family = font,
@@ -1818,8 +1852,8 @@ p_xi_mapa <- ggplot() +
   ) +
   
   labs(
-    x = NULL,
-    y = NULL
+    x = "Longitude",
+    y = "Latitude"
   ) +
   
   theme_bw() +
@@ -1827,8 +1861,8 @@ p_xi_mapa <- ggplot() +
   theme(
     panel.grid = element_blank(),
     
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
+    # axis.text = element_blank(),
+    # axis.ticks = element_blank(),
     
     text = element_text(
       family = font,
@@ -2170,116 +2204,57 @@ library(readr)
 # 1. PARÂMETROS ESTRUTURAIS
 # =============================================================================
 
-estruturais_gpkg <- parametros_brasil %>%
+diagnosticos_gpkg <- flags_diagnostico |>
+  transmute(
+    UF = as.character(UF),
+    gauge_code = as.character(gauge_code),
+    flag_diagnostico = as.logical(flag_diagnostico)
+  ) |>
+  distinct(
+    gauge_code,
+    .keep_all = TRUE
+  )
+
+estruturais_gpkg <- parametros_brasil |>
   filter(
     parameter %in% c(
-      "H",
       "alpha",
       "beta",
+      "H",
+      "theta",
       "xi_bar",
       "tau2_mu",
       "tau2_sigma",
       "tau2_xi"
     )
-  ) %>%
-  select(
-    UF,
-    gauge_code,
-    parameter,
-    median,
-    q025,
-    q975
-  ) %>%
-  mutate(
-    gauge_code = as.character(gauge_code)
-  ) %>%
-  pivot_wider(
-    names_from = parameter,
-    values_from = c(
-      median,
-      q025,
-      q975
-    ),
-    names_glue = "{parameter}_{.value}"
-  )
-
-
-# =============================================================================
-# 2. PARÂMETROS GEV POR DURAÇÃO
-# =============================================================================
-
-gev_gpkg <- parametros_brasil %>%
-  filter(
-    parameter %in% c(
-      "mu",
-      "sigma",
-      "xi_d"
-    )
-  ) %>%
-  mutate(
+  ) |>
+  transmute(
+    UF = as.character(UF),
     gauge_code = as.character(gauge_code),
     
-    parametro_gpkg = recode(
-      parameter,
-      mu = "mu",
-      sigma = "sigma",
-      xi_d = "xi"
-    ),
+    parametro = as.character(parameter),
     
-    duracao_nome = paste0(
-      as.integer(duration_h),
-      "h"
-    )
-  ) %>%
-  select(
-    UF,
-    gauge_code,
-    parametro_gpkg,
-    duracao_nome,
-    median,
-    q025,
-    q975
-  ) %>%
-  pivot_wider(
-    names_from = c(
-      parametro_gpkg,
-      duracao_nome
-    ),
-    values_from = c(
-      median,
-      q025,
-      q975
-    ),
-    names_glue = "{parametro_gpkg}_{duracao_nome}_{.value}"
-  )
-
-
-# =============================================================================
-# 3. JUNTAR ESTRUTURAIS + GEV
-# =============================================================================
-
-parametros_gpkg <- estruturais_gpkg %>%
+    mediana = as.numeric(median),
+    q025 = as.numeric(q025),
+    q975 = as.numeric(q975)
+  ) |>
+  
   left_join(
-    gev_gpkg,
-    by = c(
-      "UF",
-      "gauge_code"
-    )
-  )
-
-
-# =============================================================================
-# 4. ADICIONAR COORDENADAS
-# =============================================================================
-
-parametros_gpkg <- parametros_gpkg %>%
+    diagnosticos_gpkg |>
+      select(
+        gauge_code,
+        flag_diagnostico
+      ),
+    by = "gauge_code"
+  ) |>
+  
   left_join(
-    metadados_todos %>%
+    metadados_todos |>
       transmute(
         gauge_code = as.character(gauge_code),
         lat = as.numeric(lat),
         long = as.numeric(long)
-      ) %>%
+      ) |>
       distinct(
         gauge_code,
         .keep_all = TRUE
@@ -2287,58 +2262,100 @@ parametros_gpkg <- parametros_gpkg %>%
     by = "gauge_code"
   )
 
+estruturais_sf <- estruturais_gpkg |>
+  filter(
+    is.finite(lat),
+    is.finite(long)
+  ) |>
+  st_as_sf(
+    coords = c("long", "lat"),
+    crs = 4674,
+    remove = FALSE
+  )
 
 # =============================================================================
-# 5. ADICIONAR FLAGS DO DIAGNÓSTICO
+# 2. PARÂMETROS GEV POR DURAÇÃO
 # =============================================================================
 
-parametros_gpkg <- parametros_gpkg %>%
+parametros_gev_gpkg <- parametros_brasil |>
+  filter(
+    parameter %in% c(
+      "mu",
+      "sigma",
+      "xi_d"
+    )
+  ) |>
+  
+  mutate(
+    UF = as.character(UF),
+    gauge_code = as.character(gauge_code),
+    
+    parametro = recode(
+      parameter,
+      mu = "mu",
+      sigma = "sigma",
+      xi_d = "xi"
+    )
+  ) |>
+  
+  transmute(
+    UF,
+    gauge_code,
+    duracao_h = as.numeric(duration_h),
+    duracao_dias = as.numeric(duration_days),
+    parametro,
+    
+    mediana = as.numeric(median),
+    q025 = as.numeric(q025),
+    q975 = as.numeric(q975)
+  ) |>
+  
+  tidyr::pivot_wider(
+    names_from = parametro,
+    values_from = c(
+      mediana,
+      q025,
+      q975
+    ),
+    names_glue = "{parametro}_{.value}"
+  ) |>
+  
   left_join(
-    flags_diagnostico %>%
-      transmute(
-        gauge_code = as.character(gauge_code),
-        flag_divergencia,
-        n_divergencias,
-        rhat_max,
-        flag_rhat_105,
+    diagnosticos_gpkg |>
+      select(
+        gauge_code,
         flag_diagnostico
       ),
     by = "gauge_code"
-  ) %>%
-  relocate(
-    UF,
-    gauge_code,
-    lat,
-    long,
-    flag_diagnostico,
-    flag_divergencia,
-    n_divergencias,
-    rhat_max,
-    flag_rhat_105
+  ) |>
+  
+  left_join(
+    metadados_todos |>
+      transmute(
+        gauge_code = as.character(gauge_code),
+        lat = as.numeric(lat),
+        long = as.numeric(long)
+      ) |>
+      distinct(
+        gauge_code,
+        .keep_all = TRUE
+      ),
+    by = "gauge_code"
   )
 
-
-# =============================================================================
-# 6. CONFERÊNCIAS
-# =============================================================================
-
-cat(
-  "Estações:",
-  nrow(parametros_gpkg),
-  "\n"
-)
-
-cat(
-  "Gauge codes distintos:",
-  n_distinct(parametros_gpkg$gauge_code),
-  "\n"
-)
-
-cat(
-  "Número de colunas:",
-  ncol(parametros_gpkg),
-  "\n"
-)
+parametros_gev_sf <- parametros_gev_gpkg |>
+  filter(
+    is.finite(lat),
+    is.finite(long)
+  ) |>
+  st_as_sf(
+    coords = c(
+      "long",
+      "lat"
+    ),
+    crs = 4674,
+    remove = FALSE
+  )
 
 
 # =============================================================================
@@ -2348,6 +2365,28 @@ cat(
 readr::write_excel_csv(
   parametros_gpkg,
   "C:/Larissa/parametros_modelo_BR_geopackage.csv"
+)
+
+arquivo_gpkg_parametros <- file.path(
+  "C:/Larissa/",
+  "BR_parametros_modelo.gpkg"
+)
+
+# 1. parâmetros estruturais
+sf::st_write(
+  estruturais_sf,
+  dsn = arquivo_gpkg_parametros,
+  layer = "parametros_estruturais",
+  quiet = TRUE
+)
+
+# 2. parâmetros GEV
+sf::st_write(
+  parametros_gev_sf,
+  dsn = arquivo_gpkg_parametros,
+  layer = "parametros_gev",
+  append = TRUE,
+  quiet = TRUE
 )
 
 library(dplyr)
@@ -3460,3 +3499,120 @@ p_idf_ic_2 <- plot_idf_exemplos_ic(
   cores_TR = cores_TR_2,
   arquivo_saida = "C:/Larissa/IDF_estacoes_exemplo_IC_TR_10_50_100.png"
 )
+
+library(dplyr)
+library(sf)
+
+# =============================================================================
+# 1. PREPARAR METADADOS DAS ESTAÇÕES
+# =============================================================================
+
+meta_idf_gpkg <- metadados_idf |>
+  transmute(
+    UF = as.character(UF),
+    gauge_code = as.character(gauge_code),
+    n_years = as.integer(n_years),
+    lat = as.numeric(lat),
+    long = as.numeric(long)
+  ) |>
+  distinct(
+    gauge_code,
+    .keep_all = TRUE
+  )
+
+niveis_retorno_gpkg <- idf_brasil |>
+  transmute(
+    UF = as.character(UF),
+    gauge_code = as.character(gauge_code),
+    
+    duracao_h = as.numeric(duration_h),
+    duracao_dias = as.numeric(duration_days),
+    
+    periodo_retorno_anos = as.numeric(return_period_years),
+    
+    mediana = as.numeric(median),
+    q025 = as.numeric(q025),
+    q975 = as.numeric(q975)
+  ) |>
+  
+  # ---------------------------------------------------------------------------
+# diagnóstico: somente flag sintética
+# ---------------------------------------------------------------------------
+
+left_join(
+  diagnosticos_gpkg |>
+    select(
+      gauge_code,
+      flag_diagnostico
+    ),
+  by = "gauge_code"
+) |>
+  
+  # ---------------------------------------------------------------------------
+# metadados espaciais + comprimento da série
+# ---------------------------------------------------------------------------
+
+left_join(
+  meta_idf_gpkg |>
+    select(
+      gauge_code,
+      n_years,
+      lat,
+      long
+    ),
+  by = "gauge_code"
+)
+
+niveis_retorno_gpkg |>
+  summarise(
+    n = n(),
+    
+    n_estacoes =
+      n_distinct(gauge_code),
+    
+    n_duracoes =
+      n_distinct(duracao_dias),
+    
+    n_periodos_retorno =
+      n_distinct(periodo_retorno_anos),
+    
+    sem_lat =
+      sum(!is.finite(lat)),
+    
+    sem_long =
+      sum(!is.finite(long)),
+    
+    sem_flag =
+      sum(is.na(flag_diagnostico))
+  )
+
+niveis_retorno_sf <- niveis_retorno_gpkg |>
+  filter(
+    is.finite(lat),
+    is.finite(long)
+  ) |>
+  sf::st_as_sf(
+    coords = c(
+      "long",
+      "lat"
+    ),
+    crs = 4674,
+    remove = FALSE
+  )
+
+arquivo_gpkg_retorno <- file.path(
+  "C:/Larissa/",
+  "BR_periodos_retorno.gpkg"
+)
+
+if (file.exists(arquivo_gpkg_retorno)) {
+  file.remove(arquivo_gpkg_retorno)
+}
+
+sf::st_write(
+  niveis_retorno_sf,
+  dsn = arquivo_gpkg_retorno,
+  layer = "niveis_retorno",
+  quiet = TRUE
+)
+

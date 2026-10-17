@@ -4164,8 +4164,8 @@ salvar_figura(
   altura = 20
 )
 
-TR_FIG_1 <- c(2, 10, 25)
-TR_FIG_2 <- c(50, 100, 200)
+TR_FIG_1 <- c(2, 25, 200)
+TR_FIG_2 <- c(10, 50, 100)
 
 plot_idf_modelos_ic <- function(dados, trs) {
   
@@ -4280,14 +4280,14 @@ p_idf_modelos_ic_2
 
 salvar_figura(
   p_idf_modelos_ic_1,
-  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_2_10_25.png",
+  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_2_25_200.png",
   largura = 15,
   altura = 20
 )
 
 salvar_figura(
   p_idf_modelos_ic_2,
-  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_50_100_200.png",
+  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_10_50_100.png",
   largura = 15,
   altura = 20
 )
