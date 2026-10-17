@@ -1,0 +1,22 @@
+---
+# title: "secao_metodologia_dgev"
+bibliography: ref_metodologia_dgev.bib
+---
+
+### Distribuição GEV dependente na duração
+
+O primeiro modelo avaliado nesse relatório foi uma reparametrização da distribuição GEV apresentada na [EQUAÇÃO GEV]. O modelo segue a relação geral proposta por @koutsoyiannis1998 na [EQUAÇÃO IDF KOUTSOYIANNIS]. Se a variável aleatória $I_d \sim GEV(\mu_d, \sigma_d, \xi_d)$, segue então que uma variável aleatória $Y = I_d(d + \theta)^{-H}$ também segue uma distribuição GEV, porém com parâmetros que independem da escala de tempo (duração) utilizada $d$: $Y \sim GEV(\mu_0, \sigma_0, \xi_0)$, com $\theta \ge 0$ e $0<H<1$.
+
+A com a reparametrização, a distribuição de $Y$ pode ser reescrita com $\tilde\mu = \mu_d/\sigma_d$, $\sigma_0 = \sigma_d(d + \theta)^H$ e $\xi_d = \xi$ resultando em uma expressão dependente na duração da distribuição GEV (*duration-dependent* GEV, d-GEV) pode ser definida como: $$
+F_{I_d}(i_d|\tilde\mu, \sigma_0, \xi) = \exp\left\{-\left[1 + \xi\left(\frac{i_d}{\sigma_0(d + \theta)^{-H}} - \tilde\mu\right)\right]^{-1/\xi}\right\}.
+$$ {#eq-dgev}
+
+Destaca-se que na @eq-dgev, tanto $\tilde\mu$ como $\xi$ não dependem da duração.
+
+Nessa primeira abordagem, o ajuste do modelo acima se deu com o estimador de máxima verossimilhança generalizada (GMLE) [@martins2000]. Utilizando a expressão de log-verossimilhança $\ell$ da função densidade $f_{I_d}$, a função objetivo se torna $$
+\ell(\tilde\mu,\sigma_0,\xi,\theta,H|i_d) = \ln\left[\prod_{i=1}^N\prod_{d}^D f_{I_d}(i_{d,i}|\tilde\mu, \sigma_0, \xi, \theta, H)\right] + \ln[\pi(\xi|p,q)],
+$$ {#eq-log-verossimilhanca-dgev} em que $\pi(\xi|p,q)$ representa uma distribuição *a priori* sobre o parâmetro de forma.
+
+A maximização da @eq-log-verossimilhanca-dgev se deu por meio da função `optim()` disponível para linguagem de programação R [@rcoreteam2026] sobre o conjunto de estações do BR-SDR no estado do Rio Grande do Sul. No total, 54 postos foram selecionados com pelo menos 8 anos de dados e no máximo 20% de falhas anuais. Optou-se por manter o mesmo número de durações para todas as estações, restringindo a faixa de ajuste em $d \in [1, 24]$ horas.
+
+O ajuste considerou diferentes níveis de conhecimento *a priori*. O primeiro consistiu na maximização da @eq-log-verossimilhanca-dgev, desconsiderando qualquer tipo de conhecimento prévio acerca de $\xi$ --- chamado MLE. O segundo empregou a distribuição *a priori* proposta por @martins2000, com uma distribuição Beta deslocada entre -0,50 e +0,50 com média igual a 0,10 (atribuindo um comportamento médio de cauda pesada) e variância igual a 0,122² --- chamada GMLE. A terceira e última avaliou uma abordagem que é comum em estudos de cheias, utilizando um modelo de regressão linear para construir uma distribuição *a priori* regional para $\xi$ a partir de observações na escala diária --- chamada RGMLE. Essa última será descrita na Seção @sec-metodologia-gls.

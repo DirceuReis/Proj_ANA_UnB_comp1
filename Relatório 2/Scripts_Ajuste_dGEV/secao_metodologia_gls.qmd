@@ -1,9 +1,9 @@
 ---
 # bibliography: "Relatório 2/ref_metodologia_unificada.bib"
-bibliography: "ref_metodologia_gls.bib"
+bibliography: "ref_metodologia_dgev.bib"
 ---
 
-### Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV
+### Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV {#sec-metodologia-gls}
 
 Existe grande incerteza no ajuste de distribuições de probabilidade, especialmente quando esse ajuste é feito em cenários de séries curtas. Isso se torna ainda mais relevante para o ajuste de modelos probabilísticos utilizando séries históricas de pluviógrafos. Nesse contexto, uma das abordagens exploradas no Rio Grande do Sul foi a incorporação de informação regional, mas restringindo-se à estimação do parâmetro de forma $\xi$ da distribuição GEV. Para tal, foi construído um modelo de regressão linear de mínimos quadrados generalizados (GLS) com o objetivo de reunir informação regional sobre $\xi$ que possa ser utilizada como conhecimento *a priori* na aplicação semi-Bayesiana do estimador de máxima verossimilhança generalizada.
 
@@ -61,33 +61,26 @@ com matriz de covariância determinada por
 
 $$
 \Sigma[\hat\beta]=[X^T\Lambda(\sigma_\delta^2)X]^{-1}
-$$ {#eq-cov-beta-gls}
-na solução iterativa com método dos momentos entre @eq-beta-gls e a equação do resíduo do erro quadrático médio
-$$
+$$ {#eq-cov-beta-gls} na solução iterativa com método dos momentos entre @eq-beta-gls e a equação do resíduo do erro quadrático médio $$
 (\hat\xi - X\hat\beta)^T[\sigma_\delta^2I_m + \Sigma(\hat\xi)]^{-1}(\hat\xi - X\hat\beta) = m - (p+1).
 $$ {#eq-res-gls}
 
 #### Distribuição *a priori* regional
 
-Finalmente, de posse das estimativas $\hat\beta$ do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo
-$$
+Finalmente, de posse das estimativas $\hat\beta$ do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo $$
 \hat\mu_{\xi_j} = x_j\hat\beta \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \hat\sigma_\delta^2 + x_j\Sigma[\hat\beta]x_j^T,
-$$ {#eq-media-var-xi-gls}
-em que $x_j$ é a linha de $X$ correspondente à estação $j$.
+$$ {#eq-media-var-xi-gls} em que $x_j$ é a linha de $X$ correspondente à estação $j$.
 
-A partir dessas estimativas, contruiu-se uma distribuição *a priori* regional $\pi(\xi|p,q)$ a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de $\xi$ entre -0,50 e +0,50 [@alexandre2008]. Nesssa distribuição, os parâmetros $p$ e $q$ são determinados diretamente a partir das estimativas obtidas pela @eq-media-var-xi-gls como
-$$
+A partir dessas estimativas, contruiu-se uma distribuição *a priori* regional $\pi(\xi|p,q)$ a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de $\xi$ entre -0,50 e +0,50 [@alexandre2008]. Nesssa distribuição, os parâmetros $p$ e $q$ são determinados diretamente a partir das estimativas obtidas pela @eq-media-var-xi-gls como $$
 \hat\mu_{\xi_j} = \frac{p}{p + 1} - 0,50 \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \frac{pq}{(p + q + 1)(p + q)^2}.
-$$
+$$ {#eq-par-priori_beta}
 Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de $\pi(\xi|p,q)$ em $\ell$.
 
 #### Avaliação dos modelos
 
 Nessa aplicação, foram avaliadas nove variáveis preditoras para compor $X$: 1) aspecto do terreno; 2) distância das estações até a costa leste brasileira; 3) elevação das estações; 4) longitude; 5) latitude; 6) média máxima anual de um dia; 7) média máxima anual de três dias; 8) temperatura média no local da estação; e 9) uma covariável binária $Z$ que subdivide o Rio Grande do Sul em duas macrorregiões: $Z=1$ quando a estação pertence à região do estado que faz parte da bacia do Rio Uruguai, e $Z = 0$ quando pertence à região combinada das regiões hidrográficas Litorânea e do Guaíba.
 
-O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos ($AVP_{old}$, @reis2020). Essa métrica considera a correlação na própria estação $j$, além da variância do estimador:
-$$
+O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos ($AVP_{old}$, @reis2020). Essa métrica considera a correlação na própria estação $j$, além da variância do estimador: $$
 AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
 2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
-$$ {#eq-avp-old}
-sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
+$$ {#eq-avp-old} sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
