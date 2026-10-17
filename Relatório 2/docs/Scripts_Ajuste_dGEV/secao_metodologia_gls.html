@@ -263,7 +263,7 @@ window.Quarto = {
     <h2 id="toc-title">Nesta página</h2>
    
   <ul>
-  <li><a href="#modelo-de-regressão-de-mínimos-quadrados-generalizados-para-o-parâmetro-de-forma-da-gev" id="toc-modelo-de-regressão-de-mínimos-quadrados-generalizados-para-o-parâmetro-de-forma-da-gev" class="nav-link active" data-scroll-target="#modelo-de-regressão-de-mínimos-quadrados-generalizados-para-o-parâmetro-de-forma-da-gev">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</a></li>
+  <li><a href="#sec-metodologia-gls" id="toc-sec-metodologia-gls" class="nav-link active" data-scroll-target="#sec-metodologia-gls">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</a></li>
   </ul>
 </nav>
     </div>
@@ -273,8 +273,8 @@ window.Quarto = {
 
 
 
-<section id="modelo-de-regressão-de-mínimos-quadrados-generalizados-para-o-parâmetro-de-forma-da-gev" class="level3">
-<h3 class="anchored" data-anchor-id="modelo-de-regressão-de-mínimos-quadrados-generalizados-para-o-parâmetro-de-forma-da-gev">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</h3>
+<section id="sec-metodologia-gls" class="level3">
+<h3 class="anchored" data-anchor-id="sec-metodologia-gls">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</h3>
 <p>Existe grande incerteza no ajuste de distribuições de probabilidade, especialmente quando esse ajuste é feito em cenários de séries curtas. Isso se torna ainda mais relevante para o ajuste de modelos probabilísticos utilizando séries históricas de pluviógrafos. Nesse contexto, uma das abordagens exploradas no Rio Grande do Sul foi a incorporação de informação regional, mas restringindo-se à estimação do parâmetro de forma <span class="math inline">\(\xi\)</span> da distribuição GEV. Para tal, foi construído um modelo de regressão linear de mínimos quadrados generalizados (GLS) com o objetivo de reunir informação regional sobre <span class="math inline">\(\xi\)</span> que possa ser utilizada como conhecimento <em>a priori</em> na aplicação semi-Bayesiana do estimador de máxima verossimilhança generalizada.</p>
 <p>Modelos desse tipo como o GLS se preocupam em representar, por meio de uma estrutura linear, a relação entre uma variável dependente — nesse caso o parâmetro de forma <span class="math inline">\(\xi\)</span> — e variáveis independentes — também chamadas preditoras, as quais ajudam a explicar o comportamento da variável dependente na região de estudo <span class="citation" data-cites="reis2020">(<a href="#ref-reis2020" role="doc-biblioref">Reis et al. 2020</a>)</span>.</p>
 <p>Nessa avaliação, considerou-se previamente a hipótese de que existe um parâmetro de forma único local, constante ao longo de uma faixa de durações, abordagem comum na literatura <span class="citation" data-cites="lima2018 duarte2025">(<a href="#ref-lima2018" role="doc-biblioref">Lima et al. 2018</a>; <a href="#ref-duarte2025" role="doc-biblioref">Duarte et al. 2025</a>)</span>. A partir dessa premissa, é possível então utilizar informações sobre precipitação na escala diária, a partir de séries históricas de postos pluviométricos (mais longas e em maior quantidade), para construir o modelo GLS. No Rio Grande do Sul, isso foi feito a partir de um conjunto de 182 postos de <span class="citation" data-cites="almeida2025">Das Neves Almeida et al. (<a href="#ref-almeida2025" role="doc-biblioref">2025</a>)</span>.</p>
@@ -324,9 +324,9 @@ Z_ij = \exp\left[ a - b\left( \frac{s_{jh}^c - 1}{c} \right) \right],
 <p>Finalmente, de posse das estimativas <span class="math inline">\(\hat\beta\)</span> do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo <span id="eq-media-var-xi-gls"><span class="math display">\[
 \hat\mu_{\xi_j} = x_j\hat\beta \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \hat\sigma_\delta^2 + x_j\Sigma[\hat\beta]x_j^T,
 \tag{10}\]</span></span> em que <span class="math inline">\(x_j\)</span> é a linha de <span class="math inline">\(X\)</span> correspondente à estação <span class="math inline">\(j\)</span>.</p>
-<p>A partir dessas estimativas, contruiu-se uma distribuição <em>a priori</em> regional <span class="math inline">\(\pi(\xi|p,q)\)</span> a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de <span class="math inline">\(\xi\)</span> entre -0,50 e +0,50 <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre et al. 2008</a>)</span>. Nesssa distribuição, os parâmetros <span class="math inline">\(p\)</span> e <span class="math inline">\(q\)</span> são determinados diretamente a partir das estimativas obtidas pela <a href="#eq-media-var-xi-gls" class="quarto-xref">Equação&nbsp;10</a> como <span class="math display">\[
+<p>A partir dessas estimativas, contruiu-se uma distribuição <em>a priori</em> regional <span class="math inline">\(\pi(\xi|p,q)\)</span> a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de <span class="math inline">\(\xi\)</span> entre -0,50 e +0,50 <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre et al. 2008</a>)</span>. Nesssa distribuição, os parâmetros <span class="math inline">\(p\)</span> e <span class="math inline">\(q\)</span> são determinados diretamente a partir das estimativas obtidas pela <a href="#eq-media-var-xi-gls" class="quarto-xref">Equação&nbsp;10</a> como <span id="eq-par-priori_beta"><span class="math display">\[
 \hat\mu_{\xi_j} = \frac{p}{p + 1} - 0,50 \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \frac{pq}{(p + q + 1)(p + q)^2}.
-\]</span> Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de <span class="math inline">\(\pi(\xi|p,q)\)</span> em <span class="math inline">\(\ell\)</span>.</p>
+\tag{11}\]</span></span> Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de <span class="math inline">\(\pi(\xi|p,q)\)</span> em <span class="math inline">\(\ell\)</span>.</p>
 </section>
 <section id="avaliação-dos-modelos" class="level4">
 <h4 class="anchored" data-anchor-id="avaliação-dos-modelos">Avaliação dos modelos</h4>
@@ -334,7 +334,7 @@ Z_ij = \exp\left[ a - b\left( \frac{s_{jh}^c - 1}{c} \right) \right],
 <p>O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos (<span class="math inline">\(AVP_{old}\)</span>, <span class="citation" data-cites="reis2020">Reis et al. (<a href="#ref-reis2020" role="doc-biblioref">2020</a>)</span>). Essa métrica considera a correlação na própria estação <span class="math inline">\(j\)</span>, além da variância do estimador: <span id="eq-avp-old"><span class="math display">\[
 AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
 2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
-\tag{11}\]</span></span> sendo <span class="math inline">\(e_j\)</span> um vetor contendo 1 na linha <span class="math inline">\(j\)</span> e 0 nas demais.</p>
+\tag{12}\]</span></span> sendo <span class="math inline">\(e_j\)</span> um vetor contendo 1 na linha <span class="math inline">\(j\)</span> e 0 nas demais.</p>
 
 
 

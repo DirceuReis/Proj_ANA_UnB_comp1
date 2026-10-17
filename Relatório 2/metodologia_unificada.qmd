@@ -135,11 +135,124 @@ A verificação empírica da hipótese de invariância de escala simples foi rea
 
 ## Incorporação de informações regionais na modelagem das relações IDF
 
-A incorporação de informações regionais foi investigada por meio de três abordagens estatísticas distintas: mínimos quadrados generalizados (GLS), modelos hierárquicos bayesianos (BHM) e modelos bayesianos espaciais baseados em processos *max-stable*. Essas metodologias apresentam diferentes estratégias para aproveitar informações de múltiplas estações, representar a variabilidade regional das precipitações extremas e contribuir para a estimativa e regionalização das relações IDF.
+A incorporação de informações regionais foi investigada por meio de três abordagens estatísticas distintas: um modelo semi-bayesiano que e considera informação *a priori* regional a partir de um modelo de mínimos quadrados generalizados e invariância de escala; modelos hierárquicos bayesianos (BHM); e modelos bayesianos espaciais baseados em processos *max-stable*. Essas metodologias apresentam diferentes estratégias para aproveitar informações de múltiplas estações, representar a variabilidade regional das precipitações extremas e contribuir para a estimativa e regionalização das relações IDF.
 
-### Modelagem das relações IDF por mínimos quadrados generalizados (GLS)
+Para o desenvolvimento desses modelos, todas as abordagens consideraram como base a distribuição Generalizada de Valores Extremos (GEV), cuja função de probabilidade acumulada para uma variável aleatória $X$ é expressa como $$
+F_X(x|\mu,\sigma,\xi) = \begin{cases}
+ \exp\left\{-\left[1 + \xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}, & \quad \xi \neq 0, \\
+ \exp\left[-\exp\left(-\frac{x-\mu}{\sigma}\right)\right], & \quad \xi = 0,
+\end{cases}
+$$ {#eq-gev-cdf} e cujos quantis são dados por $$
+x_T = \begin{cases}
+\mu + \frac{\sigma}{\xi}\left\{ 1 - \left[-\ln\left(1 - \frac{1}{T}\right)\right]^{-\xi} \right\}, & \quad \xi \neq0, \\
+\mu - \sigma\ln\left[-\ln\left(1 - \frac{1}{T}\right)\right], & \quad \xi= 0.
+\end{cases}
+$$ {#eq-gev-quantil}
 
-<!-- Melhorar aqui a descrição Tomas -->
+### Modelagem semi-bayesiana com informação *a priori* sobre o parâmetro de forma e invariância de escala
+
+#### Distribuição GEV invariante na escala
+
+O primeiro modelo avaliado nesse relatório foi uma reparametrização da distribuição GEV apresentada na @eq-gev-cdf. O modelo segue a relação geral proposta por @koutsoyiannis1998 na @eq-idf-koutsoyiannis. Se a variável aleatória $I_d \sim GEV(\mu_d, \sigma_d, \xi_d)$, segue então que uma variável aleatória $Y = I_d(d + \theta)^{-H}$ também segue uma distribuição GEV, porém com parâmetros que independem da escala de tempo (duração) utilizada $d$: $Y \sim GEV(\mu_0, \sigma_0, \xi_0)$, com $\theta \ge 0$ e $0<H<1$.
+
+A com a reparametrização, a distribuição de $Y$ pode ser reescrita com $\tilde\mu = \mu_d/\sigma_d$, $\sigma_0 = \sigma_d(d + \theta)^H$ e $\xi_d = \xi$ resultando em uma expressão dependente na duração da distribuição GEV (*duration-dependent* GEV, d-GEV) pode ser definida como: $$
+F_{I_d}(i_d|\tilde\mu, \sigma_0, \xi) = \exp\left\{-\left[1 + \xi\left(\frac{i_d}{\sigma_0(d + \theta)^{-H}} - \tilde\mu\right)\right]^{-1/\xi}\right\}.
+$$ {#eq-dgev}
+
+Destaca-se que na @eq-dgev, tanto $\tilde\mu$ como $\xi$ não dependem da duração.
+
+Nessa primeira abordagem, o ajuste do modelo acima se deu com o estimador de máxima verossimilhança generalizada (GMLE) [@martins2000]. Utilizando a expressão de log-verossimilhança $\ell$ da função densidade $f_{I_d}$, a função objetivo se torna $$
+\ell(\tilde\mu,\sigma_0,\xi,\theta,H|i_d) = \ln\left[\prod_{i=1}^N\prod_{d}^D f_{I_d}(i_{d,i}|\tilde\mu, \sigma_0, \xi, \theta, H)\right] + \ln[\pi(\xi|p,q)],
+$$ {#eq-log-verossimilhanca-dgev} em que $\pi(\xi|p,q)$ representa uma distribuição *a priori* sobre o parâmetro de forma.
+
+A maximização da @eq-log-verossimilhanca-dgev se deu por meio da função `optim()` disponível para linguagem de programação R [@rcoreteam2026] sobre o conjunto de estações do BR-SDR no estado do Rio Grande do Sul. No total, 54 postos foram selecionados com pelo menos 8 anos de dados e no máximo 20% de falhas anuais. Optou-se por manter o mesmo número de durações para todas as estações, restringindo a faixa de ajuste em $d \in [1, 24]$ horas.
+
+O ajuste considerou diferentes níveis de conhecimento *a priori*. O primeiro consistiu na maximização da @eq-log-verossimilhanca-dgev, desconsiderando qualquer tipo de conhecimento prévio acerca de $\xi$ --- chamado MLE. O segundo empregou a distribuição *a priori* proposta por @martins2000, com uma distribuição Beta deslocada entre -0,50 e +0,50 com média igual a 0,10 (atribuindo um comportamento médio de cauda pesada) e variância igual a 0,122² --- chamada GMLE. A terceira e última avaliou uma abordagem que é comum em estudos de cheias, utilizando um modelo de regressão linear para construir uma distribuição *a priori* regional para $\xi$ a partir de observações na escala diária --- chamada RGMLE. Essa última será descrita na Seção @sec-metodologia-gls.
+
+Esta reparametrização é interessante, uma vez que elimina a necessidade de ajustes distintos para cada série de $i_d$ e possibilida um ajuste único, combinando informação em diferentes escalas no ajuste de apenas cinco parâmetros. E, uma vez estimados $\hat{\tilde\mu}, \hat\sigma_0, \hat\xi, \hat H$ e $\hat\theta$, é possível a expressão final da relação IDF é simplesmente a expressão quantílica do modelo da @eq-dgev. Para um tempo de retorno $T$ e duração $d$, o quantil será, para cada estação $j$, $$
+q_{d,T,j} = \frac{\tilde\mu_j\sigma_{0j}}{(d + \theta_j)^{H_j}} + \frac{\sigma_{0j}}{\xi_j(d + \theta_j)^{H_j}}\left\{1 - \left[\ln\left(1 - \frac{1}{T}\right)\right]^{-\xi_j}\right\}.
+$$
+
+#### Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV {#sec-metodologia-gls}
+
+Existe grande incerteza no ajuste de distribuições de probabilidade, especialmente quando esse ajuste é feito em cenários de séries curtas. Isso se torna ainda mais relevante para o ajuste de modelos probabilísticos utilizando séries históricas de pluviógrafos. Nesse contexto, uma das abordagens exploradas no Rio Grande do Sul foi a incorporação de informação regional, mas restringindo-se à estimação do parâmetro de forma $\xi$ da distribuição GEV. Para tal, foi construído um modelo de regressão linear de mínimos quadrados generalizados (GLS) com o objetivo de reunir informação regional sobre $\xi$ que possa ser utilizada como conhecimento *a priori* na aplicação semi-Bayesiana do estimador de máxima verossimilhança generalizada.
+
+Modelos desse tipo como o GLS se preocupam em representar, por meio de uma estrutura linear, a relação entre uma variável dependente --- nesse caso o parâmetro de forma $\xi$ --- e variáveis independentes --- também chamadas preditoras, as quais ajudam a explicar o comportamento da variável dependente na região de estudo [@reis2020].
+
+Nessa avaliação, considerou-se previamente a hipótese de que existe um parâmetro de forma único local, constante ao longo de uma faixa de durações, abordagem comum na literatura [@lima2018; @duarte2025]. A partir dessa premissa, é possível então utilizar informações sobre precipitação na escala diária, a partir de séries históricas de postos pluviométricos (mais longas e em maior quantidade), para construir o modelo GLS. No Rio Grande do Sul, isso foi feito a partir de um conjunto de 182 postos de @almeida2025.
+
+##### Construção do modelo GLS
+
+Em forma matricial, o modelo proposto possui a seguinte formulação:
+
+$$
+\hat\xi= X\beta + \varepsilon.
+$$ {#eq-gls}
+
+Na @eq-gls, $\hat\xi$ é um vetor com estimativas prévias do parâmetro para cada estação $j$, com $j = 1, 2,\cdots, m$; $\beta$ é um vetor de tamanho $p + 1$ de parâmetros do modelo GLS; $X$ é uma matriz com $m$ linhas e $(p + 1)$ colunas, contendo valores das variáveis preditoras para cada estação $j$, sendo a primeira coluna preenchida com 1 (referente ao parâmetro constante $\beta_0$); e $\varepsilon$ é um vetor de tamanho $m$ representando o erro total do modelo [@alexandre2008].
+
+O erro total, por sua vez, é subdividido em duas parcelas: uma inerente à falta de aderência do modelo aos dados (erro de ajuste), $\delta$; e uma segunda relacionada ao erro amostral nas estimativas da variável de interesse, $\eta$. Assume-se que esse erro possui esperança $E[\varepsilon] = 0$ e covariância $E[\varepsilon\varepsilon^T] = \Lambda(\sigma_\delta^2)$. Em notação matricial, essa covariância é definida como a soma entre as variâncias das duas parcelas $\delta$ e $\eta$ do erro total, representada como $$
+\Lambda(\sigma_\delta^2) = \sigma_\delta^2 I_m + \Sigma(\hat\xi),
+$$ {#eq-lambda} sendo $I_m$ uma matriz identidade $m\times m$. A estrutura dessa matriz de covariância, entre duas estações $j$ e $h$ é formada de elementos na diagonal principal ($j = h$) e pelos demais elementos ($j \neq j$): $$
+\mathrm{Cov}\{\varepsilon_j,\varepsilon_h\} = 
+  \begin{cases}
+    \sigma_\delta^2 + \sigma_{\eta_j}^2, & \quad j = h, \\
+    \sigma_{\eta_j}\sigma_{\eta_h}\rho(\hat\xi_j,\hat\xi_h), & \quad j\neq h.
+  \end{cases}
+$$ {#eq-matriz-cov}
+
+Os elementos dessa matriz possuem certas particularidades. A variância do erro amostral $\sigma_{\eta_j}^2$ na estimativa de $\xi$ deve ser efetuada de forma independente da estimativa do parâmetro em si. Como particularidade da regressão GLS, deve também ser fatorada a correlação cruzada existente nas estimativas de $\xi$ entre estações $j$ e $h$.
+
+A estimativa aproximadamente independente de $\sigma_{\eta_j}^2$ foi obtida com o procedimentos propostos por @fill1994 e @chowdhury1991, em que a variância de $\hat\xi$ é estimada a partir da variância da L-assimetria ($\tau_3$): $$
+\mathrm{Var}[\hat\xi_j] = \frac{\bar N}{N_j}\left(\frac{\partial\xi}{\partial\tau_3}  \right)^2 \mathrm{Var}[\hat\tau_3|\bar\xi,\bar N],
+$$ {#eq-var-xi} em que $\bar N$ é o número médio de observações na região; $N_j$ é o número de observações (anos) na estação $j$; e $\bar\xi$ é o parâmetro de forma médio na região.
+
+A correlação $\rho(\hat\xi_j,\hat\xi_h)$, por sua vez, requer um modelo de suavização. @martins2002 descrevem essa correlação cruzada como uma função da correlação entre séries simultâneas entre estações $j$ e $h$ ($\rho_{jh}$) como sendo
+
+$$
+\hat\rho(\hat\xi_j,\hat\xi_h) = \mathrm{sign}(\hat\rho_{jh}) cf_{jh} |\rho_{jh}|^\Delta.
+$$ {#eq-correlacao-cruzada-xi}
+
+O expoente $\Delta$ é função do parâmetro de forma conforme a Tabela 3 apresentada por @martins2002; e $cf_{jh}$ é um fator de correção pelo tamanho das séries definido como $cf_{jh} = N_{jh}/\sqrt{N_jN_h}$ (com $N_{jh}$ sendo o número de anos em comum nas séries de $j$ e $h$).
+
+A correlação $\rho_{jh}$ foi estimada em função da distância $s_{jh}$ entre as estações e da correção estimada entre as séries $r_{jh}$, seguindo o procedimento do Serviço Geológico dos Estados Unidos [@feaster2023]. Nele, $r_{jh}$ é transformada em uma variável Z de Fisher: $Z_{jh} = \ln[(1 + r_{jh})/(1 - r_{jh})]$. Um modelo exponencial é então ajustado entre $Z_{jh}$ e a distância $s_{jh}$ $$
+Z_ij = \exp\left[ a - b\left( \frac{s_{jh}^c - 1}{c} \right) \right],
+$$ {#eq-z-fisher} permitindo, finalmente, que a correlação cruzada $\rho_{jh}$ seja estimada como $$
+\hat\rho_{jh} = \frac{\exp(2Z_{jh}) - 1}{\exp(2Z_jh) + 1}.
+$$
+
+Finalmente, determinados os elementos de $\Lambda(\sigma_\delta^2)$, a obtenção dos parâmetros $\hat\beta$ do modelo linear e sua covariância, além da variância do erro do modelo $\sigma_\delta^2$ se dá através dos estimadores descritos por @stedinger1985 como
+
+$$
+\hat\beta = [X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}\hat\xi
+$$ {#eq-beta-gls}
+
+com matriz de covariância determinada por
+
+$$
+\Sigma[\hat\beta]=[X^T\Lambda(\sigma_\delta^2)X]^{-1}
+$$ {#eq-cov-beta-gls} na solução iterativa com método dos momentos entre @eq-beta-gls e a equação do resíduo do erro quadrático médio $$
+(\hat\xi - X\hat\beta)^T[\sigma_\delta^2I_m + \Sigma(\hat\xi)]^{-1}(\hat\xi - X\hat\beta) = m - (p+1).
+$$ {#eq-res-gls}
+
+##### Distribuição *a priori* regional
+
+Finalmente, de posse das estimativas $\hat\beta$ do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo $$
+\hat\mu_{\xi_j} = x_j\hat\beta \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \hat\sigma_\delta^2 + x_j\Sigma[\hat\beta]x_j^T,
+$$ {#eq-media-var-xi-gls} em que $x_j$ é a linha de $X$ correspondente à estação $j$.
+
+A partir dessas estimativas, contruiu-se uma distribuição *a priori* regional $\pi(\xi|p,q)$ a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de $\xi$ entre -0,50 e +0,50 [@alexandre2008]. Nesssa distribuição, os parâmetros $p$ e $q$ são determinados diretamente a partir das estimativas obtidas pela @eq-media-var-xi-gls como $$
+\hat\mu_{\xi_j} = \frac{p}{p + 1} - 0,50 \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \frac{pq}{(p + q + 1)(p + q)^2}.
+$$ {#eq-par-priori_beta} Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de $\pi(\xi|p,q)$ em $\ell$.
+
+##### Avaliação dos modelos
+
+Nessa aplicação, foram avaliadas nove variáveis preditoras para compor $X$: 1) aspecto do terreno; 2) distância das estações até a costa leste brasileira; 3) elevação das estações; 4) longitude; 5) latitude; 6) média máxima anual de um dia; 7) média máxima anual de três dias; 8) temperatura média no local da estação; e 9) uma covariável binária $Z$ que subdivide o Rio Grande do Sul em duas macrorregiões: $Z=1$ quando a estação pertence à região do estado que faz parte da bacia do Rio Uruguai, e $Z = 0$ quando pertence à região combinada das regiões hidrográficas Litorânea e do Guaíba.
+
+O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos ($AVP_{old}$, @reis2020). Essa métrica considera a correlação na própria estação $j$, além da variância do estimador: $$
+AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
+2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
+$$ {#eq-avp-old} sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
 
 ### Modelos hierárquicos bayesianos (BHM)
 
