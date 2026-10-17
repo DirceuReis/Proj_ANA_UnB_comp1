@@ -107,17 +107,66 @@ fontsize <- 8
 textsize <- fontsize / .pt
 
 tema_relatorio <- theme_bw() +
-  theme(panel.grid = element_blank(), axis.ticks = element_line( linewidth = 0.3 ),
-        legend.background = element_blank(), legend.key = element_blank(),
-        legend.key.height = unit( fontsize, "pt" ),
-        strip.background = element_blank(),
-        text = element_text( family = font, size = fontsize ),
-        axis.text = element_text( family = font, size = fontsize ),
-        axis.title = element_text( family = font, size = fontsize ),
-        legend.title = element_text( family = font, size = fontsize ),
-        legend.text = element_text( family = font, size = fontsize ),
-        strip.text = element_text( family = font, size = fontsize ),
-        panel.spacing.y = unit( 0.5, "pt" ) )
+  theme(
+    panel.grid = element_blank(),
+    
+    axis.ticks = element_line(
+      linewidth = 0.3
+    ),
+    
+    text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.background = element_blank(),
+    
+    legend.key = element_blank(),
+    
+    legend.key.height = unit(
+      fontsize,
+      "pt"
+    ),
+    
+    legend.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    strip.background = element_blank(),
+    
+    strip.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    panel.spacing.y = unit(
+      0.5,
+      "pt"
+    ),
+    
+    plot.margin = margin(
+      t = 5,
+      r = 5,
+      b = 5,
+      l = 5
+    )
+  )
 
 # =============================================================================
 # 6. FUNÇÕES GERAIS
@@ -376,7 +425,7 @@ diagnostico_mcmc_nonpooled_estacoes
 
 diagnostico_mcmc <- bind_rows(
   diagnostico_mcmc_regionais,
-  diagnostico_mcmc_nonpooled
+  diagnostico_mcmc_nonpooled_estacoes
 ) %>%
   mutate(
     modelo = factor(
@@ -1109,17 +1158,17 @@ parametros_mapa <- parametros_estruturais_todos |>
 
 NOMES_MODELOS <- c(
   "bhm_common" = expression(xi ~ "— Comum"),
-  "bhm_xi_d"   = expression(xi[k] ~ "— Por duração"),
+  "bhm_xi_d"   = expression(xi[d] ~ "— Por duração"),
   "bhm_xi_j"   = expression(xi[j] ~ "— Por estação"),
-  "bhm_xi_jd"  = expression(xi[j*k] ~ "— Estação–duração"),
+  "bhm_xi_jd"  = expression(xi[j*d] ~ "— Estação–duração"),
   "nonpooled"  = "Local (Non-pooled)"
 )
 
 NOMES_MODELOS_TEXTO <- c(
   "bhm_common" = "ξ — Comum",
-  "bhm_xi_d"   = "ξₖ — Por duração",
-  "bhm_xi_j"   = "ξⱼ — Por estação",
-  "bhm_xi_jd"  = "ξⱼ,ₖ — Estação–duração",
+  "bhm_xi_d"   = "ξ_d — Por duração",
+  "bhm_xi_j"   = "ξ_j — Por estação",
+  "bhm_xi_jd"  = "ξ_j,d — Estação–duração",
   "nonpooled"  = "Local (Non-pooled)"
 )
 
@@ -1207,6 +1256,13 @@ p_theta <- plot_distribuicao_parametro_modelos(
   parametros_estruturais_todos,
   "theta",
   expression("Mediana posterior de " * theta)
+)
+
+salvar_figura(
+  p_theta,
+  "distribuicao_theta_modelos.png",
+  largura = 15,
+  altura = 11
 )
 
 library(sf)
@@ -1350,12 +1406,12 @@ criar_mapa_idw_parametro <- function(
   
   xlim_expand <- c(
     bb["xmin"] - 0.03 * dx,
-    bb["xmax"] + 0.12 * dx
+    bb["xmax"] + 0.08 * dx
   )
   
   ylim_expand <- c(
     bb["ymin"] - 0.03 * dy,
-    bb["ymax"] + 0.12 * dy
+    bb["ymax"] + 0.08 * dy
   )
   
   # ----------------------------------------------------------
@@ -1364,93 +1420,129 @@ criar_mapa_idw_parametro <- function(
   
   ggplot() +
     
-    geom_raster(
-      data = idw_plot,
-      aes(
-        x = x,
-        y = y,
-        fill = classe
-      )
-    ) +
+    # -------------------------------------------------------------------------
+  # Interpolação IDW
+  # -------------------------------------------------------------------------
+  
+  geom_raster(
+    data = idw_plot,
+    aes(
+      x = x,
+      y = y,
+      fill = classe
+    )
+  ) +
     
-    geom_point(
-      data = dados_mapa,
-      aes(
-        x = long,
-        y = lat
-      ),
-      color = "black",
-      size = 0.5
-    ) +
-    
-    geom_sf(
-      data = rs_mapa,
-      fill = NA,
-      color = "grey45",
-      linewidth = 0.20
-    ) +
+    # -------------------------------------------------------------------------
+  # Limite do RS
+  # -------------------------------------------------------------------------
+  
+  geom_sf(
+    data = rs_mapa,
+    fill = NA,
+    color = "grey45",
+    linewidth = 0.25
+  ) +
     
     geom_sf(
       data = rs_union,
       fill = NA,
-      color = "grey30",
-      linewidth = 0.40
+      color = "grey25",
+      linewidth = 0.45
     ) +
     
-    scale_fill_brewer(
-      palette = "YlOrRd",
-      name = nome_legenda,
-      drop = FALSE
-    ) +
+    # -------------------------------------------------------------------------
+  # Estações
+  # -------------------------------------------------------------------------
+  
+  geom_point(
+    data = dados_mapa,
+    aes(
+      x = long,
+      y = lat
+    ),
+    color = "black",
+    size = 0.5
+  ) +
     
-    annotation_scale(
-      location = "br",
-      width_hint = 0.20,
-      height = unit(1.5, "mm"),
+    # -------------------------------------------------------------------------
+  # Classes
+  # -------------------------------------------------------------------------
+  
+  scale_fill_brewer(
+    palette = "GnBu",
+    #palette = "YlOrRd",
+    name = nome_legenda,
+    drop = FALSE
+  ) +
+    
+    # -------------------------------------------------------------------------
+  # Escala
+  # -------------------------------------------------------------------------
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(1.5, "mm"),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+    
+    # -------------------------------------------------------------------------
+  # Norte
+  # -------------------------------------------------------------------------
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(1, "cm"),
+    height = unit(1, "cm"),
+    pad_x = unit(0.30, "cm"),
+    pad_y = unit(0.30, "cm"),
+    which_north = "true",
+    style = north_arrow_nautical(
       text_family = font,
-      text_cex = 0.6,
-      bar_cols = c(
-        "black",
-        "aliceblue"
-      ),
-      line_width = 0.4
-    ) +
+      text_size = fontsize,
+      fill = c("black", "aliceblue")
+    )
+  ) +
     
-    annotation_north_arrow(
-      location = "tr",
-      width = unit(1, "cm"),
-      height = unit(1, "cm"),
-      which_north = "true",
-      style = north_arrow_nautical(
-        text_family = font,
-        text_size = fontsize,
-        fill = c(
-          "black",
-          "aliceblue"
-        )
-      )
-    ) +
+    # -------------------------------------------------------------------------
+  # Extensão espacial
+  # -------------------------------------------------------------------------
+  
+  coord_sf(
+    crs = st_crs(4674),
+    xlim = xlim_expand,
+    ylim = ylim_expand,
+    expand = FALSE
+  ) +
     
-    coord_sf(
-      crs = st_crs(4674),
-      xlim = xlim_expand,
-      ylim = ylim_expand,
-      expand = FALSE
-    ) +
-    
-    labs(
-      x = NULL,
-      y = NULL,
-      subtitle = NOMES_MODELOS_TEXTO[[modelo_alvo]]
-    ) +
+    # -------------------------------------------------------------------------
+  # Eixos
+  # -------------------------------------------------------------------------
+  
+  labs(
+    x = "Longitude",
+    y = "Latitude",
+    subtitle = NOMES_MODELOS_TEXTO[[modelo_alvo]]
+  ) +
     
     tema_relatorio +
     
     theme(
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
       legend.position = "bottom",
-      legend.justification = "center"
+      legend.justification = "center",
+      legend.direction = "horizontal",
+      
+      legend.key.width = unit(12, "pt"),
+      legend.key.height = unit(8, "pt"),
+      legend.key.spacing.x = unit(2, "pt"),
+      legend.spacing.x = unit(1, "pt")
     )
 }
 
@@ -1514,8 +1606,8 @@ fig_mapa_H <- wrap_plots(
 salvar_figura(
   fig_mapa_H,
   "mapa_H_modelos.png",
-  largura = 15,
-  altura = 12
+  largura = 21,
+  altura = 16
 )
 
 breaks_alpha <- criar_breaks_quantis(
@@ -1531,6 +1623,33 @@ breaks_beta <- criar_breaks_quantis(
 breaks_theta <- criar_breaks_quantis(
   parametros_estruturais_todos,
   "theta"
+)
+
+mapas_theta <- purrr::map(
+  ORDEM_MODELOS,
+  ~ criar_mapa_idw_parametro(
+    dados = parametros_estruturais_todos,
+    modelo_alvo = .x,
+    parametro_alvo = "theta",
+    breaks = breaks_theta,
+    nome_legenda = expression(theta)
+  )
+)
+
+fig_mapa_theta <- wrap_plots(
+  mapas_theta,
+  ncol = 3,
+  guides = "collect"
+) &
+  theme(
+    legend.position = "bottom"
+  )
+
+salvar_figura(
+  fig_mapa_theta,
+  "mapa_theta_modelos.png",
+  largura = 21,
+  altura = 16
 )
 
 # =============================================================================
@@ -1822,12 +1941,12 @@ extrair_xi_regionais <- function(
   # ==========================================================
   # 3. xi estação × duração
   # ==========================================================
-  
+
   if (
     modelo == "bhm_xi_jd" &&
     length(dx) == 3
   ) {
-    
+
     return(
       normalizar_jk(
         x,
@@ -1836,7 +1955,7 @@ extrair_xi_regionais <- function(
       )
     )
   }
-  
+
   stop(
     "Não consegui interpretar ",
     nome,
@@ -2342,18 +2461,6 @@ diag_regionais_gpkg <- flags_diagnostico_regionais |>
   transmute(
     modelo,
     station_id,
-    
-    rhat_max_estacao,
-    ess_min_estacao,
-    
-    flag_rhat_105,
-    
-    n_divergencias =
-      n_divergencias_modelo,
-    
-    flag_divergencia =
-      flag_divergencia_modelo,
-    
     flag_diagnostico =
       flag_rhat_105 |
       flag_divergencia_modelo
@@ -2367,16 +2474,6 @@ diag_nonpooled_gpkg <- flags_diagnostico_nonpooled |>
   transmute(
     modelo = "nonpooled",
     station_id,
-    
-    rhat_max_estacao,
-    ess_min_estacao,
-    
-    flag_rhat_105,
-    
-    n_divergencias =
-      n_divergencias,
-    
-    flag_divergencia,
     flag_diagnostico
   )
 
@@ -2407,6 +2504,7 @@ parametros_gev_gpkg <- parametros_gev_gpkg |>
       ),
     by = "gauge_code"
   )
+
 
 parametros_gev_sf <- parametros_gev_gpkg |>
   sf::st_as_sf(
@@ -2643,52 +2741,68 @@ criar_mapa_idw_xi_24h <- function(
   
   p <- ggplot() +
     
-    geom_raster(
-      data = idw_plot,
-      aes(
-        x = x,
-        y = y,
-        fill = classe
-      )
-    ) +
+    # -------------------------------------------------------------------------
+  # Interpolação IDW
+  # -------------------------------------------------------------------------
+  
+  geom_raster(
+    data = idw_plot,
+    aes(
+      x = x,
+      y = y,
+      fill = classe
+    )
+  ) +
     
-    geom_point(
-      data = dados_mapa,
-      aes(
-        x = long,
-        y = lat
-      ),
-      color = "black",
-      size = 0.7
-    ) +
-    
-    geom_sf(
-      data = rs_mapa,
-      fill = NA,
-      color = "grey45",
-      linewidth = 0.20
-    ) +
+    # -------------------------------------------------------------------------
+  # Limite do RS
+  # -------------------------------------------------------------------------
+  
+  geom_sf(
+    data = rs_mapa,
+    fill = NA,
+    color = "grey45",
+    linewidth = 0.25
+  ) +
     
     geom_sf(
       data = rs_union,
       fill = NA,
-      color = "grey30",
-      linewidth = 0.40
+      color = "grey25",
+      linewidth = 0.45
     ) +
     
-    scale_fill_manual(
-      values = c(
-        "#2166AC",
-        "#67A9CF",
-        "#F7F7F7",
-        "#FDDBC7",
-        "#B2182B"
-      ),
-      breaks = labels_breaks,
-      limits = labels_breaks,
-      name = expression(xi*" (24 h)"),
-      drop = FALSE
-    ) +
+    # -------------------------------------------------------------------------
+  # Estações
+  # -------------------------------------------------------------------------
+  
+  geom_point(
+    data = dados_mapa,
+    aes(
+      x = long,
+      y = lat
+    ),
+    color = "black",
+    size = 0.7
+  ) +
+    
+    # -------------------------------------------------------------------------
+  # Classes de xi
+  # -------------------------------------------------------------------------
+  
+  scale_fill_manual(
+    values = c(
+      "#2166AC",
+      "#67A9CF",
+      "#F7F7F7",
+      "#FDDBC7",
+      "#B2182B"
+    ),
+    breaks = labels_breaks,
+    limits = labels_breaks,
+    name = expression(xi ~ "(24 h)"),
+    drop = FALSE
+  ) +
     
     guides(
       fill = guide_legend(
@@ -2698,48 +2812,76 @@ criar_mapa_idw_xi_24h <- function(
       )
     ) +
     
-    annotation_scale(
-      location = "br",
-      width_hint = 0.20,
-      height = unit(1.5, "mm"),
+    # -------------------------------------------------------------------------
+  # Escala
+  # -------------------------------------------------------------------------
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(1.5, "mm"),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+    
+    # -------------------------------------------------------------------------
+  # Norte
+  # -------------------------------------------------------------------------
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(1, "cm"),
+    height = unit(1, "cm"),
+    pad_x = unit(0.30, "cm"),
+    pad_y = unit(0.30, "cm"),
+    which_north = "true",
+    style = north_arrow_nautical(
       text_family = font,
-      text_cex = 0.6,
-      bar_cols = c("black", "aliceblue"),
-      line_width = 0.4
-    ) +
-    
-    annotation_north_arrow(
-      location = "tr",
-      width = unit(1, "cm"),
-      height = unit(1, "cm"),
-      which_north = "true",
-      style = north_arrow_nautical(
-        text_family = font,
-        text_size = fontsize,
-        fill = c("black", "aliceblue")
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
       )
-    ) +
+    )
+  ) +
     
-    coord_sf(
-      crs = st_crs(4674),
-      xlim = xlim_expand,
-      ylim = ylim_expand,
-      expand = FALSE
-    ) +
+    # -------------------------------------------------------------------------
+  # Extensão espacial
+  # -------------------------------------------------------------------------
+  
+  coord_sf(
+    crs = st_crs(4674),
+    xlim = xlim_expand,
+    ylim = ylim_expand,
+    expand = FALSE
+  ) +
     
-    labs(
-      x = NULL,
-      y = NULL,
-      subtitle = NOMES_MODELOS_TEXTO[[modelo_alvo]]
-    ) +
+    # -------------------------------------------------------------------------
+  # Eixos
+  # -------------------------------------------------------------------------
+  
+  labs(
+    x = "Longitude",
+    y = "Latitude",
+    subtitle = NOMES_MODELOS_TEXTO[[modelo_alvo]]
+  ) +
     
     tema_relatorio +
     
     theme(
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
       legend.position = if (mostrar_legenda) "bottom" else "none",
-      legend.justification = "center"
+      legend.justification = "center",
+      legend.direction = "horizontal",
+      
+      legend.key.width = unit(12, "pt"),
+      legend.key.height = unit(8, "pt"),
+      legend.key.spacing.x = unit(2, "pt"),
+      legend.spacing.x = unit(1, "pt")
     )
   
   p
@@ -2791,8 +2933,8 @@ fig_mapa_xi_24h
 salvar_figura(
   fig_mapa_xi_24h,
   "mapa_xi_24h_modelos.png",
-  largura = 18,
-  altura = 14
+  largura = 21,
+  altura = 16
 )
 
 # =============================================================================
@@ -3505,6 +3647,12 @@ diagnosticos_gpkg <- diagnosticos_gpkg |>
   left_join(
     mapa_station_id,
     by = "station_id"
+  ) |>
+  select(
+    modelo,
+    station_id,
+    gauge_code,
+    flag_diagnostico
   )
 
 diagnosticos_sf <- diagnosticos_gpkg |>
@@ -3521,7 +3669,10 @@ diagnosticos_sf <- diagnosticos_gpkg |>
     by = "gauge_code"
   ) |>
   sf::st_as_sf(
-    coords = c("long", "lat"),
+    coords = c(
+      "long",
+      "lat"
+    ),
     crs = 4674,
     remove = FALSE
   )
@@ -3531,7 +3682,11 @@ diagnosticos_sf |>
   summarise(
     n = n(),
     n_sem_lat = sum(is.na(lat)),
-    n_sem_long = sum(is.na(long))
+    n_sem_long = sum(is.na(long)),
+    n_flag = sum(
+      flag_diagnostico %in% TRUE,
+      na.rm = TRUE
+    )
   )
 
 arquivo_gpkg_parametros <- file.path(
@@ -3571,7 +3726,9 @@ niveis_retorno_gpkg <- niveis_retorno_todos |>
   left_join(
     diagnosticos_gpkg |>
       select(
-        -gauge_code
+        modelo,
+        station_id,
+        flag_diagnostico
       ),
     by = c(
       "modelo",
@@ -3599,13 +3756,22 @@ niveis_retorno_gpkg |>
     n_modelos = n_distinct(modelo),
     n_duracoes = n_distinct(duracao_h),
     n_TR = n_distinct(return_period_years),
+    
+    n_flag = sum(
+      flag_diagnostico %in% TRUE,
+      na.rm = TRUE
+    ),
+    
     sem_lat = sum(is.na(lat)),
     sem_long = sum(is.na(long))
   )
 
 niveis_retorno_sf <- niveis_retorno_gpkg |>
   sf::st_as_sf(
-    coords = c("long", "lat"),
+    coords = c(
+      "long",
+      "lat"
+    ),
     crs = 4674,
     remove = FALSE
   )
