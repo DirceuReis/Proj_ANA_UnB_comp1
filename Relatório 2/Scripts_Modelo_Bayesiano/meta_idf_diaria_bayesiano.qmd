@@ -88,4 +88,3 @@ Resultados semelhantes foram observados para os períodos de retorno de 10, 50 e
 
 Em conjunto, os resultados demonstram que o modelo bayesiano *non-pooled* permitiu representar diferentes comportamentos das relações IDF entre as estações analisadas, incluindo diferenças na intensidade dos extremos e na sensibilidade dos quantis aos períodos de retorno. A variabilidade das estimativas está associada às características locais dos parâmetros GEV, particularmente ao parâmetro de forma, cuja influência se torna mais relevante para períodos de retorno elevados. Contudo, as estimativas de eventos raros, especialmente para 200 anos, devem ser interpretadas com cautela, uma vez que envolvem extrapolações consideráveis em relação à extensão das séries observacionais.
 
-## Referências bibliográficas
