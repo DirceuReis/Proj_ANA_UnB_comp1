@@ -256,50 +256,51 @@ $$ {#eq-avp-old} sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
 
 ### Modelos hierárquicos bayesianos (BHM)
 
-Seguindo a formulação hierárquica de @lima2018, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação $j$, duração $d_k$ e ano $i$, o modelo foi especificado pelas @eq-gev-hierarquica-subdiario, @eq-mu-hierarquica-subdiario, @eq-sigma-hierarquica-subdiario e @eq-xi-hierarquica-subdiario.
+Seguindo a formulação hierárquica de @lima2018, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação $j$, duração $d$ e observação $i$ de máximo anual, o modelo foi especificado pelas @eq-gev-hierarquica-subdiario, @eq-mu-hierarquica-subdiario, @eq-sigma-hierarquica-subdiario e @eq-xi-hierarquica-subdiario.
 
 $$
-Y_{j,k,i}\sim\operatorname{GEV}
-(\mu_{j,k},\sigma_{j,k},\xi_{j,k}), i = 1,..., N_{j,k}.
+Y_{j,d,i}\sim\operatorname{GEV}
+(\mu_{j,d},\sigma_{j,d},\xi_{j,d}),
+\qquad i=1,\ldots,N_{j,d}.
 $$ {#eq-gev-hierarquica-subdiario}
 
 $$
-\log\mu_{j,k}\sim\mathcal N\left(
+\log\mu_{j,d}\sim\mathcal N\left(
 \alpha_j-H_j\log\left(
-\frac{d_k+\theta_j}{d_0+\theta_j}
+\frac{d+\theta_j}{d_0+\theta_j}
 \right),
 \tau_{\mu,j}^{2}
 \right).
 $$ {#eq-mu-hierarquica-subdiario}
 
 $$
-\log\sigma_{j,k}\sim\mathcal N\left(
+\log\sigma_{j,d}\sim\mathcal N\left(
 \beta_j-H_j\log\left(
-\frac{d_k+\theta_j}{d_0+\theta_j}
+\frac{d+\theta_j}{d_0+\theta_j}
 \right),
 \tau_{\sigma,j}^{2}
 \right).
 $$ {#eq-sigma-hierarquica-subdiario}
 
 $$
-\xi_{j,k}\mid\bar\xi_j,\tau_{\xi,j}^{2}
+\xi_{j,d}\mid\bar\xi_j,\tau_{\xi,j}^{2}
 \propto\mathcal N\left(
 \bar\xi_j,\tau_{\xi,j}^{2}
 \right),
-\qquad -0{,}5<\xi_{j,k}<0{,}5.
+\qquad -0{,}5<\xi_{j,d}<0{,}5.
 $$ {#eq-xi-hierarquica-subdiario}
 
-Nessa formulação, $Y_{j,k,a}$ representa a intensidade máxima anual de precipitação (mm/h) na estação $j$, para a duração $d_k$ e o ano $a$, em que $j$ identifica a estação pluviométrica, $k$ a duração considerada e $a$ o ano de referência. Os parâmetros $\mu_{j,k}$, $\sigma_{j,k}>0$ e $\xi_{j,k}$ correspondem, respectivamente, à localização, à escala e à forma da distribuição GEV, enquanto $\mathcal{N}$ representa a distribuição normal, parametrizada por sua média e variância.
+Nessa formulação, $Y_{j,d,i}$ representa a intensidade máxima anual de precipitação (mm/h) na estação $j$, para a duração $d$ e a observação $i$, em que $j$ identifica a estação pluviométrica, $d$ a duração considerada e $i$ a observação de máximo anual. O termo $N_{j,d}$ corresponde ao comprimento da série de máximos anuais da estação $j$ para a duração $d$. Os parâmetros $\mu_{j,d}$, $\sigma_{j,d}>0$ e $\xi_{j,d}$ correspondem, respectivamente, à localização, à escala e à forma da distribuição GEV, enquanto $\mathcal{N}$ representa a distribuição normal, parametrizada por sua média e variância.
 
-Nas relações hierárquicas, $d_0=24$ h corresponde à duração de referência, e os parâmetros $\alpha_j$ e $\beta_j$ definem, respectivamente, os níveis centrais dos logaritmos de $\mu_{j,k}$ e $\sigma_{j,k}$ nessa duração. O expoente $H_j$ controla a variação desses parâmetros com a duração, enquanto $\theta_j$ representa o parâmetro de deslocamento temporal, responsável por flexibilizar a curvatura das relações de escala. Todas as durações foram expressas em horas, incluindo $\theta_j$.
+Nas relações hierárquicas, $d_0=24$ h corresponde à duração de referência, e os parâmetros $\alpha_j$ e $\beta_j$ definem, respectivamente, os níveis centrais dos logaritmos de $\mu_{j,d}$ e $\sigma_{j,d}$ nessa duração. O expoente $H_j$ controla a variação desses parâmetros com a duração, enquanto $\theta_j$ representa o parâmetro de deslocamento temporal, responsável por flexibilizar a curvatura das relações de escala. Todas as durações foram expressas em horas, incluindo $\theta_j$.
 
-As variâncias hierárquicas $\tau_{\mu,j}^{2}$ e $\tau_{\sigma,j}^{2}$ controlam a dispersão dos logaritmos dos parâmetros de localização e escala em torno das respectivas relações de invariância. Para o parâmetro de forma, $\bar{\xi}_j$ representa o valor central da estação, em torno do qual os parâmetros $\xi_{j,k}$ são regularizados, enquanto $\tau_{\xi,j}^{2}$ controla sua variabilidade entre durações. O símbolo $\propto$ indica a utilização de um núcleo de densidade normal, sujeito à restrição $-0{,}5<\xi_{j,k}<0{,}5$, conforme a implementação adotada.
+As variâncias hierárquicas $\tau_{\mu,j}^{2}$ e $\tau_{\sigma,j}^{2}$ controlam a dispersão dos logaritmos dos parâmetros de localização e escala em torno das respectivas relações de invariância. Para o parâmetro de forma, $\bar{\xi}_j$ representa o valor central da estação, em torno do qual os parâmetros $\xi_{j,d}$ são regularizados, enquanto $\tau_{\xi,j}^{2}$ controla sua variabilidade entre durações. O símbolo $\propto$ indica a utilização de um núcleo de densidade normal, sujeito à restrição $-0{,}5<\xi_{j,d}<0{,}5$, conforme a implementação adotada.
 
 Essa estrutura permite relacionar os parâmetros GEV de diferentes durações por meio de distribuições hierárquicas, sem impor igualdade entre eles. As diferenças entre os modelos avaliados no Rio Grande do Sul foram estabelecidas pelas hipóteses de compartilhamento do parâmetro de forma, mantendo-se as relações de invariância de escala dos parâmetros de localização e escala.
 
 #### Distribuições a priori e hiperpriori
 
-Em todas as aplicações do modelo hierárquico bayesiano, as distribuições a priori e hiperpriori foram especificadas seguindo as famílias e os valores de hiperparâmetros usados na formulação de @lima2018, adotaram-se:
+Em todas as aplicações do modelo hierárquico bayesiano, as distribuições a priori e hiperpriori foram especificadas seguindo as famílias e os valores de hiperparâmetros usados na formulação de @lima2018, adotando-se:
 
 $$
 \alpha_j,\beta_j\sim\mathcal N(0,10^6),
@@ -324,7 +325,7 @@ $$ {#eq-hiperprioris-subdiario}
 
 A notação $\mathcal B(a,b,l,u)$ corresponde à distribuição Beta reescalada para o intervalo $(l,u)$. Para $\bar\xi_j$, a média a priori é $-0{,}5+9/(9+6)=0{,}1$. Essa escolha segue a regularização de parâmetros de forma em análises de extremos hidrológicos, relacionada à proposta de @martins2000 e à convenção de sinal da GEV adotada por @lima2018. A distribuição $\operatorname{Beta}(1,1)$ é uniforme em $(0,1)$, e as normais para $\alpha_j$ e $\beta_j$ são amplamente dispersas na escala logarítmica. As inversas-gama incidem sobre variâncias, não desvios-padrão; sua escolha não deve ser interpretada como necessariamente não informativa [@gelman2006].
 
-A especificação numérica segue o arcabouço de Lima et al. (2018), mas a **estrutura de compartilhamento regional é diferente**: na etapa nacional deste estudo, os hiperparâmetros $\bar\xi_j$, $\tau_{\mu,j}^2$, $\tau_{\sigma,j}^2$ e $\tau_{\xi,j}^2$ também são específicos por estação. Portanto, não houve *pooling* espacial, onde o compartilhamento ocorreu apenas entre durações do mesmo posto.
+A especificação numérica segue o arcabouço de Lima et al. (2018), mas a **estrutura de compartilhamento regional é diferente**: na etapa nacional deste estudo, os hiperparâmetros $\bar\xi_j$, $\tau_{\mu,j}^2$, $\tau_{\sigma,j}^2$ e $\tau_{\xi,j}^2$ também são específicos por estação. Portanto, não houve *pooling* espacial, uma vez que o compartilhamento ocorreu apenas entre durações do mesmo posto.
 
 #### Inferência posterior e diagnósticos
 
@@ -332,7 +333,7 @@ A especificação numérica segue o arcabouço de Lima et al. (2018), mas a **es
 
 A distribuição posterior de cada estação foi definida, proporcionalmente, pelo produto da verossimilhança GEV e das distribuições a priori e hierárquicas acima. A implementação foi desenvolvida em R com o pacote `rstan` e código probabilístico em Stan. Os parâmetros foram estimados por amostragem MCMC com o amostrador Hamiltoniano adaptativo de Stan (NUTS).
 
-Foram executadas cinco cadeias independentes, com 20.000 iterações por cadeia, descartando-se as 10.000 iniciais para aquecimento/adaptação. Aplicou-se *thinning* de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em `adapt_delta = 0.999` e `max_treedepth = 17`. Os valores iniciais de $H$, $\theta$, $\alpha$, $\beta$, $\bar\xi$, $\xi_k$ e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.
+Foram executadas cinco cadeias independentes, com 20.000 iterações por cadeia, descartando-se as 10.000 iniciais para aquecimento/adaptação. Aplicou-se *thinning* de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em `adapt_delta = 0.999` e `max_treedepth = 17`. Os valores iniciais de $H$, $\theta$, $\alpha$, $\beta$, $\bar\xi$, $\xi_d$ e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.
 
 A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência $\widehat R$ por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (*bulk-ESS* e *tail-ESS*), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (*E-BFMI*). O diagnóstico $\widehat R$ compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação [@vehtari2021]. Adota-se como referência operacional conservadora $\widehat R<1{,}05$, além da inspeção de ESS e da ausência de divergências.
 
@@ -344,10 +345,10 @@ As hipóteses de comparação podem ser expressas pelas restrições e relaçõe
 
 | Estrutura | Representação | Compartilhamento |
 |:-----------------------|:-----------------------|:-----------------------|
-| Local (*non-pooled*) | $\xi_{j,k}$ regularizado em torno de $\bar\xi_j$ | Entre durações da mesma estação |
-| Constante entre durações | $\xi_{j,k}=\xi_j$ | Igualdade entre durações em cada estação |
-| Comum entre estações para cada duração | $\xi_{j,k}=\xi_k$ | Igualdade entre estações para uma duração |
-| Globalmente comum | $\xi_{j,k}=\xi$ | Igualdade entre estações e durações |
+| Local (*non-pooled*) | $\xi_{j,d}$ regularizado em torno de $\bar\xi_j$ | Entre durações da mesma estação |
+| Constante entre durações | $\xi_{j,d}=\xi_j$ | Igualdade entre durações em cada estação |
+| Comum entre estações para cada duração | $\xi_{j,d}=\xi_d$ | Igualdade entre estações para uma duração |
+| Globalmente comum | $\xi_{j,d}=\xi$ | Igualdade entre estações e durações |
 | *Partial pooling* espacial | $\xi_j$ associado a parâmetros regionais | Regularização entre estações, sem igualdade obrigatória |
 
 : Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados. {#tbl-estruturas-xi}
@@ -356,22 +357,22 @@ Os modelos avaliados no Rio Grande do Sul mantiveram a mesma estrutura hierárqu
 
 #### Quantis de retorno, incerteza e curvas IDF
 
-Após a estimação dos parâmetros GEV, os quantis correspondentes ao período de retorno $T$ foram obtidos para cada sorteio posterior $s$. Para $\xi_{j,k}^{(s)}\ne0$, utilizou-se a @eq-quantil-gev-subdiario:
+Após a estimação dos parâmetros GEV, os quantis correspondentes ao período de retorno $T$ foram obtidos para cada sorteio posterior $s$. Para $\xi_{j,d}^{(s)}\ne0$, utilizou-se a @eq-quantil-gev-subdiario:
 
 $$
-q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}+
-\frac{\sigma_{j,k}^{(s)}}{\xi_{j,k}^{(s)}}
-\left\{\left[-\log\left(1-\frac1T\right)\right]^{-\xi_{j,k}^{(s)}}-1\right\}.
+q_{T,j,d}^{(s)}=\mu_{j,d}^{(s)}+
+\frac{\sigma_{j,d}^{(s)}}{\xi_{j,d}^{(s)}}
+\left\{\left[-\log\left(1-\frac1T\right)\right]^{-\xi_{j,d}^{(s)}}-1\right\}.
 $$ {#eq-quantil-gev-subdiario}
 
 No limite de Gumbel, aplicou-se a @eq-quantil-gumbel-subdiario:
 
 $$
-q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}-
-\sigma_{j,k}^{(s)}\log\left[-\log\left(1-\frac1T\right)\right].
+q_{T,j,d}^{(s)}=\mu_{j,d}^{(s)}-
+\sigma_{j,d}^{(s)}\log\left[-\log\left(1-\frac1T\right)\right].
 $$ {#eq-quantil-gumbel-subdiario}
 
-Os quantis de retorno foram considerados para $T=2$, 5, 10, 25, 50, 100 e 200 anos, conforme a análise proposta. A mediana dos valores $q_{T,j,k}^{(s)}$ representa a estimativa central, e os percentis de 2,5% e 97,5% caracterizam o intervalo de credibilidade pontual de 95%. Os quantis resultantes constituem diretamente as ordenadas das curvas IDF. Períodos de retorno longos relativamente ao comprimento das séries exigem cautela na interpretação da extrapolação [@coles2001].
+Os quantis de retorno foram considerados para $T=2$, 5, 10, 25, 50, 100 e 200 anos, conforme a análise proposta. A mediana dos valores $q_{T,j,d}^{(s)}$ representa a estimativa central, e os percentis de 2,5% e 97,5% caracterizam o intervalo de credibilidade pontual de 95%. Os quantis resultantes constituem diretamente as ordenadas das curvas IDF. Períodos de retorno longos relativamente ao comprimento das séries exigem cautela na interpretação da extrapolação [@coles2001].
 
 ### Modelos bayesianos espaciais baseados em processos *max-stable*
 
