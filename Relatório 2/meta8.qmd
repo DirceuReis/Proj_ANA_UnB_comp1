@@ -1,5 +1,6 @@
 ---
 title: "Meta 8 — Não Estacionariedade dos Extremos"
+bibliography: ref_tendencia.bib
 ---
 
 Esta meta avalia a existência de mudanças temporais nas séries de precipitação extrema, incluindo tendências graduais. As análises abrangem pluviômetros e pluviógrafos.
@@ -12,9 +13,9 @@ Para o realização da análise de tendência, foram utilizadas diferentes fonte
 
 Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do UNIPLU (Das Neves Almeida et al., 2025). Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.
 
-Também foi utilizada a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), elaborada por Xavier et al. e disponibilizada em formato NetCDF. A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado, obtendo-se, assim, a série de precipitação máxima diária anual para cada célula.
+Também foi utilizada a base de dados em grade do *Brazilian Daily Gridded Weather Dataset* (BR-DWGD), elaborada por @Xavier.2022. e disponibilizada em formato NetCDF. A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado, obtendo-se, assim, a série de precipitação máxima diária anual para cada célula.
 
-Para a organização espacial dos dados e a realização das análises, tanto os postos pluviométricos e pluviógrafos quanto as células da base de dados em grade de Xavier et al. foram associadas às respectivas Regiões Hidrográficas (RHs). Essa associação foi realizada por meio da localização espacial de cada posto e de cada célula da grade, permitindo identificar a Região Hidrográfica à qual cada ponto de observação ou célula pertence.
+Para a organização espacial dos dados e a realização das análises, tanto os postos pluviométricos e pluviógrafos quanto as células da base de dados em grade de @Xavier.2022 foram associadas às respectivas Regiões Hidrográficas (RHs). Essa associação foi realizada por meio da localização espacial de cada posto e de cada célula da grade, permitindo identificar a Região Hidrográfica à qual cada ponto de observação ou célula pertence.
 
 Após essa classificação espacial, os dados foram organizados de acordo com as RHs, de modo que as análises estatísticas e de tendência fossem realizadas individualmente para cada RH. Essa abordagem permitiu avaliar a distribuição espacial dos resultados e identificar possíveis diferenças no comportamento das séries de precipitação entre as diferentes Regiões Hidrográficas.
 
@@ -22,7 +23,7 @@ Após a construção das séries, foi realizada a análise de tendência em trê
 
 ## 8.2 Metodologia
 
-A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de Xavier et al. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.
+A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de @Xavier.2022. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.
 
 ### 8.2.1 Teste de Mann-Kendall
 
@@ -87,7 +88,7 @@ Foi adotado nível de significância de 5% ((\alpha=0,05)). Assim, uma série fo
 p<0,05
 $$ A direção da tendência foi determinada pelo sinal da estatística (Z). Valores positivos de (Z) foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.
 
-O teste MK foi aplicado individualmente às séries correspondentes às células da grade Xavier e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
+O teste MK foi aplicado individualmente às séries correspondentes às células da grade @Xavier.2022 e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
 
 -   finalidade do teste;
 -   hipótese nula;
@@ -99,7 +100,7 @@ O teste MK foi aplicado individualmente às séries correspondentes às células
 
 ### 8.2.2 Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
 
-A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW, conforme o procedimento descrito por @Souza e Reis Jr. (2022).
+A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW [@Onoz.2012], conforme o procedimento descrito por [@Souza.2022].
 
 O método foi aplicado individualmente a cada série temporal e estruturado em etapas sucessivas:
 
@@ -117,7 +118,7 @@ O método foi aplicado individualmente a cada série temporal e estruturado em e
 
 ### Estimativa da tendência
 
-Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen. Para uma série temporal com (n) observações, foram calculadas as inclinações entre todos os pares de observações:
+Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen [@Sen.1968]. Para uma série temporal com (n) observações, foram calculadas as inclinações entre todos os pares de observações:
 
 $$
 \beta_{ij} =
@@ -245,7 +246,7 @@ Após a aplicação do procedimento MTFPW, quando necessário, o teste de Mann�
 
 ### 8.2.3 Controle da *False Discovery Rate* – FDR
 
-Considerando que a análise de tendência foi realizada simultaneamente para diversas séries temporais, correspondentes aos postos pluviométricos e pluviógrafos e às células da grade de Xavier et al., foi aplicado o procedimento de Benjamini–Hochberg (@colocar a ref) para o controle da *False Discovery Rate*. A aplicação desse procedimento teve como objetivo controlar a proporção esperada de resultados falsamente significativos entre as hipóteses rejeitadas, reduzindo a ocorrência de falsos positivos decorrentes da realização simultânea de múltiplos testes estatísticos.
+Considerando que a análise de tendência foi realizada simultaneamente para diversas séries temporais, correspondentes aos postos pluviométricos e pluviógrafos e às células da grade de @Xavier.2022 foi aplicado o procedimento de Benjamini–Hochberg [@Benjamini.1995] para o controle da *False Discovery Rate* . A aplicação desse procedimento teve como objetivo controlar a proporção esperada de resultados falsamente significativos entre as hipóteses rejeitadas, reduzindo a ocorrência de falsos positivos decorrentes da realização simultânea de múltiplos testes estatísticos.
 
 O procedimento foi aplicado ao conjunto de *p-values* obtidos nas análises de tendência. Inicialmente, foram considerados apenas os valores de *p* válidos, ou seja, aqueles que não apresentavam valores ausentes ou infinitos. Em seguida, os *p-values* foram ordenados em ordem crescente:
 
@@ -287,7 +288,7 @@ Dessa forma, o procedimento permitiu obter a significância estatística final d
 
 ### 8.2.4 Teste de Pettit
 
-A identificação de possíveis mudanças nas séries temporais de precipitação máxima diária, provenientes dos dados em grade de Xavier, foi realizada por meio do teste não paramétrico de Pettitt. Esse procedimento permite identificar um ponto de mudança na distribuição de uma série temporal, dividindo-a em dois períodos com possíveis comportamentos distintos. A análise foi conduzida individualmente para cada célula da grade.
+A identificação de possíveis mudanças nas séries temporais de precipitação máxima diária, provenientes dos dados em grade de @Xavier.2022, foi realizada por meio do teste não paramétrico de Pettitt. Esse procedimento permite identificar um ponto de mudança na distribuição de uma série temporal, dividindo-a em dois períodos com possíveis comportamentos distintos. A análise foi conduzida individualmente para cada célula da grade.
 
 ara cada série elegível, foi construída uma matriz de comparações pareadas entre os valores de precipitação, utilizando a função sinal da diferença entre as observações. A partir dessas comparações, calculou-se a estatística $(U_k)$ para cada possível posição de mudança $(k)$, definida pela soma dos sinais das diferenças entre as observações situadas antes e depois de cada posição candidata. A estatística do teste de Pettitt foi obtida pelo maior valor absoluto de $(U_k)$, conforme a expressão:
 
@@ -337,7 +338,7 @@ Em relação à direção das tendências, observou-se predominância de tendên
 
 ### 8.3.3 Resultados Xavier
 
-A análise das séries de precipitação máximas diária dos dados em grade do Xavier, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver Figura 5.
+A análise das séries de precipitação máximas diária dos dados em grade do @Xavier.2022, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver Figura 5.
 
 ![resutlados das sigs por método com base no Xavier](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png) Figura 5
 
@@ -357,7 +358,7 @@ Em contraste, a Região Hidrográfica do SFR apresentou uma distribuição relat
 
 ### 8.3.4 Teste de Pettit nos dados de Xavier
 
-Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de Xavier, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.
+Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de @Xavier.2022, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.
 
 A aplicação do teste de Pettitt às 71.007 séries de precipitação identificou 9.330 pontos com quebra estatisticamente significativa, enquanto 61.677 séries não apresentaram quebras significativas. Esses valores correspondem, respectivamente, a aproximadamente 13,1% e 86,9% do total analisado. Os resultados indicam que a maioria das séries não apresentou evidências estatísticas de mudanças abruptas ao longo do período analisado. Entretanto, a identificação de quebras significativas em cerca de 13,2% das séries evidencia a ocorrência de possíveis alterações no comportamento temporal da precipitação em parte da área de estudo. A figura abaixo mostra as células onde foram identificadas quebras significativa.
 
@@ -387,8 +388,8 @@ De modo geral, os resultados evidenciam que a principal mudança após os pontos
 
 #8.4 Considerações Finais
 
-A análise das tendênciasda precipitação máxima diária, realizada com dados de postos pluviométricos do UNIPLU e com dados em grade de Xavier et al., permitiu identificar diferenças espaciais no comportamento das precipitações extremas nas Regiões Hidrográficas do Brasil. A aplicação sequencial dos testes de Mann–Kendall, MTFPW e da correção para múltiplos testes pelo procedimento FDR demonstrou a importância de considerar tanto a autocorrelação temporal quanto a multiplicidade das análises na identificação de tendências estatisticamente significativas. Nos dados observacionais, foram identificados 213 postos com tendências significativas após a aplicação do FDR, com predominância de tendências crescentes. Nos dados em grade, embora tenham sido observadas diferenças entre as regiões, também predominou a ocorrência de tendências crescentes entre as células que permaneceram significativas após as correções estatísticas. Destacaram-se, nesse contexto, as regiões do Atlântico Sul, Uruguai e do Atlântico Leste que apresentaram elevadas proporções de células com tendências significativas.
+A análise das tendênciasda precipitação máxima diária, realizada com dados de postos pluviométricos do UNIPLU e com dados em grade de @Xavier.2022 permitiu identificar diferenças espaciais no comportamento das precipitações extremas nas Regiões Hidrográficas do Brasil. A aplicação sequencial dos testes de Mann–Kendall, MTFPW e da correção para múltiplos testes pelo procedimento FDR demonstrou a importância de considerar tanto a autocorrelação temporal quanto a multiplicidade das análises na identificação de tendências estatisticamente significativas. Nos dados observacionais, foram identificados 213 postos com tendências significativas após a aplicação do FDR, com predominância de tendências crescentes. Nos dados em grade, embora tenham sido observadas diferenças entre as regiões, também predominou a ocorrência de tendências crescentes entre as células que permaneceram significativas após as correções estatísticas. Destacaram-se, nesse contexto, as regiões do Atlântico Sul, Uruguai e do Atlântico Leste que apresentaram elevadas proporções de células com tendências significativas.
 
 A aplicação do teste de Pettitt às séries em grade complementou a análise ao permitir a identificação de possíveis mudanças abruptas no comportamento temporal da precipitação máxima diária. Entre as células analisadas, foram identificadas 9.330 séries com quebras estatisticamente significativas após a correção FDR. A análise segmentada dessas séries evidenciou diferenças importantes entre os períodos anterior e posterior à quebra: antes dela, predominaram as tendências decrescentes entre as séries significativas, enquanto, depois dela, houve forte predominância de tendências crescentes. Também foi observada uma redução expressiva no número de tendências significativas após a quebra, especialmente após a aplicação do FDR, passando de 817 séries antes da quebra para 276 depois dela.
 
-Em conjunto, esses resultados indicam que a avaliação das tendências em toda a série histórica pode não representar integralmente as mudanças temporais ocorridas em determinadas regiões. Como passos futuros, recomenda-se aprofundar a investigação das diferenças regionais identificadas, comparando sistematicamente os resultados dos postos pluviométricos e pluviógrafos com os dados em grade de Xavier et al., de modo a avaliar a consistência espacial e temporal dos padrões observados. Também será importante investigar a distribuição dos anos de quebra e sua possível associação com variabilidades climáticas de grande escala.
+Em conjunto, esses resultados indicam que a avaliação das tendências em toda a série histórica pode não representar integralmente as mudanças temporais ocorridas em determinadas regiões. Como passos futuros, recomenda-se aprofundar a investigação das diferenças regionais identificadas, comparando sistematicamente os resultados dos postos pluviométricos e pluviógrafos com os dados em grade de @Xavier.2022 de modo a avaliar a consistência espacial e temporal dos padrões observados. Também será importante investigar a distribuição dos anos de quebra e sua possível associação com variabilidades climáticas de grande escala.

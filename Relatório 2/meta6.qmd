@@ -1,6 +1,6 @@
 ---
 title: "Meta 6 — Correção de Viés Climático"
-bibliography: referencias/ref_correcao_vies.bib
+bibliography: ref_correcao_vies.bib
 ---
 
 Esta meta avalia metodologias de correção de viés aplicáveis aos dados climáticos do NEX-GDDP-CMIP6 e define o procedimento a ser utilizado nas etapas posteriores do projeto. A análise deve comparar as alternativas metodológicas, discutir vantagens e limitações e verificar sua capacidade de representar adequadamente a precipitação observada e os extremos.
@@ -238,7 +238,6 @@ O método *Kernel Density Distribution Mapping* utiliza densidades suavizadas po
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
 
-<!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
@@ -408,7 +407,7 @@ D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big
 \tag{25}
 $$
 
-O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC). <!--Bruno: vale a pena colocar essa parte do código? posso fazer a tradução dos comentários para o português-->
+O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC). 
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
