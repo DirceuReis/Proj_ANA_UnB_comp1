@@ -1,6 +1,6 @@
 ---
 title: "Meta 6 — Correção de Viés Climático"
-bibliography: referencias/ref_correcao_vies.bib
+bibliography: ref_correcao_vies.bib
 ---
 
 Esta meta avalia metodologias de correção de viés aplicáveis aos dados climáticos do NEX-GDDP-CMIP6 e define o procedimento a ser utilizado nas etapas posteriores do projeto. A análise deve comparar as alternativas metodológicas, discutir vantagens e limitações e verificar sua capacidade de representar adequadamente a precipitação observada e os extremos.
