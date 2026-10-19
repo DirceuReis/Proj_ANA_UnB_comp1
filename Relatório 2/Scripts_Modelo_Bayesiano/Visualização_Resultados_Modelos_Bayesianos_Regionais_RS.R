@@ -3862,7 +3862,7 @@ print(
 )
 
 
-TR_FIG <- c(
+TR_FIG <- c(2,
   5,
   10,
   25,
@@ -4045,13 +4045,15 @@ param_texto_idf <- parametros_estruturais_todos |>
   )
 
 cores_TR <- c(
-  "5"   = "#D55E00",
-  "10"  = "#E69F00",
-  "25"  = "#009E73",
+  "2"   = "#D55E00",
+  "5"   = "#E69F00",
+  "10"  = "#009E73",
+  "25"  = "#56B4E9",
   "50"  = "#0072B2",
   "100" = "#CC79A7",
   "200" = "#7B3294"
 )
+
 estacoes_plot_idf <- estacoes_exemplo |>
   select(gauge_code) |>
   distinct()
@@ -4083,6 +4085,7 @@ idf_exemplos_plot <- niveis_retorno_todos |>
       levels = TR_FIG
     )
   )
+
 library(ggh4x)
 p_idf_modelos <- ggplot(
   idf_exemplos_plot,
@@ -4096,6 +4099,10 @@ p_idf_modelos <- ggplot(
   
   geom_line(
     linewidth = 0.65
+  ) +
+  
+  geom_point(
+    size = 1.2
   ) +
   
   facet_grid2(
@@ -4164,13 +4171,15 @@ salvar_figura(
   altura = 20
 )
 
-TR_FIG_1 <- c(5, 25, 200)
-TR_FIG_2 <- c(10, 50, 100)
+TR_FIG_1 <- c(2, 10, 50, 200)
+TR_FIG_2 <- c(5, 25, 100)
 
 plot_idf_modelos_ic <- function(dados, trs) {
   
   dados_plot <- dados |>
-    filter(return_period_years %in% trs) |>
+    filter(
+      return_period_years %in% trs
+    ) |>
     mutate(
       TR = factor(
         return_period_years,
@@ -4189,17 +4198,24 @@ plot_idf_modelos_ic <- function(dados, trs) {
     )
   ) +
     
+    # faixa de incerteza
     geom_ribbon(
       aes(
         ymin = q025,
         ymax = q975
       ),
-      alpha = 0.10,
+      alpha = 0.14,
       color = NA
     ) +
     
+    # linha da mediana
     geom_line(
-      linewidth = 0.65
+      linewidth = 0.70
+    ) +
+    
+    # pontos nas durações
+    geom_point(
+      size = 1.2
     ) +
     
     facet_grid2(
@@ -4210,8 +4226,22 @@ plot_idf_modelos_ic <- function(dados, trs) {
     ) +
     
     scale_x_log10(
-      breaks = c(1, 2, 3, 6, 12, 24),
-      labels = c("1", "2", "3", "6", "12", "24")
+      breaks = c(
+        1,
+        2,
+        3,
+        6,
+        12,
+        24
+      ),
+      labels = c(
+        "1",
+        "2",
+        "3",
+        "6",
+        "12",
+        "24"
+      )
     ) +
     
     scale_y_log10(
@@ -4221,13 +4251,17 @@ plot_idf_modelos_ic <- function(dados, trs) {
     ) +
     
     scale_color_manual(
-      values = cores_TR[as.character(trs)],
+      values = cores_TR[
+        as.character(trs)
+      ],
       breaks = as.character(trs),
       name = "Tempo de retorno (anos)"
     ) +
     
     scale_fill_manual(
-      values = cores_TR[as.character(trs)],
+      values = cores_TR[
+        as.character(trs)
+      ],
       breaks = as.character(trs),
       name = "Tempo de retorno (anos)"
     ) +
@@ -4250,17 +4284,25 @@ plot_idf_modelos_ic <- function(dados, trs) {
     
     theme(
       legend.position = "bottom",
+      
       strip.background = element_blank(),
+      
       strip.text.x = element_text(
         family = font,
         size = fontsize
       ),
+      
       strip.text.y = element_text(
         family = font,
         size = fontsize
       ),
+      
       panel.grid = element_blank(),
-      panel.spacing = unit(4, "pt")
+      
+      panel.spacing = unit(
+        4,
+        "pt"
+      )
     )
 }
 
