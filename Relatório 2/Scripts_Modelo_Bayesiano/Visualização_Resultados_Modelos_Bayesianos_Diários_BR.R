@@ -2967,6 +2967,7 @@ idf_exemplos_plot <- idf_brasil %>%
   filter(
     return_period_years %in% c(
       2,
+      5,
       10,
       25,
       50,
@@ -2988,6 +2989,7 @@ idf_exemplos_plot <- idf_brasil %>%
       return_period_years,
       levels = c(
         2,
+        5,
         10,
         25,
         50,
@@ -3027,13 +3029,13 @@ parametros_idf_exemplos <- parametros_idf_exemplos %>%
 
 cores_TR <- c(
   "2"   = "#D55E00",
-  "10"  = "#E69F00",
-  "25"  = "#009E73",
+  "5"   = "#E69F00",
+  "10"  = "#009E73",
+  "25"  = "#56B4E9",
   "50"  = "#0072B2",
   "100" = "#CC79A7",
   "200" = "#7B3294"
 )
-
 
 # ============================================================
 # 6. GRÁFICO
@@ -3094,10 +3096,12 @@ scale_color_manual(
   values = cores_TR,
   breaks = c(
     "2",
+    "5",
     "10",
     "25",
     "50",
-    "100"
+    "100",
+    "200"
   )
 ) +
   
@@ -3471,31 +3475,31 @@ plot_idf_exemplos_ic <- function(
 }
 
 cores_TR_1 <- c(
-  "5"   = "#E69F00",
-  "25"  = "#009E73",
-  "200" = "#CC79A7"
+  "2"   = "#D55E00",
+  "10"  = "#009E73",
+  "50"  = "#0072B2",
+  "200" = "#7B3294"
 )
 
 p_idf_ic_1 <- plot_idf_exemplos_ic(
   idf_brasil = idf_brasil,
   estacoes_exemplo = estacoes_exemplo,
   parametros_idf_exemplos = parametros_idf_exemplos,
-  tr_escolhidos = c(5, 25, 200),
+  tr_escolhidos = c(2, 10, 50, 200),
   cores_TR = cores_TR_1,
   arquivo_saida = "C:/Larissa/IDF_estacoes_exemplo_IC_TR_5_25_200.png"
 )
 
 cores_TR_2 <- c(
-  "10"  = "#009E73",
-  "50"  = "#0072B2",
+  "5"   = "#E69F00",
+  "25"  = "#56B4E9",
   "100" = "#CC79A7"
 )
-
 p_idf_ic_2 <- plot_idf_exemplos_ic(
   idf_brasil = idf_brasil,
   estacoes_exemplo = estacoes_exemplo,
   parametros_idf_exemplos = parametros_idf_exemplos,
-  tr_escolhidos = c(10, 50, 100),
+  tr_escolhidos = c(5, 25, 100),
   cores_TR = cores_TR_2,
   arquivo_saida = "C:/Larissa/IDF_estacoes_exemplo_IC_TR_10_50_100.png"
 )

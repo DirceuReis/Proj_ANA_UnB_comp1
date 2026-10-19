@@ -14,7 +14,7 @@ Os parâmetros de localização ($\mu$), escala ($\sigma$) e forma ($\xi$) da di
 
 A inferência foi realizada por amostragem MCMC utilizando Stan, com cinco cadeias independentes de 20.000 iterações, das quais 10.000 foram destinadas ao aquecimento. Foi aplicado um fator de espaçamento (*thinning*) de 50, resultando em 1.000 amostras posteriores retidas por estação. Os parâmetros de controle do amostrador foram definidos como `adapt_delta = 0.999` e `max_treedepth = 17`.
 
-As distribuições posteriores dos parâmetros GEV foram utilizadas para estimar os quantis associados aos períodos de retorno analisados, conforme as equações apresentadas anteriormente. Como as séries de máximos anuais foram expressas diretamente em intensidade de precipitação (mm/h), os quantis resultantes corresponderam às ordenadas das curvas IDF, sem necessidade de conversão adicional pela duração.
+As distribuições posteriores dos parâmetros GEV foram utilizadas para estimar os quantis associados aos períodos de retorno analisados, conforme as equações apresentadas anteriormente.
 
 ### Resultados da aplicação nacional
 
@@ -24,7 +24,7 @@ Foram realizados 5.258 ajustes individuais do modelo bayesiano, correspondentes 
 
 A distribuição espacial desses diagnósticos (\@fig-diagnostico-bayesiano) mostrou que as estações com divergências se encontram distribuídas por diferentes regiões do território brasileiro, sem concentração exclusiva em uma região específica. Embora os valores de $\widehat{R}$ não tenham ultrapassado o limite adotado, as divergências indicam a necessidade de cautela na interpretação dos resultados das estações afetadas.
 
-![Distribuição espacial das estações pluviométricas avaliadas na análise bayesiana nacional, distinguindo aquelas com e sem divergências durante a amostragem MCMC.](figuras/mapa_estacoes_diagnostico_BRR.png){#fig-diagnostico-bayesiano width="95%" fig-align="center"}
+![Distribuição espacial das estações pluviométricas avaliadas na análise bayesiana nacional, distinguindo aquelas com e sem divergências durante a amostragem MCMC.](figuras/mapa_estacoes_diagnostico_BR.png){#fig-diagnostico-bayesiano width="95%" fig-align="center"}
 
 #### Parâmetros estruturais do modelo
 
@@ -37,12 +37,12 @@ O parâmetro central de forma, $\bar{\xi}$, apresentou maior dispersão entre es
 ::: {#fig-distribuicao-parametros layout-ncol="2"}
 ![Distribuição de $H$.](figuras/distribuicao_H_BR.png)
 
-![Distribuição de $\bar{\xi}$.](figuras/distribuicao_xi_BR.png)
+![Distribuição de $\bar{\xi}$.](figuras/distribuicao_xi_bar_BR.png)
 
 Distribuição das medianas posteriores dos parâmetros estruturais $H$ e $\bar{\xi}$ nas 5.258 estações pluviométricas brasileiras.
 :::
 
-A distribuição espacial de $H$ (\@fig-mapa-h) apresentou diferenças regionais, com valores interpolados superiores a 0,72 em áreas do extremo Sul do Brasil e em setores localizados de outras regiões. Estimativas intermediárias, sobretudo entre 0,60 e 0,68, abrangeram extensas áreas do território nacional, indicando variações espaciais na taxa de redução dos parâmetros GEV com a duração.
+A distribuição espacial de $H$ (\@fig-mapa-h) apresentou diferenças regionais, com valores interpolados superiores a 0,72 em áreas do extremo Sul do Brasil. Estimativas intermediárias, sobretudo entre 0,60 e 0,68, abrangeram extensas áreas do território nacional, indicando variações espaciais na taxa de redução dos parâmetros GEV com a duração.
 
 ![Distribuição espacial interpolada das medianas posteriores do expoente de escala $H$, obtida por ponderação pelo inverso da distância (IDW) a partir das estimativas das estações pluviométricas.](figuras/mapa_H_interpolado_quantis.png){#fig-mapa-h width="95%" fig-align="center"}
 
