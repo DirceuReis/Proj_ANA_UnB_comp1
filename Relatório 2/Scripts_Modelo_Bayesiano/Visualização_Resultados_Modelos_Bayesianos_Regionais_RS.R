@@ -3863,7 +3863,7 @@ print(
 
 
 TR_FIG <- c(
-  2,
+  5,
   10,
   25,
   50,
@@ -4045,7 +4045,7 @@ param_texto_idf <- parametros_estruturais_todos |>
   )
 
 cores_TR <- c(
-  "2"   = "#D55E00",
+  "5"   = "#D55E00",
   "10"  = "#E69F00",
   "25"  = "#009E73",
   "50"  = "#0072B2",
@@ -4164,7 +4164,7 @@ salvar_figura(
   altura = 20
 )
 
-TR_FIG_1 <- c(2, 25, 200)
+TR_FIG_1 <- c(5, 25, 200)
 TR_FIG_2 <- c(10, 50, 100)
 
 plot_idf_modelos_ic <- function(dados, trs) {
@@ -4280,7 +4280,7 @@ p_idf_modelos_ic_2
 
 salvar_figura(
   p_idf_modelos_ic_1,
-  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_2_25_200.png",
+  "curvas_IDF_tres_estacoes_cinco_modelos_IC_TR_5_25_200.png",
   largura = 15,
   altura = 20
 )
@@ -4582,3 +4582,4 @@ resumo_A801 <- parametros_gev_todos |>
   )
 
 resumo_A801
+
