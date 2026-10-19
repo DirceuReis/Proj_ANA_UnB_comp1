@@ -26,7 +26,7 @@ library(arrow)
 path.root <- "Relatório 2"
 path.funs <- file.path(path.root, "Scripts_Ajuste_dGEV", "funs", "profile_likelihood", "fitprof_dgev.R")
 path.imax <- file.path(path.root, "Scripts_Maximas", "resultados", "BR", "dataframes", "df_imax_uniplu_hidro.parquet")
-path.fit.ls <- file.path(path.root, "Scripts_Ajuste_dGEV", "resultados", "subdiarios", "fit", "profile_likelihood")
+path.fit.ls <- file.path(path.root, "Scripts_Ajuste_dGEV", "resultados", "diarios", "fit", "profile_likelihood")
 
 
 # CARREGAR FUNCOES -------------------------------------------------------
@@ -74,13 +74,13 @@ if(!dir.exists(path.fit.ls)) dir.create(path.fit.ls)
 
 saveRDS(fit.ls, file.path(path.fit.ls, sprintf("ls_dgev_fit_subdiario_%d.rds", tail(subset, 1))))
 
-# ls <- lapply(list.files(path.fit.ls, full.names = TRUE, pattern = "*.rds"), readRDS)
-# par.df <- bind_rows(lapply(ls, `[[`, "par"))
-# idf.df <- bind_rows(lapply(ls, `[[`, "idf"))
-# profile.par <- bind_rows(lapply(ls, `[[`, "prof.par"))
-# profile.idf <- bind_rows(lapply(ls, `[[`, "prof.q"))
+ls <- lapply(list.files(path.fit.ls, full.names = TRUE, pattern = "*.rds"), readRDS)
+par.df <- bind_rows(lapply(ls, `[[`, "par"))
+idf.df <- bind_rows(lapply(ls, `[[`, "idf"))
+profile.par <- bind_rows(lapply(ls, `[[`, "prof.par"))
+profile.idf <- bind_rows(lapply(ls, `[[`, "prof.q"))
 
-# arrow::write_parquet(par.df, file.path(path.fit.ls, "df_subdiario_dgev_par.pqt"))     # parametros
-# arrow::write_parquet(idf.df, file.path(path.fit.ls, "df_subdiario_dgev_idf_.pqt"))    # quantis
-# arrow::write_parquet(profile.par, file.path(path.fit.ls, "df_subdiario_dgev_profpar.pqt")) # verossimilhanca parametros
-# arrow::write_parquet(profile.idf, file.path(path.fit.ls, "df_subdiario_dgev_profidf.pqt")) # verossimilhanca quantis
+arrow::write_parquet(par.df, file.path(path.fit.ls, "df_diario_dgev_par.pqt"))     # parametros
+arrow::write_parquet(idf.df, file.path(path.fit.ls, "df_diario_dgev_idf_.pqt"))    # quantis
+arrow::write_parquet(profile.par, file.path(path.fit.ls, "df_diario_dgev_profpar.pqt")) # verossimilhanca parametros
+arrow::write_parquet(profile.idf, file.path(path.fit.ls, "df_diario_dgev_profidf.pqt")) # verossimilhanca quantis
