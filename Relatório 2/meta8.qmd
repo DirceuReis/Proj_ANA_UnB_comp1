@@ -35,7 +35,7 @@ S =
 \sum_{i=1}^{n-1}
 \sum_{j=i+1}^{n}
 \operatorname{sgn}(R_j-R_i)
-$$
+$$ {#eq-mk-s}
 
 em que (R_i) e (R_j) representam os postos das observações (X_i) e (X_j), respectivamente, e:
 
@@ -46,7 +46,7 @@ $$
 0, & R_j-R_i=0\\
 -1, & R_j-R_i<0
 \end{cases}
-$$
+$${#eq-sgn}
 
 Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.
 
@@ -60,7 +60,7 @@ n(n-1)(2n+5)
 \displaystyle\sum_{p=1}^{g}
 t_p(t_p-1)(2t_p+5)
 }{18}
-$$
+$$ {#eq-km-variavancia}
 
 em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados e (g) corresponde ao número de grupos de valores empatados.
 
@@ -73,13 +73,13 @@ Z=
 0, & S=0\\[8pt]
 \dfrac{S+1}{\sqrt{\operatorname{Var}(S)}}, & S<0
 \end{cases}
-$$
+$$ {#eq-mk-z}
 
 O *p-value* bilateral foi obtido por:
 
 $$
 p=2\left[1-\Phi(|Z|)\right]
-$$
+$${#eq-pvalor}
 
 em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
 
@@ -123,7 +123,7 @@ $$
 \beta_{ij} =
 \frac{X_j-X_i}{j-i},
 \qquad j>i
-$$
+$${#eq-sen-inclinacoes}
 
 em que (X_i) e (X_j) representam os valores da série nos instantes (i) e (j), respectivamente. A inclinação de Sen ((\beta)) foi obtida pela mediana de todas as inclinações (\beta\_{ij}):
 
@@ -133,7 +133,7 @@ $$
 \left(
 \beta_{ij}
 \right)
-$$
+$$ {#eq-sen-mediana}
 
 Essa estimativa foi utilizada para remover a tendência da série antes da avaliação da autocorrelação.
 
@@ -143,7 +143,7 @@ Após a estimativa da inclinação de Sen, a tendência foi removida da série o
 
 $$
 X_t^{d}=X_t-\beta t
-$$
+$${#eq-removertendencia}
 
 em que (X_t\^{d}) representa o valor da série sem tendência no instante (t), (X_t) corresponde ao valor original da série, (\beta) é a inclinação de Sen e (t) representa a posição temporal da observação.
 
@@ -158,7 +158,7 @@ $$
 =
 \frac{1}{n}
 \sum_{t=1}^{n}X_t^d
-$$
+$${#eq-media-detrendida}
 
 Em seguida, o coeficiente de autocorrelação de primeira ordem foi obtido por:
 
@@ -172,7 +172,7 @@ r_1=
 \displaystyle\sum_{t=1}^{n}
 \left(X_t^d-\overline{X^d}\right)^2
 }
-$$
+$${#eq-autocorr1}
 
 em que (r_1) representa a correlação entre observações consecutivas da série sem tendência.
 
@@ -184,7 +184,7 @@ $$
 r_1^{*}
 =
 \frac{nr_1+2}{n-4}
-$$
+$${#eq-autocorrigida}
 
 em que (r_1\^{\*}) representa a autocorrelação de primeira ordem corrigida e (n) corresponde ao número de observações da série.
 
@@ -196,7 +196,7 @@ $$
 \rho_{1,\mathrm{inf}}
 =
 \frac{-1-1,96\sqrt{n-2}}{n-1}
-$$
+$${#eq-limiteinferior}
 
 e
 
@@ -204,7 +204,7 @@ $$
 \rho_{1,\mathrm{sup}}
 =
 \frac{-1+1,96\sqrt{n-2}}{n-1}
-$$
+$${#eq-limitesuperior}
 
 A série foi considerada sem autocorrelação significativa quando o valor de (r_1) permaneceu dentro desse intervalo:
 
@@ -213,7 +213,7 @@ $$
 \leq r_1
 \leq
 \rho_{1,\mathrm{sup}}
-$$
+$$ {#eq-intervalosemgig}
 
 Quando (r_1) permaneceu dentro dos limites estabelecidos, a série foi considerada independente para fins da análise de tendência, não sendo aplicado o procedimento de *pre-whitening*. Nesse caso, a série original foi mantida para a aplicação do teste de Mann–Kendall.
 
@@ -223,7 +223,7 @@ $$
 r_1 < \rho_{1,\mathrm{inf}}
 \quad\text{ou}\quad
 r_1 > \rho_{1,\mathrm{sup}}
-$$
+$$ {#eq-intervalocomsig}
 
 Nessa situação, foi aplicado o procedimento MTFPW.
 
@@ -235,7 +235,7 @@ $$
 Y_t=
 X_t-r_1^{*}X_{t-1},
 \qquad t=2,\ldots,n
-$$
+$${#eq-pw}
 
 em que (Y_t) representa a série após a aplicação do *pre-whitening*, (X_t) corresponde à série original e (r_1\^{\*}) representa a estimativa corrigida da autocorrelação de primeira ordem.
 
@@ -251,7 +251,7 @@ O procedimento foi aplicado ao conjunto de *p-values* obtidos nas análises de t
 
 $$
 p_{(1)} \leq p_{(2)} \leq \ldots \leq p_{(m)}
-$$
+$${#eq-fdrordenar}
 
 em que (p\_{(j)}) representa o (j)-ésimo menor *p-value* e (m) corresponde ao número total de *p-values* válidos considerados na análise.
 
@@ -260,7 +260,7 @@ Para cada posição (j), foi calculado um valor crítico de acordo com:
 $$
 d_{(j)} =
 \frac{j\alpha}{m}
-$$
+$${#eq-fdrcritico}
 
 em que (j) representa a posição do *p-value* ordenado, (\alpha) corresponde ao nível de significância adotado e (m) representa o número total de testes considerados.
 
@@ -268,7 +268,7 @@ Foi então identificado o maior valor de (j) que satisfazia a condição:
 
 $$
 p_{(j)} < \frac{j\alpha}{m}
-$$
+$${#eq-fdrcriterio}
 
 O maior índice que atende a essa condição foi denominado (j\^*). Quando não houve nenhum* p-value\* que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando (j\^*) foi identificado, todas as hipóteses correspondentes aos* p-values\* ordenados de (p\_{(1)}) até (p\_{(j\^\*)}) foram consideradas estatisticamente significativas.
 
@@ -277,7 +277,7 @@ Assim, a regra de decisão do procedimento pode ser expressa por:
 $$
 p_{(j)} < \frac{j\alpha}{m},
 \qquad j=j^*
-$$
+$$ {#eq-fdrdecisão}
 
 sendo (j\^\*) o maior índice que satisfaz essa condição.
 
@@ -293,7 +293,7 @@ ara cada série elegível, foi construída uma matriz de comparações pareadas 
 
 $$
 K = \max_{1 \leq k < n} |U_k|
-$$
+$$ {#eq-K}
 
 em que $(K)$ representa a estatística do teste e $(n)$ corresponde ao número de observações válidas da série temporal. O ponto de quebra foi associado à posição em que o valor absoluto de $(U_k)$ atingiu seu máximo, sendo o respectivo ano registrado como o ano estimado da quebra.
 
@@ -301,7 +301,7 @@ A significância estatística foi inicialmente avaliada por meio de uma aproxima
 
 $$
 p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
-$$
+$$ {#eq-pettitpvalor}
 
 com os valores limitados ao intervalo máximo de 1. Nessa etapa, adotou-se o nível de significância de 5%, considerando-se evidência de quebra quando $(p < 0{,}05)$. Entretanto, como o procedimento foi aplicado simultaneamente a milhares de células da grade, os valores-p foram submetidos posteriormente à correção para múltiplos testes pelo método FDR, com nível de significância de 5%. Assim, foram classificadas como células com quebra estatisticamente significativa aquelas que permaneceram significativas após a correção FDR e apresentaram um ano de quebra identificado. As demais células foram classificadas como sem quebra significativa.
 
