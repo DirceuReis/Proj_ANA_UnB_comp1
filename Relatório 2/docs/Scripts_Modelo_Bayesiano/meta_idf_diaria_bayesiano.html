@@ -278,7 +278,7 @@ window.Quarto = {
 <p>Diferentemente da análise comparativa realizada no Rio Grande do Sul, na qual os máximos anuais foram delimitados pelo ano civil, a presente aplicação utilizou anos hidrológicos específicos por estação. Essa organização buscou considerar as diferenças regionais na sazonalidade das precipitações extremas, evitando a adoção de um mesmo limite anual para todo o território nacional.</p>
 <p>Os parâmetros de localização (<span class="math inline">\(\mu\)</span>), escala (<span class="math inline">\(\sigma\)</span>) e forma (<span class="math inline">\(\xi\)</span>) da distribuição GEV foram estimados para cada duração. A estrutura de invariância de escala manteve a duração de referência <span class="math inline">\(d_0=24\)</span> h, com os parâmetros estruturais <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(H\)</span> e <span class="math inline">\(\theta\)</span> estimados individualmente para cada estação. O parâmetro de forma também foi mantido específico por duração, com regularização hierárquica em torno de um parâmetro central local, <span class="math inline">\(\bar{\xi}\)</span>.</p>
 <p>A inferência foi realizada por amostragem MCMC utilizando Stan, com cinco cadeias independentes de 20.000 iterações, das quais 10.000 foram destinadas ao aquecimento. Foi aplicado um fator de espaçamento (<em>thinning</em>) de 50, resultando em 1.000 amostras posteriores retidas por estação. Os parâmetros de controle do amostrador foram definidos como <code>adapt_delta = 0.999</code> e <code>max_treedepth = 17</code>.</p>
-<p>As distribuições posteriores dos parâmetros GEV foram utilizadas para estimar os quantis associados aos períodos de retorno analisados, conforme as equações apresentadas anteriormente. Como as séries de máximos anuais foram expressas diretamente em intensidade de precipitação (mm/h), os quantis resultantes corresponderam às ordenadas das curvas IDF, sem necessidade de conversão adicional pela duração.</p>
+<p>As distribuições posteriores dos parâmetros GEV foram utilizadas para estimar os quantis associados aos períodos de retorno analisados, conforme as equações apresentadas anteriormente.</p>
 <section id="resultados-da-aplicação-nacional" class="level3">
 <h3 class="anchored" data-anchor-id="resultados-da-aplicação-nacional">Resultados da aplicação nacional</h3>
 <section id="diagnósticos-de-convergência" class="level4">
@@ -288,7 +288,7 @@ window.Quarto = {
 <div id="fig-diagnostico-bayesiano" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-diagnostico-bayesiano-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/mapa_estacoes_diagnostico_BRR.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+<img src="figuras/mapa_estacoes_diagnostico_BR.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diagnostico-bayesiano-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figura&nbsp;1: Distribuição espacial das estações pluviométricas avaliadas na análise bayesiana nacional, distinguindo aquelas com e sem divergências durante a amostragem MCMC.
@@ -316,7 +316,7 @@ Figura&nbsp;1: Distribuição espacial das estações pluviométricas avaliadas 
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figuras/distribuicao_xi_BR.png" class="img-fluid figure-img"></p>
+<p><img src="figuras/distribuicao_xi_bar_BR.png" class="img-fluid figure-img"></p>
 <figcaption>Distribuição de <span class="math inline">\(\bar{\xi}\)</span>.</figcaption>
 </figure>
 </div>
@@ -328,7 +328,7 @@ Figura&nbsp;2: Distribuição das medianas posteriores dos parâmetros estrutura
 </figcaption>
 </figure>
 </div>
-<p>A distribuição espacial de <span class="math inline">\(H\)</span> (@fig-mapa-h) apresentou diferenças regionais, com valores interpolados superiores a 0,72 em áreas do extremo Sul do Brasil e em setores localizados de outras regiões. Estimativas intermediárias, sobretudo entre 0,60 e 0,68, abrangeram extensas áreas do território nacional, indicando variações espaciais na taxa de redução dos parâmetros GEV com a duração.</p>
+<p>A distribuição espacial de <span class="math inline">\(H\)</span> (@fig-mapa-h) apresentou diferenças regionais, com valores interpolados superiores a 0,72 em áreas do extremo Sul do Brasil. Estimativas intermediárias, sobretudo entre 0,60 e 0,68, abrangeram extensas áreas do território nacional, indicando variações espaciais na taxa de redução dos parâmetros GEV com a duração.</p>
 <div id="fig-mapa-h" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mapa-h-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
