@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>secao_metodologia_gls – Proj. IDF Brasil ANA/UnB</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7600ddd4616fb7b9baa2258c07466e60.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.qmd"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 3</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-3">    
+        <li>
+    <a class="dropdown-item" href="../meta3_brasil.qmd">
+ <span class="dropdown-text">Organização da base de dados - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 5</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-5">    
+        <li>
+    <a class="dropdown-item" href="../meta5_brasil.qmd">
+ <span class="dropdown-text">IDFs para precipitação diária - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta5_rs.qmd">
+ <span class="dropdown-text">Modelagem e análises no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-6" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 6</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-6">    
+        <li>
+    <a class="dropdown-item" href="../meta6_brasil.qmd">
+ <span class="dropdown-text">Correção de viés dos dados climáticos - Brasil</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-7" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 7</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-7">    
+        <li>
+    <a class="dropdown-item" href="../meta7_brasil.qmd">
+ <span class="dropdown-text">IDFs subdiárias INMET/CEMADEN - Brasil</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta7_rs.qmd">
+ <span class="dropdown-text">Modelagem regional e validação no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-meta-8" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Meta 8</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-meta-8">    
+        <li>
+    <a class="dropdown-item" href="../meta8_estacoes.qmd">
+ <span class="dropdown-text">Não estacionariedade em pluviômetros e pluviógrafos</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_grade.qmd">
+ <span class="dropdown-text">Não estacionariedade nos dados em grade</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../meta8_rs.qmd">
+ <span class="dropdown-text">Análises detalhadas no Rio Grande do Sul</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-scripts" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Scripts</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-scripts">    
+        <li>
+    <a class="dropdown-item" href="../scripts_meta3.qmd">
+ <span class="dropdown-text">Meta 3 - Base de dados</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta5.qmd">
+ <span class="dropdown-text">Meta 5 - IDFs diárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta6.qmd">
+ <span class="dropdown-text">Meta 6 - Correção de viés</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta7.qmd">
+ <span class="dropdown-text">Meta 7 - IDFs subdiárias</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../scripts_meta8.qmd">
+ <span class="dropdown-text">Meta 8 - Não estacionariedade</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#sec-metodologia-gls" id="toc-sec-metodologia-gls" class="nav-link active" data-scroll-target="#sec-metodologia-gls">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="sec-metodologia-gls" class="level3">
+<h3 class="anchored" data-anchor-id="sec-metodologia-gls">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</h3>
+<p>Existe grande incerteza no ajuste de distribuições de probabilidade, especialmente quando esse ajuste é feito em cenários de séries curtas. Isso se torna ainda mais relevante para o ajuste de modelos probabilísticos utilizando séries históricas de pluviógrafos. Nesse contexto, uma das abordagens exploradas no Rio Grande do Sul foi a incorporação de informação regional, mas restringindo-se à estimação do parâmetro de forma <span class="math inline">\(\xi\)</span> da distribuição GEV. Para tal, foi construído um modelo de regressão linear de mínimos quadrados generalizados (GLS) com o objetivo de reunir informação regional sobre <span class="math inline">\(\xi\)</span> que possa ser utilizada como conhecimento <em>a priori</em> na aplicação semi-Bayesiana do estimador de máxima verossimilhança generalizada.</p>
+<p>Modelos desse tipo como o GLS se preocupam em representar, por meio de uma estrutura linear, a relação entre uma variável dependente — nesse caso o parâmetro de forma <span class="math inline">\(\xi\)</span> — e variáveis independentes — também chamadas preditoras, as quais ajudam a explicar o comportamento da variável dependente na região de estudo <span class="citation" data-cites="reis2020">(<a href="#ref-reis2020" role="doc-biblioref">Reis et al. 2020</a>)</span>.</p>
+<p>Nessa avaliação, considerou-se previamente a hipótese de que existe um parâmetro de forma único local, constante ao longo de uma faixa de durações, abordagem comum na literatura <span class="citation" data-cites="lima2018 duarte2025">(<a href="#ref-lima2018" role="doc-biblioref">Lima et al. 2018</a>; <a href="#ref-duarte2025" role="doc-biblioref">Duarte et al. 2025</a>)</span>. A partir dessa premissa, é possível então utilizar informações sobre precipitação na escala diária, a partir de séries históricas de postos pluviométricos (mais longas e em maior quantidade), para construir o modelo GLS. No Rio Grande do Sul, isso foi feito a partir de um conjunto de 182 postos de <span class="citation" data-cites="almeida2025">Das Neves Almeida et al. (<a href="#ref-almeida2025" role="doc-biblioref">2025</a>)</span>.</p>
+<section id="construção-do-modelo-gls" class="level4">
+<h4 class="anchored" data-anchor-id="construção-do-modelo-gls">Construção do modelo GLS</h4>
+<p>Em forma matricial, o modelo proposto possui a seguinte formulação:</p>
+<p><span id="eq-gls"><span class="math display">\[
+\hat\xi= X\beta + \varepsilon.
+\tag{1}\]</span></span></p>
+<p>Na <a href="#eq-gls" class="quarto-xref">Equação&nbsp;1</a>, <span class="math inline">\(\hat\xi\)</span> é um vetor com estimativas prévias do parâmetro para cada estação <span class="math inline">\(j\)</span>, com <span class="math inline">\(j = 1, 2,\cdots, m\)</span>; <span class="math inline">\(\beta\)</span> é um vetor de tamanho <span class="math inline">\(p + 1\)</span> de parâmetros do modelo GLS; <span class="math inline">\(X\)</span> é uma matriz com <span class="math inline">\(m\)</span> linhas e <span class="math inline">\((p + 1)\)</span> colunas, contendo valores das variáveis preditoras para cada estação <span class="math inline">\(j\)</span>, sendo a primeira coluna preenchida com 1 (referente ao parâmetro constante <span class="math inline">\(\beta_0\)</span>); e <span class="math inline">\(\varepsilon\)</span> é um vetor de tamanho <span class="math inline">\(m\)</span> representando o erro total do modelo <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre et al. 2008</a>)</span>.</p>
+<p>O erro total, por sua vez, é subdividido em duas parcelas: uma inerente à falta de aderência do modelo aos dados (erro de ajuste), <span class="math inline">\(\delta\)</span>; e uma segunda relacionada ao erro amostral nas estimativas da variável de interesse, <span class="math inline">\(\eta\)</span>. Assume-se que esse erro possui esperança <span class="math inline">\(E[\varepsilon] = 0\)</span> e covariância <span class="math inline">\(E[\varepsilon\varepsilon^T] = \Lambda(\sigma_\delta^2)\)</span>. Em notação matricial, essa covariância é definida como a soma entre as variâncias das duas parcelas <span class="math inline">\(\delta\)</span> e <span class="math inline">\(\eta\)</span> do erro total, representada como <span id="eq-lambda"><span class="math display">\[
+\Lambda(\sigma_\delta^2) = \sigma_\delta^2 I_m + \Sigma(\hat\xi),
+\tag{2}\]</span></span> sendo <span class="math inline">\(I_m\)</span> uma matriz identidade <span class="math inline">\(m\times m\)</span>. A estrutura dessa matriz de covariância, entre duas estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span> é formada de elementos na diagonal principal (<span class="math inline">\(j = h\)</span>) e pelos demais elementos (<span class="math inline">\(j \neq j\)</span>): <span id="eq-matriz-cov"><span class="math display">\[
+\mathrm{Cov}\{\varepsilon_j,\varepsilon_h\} =
+  \begin{cases}
+    \sigma_\delta^2 + \sigma_{\eta_j}^2, &amp; \quad j = h, \\
+    \sigma_{\eta_j}\sigma_{\eta_h}\rho(\hat\xi_j,\hat\xi_h), &amp; \quad j\neq h.
+  \end{cases}
+\tag{3}\]</span></span></p>
+<p>Os elementos dessa matriz possuem certas particularidades. A variância do erro amostral <span class="math inline">\(\sigma_{\eta_j}^2\)</span> na estimativa de <span class="math inline">\(\xi\)</span> deve ser efetuada de forma independente da estimativa do parâmetro em si. Como particularidade da regressão GLS, deve também ser fatorada a correlação cruzada existente nas estimativas de <span class="math inline">\(\xi\)</span> entre estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span>.</p>
+<p>A estimativa aproximadamente independente de <span class="math inline">\(\sigma_{\eta_j}^2\)</span> foi obtida com o procedimentos propostos por <span class="citation" data-cites="fill1994">Fill (<a href="#ref-fill1994" role="doc-biblioref">1994</a>)</span> e <span class="citation" data-cites="chowdhury1991">Chowdhury et al. (<a href="#ref-chowdhury1991" role="doc-biblioref">1991</a>)</span>, em que a variância de <span class="math inline">\(\hat\xi\)</span> é estimada a partir da variância da L-assimetria (<span class="math inline">\(\tau_3\)</span>): <span id="eq-var-xi"><span class="math display">\[
+\mathrm{Var}[\hat\xi_j] = \frac{\bar N}{N_j}\left(\frac{\partial\xi}{\partial\tau_3}  \right)^2 \mathrm{Var}[\hat\tau_3|\bar\xi,\bar N],
+\tag{4}\]</span></span> em que <span class="math inline">\(\bar N\)</span> é o número médio de observações na região; <span class="math inline">\(N_j\)</span> é o número de observações (anos) na estação <span class="math inline">\(j\)</span>; e <span class="math inline">\(\bar\xi\)</span> é o parâmetro de forma médio na região.</p>
+<p>A correlação <span class="math inline">\(\rho(\hat\xi_j,\hat\xi_h)\)</span>, por sua vez, requer um modelo de suavização. <span class="citation" data-cites="martins2002">Martins e Stedinger (<a href="#ref-martins2002" role="doc-biblioref">2002</a>)</span> descrevem essa correlação cruzada como uma função da correlação entre séries simultâneas entre estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span> (<span class="math inline">\(\rho_{jh}\)</span>) como sendo</p>
+<p><span id="eq-correlacao-cruzada-xi"><span class="math display">\[
+\hat\rho(\hat\xi_j,\hat\xi_h) = \mathrm{sign}(\hat\rho_{jh}) cf_{jh} |\rho_{jh}|^\Delta.
+\tag{5}\]</span></span></p>
+<p>O expoente <span class="math inline">\(\Delta\)</span> é função do parâmetro de forma conforme a Tabela 3 apresentada por <span class="citation" data-cites="martins2002">Martins e Stedinger (<a href="#ref-martins2002" role="doc-biblioref">2002</a>)</span>; e <span class="math inline">\(cf_{jh}\)</span> é um fator de correção pelo tamanho das séries definido como <span class="math inline">\(cf_{jh} = N_{jh}/\sqrt{N_jN_h}\)</span> (com <span class="math inline">\(N_{jh}\)</span> sendo o número de anos em comum nas séries de <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span>).</p>
+<p>A correlação <span class="math inline">\(\rho_{jh}\)</span> foi estimada em função da distância <span class="math inline">\(s_{jh}\)</span> entre as estações e da correção estimada entre as séries <span class="math inline">\(r_{jh}\)</span>, seguindo o procedimento do Serviço Geológico dos Estados Unidos <span class="citation" data-cites="feaster2023">(<a href="#ref-feaster2023" role="doc-biblioref">Feaster et al. 2023</a>)</span>. Nele, <span class="math inline">\(r_{jh}\)</span> é transformada em uma variável Z de Fisher: <span class="math inline">\(Z_{jh} = \ln[(1 + r_{jh})/(1 - r_{jh})]\)</span>. Um modelo exponencial é então ajustado entre <span class="math inline">\(Z_{jh}\)</span> e a distância <span class="math inline">\(s_{jh}\)</span> <span id="eq-z-fisher"><span class="math display">\[
+Z_ij = \exp\left[ a - b\left( \frac{s_{jh}^c - 1}{c} \right) \right],
+\tag{6}\]</span></span> permitindo, finalmente, que a correlação cruzada <span class="math inline">\(\rho_{jh}\)</span> seja estimada como <span class="math display">\[
+\hat\rho_{jh} = \frac{\exp(2Z_{jh}) - 1}{\exp(2Z_jh) + 1}.
+\]</span></p>
+<p>Finalmente, determinados os elementos de <span class="math inline">\(\Lambda(\sigma_\delta^2)\)</span>, a obtenção dos parâmetros <span class="math inline">\(\hat\beta\)</span> do modelo linear e sua covariância, além da variância do erro do modelo <span class="math inline">\(\sigma_\delta^2\)</span> se dá através dos estimadores descritos por <span class="citation" data-cites="stedinger1985">Stedinger e Tasker (<a href="#ref-stedinger1985" role="doc-biblioref">1985</a>)</span> como</p>
+<p><span id="eq-beta-gls"><span class="math display">\[
+\hat\beta = [X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}\hat\xi
+\tag{7}\]</span></span></p>
+<p>com matriz de covariância determinada por</p>
+<p><span id="eq-cov-beta-gls"><span class="math display">\[
+\Sigma[\hat\beta]=[X^T\Lambda(\sigma_\delta^2)X]^{-1}
+\tag{8}\]</span></span> na solução iterativa com método dos momentos entre <a href="#eq-beta-gls" class="quarto-xref">Equação&nbsp;7</a> e a equação do resíduo do erro quadrático médio <span id="eq-res-gls"><span class="math display">\[
+(\hat\xi - X\hat\beta)^T[\sigma_\delta^2I_m + \Sigma(\hat\xi)]^{-1}(\hat\xi - X\hat\beta) = m - (p+1).
+\tag{9}\]</span></span></p>
+</section>
+<section id="distribuição-a-priori-regional" class="level4">
+<h4 class="anchored" data-anchor-id="distribuição-a-priori-regional">Distribuição <em>a priori</em> regional</h4>
+<p>Finalmente, de posse das estimativas <span class="math inline">\(\hat\beta\)</span> do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo <span id="eq-media-var-xi-gls"><span class="math display">\[
+\hat\mu_{\xi_j} = x_j\hat\beta \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \hat\sigma_\delta^2 + x_j\Sigma[\hat\beta]x_j^T,
+\tag{10}\]</span></span> em que <span class="math inline">\(x_j\)</span> é a linha de <span class="math inline">\(X\)</span> correspondente à estação <span class="math inline">\(j\)</span>.</p>
+<p>A partir dessas estimativas, contruiu-se uma distribuição <em>a priori</em> regional <span class="math inline">\(\pi(\xi|p,q)\)</span> a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de <span class="math inline">\(\xi\)</span> entre -0,50 e +0,50 <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre et al. 2008</a>)</span>. Nesssa distribuição, os parâmetros <span class="math inline">\(p\)</span> e <span class="math inline">\(q\)</span> são determinados diretamente a partir das estimativas obtidas pela <a href="#eq-media-var-xi-gls" class="quarto-xref">Equação&nbsp;10</a> como <span id="eq-par-priori_beta"><span class="math display">\[
+\hat\mu_{\xi_j} = \frac{p}{p + 1} - 0,50 \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \frac{pq}{(p + q + 1)(p + q)^2}.
+\tag{11}\]</span></span> Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de <span class="math inline">\(\pi(\xi|p,q)\)</span> em <span class="math inline">\(\ell\)</span>.</p>
+</section>
+<section id="avaliação-dos-modelos" class="level4">
+<h4 class="anchored" data-anchor-id="avaliação-dos-modelos">Avaliação dos modelos</h4>
+<p>Nessa aplicação, foram avaliadas nove variáveis preditoras para compor <span class="math inline">\(X\)</span>: 1) aspecto do terreno; 2) distância das estações até a costa leste brasileira; 3) elevação das estações; 4) longitude; 5) latitude; 6) média máxima anual de um dia; 7) média máxima anual de três dias; 8) temperatura média no local da estação; e 9) uma covariável binária <span class="math inline">\(Z\)</span> que subdivide o Rio Grande do Sul em duas macrorregiões: <span class="math inline">\(Z=1\)</span> quando a estação pertence à região do estado que faz parte da bacia do Rio Uruguai, e <span class="math inline">\(Z = 0\)</span> quando pertence à região combinada das regiões hidrográficas Litorânea e do Guaíba.</p>
+<p>O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos (<span class="math inline">\(AVP_{old}\)</span>, <span class="citation" data-cites="reis2020">Reis et al. (<a href="#ref-reis2020" role="doc-biblioref">2020</a>)</span>). Essa métrica considera a correlação na própria estação <span class="math inline">\(j\)</span>, além da variância do estimador: <span id="eq-avp-old"><span class="math display">\[
+AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
+2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
+\tag{12}\]</span></span> sendo <span class="math inline">\(e_j\)</span> um vetor contendo 1 na linha <span class="math inline">\(j\)</span> e 0 nas demais.</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alexandre2008" class="csl-entry" role="listitem">
+Alexandre, Allan, Dirceu Junior, e Eduardo Martins. 2008. <span>«Uso de Informação Regional na Estimativa de Quantis de Cheia GEV»</span>. <em>Revista Brasileira de Recursos Hídricos</em> 13 (2): 127–39. <a href="https://doi.org/10.21168/rbrh.v13n2.p127-139">https://doi.org/10.21168/rbrh.v13n2.p127-139</a>.
+</div>
+<div id="ref-chowdhury1991" class="csl-entry" role="listitem">
+Chowdhury, Jahir Uddin, Jery R. Stedinger, e Li‐Hsiung Lu. 1991. <span>«Goodness‐of‐fit tests for regional generalized extreme value flood distributions»</span>. <em>Water Resources Research</em> 27 (7): 1765–76. <a href="https://doi.org/10.1029/91wr00077">https://doi.org/10.1029/91wr00077</a>.
+</div>
+<div id="ref-almeida2025" class="csl-entry" role="listitem">
+Das Neves Almeida, Cristiano, Bruno Fagundes Rodrigues, Filipe Carvalho Lemos, Gabriela da Luz Lins, e Gerald Norbert Souza da Silva. 2025. <em>Avaliação de Curvas Intensidade-Duração-Frequência (IDF) para o Rio Grande do Sul</em>. João Pessoa. <a href="https://biblioteca.ana.gov.br/sophia_web/Acervo/Detalhe/111791?returnUrl=/sophia_web/Home/Index&amp;guid=1763424002514">https://biblioteca.ana.gov.br/sophia_web/Acervo/Detalhe/111791?returnUrl=/sophia_web/Home/Index&amp;guid=1763424002514</a>.
+</div>
+<div id="ref-duarte2025" class="csl-entry" role="listitem">
+Duarte, Luíza Virgínia, Alan De Gois Barbosa, Priscilla M. Moura, e Veber Costa. 2025. <span>«A Bayesian Approach to Model IDF Curves Employing Max-Stable Processes»</span>. <em>Hydrological Sciences Journal</em> 70 (16): 2934–52. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
+</div>
+<div id="ref-feaster2023" class="csl-entry" role="listitem">
+Feaster, Toby D., Anthony J. Gotvald, Jonathan W. Musser, et al. 2023. <em>Magnitude and frequency of floods for rural streams in Georgia, South Carolina, and North Carolina, 2017—Results</em>. Em <em>Scientific Investigations Report</em>. US Geological Survey. <a href="https://doi.org/10.3133/sir20235006">https://doi.org/10.3133/sir20235006</a>.
+</div>
+<div id="ref-fill1994" class="csl-entry" role="listitem">
+Fill, Heinz Dieter. 1994. <em>Improving flood quantile estimates using regional information</em>. Cornell University.
+</div>
+<div id="ref-lima2018" class="csl-entry" role="listitem">
+Lima, Carlos H. R., Hyun-Han Kwon, e Yong-Tak Kim. 2018. <span>«A Local-Regional Scaling-Invariant Bayesian GEV Model for Estimating Rainfall IDF Curves in a Future Climate»</span>. <em>Journal of Hydrology</em> 566 (novembro): 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
+</div>
+<div id="ref-martins2002" class="csl-entry" role="listitem">
+Martins, Eduardo S., e Jery R. Stedinger. 2002. <span>«Cross Correlations Among Estimators of Shape»</span>. <em>Water Resources Research</em> 38 (11). <a href="https://doi.org/10.1029/2002WR001589">https://doi.org/10.1029/2002WR001589</a>.
+</div>
+<div id="ref-reis2020" class="csl-entry" role="listitem">
+Reis, Dirceu S., Andrea G. Veilleux, Jonathan R. Lamontagne, Jery R. Stedinger, e Eduardo S. Martins. 2020. <span>«Operational Bayesian GLS Regression for Regional Hydrologic Analyses»</span>. <em>Water Resources Research</em> 56 (8). <a href="https://doi.org/10.1029/2019wr026940">https://doi.org/10.1029/2019wr026940</a>.
+</div>
+<div id="ref-stedinger1985" class="csl-entry" role="listitem">
+Stedinger, Jery R., e Gary D. Tasker. 1985. <span>«Regional Hydrologic Analysis: 1. Ordinary, Weighted, and Generalized Least Squares Compared»</span>. <em>Water Resources Research</em> 21 (9): 1421–32. <a href="https://doi.org/10.1029/WR021i009p01421">https://doi.org/10.1029/WR021i009p01421</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

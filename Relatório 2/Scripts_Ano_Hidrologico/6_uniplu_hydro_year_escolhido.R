@@ -563,13 +563,26 @@ br <- read_country(year = 2020, showProgress = FALSE) %>%
 sul_ufs <- ufs %>%
   filter(estado %in% UF_SUL)
 
+bbox_br <- st_bbox(br)
+
 tema_mapa <- theme_bw() +
   theme(
     panel.grid = element_blank(),
     
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title = element_blank(),
+    # mostrar coordenadas
+    axis.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.ticks = element_line(
+      linewidth = 0.3
+    ),
+    
+    axis.title = element_text(
+      family = font,
+      size = fontsize
+    ),
     
     text = element_text(
       family = font,
@@ -596,7 +609,12 @@ tema_mapa <- theme_bw() +
       size = fontsize
     ),
     
-    plot.margin = margin( t = 5, r = 5, b = 5, l = 5)
+    plot.margin = margin(
+      t = 5,
+      r = 5,
+      b = 5,
+      l = 5
+    )
   )
 
 legenda_circular <- function() {
@@ -619,7 +637,12 @@ legenda_circular <- function() {
     theme(plot.margin = margin(0, 0, 2, 0))
 }
 
-mapa_mes <- function( df, col_mes, bbox = NULL, pt_size = 1.2 ) {
+mapa_mes <- function(
+    df,
+    col_mes,
+    bbox = NULL,
+    pt_size = 1.2
+) {
   
   d <- df %>%
     filter(
@@ -634,59 +657,106 @@ mapa_mes <- function( df, col_mes, bbox = NULL, pt_size = 1.2 ) {
             .data[[col_mes]]
           )
         ),
-        levels = as.character(
-          1:12
-        )
+        levels = as.character(1:12)
       )
     )
   
   g <- ggplot() +
     
     # -------------------------------------------------------------------------
-  # Brasil / Sul
+  # Brasil
   # -------------------------------------------------------------------------
   
-  geom_sf( data = if (is.null(bbox)) br else sul_ufs, fill = "grey98", color = "grey50", linewidth = 0.40) +
+  geom_sf(
+    data = if (is.null(bbox)) br else sul_ufs,
+    fill = "grey98",
+    color = "grey40",
+    linewidth = 0.40
+  ) +
     
     # -------------------------------------------------------------------------
-  # Estados
+  # Limites estaduais
   # -------------------------------------------------------------------------
   
-  geom_sf( data = if (is.null(bbox)) ufs else sul_ufs, fill = NA, color = "grey65", linewidth = 0.18 ) +
+  geom_sf(
+    data = if (is.null(bbox)) ufs else sul_ufs,
+    fill = NA,
+    color = "grey60",
+    linewidth = 0.25
+  ) +
     
     # -------------------------------------------------------------------------
   # Estações
   # -------------------------------------------------------------------------
   
-  geom_point(data = d, aes( x = long, y = lat, color = mes_f ),
-    size = pt_size, alpha = 0.90, stroke = 0 ) +
+  geom_point(
+    data = d,
+    aes(
+      x = long,
+      y = lat,
+      color = mes_f
+    ),
+    size = pt_size,
+    alpha = 0.90,
+    stroke = 0
+  ) +
     
     # -------------------------------------------------------------------------
   # Cores
   # -------------------------------------------------------------------------
   
-  scale_color_manual( name = "Mês", values = cores_mes, breaks = as.character( 1:12 ),
-    labels = meses_lab, drop = FALSE ) +
+  scale_color_manual(
+    name = "Mês",
+    values = cores_mes,
+    breaks = as.character(1:12),
+    labels = meses_lab,
+    drop = FALSE
+  ) +
     
     # -------------------------------------------------------------------------
   # Barra de escala
   # -------------------------------------------------------------------------
   
-  annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
-    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ),
-    line_width = 0.4 ) +
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(1.5, "mm"),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
     
     # -------------------------------------------------------------------------
-  # Rosa dos ventos
+  # Norte
   # -------------------------------------------------------------------------
   
-  annotation_north_arrow( location = "tr", width = unit( 1, "cm" ),
-    height = unit( 1, "cm" ),
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(1, "cm"),
+    height = unit(1, "cm"),
     which_north = "true",
-    style = north_arrow_nautical( text_family = font, text_size = fontsize,
-      fill = c( "black", "aliceblue" ) ) ) +
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
+      )
+    )
+  ) +
     
-    labs( x = NULL, y = NULL ) +
+    # -------------------------------------------------------------------------
+  # Eixos
+  # -------------------------------------------------------------------------
+  
+  labs(
+    x = "Longitude",
+    y = "Latitude"
+  ) +
     
     tema_mapa +
     
@@ -695,21 +765,53 @@ mapa_mes <- function( df, col_mes, bbox = NULL, pt_size = 1.2 ) {
       legend.justification = "center",
       legend.direction = "horizontal",
       
-      legend.key.width = unit( 12, "pt"),
-      legend.key.height = unit( 8, "pt" ),
-      legend.key.spacing.x = unit( 2, "pt" ),
-      legend.spacing.x = unit( 1, "pt" ) ) +
+      legend.key.width = unit(12, "pt"),
+      legend.key.height = unit(8, "pt"),
+      legend.key.spacing.x = unit(2, "pt"),
+      legend.spacing.x = unit(1, "pt")
+    ) +
     
-    guides( color = guide_legend( nrow = 2, byrow = TRUE,
-        title.position = "top", override.aes = list( size = 2.5, alpha = 1 )
+    guides(
+      color = guide_legend(
+        nrow = 2,
+        byrow = TRUE,
+        title.position = "top",
+        override.aes = list(
+          size = 2.5,
+          alpha = 1
+        )
       )
     )
   
-  if (!is.null(bbox)) {
+  # ---------------------------------------------------------------------------
+  # Extensão espacial
+  # ---------------------------------------------------------------------------
+  
+  if (is.null(bbox)) {
     
-    g <- g + coord_sf( xlim = bbox[ c( "xmin", "xmax" ) ],
-        ylim = bbox[ c( "ymin", "ymax" ) ], expand = FALSE )
+    g <- g +
+      coord_sf(
+        xlim = c(
+          bbox_br["xmin"],
+          bbox_br["xmax"]
+        ),
+        ylim = c(
+          bbox_br["ymin"],
+          bbox_br["ymax"]
+        ),
+        expand = FALSE
+      )
+    
+  } else {
+    
+    g <- g +
+      coord_sf(
+        xlim = bbox[c("xmin", "xmax")],
+        ylim = bbox[c("ymin", "ymax")],
+        expand = FALSE
+      )
   }
+  
   g
 }
 

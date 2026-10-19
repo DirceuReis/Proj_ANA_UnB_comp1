@@ -272,7 +272,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#incorporação-de-informações-regionais-na-modelagem-das-relações-idf" id="toc-incorporação-de-informações-regionais-na-modelagem-das-relações-idf" class="nav-link" data-scroll-target="#incorporação-de-informações-regionais-na-modelagem-das-relações-idf">Incorporação de informações regionais na modelagem das relações IDF</a>
   <ul class="collapse">
-  <li><a href="#modelagem-das-relações-idf-por-mínimos-quadrados-generalizados-gls" id="toc-modelagem-das-relações-idf-por-mínimos-quadrados-generalizados-gls" class="nav-link" data-scroll-target="#modelagem-das-relações-idf-por-mínimos-quadrados-generalizados-gls">Modelagem das relações IDF por mínimos quadrados generalizados (GLS)</a></li>
+  <li><a href="#modelagem-semi-bayesiana-com-informação-a-priori-sobre-o-parâmetro-de-forma-e-invariância-de-escala" id="toc-modelagem-semi-bayesiana-com-informação-a-priori-sobre-o-parâmetro-de-forma-e-invariância-de-escala" class="nav-link" data-scroll-target="#modelagem-semi-bayesiana-com-informação-a-priori-sobre-o-parâmetro-de-forma-e-invariância-de-escala">Modelagem semi-bayesiana com informação <em>a priori</em> sobre o parâmetro de forma e invariância de escala</a></li>
   <li><a href="#modelos-hierárquicos-bayesianos-bhm" id="toc-modelos-hierárquicos-bayesianos-bhm" class="nav-link" data-scroll-target="#modelos-hierárquicos-bayesianos-bhm">Modelos hierárquicos bayesianos (BHM)</a></li>
   <li><a href="#modelos-bayesianos-espaciais-baseados-em-processos-max-stable" id="toc-modelos-bayesianos-espaciais-baseados-em-processos-max-stable" class="nav-link" data-scroll-target="#modelos-bayesianos-espaciais-baseados-em-processos-max-stable">Modelos bayesianos espaciais baseados em processos <em>max-stable</em></a></li>
   </ul></li>
@@ -301,7 +301,7 @@ window.Quarto = {
 </header>
 
 
-<p>Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries subdiárias de precipitação, previamente organizadas e descritas na Meta 3. Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas. Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação <!-- Melhorar aqui a descrição Tomas -->. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos <em>max-stable</em>, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados.</p>
+<p>Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries <!--subdiárias--> de precipitação, previamente organizadas e descritas na Meta 3. <!--Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas. Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos *max-stable*, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados-->.</p>
 <section id="preparação-das-séries-de-precipitação-e-construção-dos-máximos-anuais" class="level2">
 <h2 class="anchored" data-anchor-id="preparação-das-séries-de-precipitação-e-construção-dos-máximos-anuais">Preparação das séries de precipitação e construção dos máximos anuais</h2>
 <p>Nesta etapa, foram definidos os anos hidrológicos das estações e construídas as séries de intensidades máximas anuais (AMAX), utilizadas posteriormente nos ajustes das relações intensidade–duração–frequência (IDF). A preparação compreendeu a análise da sazonalidade dos extremos em séries diárias, a transferência espacial do mês inicial do ano hidrológico às estações subdiárias e a agregação temporal dos registros para obtenção dos máximos anuais.</p>
@@ -399,72 +399,163 @@ E[I_d^q] = \left(\frac{d}{D}\right)^{-qH}E[I_D^q].
 </section>
 <section id="incorporação-de-informações-regionais-na-modelagem-das-relações-idf" class="level2">
 <h2 class="anchored" data-anchor-id="incorporação-de-informações-regionais-na-modelagem-das-relações-idf">Incorporação de informações regionais na modelagem das relações IDF</h2>
-<p>A incorporação de informações regionais foi investigada por meio de três abordagens estatísticas distintas: mínimos quadrados generalizados (GLS), modelos hierárquicos bayesianos (BHM) e modelos bayesianos espaciais baseados em processos <em>max-stable</em>. Essas metodologias apresentam diferentes estratégias para aproveitar informações de múltiplas estações, representar a variabilidade regional das precipitações extremas e contribuir para a estimativa e regionalização das relações IDF.</p>
-<section id="modelagem-das-relações-idf-por-mínimos-quadrados-generalizados-gls" class="level3">
-<h3 class="anchored" data-anchor-id="modelagem-das-relações-idf-por-mínimos-quadrados-generalizados-gls">Modelagem das relações IDF por mínimos quadrados generalizados (GLS)</h3>
-<!-- Melhorar aqui a descrição Tomas -->
+<p>A incorporação de informações regionais foi investigada por meio de três abordagens estatísticas distintas: um modelo semi-bayesiano que e considera informação <em>a priori</em> regional a partir de um modelo de mínimos quadrados generalizados e invariância de escala; modelos hierárquicos bayesianos (BHM); e modelos bayesianos espaciais baseados em processos <em>max-stable</em>. Essas metodologias apresentam diferentes estratégias para aproveitar informações de múltiplas estações, representar a variabilidade regional das precipitações extremas e contribuir para a estimativa e regionalização das relações IDF.</p>
+<p>Para o desenvolvimento desses modelos, todas as abordagens consideraram como base a distribuição Generalizada de Valores Extremos (GEV), cuja função de probabilidade acumulada para uma variável aleatória <span class="math inline">\(X\)</span> é expressa como <span id="eq-gev-cdf"><span class="math display">\[
+F_X(x|\mu,\sigma,\xi) = \begin{cases}
+\exp\left\{-\left[1 + \xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}, &amp; \quad \xi \neq 0, \\
+\exp\left[-\exp\left(-\frac{x-\mu}{\sigma}\right)\right], &amp; \quad \xi = 0,
+\end{cases}
+\tag{13}\]</span></span> e cujos quantis são dados por <span id="eq-gev-quantil"><span class="math display">\[
+x_T = \begin{cases}
+\mu + \frac{\sigma}{\xi}\left\{ 1 - \left[-\ln\left(1 - \frac{1}{T}\right)\right]^{-\xi} \right\}, &amp; \quad \xi \neq0, \\
+\mu - \sigma\ln\left[-\ln\left(1 - \frac{1}{T}\right)\right], &amp; \quad \xi= 0.
+\end{cases}
+\tag{14}\]</span></span></p>
+<section id="modelagem-semi-bayesiana-com-informação-a-priori-sobre-o-parâmetro-de-forma-e-invariância-de-escala" class="level3">
+<h3 class="anchored" data-anchor-id="modelagem-semi-bayesiana-com-informação-a-priori-sobre-o-parâmetro-de-forma-e-invariância-de-escala">Modelagem semi-bayesiana com informação <em>a priori</em> sobre o parâmetro de forma e invariância de escala</h3>
+<section id="distribuição-gev-invariante-na-escala" class="level4">
+<h4 class="anchored" data-anchor-id="distribuição-gev-invariante-na-escala">Distribuição GEV invariante na escala</h4>
+<p>O primeiro modelo avaliado nesse relatório foi uma reparametrização da distribuição GEV apresentada na <a href="#eq-gev-cdf" class="quarto-xref">Equação&nbsp;13</a>. O modelo segue a relação geral proposta por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span> na <a href="#eq-idf-koutsoyiannis" class="quarto-xref">Equação&nbsp;9</a>. Se a variável aleatória <span class="math inline">\(I_d \sim GEV(\mu_d, \sigma_d, \xi_d)\)</span>, segue então que uma variável aleatória <span class="math inline">\(Y = I_d(d + \theta)^{-H}\)</span> também segue uma distribuição GEV, porém com parâmetros que independem da escala de tempo (duração) utilizada <span class="math inline">\(d\)</span>: <span class="math inline">\(Y \sim GEV(\mu_0, \sigma_0, \xi_0)\)</span>, com <span class="math inline">\(\theta \ge 0\)</span> e <span class="math inline">\(0&lt;H&lt;1\)</span>.</p>
+<p>A com a reparametrização, a distribuição de <span class="math inline">\(Y\)</span> pode ser reescrita com <span class="math inline">\(\tilde\mu = \mu_d/\sigma_d\)</span>, <span class="math inline">\(\sigma_0 = \sigma_d(d + \theta)^H\)</span> e <span class="math inline">\(\xi_d = \xi\)</span> resultando em uma expressão dependente na duração da distribuição GEV (<em>duration-dependent</em> GEV, d-GEV) pode ser definida como: <span id="eq-dgev"><span class="math display">\[
+F_{I_d}(i_d|\tilde\mu, \sigma_0, \xi) = \exp\left\{-\left[1 + \xi\left(\frac{i_d}{\sigma_0(d + \theta)^{-H}} - \tilde\mu\right)\right]^{-1/\xi}\right\}.
+\tag{15}\]</span></span></p>
+<p>Destaca-se que na <a href="#eq-dgev" class="quarto-xref">Equação&nbsp;15</a>, tanto <span class="math inline">\(\tilde\mu\)</span> como <span class="math inline">\(\xi\)</span> não dependem da duração.</p>
+<p>Nessa primeira abordagem, o ajuste do modelo acima se deu com o estimador de máxima verossimilhança generalizada (GMLE) <span class="citation" data-cites="martins2000">(<a href="#ref-martins2000" role="doc-biblioref">Martins e Stedinger 2000</a>)</span>. Utilizando a expressão de log-verossimilhança <span class="math inline">\(\ell\)</span> da função densidade <span class="math inline">\(f_{I_d}\)</span>, a função objetivo se torna <span id="eq-log-verossimilhanca-dgev"><span class="math display">\[
+\ell(\tilde\mu,\sigma_0,\xi,\theta,H|i_d) = \ln\left[\prod_{i=1}^N\prod_{d}^D f_{I_d}(i_{d,i}|\tilde\mu, \sigma_0, \xi, \theta, H)\right] + \ln[\pi(\xi|p,q)],
+\tag{16}\]</span></span> em que <span class="math inline">\(\pi(\xi|p,q)\)</span> representa uma distribuição <em>a priori</em> sobre o parâmetro de forma.</p>
+<p>A maximização da <a href="#eq-log-verossimilhanca-dgev" class="quarto-xref">Equação&nbsp;16</a> se deu por meio da função <code>optim()</code> disponível para linguagem de programação R <span class="citation" data-cites="rcoreteam2026">(<a href="#ref-rcoreteam2026" role="doc-biblioref">R Core Team 2026</a>)</span> sobre o conjunto de estações do BR-SDR no estado do Rio Grande do Sul. No total, 54 postos foram selecionados com pelo menos 8 anos de dados e no máximo 20% de falhas anuais. Optou-se por manter o mesmo número de durações para todas as estações, restringindo a faixa de ajuste em <span class="math inline">\(d \in [1, 24]\)</span> horas.</p>
+<p>O ajuste considerou diferentes níveis de conhecimento <em>a priori</em>. O primeiro consistiu na maximização da <a href="#eq-log-verossimilhanca-dgev" class="quarto-xref">Equação&nbsp;16</a>, desconsiderando qualquer tipo de conhecimento prévio acerca de <span class="math inline">\(\xi\)</span> — chamado MLE. O segundo empregou a distribuição <em>a priori</em> proposta por <span class="citation" data-cites="martins2000">Martins e Stedinger (<a href="#ref-martins2000" role="doc-biblioref">2000</a>)</span>, com uma distribuição Beta deslocada entre -0,50 e +0,50 com média igual a 0,10 (atribuindo um comportamento médio de cauda pesada) e variância igual a 0,122² — chamada GMLE. A terceira e última avaliou uma abordagem que é comum em estudos de cheias, utilizando um modelo de regressão linear para construir uma distribuição <em>a priori</em> regional para <span class="math inline">\(\xi\)</span> a partir de observações na escala diária — chamada RGMLE. Essa última será descrita na Seção <a href="#sec-metodologia-gls" class="quarto-xref">Seção&nbsp;3.1.2</a>.</p>
+<p>Esta reparametrização é interessante, uma vez que elimina a necessidade de ajustes distintos para cada série de <span class="math inline">\(i_d\)</span> e possibilida um ajuste único, combinando informação em diferentes escalas no ajuste de apenas cinco parâmetros. E, uma vez estimados <span class="math inline">\(\hat{\tilde\mu}, \hat\sigma_0, \hat\xi, \hat H\)</span> e <span class="math inline">\(\hat\theta\)</span>, é possível a expressão final da relação IDF é simplesmente a expressão quantílica do modelo da <a href="#eq-dgev" class="quarto-xref">Equação&nbsp;15</a>. Para um tempo de retorno <span class="math inline">\(T\)</span> e duração <span class="math inline">\(d\)</span>, o quantil será, para cada estação <span class="math inline">\(j\)</span>, <span class="math display">\[
+q_{d,T,j} = \frac{\tilde\mu_j\sigma_{0j}}{(d + \theta_j)^{H_j}} + \frac{\sigma_{0j}}{\xi_j(d + \theta_j)^{H_j}}\left\{1 - \left[\ln\left(1 - \frac{1}{T}\right)\right]^{-\xi_j}\right\}.
+\]</span></p>
+</section>
+<section id="sec-metodologia-gls" class="level4">
+<h4 class="anchored" data-anchor-id="sec-metodologia-gls">Modelo de regressão de mínimos quadrados generalizados para o parâmetro de forma da GEV</h4>
+<p>Existe grande incerteza no ajuste de distribuições de probabilidade, especialmente quando esse ajuste é feito em cenários de séries curtas. Isso se torna ainda mais relevante para o ajuste de modelos probabilísticos utilizando séries históricas de pluviógrafos. Nesse contexto, uma das abordagens exploradas no Rio Grande do Sul foi a incorporação de informação regional, mas restringindo-se à estimação do parâmetro de forma <span class="math inline">\(\xi\)</span> da distribuição GEV. Para tal, foi construído um modelo de regressão linear de mínimos quadrados generalizados (GLS) com o objetivo de reunir informação regional sobre <span class="math inline">\(\xi\)</span> que possa ser utilizada como conhecimento <em>a priori</em> na aplicação semi-Bayesiana do estimador de máxima verossimilhança generalizada.</p>
+<p>Modelos desse tipo como o GLS se preocupam em representar, por meio de uma estrutura linear, a relação entre uma variável dependente — nesse caso o parâmetro de forma <span class="math inline">\(\xi\)</span> — e variáveis independentes — também chamadas preditoras, as quais ajudam a explicar o comportamento da variável dependente na região de estudo <span class="citation" data-cites="reis2020">(<a href="#ref-reis2020" role="doc-biblioref">Reis et al. 2020</a>)</span>.</p>
+<p>Nessa avaliação, considerou-se previamente a hipótese de que existe um parâmetro de forma único local, constante ao longo de uma faixa de durações, abordagem comum na literatura <span class="citation" data-cites="lima2018 duarte2025">(<a href="#ref-lima2018" role="doc-biblioref">Carlos H. R. Lima, Kwon, e Kim 2018</a>; <a href="#ref-duarte2025" role="doc-biblioref">Luíza Virgínia Duarte et al. 2025</a>)</span>. A partir dessa premissa, é possível então utilizar informações sobre precipitação na escala diária, a partir de séries históricas de postos pluviométricos (mais longas e em maior quantidade), para construir o modelo GLS. No Rio Grande do Sul, isso foi feito a partir de um conjunto de 182 postos de <span class="citation" data-cites="almeida2025">Das Neves Almeida et al. (<a href="#ref-almeida2025" role="doc-biblioref">2025</a>)</span>.</p>
+<section id="construção-do-modelo-gls" class="level5">
+<h5 class="anchored" data-anchor-id="construção-do-modelo-gls">Construção do modelo GLS</h5>
+<p>Em forma matricial, o modelo proposto possui a seguinte formulação:</p>
+<p><span id="eq-gls"><span class="math display">\[
+\hat\xi= X\beta + \varepsilon.
+\tag{17}\]</span></span></p>
+<p>Na <a href="#eq-gls" class="quarto-xref">Equação&nbsp;17</a>, <span class="math inline">\(\hat\xi\)</span> é um vetor com estimativas prévias do parâmetro para cada estação <span class="math inline">\(j\)</span>, com <span class="math inline">\(j = 1, 2,\cdots, m\)</span>; <span class="math inline">\(\beta\)</span> é um vetor de tamanho <span class="math inline">\(p + 1\)</span> de parâmetros do modelo GLS; <span class="math inline">\(X\)</span> é uma matriz com <span class="math inline">\(m\)</span> linhas e <span class="math inline">\((p + 1)\)</span> colunas, contendo valores das variáveis preditoras para cada estação <span class="math inline">\(j\)</span>, sendo a primeira coluna preenchida com 1 (referente ao parâmetro constante <span class="math inline">\(\beta_0\)</span>); e <span class="math inline">\(\varepsilon\)</span> é um vetor de tamanho <span class="math inline">\(m\)</span> representando o erro total do modelo <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre, Junior, e Martins 2008</a>)</span>.</p>
+<p>O erro total, por sua vez, é subdividido em duas parcelas: uma inerente à falta de aderência do modelo aos dados (erro de ajuste), <span class="math inline">\(\delta\)</span>; e uma segunda relacionada ao erro amostral nas estimativas da variável de interesse, <span class="math inline">\(\eta\)</span>. Assume-se que esse erro possui esperança <span class="math inline">\(E[\varepsilon] = 0\)</span> e covariância <span class="math inline">\(E[\varepsilon\varepsilon^T] = \Lambda(\sigma_\delta^2)\)</span>. Em notação matricial, essa covariância é definida como a soma entre as variâncias das duas parcelas <span class="math inline">\(\delta\)</span> e <span class="math inline">\(\eta\)</span> do erro total, representada como <span id="eq-lambda"><span class="math display">\[
+\Lambda(\sigma_\delta^2) = \sigma_\delta^2 I_m + \Sigma(\hat\xi),
+\tag{18}\]</span></span> sendo <span class="math inline">\(I_m\)</span> uma matriz identidade <span class="math inline">\(m\times m\)</span>. A estrutura dessa matriz de covariância, entre duas estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span> é formada de elementos na diagonal principal (<span class="math inline">\(j = h\)</span>) e pelos demais elementos (<span class="math inline">\(j \neq j\)</span>): <span id="eq-matriz-cov"><span class="math display">\[
+\mathrm{Cov}\{\varepsilon_j,\varepsilon_h\} =
+  \begin{cases}
+    \sigma_\delta^2 + \sigma_{\eta_j}^2, &amp; \quad j = h, \\
+    \sigma_{\eta_j}\sigma_{\eta_h}\rho(\hat\xi_j,\hat\xi_h), &amp; \quad j\neq h.
+  \end{cases}
+\tag{19}\]</span></span></p>
+<p>Os elementos dessa matriz possuem certas particularidades. A variância do erro amostral <span class="math inline">\(\sigma_{\eta_j}^2\)</span> na estimativa de <span class="math inline">\(\xi\)</span> deve ser efetuada de forma independente da estimativa do parâmetro em si. Como particularidade da regressão GLS, deve também ser fatorada a correlação cruzada existente nas estimativas de <span class="math inline">\(\xi\)</span> entre estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span>.</p>
+<p>A estimativa aproximadamente independente de <span class="math inline">\(\sigma_{\eta_j}^2\)</span> foi obtida com o procedimentos propostos por <span class="citation" data-cites="fill1994">Fill (<a href="#ref-fill1994" role="doc-biblioref">1994</a>)</span> e <span class="citation" data-cites="chowdhury1991">Chowdhury, Stedinger, e Lu (<a href="#ref-chowdhury1991" role="doc-biblioref">1991</a>)</span>, em que a variância de <span class="math inline">\(\hat\xi\)</span> é estimada a partir da variância da L-assimetria (<span class="math inline">\(\tau_3\)</span>): <span id="eq-var-xi"><span class="math display">\[
+\mathrm{Var}[\hat\xi_j] = \frac{\bar N}{N_j}\left(\frac{\partial\xi}{\partial\tau_3}  \right)^2 \mathrm{Var}[\hat\tau_3|\bar\xi,\bar N],
+\tag{20}\]</span></span> em que <span class="math inline">\(\bar N\)</span> é o número médio de observações na região; <span class="math inline">\(N_j\)</span> é o número de observações (anos) na estação <span class="math inline">\(j\)</span>; e <span class="math inline">\(\bar\xi\)</span> é o parâmetro de forma médio na região.</p>
+<p>A correlação <span class="math inline">\(\rho(\hat\xi_j,\hat\xi_h)\)</span>, por sua vez, requer um modelo de suavização. <span class="citation" data-cites="martins2002">Martins e Stedinger (<a href="#ref-martins2002" role="doc-biblioref">2002</a>)</span> descrevem essa correlação cruzada como uma função da correlação entre séries simultâneas entre estações <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span> (<span class="math inline">\(\rho_{jh}\)</span>) como sendo</p>
+<p><span id="eq-correlacao-cruzada-xi"><span class="math display">\[
+\hat\rho(\hat\xi_j,\hat\xi_h) = \mathrm{sign}(\hat\rho_{jh}) cf_{jh} |\rho_{jh}|^\Delta.
+\tag{21}\]</span></span></p>
+<p>O expoente <span class="math inline">\(\Delta\)</span> é função do parâmetro de forma conforme a Tabela 3 apresentada por <span class="citation" data-cites="martins2002">Martins e Stedinger (<a href="#ref-martins2002" role="doc-biblioref">2002</a>)</span>; e <span class="math inline">\(cf_{jh}\)</span> é um fator de correção pelo tamanho das séries definido como <span class="math inline">\(cf_{jh} = N_{jh}/\sqrt{N_jN_h}\)</span> (com <span class="math inline">\(N_{jh}\)</span> sendo o número de anos em comum nas séries de <span class="math inline">\(j\)</span> e <span class="math inline">\(h\)</span>).</p>
+<p>A correlação <span class="math inline">\(\rho_{jh}\)</span> foi estimada em função da distância <span class="math inline">\(s_{jh}\)</span> entre as estações e da correção estimada entre as séries <span class="math inline">\(r_{jh}\)</span>, seguindo o procedimento do Serviço Geológico dos Estados Unidos <span class="citation" data-cites="feaster2023">(<a href="#ref-feaster2023" role="doc-biblioref">Feaster et al. 2023</a>)</span>. Nele, <span class="math inline">\(r_{jh}\)</span> é transformada em uma variável Z de Fisher: <span class="math inline">\(Z_{jh} = \ln[(1 + r_{jh})/(1 - r_{jh})]\)</span>. Um modelo exponencial é então ajustado entre <span class="math inline">\(Z_{jh}\)</span> e a distância <span class="math inline">\(s_{jh}\)</span> <span id="eq-z-fisher"><span class="math display">\[
+Z_ij = \exp\left[ a - b\left( \frac{s_{jh}^c - 1}{c} \right) \right],
+\tag{22}\]</span></span> permitindo, finalmente, que a correlação cruzada <span class="math inline">\(\rho_{jh}\)</span> seja estimada como <span class="math display">\[
+\hat\rho_{jh} = \frac{\exp(2Z_{jh}) - 1}{\exp(2Z_jh) + 1}.
+\]</span></p>
+<p>Finalmente, determinados os elementos de <span class="math inline">\(\Lambda(\sigma_\delta^2)\)</span>, a obtenção dos parâmetros <span class="math inline">\(\hat\beta\)</span> do modelo linear e sua covariância, além da variância do erro do modelo <span class="math inline">\(\sigma_\delta^2\)</span> se dá através dos estimadores descritos por <span class="citation" data-cites="stedinger1985">Stedinger e Tasker (<a href="#ref-stedinger1985" role="doc-biblioref">1985</a>)</span> como</p>
+<p><span id="eq-beta-gls"><span class="math display">\[
+\hat\beta = [X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}\hat\xi
+\tag{23}\]</span></span></p>
+<p>com matriz de covariância determinada por</p>
+<p><span id="eq-cov-beta-gls"><span class="math display">\[
+\Sigma[\hat\beta]=[X^T\Lambda(\sigma_\delta^2)X]^{-1}
+\tag{24}\]</span></span> na solução iterativa com método dos momentos entre <a href="#eq-beta-gls" class="quarto-xref">Equação&nbsp;23</a> e a equação do resíduo do erro quadrático médio <span id="eq-res-gls"><span class="math display">\[
+(\hat\xi - X\hat\beta)^T[\sigma_\delta^2I_m + \Sigma(\hat\xi)]^{-1}(\hat\xi - X\hat\beta) = m - (p+1).
+\tag{25}\]</span></span></p>
+</section>
+<section id="distribuição-a-priori-regional" class="level5">
+<h5 class="anchored" data-anchor-id="distribuição-a-priori-regional">Distribuição <em>a priori</em> regional</h5>
+<p>Finalmente, de posse das estimativas <span class="math inline">\(\hat\beta\)</span> do modelo GLS e sua covariância, estimou-se uma média e variância do parâmetro de forma regionais como sendo <span id="eq-media-var-xi-gls"><span class="math display">\[
+\hat\mu_{\xi_j} = x_j\hat\beta \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \hat\sigma_\delta^2 + x_j\Sigma[\hat\beta]x_j^T,
+\tag{26}\]</span></span> em que <span class="math inline">\(x_j\)</span> é a linha de <span class="math inline">\(X\)</span> correspondente à estação <span class="math inline">\(j\)</span>.</p>
+<p>A partir dessas estimativas, contruiu-se uma distribuição <em>a priori</em> regional <span class="math inline">\(\pi(\xi|p,q)\)</span> a partir de uma distribuição Beta deslocada, a qual limita o intervalo possível de <span class="math inline">\(\xi\)</span> entre -0,50 e +0,50 <span class="citation" data-cites="alexandre2008">(<a href="#ref-alexandre2008" role="doc-biblioref">Alexandre, Junior, e Martins 2008</a>)</span>. Nesssa distribuição, os parâmetros <span class="math inline">\(p\)</span> e <span class="math inline">\(q\)</span> são determinados diretamente a partir das estimativas obtidas pela <a href="#eq-media-var-xi-gls" class="quarto-xref">Equação&nbsp;26</a> como <span id="eq-par-priori_beta"><span class="math display">\[
+\hat\mu_{\xi_j} = \frac{p}{p + 1} - 0,50 \quad \text{e} \quad \hat\sigma_{\xi_j}^2 = \frac{pq}{(p + q + 1)(p + q)^2}.
+\tag{27}\]</span></span> Com isso, essa informação pode finalmente ser incorporada na estimativa no estimador de máxima verossimilhança generalizada, simplesmente somando o logaritmo de <span class="math inline">\(\pi(\xi|p,q)\)</span> em <span class="math inline">\(\ell\)</span>.</p>
+</section>
+<section id="avaliação-dos-modelos" class="level5">
+<h5 class="anchored" data-anchor-id="avaliação-dos-modelos">Avaliação dos modelos</h5>
+<p>Nessa aplicação, foram avaliadas nove variáveis preditoras para compor <span class="math inline">\(X\)</span>: 1) aspecto do terreno; 2) distância das estações até a costa leste brasileira; 3) elevação das estações; 4) longitude; 5) latitude; 6) média máxima anual de um dia; 7) média máxima anual de três dias; 8) temperatura média no local da estação; e 9) uma covariável binária <span class="math inline">\(Z\)</span> que subdivide o Rio Grande do Sul em duas macrorregiões: <span class="math inline">\(Z=1\)</span> quando a estação pertence à região do estado que faz parte da bacia do Rio Uruguai, e <span class="math inline">\(Z = 0\)</span> quando pertence à região combinada das regiões hidrográficas Litorânea e do Guaíba.</p>
+<p>O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos (<span class="math inline">\(AVP_{old}\)</span>, <span class="citation" data-cites="reis2020">Reis et al. (<a href="#ref-reis2020" role="doc-biblioref">2020</a>)</span>). Essa métrica considera a correlação na própria estação <span class="math inline">\(j\)</span>, além da variância do estimador: <span id="eq-avp-old"><span class="math display">\[
+AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
+2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
+\tag{28}\]</span></span> sendo <span class="math inline">\(e_j\)</span> um vetor contendo 1 na linha <span class="math inline">\(j\)</span> e 0 nas demais.</p>
+</section>
+</section>
 </section>
 <section id="modelos-hierárquicos-bayesianos-bhm" class="level3">
 <h3 class="anchored" data-anchor-id="modelos-hierárquicos-bayesianos-bhm">Modelos hierárquicos bayesianos (BHM)</h3>
-<p>Seguindo a formulação hierárquica de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação <span class="math inline">\(j\)</span>, duração <span class="math inline">\(d_k\)</span> e ano <span class="math inline">\(a\)</span>, o modelo foi especificado pelas <a href="#eq-gev-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;13</a>, <a href="#eq-mu-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;14</a>, <a href="#eq-sigma-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;15</a> e <a href="#eq-xi-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;16</a>.</p>
+<p>Seguindo a formulação hierárquica de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, a distribuição GEV foi associada a relações de invariância de escala para os parâmetros de localização e escala, enquanto o parâmetro de forma foi regularizado em torno de um valor central. Para cada estação <span class="math inline">\(j\)</span>, duração <span class="math inline">\(d\)</span> e observação <span class="math inline">\(i\)</span> de máximo anual, o modelo foi especificado pelas <a href="#eq-gev-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;29</a>, <a href="#eq-mu-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;30</a>, <a href="#eq-sigma-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;31</a> e <a href="#eq-xi-hierarquica-subdiario" class="quarto-xref">Equação&nbsp;32</a>.</p>
 <p><span id="eq-gev-hierarquica-subdiario"><span class="math display">\[
-Y_{j,k,a}\sim\operatorname{GEV}
-(\mu_{j,k},\sigma_{j,k},\xi_{j,k}).
-\tag{13}\]</span></span></p>
+Y_{j,d,i}\sim\operatorname{GEV}
+(\mu_{j,d},\sigma_{j,d},\xi_{j,d}),
+\qquad i=1,\ldots,N_{j,d}.
+\tag{29}\]</span></span></p>
 <p><span id="eq-mu-hierarquica-subdiario"><span class="math display">\[
-\log\mu_{j,k}\sim\mathcal N\left(
+\log\mu_{j,d}\sim\mathcal N\left(
 \alpha_j-H_j\log\left(
-\frac{d_k+\theta_j}{d_0+\theta_j}
+\frac{d+\theta_j}{d_0+\theta_j}
 \right),
 \tau_{\mu,j}^{2}
 \right).
-\tag{14}\]</span></span></p>
+\tag{30}\]</span></span></p>
 <p><span id="eq-sigma-hierarquica-subdiario"><span class="math display">\[
-\log\sigma_{j,k}\sim\mathcal N\left(
+\log\sigma_{j,d}\sim\mathcal N\left(
 \beta_j-H_j\log\left(
-\frac{d_k+\theta_j}{d_0+\theta_j}
+\frac{d+\theta_j}{d_0+\theta_j}
 \right),
 \tau_{\sigma,j}^{2}
 \right).
-\tag{15}\]</span></span></p>
+\tag{31}\]</span></span></p>
 <p><span id="eq-xi-hierarquica-subdiario"><span class="math display">\[
-\xi_{j,k}\mid\bar\xi_j,\tau_{\xi,j}^{2}
+\xi_{j,d}\mid\bar\xi_j,\tau_{\xi,j}^{2}
 \propto\mathcal N\left(
 \bar\xi_j,\tau_{\xi,j}^{2}
 \right),
-\qquad -0{,}5&lt;\xi_{j,k}&lt;0{,}5.
-\tag{16}\]</span></span></p>
-<p>Nessa formulação, <span class="math inline">\(Y_{j,k,a}\)</span> representa a intensidade máxima anual de precipitação (mm/h) na estação <span class="math inline">\(j\)</span>, para a duração <span class="math inline">\(d_k\)</span> e o ano <span class="math inline">\(a\)</span>, em que <span class="math inline">\(j\)</span> identifica a estação pluviométrica, <span class="math inline">\(k\)</span> a duração considerada e <span class="math inline">\(a\)</span> o ano de referência. Os parâmetros <span class="math inline">\(\mu_{j,k}\)</span>, <span class="math inline">\(\sigma_{j,k}&gt;0\)</span> e <span class="math inline">\(\xi_{j,k}\)</span> correspondem, respectivamente, à localização, à escala e à forma da distribuição GEV, enquanto <span class="math inline">\(\mathcal{N}\)</span> representa a distribuição normal, parametrizada por sua média e variância.</p>
-<p>Nas relações hierárquicas, <span class="math inline">\(d_0=24\)</span> h corresponde à duração de referência, e os parâmetros <span class="math inline">\(\alpha_j\)</span> e <span class="math inline">\(\beta_j\)</span> definem, respectivamente, os níveis centrais dos logaritmos de <span class="math inline">\(\mu_{j,k}\)</span> e <span class="math inline">\(\sigma_{j,k}\)</span> nessa duração. O expoente <span class="math inline">\(H_j\)</span> controla a variação desses parâmetros com a duração, enquanto <span class="math inline">\(\theta_j\)</span> representa o parâmetro de deslocamento temporal, responsável por flexibilizar a curvatura das relações de escala. Todas as durações foram expressas em horas, incluindo <span class="math inline">\(\theta_j\)</span>.</p>
-<p>As variâncias hierárquicas <span class="math inline">\(\tau_{\mu,j}^{2}\)</span> e <span class="math inline">\(\tau_{\sigma,j}^{2}\)</span> controlam a dispersão dos logaritmos dos parâmetros de localização e escala em torno das respectivas relações de invariância. Para o parâmetro de forma, <span class="math inline">\(\bar{\xi}_j\)</span> representa o valor central da estação, em torno do qual os parâmetros <span class="math inline">\(\xi_{j,k}\)</span> são regularizados, enquanto <span class="math inline">\(\tau_{\xi,j}^{2}\)</span> controla sua variabilidade entre durações. O símbolo <span class="math inline">\(\propto\)</span> indica a utilização de um núcleo de densidade normal, sujeito à restrição <span class="math inline">\(-0{,}5&lt;\xi_{j,k}&lt;0{,}5\)</span>, conforme a implementação adotada.</p>
+\qquad -0{,}5&lt;\xi_{j,d}&lt;0{,}5.
+\tag{32}\]</span></span></p>
+<p>Nessa formulação, <span class="math inline">\(Y_{j,d,i}\)</span> representa a intensidade máxima anual de precipitação (mm/h) na estação <span class="math inline">\(j\)</span>, para a duração <span class="math inline">\(d\)</span> e a observação <span class="math inline">\(i\)</span>, em que <span class="math inline">\(j\)</span> identifica a estação pluviométrica, <span class="math inline">\(d\)</span> a duração considerada e <span class="math inline">\(i\)</span> a observação de máximo anual. O termo <span class="math inline">\(N_{j,d}\)</span> corresponde ao comprimento da série de máximos anuais da estação <span class="math inline">\(j\)</span> para a duração <span class="math inline">\(d\)</span>. Os parâmetros <span class="math inline">\(\mu_{j,d}\)</span>, <span class="math inline">\(\sigma_{j,d}&gt;0\)</span> e <span class="math inline">\(\xi_{j,d}\)</span> correspondem, respectivamente, à localização, à escala e à forma da distribuição GEV, enquanto <span class="math inline">\(\mathcal{N}\)</span> representa a distribuição normal, parametrizada por sua média e variância.</p>
+<p>Nas relações hierárquicas, <span class="math inline">\(d_0=24\)</span> h corresponde à duração de referência, e os parâmetros <span class="math inline">\(\alpha_j\)</span> e <span class="math inline">\(\beta_j\)</span> definem, respectivamente, os níveis centrais dos logaritmos de <span class="math inline">\(\mu_{j,d}\)</span> e <span class="math inline">\(\sigma_{j,d}\)</span> nessa duração. O expoente <span class="math inline">\(H_j\)</span> controla a variação desses parâmetros com a duração, enquanto <span class="math inline">\(\theta_j\)</span> representa o parâmetro de deslocamento temporal, responsável por flexibilizar a curvatura das relações de escala. Todas as durações foram expressas em horas, incluindo <span class="math inline">\(\theta_j\)</span>.</p>
+<p>As variâncias hierárquicas <span class="math inline">\(\tau_{\mu,j}^{2}\)</span> e <span class="math inline">\(\tau_{\sigma,j}^{2}\)</span> controlam a dispersão dos logaritmos dos parâmetros de localização e escala em torno das respectivas relações de invariância. Para o parâmetro de forma, <span class="math inline">\(\bar{\xi}_j\)</span> representa o valor central da estação, em torno do qual os parâmetros <span class="math inline">\(\xi_{j,d}\)</span> são regularizados, enquanto <span class="math inline">\(\tau_{\xi,j}^{2}\)</span> controla sua variabilidade entre durações. O símbolo <span class="math inline">\(\propto\)</span> indica a utilização de um núcleo de densidade normal, sujeito à restrição <span class="math inline">\(-0{,}5&lt;\xi_{j,d}&lt;0{,}5\)</span>, conforme a implementação adotada.</p>
 <p>Essa estrutura permite relacionar os parâmetros GEV de diferentes durações por meio de distribuições hierárquicas, sem impor igualdade entre eles. As diferenças entre os modelos avaliados no Rio Grande do Sul foram estabelecidas pelas hipóteses de compartilhamento do parâmetro de forma, mantendo-se as relações de invariância de escala dos parâmetros de localização e escala.</p>
 <section id="distribuições-a-priori-e-hiperpriori" class="level4">
 <h4 class="anchored" data-anchor-id="distribuições-a-priori-e-hiperpriori">Distribuições a priori e hiperpriori</h4>
-<p>Em todas as aplicações do modelo hierárquico bayesiano, as distribuições a priori e hiperpriori foram especificadas seguindo as famílias e os valores de hiperparâmetros usados na formulação de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, adotaram-se:</p>
+<p>Em todas as aplicações do modelo hierárquico bayesiano, as distribuições a priori e hiperpriori foram especificadas seguindo as famílias e os valores de hiperparâmetros usados na formulação de <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>, adotando-se:</p>
 <p><span id="eq-priori-alpha-beta-subdiario"><span class="math display">\[
 \alpha_j,\beta_j\sim\mathcal N(0,10^6),
-\tag{17}\]</span></span></p>
+\tag{33}\]</span></span></p>
 <p><span id="eq-priori-h-subdiario"><span class="math display">\[
 H_j\sim\operatorname{Beta}(1,1),\qquad 0&lt;H_j&lt;1,
-\tag{18}\]</span></span></p>
+\tag{34}\]</span></span></p>
 <p><span id="eq-priori-theta-subdiario"><span class="math display">\[
 \theta_j\sim\operatorname{Uniforme}(0,10),
-\tag{19}\]</span></span></p>
+\tag{35}\]</span></span></p>
 <p><span id="eq-priori-xi-subdiario"><span class="math display">\[
 \bar\xi_j\sim\mathcal B(9,6,-0{,}5,0{,}5),
-\tag{20}\]</span></span></p>
+\tag{36}\]</span></span></p>
 <p><span id="eq-hiperprioris-subdiario"><span class="math display">\[
 \tau_{\mu,j}^{2},\tau_{\sigma,j}^{2},\tau_{\xi,j}^{2}
 \sim\operatorname{InvGamma}(0{,}01,0{,}01).
-\tag{21}\]</span></span></p>
+\tag{37}\]</span></span></p>
 <p>A notação <span class="math inline">\(\mathcal B(a,b,l,u)\)</span> corresponde à distribuição Beta reescalada para o intervalo <span class="math inline">\((l,u)\)</span>. Para <span class="math inline">\(\bar\xi_j\)</span>, a média a priori é <span class="math inline">\(-0{,}5+9/(9+6)=0{,}1\)</span>. Essa escolha segue a regularização de parâmetros de forma em análises de extremos hidrológicos, relacionada à proposta de <span class="citation" data-cites="martins2000">Martins e Stedinger (<a href="#ref-martins2000" role="doc-biblioref">2000</a>)</span> e à convenção de sinal da GEV adotada por <span class="citation" data-cites="lima2018">Carlos H. R. Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span>. A distribuição <span class="math inline">\(\operatorname{Beta}(1,1)\)</span> é uniforme em <span class="math inline">\((0,1)\)</span>, e as normais para <span class="math inline">\(\alpha_j\)</span> e <span class="math inline">\(\beta_j\)</span> são amplamente dispersas na escala logarítmica. As inversas-gama incidem sobre variâncias, não desvios-padrão; sua escolha não deve ser interpretada como necessariamente não informativa <span class="citation" data-cites="gelman2006">(<a href="#ref-gelman2006" role="doc-biblioref">Gelman 2006</a>)</span>.</p>
-<p>A especificação numérica segue o arcabouço de Lima et al.&nbsp;(2018), mas a <strong>estrutura de compartilhamento regional é diferente</strong>: na etapa nacional deste estudo, os hiperparâmetros <span class="math inline">\(\bar\xi_j\)</span>, <span class="math inline">\(\tau_{\mu,j}^2\)</span>, <span class="math inline">\(\tau_{\sigma,j}^2\)</span> e <span class="math inline">\(\tau_{\xi,j}^2\)</span> também são específicos por estação. Portanto, não houve <em>pooling</em> espacial, onde o compartilhamento ocorreu apenas entre durações do mesmo posto.</p>
+<p>A especificação numérica segue o arcabouço de Lima et al.&nbsp;(2018), mas a <strong>estrutura de compartilhamento regional é diferente</strong>: na etapa nacional deste estudo, os hiperparâmetros <span class="math inline">\(\bar\xi_j\)</span>, <span class="math inline">\(\tau_{\mu,j}^2\)</span>, <span class="math inline">\(\tau_{\sigma,j}^2\)</span> e <span class="math inline">\(\tau_{\xi,j}^2\)</span> também são específicos por estação. Portanto, não houve <em>pooling</em> espacial, uma vez que o compartilhamento ocorreu apenas entre durações do mesmo posto.</p>
 </section>
 <section id="inferência-posterior-e-diagnósticos" class="level4">
 <h4 class="anchored" data-anchor-id="inferência-posterior-e-diagnósticos">Inferência posterior e diagnósticos</h4>
 <!-- Talvez melhor falar disso nos resultados -->
 <p>A distribuição posterior de cada estação foi definida, proporcionalmente, pelo produto da verossimilhança GEV e das distribuições a priori e hierárquicas acima. A implementação foi desenvolvida em R com o pacote <code>rstan</code> e código probabilístico em Stan. Os parâmetros foram estimados por amostragem MCMC com o amostrador Hamiltoniano adaptativo de Stan (NUTS).</p>
-<p>Foram executadas cinco cadeias independentes, com 20.000 iterações por cadeia, descartando-se as 10.000 iniciais para aquecimento/adaptação. Aplicou-se <em>thinning</em> de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em <code>adapt_delta = 0.999</code> e <code>max_treedepth = 17</code>. Os valores iniciais de <span class="math inline">\(H\)</span>, <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\bar\xi\)</span>, <span class="math inline">\(\xi_k\)</span> e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.</p>
+<p>Foram executadas cinco cadeias independentes, com 20.000 iterações por cadeia, descartando-se as 10.000 iniciais para aquecimento/adaptação. Aplicou-se <em>thinning</em> de 50, mantendo-se nominalmente 200 amostras por cadeia e 1.000 sorteios posteriores por estação. Os controles do amostrador foram estabelecidos em <code>adapt_delta = 0.999</code> e <code>max_treedepth = 17</code>. Os valores iniciais de <span class="math inline">\(H\)</span>, <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\bar\xi\)</span>, <span class="math inline">\(\xi_d\)</span> e das variâncias hierárquicas foram definidos por sorteios aleatórios próximos de valores de referência baseados nas estatísticas das séries ou em intervalos preestabelecidos.</p>
 <p>A confiabilidade das inferências deve ser examinada por indicadores de mistura e exploração da distribuição posterior. Recomenda-se computar o diagnóstico de convergência <span class="math inline">\(\widehat R\)</span> por parâmetro, os tamanhos efetivos amostrais das regiões central e caudal (<em>bulk-ESS</em> e <em>tail-ESS</em>), as transições divergentes, os atingimentos da profundidade máxima de árvore e, quando aplicável, a eficiência energética do amostrador (<em>E-BFMI</em>). O diagnóstico <span class="math inline">\(\widehat R\)</span> compara variações entre e dentro das cadeias, enquanto os ESS sintetizam a informação efetiva disponível após considerar autocorrelação <span class="citation" data-cites="vehtari2021">(<a href="#ref-vehtari2021" role="doc-biblioref">Vehtari et al. 2021</a>)</span>. Adota-se como referência operacional conservadora <span class="math inline">\(\widehat R&lt;1{,}05\)</span>, além da inspeção de ESS e da ausência de divergências.</p>
 </section>
 <section id="estruturas-alternativas-de-xi" class="level4">
@@ -493,22 +584,22 @@ Tabela&nbsp;1: Estruturas de parametrização do parâmetro de forma (<span clas
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Local (<em>non-pooled</em>)</td>
-<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}\)</span> regularizado em torno de <span class="math inline">\(\bar\xi_j\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,d}\)</span> regularizado em torno de <span class="math inline">\(\bar\xi_j\)</span></td>
 <td style="text-align: left;">Entre durações da mesma estação</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Constante entre durações</td>
-<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi_j\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,d}=\xi_j\)</span></td>
 <td style="text-align: left;">Igualdade entre durações em cada estação</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Comum entre estações para cada duração</td>
-<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi_k\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,d}=\xi_d\)</span></td>
 <td style="text-align: left;">Igualdade entre estações para uma duração</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Globalmente comum</td>
-<td style="text-align: left;"><span class="math inline">\(\xi_{j,k}=\xi\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\xi_{j,d}=\xi\)</span></td>
 <td style="text-align: left;">Igualdade entre estações e durações</td>
 </tr>
 <tr class="odd">
@@ -525,24 +616,24 @@ Tabela&nbsp;1: Estruturas de parametrização do parâmetro de forma (<span clas
 </section>
 <section id="quantis-de-retorno-incerteza-e-curvas-idf" class="level4">
 <h4 class="anchored" data-anchor-id="quantis-de-retorno-incerteza-e-curvas-idf">Quantis de retorno, incerteza e curvas IDF</h4>
-<p>Após a estimação dos parâmetros GEV, os quantis correspondentes ao período de retorno <span class="math inline">\(T\)</span> foram obtidos para cada sorteio posterior <span class="math inline">\(s\)</span>. Para <span class="math inline">\(\xi_{j,k}^{(s)}\ne0\)</span>, utilizou-se a <a href="#eq-quantil-gev-subdiario" class="quarto-xref">Equação&nbsp;22</a>:</p>
+<p>Após a estimação dos parâmetros GEV, os quantis correspondentes ao período de retorno <span class="math inline">\(T\)</span> foram obtidos para cada sorteio posterior <span class="math inline">\(s\)</span>. Para <span class="math inline">\(\xi_{j,d}^{(s)}\ne0\)</span>, utilizou-se a <a href="#eq-quantil-gev-subdiario" class="quarto-xref">Equação&nbsp;38</a>:</p>
 <p><span id="eq-quantil-gev-subdiario"><span class="math display">\[
-q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}+
-\frac{\sigma_{j,k}^{(s)}}{\xi_{j,k}^{(s)}}
-\left\{\left[-\log\left(1-\frac1T\right)\right]^{-\xi_{j,k}^{(s)}}-1\right\}.
-\tag{22}\]</span></span></p>
-<p>No limite de Gumbel, aplicou-se a <a href="#eq-quantil-gumbel-subdiario" class="quarto-xref">Equação&nbsp;23</a>:</p>
+q_{T,j,d}^{(s)}=\mu_{j,d}^{(s)}+
+\frac{\sigma_{j,d}^{(s)}}{\xi_{j,d}^{(s)}}
+\left\{\left[-\log\left(1-\frac1T\right)\right]^{-\xi_{j,d}^{(s)}}-1\right\}.
+\tag{38}\]</span></span></p>
+<p>No limite de Gumbel, aplicou-se a <a href="#eq-quantil-gumbel-subdiario" class="quarto-xref">Equação&nbsp;39</a>:</p>
 <p><span id="eq-quantil-gumbel-subdiario"><span class="math display">\[
-q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}-
-\sigma_{j,k}^{(s)}\log\left[-\log\left(1-\frac1T\right)\right].
-\tag{23}\]</span></span></p>
-<p>Os quantis de retorno foram considerados para <span class="math inline">\(T=2\)</span>, 5, 10, 25, 50, 100 e 200 anos, conforme a análise proposta. A mediana dos valores <span class="math inline">\(q_{T,j,k}^{(s)}\)</span> representa a estimativa central, e os percentis de 2,5% e 97,5% caracterizam o intervalo de credibilidade pontual de 95%. Os quantis resultantes constituem diretamente as ordenadas das curvas IDF. Períodos de retorno longos relativamente ao comprimento das séries exigem cautela na interpretação da extrapolação <span class="citation" data-cites="coles2001">(<a href="#ref-coles2001" role="doc-biblioref">Coles 2001</a>)</span>.</p>
+q_{T,j,d}^{(s)}=\mu_{j,d}^{(s)}-
+\sigma_{j,d}^{(s)}\log\left[-\log\left(1-\frac1T\right)\right].
+\tag{39}\]</span></span></p>
+<p>Os quantis de retorno foram considerados para <span class="math inline">\(T=2\)</span>, 5, 10, 25, 50, 100 e 200 anos, conforme a análise proposta. A mediana dos valores <span class="math inline">\(q_{T,j,d}^{(s)}\)</span> representa a estimativa central, e os percentis de 2,5% e 97,5% caracterizam o intervalo de credibilidade pontual de 95%. Os quantis resultantes constituem diretamente as ordenadas das curvas IDF. Períodos de retorno longos relativamente ao comprimento das séries exigem cautela na interpretação da extrapolação <span class="citation" data-cites="coles2001">(<a href="#ref-coles2001" role="doc-biblioref">Coles 2001</a>)</span>.</p>
 </section>
 </section>
 <section id="modelos-bayesianos-espaciais-baseados-em-processos-max-stable" class="level3">
 <h3 class="anchored" data-anchor-id="modelos-bayesianos-espaciais-baseados-em-processos-max-stable">Modelos bayesianos espaciais baseados em processos <em>max-stable</em></h3>
 <p>Dentre os métodos utilizados para o estabelecimento de curvas IDF de forma espacializada, destacam-se os modelos hierárquicos bayesianos (MHB) baseados em processos <em>max-stable</em> <span class="citation" data-cites="Stephenson2016Durations">(<a href="#ref-Stephenson2016Durations" role="doc-biblioref">Stephenson, Lehmann, e Phatak 2016</a>)</span>. Esses processos derivam da teoria de valores extremos e permitem representar a distribuição conjunta das precipitações intensas observadas em diferentes locais de uma mesma região. Em comparação com a abordagem de <em>partial pooling</em> proposta por <span class="citation" data-cites="Lima2016BayesianGEV">C. H. R. Lima et al. (<a href="#ref-Lima2016BayesianGEV" role="doc-biblioref">2016</a>)</span>, apresentada anteriormente, os processos <em>max-stable</em> incorporam uma camada adicional de dependência espacial, considerando a ocorrência simultânea de eventos extremos em diferentes estações. Enquanto o <em>partial pooling</em> permite representar a variabilidade espacial dos parâmetros associados às características climáticas regionais, os processos <em>max-stable</em> também consideram a dependência espacial dos eventos em uma camada adicional do modelo hierárquico <span class="citation" data-cites="Sampaio2021Regional">(<a href="#ref-Sampaio2021Regional" role="doc-biblioref">Sampaio e Costa 2021</a>)</span>.</p>
-<p>A modelagem foi baseada na metodologia proposta por <span class="citation" data-cites="Stephenson2016Durations">Stephenson, Lehmann, e Phatak (<a href="#ref-Stephenson2016Durations" role="doc-biblioref">2016</a>)</span>, posteriormente aplicada por <span class="citation" data-cites="Duarte2025IDF">Duarte et al. (<a href="#ref-Duarte2025IDF" role="doc-biblioref">2025</a>)</span> na Região Metropolitana de Belo Horizonte, que integra os processos <em>max-stable</em> de <span class="citation" data-cites="Reich2012MaxStable">Reich e Shaby (<a href="#ref-Reich2012MaxStable" role="doc-biblioref">2012</a>)</span> às relações de invariância de escala de <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>. Foram consideradas duas configurações: um modelo sem covariáveis (MS) e outro com incorporação de covariáveis fisiográficas e pluviométricas (MS-COV), com o objetivo de avaliar sua contribuição para a estimação e regionalização das relações IDF.</p>
+<p>A modelagem foi baseada na metodologia proposta por <span class="citation" data-cites="Stephenson2016Durations">Stephenson, Lehmann, e Phatak (<a href="#ref-Stephenson2016Durations" role="doc-biblioref">2016</a>)</span>, posteriormente aplicada por <span class="citation" data-cites="Duarte2025IDF">L. V. Duarte et al. (<a href="#ref-Duarte2025IDF" role="doc-biblioref">2025</a>)</span> na Região Metropolitana de Belo Horizonte, que integra os processos <em>max-stable</em> de <span class="citation" data-cites="Reich2012MaxStable">Reich e Shaby (<a href="#ref-Reich2012MaxStable" role="doc-biblioref">2012</a>)</span> às relações de invariância de escala de <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>. Foram consideradas duas configurações: um modelo sem covariáveis (MS) e outro com incorporação de covariáveis fisiográficas e pluviométricas (MS-COV), com o objetivo de avaliar sua contribuição para a estimação e regionalização das relações IDF.</p>
 <section id="área-de-estudo-e-dados-utilizados" class="level4">
 <h4 class="anchored" data-anchor-id="área-de-estudo-e-dados-utilizados">Área de estudo e dados utilizados</h4>
 <p>O estado do Rio Grande do Sul foi selecionado como área de estudo para a aplicação das metodologias propostas, utilizando dados de precipitação do projeto UNIPLU-BR <span class="citation" data-cites="Lemos2026UNIPLUBR Almeida2025BRSDR">(<a href="#ref-Lemos2026UNIPLUBR" role="doc-biblioref">Lemos et al. 2026</a>; <a href="#ref-Almeida2025BRSDR" role="doc-biblioref">Almeida et al. 2025</a>)</span>. Complementarmente, foram incorporadas informações de 75 estações com registros sub-horários disponibilizadas pelo Serviço Geológico do Brasil. Após a aplicação dos critérios de no máximo 20% de falhas anuais e pelo menos oito anos válidos, foram selecionadas 45 dessas estações, que, somadas às 56 provenientes da UNIPLU-BR, totalizaram 101 estações utilizadas no estudo.</p>
@@ -551,7 +642,7 @@ q_{T,j,k}^{(s)}=\mu_{j,k}^{(s)}-
 </section>
 <section id="formulação-do-modelo-max-stable" class="level4">
 <h4 class="anchored" data-anchor-id="formulação-do-modelo-max-stable">Formulação do modelo <em>max-stable</em></h4>
-<p>A metodologia utilizada neste trabalho, assim como a sua formulação, está descrita em <span class="citation" data-cites="Duarte2025IDF">Duarte et al. (<a href="#ref-Duarte2025IDF" role="doc-biblioref">2025</a>)</span>, e apresenta-se aqui um resumo do processo.</p>
+<p>A metodologia utilizada neste trabalho, assim como a sua formulação, está descrita em <span class="citation" data-cites="Duarte2025IDF">L. V. Duarte et al. (<a href="#ref-Duarte2025IDF" role="doc-biblioref">2025</a>)</span>, e apresenta-se aqui um resumo do processo.</p>
 <p>Utilizou-se a distribuição Generalizada de Valores Extremos (GEV) para representar os máximos de precipitações anuais de cada estação, com as diferentes durações reunidas em uma mesma estrutura IDF, considerando válido o princípio da invariância de escala proposto por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>, conforme descrito e analisado no item X deste relatório. Assim, além dos parâmetros associados à distribuição GEV (posição, escala e forma), foram estimados o expoente de escala e o parâmetro de correção das durações.</p>
 <p>O Modelo Hierárquico Bayesiano foi organizado em 3 níveis:</p>
 <p>- Nível de dados, que descreve os máximos anuais (<em>block-maxima</em>) e, nos modelos <em>max-stable</em>, sua dependência espacial.</p>
@@ -657,15 +748,45 @@ Tabela&nbsp;2: Configuração dos parâmetros de entrada utilizada nos modelos M
 </section>
 <section id="estimativa-dos-parâmetros-em-locais-não-monitorados" class="level4">
 <h4 class="anchored" data-anchor-id="estimativa-dos-parâmetros-em-locais-não-monitorados">Estimativa dos parâmetros em locais não monitorados</h4>
-<p>A transferência das informações para locais onde não há monitoramento foi realizada por meio da derivação das distribuições condicionais dos erros de regressão de cada parâmetro da GEV para toda a área de estudo. Através dos semivariogramas, as covariâncias são utilizadas para estimar os efeitos residuais nos locais não monitorados, somando-se esses efeitos aos valores médios dos parâmetros, ou aos resultados das regressões, no caso dos modelos que utilizam covariáveis. De forma resumida, considera-se que o valor de determinado parâmetro em um ponto não monitorado é obtido através da soma do valor médio (ou do resultado da regressão), somado a um ajuste residual para aquele ponto <a href="#eq-1" class="quarto-xref">Equação&nbsp;24</a>. Esse resíduo, por sua vez, é representado por uma distribuição normal <a href="#eq-2" class="quarto-xref">Equação&nbsp;25</a>, com a média calculada pela <a href="#eq-3" class="quarto-xref">Equação&nbsp;26</a>, e a variância calculada pela <a href="#eq-4" class="quarto-xref">Equação&nbsp;27</a>.</p>
-<p><span id="eq-1"><span class="math display">\[ g_{\chi}\{\chi(\hat{s})\} = X_{\chi}(\hat{s})\beta_{\chi} + \varepsilon_{\chi}(\hat{s}).  \tag{24}\]</span></span></p>
-<p><span id="eq-2"><span class="math display">\[ p\left( \varepsilon_{\chi}(\hat{s}) \mid \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N), \boldsymbol{y}, \boldsymbol{x}_{\chi}, \boldsymbol{\phi}_{\chi} \right) = N\left( \mu_{\chi,\mathrm{conditional}}, \sigma_{\chi,\mathrm{conditional}}^{2} \right).  \tag{25}\]</span></span></p>
+<p>A transferência das informações para locais onde não há monitoramento foi realizada por meio da derivação das distribuições condicionais dos erros de regressão de cada parâmetro da GEV para toda a área de estudo. Através dos semivariogramas, as covariâncias são utilizadas para estimar os efeitos residuais nos locais não monitorados, somando-se esses efeitos aos valores médios dos parâmetros, ou aos resultados das regressões, no caso dos modelos que utilizam covariáveis. De forma resumida, considera-se que o valor de determinado parâmetro em um ponto não monitorado é obtido através da soma do valor médio (ou do resultado da regressão), somado a um ajuste residual para aquele ponto <a href="#eq-1" class="quarto-xref">Equação&nbsp;40</a>. Esse resíduo, por sua vez, é representado por uma distribuição normal <a href="#eq-2" class="quarto-xref">Equação&nbsp;41</a>, com a média calculada pela <a href="#eq-3" class="quarto-xref">Equação&nbsp;42</a>, e a variância calculada pela <a href="#eq-4" class="quarto-xref">Equação&nbsp;43</a>.</p>
+<p><span id="eq-1"><span class="math display">\[
+g_{\chi}\{\chi(\mathbf{s}_0)\}
+=
+X_{\chi}(\mathbf{s}_0)\boldsymbol{\beta}_{\chi}
++
+\varepsilon_{\chi}(\mathbf{s}_0).
+\tag{40}\]</span></span></p>
+<p><span id="eq-2"><span class="math display">\[
+p\left(
+\varepsilon_{\chi}(\hat{s})
+\mid
+\varepsilon_{\chi}(s_1),\ldots,\varepsilon_{\chi}(s_m),
+\boldsymbol{y},\boldsymbol{x}_{\chi},\boldsymbol{\phi}_{\chi}
+\right)
+=
+\mathcal N\left(
+\mu_{\chi,\mathrm{conditional}},
+\sigma_{\chi,\mathrm{conditional}}^{2}
+\right).
+\tag{41}\]</span></span></p>
 <p><span id="eq-3"><span class="math display">\[
-\mu_{\chi,\mathrm{conditional}} = \Lambda_{\chi}\Sigma_{\chi}^{-1} \left( \varepsilon_{\chi}(s_1), \ldots, \varepsilon_{\chi}(s_N) \right)^{T}  \tag{26}\]</span></span></p>
+\mu_{\chi,\mathrm{conditional}}
+=
+\Lambda_{\chi}\Sigma_{\chi}^{-1}
+\left(
+\varepsilon_{\chi}(s_1),\ldots,
+\varepsilon_{\chi}(s_m)
+\right)^{T}.
+\tag{42}\]</span></span></p>
 <p><span id="eq-4"><span class="math display">\[
-\sigma_{\chi,\mathrm{conditional}}^{2} = \delta_{\chi}^{2} - \Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T}
-\tag{27}\]</span></span></p>
-<p>A <a href="#eq-3" class="quarto-xref">Equação&nbsp;26</a> descreve a média do efeito residual no local da estimativa, considerando que os pesos utilizados para combinar os resíduos variam em função dos valores de covariância entre cada estação de dados e o local não monitorado. A <a href="#eq-4" class="quarto-xref">Equação&nbsp;27</a> apresenta a variância do efeito residual no local não monitorado, que considera a diferença entre a variância marginal do campo residual (incerteza antes de considerar as estações) e a redução dessa variância proporcionada pelas estações disponíveis.</p>
+\sigma_{\chi,\mathrm{conditional}}^{2}
+=
+\delta_{\chi}^{2}
+-
+\Lambda_{\chi}\Sigma_{\chi}^{-1}\Lambda_{\chi}^{T}.
+\tag{43}\]</span></span></p>
+<p>Nas <a href="#eq-1" class="quarto-xref">Equação&nbsp;40</a>, <a href="#eq-2" class="quarto-xref">Equação&nbsp;41</a>, <a href="#eq-3" class="quarto-xref">Equação&nbsp;42</a> e <a href="#eq-4" class="quarto-xref">Equação&nbsp;43</a>, <span class="math inline">\(\chi\)</span> representa o parâmetro da relação IDF a ser estimado, <span class="math inline">\(g_{\chi}\)</span> sua função de ligação, <span class="math inline">\(\hat{s}\)</span> o local não monitorado e <span class="math inline">\(s_j\)</span> e <span class="math inline">\(s_h\)</span> as localizações das estações observadas, com <span class="math inline">\(j,h=1,\ldots,m\)</span>, sendo <span class="math inline">\(m\)</span> o número de estações. Os termos <span class="math inline">\(X_{\chi}(\hat{s})\)</span> e <span class="math inline">\(\beta_{\chi}\)</span> representam, respectivamente, o vetor de covariáveis no local de estimativa e seus coeficientes de regressão, enquanto <span class="math inline">\(\varepsilon_{\chi}(s)\)</span> corresponde ao efeito residual espacial. Na distribuição condicional, <span class="math inline">\(\boldsymbol{y}\)</span> representa os dados observados, <span class="math inline">\(\boldsymbol{x}_{\chi}\)</span> as covariáveis consideradas e <span class="math inline">\(\boldsymbol{\phi}_{\chi}\)</span> os parâmetros da estrutura espacial. Por sua vez, <span class="math inline">\(\mu_{\chi,\mathrm{conditional}}\)</span> e <span class="math inline">\(\sigma_{\chi,\mathrm{conditional}}^{2}\)</span> são a média e a variância condicionais, calculadas a partir da matriz de covariância entre estações <span class="math inline">\(\Sigma_{\chi}\)</span>, do vetor de covariâncias entre estas e o local não monitorado <span class="math inline">\(\Lambda_{\chi}\)</span> e da variância marginal do campo residual <span class="math inline">\(\delta_{\chi}^{2}\)</span>. Os sobrescritos <span class="math inline">\(-1\)</span> e <span class="math inline">\(T\)</span> indicam, respectivamente, a inversa matricial e a transposição.</p>
+<p>A <a href="#eq-3" class="quarto-xref">Equação&nbsp;42</a> descreve a média do efeito residual no local da estimativa, considerando que os pesos utilizados para combinar os resíduos variam em função dos valores de covariância entre cada estação de dados e o local não monitorado. A <a href="#eq-4" class="quarto-xref">Equação&nbsp;43</a> apresenta a variância do efeito residual no local não monitorado, que considera a diferença entre a variância marginal do campo residual (incerteza antes de considerar as estações) e a redução dessa variância proporcionada pelas estações disponíveis.</p>
 <p>A avaliação dos modelos MS e MS-COV foi realizada a partir das estações reservadas para validação, comparando-se as intensidades de precipitação estimadas com os respectivos valores observados. Foram utilizadas as métricas de raiz do erro quadrático médio (RMSE), erro absoluto médio (MAE), viés percentual (PBIAS), coeficiente de correlação (<span class="math inline">\(r\)</span>), eficiência de Nash–Sutcliffe (NSE) e eficiência de Kling–Gupta (KGE), conforme as formulações apresentadas anteriormente neste relatório.</p>
 
 
@@ -678,11 +799,17 @@ Tabela&nbsp;2: Configuração dos parâmetros de entrada utilizada nos modelos M
 <div id="ref-anaUFMG2025" class="csl-entry" role="listitem">
 Agência Nacional de Águas e Saneamento Básico, e Universidade Federal de Minas Gerais. 2025. <span>«Regionalização de vazões máximas diárias anuais do Estado do Rio Grande do Sul: relatório final»</span>. Belo Horizonte: ANA e UFMG.
 </div>
+<div id="ref-alexandre2008" class="csl-entry" role="listitem">
+Alexandre, Allan, Dirceu Junior, e Eduardo Martins. 2008. <span>«Uso de Informação Regional na Estimativa de Quantis de Cheia GEV»</span>. <em>Revista Brasileira de Recursos Hídricos</em> 13 (2): 127–39. <a href="https://doi.org/10.21168/rbrh.v13n2.p127-139">https://doi.org/10.21168/rbrh.v13n2.p127-139</a>.
+</div>
 <div id="ref-Almeida2025BRSDR" class="csl-entry" role="listitem">
 Almeida, Cristiano das Neves et al. 2025. <span>«The design of the <span>Brazilian Sub-Daily Rainfall</span> dataset (<span>BR-SDR</span>): two decades of high-time-resolution data in <span>Brazil</span>»</span>. <em>Hydrological Sciences Journal</em> 70 (11): 1850–62. <a href="https://doi.org/10.1080/02626667.2025.2506193">https://doi.org/10.1080/02626667.2025.2506193</a>.
 </div>
 <div id="ref-bayliss1993" class="csl-entry" role="listitem">
 Bayliss, A. C., e R. C. Jones. 1993. <span>«Peaks-Over-Threshold Database: Summary Statistics and Seasonality»</span>. 121. Wallingford, UK: Institute of Hydrology.
+</div>
+<div id="ref-chowdhury1991" class="csl-entry" role="listitem">
+Chowdhury, Jahir Uddin, Jery R. Stedinger, e Li‐Hsiung Lu. 1991. <span>«Goodness‐of‐fit tests for regional generalized extreme value flood distributions»</span>. <em>Water Resources Research</em> 27 (7): 1765–76. <a href="https://doi.org/10.1029/91wr00077">https://doi.org/10.1029/91wr00077</a>.
 </div>
 <div id="ref-coles2001" class="csl-entry" role="listitem">
 Coles, Stuart. 2001. <em>An Introduction to Statistical Modeling of Extreme Values</em>. Springer. <a href="https://doi.org/10.1007/978-1-4471-3675-0">https://doi.org/10.1007/978-1-4471-3675-0</a>.
@@ -690,17 +817,29 @@ Coles, Stuart. 2001. <em>An Introduction to Statistical Modeling of Extreme Valu
 <div id="ref-Copernicus2018ERA5" class="csl-entry" role="listitem">
 Copernicus Climate Change Service. 2018. <span>«<span>ERA5</span> hourly data on single levels from 1940 to present»</span>. Copernicus Climate Change Service (C3S) Climate Data Store (CDS); Copernicus Climate Change Service (C3S) Climate Data Store (CDS). <a href="https://doi.org/10.24381/cds.adbb2d47">https://doi.org/10.24381/cds.adbb2d47</a>.
 </div>
+<div id="ref-almeida2025" class="csl-entry" role="listitem">
+Das Neves Almeida, Cristiano, Bruno Fagundes Rodrigues, Filipe Carvalho Lemos, Gabriela da Luz Lins, e Gerald Norbert Souza da Silva. 2025. <span>«Avaliação de Curvas Intensidade-Duração-Frequência (IDF) para o Rio Grande do Sul»</span>. João Pessoa. <a href="https://biblioteca.ana.gov.br/sophia_web/Acervo/Detalhe/111791?returnUrl=/sophia_web/Home/Index&amp;guid=1763424002514">https://biblioteca.ana.gov.br/sophia_web/Acervo/Detalhe/111791?returnUrl=/sophia_web/Home/Index&amp;guid=1763424002514</a>.
+</div>
 <div id="ref-Davison2012SpatialExtremes" class="csl-entry" role="listitem">
 Davison, A. C., S. A. Padoan, e M. Ribatet. 2012. <span>«Statistical modeling of spatial extremes»</span>. <em>Statistical Science</em> 27 (2): 161–86. <a href="https://doi.org/10.1214/11-STS376">https://doi.org/10.1214/11-STS376</a>.
 </div>
 <div id="ref-Duarte2025IDF" class="csl-entry" role="listitem">
 Duarte, L. V. et al. 2025. <span>«A <span>Bayesian</span> approach to model <span>IDF</span> curves employing max-stable processes»</span>. <em>Hydrological Sciences Journal</em> 70 (16): 2934–52. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
 </div>
+<div id="ref-duarte2025" class="csl-entry" role="listitem">
+Duarte, Luíza Virgínia, Alan De Gois Barbosa, Priscilla M. Moura, e Veber Costa. 2025. <span>«A Bayesian Approach to Model IDF Curves Employing Max-Stable Processes»</span>. <em>Hydrological Sciences Journal</em> 70 (16): 2934–52. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
+</div>
 <div id="ref-durrieu2018" class="csl-entry" role="listitem">
 Durrieu, G., I. Grama, K. Jaunatre, Q. K. Pham, e J. M. Tricot. 2018. <span>«extremefit: A Package for Extreme Quantiles»</span>. <em>Journal of Statistical Software</em> 87 (12): 1–20. <a href="https://doi.org/10.18637/jss.v087.i12">https://doi.org/10.18637/jss.v087.i12</a>.
 </div>
 <div id="ref-durrieu2015" class="csl-entry" role="listitem">
 Durrieu, G., I. Grama, Q. Pham, e J. M. Tricot. 2015. <span>«Nonparametric adaptive estimator of extreme conditional tail probabilities quantiles»</span>. <em>Extremes</em> 18: 437–78.
+</div>
+<div id="ref-feaster2023" class="csl-entry" role="listitem">
+Feaster, Toby D., Anthony J. Gotvald, Jonathan W. Musser, J. Curtis Weaver, Katharine Kolb, Andrea G. Veilleux, e Daniel M. Wagner. 2023. <em>Magnitude and frequency of floods for rural streams in Georgia, South Carolina, and North Carolina, 2017—Results</em>. <em>Scientific Investigations Report</em>. US Geological Survey. <a href="https://doi.org/10.3133/sir20235006">https://doi.org/10.3133/sir20235006</a>.
+</div>
+<div id="ref-fill1994" class="csl-entry" role="listitem">
+Fill, Heinz Dieter. 1994. <em>Improving flood quantile estimates using regional information</em>. Cornell University.
 </div>
 <div id="ref-gelman2006" class="csl-entry" role="listitem">
 Gelman, Andrew. 2006. <span>«Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper)»</span>. <em>Bayesian Analysis</em> 1 (3): 515–34. <a href="https://doi.org/10.1214/06-BA117A">https://doi.org/10.1214/06-BA117A</a>.
@@ -715,10 +854,13 @@ Lemos, F. C. et al. 2026. <span>«Unified <span>Brazilian</span> Rainfall Datase
 Lima, C. H. R., U. Lall, T. Troy, e N. Devineni. 2016. <span>«A hierarchical <span>Bayesian GEV</span> model for improving local and regional flood quantile estimates»</span>. <em>Journal of Hydrology</em> 541: 816–23. <a href="https://doi.org/10.1016/j.jhydrol.2016.07.042">https://doi.org/10.1016/j.jhydrol.2016.07.042</a>.
 </div>
 <div id="ref-lima2018" class="csl-entry" role="listitem">
-Lima, Carlos H. R., Hyun-Han Kwon, e Yong-Tak Kim. 2018. <span>«A local-regional scaling-invariant Bayesian GEV model for estimating rainfall IDF curves in a future climate»</span>. <em>Journal of Hydrology</em> 566: 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
+Lima, Carlos H. R., Hyun-Han Kwon, e Yong-Tak Kim. 2018. <span>«A Local-Regional Scaling-Invariant Bayesian GEV Model for Estimating Rainfall IDF Curves in a Future Climate»</span>. <em>Journal of Hydrology</em> 566 (novembro): 73–88. <a href="https://doi.org/10.1016/j.jhydrol.2018.08.075">https://doi.org/10.1016/j.jhydrol.2018.08.075</a>.
 </div>
 <div id="ref-martins2000" class="csl-entry" role="listitem">
 Martins, Eduardo S., e Jery R. Stedinger. 2000. <span>«Generalized maximum-likelihood generalized extreme-value quantile estimators for hydrologic data»</span>. <em>Water Resources Research</em>. <a href="https://doi.org/10.1029/1999WR900330">https://doi.org/10.1029/1999WR900330</a>.
+</div>
+<div id="ref-martins2002" class="csl-entry" role="listitem">
+———. 2002. <span>«Cross Correlations Among Estimators of Shape»</span>. <em>Water Resources Research</em> 38 (11). <a href="https://doi.org/10.1029/2002WR001589">https://doi.org/10.1029/2002WR001589</a>.
 </div>
 <div id="ref-menabde1999" class="csl-entry" role="listitem">
 Menabde, Merab, Alan Seed, e Geoff Pegram. 1999. <span>«A Simple Scaling Model for Extreme Rainfall»</span>. <em>Water Resources Research</em> 35 (1): 335–39. <a href="https://doi.org/10.1029/1998WR900012">https://doi.org/10.1029/1998WR900012</a>.
@@ -726,11 +868,20 @@ Menabde, Merab, Alan Seed, e Geoff Pegram. 1999. <span>«A Simple Scaling Model 
 <div id="ref-nair2022" class="csl-entry" role="listitem">
 Nair, Jayakrishnan, Adam Wierman, e Bert Zwart. 2022. <em>The Fundamentals of Heavy Tails: Properties, Emergence, and Estimation</em>. Cambridge University Press. <a href="https://doi.org/10.1017/9781009053730">https://doi.org/10.1017/9781009053730</a>.
 </div>
+<div id="ref-rcoreteam2026" class="csl-entry" role="listitem">
+R Core Team. 2026. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://doi.org/10.32614/R.manuals">https://doi.org/10.32614/R.manuals</a>.
+</div>
 <div id="ref-Reich2012MaxStable" class="csl-entry" role="listitem">
 Reich, B. J., e B. A. Shaby. 2012. <span>«A hierarchical max-stable spatial model for extreme precipitation»</span>. <em>The Annals of Applied Statistics</em> 6 (4): 1430–51. <a href="https://doi.org/10.1214/12-AOAS591">https://doi.org/10.1214/12-AOAS591</a>.
 </div>
+<div id="ref-reis2020" class="csl-entry" role="listitem">
+Reis, Dirceu S., Andrea G. Veilleux, Jonathan R. Lamontagne, Jery R. Stedinger, e Eduardo S. Martins. 2020. <span>«Operational Bayesian GLS Regression for Regional Hydrologic Analyses»</span>. <em>Water Resources Research</em> 56 (8). <a href="https://doi.org/10.1029/2019wr026940">https://doi.org/10.1029/2019wr026940</a>.
+</div>
 <div id="ref-Sampaio2021Regional" class="csl-entry" role="listitem">
 Sampaio, J., e V. Costa. 2021. <span>«<span>Bayesian</span> regional flood frequency analysis with <span>GEV</span> hierarchical models under spatial dependency structures»</span>. <em>Hydrological Sciences Journal</em> 66 (3): 422–33. <a href="https://doi.org/10.1080/02626667.2021.1873997">https://doi.org/10.1080/02626667.2021.1873997</a>.
+</div>
+<div id="ref-stedinger1985" class="csl-entry" role="listitem">
+Stedinger, Jery R., e Gary D. Tasker. 1985. <span>«Regional Hydrologic Analysis: 1. Ordinary, Weighted, and Generalized Least Squares Compared»</span>. <em>Water Resources Research</em> 21 (9): 1421–32. <a href="https://doi.org/10.1029/WR021i009p01421">https://doi.org/10.1029/WR021i009p01421</a>.
 </div>
 <div id="ref-Stephenson2016Durations" class="csl-entry" role="listitem">
 Stephenson, A. G., E. A. Lehmann, e A. Phatak. 2016. <span>«A max-stable process model for rainfall extremes at different accumulation durations»</span>. <em>Weather and Climate Extremes</em> 13: 44–53. <a href="https://doi.org/10.1016/j.wace.2016.07.002">https://doi.org/10.1016/j.wace.2016.07.002</a>.
