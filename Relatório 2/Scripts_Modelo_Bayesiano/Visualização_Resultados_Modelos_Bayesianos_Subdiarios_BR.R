@@ -1351,7 +1351,7 @@ produtos_subdiarios <- pmap(
   }
 )
 
-parametros_estruturais_subdiarios <- map_dfr(
+ parametros_estruturais_subdiarios <- map_dfr(
   produtos_subdiarios,
   "estruturais"
 )
@@ -1890,18 +1890,39 @@ metadados_subdiarios <- meta_sub |>
 
 # =============================================================================
 # 2. CANDIDATAS PARA AS IDFs SUBDIÁRIAS
-# usar apenas o modelo conjunto 10 min–24 h
+#    - conjunto: 10 min–24 h
+#    - complementar: 1–24 h
+# =============================================================================
+
+# =============================================================================
+# 2. CANDIDATAS PARA AS IDFs SUBDIÁRIAS
+#    Dois tipos de ajuste:
+#    - conjunto: 10 min–24 h
+#    - complementar: 1–24 h
+#
+# Critério:
+#    1. comprimento da série
+#    2. diversidade de cauda
+#    3. distância espacial
+#
+# Maior peso para estações com séries longas
 # =============================================================================
 
 candidatas_idf_sub <- parametros_gev_subdiarios |>
   filter(
-    tipo_modelo == "conjunto_10min_24h",
+    tipo_modelo %in% c(
+      "conjunto_10min_24h",
+      "complementar_1h_24h"
+    ),
     duracao_h == 24
   ) |>
+  
   select(
     gauge_code,
+    tipo_modelo,
     xi_mediana
   ) |>
+  
   distinct() |>
   
   left_join(
@@ -1925,30 +1946,69 @@ candidatas_idf_sub <- parametros_gev_subdiarios |>
     is.finite(long),
     is.finite(xi_mediana),
     is.finite(n_years)
+  ) |>
+  
+  mutate(
+    grupo_duracao = case_when(
+      
+      tipo_modelo == "conjunto_10min_24h" ~
+        "10 min–24 h",
+      
+      tipo_modelo == "complementar_1h_24h" ~
+        "1–24 h",
+      
+      TRUE ~ NA_character_
+    )
   )
 
-q_xi <- quantile(
-  candidatas_idf_sub$xi_mediana,
-  probs = c(
-    0.25,
-    0.75
-  ),
-  na.rm = TRUE
-)
-
 candidatas_idf_sub <- candidatas_idf_sub |>
+  group_by(
+    tipo_modelo
+  ) |>
+  
   mutate(
+    q25_xi =
+      quantile(
+        xi_mediana,
+        0.25,
+        na.rm = TRUE
+      ),
+    
+    q75_xi =
+      quantile(
+        xi_mediana,
+        0.75,
+        na.rm = TRUE
+      ),
+    
     classe_cauda = case_when(
       
-      xi_mediana <= q_xi[1] ~
+      xi_mediana <= q25_xi ~
         "Cauda leve",
       
-      xi_mediana >= q_xi[2] ~
+      xi_mediana >= q75_xi ~
         "Cauda pesada",
       
       TRUE ~
         "Próxima de Gumbel"
     )
+  ) |>
+  
+  ungroup() |>
+  
+  select(
+    -q25_xi,
+    -q75_xi
+  )
+
+candidatas_idf_sub |>
+  count(
+    grupo_duracao,
+    classe_cauda
+  ) |>
+  print(
+    n = Inf,
+    width = Inf
   )
 
 selecionar_estacoes_distantes <- function(
@@ -1957,7 +2017,9 @@ selecionar_estacoes_distantes <- function(
     min_dist_km = 700
 ) {
   
-  if (nrow(dados) == 0) {
+  if (
+    nrow(dados) == 0
+  ) {
     return(dados)
   }
   
@@ -1973,11 +2035,17 @@ selecionar_estacoes_distantes <- function(
   
   selecionadas <- dados_sf[0, ]
   
-  for (i in seq_len(nrow(dados_sf))) {
+  for (
+    i in seq_len(
+      nrow(dados_sf)
+    )
+  ) {
     
     candidata <- dados_sf[i, ]
     
-    if (nrow(selecionadas) == 0) {
+    if (
+      nrow(selecionadas) == 0
+    ) {
       
       selecionadas <- candidata
       
@@ -2010,6 +2078,8 @@ selecionar_estacoes_distantes <- function(
     }
   }
   
+  # Se a distância mínima impedir completar n,
+  # completar pelas próximas séries mais longas
   if (
     nrow(selecionadas) < n
   ) {
@@ -2020,11 +2090,13 @@ selecionar_estacoes_distantes <- function(
           selecionadas$gauge_code
       )
     
-    faltam <- n -
+    faltam <-
+      n -
       nrow(selecionadas)
     
     selecionadas <- bind_rows(
       selecionadas,
+      
       restantes |>
         slice_head(
           n = faltam
@@ -2037,281 +2109,489 @@ selecionar_estacoes_distantes <- function(
   )
 }
 
-sel_leve <- candidatas_idf_sub |>
+candidatas_conjunto <- candidatas_idf_sub |>
   filter(
-    classe_cauda ==
-      "Cauda leve"
-  ) |>
-  arrange(
-    xi_mediana,
-    desc(n_years)
-  ) |>
-  selecionar_estacoes_distantes(
-    n = 2,
-    min_dist_km = 700
+    tipo_modelo ==
+      "conjunto_10min_24h"
   )
 
-sel_gumbel <- candidatas_idf_sub |>
+candidatas_complementar <- candidatas_idf_sub |>
   filter(
-    classe_cauda ==
-      "Próxima de Gumbel"
-  ) |>
-  mutate(
-    abs_xi =
-      abs(xi_mediana)
-  ) |>
-  arrange(
-    abs_xi,
-    desc(n_years)
-  ) |>
-  filter(
-    !gauge_code %in%
-      sel_leve$gauge_code
-  ) |>
-  selecionar_estacoes_distantes(
-    n = 2,
-    min_dist_km = 700
-  ) |>
-  select(
-    -abs_xi
+    tipo_modelo ==
+      "complementar_1h_24h"
   )
 
-sel_pesada <- candidatas_idf_sub |>
-  filter(
-    classe_cauda ==
-      "Cauda pesada"
-  ) |>
-  arrange(
-    desc(xi_mediana),
-    desc(n_years)
-  ) |>
-  filter(
-    !gauge_code %in%
-      c(
-        sel_leve$gauge_code,
-        sel_gumbel$gauge_code
-      )
-  ) |>
-  selecionar_estacoes_distantes(
-    n = 2,
+N_CONJUNTO <- 250L
+N_COMPLEMENTAR <- 250L
+
+selecionar_exemplos_fit <- function(
+    dados,
+    n_total,
     min_dist_km = 700
+) {
+  
+  if (
+    nrow(dados) == 0
+  ) {
+    return(dados)
+  }
+  
+  # ---------------------------------------------------------------------------
+  # Primeiro candidato de cada classe:
+  # sempre a estação de maior série dentro daquela classe
+  # ---------------------------------------------------------------------------
+  
+  candidato_leve <- dados |>
+    filter(
+      classe_cauda == "Cauda leve"
+    ) |>
+    arrange(
+      desc(n_years),
+      xi_mediana
+    ) |>
+    slice_head(
+      n = 1
+    )
+  
+  
+  candidato_gumbel <- dados |>
+    filter(
+      classe_cauda == "Próxima de Gumbel"
+    ) |>
+    mutate(
+      abs_xi = abs(xi_mediana)
+    ) |>
+    arrange(
+      desc(n_years),
+      abs_xi
+    ) |>
+    slice_head(
+      n = 1
+    ) |>
+    select(
+      -abs_xi
+    )
+  
+  
+  candidato_pesada <- dados |>
+    filter(
+      classe_cauda == "Cauda pesada"
+    ) |>
+    arrange(
+      desc(n_years),
+      desc(xi_mediana)
+    ) |>
+    slice_head(
+      n = 1
+    )
+  
+  
+  candidatos_cauda <- bind_rows(
+    candidato_leve,
+    candidato_gumbel,
+    candidato_pesada
+  ) |>
+    distinct(
+      gauge_code,
+      .keep_all = TRUE
+    ) |>
+    arrange(
+      desc(n_years)
+    )
+  
+  
+  # ---------------------------------------------------------------------------
+  # Todas as demais candidatas, priorizando séries longas
+  # ---------------------------------------------------------------------------
+  
+  restantes <- dados |>
+    filter(
+      !gauge_code %in%
+        candidatos_cauda$gauge_code
+    ) |>
+    mutate(
+      abs_xi = abs(xi_mediana)
+    ) |>
+    arrange(
+      desc(n_years),
+      abs_xi
+    ) |>
+    select(
+      -abs_xi
+    )
+  
+  
+  # ---------------------------------------------------------------------------
+  # Pool:
+  # diversidade de cauda primeiro,
+  # depois demais séries mais longas
+  # ---------------------------------------------------------------------------
+  
+  pool <- bind_rows(
+    candidatos_cauda,
+    restantes
+  ) |>
+    distinct(
+      gauge_code,
+      .keep_all = TRUE
+    )
+  
+  
+  # ---------------------------------------------------------------------------
+  # Finalmente considerar distância espacial
+  # ---------------------------------------------------------------------------
+  
+  selecionar_estacoes_distantes(
+    dados = pool,
+    n = n_total,
+    min_dist_km = min_dist_km
   )
+}
+
+sel_conjunto <- selecionar_exemplos_fit(
+  dados = candidatas_conjunto,
+  n_total = N_CONJUNTO,
+  min_dist_km = 700
+)
+
+sel_conjunto <- sel_conjunto[c(3,10,48),]
+
+sel_complementar <- selecionar_exemplos_fit(
+  dados = candidatas_complementar,
+  n_total = N_COMPLEMENTAR,
+  min_dist_km = 700
+)
+
+sel_complementar <- sel_complementar[c(1,2,13),]
 
 estacoes_idf_exemplo <- bind_rows(
-  sel_leve,
-  sel_gumbel,
-  sel_pesada
+  sel_complementar,
+  sel_conjunto
 ) |>
+  
   distinct(
     gauge_code,
+    tipo_modelo,
     .keep_all = TRUE
   ) |>
+  
+  arrange(
+    desc(n_years)
+  ) |>
+  
   mutate(
     painel = paste0(
       UF,
       " - ",
       gauge_code
     ),
+    
     ordem_painel =
       row_number()
   )
 
-estacoes_idf_exemplo |>
-  select(
-    UF,
-    gauge_code,
-    n_years,
-    xi_mediana,
-    classe_cauda,
-    lat,
-    long
-  ) |>
-  print(
-    n = Inf,
-    width = Inf
-  )
-
 param_texto_idf_sub <- parametros_estruturais_subdiarios |>
+  
+  semi_join(
+    estacoes_idf_exemplo |>
+      select(
+        gauge_code,
+        tipo_modelo
+      ),
+    by = c(
+      "gauge_code",
+      "tipo_modelo"
+    )
+  ) |>
+  
   filter(
-    tipo_modelo ==
-      "conjunto_10min_24h",
-    gauge_code %in%
-      estacoes_idf_exemplo$gauge_code,
     parametro %in%
       c(
         "H",
         "theta"
       )
   ) |>
-  transmute(
+  
+  mutate(
+    nome_param = case_when(
+      
+      parametro == "H" &
+        ramo == "curto" ~
+        "H_curto",
+      
+      parametro == "H" &
+        ramo == "longo" ~
+        "H_longo",
+      
+      parametro == "theta" &
+        ramo == "curto" ~
+        "theta_curto",
+      
+      parametro == "theta" &
+        ramo == "longo" ~
+        "theta_longo",
+      
+      TRUE ~
+        NA_character_
+    )
+  ) |>
+  
+  filter(
+    !is.na(nome_param)
+  ) |>
+  
+  select(
     gauge_code,
-    nome_param =
-      paste0(
-        parametro,
-        "_",
-        ramo
-      ),
+    tipo_modelo,
+    nome_param,
     mediana
   ) |>
+  
   distinct() |>
+  
   pivot_wider(
-    names_from =
-      nome_param,
-    values_from =
-      mediana
-  ) |>
+    names_from = nome_param,
+    values_from = mediana
+  )
+
+param_texto_idf_sub <- param_texto_idf_sub |>
   
   left_join(
     parametros_gev_subdiarios |>
       filter(
-        tipo_modelo ==
-          "conjunto_10min_24h",
-        duracao_h == 24,
-        gauge_code %in%
-          estacoes_idf_exemplo$gauge_code
+        duracao_h == 24
+      ) |>
+      semi_join(
+        estacoes_idf_exemplo |>
+          select(
+            gauge_code,
+            tipo_modelo
+          ),
+        by = c(
+          "gauge_code",
+          "tipo_modelo"
+        )
       ) |>
       select(
         gauge_code,
+        tipo_modelo,
         xi_mediana
       ) |>
       distinct(),
-    by = "gauge_code"
+    
+    by = c(
+      "gauge_code",
+      "tipo_modelo"
+    )
   ) |>
   
   left_join(
     estacoes_idf_exemplo |>
       select(
         gauge_code,
+        tipo_modelo,
         painel,
         n_years,
         classe_cauda,
+        grupo_duracao,
         ordem_painel
       ),
-    by = "gauge_code"
+    
+    by = c(
+      "gauge_code",
+      "tipo_modelo"
+    )
   ) |>
   
   arrange(
     ordem_painel
-  ) |>
-  
+  )
+
+param_texto_idf_sub <- param_texto_idf_sub |>
   mutate(
+    
     painel = factor(
       painel,
       levels =
         estacoes_idf_exemplo$painel
     ),
     
-    texto_parametros =
-      paste0(
-        "ξ(24 h) = ",
-        sprintf(
-          "%.3f",
-          xi_mediana
+    texto_parametros = case_when(
+      
+      # -----------------------------------------------------------------------
+      # Modelo conjunto: tem ramo curto e longo
+      # -----------------------------------------------------------------------
+      
+      tipo_modelo == "conjunto_10min_24h" ~
+        paste0(
+          "ξ(24 h) = ",
+          sprintf(
+            "%.3f",
+            xi_mediana
+          ),
+          
+          "\nH<1 h = ",
+          sprintf(
+            "%.3f",
+            H_curto
+          ),
+          
+          " | H≥1 h = ",
+          sprintf(
+            "%.3f",
+            H_longo
+          ),
+          
+          "\nθ<1 h = ",
+          sprintf(
+            "%.3f",
+            theta_curto
+          ),
+          
+          " | θ≥1 h = ",
+          sprintf(
+            "%.3f",
+            theta_longo
+          ),
+          
+          "\nAnos = ",
+          n_years
         ),
-        
-        "\nH<1h = ",
-        sprintf(
-          "%.3f",
-          H_curto
-        ),
-        
-        " | H≥1h = ",
-        sprintf(
-          "%.3f",
-          H_longo
-        ),
-        
-        "\nθ<1h = ",
-        sprintf(
-          "%.3f",
-          theta_curto
-        ),
-        
-        " | θ≥1h = ",
-        sprintf(
-          "%.3f",
-          theta_longo
-        ),
-        
-        "\nAnos = ",
-        n_years
-      )
+      
+      
+      # -----------------------------------------------------------------------
+      # Modelo complementar: somente >= 1 h
+      # -----------------------------------------------------------------------
+      
+      tipo_modelo == "complementar_1h_24h" ~
+        paste0(
+          "ξ(24 h) = ",
+          sprintf(
+            "%.3f",
+            xi_mediana
+          ),
+          
+          "\nH≥1 h = ",
+          sprintf(
+            "%.3f",
+            H_longo
+          ),
+          
+          " | θ≥1 h = ",
+          sprintf(
+            "%.3f",
+            theta_longo
+          ),
+          
+          "\nAnos = ",
+          n_years
+        )
+    )
   )
 
-TR_IDF_SUB <- c(2, 5, 10, 25, 50, 100, 200)
+# =============================================================================
+# 10. DADOS DAS CURVAS IDF DAS ESTAÇÕES SELECIONADAS
+# =============================================================================
 
 idf_exemplos_sub <- niveis_retorno_subdiarios |>
+  
   semi_join(
-    estacoes_idf_exemplo,
-    by = "gauge_code"
+    estacoes_idf_exemplo |>
+      select(
+        gauge_code,
+        tipo_modelo
+      ),
+    
+    by = c(
+      "gauge_code",
+      "tipo_modelo"
+    )
   ) |>
+  
   filter(
-    periodo_retorno_anos %in% TR_IDF_SUB
+    periodo_retorno_anos %in%
+      TR_IDF_SUB
   ) |>
+  
   left_join(
     estacoes_idf_exemplo |>
       select(
         gauge_code,
+        tipo_modelo,
         UF,
-        painel
+        painel,
+        grupo_duracao,
+        ordem_painel
       ),
-    by = "gauge_code"
+    
+    by = c(
+      "gauge_code",
+      "tipo_modelo"
+    )
   ) |>
+  
   mutate(
     TR = factor(
       periodo_retorno_anos,
       levels = TR_IDF_SUB
-    )
-  )
-
-estacoes_idf_exemplo <- estacoes_idf_exemplo |>
-  mutate(
-    painel = paste0(UF, " - ", gauge_code)
-  )
-
-param_texto_idf_sub <- parametros_estruturais_subdiarios |>
-  filter(
-    gauge_code %in% estacoes_idf_exemplo$gauge_code,
-    tipo_modelo == "conjunto_10min_24h",
-    parametro %in% c("xi_bar", "H", "theta")
-  ) |>
-  mutate(
-    parametro_plot = case_when(
-      parametro == "xi_bar" ~ "xi_bar",
-      parametro == "H"     & ramo == "curto" ~ "H_curto",
-      parametro == "theta" & ramo == "curto" ~ "theta_curto",
-      parametro == "H"     & ramo == "longo" ~ "H_longo",
-      parametro == "theta" & ramo == "longo" ~ "theta_longo",
-      TRUE ~ NA_character_
+    ),
+    
+    painel = factor(
+      painel,
+      levels =
+        estacoes_idf_exemplo$painel
     )
   ) |>
-  filter(!is.na(parametro_plot)) |>
+  
+  arrange(
+    ordem_painel,
+    periodo_retorno_anos,
+    duracao_h
+  )
+
+estacoes_idf_exemplo |>
   select(
+    grupo_duracao,
+    UF,
     gauge_code,
-    parametro_plot,
-    mediana
+    n_years,
+    xi_mediana,
+    classe_cauda
   ) |>
-  distinct() |>
-  tidyr::pivot_wider(
-    names_from = parametro_plot,
-    values_from = mediana
+  print(
+    n = Inf,
+    width = Inf
+  )
+
+
+idf_exemplos_sub |>
+  group_by(
+    painel,
+    grupo_duracao
   ) |>
-  left_join(
-    estacoes_idf_exemplo |>
-      select(
-        gauge_code,
-        painel
+  summarise(
+    duracao_min =
+      min(
+        duracao_h,
+        na.rm = TRUE
       ),
-    by = "gauge_code"
+    
+    duracao_max =
+      max(
+        duracao_h,
+        na.rm = TRUE
+      ),
+    
+    n_duracoes =
+      n_distinct(
+        duracao_h
+      ),
+    
+    .groups = "drop"
   ) |>
-  mutate(
-    texto_parametros = paste0(
-      "\u03be\u0305 = ", sprintf("%.3f", xi_bar),
-      "\nH<1 h = ", sprintf("%.3f", H_curto),
-      " | \u03b8<1 h = ", sprintf("%.3f", theta_curto),
-      "\nH\u22651 h = ", sprintf("%.3f", H_longo),
-      " | \u03b8\u22651 h = ", sprintf("%.3f", theta_longo)
-    )
+  print(
+    n = Inf,
+    width = Inf
   )
 
 cores_TR <- c(
@@ -2388,8 +2668,8 @@ plot_idf_sem_ic <- function(
         1/6, 0.25, 0.5, 1, 3, 6, 12, 24
       ),
       labels = c(
-        "10 min", "15 min", "30 min", "1 h",
-        "3 h", "6 h", "12 h", "24 h"
+        "0.16", "0.25", "0.5", "1",
+        "3", "6", "12", "24"
       )
     ) +
     
@@ -2406,7 +2686,7 @@ plot_idf_sem_ic <- function(
     ) +
     
     labs(
-      x = "Duração",
+      x = "Duração (h)",
       y = "Intensidade (mm/h)"
     ) +
     
@@ -2539,8 +2819,8 @@ plot_idf_com_ic <- function(
         1/6, 0.25, 0.5, 1, 3, 6, 12, 24
       ),
       labels = c(
-        "10 min", "15 min", "30 min", "1 h",
-        "3 h", "6 h", "12 h", "24 h"
+        "0.16", "0.25", "0.5", "1",
+        "3", "6", "12", "24"
       )
     ) +
     
@@ -2563,7 +2843,7 @@ plot_idf_com_ic <- function(
     ) +
     
     labs(
-      x = "Duração",
+      x = "Duração (h)",
       y = "Intensidade (mm/h)"
     ) +
     
@@ -2633,8 +2913,8 @@ ggsave(
     "IDF_subdiarias_sem_IC.png"
   ),
   p_idf_sub_sem_ic,
-  width = 17,
-  height = 17,
+  width = 19,
+  height = 19,
   units = "cm",
   dpi = 600
 )
@@ -2642,7 +2922,7 @@ ggsave(
 p_idf_sub_ic_5_25_200 <- plot_idf_com_ic(
   dados = idf_exemplos_sub,
   dados_texto = param_texto_idf_sub,
-  TR_sel = c(5, 25, 200)
+  TR_sel = c(2, 10, 50, 200)
 )
 
 print(p_idf_sub_ic_5_25_200)
@@ -2653,8 +2933,8 @@ ggsave(
     "IDF_subdiarias_IC_5_25_200.png"
   ),
   p_idf_sub_ic_5_25_200,
-  width = 17,
-  height = 17,
+  width = 19,
+  height = 19,
   units = "cm",
   dpi = 600
 )
@@ -2662,7 +2942,7 @@ ggsave(
 p_idf_sub_ic_10_50_100 <- plot_idf_com_ic(
   dados = idf_exemplos_sub,
   dados_texto = param_texto_idf_sub,
-  TR_sel = c(10, 50, 100)
+  TR_sel = c(5, 25, 100)
 )
 
 print(p_idf_sub_ic_10_50_100)
@@ -2673,8 +2953,8 @@ ggsave(
     "IDF_subdiarias_IC_10_50_100.png"
   ),
   p_idf_sub_ic_10_50_100,
-  width = 17,
-  height = 17,
+  width = 19,
+  height = 19,
   units = "cm",
   dpi = 600
 )
@@ -2687,7 +2967,7 @@ library(grid)
 font <- "sans"
 fontsize <- 8
 
-# garantir um painel bonito para cada estação
+# garantir um painel para cada estação
 estacoes_idf_exemplo <- estacoes_idf_exemplo |>
   mutate(
     painel = if ("UF" %in% names(estacoes_idf_exemplo)) {
@@ -2780,11 +3060,12 @@ fig_parametros_6_idf <- ggplot(
   
   scale_x_log10(
     breaks = c(1/6, 0.25, 0.5, 1, 3, 6, 12, 24),
-    labels = c("10 min", "15 min", "30 min", "1 h", "3 h", "6 h", "12 h", "24 h")
+    labels = c("0.16", "0.25", "0.5", "1",
+               "3", "6", "12", "24")
   ) +
   
   labs(
-    x = "Duração",
+    x = "Duração (h)",
     y = "Mediana posterior entre estações"
   ) +
   
@@ -2836,8 +3117,8 @@ ggsave(
     "parametros_GEV_6_estacoes_IDF.png"
   ),
   fig_parametros_6_idf,
-  width = 50,
-  height = 13,
+  width = 45,
+  height = 15,
   units = "cm",
   dpi = 600
 )
@@ -2890,6 +3171,228 @@ st_crs(brasil_union) <- st_crs(4674)
 
 bbox_br <- st_bbox(
   brasil_union
+)
+
+# =============================================================================
+# ESTAÇÕES COM DIVERGÊNCIAS NO STAN
+# =============================================================================
+
+estacoes_divergencia <- diagnosticos_subdiarios |>
+  transmute(
+    gauge_code = as.character(gauge_code),
+    tipo_modelo = as.character(tipo_modelo),
+    n_divergencias = as.numeric(n_divergencias),
+    flag_divergencia = as.logical(flag_divergencia)
+  ) |>
+  
+  left_join(
+    meta_espacial_sub |>
+      select(
+        gauge_code,
+        UF,
+        lat,
+        long
+      ),
+    by = "gauge_code"
+  ) |>
+  
+  filter(
+    is.finite(lat),
+    is.finite(long)
+  ) |>
+  
+  mutate(
+    classe_divergencia = if_else(
+      flag_divergencia,
+      "Com divergência",
+      "Sem divergência"
+    ),
+    
+    classe_divergencia = factor(
+      classe_divergencia,
+      levels = c(
+        "Sem divergência",
+        "Com divergência"
+      )
+    )
+  )
+
+resumo_divergencias <- estacoes_divergencia |>
+  count(
+    classe_divergencia,
+    name = "n_estacoes"
+  ) |>
+  mutate(
+    percentual =
+      100 *
+      n_estacoes /
+      sum(n_estacoes)
+  )
+
+print(
+  resumo_divergencias,
+  n = Inf,
+  width = Inf
+)
+
+estacoes_divergencia_sf <- estacoes_divergencia |>
+  st_as_sf(
+    coords = c(
+      "long",
+      "lat"
+    ),
+    crs = 4674,
+    remove = FALSE
+  )
+
+p_divergencias <- ggplot() +
+  
+  geom_sf(
+    data = brasil,
+    fill = "grey98",
+    color = "grey65",
+    linewidth = 0.20
+  ) +
+  
+  geom_sf(
+    data = brasil_union,
+    fill = NA,
+    color = "grey30",
+    linewidth = 0.40
+  ) +
+  
+  geom_sf(
+    data = estacoes_divergencia_sf |>
+      filter(
+        classe_divergencia == "Sem divergência"
+      ),
+    aes(
+      color = classe_divergencia
+    ),
+    size = 0.5,
+    alpha = 0.60
+  ) +
+  
+  geom_sf(
+    data = estacoes_divergencia_sf |>
+      filter(
+        classe_divergencia == "Com divergência"
+      ),
+    aes(
+      color = classe_divergencia
+    ),
+    size = 0.5,
+    alpha = 0.95
+  ) +
+  
+  scale_color_manual(
+    name = NULL,
+    values = c(
+      "Sem divergência" = "grey10",
+      "Com divergência" = "#D55E00"
+    ),
+    drop = FALSE
+  ) +
+  
+  annotation_scale(
+    location = "br",
+    width_hint = 0.20,
+    height = unit(1.5, "mm"),
+    text_family = font,
+    text_cex = 0.6,
+    bar_cols = c(
+      "black",
+      "aliceblue"
+    ),
+    line_width = 0.4
+  ) +
+  
+  annotation_north_arrow(
+    location = "tr",
+    width = unit(1, "cm"),
+    height = unit(1, "cm"),
+    pad_x = unit(0.30, "cm"),
+    pad_y = unit(0.30, "cm"),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font,
+      text_size = fontsize,
+      fill = c(
+        "black",
+        "aliceblue"
+      )
+    )
+  ) +
+  
+  coord_sf(
+    crs = st_crs(4674),
+    xlim = c(
+      bbox_br["xmin"],
+      bbox_br["xmax"]
+    ),
+    ylim = c(
+      bbox_br["ymin"],
+      bbox_br["ymax"]
+    ),
+    expand = FALSE
+  ) +
+  
+  labs(
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  
+  theme_bw() +
+  
+  theme(
+    panel.grid = element_blank(),
+    
+    text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    axis.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.position = "bottom",
+    legend.justification = "center",
+    
+    legend.title = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    legend.text = element_text(
+      family = font,
+      size = fontsize
+    ),
+    
+    plot.margin = margin(
+      t = 5,
+      r = 5,
+      b = 5,
+      l = 5
+    )
+  )
+
+ggsave(
+  filename = file.path(
+    DIR_RESULTADOS,
+    "mapa_estacoes_transicao_subdiario.png"
+  ),
+  plot = p_divergencias,
+  width = 15,
+  height = 12,
+  units = "cm",
+  dpi = 600
 )
 
 grade_pts <- st_make_grid(
