@@ -18,12 +18,16 @@ O método *Delta Change* aplica fatores de variação obtidos a partir da difere
 $$
 \Delta = \frac{X_{GCM}^{proj}}{X_{GCM}^{hist}} 
 \tag{1}
-$$ Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.
+$$ {#eq-delta}
+
+Essa variação é então adicionada (ou multiplicada) à série temporal de observações para produzir as projeções futuras com correção de viés.
 
 $$
 X = X_{OBS}+\Delta
 \tag{2}
-$$ É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
+$$ {#eq-x}
+
+É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
 
 ### *Equidistant Quantile Matching* (EQM)
 
@@ -43,7 +47,7 @@ x_{3,\max}^{STN,5\min} & x_{3,\max}^{STN,10\min} & \cdots & x_{3,\max}^{STN,24hr
 x_{N,\max}^{STN,5\min} & x_{N,\max}^{STN,10\min} & \cdots & x_{N,\max}^{STN,24hr}
 \end{bmatrix}
 \tag{3}
-$$
+$${#eq-maxsub}
 
 Onde, $x_{i,\max}^{STN,j}$ é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e $N$ é o número total de anos.
 
@@ -59,7 +63,7 @@ X^{GCM}_{3,\text{max}} \\
 X^{GCM}_{N,\text{max}}
 \end{bmatrix}
 \tag{4}
-$$
+$$ {#eq-maxdGCM}
 
 Onde, $X_{i,\max}^{GCM}$ representa a precipitação diária máxima do modelo GCM no i-ésimo ano e $N$ é o número total de anos (é utilizado o mesmo intervalo de tempo dos dados históricos/observados).
 
@@ -75,7 +79,7 @@ X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\
 X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
 \tag{5}
-$$
+$${#eq-maxdRCP}
 
 Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerados; e $N_F$ é o número total de anos considerados para o período futuro.
 
@@ -84,17 +88,17 @@ Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os c
 $$
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
 \tag{6}
-$$
+$${#eq-pdfGCM}
 
 $$
 PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
 \tag{7}
-$$
+$$ {#eq-pdfSTN}
 
 $$
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
 \tag{8}
-$$
+$${#eq-pdfGCMfut}
 
 Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
 
@@ -103,7 +107,7 @@ Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é 
 $$
 Y_{max,j}^{STN} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{STN,j})
 \tag{9}
-$$
+$$ {#eq-ysubgcm}
 
 Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzida para a j-ésima duração; $CDF$ significa função de distribuição de probabilidade cumulativa; e $invCDF$ significa CDF inversa.
 
@@ -112,33 +116,33 @@ Onde, $Y_{max,j}^{STN}$ é uma série máxima subdiária estatisticamente reduzi
 $$
 Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 \tag{10}
-$$
+$$ {#eq-ymaxGCMfut}
 
 Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
-
+ 
 (vii) Encontrar uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:
 
 $$
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
 \tag{11}
-$$
+$${#eq-ymaxSTN1}
 
 $$
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
 \tag{12}
-$$
+$${#eq-ymaxSTN2}
 
 (viii) Encontrar uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
 
 $$
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
 \tag{13}
-$$
+$${#eq-ymaxGCMfut1}
 
 $$
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
 \tag{14}
-$$
+$${#eq-ymaxGCMfut2}
 
 (ix) Para gerar dados subdiários máximos futuros, combinar as equações acima em:
 
@@ -150,7 +154,7 @@ X^{STN, future}_{\max,j}
 \right] 
 + b_{1} 
 \tag{15}
-$$
+$${#eq-xSTNfut}
 
 (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
 
@@ -161,21 +165,21 @@ O EQM também possui uma versão não estacionária que integra modelagem estat�
 $$
 z_p = \mu - \frac{\sigma}{\xi} \left[\, 1 - \left\{ -\ln\!\left(1 - \frac{1}{T}\right)^{-\xi} \right\} \right]
 \tag{16}
-$$
+$${#eq-zp}
 
 No EQM original, a função de mapeamento de quantis realiza o *donwscaling* espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada [@Silva.2021]. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM ($F_{m,h}$) e a série subdiária ($x_{j,o,h}$) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM ($\hat{x}_{j,o,h}$), conforme mostrado na Equação (17):
 
 $$
 \hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
 \tag{17}
-$$
+$${#eq-quantmaxanual}
 
 Onde $\hat{x}$ é o quantil máximo anual na escala da estação, $F$ é a função de distribuição cumulativa e $F^{-1}$ é sua inversa. $j,o,h$ correspondem a cada dado de precipitação observado subdiário ($‘j’$) ($‘o’$) no período histórico-base ($‘h’$), enquanto $‘m’$ permanece como os dados modelados. Os quantis extraídos de cada par \hat{x}\_{j,o,h} e $x_{m,h}$ são igualados para estabelecer uma relação funcional na forma da Equação (18):
 
 $$
 \hat{x}_{j,o,h} = \frac{a_j + x_{m,h}}{b_j + c_j x_{m,h}} + \frac{d_j}{x_{m,h}}
 \tag{18}
-$$
+$${#eq-coefajustados}
 
 Onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o $EQM_{NS}$ introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
 
@@ -184,19 +188,19 @@ Semelhante ao EQM, o $EQM_{NS}$ utiliza o mapeamento delta de quantis, uma vez q
 $$
 \hat{x}_{m,h} = F_{m,h}^{-1}\left[ F_{m,f}(x_{m,f}) \right]
 \tag{19}
-$$
+$${#eq-igualgcmfutpr}
 
 $$
 \Delta_m = \frac{x_{m,f}}{\hat{x}_{m,h}}
 \tag{20}
-$$
+$${#eq-deltarelativo}
 
 Onde $m,f$ corresponde aos dados modelados ($‘m’$) no período de projeção futuro ($‘f’$), e $\Delta_m$ é a mudança relativa. A série subdiária máxima futura projetada ($X_j,f$ )) na escala da estação é então gerada usando a Equação (18) substituindo $x_{m,h}$ por $\hat{x}_{m,h}$ e multiplicando-a pela mudança relativa Dm da Equação (20), conforme dado pela Equação (21):
 
 $$
 x_{j,f} = \Delta_m \cdot \hat{x}_{j,o,h}
 \tag{21}
-$$
+$${#eq-subdiariafutprojet}
 
 ### *Quantile–Quantile Downscaling*
 
@@ -209,7 +213,7 @@ O GP cria equações que relacionam o quantil do GCM $(Q_{GCM}(X))$ com o quanti
 $$
 Q_{Local}(x) = aQ_{GCM}(x) + f[Q_{GCM}(x)]
 \tag{22}
-$$
+$${#eq-qlocal}
 
 Onde $aQ_{GCM}(x)$ pode ser considerado a parte principal das relações extraídas que descrevem a maior parte da variância. O termo $a$ em cada relação é um coeficiente numérico; $f[Q_{GCM}(x)]$ é uma função não linear gerada automaticamente pelo algoritmo GP.
 
@@ -220,7 +224,7 @@ O método BCQM corrige diretamente as funções de distribuição cumulativa (CD
 $$
 F_{DF}(x) = F_{Oh}[F^{-1}_{Mh}(x)]
 \tag{23}
-$$
+$${#eq-fdf}
 
 Onde $F$ é a função de distribuição cumulativa; $F^{−1}$ sua inversa; $x$ o valor de $M_f$ (Modelo futuro) a ser reduzido e $M_h$ refere-se ao Modelo histórico;$O_h$ são as observações históricas e $D_f$ refere-se a saída futura em escala reduzida.
 
@@ -237,7 +241,6 @@ Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis m
 O método *Kernel Density Distribution Mapping* utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021].
 
 O KDDM utiliza um algoritmo complexo de múltiplas etapas que envolve estimativa de densidade de kernel para suavizar $O_h$ e $M_h$. A subsequente integração das funções de distribuição geradas, seguida pela padronização inversa, produz as funções de transferência desejadas. Lanzante et al. [-@Lanzante.2021], na aplicação do método, utilizaram o código R fornecido pelos autores do KDDM (https://github.com/sethmcg/climod).
-
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
@@ -398,16 +401,16 @@ A forma aditiva é:
 $$
 D_f(x) = x + \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big) - F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
 \tag{24}
-$$
+$$ {#eq-dfxaditiva}
 
 E a forma multiplicativa é:
 
 $$
 D_f(x) = x X \left[ F_{Oh}^{-1}\big(F_{Mf}(x)\big)/F_{Mh}^{-1}\big(F_{Mf}(x)\big) \right]
 \tag{25}
-$$
+$$ {#eq-dfxmultiplicativa}
 
-O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC). 
+O código R disponibilizado pelos autores do QDM está em: (https://github.com/cran/MBC).
 
 ::: {style="max-height:300px; overflow:auto; border:1px solid #ccc; padding:10px; border-radius:6px;"}
 ``` r
@@ -528,7 +531,7 @@ O método PresRat estende o QDM incluindo um fator de correção médio [@Lanzan
 $$
 K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
 \tag{26}
-$$
+$${#eq-kcorrecao}
 
 Onde as barras indicam as médias climatológicas ao longo de um mês.
 
@@ -541,7 +544,7 @@ Willems [-@Willems.2013] afirma que o fator de perturbação é calculado nos qu
 $$
 \varphi({p}) = \frac{I_s({p})}{I_c({p})}
 \tag{27}
-$$
+$${#eq-varphi}
 
 Onde $\varphi({p})$ é o fator de perturbação quantílica; $I_c({p})$ o quantil de precipitação da simulação de controle; $I_s({p})$ o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, $I(1)\geq I(2)\geq...\geq I(n_g)$, a probabilidade de excedência $p$ de qualquer intensidade de precipitação diária $I(k_g)$ é calculada empiricamente como a razão $(\frac{kg} {ng})$ do número de classificação $k_g$ sobre o número total de dias $n_g$ do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.
 
@@ -552,7 +555,7 @@ Essas distribuições são calibradas aos dados empíricos e aplicadas, conforme
 $$
 \varphi({p}) = \frac{G^{-1}_s({p})}{G^{-1}_c({p})}
 \tag{28}
-$$
+$${#eq-varphicalibrado}
 
 Onde $G_s_$ é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; $G_c$ calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (28), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (27).
 
