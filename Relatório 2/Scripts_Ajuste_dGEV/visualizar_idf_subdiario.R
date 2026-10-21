@@ -58,37 +58,27 @@ tr1 <- c(10, 50, 100)
 tr2 <- c(5, 25, 200)
 
 # Cores
-tr.cores <- setNames(c("#d55e00", "#e69200", "#e69F00", "#009e73", "#0072b2", "#cc79a7", "#7b3294"), tr.todos)
+tr.cores <- setNames(c("#d55e00", "#e69F00", "#009e73", "#56b4e9", "#0072b2", "#cc79a7", "#7b3294"), tr.todos)
 
-# Estações
-# gg.rs <- c("A801", "430120601A", "A828") # Rio grande do Sul
-# Estações c/ durações sub-horárias
-# gg.rs <- c("210690401A", "63001228", "260310801A", "85400000", "351160701A", "351220901A") # estações usadas pela Larissa
-gg.rs <- c("210690401A", "351160701A", "63001228", "85400000", "351220901A", "260310801A") # estações usadas pela Larissa
+# Estações foram escolhidas buscando reunir 3 estações c/ d < 1 h e 3 c/ d > 1 h
+# das mais longas disponíveis: 1 c/ xi approx 0, ourta c/ xi > 0 e outra c/ xi < 0
+gg <- c("SBAR", "SBCF", "SBRP", "420800501A", "293330704A", "314610703A") # estações usadas pela Larissa
 
 gauge.labels <- imax.df |> 
-  filter(gauge_code %in% gg.rs) |> 
+  filter(gauge_code %in% gg) |> 
   slice_head(n = 1, by = gauge_code) |> 
   mutate(
-    gauge_code = factor(gauge_code, gg.rs),
+    gauge_code = factor(gauge_code, gg),
     gauge_label = sprintf("%s - %s", state, gauge_code)
   ) |> 
-  arrange(gauge_code)
+  arrange(gauge_code) |> 
   pull(gauge_label, name = gauge_code)
 
-# gg.br <- c(
-#   "7339006", # CE
-#   "1842004", # MG
-#   "735041",  # PE
-#   "2549006", # PR
-#   "535011",  # RN
-#   "2849002"  # SC
-# )
 
 ### Rio Grande do Sul -----------------------------------------------------
 
-par.rs <- par.df |> 
-  filter(gauge_code %in% gg.rs) |>  
+par.gg <- par.df |> 
+  filter(gauge_code %in% gg) |>  
   left_join(
     imax.df |> slice_head(n = 1, by = gauge_code) |> select(gauge_code, state),
     by = "gauge_code",
@@ -98,71 +88,51 @@ par.rs <- par.df |>
     gauge_label = factor(gauge_label, gauge.labels)
   )
 
-idf.rs <- idf.df |> 
-  filter(gauge_code %in% gg.rs) |> 
+idf.gg <- idf.df |> 
+  filter(gauge_code %in% gg) |> 
   left_join(
     imax.df |> slice_head(n = 1, by = gauge_code) |> select(gauge_code, state),
     by = "gauge_code",
   ) |> 
+  mutate(
+    gauge_label = sprintf("%s - %s", state, gauge_code),
+    gauge_label = factor(gauge_label, gauge.labels)
+  )
+
+info.gg <- imax.df |> 
+  filter(gauge_code %in% gg) |> 
+  slice_head(n = 1, by = gauge_code) |> 
+  select(-c(d, imax_mm_h)) |> 
   mutate(
     gauge_label = sprintf("%s - %s", state, gauge_code),
     gauge_label = factor(gauge_label, gauge.labels)
   )
   
-
-# Todos os tempos de retorno, s/ intervalos de confiança
-idf.plot.tr.todos <- idf.rs |>
-  filter(return_period %in% tr.todos) |> 
-  ggplot(aes(x = d, color = factor(return_period))) +
-  facet_wrap(~gauge_label, ncol = 2, scales = "free") +
-  geom_line(aes(y = q), linewidth = 0.3) +
-  geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("ξ = %7.3f", -par)), filter(par.rs, parname == "xi"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3, family = font, size = textsize
-  ) +
-  geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("H = %7.3f", par)), filter(par.rs, parname == "H"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + textsize*0.7, family = font, size = textsize
-  ) +
-  geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("θ = %7.3f", par)), filter(par.rs, parname == "theta"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + 2*textsize*0.7, family = font, size = textsize
-  ) +
-  scale_x_continuous(
-    name = "Duração (h)",
-    trans = "log10"
-  ) +
-  scale_y_continuous(
-    name = "Intensidade (mm/h)",
-    trans = "log10"
-  ) +
-  scale_color_manual(
-    name = "Tempo de retorno (anos)", values = tr.cores
-  ); idf.plot.tr.todos
-
-ggsave(
-  file.path(path.plot, "idf_subdiario_tr_todos.png"), idf.plot.tr.todos,
-  width = 15, height = 18, units = "cm", dpi = 600
-)
+textsize.fct <- 0.6
 
 # Tempos de retorno 1
-idf.plot.tr1 <- idf.rs |> 
+idf.plot.tr1 <- idf.gg |> 
   filter(return_period %in% tr1) |> 
   ggplot(aes(x = d, color = factor(return_period), fill = factor(return_period))) +
-  facet_wrap(~gauge_label, ncol = 2, scales = "free") +
+  facet_wrap(~gauge_label, ncol = 2, scales = "free_y") +
   geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.2, linewidth = 0, show.legend = FALSE) +
   geom_line(aes(y = q), linewidth = 0.3) +
+  geom_vline(xintercept = 1, linewidth = 0.3, linetype= "dashed", color = "grey") + 
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("ξ = %7.3f", -par)), filter(par.rs, parname == "xi"), inherit.aes = FALSE,
+    aes(x = Inf, y = Inf, label = sprintf("ξ = %7.3f", -par)), filter(par.gg, parname == "xi"), inherit.aes = FALSE,
     hjust = 1.1, vjust = 2.3, family = font, size = textsize
   ) +
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("H = %7.3f", par)), filter(par.rs, parname == "H"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + textsize*0.7, family = font, size = textsize
+    aes(x = Inf, y = Inf, label = sprintf("H = %7.3f", par)), filter(par.gg, parname == "H"), inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + textsize*textsize.fct, family = font, size = textsize
   ) +
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("θ = %7.3f", par)), filter(par.rs, parname == "theta"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + 2*textsize*0.7, family = font, size = textsize
+    aes(x = Inf, y = Inf, label = sprintf("θ = %7.3f", par)), filter(par.gg, parname == "theta"), inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + 2*textsize*textsize.fct, family = font, size = textsize
+  ) +
+  geom_text(
+    aes(x = Inf, y = Inf, label = sprintf("N = %g anos", n_valid_years)), info.gg, inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + 3*textsize*textsize.fct, family = font, size = textsize
   ) +
   scale_x_continuous(
     name = "Duração (h)",
@@ -183,23 +153,28 @@ ggsave(
 )
 
 # Tempos de retorno 2
-idf.plot.tr2 <- idf.rs |> 
+idf.plot.tr2 <- idf.gg |> 
   filter(return_period %in% tr2) |> 
   ggplot(aes(x = d, color = factor(return_period), fill = factor(return_period))) +
-  facet_wrap(~gauge_label, ncol = 2, scales = "free") +
+  facet_wrap(~gauge_label, ncol = 2, scales = "free_y") +
   geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.2, linewidth = 0, show.legend = FALSE) +
   geom_line(aes(y = q), linewidth = 0.3) +
+  geom_vline(xintercept = 1, linewidth = 0.3, linetype= "dashed", color = "grey") + 
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("ξ = %7.3f", -par)), filter(par.rs, parname == "xi"), inherit.aes = FALSE,
+    aes(x = Inf, y = Inf, label = sprintf("ξ = %7.3f", -par)), filter(par.gg, parname == "xi"), inherit.aes = FALSE,
     hjust = 1.1, vjust = 2.3, family = font, size = textsize
   ) +
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("H = %7.3f", par)), filter(par.rs, parname == "H"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + textsize*0.7, family = font, size = textsize
+    aes(x = Inf, y = Inf, label = sprintf("H = %7.3f", par)), filter(par.gg, parname == "H"), inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + textsize*textsize.fct, family = font, size = textsize
   ) +
   geom_text(
-    aes(x = Inf, y = Inf, label = sprintf("θ = %7.3f", par)), filter(par.rs, parname == "theta"), inherit.aes = FALSE,
-    hjust = 1.1, vjust = 2.3 + 2*textsize*0.7, family = font, size = textsize
+    aes(x = Inf, y = Inf, label = sprintf("θ = %7.3f", par)), filter(par.gg, parname == "theta"), inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + 2*textsize*textsize.fct, family = font, size = textsize
+  ) +
+  geom_text(
+    aes(x = Inf, y = Inf, label = sprintf("N = %g anos", n_valid_years)), info.gg, inherit.aes = FALSE,
+    hjust = 1.1, vjust = 2.3 + 3*textsize*textsize.fct, family = font, size = textsize
   ) +
   scale_x_continuous(
     name = "Duração (h)",
