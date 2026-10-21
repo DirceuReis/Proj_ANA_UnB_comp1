@@ -1,0 +1,626 @@
+---
+title: "Documentação dos scripts em R"
+subtitle: "Processamento e controle de qualidade de dados pluviométricos"
+author: ""
+date: "2026-10-21"
+lang: pt-BR
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+execute:
+  echo: false
+  warning: false
+---
+
+# Apresentação
+
+Este documento reúne a descrição dos scripts em R utilizados no processamento de dados pluviométricos. Cada seção apresenta a finalidade de um script, seus dados de entrada, as principais operações executadas, os critérios de seleção e controle de qualidade, os arquivos produzidos e os cuidados necessários para interpretar seus resultados.
+
+A documentação descreve **o comportamento implementado no código**, sem pressupor operações realizadas em etapas externas. Novos scripts poderão ser acrescentados em sequência, mantendo a mesma estrutura.
+
+# Scripts - Ano Hidrológico
+
+## Script 01 — 2_uniplu_processamento
+
+### Finalidade
+
+O script realiza a extração e o controle de qualidade das séries de precipitação diária da base Uniplu, considerando exclusivamente registros com resolução de 1.440 minutos. Seu objetivo é selecionar estações com pelo menos 30 anos de dados considerados válidos, além de organizar as séries para as análises posteriores.
+
+### Função principal
+
+**`analyse_station_uniplu(sta)`**
+
+**Dados de entrada:** objeto `sta`, contendo a série diária de uma estação, com as colunas:
+
+| Variável | Descrição |
+|---|---|
+| `codigo` | Código identificador da estação. |
+| `dt` | Data da observação. |
+| `p` | Precipitação diária (mm). |
+
+A função padroniza os registros, consolida datas duplicadas, completa a sequência diária e aplica verificações de qualidade. Valores superiores a 700 mm são sinalizados, enquanto aqueles superiores a 1.500 mm são substituídos por `NA`. Também são calculados acumulados móveis para 3, 5, 7, 15 e 30 dias.
+
+São sinalizadas como inadequadas as séries com menos de 365 registros diários após a consolidação, menos de 15 valores distintos de precipitação ou proporção de dias com precipitação inferior a 0,5 mm igual ou superior a 99,5%.
+
+**Dados de saída:** a função retorna uma lista contendo:
+
+| Objeto | Descrição |
+|---|---|
+| `is.null` | Indicador lógico de inadequação da estação. |
+| `sta` | Série diária processada, incluindo os acumulados móveis e a sinalização de precipitações elevadas. |
+| `err` | Diagnóstico contendo o último ano da série, o número de valores distintos e a proporção de dias com precipitação inferior a 0,5 mm. |
+
+O objeto `err` não é retornado quando a série é rejeitada antecipadamente por possuir menos de 365 registros.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script percorre os arquivos ZIP da Uniplu e identifica as estações diárias presentes em pelo menos 30 anos distintos. Em seguida, extrai suas observações e aplica a função `analyse_station_uniplu()` individualmente.
+
+Após o tratamento, a disponibilidade é avaliada por ano civil, considerando válido aquele com até 73 dias sem dados. São selecionadas as estações que apresentam pelo menos 30 anos válidos, não necessariamente consecutivos.
+
+As séries processadas são salvas individualmente, enquanto as informações das estações selecionadas são consolidadas em uma tabela de metadados.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `uniplu_daily_inventory.rds` | Inventário dos registros diários identificados na Uniplu. |
+| `uniplu_daily_sta_years.rds` | Resumo da cobertura temporal de cada estação. |
+| `uniplu_daily_keep30.rds` | Estações com pelo menos 30 anos identificados nos arquivos ZIP. |
+| `stations/uniplu_daily_year/*.parquet` | Registros diários extraídos, organizados por arquivo de origem. |
+| `stations_analyzed/<codigo>_analyzed.rds` | Série diária processada de cada estação aprovada. |
+| `out_analise_uniplu.rds` | Inventário final das estações selecionadas, incluindo localização e período de observação. |
+
+**Observação:** a seleção utiliza a quantidade de anos válidos, mas os arquivos individuais preservam toda a série processada, inclusive os anos que não satisfizeram o critério de disponibilidade.
+
+## Script 02 — 3_uniplu_hydro_year_def
+
+### Finalidade
+
+O script caracteriza a **sazonalidade dos eventos extremos de precipitação diária** das estações selecionadas no Script 01. Para isso, utiliza a abordagem *Peaks Over Threshold* (POT) para identificar eventos extremos e aplica estatística circular às suas datas de ocorrência.
+
+O objetivo é determinar a época predominante dos extremos (`theta`) e seu grau de concentração sazonal (`rbar`), fornecendo informações para a posterior definição do início do ano hidrológico.
+
+### Função principal
+
+**`pot_station(sta, serie, r = 1)`**
+
+**Dados de entrada:** a função recebe os seguintes argumentos:
+
+| Argumento | Descrição |
+|---|---|
+| `sta` | Série temporal de precipitação de uma estação, contendo `codigo`, `dt` e a variável de precipitação. |
+| `serie` | Nome da coluna de precipitação a ser analisada (`"p"`). |
+| `r` | Parâmetro de agrupamento das excedências POT, definido como 1. |
+
+A função estima um limiar adaptativo de precipitação extrema por meio de `hill.adapt()`, utilizando o percentil 99 como alternativa quando o limiar estimado é `NA` ou `NaN`. Em seguida, identifica agrupamentos de excedências com `evd::clusters()` e seleciona o máximo de precipitação de cada agrupamento.
+
+As datas desses máximos são convertidas em ângulos no ciclo anual, considerando 365 dias. A partir desses ângulos, calculam-se as componentes médias do vetor circular, sua direção preliminar e seu comprimento, que representa a concentração sazonal dos extremos.
+
+**Dados de saída:** a função retorna um `tibble` contendo:
+
+| Variável | Descrição |
+|---|---|
+| `codigo` | Código identificador da estação. |
+| `xbar` | Média dos cossenos dos ângulos dos eventos extremos. |
+| `ybar` | Média dos senos dos ângulos dos eventos extremos. |
+| `thetabar` | Direção angular preliminar do vetor médio, em radianos. |
+| `thetavar` | Variância linear dos ângulos dos eventos extremos. |
+| `rbar` | Comprimento do vetor médio, indicando a concentração sazonal dos eventos. |
+
+O parâmetro `rbar` varia entre 0 e 1, com valores próximos de 1 indicando maior concentração dos extremos em determinada época do ano.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê `out_analise_uniplu.rds` e seleciona as estações com pelo menos 30 anos considerados válidos no Script 01. Para cada estação, a série diária processada é carregada e submetida à função `pot_station()`.
+
+Os resultados individuais são consolidados em uma única tabela. Posteriormente, a direção angular preliminar (`thetabar`) é ajustada conforme o quadrante definido pelas componentes `xbar` e `ybar`, originando a variável `theta`, que representa a direção circular média dos eventos extremos.
+
+Por fim, são incorporados os metadados das estações, incluindo localização geográfica, rede de monitoramento e período de observação.
+
+A análise utiliza as séries completas das estações selecionadas, sem remover individualmente os anos que não atenderam ao critério de disponibilidade anual.
+
+### Arquivo gerado
+
+| Arquivo | Descrição |
+|---|---|
+| `df_hydroyear_uniplu.rds` | Base consolidada com os indicadores de sazonalidade (`xbar`, `ybar`, `thetabar`, `thetavar`, `rbar` e `theta`), quadrante e metadados das estações. |
+
+**Observação:** o script caracteriza a sazonalidade dos eventos extremos, mas ainda não define diretamente o mês de início do ano hidrológico. Essa definição é realizada em uma etapa posterior, utilizando os indicadores calculados aqui.
+
+## Script 03 — 4_uniplu_mapas
+
+### Finalidade
+
+O script produz mapas da **sazonalidade dos eventos extremos de precipitação diária**, utilizando os indicadores de estatística circular calculados no Script 02. As estações são representadas por setas cuja orientação indica a época predominante dos extremos (`theta`), enquanto o comprimento representa a concentração sazonal relativa (`rbar`).
+
+São gerados um mapa nacional, mapas individuais por unidade da federação e um painel reunindo os mapas estaduais.
+
+### Rotinas principais
+
+O script não define funções próprias, utilizando principalmente funções dos pacotes `ggplot2`, `sf`, `geobr` e `patchwork` para construir os mapas.
+
+**Dados de entrada:** o arquivo `df_hydroyear_uniplu.rds`, contendo:
+
+| Variável | Descrição |
+|---|---|
+| `codigo` | Código identificador da estação. |
+| `lat`, `long` | Coordenadas geográficas da estação. |
+| `estado` | Unidade da federação. |
+| `theta` | Direção circular média dos eventos extremos, em radianos. |
+| `rbar` | Concentração sazonal dos eventos extremos. |
+
+Também são utilizadas as malhas territoriais do Brasil e das unidades da federação, obtidas pelo pacote `geobr`.
+
+As principais rotinas de visualização são:
+
+| Rotina | Processamento | Saída |
+|---|---|---|
+| `geom_spoke()` | Representa cada estação por uma seta orientada por `theta`, com comprimento associado a `rbar` e cor referente ao mês típico dos extremos. | Camada gráfica de setas. |
+| `g_brasil` | Combina as setas com os limites territoriais brasileiros. | Mapa nacional. |
+| `g_one` | Constrói mapas individuais para cada UF, utilizando as estações e os respectivos limites estaduais. | Mapa estadual. |
+| `wrap_plots()` | Organiza os mapas individuais em um painel. | Painel com os mapas estaduais. |
+| `ggsave()` | Exporta as figuras produzidas. | Arquivos PNG. |
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê `df_hydroyear_uniplu.rds` e seleciona as estações com coordenadas geográficas e indicadores `theta` e `rbar` disponíveis. Opcionalmente, o processamento pode ser restrito a uma unidade da federação por meio de `TEST_UF`.
+
+Em seguida, o parâmetro `rbar` é reescalonado para definir o comprimento gráfico das setas, enquanto `theta` determina sua orientação e é convertido em um mês do calendário para atribuição das cores.
+
+O mapa nacional é construído com os limites territoriais do Brasil e as setas das estações. Posteriormente, o script gera mapas individuais por UF, que são reunidos em um painel utilizando `patchwork`.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `fig3_uniplu.png` | Mapa nacional com setas representando a sazonalidade dos eventos extremos. |
+| `fig3_uniplu_estados.png` | Painel com os mapas individuais das unidades da federação. |
+| `fig3_setas_uf/<UF>.png` | Mapa individual de cada UF com as setas das estações. |
+
+## Script 04 — 5_uniplu_fig3_postos
+
+### Finalidade
+
+O script produz diagramas circulares para representar a **sazonalidade dos eventos extremos de precipitação** das estações analisadas no Script 02. Cada estação é representada por um ponto cujas coordenadas (`xbar`, `ybar`) indicam a direção média dos eventos extremos, enquanto a distância ao centro corresponde à concentração sazonal (`rbar`).
+
+São geradas uma figura para o conjunto de estações analisadas e figuras individuais por unidade da federação.
+
+### Funções principais
+
+**Dados de entrada:** arquivo `df_hydroyear_uniplu.rds`, contendo `codigo`, `estado`, `xbar`, `ybar` e `rbar`.
+
+O script utiliza quatro funções próprias:
+
+| Função | Dados de entrada | Processamento e saída |
+|---|---|---|
+| `get_scale_month()` | Não recebe argumentos. | Calcula as coordenadas circulares dos 12 meses, retornando `xscale` e `yscale` para posicionamento das divisões mensais. |
+| `get_scale_text_month(r)` | Raio `r` para posicionamento dos rótulos. | Retorna as coordenadas circulares dos nomes dos meses, utilizando o raio informado. |
+| `plot_fig3_postos(df, titulo)` | Tabela de estações com `xbar` e `ybar`, e título da figura. | Retorna um objeto `ggplot` com os pontos das estações, círculos de referência e identificação dos meses. Para conjuntos com pelo menos oito estações, adiciona curvas de densidade bidimensional. |
+| `salvar_fig3(g, caminho)` | Objeto gráfico `g` e caminho do arquivo. | Salva a figura em PNG, com dimensões de 15 × 15 cm e resolução de 300 dpi. |
+
+Os círculos de referência possuem raios de 0,25, 0,50, 0,75 e 1,00, permitindo avaliar visualmente a concentração sazonal das estações.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê `df_hydroyear_uniplu.rds` e seleciona as estações com valores válidos de `xbar`, `ybar`, `rbar` e identificação estadual. Opcionalmente, os dados podem ser restritos a uma UF por meio de `TEST_UF`.
+
+Em seguida, as funções auxiliares definem as posições dos meses e dos círculos de referência. A função `plot_fig3_postos()` é utilizada para construir a figura geral e, posteriormente, as figuras individuais de cada estado.
+
+Todas as figuras são exportadas pela função `salvar_fig3()`, mantendo a mesma escala e configuração gráfica.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `fig3_postos_uniplu.png` | Diagrama circular com todas as estações do domínio analisado. |
+| `fig3_postos_uf/<UF>.png` | Diagrama circular individual das estações de cada UF. |
+
+## Script 05 — 6_uniplu_hydro_year_escolhido
+
+### Finalidade
+
+O script determina o **mês de início do ano hidrológico de cada estação diária da Uniplu**, combinando a sazonalidade dos eventos extremos com a climatologia mensal da precipitação.
+
+A definição utiliza um critério híbrido baseado em `rbar`: para estações com concentração sazonal igual ou superior a 0,30, adota-se o mês oposto à época predominante dos extremos (`theta + π`). Para as demais estações, utiliza-se o último mês do maior período seco consecutivo.
+
+Além da classificação, o script produz tabelas de resultados, resumos estatísticos e mapas de distribuição espacial.
+
+### Funções principais
+
+**Dados de entrada:** são utilizados dois arquivos produzidos anteriormente:
+
+| Arquivo | Descrição |
+|---|---|
+| `df_hydroyear_uniplu.rds` | Indicadores `theta` e `rbar`, identificação e coordenadas das estações (Script 02). |
+| `stations_analyzed/<codigo>_analyzed.rds` | Séries diárias de precipitação (`dt`, `p`) processadas no Script 01. |
+
+As principais funções próprias são:
+
+| Função | Dados de entrada | Processamento e saída |
+|---|---|---|
+| `climatologia_mensal(sta, frac_na)` | Série diária com `dt` e `p`; fração máxima de falhas, definida como 0,20. | Calcula os totais mensais dos meses-ano válidos e suas medianas climatológicas. Retorna as 12 medianas (`p_med`), o mês de menor mediana (`mes_mais_seco`) e `n_anos_clima`. |
+| `maior_vao_circular(quiet)` | Vetor lógico de 12 posições, identificando os meses secos. | Identifica a maior sequência consecutiva de meses secos, considerando a continuidade entre dezembro e janeiro. Retorna início, fim e comprimento da sequência. |
+| `ultimo_mes_seco(p_med, seco_frac)` | Vetor das 12 medianas mensais e fração de 0,15 da amplitude anual. | Classifica os meses secos, identifica o maior bloco consecutivo e retorna seu último mês (`mes`) e o número total de meses secos (`n_secos`). |
+| `mes_oposto_de_theta(theta, mes_inicio_oposto)` | Direção circular média `theta` e, opcionalmente, um mês oposto previamente calculado. | Retorna o mês correspondente à direção `theta + π`, utilizando prioritariamente o mês preexistente quando válido. |
+| `mapa_mes(df, col_mes, bbox, pt_size)` | Tabela de estações, coluna do mês, recorte espacial opcional e tamanho dos pontos. | Retorna um objeto `ggplot` com a distribuição espacial dos meses atribuídos. |
+
+As funções auxiliares `achar_rds()` e `dir_analyzed()` verificam a existência dos arquivos e diretórios de entrada. O script também define `legenda_circular()`, mas essa função não é utilizada nas figuras geradas.
+
+A função `climatologia_mensal()` considera válidos os meses-ano com até 20% de falhas. Para cada mês do calendário, calcula a mediana dos totais mensais disponíveis.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê os indicadores de sazonalidade calculados no Script 02 e recupera as séries diárias das estações correspondentes. Para cada série, calcula a climatologia mensal e identifica o último mês do maior período seco consecutivo.
+
+Posteriormente, os resultados são associados aos valores de `theta` e `rbar`. O mês de início do ano hidrológico é definido conforme a regra:
+
+| Condição | Mês de início | Identificação da fonte |
+|---|---|---|
+| `rbar >= 0.30` | Mês oposto à direção dos extremos (`theta + π`). | `theta_pi` |
+| `rbar < 0.30` | Último mês do maior período seco consecutivo. | `ultimo_mes_seco` |
+
+O resultado é armazenado em `mes_hibrido_rbar`, enquanto `fonte_hibrido_rbar` registra o critério utilizado. Também são produzidos resumos para o conjunto analisado, a Região Sul e as unidades da federação.
+
+Por fim, o script gera mapas dos meses atribuídos, da regra utilizada por estação e da distribuição de `rbar`, além de histogramas de concentração sazonal.
+
+### Arquivos gerados
+
+**Tabelas:**
+
+| Arquivo | Descrição |
+|---|---|
+| `df_hidro_rbar_hibrido.rds` | Base completa com os indicadores, medianas climatológicas, meses calculados e resultado híbrido por estação. |
+| `df_hidro_rbar_hibrido.csv` | Tabela simplificada dos meses atribuídos e dos critérios utilizados. |
+| `df_hidro_rbar_hibrido_resumo.csv` | Resumo estatístico do conjunto analisado e da Região Sul. |
+| `df_hidro_rbar_hibrido_uf.csv` | Resumo dos resultados por unidade da federação. |
+
+**Figuras — pasta `pictures/ano_hidro_rbar_hibrido/`:**
+
+| Arquivo | Descrição |
+|---|---|
+| `fig_brasil_hibrido_rbar.png` | Distribuição espacial nacional dos meses de início. |
+| `fig_sul_hibrido_rbar.png` | Distribuição dos meses de início na Região Sul. |
+| `fig_brasil_fonte_hibrido.png` | Distribuição espacial da regra utilizada em cada estação. |
+| `fig_sul_fonte_hibrido.png` | Regra utilizada nas estações da Região Sul. |
+| `fig_rbar_brasil.png` | Distribuição espacial da concentração sazonal `rbar`. |
+| `fig_hist_rbar.png` | Histogramas de `rbar` para o Sul e o restante do Brasil. |
+
+## Script 06 — 9_subdiario_ano_hidro_uniplu
+
+### Finalidade
+
+O script atribui o **mês de início do ano hidrológico às estações subdiárias da Uniplu**, utilizando como referência os meses previamente definidos para as estações diárias no Script 05.
+
+A atribuição considera as dez estações de referência mais próximas de cada posto subdiário, classificando sua vizinhança como mancha ou transição.
+
+O código possui dois blocos de processamento, diferenciados pela origem dos inventários subdiários utilizados.
+
+### Funções principais
+
+**Dados de entrada:**
+
+| Arquivo ou fonte | Descrição |
+|---|---|
+| `df_hidro_rbar_hibrido.rds` | Meses de início, coordenadas e indicadores das estações diárias de referência. |
+| `df_subdiario_inventario.rds` ou arquivos Parquet | Inventário subdiário utilizado no primeiro bloco. |
+| `Dados_Uniplu/*.zip` | Arquivos utilizados para construir o inventário subdiário no segundo bloco. |
+
+As principais funções utilizadas são:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `mes_para_ang(m)` | Mês numérico. | Ângulo correspondente em radianos. |
+| `ang_para_mes(th)` | Ângulo em radianos. | Mês correspondente, entre 1 e 12. |
+| `rbar_meses(meses)` | Meses das estações vizinhas. | Concentração circular dos meses (`rbar_local`). |
+| `media_circ_mes(meses, pesos)` | Meses e pesos das estações vizinhas. | Mês obtido pela média circular ponderada. |
+| `FNN::get.knnx()` | Coordenadas das estações diárias e subdiárias. | Índices e distâncias dos vizinhos mais próximos. |
+
+### Fluxo geral de processamento
+
+O primeiro bloco utiliza um inventário subdiário existente ou o constrói a partir de arquivos Parquet. O segundo bloco realiza essa etapa diretamente a partir dos arquivos ZIP originais da Uniplu. Em ambos os casos, são selecionadas estações presentes em pelo menos oito anos dos arquivos.
+
+Para cada estação subdiária, o script identifica dez estações diárias vizinhas e utiliza seus meses de início para classificar a vizinhança como **mancha ou transição**. Nas regiões de mancha, adota a moda dos meses dos vizinhos; nas regiões de transição, utiliza a média circular ponderada.
+
+Os resultados são consolidados em tabelas contendo o mês atribuído (`mes_inicio`), a classificação espacial (`classe_espacial`) e o procedimento utilizado (`fonte_inicio`). Por fim, são produzidos mapas dos meses de início e das classes espaciais.
+
+### Arquivos gerados
+
+**Bloco A — Inventário existente ou Parquet**
+
+| Arquivo | Descrição |
+|---|---|
+| `df_subdiario_inventario.rds` e `.csv` | Inventário criado quando necessário. |
+| `df_subdiario_ano_hidro_uniplu.rds` e `.csv` | Resultados da atribuição do mês de início. |
+| `df_subdiario_ano_hidro_uniplu_uf.csv` | Resumo por UF. |
+| `subdiario_uniplu/fig_subdiario_mes_inicio_uniplu.png` | Mapa dos meses atribuídos. |
+| `subdiario_uniplu/fig_subdiario_mancha_transicao.png` | Mapa das classes espaciais. |
+
+**Bloco B — Inventário dos ZIPs da Uniplu**
+
+| Arquivo | Descrição |
+|---|---|
+| `uniplu_subdiario_inventory.rds` | Inventário dos registros subdiários. |
+| `uniplu_subdiario_sta_years.rds` | Cobertura temporal por estação. |
+| `uniplu_subdiario_keep8.rds` | Estações presentes em pelo menos oito anos. |
+| `uniplu_subdiario_inventory_keep8.rds` | Inventário das estações pré-selecionadas. |
+| `df_uniplu_subdiario_ano_hidro.rds` | Resultados da atribuição do mês de início. |
+| `df_uniplu_subdiario_ano_hidro_uf.csv` | Resumo por UF. |
+| `uniplu_subdiario/fig_uniplu_subdiario_mes_inicio.png` | Mapa dos meses atribuídos. |
+| `uniplu_subdiario/fig_uniplu_subdiario_mancha_transicao.png` | Mapa das classes espaciais. |
+
+# Scripts - Geração das Máximas
+
+## Script 01 — 12_subdiario_imax
+
+### Finalidade
+
+O script realiza a **extração das intensidades máximas anuais de precipitação subdiária (IMAX)**, considerando o ano hidrológico específico de cada estação, previamente definido por vizinhança espacial no Script 06.
+
+São analisadas durações de 10 a 50 minutos e de 1 a 24 horas, conforme a resolução temporal disponível. O processamento aplica controle de qualidade com tolerância máxima de 20% de falhas por ano hidrológico e identifica estações com pelo menos oito anos válidos em todas as 24 durações horárias.
+
+## Funções principais
+
+**Dados de entrada:**
+
+| Arquivo ou fonte | Descrição |
+|---|---|
+| `df_subdiario_ano_hidro_uniplu.rds` | Mês de início do ano hidrológico de cada estação, calculado no Script 06. |
+| `df_subdiario_inventario.rds` | Inventário e metadados das estações subdiárias. O script aceita `df_subdiario_mes_oposto_nearest.rds` como alternativa. |
+| `subdiario_br/<UF>/*_data.parquet` | Séries de precipitação subdiária utilizadas na extração das máximas. |
+
+As funções auxiliares são carregadas de três arquivos R:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `fun_filter_set()` | Tabela de precipitação com estação, data, chuva, resolução e responsável. | Série temporal com grade regularizada e datas ausentes preenchidas. Quando solicitado, também pode aplicar filtros de disponibilidade. |
+| `fun_group_ts()` | Lista de séries por estação e nome da variável de resolução temporal. | Listas de estações agrupadas por resolução temporal. |
+| `imax.wateryear()` | Séries temporais, durações, mês inicial por estação e parâmetros de controle de qualidade. | Tabela com as máximas anuais (`imax`) por estação, duração e ano hidrológico, acompanhadas dos diagnósticos de disponibilidade. |
+
+No processamento subdiário, `fun_filter_set()` é utilizada com `filter = FALSE`, preservando o controle de qualidade para a etapa de extração das máximas. A função também possui tratamento específico para registros do CEMADEN.
+
+A função `imax.wateryear()` retorna, entre outras, as variáveis:
+
+| Variável | Descrição |
+|---|---|
+| `gauge_code` | Código da estação. |
+| `d` | Duração analisada, em horas. |
+| `imax` | Intensidade máxima anual, em mm/h. |
+| `date` | Data de ocorrência da máxima. |
+| `wateryear` | Ano hidrológico correspondente. |
+| `start_month` | Mês de início do ano hidrológico. |
+| `na_prct_yr` | Proporção de falhas no ano hidrológico. |
+| `qc_year` | Indicador de aprovação no controle de qualidade anual. |
+
+### Fluxo geral de processamento
+
+Inicialmente, o script associa os meses de início do ano hidrológico aos metadados das estações subdiárias. Em seguida, realiza o processamento por unidade da federação, lendo os arquivos Parquet de precipitação.
+
+As séries são regularizadas por `fun_filter_set()` e agrupadas conforme a resolução temporal por `fun_group_ts()`. Posteriormente, `imax.wateryear()` extrai as máximas para as durações compatíveis com cada resolução, aplicando o controle de qualidade ao ano hidrológico completo.
+
+Os resultados são armazenados temporariamente por UF e depois consolidados em uma base nacional. Por fim, o script identifica as estações com pelo menos oito anos válidos em todas as 24 durações de 1 a 24 horas, produzindo tabelas de seleção e diagnóstico.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `df_subdiario_mes_inicio_imax.rds` e `.csv` | Inventário das estações com o mês de início utilizado na extração. |
+| `subdiario_cache/imax_by_uf_hidro_qc20/<UF>_imax.rds` | Resultados intermediários das máximas por UF. |
+| `df_imax_subdiario.rds` | Base nacional consolidada de máximas subdiárias. |
+| `df_imax_subdiario.parquet` e `.csv` | Versões da base consolidada para armazenamento e consulta. |
+| `selecao_estacoes_hidro_qc20.csv` | Diagnóstico de aprovação das estações nas 24 durações horárias, considerando pelo menos oito anos válidos em cada duração. |
+| `resumo_selecao_por_uf.csv` | Quantidade de estações avaliadas e aprovadas por UF. |
+| `auditoria_cemaden_hidro_qc20.csv` | Diagnóstico de disponibilidade anual das estações do CEMADEN. |
+
+## Script 02 — 13_uniplu_imax_hidro
+
+### Finalidade
+
+O script realiza a **extração das intensidades máximas anuais de precipitação diária**, considerando o mês de início do ano hidrológico definido para cada estação da Uniplu pelo método híbrido do Script 05.
+
+São analisadas as durações de 1, 2, 3, 4, 5, 6, 7 e 10 dias. O processamento aplica controle de qualidade com tolerância máxima de 20% de falhas por ano hidrológico e identifica estações com pelo menos 30 anos válidos em todas as oito durações.
+
+### Função principal
+
+**Dados de entrada:**
+
+| Arquivo | Descrição |
+|---|---|
+| `df_hidro_rbar_hibrido.rds` | Meses de início do ano hidrológico e metadados das estações diárias, obtidos no Script 05. |
+| `stations_analyzed/<codigo>_analyzed.rds` | Séries diárias de precipitação processadas no Script 01. |
+
+A função principal utilizada é:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `imax.wateryear()` | Lista de séries diárias, durações em horas, mês inicial de cada estação e parâmetros de controle de qualidade. | Tabela de intensidades máximas anuais para cada estação, duração e ano hidrológico, incluindo indicadores de disponibilidade. |
+
+A função é carregada do arquivo auxiliar `fun_imax_wateryear.R`, utilizado também pelo Script 07.
+
+As principais variáveis retornadas são `gauge_code`, `d`, `imax`, `date`, `wateryear`, `start_month`, `na_prct_yr` e `qc_year`. O script também acrescenta `d_days`, correspondente à duração em dias.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê `df_hidro_rbar_hibrido.rds` e identifica as estações com mês de início do ano hidrológico válido.
+
+O processamento é realizado por UF. Para cada estação, a série diária é carregada, organizada cronologicamente e regularizada entre a primeira e a última data observada.
+
+Em seguida, a função `imax.wateryear()` calcula as máximas anuais das oito durações, aplicando o controle de qualidade de 20% de falhas ao ano hidrológico completo. Os resultados são salvos por UF e posteriormente consolidados em uma base nacional.
+
+Por fim, o script identifica as estações com pelo menos 30 anos válidos em todas as durações analisadas, produzindo tabelas de seleção e resumos estatísticos.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `uniplu_cache/imax_by_uf_hidro_qc20/<UF>_imax.rds` | Resultados intermediários das máximas diárias por UF. |
+| `df_imax_uniplu_hidro.rds` | Base nacional consolidada das máximas diárias por ano hidrológico. |
+| `df_imax_uniplu_hidro.parquet` e `.csv` | Versões da base consolidada para armazenamento e consulta. |
+| `df_imax_uniplu_hidro_resumo.csv` | Resumo das máximas por duração, incluindo quantidade de observações, número de estações, mediana e percentil 95. |
+| `selecao_estacoes_diario_hidro_qc20_mais30anos.csv` | Diagnóstico de aprovação das estações nas oito durações, considerando pelo menos 30 anos válidos em cada uma. |
+| `resumo_selecao_diario_por_uf_mais30anos.csv` | Quantidade de estações avaliadas e aprovadas por UF. |
+
+# Script - Modelos Bayesianos
+
+## Script 01 — GEV_nonpooled_uniplu_diario_por_uf
+
+### Finalidade
+
+O script realiza o **ajuste bayesiano da distribuição generalizada de valores extremos (GEV)** às séries de intensidades máximas anuais de precipitação diária da Uniplu, considerando as durações de 1, 2, 3, 4, 5, 6, 7 e 10 dias.
+
+Os modelos são ajustados individualmente por estação (*non-pooled*), com uma estrutura de invariância de escala entre durações. O processamento é organizado por unidade da federação e permite retomar ajustes anteriores.
+
+### Funções principais
+
+**Dados de entrada:**
+
+| Arquivo | Descrição |
+|---|---|
+| `df_imax_uniplu_hidro.rds` | Intensidades máximas anuais por estação, duração e ano hidrológico, produzidas no Script 08. |
+
+As principais funções são:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `prepare_uf(uf)` | Sigla da UF. | Lista com os dados das estações, identificadores e estatísticas auxiliares por duração. |
+| `get_station_data(gauge_code, dados_stan)` | Código da estação e base preparada. | Série de máximas anuais da estação selecionada. |
+| `make_stan_data_station(gauge_code, dados_stan)` | Código da estação e base preparada. | Lista de dados para o Stan, incluindo máximas observadas, índices e durações. |
+| `make_nonpooled_diario_init(gauge_code, ctx)` | Código da estação e contexto de processamento. | Valores iniciais dos parâmetros para a amostragem MCMC. |
+| `fit_nonpooled_diario_station(gauge_code, ctx, seed)` | Código da estação, contexto e semente aleatória. | Objeto `stanfit` com o ajuste bayesiano da estação. |
+
+O modelo Stan, armazenado em `modelo_nonpooled_diario_stan`, estima os parâmetros estruturais `alpha`, `beta`, `H` e `theta`, os parâmetros GEV por duração (`mu`, `sigma`, `xi_d`) e parâmetros auxiliares de variabilidade. Também calcula a log-verossimilhança por observação (`log_lik`).
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê as máximas anuais e seleciona as estações com **pelo menos 30 anos válidos em todas as oito durações**. Registros duplicados por estação, duração e ano são consolidados, mantendo o maior valor.
+
+Em seguida, prepara os dados para o Stan e compila o modelo GEV. Para cada UF, as estações são ajustadas individualmente por MCMC, utilizando cinco cadeias e 20.000 iterações por cadeia, das quais 10.000 são destinadas ao aquecimento.
+
+O script verifica ajustes previamente salvos e processa somente as estações pendentes ou com erro. Os resultados e o resumo de execução são atualizados por UF.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `gev_nonpooled_by_uf/<UF>_fits.rds` | Lista dos ajustes Stan das estações da UF, incluindo eventuais erros registrados. |
+| `gev_nonpooled_by_uf/<UF>_meta.rds` | Metadados das durações, identificação das estações e situação dos ajustes (concluído, erro ou pendente). |
+
+**Observação:** o código está configurado com `TEST_UF = "MG"` e `OUT_TAG = "BR"`. O caminho de `DIR_FLUXO` também precisa ser conferido, pois não contém uma pasta de saída explicitamente definida na atribuição apresentada. O script salva os ajustes, mas não produz diretamente tabelas consolidadas de parâmetros posteriores nem curvas IDF.
+
+## Script 02 — codigos_bayesiano_comparação_RS
+
+### Finalidade
+
+O documento organiza os dados e apresenta **cinco modelos bayesianos GEV com invariância de escala**, destinados à análise das intensidades máximas anuais de precipitação subdiária.
+
+Os modelos consideram durações de 1 a 24 horas e diferem principalmente na representação do parâmetro de forma da GEV (`xi`), permitindo avaliar estruturas locais e regionais.
+
+### Funções e modelos principais
+
+**Dados de entrada:**
+
+| Arquivo | Descrição |
+|---|---|
+| `df_imax_fellipe.pqt` | Base de máximas anuais de intensidade, contendo código da estação, duração, ano e valor máximo (`imax`). |
+
+A principal função própria é:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `make_stan_data_station(gauge_sel, dados, D0)` | Código da estação, tabela de máximas indexada e duração de referência. | Lista de observações, durações e índices necessários para ajustar o modelo Stan individual da estação. |
+
+O documento também define cinco modelos Stan:
+
+| Modelo | Objeto no código | Característica |
+|---|---|---|
+| Non-pooled | `modelo_nonpooled_total_por_estacao_stan` | Ajuste independente por estação, com parâmetros GEV específicos por duração. |
+| Regional com `xi` comum | `modelo_bhm_xi_common_stan` | Um único parâmetro de forma compartilhado entre estações e durações. |
+| Regional com `xi` por duração | `modelo_bhm_xi_d_stan` | Parâmetro de forma específico de cada duração. |
+| Regional com `xi` por estação | `modelo_bhm_xi_j_stan` | Parâmetro de forma específico de cada estação. |
+| Regional com `xi` por estação e duração | `modelo_bhm_xi_jd_stan` | Parâmetro de forma específico de cada combinação estação–duração. |
+
+Todos os modelos utilizam a duração de referência de 24 horas e geram a variável `log_lik`, destinada a avaliações posteriores de ajuste e comparação.
+
+### Fluxo geral de processamento
+
+Inicialmente, o código lê a base de máximas anuais, consolida registros duplicados e seleciona estações com pelo menos oito anos válidos em todas as 24 durações.
+
+Em seguida, são construídos os identificadores numéricos das estações e durações, a base `dados_stan` e a lista `stan_data_regional`, utilizada pelos modelos regionais.
+
+Por fim, o documento define os cinco programas Stan, com diferentes estruturas para o parâmetro de forma da distribuição GEV.
+
+### Objetos gerados
+
+| Objeto | Descrição |
+|---|---|
+| `dados_modelo` | Base de máximas anuais após os filtros de seleção. |
+| `dados_stan` | Base com os índices numéricos utilizados pelo Stan. |
+| `gauge_lookup` | Correspondência entre códigos e identificadores das estações. |
+| `duration_lookup` | Correspondência entre durações e seus índices. |
+| `stan_data_regional` | Lista de dados para os modelos bayesianos regionais. |
+| `modelo_nonpooled_total_por_estacao_stan` e `modelo_bhm_xi_*_stan` | Códigos Stan dos cinco modelos definidos. |
+
+**Observação:** este arquivo organiza os dados e define os modelos, mas não executa a amostragem MCMC nem salva ajustes ou resultados de comparação.
+
+## Script 03 — GEV_nonpooled_uniplu_subdiario_cj
+
+### Finalidade
+
+O script realiza o **ajuste bayesiano GEV às intensidades máximas anuais subdiárias**, utilizando um modelo *non-pooled* por estação, com invariância de escala definida separadamente para durações inferiores a uma hora e durações de 1 a 24 horas.
+
+O processamento utiliza uma base previamente submetida a controle de qualidade e permite executar os ajustes em lotes de estações, com salvamento individual e retomada automática.
+
+### Funções principais
+
+**Dados de entrada:**
+
+| Arquivo | Descrição |
+|---|---|
+| `imax_sem_iqr_subdiario_Uniplu.rds` | Base de máximas anuais subdiárias, com durações, anos hidrológicos, intensidades máximas e indicadores de controle de qualidade e elegibilidade. |
+
+As principais funções são:
+
+| Função | Entrada | Saída |
+|---|---|---|
+| `make_station_context(gauge_code, bloco)` | Código da estação e base preparada para a modelagem. | Lista contendo as observações, durações, identificadores e estatísticas auxiliares da estação. |
+| `make_stan_data(ctx)` | Contexto da estação. | Lista de dados compatível com o modelo Stan. |
+| `make_nonpooled_conjunto_init(ctx)` | Contexto da estação. | Valores iniciais dos parâmetros bayesianos. |
+| `fit_station(gauge_code, bloco, seed)` | Código da estação, base e semente aleatória. | Objeto `stanfit` com o ajuste GEV da estação. |
+| `save_fit_atomic(obj, arquivo)` | Objeto de ajuste e caminho de destino. | Salva o ajuste em RDS, utilizando um arquivo temporário antes da substituição. |
+| `run_model(bloco, dir_fit, inicio, fim)` | Base de modelagem, diretório e intervalo de estações. | Executa os ajustes do lote, grava resultados individuais e atualiza a tabela de status. |
+
+O modelo Stan (`modelo_nonpooled_conjunto_stan`) estima os parâmetros GEV por duração e os parâmetros estruturais da relação de escala, distinguindo os ramos sub-horário e horário. A transição entre os dois ocorre em 1 hora, com duração de referência de 24 horas.
+
+### Fluxo geral de processamento
+
+Inicialmente, o script lê a base de máximas subdiárias e verifica os indicadores de controle de qualidade e elegibilidade. São mantidas estações com pelo menos oito anos válidos nas 24 durações de 1 a 24 horas e em pelo menos duas durações inferiores a uma hora.
+
+Em seguida, os dados são organizados por estação e o modelo Stan é compilado. Os ajustes são realizados individualmente por MCMC, utilizando cinco cadeias e 20.000 iterações por cadeia, com 10.000 destinadas ao aquecimento.
+
+O processamento ocorre em lotes configuráveis. Na execução apresentada, são selecionadas as posições de 101 a 200 da lista de estações. Cada ajuste concluído é salvo individualmente, enquanto um arquivo de status permite identificar estações concluídas, pendentes ou com erro e retomar a execução.
+
+### Arquivos gerados
+
+| Arquivo | Descrição |
+|---|---|
+| `selecao/filtro_nonpooled_subdiario_10min_24h_conjunto.csv` | Tabela das estações avaliadas e selecionadas para o modelo conjunto. |
+| `10min_24h_conjunto/lote_101_200/<codigo>_fit.rds` | Objeto `stanfit` correspondente ao ajuste de cada estação. |
+| `10min_24h_conjunto/lote_101_200/<codigo>_fit.ok` | Marcador de conclusão utilizado na retomada do processamento. |
+| `10min_24h_conjunto/lote_101_200/status.csv` | Registro da situação dos ajustes, incluindo erros e data de execução. |
+| `10min_24h_conjunto/lote_101_200/estacoes_do_lote.csv` | Identificação das estações incluídas no lote. |
+
+# Scripts — Visualização
+
+Os três scripts complementam os ajustes bayesianos realizados anteriormente, realizando a extração e organização dos resultados, a elaboração de tabelas e figuras e a geração de produtos espaciais para análise e apresentação.
+
+| Script | Finalidade |
+|---|---|
+| **`Visualização_Resultados_Modelos_Bayesianos_Diários_BR.R`** | Consolida os diagnósticos MCMC e os parâmetros dos modelos diários ajustados para o Brasil, produzindo resumos estatísticos, mapas de distribuição espacial, curvas IDF e arquivos GeoPackage. |
+| **`Visualização_Resultados_Modelos_Bayesianos_Regionais_RS.R`** | Compara os cinco modelos bayesianos aplicados ao Rio Grande do Sul, incluindo diagnósticos MCMC, avaliação preditiva por PSIS-LOO, comparação de parâmetros, níveis de retorno, curvas IDF e produtos cartográficos. |
+| **`Visualização_Resultados_Modelos_Bayesianos_Subdiarios_BR.R`** | Consolida os ajustes bayesianos subdiários para o Brasil, extraindo diagnósticos, parâmetros estruturais e GEV, níveis de retorno e produzindo distribuições estatísticas, mapas, curvas IDF e arquivos GeoPackage. |
+
+Esses scripts utilizam os resultados dos modelos previamente ajustados, sem realizar novos ajustes bayesianos. Seus produtos são destinados à avaliação dos resultados e à elaboração das figuras e tabelas apresentadas no relatório.

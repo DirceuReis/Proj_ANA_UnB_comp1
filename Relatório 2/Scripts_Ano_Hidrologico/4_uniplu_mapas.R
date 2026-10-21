@@ -90,11 +90,7 @@ meses_pt <- c("jan", "fev", "mar", "abr", "mai", "jun",
 stations <- stations %>%
   mutate(
     s1 = scales::rescale(rbar, to = c(0.05, 1.5)),
-    mes_color = meses_pt[
-      as.integer(
-        month(dmy("1-1-1999") + round(theta * 180 / pi) - 1)
-      )
-    ],
+    mes_color = meses_pt[as.integer(month(dmy("1-1-1999") + round(theta * 180 / pi) - 1) )],
     mes_color = factor(mes_color, levels = meses_pt)
   )
 
@@ -117,15 +113,9 @@ col_month <- c(col_month, rev(col_month))
 
 library(geobr)
 
-uf.sf <- geobr::read_state(
-  year = 2020,
-  showProgress = FALSE
-)
+uf.sf <- geobr::read_state( year = 2020, showProgress = FALSE )
 
-br.sf <- geobr::read_country(
-  year = 2020,
-  showProgress = FALSE
-)
+br.sf <- geobr::read_country( year = 2020, showProgress = FALSE )
 
 # garantir o mesmo CRS
 uf.sf <- sf::st_transform(uf.sf, 4326)
@@ -137,136 +127,43 @@ g_brasil <-
   ggplot() +
   
   # Estados: preenchimento + divisas estaduais
-  geom_sf(
-    data = uf.sf,
-    fill = "grey98",
-    color = "grey50",
-    linewidth = 0.35
-  ) +
+  geom_sf( data = uf.sf, fill = "grey98", color = "grey50", linewidth = 0.35 ) +
   
   # Contorno externo do Brasil
-  geom_sf(
-    data = br.sf,
-    fill = NA,
-    color = "grey25",
-    linewidth = 0.50
-  ) +
+  geom_sf( data = br.sf, fill = NA, color = "grey25", linewidth = 0.50 ) +
   
-  geom_spoke(
-    data = stations,
-    aes(
-      x = long,
-      y = lat,
-      angle = theta,
-      color = mes_color,
-      radius = s1
-    ),
-    linewidth = 0.35,
-    arrow = arrow(
-      length = unit(0.08, "cm")
-    )
-  ) +
+  geom_spoke( data = stations, aes( x = long, y = lat, angle = theta, color = mes_color, radius = s1 ),
+    linewidth = 0.35, arrow = arrow( length = unit(0.08, "cm") ) ) +
   
-  scale_colour_manual(
-    name = "Mês típico do extremo",
-    values = col_month
-  ) +
+  scale_colour_manual( name = "Mês típico do extremo", values = col_month ) +
   
-  scale_radius(
-    labels = NULL,
-    trans = "identity",
-    range = c(0.5, 3),
-    guide = "none"
-  ) +
+  scale_radius( labels = NULL, trans = "identity", range = c(0.5, 3), guide = "none" ) +
   
-  coord_sf(
-    xlim = c(
-      bbox.br["xmin"],
-      bbox.br["xmax"]
-    ),
-    ylim = c(
-      bbox.br["ymin"],
-      bbox.br["ymax"]
-    ),
-    expand = FALSE
-  ) +
+  coord_sf( xlim = c( bbox.br["xmin"], bbox.br["xmax"] ),
+    ylim = c( bbox.br["ymin"],  bbox.br["ymax"] ),
+    expand = FALSE ) +
   
-  labs(
-    x = "Longitude",
-    y = "Latitude"
-  ) +
+  labs( x = "Longitude", y = "Latitude" ) +
   
-  annotation_scale(
-    location = "br",
-    width_hint = 0.20,
-    height = unit(1.5, "mm"),
-    text_family = font,
-    text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
-    line_width = 0.4
-  ) +
+  annotation_scale( location = "br", width_hint = 0.20, height = unit(1.5, "mm"), text_family = font,
+    text_cex = 0.6, bar_cols = c( "black", "aliceblue" ), line_width = 0.4 ) +
   
-  annotation_north_arrow(
-    location = "tr",
-    width = unit(1, "cm"),
-    height = unit(1, "cm"),
-    which_north = "true",
-    style = north_arrow_nautical(
-      text_family = font,
-      text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
-    )
-  ) +
+  annotation_north_arrow( location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+    which_north = "true", style = north_arrow_nautical( text_family = font, text_size = fontsize,
+      fill = c( "black", "aliceblue" ) ) ) +
   
   tema_base +
   
-  theme(
-    legend.position = "bottom",
-    legend.justification = "center",
-    legend.direction = "horizontal",
-    
-    legend.key.spacing.x = unit(
-      fontsize,
-      "pt"
-    ),
-    
-    legend.spacing.x = unit(
-      1,
-      "pt"
-    ),
-    
-    legend.margin = margin(
-      t = -3
-    )
-  ) +
+  theme( legend.position = "bottom", legend.justification = "center", legend.direction = "horizontal",
+    legend.key.spacing.x = unit( fontsize, "pt" ),
+    legend.spacing.x = unit( 1, "pt" ),
+    legend.margin = margin( t = -3 ) ) +
   
-  guides(
-    color = guide_legend(
-      nrow = 2,
-      byrow = TRUE,
-      title.position = "top",
-      override.aes = list(
-        linewidth = 1.0
-      )
-    )
-  )
+  guides( color = guide_legend( nrow = 2, byrow = TRUE, title.position = "top", override.aes = list( linewidth = 1.0 ) ))
 
 
-ggsave(
-  filename = file.path(DIR_PIC, "fig3_uniplu.png"),
-  plot = g_brasil,
-  width = FIG_WIDTH,
-  height = 12,
-  units = "cm",
-  dpi = 300
-)
-
+ggsave( filename = file.path(DIR_PIC, "fig3_uniplu.png"), plot = g_brasil, width = FIG_WIDTH,
+  height = 12, units = "cm", dpi = 300 )
 message("Salvo: ", file.path(DIR_PIC, "fig3_uniplu.png"))
 
 # Segunda figura: recorte por estado com malha do geobr
@@ -290,10 +187,7 @@ ufs <- read_state(year = 2020, showProgress = FALSE) %>%
   mutate(estado = abbrev_state)
 
 tema_mapa_uf <- tema_base +
-  theme(
-    axis.ticks = element_blank(),
-    legend.position = "bottom"
-  )
+  theme( axis.ticks = element_blank(), legend.position = "bottom" )
 
 n_uf <- n_distinct(stations$estado)
 

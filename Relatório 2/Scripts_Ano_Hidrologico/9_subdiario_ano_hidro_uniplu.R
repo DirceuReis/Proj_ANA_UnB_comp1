@@ -417,7 +417,7 @@ library(readr)
 # =============================================================================
 
 DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
-DIR_DADOS <- "C:/Users/Adm/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
+DIR_DADOS <- #Caminho dos dados do Uniplu
 DIR_ZIP <- file.path(DIR_DADOS, "Dados_Uniplu")
 
 TEST_UF <- NULL
@@ -541,17 +541,13 @@ message(
 # SALVAR
 # =============================================================================
 
-saveRDS(inv_subdiario,
-        file.path(DIR_DF, "uniplu_subdiario_inventory.rds"))
+saveRDS(inv_subdiario, file.path(DIR_DF, "uniplu_subdiario_inventory.rds"))
 
-saveRDS(sta_years,
-        file.path(DIR_DF, "uniplu_subdiario_sta_years.rds"))
+saveRDS(sta_years, file.path(DIR_DF, "uniplu_subdiario_sta_years.rds"))
 
-saveRDS(keep_subdiario,
-        file.path(DIR_DF, "uniplu_subdiario_keep8.rds"))
+saveRDS(keep_subdiario, file.path(DIR_DF, "uniplu_subdiario_keep8.rds"))
 
-saveRDS(inv_subdiario_keep,
-        file.path(DIR_DF, "uniplu_subdiario_inventory_keep8.rds"))
+saveRDS(inv_subdiario_keep, file.path(DIR_DF, "uniplu_subdiario_inventory_keep8.rds"))
 
 # =============================================================================
 # ANO HIDROLÓGICO — UNIPLU SUBDIÁRIO
@@ -767,15 +763,9 @@ tab_uf <- res %>%
 # Salvar
 # -----------------------------------------------------------------------------
 
-saveRDS(
-  res,
-  file.path(DIR_DF, "df_uniplu_subdiario_ano_hidro.rds")
-)
+saveRDS( res, file.path(DIR_DF, "df_uniplu_subdiario_ano_hidro.rds") )
 
-write_excel_csv(
-  tab_uf,
-  file.path(DIR_DF, "df_uniplu_subdiario_ano_hidro_uf.csv")
-)
+write_excel_csv( tab_uf, file.path(DIR_DF, "df_uniplu_subdiario_ano_hidro_uf.csv") )
 
 # -----------------------------------------------------------------------------
 # Mapas
@@ -819,387 +809,182 @@ br <- geobr::read_country(year=2020, showProgress=FALSE) %>%
 tema <- theme_bw() +
   theme(
     panel.grid = element_blank(),
-    
-    axis.text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    axis.ticks = element_line(
-      linewidth = 0.3
-    ),
-    
-    axis.title = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
+    axis.text = element_text(family = font, size = fontsize),
+    axis.ticks = element_line(linewidth = 0.3),
+    axis.title = element_text(family = font, size = fontsize),
+    text = element_text(family = font, size = fontsize),
     legend.background = element_blank(),
     legend.key = element_blank(),
-    
     plot.title = element_text(
-      face = "bold",
-      hjust = 0.5,
-      family = font,
-      size = fontsize
+      face = "bold", hjust = 0.5, family = font, size = fontsize
     ),
-    
     plot.subtitle = element_text(
-      hjust = 0.5,
-      family = font,
-      size = fontsize,
-      color = "grey35"
+      hjust = 0.5, family = font, size = fontsize, color = "grey35"
     ),
-    
-    plot.background = element_rect(
-      fill = "white",
-      color = NA
-    ),
-    
-    plot.margin = margin(
-      t = 5,
-      r = 5,
-      b = 5,
-      l = 5
-    )
+    plot.background = element_rect(fill = "white", color = NA),
+    plot.margin = margin(t = 5, r = 5, b = 5, l = 5)
   )
 
-
 # legenda_circular <- function(){
-  # 
-  # d <- tibble(
-  #   mes=1:12,
-  #   lab=meses_lab,
-  #   xmin=0:11,
-  #   xmax=1:12
-  # )
-  # 
-  # ggplot(d) +
-  #   geom_rect(
-  #     aes(xmin=xmin, xmax=xmax, ymin=0.58, ymax=1, fill=factor(mes)),
-  #     color="white", linewidth=0.35
-  #   ) +
-  #   geom_text(
-  #     aes(x=(xmin+xmax)/2, y=1.22, label=lab),
-  #     size=BASE_SIZE/.pt, fontface="bold"
-  #   ) +
-  #   scale_fill_manual(values=unname(cores_mes), guide="none") +
-  #   coord_polar(theta="x", start=-pi/2-pi/12, direction=1) +
-  #   ylim(0, 1.45) +
-  #   theme_void()
+#   d <- tibble(mes=1:12, lab=meses_lab, xmin=0:11, xmax=1:12)
+#   ggplot(d) +
+#     geom_rect(
+#       aes(xmin=xmin, xmax=xmax, ymin=0.58, ymax=1, fill=factor(mes)),
+#       color="white", linewidth=0.35
+#     ) +
+#     geom_text(
+#       aes(x=(xmin+xmax)/2, y=1.22, label=lab),
+#       size=BASE_SIZE/.pt, fontface="bold"
+#     ) +
+#     scale_fill_manual(values=unname(cores_mes), guide="none") +
+#     coord_polar(theta="x", start=-pi/2-pi/12, direction=1) +
+#     ylim(0, 1.45) +
+#     theme_void()
 # }
 
 dados_mes <- res %>%
-    filter( is.finite(mes_inicio) ) %>%
-    mutate( mes_inicio_f = factor( mes_inicio, levels = 1:12, labels = meses_lab ) )
+  filter(is.finite(mes_inicio)) %>%
+  mutate(mes_inicio_f = factor(mes_inicio, levels = 1:12, labels = meses_lab))
 
 bbox_br <- st_bbox(br)
-  
+
 g_mes <- ggplot() +
-  
-  # -------------------------------------------------------------------------
-# Estados
-# -------------------------------------------------------------------------
-
-geom_sf(
-  data = ufs,
-  fill = "grey98",
-  color = "grey50",
-  linewidth = 0.30
-) +
-  
-  # -------------------------------------------------------------------------
-# Contorno externo do Brasil
-# -------------------------------------------------------------------------
-
-geom_sf(
-  data = br,
-  fill = NA,
-  color = "grey25",
-  linewidth = 0.45
-) +
-  
-  # -------------------------------------------------------------------------
-# Estações
-# -------------------------------------------------------------------------
-
-geom_point(
-  data = res %>%
-    filter(
-      is.finite(mes_inicio),
-      is.finite(long),
-      is.finite(lat)
-    ),
-  aes(
-    x = long,
-    y = lat,
-    color = factor(
-      mes_inicio,
-      levels = 1:12
-    )
-  ),
-  size = 1.1,
-  alpha = 0.90,
-  stroke = 0
-) +
-  
-  # -------------------------------------------------------------------------
-# Meses
-# -------------------------------------------------------------------------
-
-scale_color_manual(
-  name = "Mês",
-  values = cores_mes,
-  breaks = as.character(1:12),
-  labels = meses_lab,
-  drop = FALSE
-) +
-  
-  # -------------------------------------------------------------------------
-# Extensão
-# -------------------------------------------------------------------------
-
-coord_sf(
-  xlim = c(
-    bbox_br["xmin"],
-    bbox_br["xmax"]
-  ),
-  ylim = c(
-    bbox_br["ymin"],
-    bbox_br["ymax"]
-  ),
-  expand = FALSE
-) +
-  
-  # -------------------------------------------------------------------------
-# Eixos
-# -------------------------------------------------------------------------
-
-labs(
-  x = "Longitude",
-  y = "Latitude"
-  # title = "Subdiário — mês de início (vizinhança Uniplu)"
-) +
-  
-  # -------------------------------------------------------------------------
-# Escala
-# -------------------------------------------------------------------------
-
-annotation_scale(
-  location = "br",
-  width_hint = 0.20,
-  height = unit(1.5, "mm"),
-  text_family = font,
-  text_cex = 0.6,
-  bar_cols = c(
-    "black",
-    "aliceblue"
-  ),
-  line_width = 0.4
-) +
-  
-  # -------------------------------------------------------------------------
-# Norte
-# -------------------------------------------------------------------------
-
-annotation_north_arrow(
-  location = "tr",
-  width = unit(1, "cm"),
-  height = unit(1, "cm"),
-  which_north = "true",
-  style = north_arrow_nautical(
-    text_family = font,
-    text_size = fontsize,
-    fill = c(
-      "black",
-      "aliceblue"
+  # Estados
+  geom_sf(data = ufs, fill = "grey98", color = "grey50", linewidth = 0.30) +
+  # Contorno externo do Brasil
+  geom_sf(data = br, fill = NA, color = "grey25", linewidth = 0.45) +
+  # Estações
+  geom_point(
+    data = res %>% filter(is.finite(mes_inicio), is.finite(long), is.finite(lat)),
+    aes(x = long, y = lat, color = factor(mes_inicio, levels = 1:12)),
+    size = 1.1, alpha = 0.90, stroke = 0
+  ) +
+  # Meses
+  scale_color_manual(
+    name = "Mês", values = cores_mes, breaks = as.character(1:12),
+    labels = meses_lab, drop = FALSE
+  ) +
+  # Extensão
+  coord_sf(
+    xlim = c(bbox_br["xmin"], bbox_br["xmax"]),
+    ylim = c(bbox_br["ymin"], bbox_br["ymax"]),
+    expand = FALSE
+  ) +
+  # Eixos
+  labs(
+    x = "Longitude", y = "Latitude"
+    # title = "Subdiário — mês de início (vizinhança Uniplu)"
+  ) +
+  # Escala
+  annotation_scale(
+    location = "br", width_hint = 0.20, height = unit(1.5, "mm"),
+    text_family = font, text_cex = 0.6,
+    bar_cols = c("black", "aliceblue"), line_width = 0.4
+  ) +
+  # Norte
+  annotation_north_arrow(
+    location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font, text_size = fontsize,
+      fill = c("black", "aliceblue")
     )
   )
 ) +
-  
   tema +
-  
   theme(
     legend.position = "bottom",
     legend.justification = "center",
     legend.direction = "horizontal",
-    
     legend.key.width = unit(12, "pt"),
     legend.key.height = unit(8, "pt"),
     legend.key.spacing.x = unit(2, "pt"),
     legend.spacing.x = unit(1, "pt")
   ) +
-  
   guides(
     color = guide_legend(
-      nrow = 2,
-      byrow = TRUE,
-      title.position = "top",
-      override.aes = list(
-        size = 2.5,
-        alpha = 1
-      )
+      nrow = 2, byrow = TRUE, title.position = "top",
+      override.aes = list(size = 2.5, alpha = 1)
     )
   )
 
 g_mes
-  
-ggsave( filename = file.path( DIR_PIC, "fig_uniplu_subdiario_mes_inicio.png" ),
-    plot = g_mes, width = FIG_WIDTH, height = 12, units = "cm", dpi = 600, bg = "white" )
-  
 
-cores_classe <- c( "mancha" = "#0072B2", "transicao" = "#D55E00" )
+ggsave(
+  filename = file.path(DIR_PIC, "fig_uniplu_subdiario_mes_inicio.png"),
+  plot = g_mes, width = FIG_WIDTH, height = 12, units = "cm", dpi = 600, bg = "white"
+)
 
-labels_classe <- c( "mancha" = paste0( "Mancha (",
-    sum( res$classe_espacial == "mancha", na.rm = TRUE ), ")" ),
-  "transicao" = paste0( "Transição (", sum( res$classe_espacial == "transicao", na.rm = TRUE ),
-    ")" ) )
+cores_classe <- c("mancha" = "#0072B2", "transicao" = "#D55E00")
+
+labels_classe <- c(
+  "mancha" = paste0("Mancha (", sum(res$classe_espacial == "mancha", na.rm = TRUE), ")"),
+  "transicao" = paste0("Transição (", sum(res$classe_espacial == "transicao", na.rm = TRUE), ")")
+)
 
 g_cls <- ggplot() +
-  
-  # -------------------------------------------------------------------------
-# Estados
-# -------------------------------------------------------------------------
-
-geom_sf(
-  data = ufs,
-  fill = "grey98",
-  color = "grey50",
-  linewidth = 0.30
-) +
-  
-  # -------------------------------------------------------------------------
-# Contorno externo do Brasil
-# -------------------------------------------------------------------------
-
-geom_sf(
-  data = br,
-  fill = NA,
-  color = "grey25",
-  linewidth = 0.45
-) +
-  
-  # -------------------------------------------------------------------------
-# Estações
-# -------------------------------------------------------------------------
-
-geom_point(
-  data = res %>%
-    filter(
-      is.finite(long),
-      is.finite(lat),
-      !is.na(classe_espacial)
-    ),
-  aes(
-    x = long,
-    y = lat,
-    color = classe_espacial
-  ),
-  size = 1.10,
-  alpha = 0.90,
-  stroke = 0
-) +
-  
-  # -------------------------------------------------------------------------
-# Cores
-# -------------------------------------------------------------------------
-
-scale_color_manual(
-  name = "Classificação espacial",
-  values = cores_classe,
-  labels = labels_classe,
-  drop = FALSE
-) +
-  
-  # -------------------------------------------------------------------------
-# Extensão espacial
-# -------------------------------------------------------------------------
-
-coord_sf(
-  xlim = c(
-    bbox_br["xmin"],
-    bbox_br["xmax"]
-  ),
-  ylim = c(
-    bbox_br["ymin"],
-    bbox_br["ymax"]
-  ),
-  expand = FALSE
-) +
-  
-  # -------------------------------------------------------------------------
-# Eixos
-# -------------------------------------------------------------------------
-
-labs(
-  x = "Longitude",
-  y = "Latitude"
-) +
-  
-  # -------------------------------------------------------------------------
-# Barra de escala
-# -------------------------------------------------------------------------
-
-annotation_scale(
-  location = "br",
-  width_hint = 0.20,
-  height = unit(1.5, "mm"),
-  text_family = font,
-  text_cex = 0.6,
-  bar_cols = c("black", "aliceblue"),
-  line_width = 0.4
-) +
-  
-  # -------------------------------------------------------------------------
-# Norte
-# -------------------------------------------------------------------------
-
-annotation_north_arrow(
-  location = "tr",
-  width = unit(1, "cm"),
-  height = unit(1, "cm"),
-  which_north = "true",
-  style = north_arrow_nautical(
-    text_family = font,
-    text_size = fontsize,
-    fill = c("black", "aliceblue")
+  # Estados
+  geom_sf(data = ufs, fill = "grey98", color = "grey50", linewidth = 0.30) +
+  # Contorno externo do Brasil
+  geom_sf(data = br, fill = NA, color = "grey25", linewidth = 0.45) +
+  # Estações
+  geom_point(
+    data = res %>% filter(is.finite(long), is.finite(lat), !is.na(classe_espacial)),
+    aes(x = long, y = lat, color = classe_espacial),
+    size = 1.10, alpha = 0.90, stroke = 0
+  ) +
+  # Cores
+  scale_color_manual(
+    name = "Classificação espacial", values = cores_classe,
+    labels = labels_classe, drop = FALSE
+  ) +
+  # Extensão espacial
+  coord_sf(
+    xlim = c(bbox_br["xmin"], bbox_br["xmax"]),
+    ylim = c(bbox_br["ymin"], bbox_br["ymax"]),
+    expand = FALSE
+  ) +
+  # Eixos
+  labs(x = "Longitude", y = "Latitude") +
+  # Barra de escala
+  annotation_scale(
+    location = "br", width_hint = 0.20, height = unit(1.5, "mm"),
+    text_family = font, text_cex = 0.6,
+    bar_cols = c("black", "aliceblue"), line_width = 0.4
+  ) +
+  # Norte
+  annotation_north_arrow(
+    location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+    which_north = "true",
+    style = north_arrow_nautical(
+      text_family = font, text_size = fontsize,
+      fill = c("black", "aliceblue")
+    )
   )
 ) +
-  
   tema +
-  
   theme(
     legend.position = "bottom",
     legend.justification = "center",
     legend.direction = "horizontal",
-    
     legend.key.width = unit(12, "pt"),
     legend.key.height = unit(8, "pt"),
     legend.key.spacing.x = unit(2, "pt"),
     legend.spacing.x = unit(1, "pt")
   ) +
-  
   guides(
     color = guide_legend(
-      nrow = 1,
-      byrow = TRUE,
-      title.position = "left",
-      override.aes = list(
-        size = 2.5,
-        alpha = 1
-      )
+      nrow = 1, byrow = TRUE, title.position = "left",
+      override.aes = list(size = 2.5, alpha = 1)
     )
   )
 
 g_cls
 
-ggsave( filename = file.path( DIR_PIC, "fig_uniplu_subdiario_mancha_transicao.png" ),
-  plot = g_cls, width = FIG_WIDTH, height = 12, units = "cm", dpi = 600, bg = "white" )
+ggsave(
+  filename = file.path(DIR_PIC, "fig_uniplu_subdiario_mancha_transicao.png"),
+  plot = g_cls, width = FIG_WIDTH, height = 12, units = "cm", dpi = 600, bg = "white"
+)
 
 message("\nTabelas: ", DIR_DF)
 message("Figuras: ", DIR_PIC)

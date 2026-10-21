@@ -18,8 +18,7 @@ library(readr)
 
 # --- caminhos (saídas nesta pasta; Uniplu fora) ---
 DIR_FLUXO <- "Relatório 2/Scripts_Ano_Hidrologico"
-DIR_DADOS <- "C:/Users/Adm/OneDrive/3. UFC/UFC - 2026/Analises_Relatório_ANA_Outubro/Ano_Hidro"
-#Caminho dados do Uniplu
+DIR_DADOS <- #Caminho dados do Uniplu
 
 TEST_UF <- NULL   # NULL = Brasil; ex. "CE", "RS"
 OUT_TAG <- if (is.null(TEST_UF) || !nzchar(TEST_UF)) "BR" else TEST_UF

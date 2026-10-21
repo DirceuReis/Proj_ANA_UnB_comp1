@@ -495,15 +495,8 @@ for (col in c("n_picos", "mes_pico")) {
   }
 }
 
-write_excel_csv(
-  planilha,
-  file.path(DIR_DF, "df_hidro_rbar_hibrido.csv")
-)
-
-saveRDS(
-  sta,
-  file.path(DIR_DF, "df_hidro_rbar_hibrido.rds")
-)
+write_excel_csv( planilha, file.path(DIR_DF, "df_hidro_rbar_hibrido.csv") )
+saveRDS( sta, file.path(DIR_DF, "df_hidro_rbar_hibrido.rds") )
 
 tab_uf <- sta %>%
   group_by(estado) %>%
@@ -516,10 +509,7 @@ tab_uf <- sta %>%
   ) %>%
   arrange(estado)
 
-write_excel_csv(
-  tab_uf,
-  file.path(DIR_DF, "df_hidro_rbar_hibrido_uf.csv")
-)
+write_excel_csv( tab_uf, file.path(DIR_DF, "df_hidro_rbar_hibrido_uf.csv") )
 
 # ---------------------------------------------------------------------------
 # Mapas
@@ -566,55 +556,25 @@ sul_ufs <- ufs %>%
 bbox_br <- st_bbox(br)
 
 tema_mapa <- theme_bw() +
-  theme(
-    panel.grid = element_blank(),
+  theme( panel.grid = element_blank(),
     
     # mostrar coordenadas
-    axis.text = element_text(
-      family = font,
-      size = fontsize
-    ),
+    axis.text = element_text( family = font, size = fontsize ),
+    axis.ticks = element_line( linewidth = 0.3 ),
+    axis.title = element_text( family = font, size = fontsize ),
     
-    axis.ticks = element_line(
-      linewidth = 0.3
-    ),
-    
-    axis.title = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    text = element_text(
-      family = font,
-      size = fontsize
-    ),
+    text = element_text( family = font, size = fontsize ),
     
     legend.background = element_blank(),
     legend.key = element_blank(),
     
-    legend.title = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    legend.text = element_text(
-      family = font,
-      size = fontsize
-    ),
+    legend.title = element_text( family = font, size = fontsize ),
+    legend.text = element_text( family = font, size = fontsize ),
     
     strip.background = element_blank(),
     
-    strip.text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    plot.margin = margin(
-      t = 5,
-      r = 5,
-      b = 5,
-      l = 5
-    )
+    strip.text = element_text( family = font, size = fontsize ),
+    plot.margin = margin( t = 5, r = 5, b = 5, l = 5 )
   )
 
 legenda_circular <- function() {
@@ -637,12 +597,7 @@ legenda_circular <- function() {
     theme(plot.margin = margin(0, 0, 2, 0))
 }
 
-mapa_mes <- function(
-    df,
-    col_mes,
-    bbox = NULL,
-    pt_size = 1.2
-) {
+mapa_mes <- function( df, col_mes, bbox = NULL, pt_size = 1.2 ) {
   
   d <- df %>%
     filter(
@@ -650,113 +605,29 @@ mapa_mes <- function(
       is.finite(long),
       is.finite(lat)
     ) %>%
-    mutate(
-      mes_f = factor(
-        as.character(
-          as.integer(
-            .data[[col_mes]]
-          )
-        ),
-        levels = as.character(1:12)
-      )
-    )
+    mutate( mes_f = factor( as.character( as.integer( .data[[col_mes]] ) ), levels = as.character(1:12) ) )
   
   g <- ggplot() +
-    
-    # -------------------------------------------------------------------------
-  # Brasil
-  # -------------------------------------------------------------------------
   
-  geom_sf(
-    data = if (is.null(bbox)) br else sul_ufs,
-    fill = "grey98",
-    color = "grey40",
-    linewidth = 0.40
-  ) +
-    
-    # -------------------------------------------------------------------------
-  # Limites estaduais
-  # -------------------------------------------------------------------------
+  geom_sf( data = if (is.null(bbox)) br else sul_ufs, fill = "grey98", color = "grey40", linewidth = 0.40 ) +
+   
+  geom_sf( data = if (is.null(bbox)) ufs else sul_ufs, fill = NA, color = "grey60", linewidth = 0.25 ) +
   
-  geom_sf(
-    data = if (is.null(bbox)) ufs else sul_ufs,
-    fill = NA,
-    color = "grey60",
-    linewidth = 0.25
-  ) +
-    
-    # -------------------------------------------------------------------------
-  # Estações
-  # -------------------------------------------------------------------------
+  geom_point( data = d, aes( x = long, y = lat, color = mes_f ),
+    size = pt_size, alpha = 0.90, stroke = 0 ) +
   
-  geom_point(
-    data = d,
-    aes(
-      x = long,
-      y = lat,
-      color = mes_f
-    ),
-    size = pt_size,
-    alpha = 0.90,
-    stroke = 0
-  ) +
-    
-    # -------------------------------------------------------------------------
-  # Cores
-  # -------------------------------------------------------------------------
+  scale_color_manual( name = "Mês", values = cores_mes, breaks = as.character(1:12),
+    labels = meses_lab, drop = FALSE ) +
   
-  scale_color_manual(
-    name = "Mês",
-    values = cores_mes,
-    breaks = as.character(1:12),
-    labels = meses_lab,
-    drop = FALSE
-  ) +
-    
-    # -------------------------------------------------------------------------
-  # Barra de escala
-  # -------------------------------------------------------------------------
+  annotation_scale( location = "br", width_hint = 0.20, height = unit(1.5, "mm"),
+    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ),
+    line_width = 0.4 ) +
   
-  annotation_scale(
-    location = "br",
-    width_hint = 0.20,
-    height = unit(1.5, "mm"),
-    text_family = font,
-    text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
-    line_width = 0.4
-  ) +
+  annotation_north_arrow( location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+    which_north = "true", style = north_arrow_nautical( text_family = font, text_size = fontsize,
+      fill = c( "black", "aliceblue" ) ) ) +
     
-    # -------------------------------------------------------------------------
-  # Norte
-  # -------------------------------------------------------------------------
-  
-  annotation_north_arrow(
-    location = "tr",
-    width = unit(1, "cm"),
-    height = unit(1, "cm"),
-    which_north = "true",
-    style = north_arrow_nautical(
-      text_family = font,
-      text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
-    )
-  ) +
-    
-    # -------------------------------------------------------------------------
-  # Eixos
-  # -------------------------------------------------------------------------
-  
-  labs(
-    x = "Longitude",
-    y = "Latitude"
-  ) +
+  labs( x = "Longitude", y = "Latitude") +
     
     tema_mapa +
     
@@ -771,36 +642,14 @@ mapa_mes <- function(
       legend.spacing.x = unit(1, "pt")
     ) +
     
-    guides(
-      color = guide_legend(
-        nrow = 2,
-        byrow = TRUE,
-        title.position = "top",
-        override.aes = list(
-          size = 2.5,
-          alpha = 1
-        )
-      )
+    guides( color = guide_legend( nrow = 2, byrow = TRUE, title.position = "top", override.aes = list( size = 2.5, alpha = 1 ))
     )
-  
-  # ---------------------------------------------------------------------------
-  # Extensão espacial
-  # ---------------------------------------------------------------------------
   
   if (is.null(bbox)) {
     
     g <- g +
-      coord_sf(
-        xlim = c(
-          bbox_br["xmin"],
-          bbox_br["xmax"]
-        ),
-        ylim = c(
-          bbox_br["ymin"],
-          bbox_br["ymax"]
-        ),
-        expand = FALSE
-      )
+      coord_sf( xlim = c( bbox_br["xmin"], bbox_br["xmax"] ),
+                ylim = c( bbox_br["ymin"], bbox_br["ymax"] ), expand = FALSE )
     
   } else {
     
@@ -822,26 +671,17 @@ ggsave( file.path( DIR_OUT_PIC, "fig_brasil_hibrido_rbar.png" ),
   bg = "white"
 )
 
-
 # =============================================================================
 # MAPA DO SUL — ANO HIDROLÓGICO HÍBRIDO
 # =============================================================================
 
-g_hibrido_sul <- mapa_mes(
-  sta %>%
-    filter(
-      is_sul
-    ),
+g_hibrido_sul <- mapa_mes( sta %>% filter( is_sul ),
   "mes_hibrido_rbar",
   bbox = BB_SUL,
   pt_size = 2.3
 )
 
-ggsave(
-  file.path(
-    DIR_OUT_PIC,
-    "fig_sul_hibrido_rbar.png"
-  ),
+ggsave( file.path( DIR_OUT_PIC, "fig_sul_hibrido_rbar.png" ),
   g_hibrido_sul,
   width = FIG_WIDTH,
   height = 11,
@@ -855,123 +695,41 @@ ggsave(
 # MAPA DA FONTE DO MÉTODO — BRASIL
 # =============================================================================
 
-cores_fonte <- c(
-  "theta_pi" = "#0072B2",
-  "ultimo_mes_seco" = "#D55E00"
-)
+cores_fonte <- c( "theta_pi" = "#0072B2", "ultimo_mes_seco" = "#D55E00" )
 
-labels_fonte <- c(
-  "theta_pi" = expression(theta + pi),
-  "ultimo_mes_seco" = "Último mês seco"
-)
+labels_fonte <- c( "theta_pi" = expression(theta + pi), "ultimo_mes_seco" = "Último mês seco" )
 
 g_fonte_br <- ggplot() +
   
-  geom_sf(
-    data = br,
-    fill = "grey98",
-    color = "grey50",
-    linewidth = 0.40
-  ) +
+  geom_sf( data = br, fill = "grey98", color = "grey50", linewidth = 0.40 ) +
   
-  geom_sf(
-    data = ufs,
-    fill = NA,
-    color = "grey65",
-    linewidth = 0.18
-  ) +
+  geom_sf( data = ufs, fill = NA, color = "grey65", linewidth = 0.18 ) +
   
-  geom_point(
-    data = sta,
-    aes(
-      x = long,
-      y = lat,
-      color = fonte_hibrido_rbar
-    ),
-    size = 1.2,
-    alpha = 0.90,
-    stroke = 0
-  ) +
+  geom_point( data = sta, aes( x = long, y = lat, color = fonte_hibrido_rbar ),
+    size = 1.2, alpha = 0.90, stroke = 0 ) +
   
-  scale_color_manual(
-    name = "Fonte",
-    values = cores_fonte,
-    labels = labels_fonte
-  ) +
+  scale_color_manual( name = "Fonte", values = cores_fonte, labels = labels_fonte ) +
   
-  annotation_scale(
-    location = "br",
-    width_hint = 0.20,
-    height = unit(
-      1.5,
-      "mm"
-    ),
-    text_family = font,
-    text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
-    line_width = 0.4
-  ) +
+  annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
+    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ), line_width = 0.4 ) +
   
-  annotation_north_arrow(
-    location = "tr",
-    width = unit(
-      1,
-      "cm"
-    ),
-    height = unit(
-      1,
-      "cm"
-    ),
-    which_north = "true",
-    style = north_arrow_nautical(
-      text_family = font,
-      text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
-    )
-  ) +
+  annotation_north_arrow( location = "tr", width = unit( 1, "cm" ),
+    height = unit( 1, "cm" ),
+    which_north = "true", style = north_arrow_nautical( text_family = font,
+      text_size = fontsize, fill = c( "black", "aliceblue" ) ) ) +
   
-  labs(
-    x = NULL,
-    y = NULL
-  ) +
+  labs( x = NULL, y = NULL ) +
   
   tema_mapa +
   
-  theme(
-    legend.position = "bottom",
-    legend.justification = "center"
-  ) +
+  theme( legend.position = "bottom", legend.justification = "center" ) +
   
-  guides(
-    color = guide_legend(
-      nrow = 1,
-      title.position = "left",
-      override.aes = list(
-        size = 2.5,
-        alpha = 1
-      )
-    )
-  )
+  guides( color = guide_legend( nrow = 1, title.position = "left",
+      override.aes = list( size = 2.5, alpha = 1 ) ) )
 
-ggsave(
-  file.path(
-    DIR_OUT_PIC,
-    "fig_brasil_fonte_hibrido.png"
-  ),
-  g_fonte_br,
-  width = FIG_WIDTH,
-  height = 10,
-  units = "cm",
-  dpi = 600,
-  bg = "white"
-)
-
+ggsave( file.path( DIR_OUT_PIC, "fig_brasil_fonte_hibrido.png" ),
+  g_fonte_br, width = FIG_WIDTH, height = 10, units = "cm",
+  dpi = 600, bg = "white" )
 
 # =============================================================================
 # MAPA DA FONTE — SUL
@@ -979,332 +737,107 @@ ggsave(
 
 g_fonte_sul <- ggplot() +
   
-  geom_sf(
-    data = sul_ufs,
-    fill = "grey98",
-    color = "grey50",
-    linewidth = 0.40
-  ) +
+  geom_sf( data = sul_ufs, fill = "grey98", color = "grey50", linewidth = 0.40 ) +
   
-  geom_point(
-    data = sta %>%
-      filter(
-        is_sul
-      ),
-    aes(
-      x = long,
-      y = lat,
-      color = fonte_hibrido_rbar
-    ),
-    size = 2.3,
-    alpha = 0.90,
-    stroke = 0
-  ) +
+  geom_point( data = sta %>% filter( is_sul ),
+    aes( x = long, y = lat, color = fonte_hibrido_rbar ),
+    size = 2.3, alpha = 0.90, stroke = 0 ) +
   
-  scale_color_manual(
-    name = "Fonte",
-    values = cores_fonte,
-    labels = labels_fonte
-  ) +
+  scale_color_manual( name = "Fonte", values = cores_fonte, labels = labels_fonte ) +
   
-  annotation_scale(
-    location = "br",
-    width_hint = 0.20,
-    height = unit(
-      1.5,
-      "mm"
-    ),
-    text_family = font,
-    text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
-    line_width = 0.4
-  ) +
+  annotation_scale( location = "br", width_hint = 0.20, height = unit( 1.5, "mm" ),
+    text_family = font, text_cex = 0.6, bar_cols = c( "black", "aliceblue" ), line_width = 0.4 ) +
   
-  annotation_north_arrow(
-    location = "tr",
-    width = unit(
-      1,
-      "cm"
-    ),
-    height = unit(
-      1,
-      "cm"
-    ),
-    which_north = "true",
-    style = north_arrow_nautical(
-      text_family = font,
-      text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
-    )
-  ) +
+  annotation_north_arrow( location = "tr", width = unit( 1, "cm" ), height = unit( 1, "cm" ),
+    which_north = "true", style = north_arrow_nautical( text_family = font, text_size = fontsize, fill = c( "black", "aliceblue"))) +
   
-  coord_sf(
-    xlim = BB_SUL[
-      c(
-        "xmin",
-        "xmax"
-      )
-    ],
-    ylim = BB_SUL[
-      c(
-        "ymin",
-        "ymax"
-      )
-    ],
-    expand = FALSE
-  ) +
+  coord_sf( xlim = BB_SUL[ c( "xmin", "xmax" ) ],
+    ylim = BB_SUL[ c( "ymin", "ymax" ) ], expand = FALSE ) +
   
-  labs(
-    x = NULL,
-    y = NULL
-  ) +
+  labs( x = NULL, y = NULL ) +
   
   tema_mapa +
   
-  theme(
-    legend.position = "bottom"
-  )
+  theme( legend.position = "bottom" )
 
-ggsave(
-  file.path(
-    DIR_OUT_PIC,
-    "fig_sul_fonte_hibrido.png"
-  ),
-  g_fonte_sul,
-  width = FIG_WIDTH,
-  height = 10,
-  units = "cm",
-  dpi = 600,
-  bg = "white"
-)
-
+ggsave( file.path( DIR_OUT_PIC, "fig_sul_fonte_hibrido.png" ),
+  g_fonte_sul, width = FIG_WIDTH, height = 10, units = "cm", dpi = 600, bg = "white" )
 
 # =============================================================================
 # MAPA DE RBAR
 # =============================================================================
 
 g_rbar <- ggplot() +
-  
-  geom_sf(
-    data = br,
-    fill = "grey98",
-    color = "grey50",
-    linewidth = 0.40
-  ) +
-  
-  geom_sf(
-    data = ufs,
-    fill = NA,
-    color = "grey65",
-    linewidth = 0.18
-  ) +
-  
+  geom_sf(data = br, fill = "grey98", color = "grey50", linewidth = 0.40) +
+  geom_sf(data = ufs, fill = NA, color = "grey65", linewidth = 0.18) +
   geom_point(
     data = sta,
-    aes(
-      x = long,
-      y = lat,
-      color = rbar
-    ),
-    size = 1.15,
-    alpha = 0.90,
-    stroke = 0
+    aes(x = long, y = lat, color = rbar),
+    size = 1.15, alpha = 0.90, stroke = 0
   ) +
-  
   scale_color_viridis_c(
-    option = "C",
-    limits = c(
-      0,
-      1
-    ),
-    name = expression(bar(r)),
-    breaks = c(
-      0,
-      0.2,
-      0.3,
-      0.5,
-      0.75,
-      1
-    )
+    option = "C", limits = c(0, 1), name = expression(bar(r)),
+    breaks = c(0, 0.2, 0.3, 0.5, 0.75, 1)
   ) +
-  
   annotation_scale(
-    location = "br",
-    width_hint = 0.20,
-    height = unit(
-      1.5,
-      "mm"
-    ),
-    text_family = font,
-    text_cex = 0.6,
-    bar_cols = c(
-      "black",
-      "aliceblue"
-    ),
-    line_width = 0.4
+    location = "br", width_hint = 0.20, height = unit(1.5, "mm"),
+    text_family = font, text_cex = 0.6,
+    bar_cols = c("black", "aliceblue"), line_width = 0.4
   ) +
-  
   annotation_north_arrow(
-    location = "tr",
-    width = unit(
-      1,
-      "cm"
-    ),
-    height = unit(
-      1,
-      "cm"
-    ),
+    location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
     which_north = "true",
     style = north_arrow_nautical(
-      text_family = font,
-      text_size = fontsize,
-      fill = c(
-        "black",
-        "aliceblue"
-      )
+      text_family = font, text_size = fontsize,
+      fill = c("black", "aliceblue")
     )
   ) +
-  
-  labs(
-    x = NULL,
-    y = NULL
-  ) +
-  
+  labs(x = NULL, y = NULL) +
   tema_mapa +
-  
   theme(
     legend.position = "bottom",
-    legend.key.width = unit(
-      28,
-      "pt"
-    ),
-    legend.key.height = unit(
-      5,
-      "pt"
-    )
+    legend.key.width = unit(28, "pt"),
+    legend.key.height = unit(5, "pt")
   )
 
 ggsave(
-  file.path(
-    DIR_OUT_PIC,
-    "fig_rbar_brasil.png"
-  ),
-  g_rbar,
-  width = FIG_WIDTH,
-  height = 8,
-  units = "cm",
-  dpi = 600,
-  bg = "white"
+  file.path(DIR_OUT_PIC, "fig_rbar_brasil.png"),
+  g_rbar, width = FIG_WIDTH, height = 8, units = "cm", dpi = 600, bg = "white"
 )
-
 
 # =============================================================================
 # HISTOGRAMA DE RBAR
 # =============================================================================
 
 g_hist <- sta %>%
-  mutate(
-    regiao = if_else(
-      is_sul,
-      "Sul (RS/SC/PR)",
-      "Resto do Brasil"
-    )
-  ) %>%
-  ggplot(
-    aes(
-      x = rbar
-    )
-  ) +
-  
+  mutate(regiao = if_else(is_sul, "Sul (RS/SC/PR)", "Resto do Brasil")) %>%
+  ggplot(aes(x = rbar)) +
   geom_histogram(
-    bins = 30,
-    fill = "grey75",
-    color = "grey30",
-    linewidth = 0.25
+    bins = 30, fill = "grey75", color = "grey30", linewidth = 0.25
   ) +
-  
-  geom_vline(
-    xintercept = RBAR_HI,
-    linetype = "dashed",
-    linewidth = 0.5
-  ) +
-  
-  facet_wrap(
-    ~regiao,
-    ncol = 1,
-    scales = "free_y"
-  ) +
-  
-  labs(
-    x = expression(bar(r)),
-    y = "Número de estações"
-  ) +
-  
+  geom_vline(xintercept = RBAR_HI, linetype = "dashed", linewidth = 0.5) +
+  facet_wrap(~regiao, ncol = 1, scales = "free_y") +
+  labs(x = expression(bar(r)), y = "Número de estações") +
   theme_bw() +
-  
   theme(
     panel.grid = element_blank(),
-    
-    axis.ticks = element_line(
-      linewidth = 0.3
-    ),
-    
-    text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    axis.text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    axis.title = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
+    axis.ticks = element_line(linewidth = 0.3),
+    text = element_text(family = font, size = fontsize),
+    axis.text = element_text(family = font, size = fontsize),
+    axis.title = element_text(family = font, size = fontsize),
     strip.background = element_blank(),
-    
-    strip.text = element_text(
-      family = font,
-      size = fontsize
-    ),
-    
-    panel.border = element_rect(
-      linewidth = 0.4
-    ),
-    
-    plot.margin = margin(
-      t = 5,
-      r = 5,
-      b = 5,
-      l = 5
-    )
+    strip.text = element_text(family = font, size = fontsize),
+    panel.border = element_rect(linewidth = 0.4),
+    plot.margin = margin(t = 5, r = 5, b = 5, l = 5)
   )
 
 ggsave(
-  file.path(
-    DIR_OUT_PIC,
-    "fig_hist_rbar.png"
-  ),
-  g_hist,
-  width = FIG_WIDTH,
-  height = 10,
-  units = "cm",
-  dpi = 600,
-  bg = "white"
+  file.path(DIR_OUT_PIC, "fig_hist_rbar.png"),
+  g_hist, width = FIG_WIDTH, height = 10, units = "cm", dpi = 600, bg = "white"
 )
 
 message("Tabelas: ", DIR_DF)
 message("Figuras: ", DIR_OUT_PIC)
-
 message(
   "Concluído — híbrido rbar ≥ ", RBAR_HI,
   " | último mês seco recalculado (SECO_FRAC = ",
