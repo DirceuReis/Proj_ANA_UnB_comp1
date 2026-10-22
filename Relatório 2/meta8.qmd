@@ -314,6 +314,16 @@ Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descr
 
 ### 8.3.1 Resultados Pluviómetros e pluviógrafos
 
+Para os dados provenientes dos pluviógrafos, foram identificados seis postos com séries históricas de pelo menos 30 anos para os períodos de duração de 1, 3, 6, 12 e 24 horas. Assim, as análises de tendência foram realizadas com base nas séries históricas desses postos.
+
+Nas durações de 1, 3 e 6 horas, os resultados foram idênticos: o teste de MK identificou uma tendência estatisticamente significativa e decrescente no posto SBAR. Essa tendência permaneceu significativa após a aplicação do procedimento MTFPW + MK, e da correção para múltiplos FDR.
+
+Para a duração de 12 horas, o teste MK identificou tendências significativas nos postos SBAR e SBSJ. Entretanto, após a aplicação do procedimento MTFPW + MK e da correção FDR, apenas o posto SBAR permaneceu estatisticamente significativo, mantendo a tendência decrescente.
+
+Já nas séries de 24 horas, os dois postos que apresentaram tendências significativas no teste MK (SBAR e SBSJ) também permaneceram significativos após a aplicação do procedimento MTFPW + MK e da correção FDR. Ambos apresentaram tendências decrescentes. Esses seis postos estão distribuídos em cinco Regiões Hidrográficas: Atlântico Leste, São Francisco, Atlântico Nordeste Oriental, Atlântico Sudeste e Paraná.
+
+De modo geral, o posto SBAR apresentou tendência decrescente estatisticamente significativa nas quatro durações de 1, 3, 6 e 12 horas, enquanto o posto SBSJ apresentou tendência significativa apenas na duração de 24 horas, considerando os resultados após a correção FDR.
+
 A análise de tendência foi aplicada a 5.258 postos pluviométricos distribuídos pelo território brasileiro, conforme apresentado na Figura 1. Quanto à extensão das séries históricas, 1.308 postos (24,9%) possuem registros com duração igual ou superior a 60 anos; 1.829 (34,8%) apresentam séries entre 45 e 59 anos; e 2.121 (40,3%) possuem séries entre 30 e 44 anos
 
 ![Espacialização das estações pluviométricas por número de anos disponíveis](Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png) Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas
