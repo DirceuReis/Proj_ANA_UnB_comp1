@@ -1,5 +1,5 @@
 ---
-bibliography: ref_desagregacao.bib
+bibliography: ref_invariancia_escala.bib
 ---
 
 ## Invariância de escala

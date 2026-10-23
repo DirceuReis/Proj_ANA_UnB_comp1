@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Base Hidroclimática Nacional – 2º Relatório Parcial de Atividades</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./meta6.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7b70b6449d90b0912b3f848c5cf55d7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./meta3.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">2º Relatório Parcial de Atividades</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Meta 6 — Correção de Viés Climático</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#bases-de-dados" id="toc-bases-de-dados" class="nav-link active" data-scroll-target="#bases-de-dados"><span class="header-section-number">2.1</span> Bases de Dados</a>
+  <ul class="collapse">
+  <li><a href="#uniplu-br" id="toc-uniplu-br" class="nav-link" data-scroll-target="#uniplu-br"><span class="header-section-number">2.1.1</span> UNIPLU-BR</a></li>
+  <li><a href="#br-dwgd" id="toc-br-dwgd" class="nav-link" data-scroll-target="#br-dwgd"><span class="header-section-number">2.1.2</span> BR-DWGD</a></li>
+  </ul></li>
+  <li><a href="#metodologia-de-controle-de-qualidade-da-base-do-uniplu-br" id="toc-metodologia-de-controle-de-qualidade-da-base-do-uniplu-br" class="nav-link" data-scroll-target="#metodologia-de-controle-de-qualidade-da-base-do-uniplu-br"><span class="header-section-number">2.2</span> Metodologia de Controle de Qualidade da base do UNIPLU-BR</a>
+  <ul class="collapse">
+  <li><a href="#séries-diárias" id="toc-séries-diárias" class="nav-link" data-scroll-target="#séries-diárias"><span class="header-section-number">2.2.1</span> Séries Diárias</a></li>
+  <li><a href="#séries-sub-diárias" id="toc-séries-sub-diárias" class="nav-link" data-scroll-target="#séries-sub-diárias"><span class="header-section-number">2.2.2</span> Séries Sub-diárias</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional de qualidade e consistente, com destaque para dados observados obtidos da base do UNIPLU-BR (Das Neves Almeida et al., 2025; Lemos et al., 2026), de responsabilidade da ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, entre outros; e dados em grade obtidos pelo BR-DWGD (Xavier et al., 2022) e NEX-GDDP-CMIP6 (NASA).</p>
+<section id="bases-de-dados" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bases-de-dados"><span class="header-section-number">2.1</span> Bases de Dados</h2>
+<section id="uniplu-br" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="uniplu-br"><span class="header-section-number">2.1.1</span> UNIPLU-BR</h3>
+<p>Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) (Das Neves Almeida et al., 2025; Lemos et al., 2026), que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:</p>
+<ul>
+<li><strong>CEMADEN</strong>: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.</li>
+<li><strong>INMET</strong>: Instituto Nacional de Meteorologia.</li>
+<li><strong>ANA (Hidroweb)</strong>: Agência Nacional de Águas e Saneamento Básico.</li>
+<li><strong>ANA (Telemetria)</strong>: Agência Nacional de Águas e Saneamento Básico.</li>
+<li><strong>ICEA</strong>: Instituto de Controle do Espaço Aéreo.</li>
+</ul>
+<p>Toda a base do UNIPLU-BR pode ser obtida através do site <a href="https://github.com/LARHENA/UNIPLU-BR">UNIPLU-BR no GitHub</a>. Os dados são armazenados em arquivos tipo .zip. Cada arquivo .zip contém dois arquivos em formato .parquet: (i) table_info.parquet (metadados das estações); e (ii) table_data.parquet (séries de dados).</p>
+<p>Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do UNIPLU-BR cobre o período de 1855 a 2026, consolidando aproximadamente 2,2 bilhões de registros de precipitação em 21.331 estações. As informações obtidas possuem resolução temporal variada, entre intervalos de 10 minutos até 24 horas e discretização diária (obtida das 9h às 9h). A distribuição desses registros, por fonte é detalhada na <span class="quarto-unresolved-ref">?tbl-fontes-uniplu</span> e <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a>.</p>
+<p>A <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> apresenta a distribuição espacial das estações de precipitação por fonte da informação inserida na base do UNIPLU-BR, cuja densidade geral é apresentada na <a href="#fig-densidade" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>. Observa-se uma maior densidade de estações no Estado do Rio de Janeiro e Distrito Federal, seguido de São Paulo, Santa Catarina e Espírito Santo. De maneira geral, as regiões Sul e Sudeste possuem densidade de estações de monitoramento similares. Na região Nordeste, destacam-se os estados do Ceará, Pernambuco e Alagoas. Regiões Centro-Oeste e Norte brasileiro são as mais desproporcionais em número de estações.</p>
+<div id="fig-mapa-estacoes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mapa-estacoes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 1. Inventário.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mapa-estacoes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.1: Figura 1. Distribuição espacial das estações de monitoramento do UNIPLU-BR.
+</figcaption>
+</figure>
+</div>
+<div id="fig-densidade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-densidade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 2. Densidade de estações.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-densidade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: Figura 2. Densidade das estações de monitoramento de chuva por Estado, em km², por estação.
+</figcaption>
+</figure>
+</div>
+<p>Na <a href="#fig-anos-atividade" class="quarto-xref">Figura&nbsp;<span>2.3</span></a> é apresentado o número de anos em atividade com dados das estações de monitoramento. Observa-se longas séries de dados especialmente nos estados de São Paulo, Paraná e Ceará. No tocante ao número de estações por agência ou instituição responsável, o CEMADEN, Telemetria e SGB-CPRM se destacam com o maior número de estações em operação (<a href="#fig-estacoes-instituicao" class="quarto-xref">Figura&nbsp;<span>2.4</span></a>). Essas 3 (três) instituições são de nível federal. CEMADEN e Telemetria, especialmente, tiveram fortes investimentos em número de estações desde o início do monitoramento de precipitação em razão dos desastres de origem natural, em 2014. O DAEE-SP em São Paulo (atualmente SP Águas), é uma instituição estadual e, portanto, possui toda sua rede inserida no território paulista, assim como o IAT (Instituto Água e Terra), no Paraná, e a FUNCEME (Fundação Cearense de Meteorologia e Recursos Hídricos), no Ceará.</p>
+<div id="fig-anos-atividade" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anos-atividade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 3. Mapa anos_atividade.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anos-atividade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.3: Figura 3. Distribuição das estações por anos de atividade entre 1855 e 2025.
+</figcaption>
+</figure>
+</div>
+<div id="fig-estacoes-instituicao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-estacoes-instituicao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 4. Estações por instituição.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estacoes-instituicao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.4: Figura 4. Número de estações de monitoramento da precipitação por instituição responsável (acima de 250 estações).
+</figcaption>
+</figure>
+</div>
+<p>A base de dados do UNIPLU-BR possui estações cuja resolução temporal é diária e sub-diária. Na <a href="#fig-estacoes-resolucao" class="quarto-xref">Figura&nbsp;<span>2.5</span></a> apresenta-se o número de estações por ano e resolução temporal, a partir da qual se observa densificação da base de dados diária ocorreu em meados da década de 1960, atingindo seu pico em meados de 1975; por outro lado, a atividade das estações de resolução sub-diária se iniciou em 1960, por estações do INMET e ICEA, intensificando-se apenas a partir de 2016, à medida que eventos intensos se tornaram mais frequentes e o CEMADEN iniciou sua operação.</p>
+<div id="fig-estacoes-resolucao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-estacoes-resolucao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 5. Estações por ano e resolução temporal.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estacoes-resolucao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.5: Figura 5. Número de estações de monitoramento da precipitação por ano e resolução temporal.
+</figcaption>
+</figure>
+</div>
+<p>A estrutura dos dados brutos do UNIPLU-BR consiste em 2 (dois) metadados: (i) informação de estações de chuva, incluindo colunas com dados de código da estação, cidade, coordenadas geográficas, elevação topográfica da estação, discretização temporal, rede fonte da informação, agência ou instituição responsável pela operação das estações, e UTC (Tempo Universal Coordenado); e (ii) série de dados, contendo código da estação, data e tempo da leitura e precipitação em mm.</p>
+</section>
+<section id="br-dwgd" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="br-dwgd"><span class="header-section-number">2.1.2</span> BR-DWGD</h3>
+<p>Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.</p>
+<p>Os dados de grade foram provenientes de interpolação dos dados observados das estações da ANA e do INMET. Para a precipitação, foram utilizados 11.473 pluviômetros. Os autores aplicaram dois procedimentos de consistência: (i) O primeiro descartou valores fora de limiares pré-estabelecidos, sendo 0 mm &lt; pr &lt; 450 mm para a precipitação (Liebmann e Allured, 2005); e (ii) o segundo consistiu em teste visual de homogeneidade, comparando cada série às das estações vizinhas, conforme Xavier et al.&nbsp;(2016).</p>
+<p>Após os procedimentos de consistência foram obtidos por interpolação. A espacialização foi feita por bacia hidrográfica, a partir do uso do método do inverso da distância (IDW), dada sua performance na validação cruzada pela aplicação de métricas de desempenho.</p>
+<p>Junto às grades das variáveis, o BR-DWGD disponibiliza duas grades de controle diárias: (i) o número de estações ou pluviômetros existentes dentro da célula (Count); e (ii) a distância da célula à estação mais próxima com dado observado (dist_nearest). Esses controles permitem avaliar, célula a célula e dia a dia, o quanto o valor interpolado se apoia em observação próxima ou em extrapolação. Essa informação é relevante porque a densidade da rede é bastante desproporcional. Nas bacias do Atlântico Central e do Atlântico Sul há ao menos um pluviômetro a cada 50 km, o equivalente a um a cada 580 km². Já na bacia Amazônica, a densidade era de um pluviômetro a cada 150.000 km² entre 1961 e 1980, melhorando para um a cada 7.600 km² entre 1991 e 2020. O número máximo de pluviômetros com dado disponível simultaneamente foi de 5.972, entre as décadas de 1970 e 1980, o que corresponde a um a cada 1.425 km², ainda abaixo da densidade de um a cada 575 km² recomendada pela WMO (2008) para planícies interiores.</p>
+<p>Toda a base do BR-DWGD pode ser obtida através do site <a href="https://github.com/AlexandreCandidoXavier/BR-DWGD">BR-DWGD no GitHub</a>.</p>
+</section>
+</section>
+<section id="metodologia-de-controle-de-qualidade-da-base-do-uniplu-br" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="metodologia-de-controle-de-qualidade-da-base-do-uniplu-br"><span class="header-section-number">2.2</span> Metodologia de Controle de Qualidade da base do UNIPLU-BR</h2>
+<p>De acordo com Lemos et al.&nbsp;(2026), os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de outlier, seguindo originalmente conforme reportados pelas agências. Desta forma, aplicou-se metodologia de controle de qualidade.</p>
+<p>A metodologia foi aplicada de maneira diferente considerando os dados de resolução temporal diária e sub-diária.</p>
+<section id="séries-diárias" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="séries-diárias"><span class="header-section-number">2.2.1</span> Séries Diárias</h3>
+<section id="análise-de-consistência" class="level4" data-number="2.2.1.1">
+<h4 data-number="2.2.1.1" class="anchored" data-anchor-id="análise-de-consistência"><span class="header-section-number">2.2.1.1</span> Análise de consistência</h4>
+<p>O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações.</p>
+<p>Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo, por exemplo, verificou-se se a estação X se mantém com as mesmas informações de descrição ao longo de todos os anos do inventário, como unidade da federação, latitude, longitude, altitude, discretização temporal, entre outras. Das 12.640 estações diárias, 211 (1,7%) apresentaram alteração em ao menos um metadado, sendo essa ocorrência mais concentrada nas estações do Inmet diário.</p>
+<p>As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais, o que resultou em diferenças de até 1 km de distância entre a maioria das estações com mudanças. Outras divergências observadas eram no nome do município, em razão do uso ou não de acentos, ou estado em que a estação pertence. Nenhuma das 211 estações verificadas indicou a necessidade de ajustes.</p>
+<p>Ainda, aplicou-se a verificação de duplicatas, de modo a identificar pares estação e data repetidas. A análise não indicou nenhuma duplicata na base de dados díária.</p>
+</section>
+<section id="controle-de-qualidade" class="level4" data-number="2.2.1.2">
+<h4 data-number="2.2.1.2" class="anchored" data-anchor-id="controle-de-qualidade"><span class="header-section-number">2.2.1.2</span> Controle de Qualidade</h4>
+<p>Para as séries diárias, o controle de qualidade (Quality Control - QC) foi aplicado para trazer maior confiabilidade a base de dados. O método considerado neste estudo foi proposto por Estévez et al.&nbsp;(2022), que combina dois passos principais: (a) QC Básico: detecção de dados “errôneos”, como valores negativos, registros inválidos e eventos de precipitação muito superior aos valores comumente ocorridos no Brasil. (b) QC Absoluto: quatro processos aplicados às estações individualmente, estimando o Índice de qualidade da série (IQ) e classificando-a por ano.</p>
+<p>Em se tratando de análise de eventos extremos, em que são necessárias séries de precipitações mais longas, foi aplicado um filtro de descarte de estações com menos de 30 anos de dados, resultando em 6.078 estações (48,1% do total), para as quais foram aplicados os critérios de controle de qualidade, conforme descrito a seguir. A <a href="#fig-estacoes-diaria-30" class="quarto-xref">Figura&nbsp;<span>2.6</span></a> apresenta o mapa geral das estações de base diária.</p>
+<div id="fig-estacoes-diaria-30" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-estacoes-diaria-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 6. Inventário Diário 30 anos ou mais.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estacoes-diaria-30-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.6: Figura 6. Estações de monitoramento de precipitação de resolução diária (30 anos ou mais).
+</figcaption>
+</figure>
+</div>
+<section id="qc-básico" class="level5" data-number="2.2.1.2.1">
+<h5 data-number="2.2.1.2.1" class="anchored" data-anchor-id="qc-básico"><span class="header-section-number">2.2.1.2.1</span> QC Básico</h5>
+<p>Neste processo foram identificados e eliminados dados considerados “errôneos” ou “inadequados” para a análise das séries de precipitação. Envolve a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo (Carmona et al., 2023). Desse modo, considerou-se como limite superior 700 mm/dia.</p>
+<p>A aplicação deste controle de qualidade indicou como problemática aos dados: (i) dias seguidos de valores diários acima de 1.000 mm; (ii) valores diários acima de 6.000 mm, possivelmente em razão de erros na digitação; e (iii) valores diários acima de 700 mm em poucos meses em um mesmo ano. Após aplicação do QC Básico, aproximadamente 0,0003% do total dos registros (346 registros) foram excluídos, por possuirem valores de precipitação superior a 700 mm/dia. Não foram identificados registros negativos. De todos os dados excluidos assumiu-se que se tratavam de dados errôneos, não se tratavam de outliers.</p>
+</section>
+<section id="qc-absoluto" class="level5" data-number="2.2.1.2.2">
+<h5 data-number="2.2.1.2.2" class="anchored" data-anchor-id="qc-absoluto"><span class="header-section-number">2.2.1.2.2</span> QC Absoluto</h5>
+<p>Neste controle de qualidade cada série de precipitações diárias é utilizada na estimativa do Índice de Qualidade (IQ) por ano de acordo com a <a href="#eq-iq" class="quarto-xref">Equação&nbsp;<span>2.1</span></a> abaixo:</p>
+<p><span id="eq-iq"><span class="math display">\[IQ = \frac{P + Q_1 + Q_2 + Q_3}{4} \tag{2.1}\]</span></span></p>
+<p>O IQ compreende 4 (quatro) variáveis que consolida problemas comuns identificados em séries de precipitações. São eles:</p>
+<ul>
+<li><strong>P</strong>: representa a disponibilidade de dados. Porcentagem de dados válidos em relação ao total de dados em um determinado ano, <a href="#eq-p" class="quarto-xref">Equação&nbsp;<span>2.2</span></a>:</li>
+</ul>
+<p><span id="eq-p"><span class="math display">\[P = 100 \cdot \frac{k}{n} \tag{2.2}\]</span></span></p>
+<p>em que <span class="math inline">\(k\)</span> é o número de dias com dado válido no ano; e <span class="math inline">\(n\)</span> é o número de dias do ano (365, ou 366 em anos bissextos). Varia de 0 a 100%.</p>
+<ul>
+<li><strong>Q1</strong>: representa a distribuição das lacunas nas séries. Avalia a distribuição de lacunas, penalizando a presença de lacunas extensas em detrimento de pequenas lacunas. O cálculo de Q1 é indicado na <a href="#eq-q1" class="quarto-xref">Equação&nbsp;<span>2.3</span></a>:</li>
+</ul>
+<p><span id="eq-q1"><span class="math display">\[Q_1 = 100 - 100 \cdot \frac{2\,n_{lacuna} + L_{lacuna}^{max}}{n} \tag{2.3}\]</span></span></p>
+<p>em que <span class="math inline">\(n_{lacuna}\)</span> é o número de dias sem dado no ano; e <span class="math inline">\(L_{lacuna}^{max}\)</span> é a extensão, em dias, da maior sequência contínua de dias sem dado. Varia de −200 a 100%. O valor máximo corresponde ao ano sem nenhuma falha. Em um ano sem registros, <span class="math inline">\(n_{lacuna} = n\)</span> e <span class="math inline">\(L_{lacuna}^{max} = n\)</span>, logo <span class="math inline">\(Q_1 = -200\)</span>. Valores negativos ocorrem quando as falhas superam cerca de um terço do ano.</p>
+<ul>
+<li><strong>Q2</strong>: detecta se há há dias da semana com menos registros de chuva que os demais, o que indicaria falhas sistemáticas de registro. É calculado pelo coeficiente de variação do número de dias chuvosos em cada dia da semana ao longo do ano (<a href="#eq-q2" class="quarto-xref">Equação&nbsp;<span>2.4</span></a>).</li>
+</ul>
+<p><span id="eq-q2"><span class="math display">\[Q_2 = 100 - 100 \cdot CV, \qquad CV = \frac{\sigma_{s}}{\mu_{s}} \tag{2.4}\]</span></span></p>
+<p>em que <span class="math inline">\(CV\)</span> é o coeficiente de variação do número de dias chuvosos registrados em cada dia da semana ao longo do ano; <span class="math inline">\(\sigma_{s}\)</span> é o desvio-padrão e <span class="math inline">\(\mu_{s}\)</span> a média das sete contagens (domingos chuvosos, segundas chuvosas, e assim por diante). Varia de −164,58 a 100%. O valor máximo corresponde ao ano em que os dias chuvosos se distribuem igualmente entre os sete dias da semana, situação em que <span class="math inline">\(CV = 0\)</span>.</p>
+<ul>
+<li><strong>Q3</strong>: representa a presença de valores atípicos (<em>outliers</em>) na série. É a porcentagem de dias do ano em que a precipitação registrada não ultrapassou o limiar de valor atípico (<a href="#eq-q3" class="quarto-xref">Equação&nbsp;<span>2.5</span></a>). O limiar é definido para cada mês do calendário como o terceiro quartil somado a 1,5 vez a amplitude interquartil das precipitações diárias maiores que 0 mm daquele mês (<a href="#eq-limiar" class="quarto-xref">Equação&nbsp;<span>2.6</span></a>). Os quartis são calculados considerando toda a série histórica da estação, e não apenas o ano avaliado: um dia de janeiro de 1990, por exemplo, é comparado ao limiar obtido com todos os meses de janeiro disponíveis na estação. Adotou-se o multiplicador 1,5 na amplitude interquartil (Llabrés-Brustenga et al., 2019; Estévez et al., 2022; Vidal-Barbosa, 2024).</li>
+</ul>
+<p><span id="eq-q3"><span class="math display">\[Q_3 = 100 \cdot \frac{n - n_{out}}{n} \tag{2.5}\]</span></span></p>
+<p>em que <span class="math inline">\(n_{out}\)</span> é o número de dias do ano cuja precipitação excedeu o limiar de valor atípico <span class="math inline">\(P_{out}\)</span>, definido na <a href="#eq-limiar" class="quarto-xref">Equação&nbsp;<span>2.6</span></a>, e <span class="math inline">\(n\)</span> é o número de dias do ano, como definido na <a href="#eq-p" class="quarto-xref">Equação&nbsp;<span>2.2</span></a>. Varia de 0 a 100%. É a razão entre os dias que não excederam o limiar de valor atípico e o total de dias do ano (<a href="#eq-q3" class="quarto-xref">Equação&nbsp;<span>2.5</span></a>). O valor máximo corresponde ao ano sem nenhum dia acima do limiar, e o mínimo, à situação hipotética em que todos os dias do ano o excedem.</p>
+<p><span id="eq-limiar"><span class="math display">\[P_{out,m} = Q_{3,m} + 1{,}5 \cdot IQR_m, \qquad IQR_m = Q_{3,m} - Q_{1,m} \tag{2.6}\]</span></span></p>
+<p>em que <span class="math inline">\(P_{out,m}\)</span> é o limiar de valor atípico do mês <span class="math inline">\(m\)</span>; <span class="math inline">\(Q_{1,m}\)</span> e <span class="math inline">\(Q_{3,m}\)</span> são, respectivamente, o primeiro e o terceiro quartis das precipitações diárias maiores que 0 mm registradas no mês <span class="math inline">\(m\)</span>; e <span class="math inline">\(IQR_m\)</span> é a amplitude interquartil desse mesmo conjunto. Os quartis são calculados sobre todos os anos da série histórica da estação, e não apenas sobre o ano avaliado.</p>
+<p>Obtidas as variáveis, o IQ de cada estação por ano foi dado pela média das variáveis. Os resultados de IQ e P foram então classificados de acordo com as regras da <span class="quarto-unresolved-ref">?tbl-classificacao</span>.</p>
+<p>A <a href="#fig-series" class="quarto-xref">Figura&nbsp;<span>2.7</span></a> apresenta a média de cada parâmetro em cada ano-calendário. Três períodos se distinguem. Até 1887, a base contém uma única estação, com cerca de 3% dos dias registrados, de modo que a média nacional reflete apenas essa série. Entre 1888 e 1910, o número de estações cresce de 3 para 68, e as médias oscilam fortemente. A partir de 1911, com mais de 160 estações, as curvas se estabilizam.</p>
+<p>O parâmetro P atinge seu valor máximo em 2018 (93,8%) e apresenta reduções pontuais, como a de 1991 (82,4%). O Q1 acompanha o P, por construção, já que ambos dependem dos dias ausentes. O Q2 mantém-se entre 58,3 e 82,7 em todo o período estabilizado, sem tendência aparente. O Q3 é o parâmetro mais estável de todos, variando entre 97,0 e 99,3 em toda a série.</p>
+<p>O último ano da série (2025) apresenta queda acentuada em todos os parâmetros (P = 57,3%, Q1 = −26,0), decorrente do fato de os registros estarem incompletos na data de extração dos dados: as 2.205 estações ativas nesse ano possuem, em mediana, 243 dias registrados. Trata-se, portanto, de artefato de coleta, e não de deterioração da rede.</p>
+<div id="fig-series" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 7. Series anuais P Q1 Q2 Q3.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.7: Figura 7. Série temporal das variáveis médias do QC Absoluto por ano.
+</figcaption>
+</figure>
+</div>
+<p>A <span class="quarto-unresolved-ref">?tbl-classificacao-resultado</span> apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 285.810 séries estação-ano (85,6%) como de Alta Qualidade e 48.080 (14,4%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (74,1%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 17.271 (5,2% do total geral) correspondem a anos sem nenhum registro dentro do período de operação da estação, e os demais reúnem anos com cobertura insuficiente, lacunas concentradas ou ambos.</p>
+<p>Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.145 estações das 6.078 avaliadas (84,4%). A base final reúne 261.242 séries estação-ano e 94.785.374 registros diários, conforme indicado na <a href="#fig-estacoes-QC-final" class="quarto-xref">Figura&nbsp;<span>2.8</span></a>.</p>
+<div id="fig-estacoes-QC-final" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-estacoes-QC-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 8. Estacoes finais.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estacoes-QC-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.8: Figura 8. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="séries-sub-diárias" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="séries-sub-diárias"><span class="header-section-number">2.2.2</span> Séries Sub-diárias</h3>
+<p>Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção anterior, tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros do IQ foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. Inicialmente, o controle de qualidade dos dados sub-diários do UNIPLU-BR seriam provenientes da metodologia descrita no Relatório “Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias”, estruturado em 5 (cinco) etapas.</p>
+<ol type="a">
+<li><p>Filtragem inicial: foram filtradas as estações cuja fonte de dados fosse o CEMADEN, ANA (Telemetria) e INMET sub-diário. Para o INMET, as séries de resolução diária foram incorporadas à análise no período posterior a 2014, como suporte comparativo para a classificação das estações sub-diárias.</p></li>
+<li><p>Análise visual comparativa: cada estação foi comparada às cinco estações mais próximas por meio de nove conjuntos de gráficos (precipitações anuais, precipitações mensais, precipitações diárias, precipitações máximas diárias, localização das estações, altitude, correlação das precipitações mensais, correlação das precipitações diárias e soma cumulativa das precipitações diárias). Inconsistências foram identificadas por mudanças repentinas de inclinação nas curvas ou pela permanência em patamar constante enquanto as vizinhas registram precipitação. Cada estação recebeu os rótulos “Boa”, “Ruim” ou “Dúvida”, atribuídos de forma independente por dois pesquisadores. Nas estações classificadas como “Ruim”, o avaliador registrou o tipo de problema, e.g.&nbsp;chuva constante ao longo do tempo, valores sistematicamente acima ou abaixo das vizinhas, ou ausência de dados em dias com chuva registrada nas estações próximas. Os casos de dúvida e as divergências entre os dois avaliadores foram arbitrados por um terceiro pesquisador, com consulta a outras redes pluviométricas. Ao final, as estações foram classificadas, ano a ano, como HQ (<em>High Quality</em>) ou PQ (<em>Poor Quality</em>).</p></li>
+<li><p>Separação dos eventos chuvosos: As estações HQ seguiram para análise detalhada, na qual as séries foram segmentadas em eventos chuvosos segundo critérios como o Mínimo Intervalo de Tempo entre eventos (MIT) e a lâmina mínima precipitada. Foram avaliados 3 (três) MITs (30 minutos, 6 horas e 24 horas) e lâmina mínima de 1 mm por evento. Para cada estação, ano e MIT, foram calculadas 14 variáveis, a saber: precipitação, total anual, número de eventos, lâmina média, duração média, intensidade média e tempo seco médio, com seus respectivos desvios-padrão e valores máximos.</p></li>
+<li><p>Análise espacial dos eventos: as características dos eventos foram analisadas espacialmente no usando o GeoDa (Anselin, 2024), ferramenta de análise de dados espaciais, com apoio de gráficos de coordenadas paralelas. Foram adotadas premissas segundo a primeira Lei de Tobler: postos próximos devem apresentar comportamento semelhante. Nessa etapa, estações cujos valores médios são compatíveis com os vizinhos, mas cuja dispersão ou cujos máximos destoam, foram sinalizadas como duvidosas e devolvidas à análise visual. O procedimento foi conduzido de forma independente para cada MIT, uma vez que anomalias se manifestam, com frequência, em apenas um deles.</p></li>
+<li><p>Reanálise visual: por fim, todas as redes passaram por uma revalidação. Na primeira análise visual, a seleção de vizinhas baseia-se apenas na distância, de modo que uma estação podia ter sido comparada somente a séries igualmente inconsistentes. Na reanálise, consideraram-se como vizinhas exclusivamente as estações já classificadas como HQ, de qualquer rede. Isso permitiu tanto excluir séries com erros remanescentes quanto reclassificar como HQ estações antes rotuladas como PQ, cujas inconsistências aparentes decorriam da baixa qualidade das vizinhas originais.</p></li>
+</ol>
+<p>Conforme apresentado na <span class="quarto-unresolved-ref">?tbl-fontes-uniplu</span>, 8.691 estações do UNIPLU-BR se tratam de estações de monitoramento de precipitação sub-diário; novamente, em se tratando de análise de eventos extremos, foi aplicado um filtro adicional de descarte de estações com menos de 8 anos de dados, resultando em 5.265 estações (60,6 % do total). A <a href="#fig-estacoes-sub-8" class="quarto-xref">Figura&nbsp;<span>2.9</span></a> apresenta o mapa geral das estações de base sub-diária com mais de 8 anos de dados. Com a filtragem de séries com mais de 8 anos, a rede Telemetria foi a mais afetada, perdendo mais da metade das estações.</p>
+<div id="fig-estacoes-sub-8" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-estacoes-sub-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Controle_Qualidade/Figuras/Figura 9. Mapa estacoes subdiarias 8 anos ou mais.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estacoes-sub-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.9: Figura 9. Estações de monitoramento de precipitação de resolução sub-diária (8 anos ou mais).
+</figcaption>
+</figure>
+</div>
+<p>Na sequência, foram realizadas verificações exploratórias à base sub-diária,a saber: (i)</p>
+<section id="análise-de-consistência-1" class="level4" data-number="2.2.2.1">
+<h4 data-number="2.2.2.1" class="anchored" data-anchor-id="análise-de-consistência-1"><span class="header-section-number">2.2.2.1</span> Análise de consistência</h4>
+<p>O inventário das estações de monitoramento subdiário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações sub-diárias, cuja fonte de dados seria o CEMADEN, Telemetria, ICEA e Inmet subdiário. Esses filtros resultaram em 8.691 estações.</p>
+<p>Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo. Das 8.691 estações, 1.775 (20,4%) apresentaram alteração em ao menos um metadado, com maior concentração nas estações do CEMADEN.</p>
+<p>As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais, o que resultou em diferenças de até 1 km de distância entre a maioria das estações com mudanças. Outras divergências observadas eram no nome do município, em razão do uso ou não de acentos, ou estado em que a estação pertence. Nenhuma das 211 estações verificadas indicou a necessidade de ajustes.</p>
+<p>Ainda, aplicou-se a verificação de duplicatas, de modo a identificar pares estação e data repetidas. A análise não indicou nenhuma duplicata na base de dados díária.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Introdução">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./meta6.html" class="pagination-link" aria-label="Meta 6 — Correção de Viés Climático">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Meta 6 — Correção de Viés Climático</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

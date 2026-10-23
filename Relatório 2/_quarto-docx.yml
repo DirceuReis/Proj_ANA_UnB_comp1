@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: output_docx
+  
+book:
+  title: ""
+  chapters:
+    - index.qmd      # Capítulo 1: Introdução (era o introdução.qmd)
+    - meta3.qmd      # Capítulo 2: Base Hidroclimática Nacional
+    - meta6.qmd      # Capítulo 3: Não Estacionariedade
+    
+format:
+  docx:
+    toc: true
+    toc-title: "Sumário"
+    number-sections: true
+    fig-align: center
+    reference-doc: .template.docx
+    link-citations: true
+    link-bibliography: true
+    lang: pt
+    
+bibliography:
+  - ref_tendencia.bib
+    
+# Sobre a nomeação dos arquivos: o padrão para o nome dos "profiles" dos arquivos yml
+# são _quarto-{nome do perfil}.yml, especificamento o nome após o hífen (obrigatório)
+# como "_quarto-docx.yml". Nesse caso, o nome do perfil seria "docx".
