@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Não Estacionariedade dos Extremos</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./meta3.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7b70b6449d90b0912b3f848c5cf55d7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./meta8.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta8.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#dados-utilizados" id="toc-dados-utilizados" class="nav-link active" data-scroll-target="#dados-utilizados"><span class="header-section-number">3.1</span> Dados utilizados</a></li>
+  <li><a href="#metodologia" id="toc-metodologia" class="nav-link" data-scroll-target="#metodologia"><span class="header-section-number">3.2</span> Metodologia</a>
+  <ul class="collapse">
+  <li><a href="#teste-de-mann-kendall" id="toc-teste-de-mann-kendall" class="nav-link" data-scroll-target="#teste-de-mann-kendall"><span class="header-section-number">3.2.1</span> Teste de Mann-Kendall</a></li>
+  <li><a href="#mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" id="toc-mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" class="nav-link" data-scroll-target="#mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw"><span class="header-section-number">3.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</a></li>
+  <li><a href="#estimativa-da-tendência" id="toc-estimativa-da-tendência" class="nav-link" data-scroll-target="#estimativa-da-tendência"><span class="header-section-number">3.2.3</span> Estimativa da tendência</a></li>
+  <li><a href="#remoção-da-tendência" id="toc-remoção-da-tendência" class="nav-link" data-scroll-target="#remoção-da-tendência"><span class="header-section-number">3.2.4</span> Remoção da tendência</a></li>
+  <li><a href="#estimativa-da-autocorrelação-de-primeira-ordem" id="toc-estimativa-da-autocorrelação-de-primeira-ordem" class="nav-link" data-scroll-target="#estimativa-da-autocorrelação-de-primeira-ordem"><span class="header-section-number">3.2.5</span> Estimativa da autocorrelação de primeira ordem</a></li>
+  <li><a href="#correção-do-viés-da-autocorrelação" id="toc-correção-do-viés-da-autocorrelação" class="nav-link" data-scroll-target="#correção-do-viés-da-autocorrelação"><span class="header-section-number">3.2.6</span> Correção do viés da autocorrelação</a></li>
+  <li><a href="#identificação-da-autocorrelação-significativa" id="toc-identificação-da-autocorrelação-significativa" class="nav-link" data-scroll-target="#identificação-da-autocorrelação-significativa"><span class="header-section-number">3.2.7</span> Identificação da autocorrelação significativa</a></li>
+  <li><a href="#aplicação-do-pre-whitening" id="toc-aplicação-do-pre-whitening" class="nav-link" data-scroll-target="#aplicação-do-pre-whitening"><span class="header-section-number">3.2.8</span> Aplicação do <em>pre-whitening</em></a></li>
+  <li><a href="#controle-da-false-discovery-rate-fdr" id="toc-controle-da-false-discovery-rate-fdr" class="nav-link" data-scroll-target="#controle-da-false-discovery-rate-fdr"><span class="header-section-number">3.2.9</span> Controle da <em>False Discovery Rate</em> – FDR</a></li>
+  <li><a href="#teste-de-pettit" id="toc-teste-de-pettit" class="nav-link" data-scroll-target="#teste-de-pettit"><span class="header-section-number">3.2.10</span> Teste de Pettit</a></li>
+  </ul></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados"><span class="header-section-number">3.3</span> Resultados</a>
+  <ul class="collapse">
+  <li><a href="#resultados-pluviómetros-e-pluviógrafos" id="toc-resultados-pluviómetros-e-pluviógrafos" class="nav-link" data-scroll-target="#resultados-pluviómetros-e-pluviógrafos"><span class="header-section-number">3.3.1</span> Resultados Pluviómetros e pluviógrafos</a></li>
+  <li><a href="#mk-mkmtfpw-mkmtfpwfdr" id="toc-mk-mkmtfpw-mkmtfpwfdr" class="nav-link" data-scroll-target="#mk-mkmtfpw-mkmtfpwfdr"><span class="header-section-number">3.3.2</span> MK; MK+MTFPW; MK+MTFPW+FDR</a></li>
+  <li><a href="#resultados-xavier" id="toc-resultados-xavier" class="nav-link" data-scroll-target="#resultados-xavier"><span class="header-section-number">3.3.3</span> Resultados Xavier</a></li>
+  <li><a href="#teste-de-pettit-nos-dados-de-xavier" id="toc-teste-de-pettit-nos-dados-de-xavier" class="nav-link" data-scroll-target="#teste-de-pettit-nos-dados-de-xavier"><span class="header-section-number">3.3.4</span> Teste de Pettit nos dados de Xavier</a></li>
+  </ul></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais"><span class="header-section-number">3.4</span> Considerações Finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Esta meta avalia a existência de mudanças temporais nas séries de precipitação extrema, incluindo tendências graduais. As análises abrangem pluviômetros e pluviógrafos.</p>
+<section id="dados-utilizados" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="dados-utilizados"><span class="header-section-number">3.1</span> Dados utilizados</h2>
+<p>Para o realização da análise de tendência, foram utilizadas diferentes fontes de dados de precipitação, contemplando informações provenientes de postos pluviométricos e pluviógrafos, bem como dados espacialmente distribuídos em grade.</p>
+<p>Foram utilizados os postos pluviométricos e pluviómetros disponíveis na base de dados do UNIPLU (Das Neves Almeida et al., 2025). Na etapa de preparação dos dados, foram selecionados os registros com intervalo temporal de 24 horas (1440 minutos) para os dados diários e de 1hora (60 min) para os dados subdiários.</p>
+<p>Também foi utilizada a base de dados em grade do <em>Brazilian Daily Gridded Weather Dataset</em> (BR-DWGD), elaborada por <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>. e disponibilizada em formato NetCDF. A série temporal utilizada compreende o período de 1961 a 2025, totalizando 65 anos de dados diários. Para cada célula da grade espacial e para cada ano, foi identificado o maior valor de precipitação diária registrado, obtendo-se, assim, a série de precipitação máxima diária anual para cada célula.</p>
+<p>Para a organização espacial dos dados e a realização das análises, tanto os postos pluviométricos e pluviógrafos quanto as células da base de dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> foram associadas às respectivas Regiões Hidrográficas (RHs). Essa associação foi realizada por meio da localização espacial de cada posto e de cada célula da grade, permitindo identificar a Região Hidrográfica à qual cada ponto de observação ou célula pertence.</p>
+<p>Após essa classificação espacial, os dados foram organizados de acordo com as RHs, de modo que as análises estatísticas e de tendência fossem realizadas individualmente para cada RH. Essa abordagem permitiu avaliar a distribuição espacial dos resultados e identificar possíveis diferenças no comportamento das séries de precipitação entre as diferentes Regiões Hidrográficas.</p>
+<p>Após a construção das séries, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao <em>Modified Trend-Free Pre-Whitening</em> (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método <em>False Discovery Rate</em> (MK + MTFPW + FDR). A análise de tendência foi aplicada individualmente a cada base de dados.</p>
+</section>
+<section id="metodologia" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="metodologia"><span class="header-section-number">3.2</span> Metodologia</h2>
+<p>A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.</p>
+<section id="teste-de-mann-kendall" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="teste-de-mann-kendall"><span class="header-section-number">3.2.1</span> Teste de Mann-Kendall</h3>
+<p>Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.</p>
+<p>Para cada série temporal ((X_1,X_2,,X_n)), as observações foram inicialmente transformadas em postos, considerando os valores empatados pelo método do menor posto. Em seguida, a estatística (S) foi calculada pela comparação entre todos os pares de observações:</p>
+<p><span id="eq-mk-s"><span class="math display">\[
+S =
+\sum_{i=1}^{n-1}
+\sum_{j=i+1}^{n}
+\operatorname{sgn}(R_j-R_i)
+\tag{3.1}\]</span></span></p>
+<p>em que (R_i) e (R_j) representam os postos das observações (X_i) e (X_j), respectivamente, e:</p>
+<p><span id="eq-sgn"><span class="math display">\[
+\operatorname{sgn}(R_j-R_i)=
+\begin{cases}
++1, &amp; R_j-R_i&gt;0\\
+0, &amp; R_j-R_i=0\\
+-1, &amp; R_j-R_i&lt;0
+\end{cases}
+\tag{3.2}\]</span></span></p>
+<p>Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.</p>
+<p>Os empates entre observações foram considerados no cálculo da variância de (S). A variância foi calculada por:</p>
+<p><span id="eq-km-variavancia"><span class="math display">\[
+\operatorname{Var}(S)=
+\frac{
+n(n-1)(2n+5)
+-
+\displaystyle\sum_{p=1}^{g}
+t_p(t_p-1)(2t_p+5)
+}{18}
+\tag{3.3}\]</span></span></p>
+<p>em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados e (g) corresponde ao número de grupos de valores empatados.</p>
+<p>A estatística padronizada (Z) foi calculada por:</p>
+<p><span id="eq-mk-z"><span class="math display">\[
+Z=
+\begin{cases}
+\dfrac{S-1}{\sqrt{\operatorname{Var}(S)}}, &amp; S&gt;0\\[8pt]
+0, &amp; S=0\\[8pt]
+\dfrac{S+1}{\sqrt{\operatorname{Var}(S)}}, &amp; S&lt;0
+\end{cases}
+\tag{3.4}\]</span></span></p>
+<p>O <em>p-value</em> bilateral foi obtido por:</p>
+<p><span id="eq-pvalor"><span class="math display">\[
+p=2\left[1-\Phi(|Z|)\right]
+\tag{3.5}\]</span></span></p>
+<p>em que () representa a função de distribuição acumulada da distribuição normal padrão.</p>
+<p>Foi adotado nível de significância de 5% ((,05)). Assim, uma série foi considerada estatisticamente significativa quando: <span class="math display">\[
+p&lt;0,05
+\]</span> A direção da tendência foi determinada pelo sinal da estatística (Z). Valores positivos de (Z) foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.</p>
+<p>O teste MK foi aplicado individualmente às séries correspondentes às células da grade <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), <em>p-value</em> e classificação da direção da tendência.</p>
+<ul>
+<li>finalidade do teste;</li>
+<li>hipótese nula;</li>
+<li>estatística Z;</li>
+<li>p-valor;</li>
+<li>nível de significância;</li>
+<li>classificação da tendência em crescente, decrescente ou não significativa.</li>
+<li>equações</li>
+</ul>
+</section>
+<section id="mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw"><span class="header-section-number">3.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</h3>
+<p>A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW <span class="citation" data-cites="Onoz.2012">(<a href="#ref-Onoz.2012" role="doc-biblioref">Önöz e Bayazit 2012</a>)</span>, conforme o procedimento descrito por <span class="citation" data-cites="Souza.2022">(<a href="#ref-Souza.2022" role="doc-biblioref">Souza e Reis 2022</a>)</span>.</p>
+<p>O método foi aplicado individualmente a cada série temporal e estruturado em etapas sucessivas:</p>
+<ol type="i">
+<li><p>estimativa da tendência por meio da inclinação de Sen;</p></li>
+<li><p>remoção da tendência da série;</p></li>
+<li><p>estimativa da autocorrelação de primeira ordem ((r_1));</p></li>
+<li><p>correção do viés da estimativa de (r_1);</p></li>
+<li><p>verificação da significância da autocorrelação; e</p></li>
+<li><p>aplicação do procedimento de <em>pre-whitening</em> quando a autocorrelação foi considerada estatisticamente significativa.</p></li>
+</ol>
+</section>
+<section id="estimativa-da-tendência" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="estimativa-da-tendência"><span class="header-section-number">3.2.3</span> Estimativa da tendência</h3>
+<p>Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen <span class="citation" data-cites="Sen.1968">(<a href="#ref-Sen.1968" role="doc-biblioref">Sen 1968</a>)</span>. Para uma série temporal com (n) observações, foram calculadas as inclinações entre todos os pares de observações:</p>
+<p><span id="eq-sen-inclinacoes"><span class="math display">\[
+\beta_{ij} =
+\frac{X_j-X_i}{j-i},
+\qquad j&gt;i
+\tag{3.6}\]</span></span></p>
+<p>em que (X_i) e (X_j) representam os valores da série nos instantes (i) e (j), respectivamente. A inclinação de Sen (()) foi obtida pela mediana de todas as inclinações (_{ij}):</p>
+<p><span id="eq-sen-mediana"><span class="math display">\[
+\beta =
+\operatorname{mediana}
+\left(
+\beta_{ij}
+\right)
+\tag{3.7}\]</span></span></p>
+<p>Essa estimativa foi utilizada para remover a tendência da série antes da avaliação da autocorrelação.</p>
+</section>
+<section id="remoção-da-tendência" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="remoção-da-tendência"><span class="header-section-number">3.2.4</span> Remoção da tendência</h3>
+<p>Após a estimativa da inclinação de Sen, a tendência foi removida da série original. Para isso, foi utilizada a expressão:</p>
+<p><span id="eq-removertendencia"><span class="math display">\[
+X_t^{d}=X_t-\beta t
+\tag{3.8}\]</span></span></p>
+<p>em que (X_t^{d}) representa o valor da série sem tendência no instante (t), (X_t) corresponde ao valor original da série, () é a inclinação de Sen e (t) representa a posição temporal da observação.</p>
+<p>A série sem tendência foi utilizada exclusivamente para a estimativa da autocorrelação de primeira ordem. A aplicação posterior do procedimento de <em>pre-whitening</em>, quando necessária, foi realizada sobre a série original.</p>
+</section>
+<section id="estimativa-da-autocorrelação-de-primeira-ordem" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="estimativa-da-autocorrelação-de-primeira-ordem"><span class="header-section-number">3.2.5</span> Estimativa da autocorrelação de primeira ordem</h3>
+<p>A autocorrelação de primeira ordem ((r_1)) foi estimada a partir da série sem tendência. Inicialmente, foi calculada a média da série por:</p>
+<p><span id="eq-media-detrendida"><span class="math display">\[
+\overline{X^d}
+=
+\frac{1}{n}
+\sum_{t=1}^{n}X_t^d
+\tag{3.9}\]</span></span></p>
+<p>Em seguida, o coeficiente de autocorrelação de primeira ordem foi obtido por:</p>
+<p><span id="eq-autocorr1"><span class="math display">\[
+r_1=
+\frac{
+\displaystyle\sum_{t=1}^{n-1}
+\left(X_t^d-\overline{X^d}\right)
+\left(X_{t+1}^d-\overline{X^d}\right)
+}{
+\displaystyle\sum_{t=1}^{n}
+\left(X_t^d-\overline{X^d}\right)^2
+}
+\tag{3.10}\]</span></span></p>
+<p>em que (r_1) representa a correlação entre observações consecutivas da série sem tendência.</p>
+</section>
+<section id="correção-do-viés-da-autocorrelação" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="correção-do-viés-da-autocorrelação"><span class="header-section-number">3.2.6</span> Correção do viés da autocorrelação</h3>
+<p>A estimativa de (r_1) foi posteriormente corrigida para reduzir o viés associado à estimativa da autocorrelação em séries finitas. A autocorrelação corrigida foi calculada por:</p>
+<p><span id="eq-autocorrigida"><span class="math display">\[
+r_1^{*}
+=
+\frac{nr_1+2}{n-4}
+\tag{3.11}\]</span></span></p>
+<p>em que (r_1^{*}) representa a autocorrelação de primeira ordem corrigida e (n) corresponde ao número de observações da série.</p>
+</section>
+<section id="identificação-da-autocorrelação-significativa" class="level3" data-number="3.2.7">
+<h3 data-number="3.2.7" class="anchored" data-anchor-id="identificação-da-autocorrelação-significativa"><span class="header-section-number">3.2.7</span> Identificação da autocorrelação significativa</h3>
+<p>Para determinar se a autocorrelação de primeira ordem era estatisticamente significativa, foi utilizado um intervalo de confiança de 95%. Os limites inferior e superior foram calculados por:</p>
+<p><span id="eq-limiteinferior"><span class="math display">\[
+\rho_{1,\mathrm{inf}}
+=
+\frac{-1-1,96\sqrt{n-2}}{n-1}
+\tag{3.12}\]</span></span></p>
+<p>e</p>
+<p><span id="eq-limitesuperior"><span class="math display">\[
+\rho_{1,\mathrm{sup}}
+=
+\frac{-1+1,96\sqrt{n-2}}{n-1}
+\tag{3.13}\]</span></span></p>
+<p>A série foi considerada sem autocorrelação significativa quando o valor de (r_1) permaneceu dentro desse intervalo:</p>
+<p><span id="eq-intervalosemgig"><span class="math display">\[
+\rho_{1,\mathrm{inf}}
+\leq r_1
+\leq
+\rho_{1,\mathrm{sup}}
+\tag{3.14}\]</span></span></p>
+<p>Quando (r_1) permaneceu dentro dos limites estabelecidos, a série foi considerada independente para fins da análise de tendência, não sendo aplicado o procedimento de <em>pre-whitening</em>. Nesse caso, a série original foi mantida para a aplicação do teste de Mann–Kendall.</p>
+<p>Por outro lado, quando (r_1) apresentou valor inferior ao limite inferior ou superior ao limite superior, a autocorrelação foi considerada significativa:</p>
+<p><span id="eq-intervalocomsig"><span class="math display">\[
+r_1 &lt; \rho_{1,\mathrm{inf}}
+\quad\text{ou}\quad
+r_1 &gt; \rho_{1,\mathrm{sup}}
+\tag{3.15}\]</span></span></p>
+<p>Nessa situação, foi aplicado o procedimento MTFPW.</p>
+</section>
+<section id="aplicação-do-pre-whitening" class="level3" data-number="3.2.8">
+<h3 data-number="3.2.8" class="anchored" data-anchor-id="aplicação-do-pre-whitening"><span class="header-section-number">3.2.8</span> Aplicação do <em>pre-whitening</em></h3>
+<p>Quando identificada autocorrelação significativa, o procedimento de <em>pre-whitening</em> foi aplicado à série temporal original, utilizando a autocorrelação corrigida (r_1^{*}). A série corrigida foi obtida por:</p>
+<p><span id="eq-pw"><span class="math display">\[
+Y_t=
+X_t-r_1^{*}X_{t-1},
+\qquad t=2,\ldots,n
+\tag{3.16}\]</span></span></p>
+<p>em que (Y_t) representa a série após a aplicação do <em>pre-whitening</em>, (X_t) corresponde à série original e (r_1^{*}) representa a estimativa corrigida da autocorrelação de primeira ordem.</p>
+<p>Dessa forma, a série sem tendência foi utilizada para estimar e avaliar a autocorrelação, enquanto o <em>pre-whitening</em> foi aplicado diretamente à série original. Quando a autocorrelação não foi significativa, nenhuma transformação foi aplicada e a série original foi mantida.</p>
+<p>Após a aplicação do procedimento MTFPW, quando necessário, o teste de Mann–Kendall foi aplicado à série resultante. Assim, para cada unidade espacial de análise, foram obtidos a estimativa da inclinação de Sen, o coeficiente de autocorrelação de primeira ordem, o coeficiente corrigido, a indicação da presença ou ausência de autocorrelação significativa e a série utilizada na etapa subsequente do teste de tendência.</p>
+</section>
+<section id="controle-da-false-discovery-rate-fdr" class="level3" data-number="3.2.9">
+<h3 data-number="3.2.9" class="anchored" data-anchor-id="controle-da-false-discovery-rate-fdr"><span class="header-section-number">3.2.9</span> Controle da <em>False Discovery Rate</em> – FDR</h3>
+<p>Considerando que a análise de tendência foi realizada simultaneamente para diversas séries temporais, correspondentes aos postos pluviométricos e pluviógrafos e às células da grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> foi aplicado o procedimento de Benjamini–Hochberg <span class="citation" data-cites="Benjamini.1995">(<a href="#ref-Benjamini.1995" role="doc-biblioref">Benjamini e Hochberg 1995</a>)</span> para o controle da <em>False Discovery Rate</em> . A aplicação desse procedimento teve como objetivo controlar a proporção esperada de resultados falsamente significativos entre as hipóteses rejeitadas, reduzindo a ocorrência de falsos positivos decorrentes da realização simultânea de múltiplos testes estatísticos.</p>
+<p>O procedimento foi aplicado ao conjunto de <em>p-values</em> obtidos nas análises de tendência. Inicialmente, foram considerados apenas os valores de <em>p</em> válidos, ou seja, aqueles que não apresentavam valores ausentes ou infinitos. Em seguida, os <em>p-values</em> foram ordenados em ordem crescente:</p>
+<p><span id="eq-fdrordenar"><span class="math display">\[
+p_{(1)} \leq p_{(2)} \leq \ldots \leq p_{(m)}
+\tag{3.17}\]</span></span></p>
+<p>em que (p_{(j)}) representa o (j)-ésimo menor <em>p-value</em> e (m) corresponde ao número total de <em>p-values</em> válidos considerados na análise.</p>
+<p>Para cada posição (j), foi calculado um valor crítico de acordo com:</p>
+<p><span id="eq-fdrcritico"><span class="math display">\[
+d_{(j)} =
+\frac{j\alpha}{m}
+\tag{3.18}\]</span></span></p>
+<p>em que (j) representa a posição do <em>p-value</em> ordenado, () corresponde ao nível de significância adotado e (m) representa o número total de testes considerados.</p>
+<p>Foi então identificado o maior valor de (j) que satisfazia a condição:</p>
+<p><span id="eq-fdrcriterio"><span class="math display">\[
+p_{(j)} &lt; \frac{j\alpha}{m}
+\tag{3.19}\]</span></span></p>
+<p>O maior índice que atende a essa condição foi denominado (j^<em>). Quando não houve nenhum</em> p-value* que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando (j^<em>) foi identificado, todas as hipóteses correspondentes aos</em> p-values* ordenados de (p_{(1)}) até (p_{(j^*)}) foram consideradas estatisticamente significativas.</p>
+<p>Assim, a regra de decisão do procedimento pode ser expressa por:</p>
+<p><span id="eq-fdrdecisão"><span class="math display">\[
+p_{(j)} &lt; \frac{j\alpha}{m},
+\qquad j=j^*
+\tag{3.20}\]</span></span></p>
+<p>sendo (j^*) o maior índice que satisfaz essa condição.</p>
+<p>Foi adotado nível de significância de 5% ((,05)). Após a identificação das hipóteses significativas na ordem crescente dos <em>p-values</em>, os resultados foram novamente associados às respectivas unidades espaciais, preservando a correspondência original entre cada <em>p-value</em> e sua estação ou célula da grade.</p>
+<p>Dessa forma, o procedimento permitiu obter a significância estatística final das tendências considerando simultaneamente os múltiplos testes realizados. Para cada unidade espacial, o resultado após o controle da FDR foi classificado como significativo ou não significativo, permitindo a representação e a avaliação da distribuição espacial das tendências.</p>
+</section>
+<section id="teste-de-pettit" class="level3" data-number="3.2.10">
+<h3 data-number="3.2.10" class="anchored" data-anchor-id="teste-de-pettit"><span class="header-section-number">3.2.10</span> Teste de Pettit</h3>
+<p>A identificação de possíveis mudanças nas séries temporais de precipitação máxima diária, provenientes dos dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, foi realizada por meio do teste não paramétrico de Pettitt. Esse procedimento permite identificar um ponto de mudança na distribuição de uma série temporal, dividindo-a em dois períodos com possíveis comportamentos distintos. A análise foi conduzida individualmente para cada célula da grade.</p>
+<p>ara cada série elegível, foi construída uma matriz de comparações pareadas entre os valores de precipitação, utilizando a função sinal da diferença entre as observações. A partir dessas comparações, calculou-se a estatística <span class="math inline">\((U_k)\)</span> para cada possível posição de mudança <span class="math inline">\((k)\)</span>, definida pela soma dos sinais das diferenças entre as observações situadas antes e depois de cada posição candidata. A estatística do teste de Pettitt foi obtida pelo maior valor absoluto de <span class="math inline">\((U_k)\)</span>, conforme a expressão:</p>
+<p><span id="eq-K"><span class="math display">\[
+K = \max_{1 \leq k &lt; n} |U_k|
+\tag{3.21}\]</span></span></p>
+<p>em que <span class="math inline">\((K)\)</span> representa a estatística do teste e <span class="math inline">\((n)\)</span> corresponde ao número de observações válidas da série temporal. O ponto de quebra foi associado à posição em que o valor absoluto de <span class="math inline">\((U_k)\)</span> atingiu seu máximo, sendo o respectivo ano registrado como o ano estimado da quebra.</p>
+<p>A significância estatística foi inicialmente avaliada por meio de uma aproximação do valor-p, calculada pela expressão:</p>
+<p><span id="eq-pettitpvalor"><span class="math display">\[
+p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
+\tag{3.22}\]</span></span></p>
+<p>com os valores limitados ao intervalo máximo de 1. Nessa etapa, adotou-se o nível de significância de 5%, considerando-se evidência de quebra quando <span class="math inline">\((p &lt; 0{,}05)\)</span>. Entretanto, como o procedimento foi aplicado simultaneamente a milhares de células da grade, os valores-p foram submetidos posteriormente à correção para múltiplos testes pelo método FDR, com nível de significância de 5%. Assim, foram classificadas como células com quebra estatisticamente significativa aquelas que permaneceram significativas após a correção FDR e apresentaram um ano de quebra identificado. As demais células foram classificadas como sem quebra significativa.</p>
+<p>Para as células com quebras significativas após o procedimento FDR, realizou-se uma análise complementar das tendências temporais, com o objetivo de investigar possíveis diferenças no comportamento da precipitação entre os períodos anterior e posterior à quebra. O período anterior foi definido pelas observações com ano menor ou igual ao ano estimado da quebra, enquanto o período posterior compreendeu as observações com ano estritamente maior que esse ano. Dessa forma, o ano da quebra foi incluído no segmento anterior, e os dois períodos foram analisados separadamente.</p>
+<p>Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descrita nos itens 8.2.1; 8.2.2 e 8.2.3.</p>
+</section>
+</section>
+<section id="resultados" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="resultados"><span class="header-section-number">3.3</span> Resultados</h2>
+<section id="resultados-pluviómetros-e-pluviógrafos" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="resultados-pluviómetros-e-pluviógrafos"><span class="header-section-number">3.3.1</span> Resultados Pluviómetros e pluviógrafos</h3>
+<p>Para os dados provenientes dos pluviógrafos, foram identificados seis postos com séries históricas de pelo menos 30 anos para os períodos de duração de 1, 3, 6, 12 e 24 horas. Assim, as análises de tendência foram realizadas com base nas séries históricas desses postos.</p>
+<p>Nas durações de 1, 3 e 6 horas, os resultados foram idênticos: o teste de MK identificou uma tendência estatisticamente significativa e decrescente no posto SBAR. Essa tendência permaneceu significativa após a aplicação do procedimento MTFPW + MK, e da correção para múltiplos FDR.</p>
+<p>Para a duração de 12 horas, o teste MK identificou tendências significativas nos postos SBAR e SBSJ. Entretanto, após a aplicação do procedimento MTFPW + MK e da correção FDR, apenas o posto SBAR permaneceu estatisticamente significativo, mantendo a tendência decrescente.</p>
+<p>Já nas séries de 24 horas, os dois postos que apresentaram tendências significativas no teste MK (SBAR e SBSJ) também permaneceram significativos após a aplicação do procedimento MTFPW + MK e da correção FDR. Ambos apresentaram tendências decrescentes. Esses seis postos estão distribuídos em cinco Regiões Hidrográficas: Atlântico Leste, São Francisco, Atlântico Nordeste Oriental, Atlântico Sudeste e Paraná.</p>
+<p>De modo geral, o posto SBAR apresentou tendência decrescente estatisticamente significativa nas quatro durações de 1, 3, 6 e 12 horas, enquanto o posto SBSJ apresentou tendência significativa apenas na duração de 24 horas, considerando os resultados após a correção FDR.</p>
+<p>A análise de tendência foi aplicada a 5.258 postos pluviométricos distribuídos pelo território brasileiro, conforme apresentado na Figura 1. Quanto à extensão das séries históricas, 1.308 postos (24,9%) possuem registros com duração igual ou superior a 60 anos; 1.829 (34,8%) apresentam séries entre 45 e 59 anos; e 2.121 (40,3%) possuem séries entre 30 e 44 anos</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png" class="img-fluid" alt="Espacialização das estações pluviométricas por número de anos disponíveis"> Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas</p>
+<p>A análise por Região Hidrográfica (RH) evidencia que a Região Hidrográfica do Paraná (PRN) concentra o maior número de postos pluviométricos, totalizando 1.728 estações, o que corresponde a 32,9% do total analisado. Desse conjunto, 761 postos possuem séries históricas entre 45 e 59 anos, enquanto 412 apresentam registros com duração igual ou superior a 60 anos.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges_AH.png" class="img-fluid" alt="Base de dados das estações pluviométricas por RH"> Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica</p>
+<p>Por outro lado, a RH do Atlântico Nordeste Ocidental (ANC) apresenta a menor concentração, com 100 postos pluviométricos, dos quais apenas 2 possuem séries históricas com duração igual ou superior a 60 anos.</p>
+</section>
+<section id="mk-mkmtfpw-mkmtfpwfdr" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="mk-mkmtfpw-mkmtfpwfdr"><span class="header-section-number">3.3.2</span> MK; MK+MTFPW; MK+MTFPW+FDR</h3>
+<p>A aplicação do teste de Mann-Kendall identificou 973 postos com tendências estatisticamente significativas. Após a correção da autocorrelação temporal pelo método MTFPW, seguida da reaplicação do teste MK, esse número foi reduzido para 925 postos, indicando uma diminuição no total de séries com tendências significativas. Posteriormente, com a aplicação da correção para múltiplos testes pelo procedimento de FDR, foram identificados 213 postos com tendências estatisticamente significativas. Esse resultado evidencia uma redução expressiva no número de tendências consideradas significativas após o controle da multiplicidade dos testes. Além disso, 4.777 postos não apresentaram autocorrelação temporal estatisticamente significativa, indicando ausência de evidências de dependência temporal significativa nessas séries, segundo o critério adotado.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_imax_AH_RH.png" class="img-fluid" alt="Resultado para chuva máxima diária anual"> Figura 3.</p>
+<p>Dos postos que mantiveram tendências estatisticamente significativas após a aplicação do procedimento FDR, 174 apresentaram tendência crescente, enquanto 39 apresentaram tendência decrescente, distribuídas entre 11 RH. A Região Hidrográfica do Paraná (PRN) concentrou o maior número de estações significativas, com 43 (20,2%), seguida pelas regiões do Atlântico Sul (ATS), com 42 (19,7%), e do Atlântico Sudeste (ASD), com 30 (14,1%). Em conjunto, essas três regiões reuniram 54,0% das estações com tendências significativas. Na sequência, destacaram-se o Atlântico Nordeste Oriental (ANO), com 26 estações (12,2%), e o São Francisco (SFR), com 19 (8,9%). As demais regiões apresentaram menores proporções, variando de 1,9% no Paraguai (PRG) e no Uruguai (URU) a 7,5% na região Amazônica (AMZ). Por outro lado, não houve posto com tendência significativa na Região do Atlântico Nordeste Ocidental (ANC).</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs_1d_AH.png" class="img-fluid" alt="Porporção de sing por RH para máxima anual"> Figura 4.</p>
+<p>Em relação à direção das tendências, observou-se predominância de tendências crescentes na maioria das RHs. Esse padrão foi particularmente evidente no ATS, onde 39 das 42 estações significativas apresentaram tendência crescente, e no ANO, com 23 das 26 estações. No PRN, foram identificadas 36 tendências crescentes e 7 decrescentes, enquanto no ASD foram registradas 25 crescentes e 5 decrescentes. A região AMZ apresentou 11 tendências crescentes e 5 decrescentes, e o SFR, 14 crescentes e 5 decrescentes. Também predominaram tendências crescentes no Atlântico Leste (ALE), no Parnaíba (PNB) e no Tocantins-Araguaia (TOA). Em contraste, na Região Hidrográfica do PRG, as quatro estações significativas apresentaram tendências decrescentes, enquanto no URU todas as quatro apresentaram tendências crescentes.</p>
+</section>
+<section id="resultados-xavier" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="resultados-xavier"><span class="header-section-number">3.3.3</span> Resultados Xavier</h3>
+<p>A análise das séries de precipitação máximas diária dos dados em grade do <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver Figura 5.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png" class="img-fluid" alt="resutlados das sigs por método com base no Xavier"> Figura 5</p>
+<p>A RH Amazônica apresentou o maior número de células analisadas, com 31.304 pontos, dos quais 10.114 apresentaram tendências significativas pelo teste MK. Após a aplicação do MTFPW, esse número foi reduzido para 8.079 células e, após o FDR, para 3.547. Apesar de concentrar o maior número absoluto de células com tendências significativas após a correção, a proporção correspondente foi de aproximadamente 11,3% das células analisadas na região. A Região Hidrográfica do Paraná também apresentou quantidade expressiva de células significativas após o FDR, totalizando 1.272, seguida pelas regiões Tocantins-Araguaia, com 1.318 células, e Atlântico Sul, com 947 células. Considerando a proporção em relação ao número de células analisadas em cada região, o Atlântico Sul destacou-se, com aproximadamente 54,9% de células significativas após o FDR, seguido pelo Uruguai, com 38,8%. Esses resultados indicam que a distribuição das tendências significativas não depende apenas da extensão espacial representada pela grade, mas também da proporção de células que apresentam tendências estatisticamente significativas em cada região.</p>
+<p>Por outro lado, as regiões do Paraguai e do Parnaíba não apresentaram células com tendências significativas após a aplicação do FDR, embora tenham sido identificadas, respectivamente, 422 e 388 células significativas após a correção pelo MTFPW. No São Francisco, o número de células significativas passou de 990 após o MTFPW para 202 após o FDR. O Atlântico Nordeste Ocidental apresentou 278 células significativas, enquanto o Atlântico Nordeste Oriental contabilizou 368. Nas regiões do Atlântico Leste e do Atlântico Sudeste, foram identificadas, respectivamente, 385 e 241 células significativas após a correção para múltiplos testes.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png" class="img-fluid" alt="proporção de sigs com dados do Xavier"> Figura 6</p>
+<p>A análise da direção das tendências nas séries, considerando as células que permaneceram estatisticamente significativas após a aplicação do procedimento FDR, revelou o predomínio de tendências crescentes na maioria das RHs. A Região Hidrográfica AMZ apresentou 2.471 células com tendências crescentes e 1.076 com tendências decrescentes, correspondendo a aproximadamente 69,7% e 30,3% das células significativas da região, respectivamente. Esse resultado evidencia que, embora predominem tendências positivas, há uma parcela expressiva de células com tendências negativas na região.</p>
+<p>O predomínio de tendências crescentes foi ainda mais evidente nas regiões do ATS e do ALE. No ATS, das 947 células significativas após o FDR, 937 apresentaram tendências crescentes e apenas 10 apresentaram tendências decrescentes. No ALE, todas as 385 células significativas apresentaram tendência crescente. Padrão semelhante foi observado nas regiões do PRN e TOA, que registraram, respectivamente, 1.226 e 1.302 células com tendências crescentes, em comparação com 46 e 16 células com tendências decrescentes. No URU, todas as 623 células significativas também apresentaram tendências crescentes.</p>
+<p>Nas regiões do ANC e do ANO, as tendências crescentes também predominaram, com 270 e 356 células, respectivamente, enquanto as tendências decrescentes foram identificadas em apenas 8 e 12 células. No ASD, foram registradas 219 células com tendências crescentes e 22 com tendências decrescentes. Esses resultados indicam uma predominância espacial de tendências positivas nessas regiões, considerando exclusivamente as células que mantiveram significância estatística após a correção para múltiplos testes.</p>
+<p>Em contraste, a Região Hidrográfica do SFR apresentou uma distribuição relativamente mais equilibrada entre as direções das tendências, com 124 células crescentes e 78 decrescentes. Embora as tendências crescentes ainda predominem, a proporção de tendências decrescentes nessa região foi superior à observada na maioria das demais regiões analisadas.</p>
+</section>
+<section id="teste-de-pettit-nos-dados-de-xavier" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="teste-de-pettit-nos-dados-de-xavier"><span class="header-section-number">3.3.4</span> Teste de Pettit nos dados de Xavier</h3>
+<p>Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.</p>
+<p>A aplicação do teste de Pettitt às 71.007 séries de precipitação identificou 9.330 pontos com quebra estatisticamente significativa, enquanto 61.677 séries não apresentaram quebras significativas. Esses valores correspondem, respectivamente, a aproximadamente 13,1% e 86,9% do total analisado. Os resultados indicam que a maioria das séries não apresentou evidências estatísticas de mudanças abruptas ao longo do período analisado. Entretanto, a identificação de quebras significativas em cerca de 13,2% das séries evidencia a ocorrência de possíveis alterações no comportamento temporal da precipitação em parte da área de estudo. A figura abaixo mostra as células onde foram identificadas quebras significativa.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png" class="img-fluid" alt="mapa anos de quebra"> Figura 7</p>
+<p>Posteriormente, nas séries com quebra significativa identificada pelo teste de Pettitt, o teste de tendência foi reaplicado separadamente aos períodos anterior e posterior à quebra, a fim de avaliar possíveis diferenças na direção e na significância das tendências de precipitação entre esses dois intervalos.</p>
+<p>O teste de Pettitt evidenciou uma redução no número de séries com significância estatística após a quebra, tanto para o teste de MK quanto para o método MTFPW. Antes da quebra, o teste MK identificou 1.904 séries com tendências significativas, enquanto 7.426 não apresentaram significância. Após a quebra, o número de séries significativas diminuiu para 1.498, ao passo que 7.832 séries não apresentaram tendências estatisticamente significativas, correspondendo a uma redução de aproximadamente 21,3% no número de resultados significativos.</p>
+<p>Considerando a correção da autocorrelação temporal pelo método MTFPW, foram identificadas 1.779 séries significativas antes da quebra e 7.551 não significativas. Após a quebra, esses números passaram para 1.415 e 7.915, respectivamente, representando uma redução de aproximadamente 20,5% no número de séries significativas. A diminuição observada em ambos os procedimentos indica que as tendências estatisticamente significativas foram menos frequentes no período posterior à quebra.</p>
+<p>Após a correção pelo procedimento FDR no período anterior à quebra, foram identificadas 817 séries com tendências estatisticamente significativas, enquanto 8.513 não apresentaram significância. Após a quebra, o número de séries significativas foi reduzido para 276, ao passo que 9.054 séries permaneceram sem tendências significativas. Esses resultados correspondem a uma redução de aproximadamente 66,2% no número de séries com tendências significativas entre os dois períodos. Essa diminuição sugere que, nas séries analisadas, as tendências identificadas antes dos pontos de quebra foram menos frequentes após a ruptura.</p>
+<p>Na Figura 8 pode-se observar as diferenças na distribuição das categorias de tendência entre os dois períodos. Antes da quebra, figura superior, foram identificadas 19 séries com tendência crescente e 798 com tendência decrescente. Após a quebra, figura inferior, o número de séries com tendência crescente aumentou para 275, ao passo que apenas uma série apresentou tendência decrescente.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_depois_quebra.png" class="img-fluid" alt="tendência antes e depois da quebra"> Figura 8</p>
+<p>Esses resultados apresentam uma mudança na distribuição das tendências entre os períodos analisados, caracterizada pelo predomínio de tendências decrescentes antes da quebra e de tendências crescentes após a quebra. Entretanto, a maior parte das séries permaneceu sem tendência estatisticamente significativa em ambos os períodos.</p>
+<p>Ainda pós a aplicação do FDR observou-se as mudanças na direção da tendência antes e depois da quebra. A transição mais frequente foi a manutenção da condição de ausência de tendência estatisticamente significativa (NS → NS), observada em 8.362 séries. Esse resultado indica que, para a maioria das séries analisadas, não foram identificadas tendências significativas em nenhum dos dois períodos, considerando o critério estatístico adotado.</p>
+<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png" class="img-fluid" alt="mudança de tendência antes e depois da quebra"> Figura 9</p>
+<p>Entre as séries que apresentaram mudanças na direção das tendências, destacou-se a transição de decrescente para não significativa (Decrescente → NS), registrada em 673 casos. Esse resultado foi seguido pelas transições de não significativa para crescente (NS → Crescente), observada em 150 séries, e de decrescente para crescente (Decrescente → Crescente), identificada em 125 séries. Em menor número, 19 séries passaram de uma tendência crescente para não significativa (Crescente → NS), enquanto apenas uma apresentou transição de não significativa para decrescente (NS → Decrescente).</p>
+<p>De modo geral, os resultados evidenciam que a principal mudança após os pontos de quebra foi a ausência de significância estatística das tendências, especialmente em séries que anteriormente apresentavam tendência decrescente. Também foram observadas transições para tendências crescentes, embora em menor quantidade</p>
+</section>
+</section>
+<section id="considerações-finais" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="considerações-finais"><span class="header-section-number">3.4</span> Considerações Finais</h2>
+<p>A análise das tendênciasda precipitação máxima diária, realizada com dados de postos pluviométricos do UNIPLU e com dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> permitiu identificar diferenças espaciais no comportamento das precipitações extremas nas Regiões Hidrográficas do Brasil. A aplicação sequencial dos testes de Mann–Kendall, MTFPW e da correção para múltiplos testes pelo procedimento FDR demonstrou a importância de considerar tanto a autocorrelação temporal quanto a multiplicidade das análises na identificação de tendências estatisticamente significativas. Nos dados observacionais, foram identificados 213 postos com tendências significativas após a aplicação do FDR, com predominância de tendências crescentes. Nos dados em grade, embora tenham sido observadas diferenças entre as regiões, também predominou a ocorrência de tendências crescentes entre as células que permaneceram significativas após as correções estatísticas. Destacaram-se, nesse contexto, as regiões do Atlântico Sul, Uruguai e do Atlântico Leste que apresentaram elevadas proporções de células com tendências significativas.</p>
+<p>A aplicação do teste de Pettitt às séries em grade complementou a análise ao permitir a identificação de possíveis mudanças abruptas no comportamento temporal da precipitação máxima diária. Entre as células analisadas, foram identificadas 9.330 séries com quebras estatisticamente significativas após a correção FDR. A análise segmentada dessas séries evidenciou diferenças importantes entre os períodos anterior e posterior à quebra: antes dela, predominaram as tendências decrescentes entre as séries significativas, enquanto, depois dela, houve forte predominância de tendências crescentes. Também foi observada uma redução expressiva no número de tendências significativas após a quebra, especialmente após a aplicação do FDR, passando de 817 séries antes da quebra para 276 depois dela.</p>
+<p>Em conjunto, esses resultados indicam que a avaliação das tendências em toda a série histórica pode não representar integralmente as mudanças temporais ocorridas em determinadas regiões. Como passos futuros, recomenda-se aprofundar a investigação das diferenças regionais identificadas, comparando sistematicamente os resultados dos postos pluviométricos e pluviógrafos com os dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> de modo a avaliar a consistência espacial e temporal dos padrões observados. Também será importante investigar a distribuição dos anos de quebra e sua possível associação com variabilidades climáticas de grande escala.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Benjamini.1995" class="csl-entry" role="listitem">
+Benjamini, Yoav, e Yosef Hochberg. 1995. <span>«Controlling the <span>False Discovery Rate</span>: <span>A Practical</span> and <span>Powerful Approach</span> to <span>Multiple Testing</span>»</span>. <em>Journal of the Royal Statistical Society Series B: Statistical Methodology</em> 57 (1): 289–300. <a href="https://doi.org/10.1111/j.2517-6161.1995.tb02031.x">https://doi.org/10.1111/j.2517-6161.1995.tb02031.x</a>.
+</div>
+<div id="ref-Onoz.2012" class="csl-entry" role="listitem">
+Önöz, Bihrat, e Mehmetcik Bayazit. 2012. <span>«Block Bootstrap for <span>Mann</span>–<span>Kendall</span> Trend Test of Serially Dependent Data»</span>. <em>Hydrological Processes</em> 26 (23): 3552–60. <a href="https://doi.org/10.1002/hyp.8438">https://doi.org/10.1002/hyp.8438</a>.
+</div>
+<div id="ref-Sen.1968" class="csl-entry" role="listitem">
+Sen, Pranab Kumar. 1968. <span>«Estimates of the <span>Regression Coefficient Based</span> on <span>Kendall</span>’s <span>Tau</span>»</span>. <em>Journal of the American Statistical Association</em> 63 (324): 1379–89. <a href="https://doi.org/10.1080/01621459.1968.10480934">https://doi.org/10.1080/01621459.1968.10480934</a>.
+</div>
+<div id="ref-Souza.2022" class="csl-entry" role="listitem">
+Souza, Saulo A. De, e Dirceu S. Reis Jr. 2022. <span>«Trend <span>Detection</span> in <span>Annual Streamflow Extremes</span> in <span>Brazil</span>»</span>. <em>Water</em> 14 (11): 1805. <a href="https://doi.org/10.3390/w14111805">https://doi.org/10.3390/w14111805</a>.
+</div>
+<div id="ref-Xavier.2022" class="csl-entry" role="listitem">
+Xavier, Alexandre C., Bridget R. Scanlon, Carey W. King, e Aline I. Alves. 2022. <span>«New Improved <span>Brazilian</span> Daily Weather Gridded Data (1961–2020)»</span>. <em>International Journal of Climatology</em> 42 (16): 8390–404. <a href="https://doi.org/10.1002/joc.7731">https://doi.org/10.1002/joc.7731</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./meta3.html" class="pagination-link" aria-label="Base Hidroclimática Nacional">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

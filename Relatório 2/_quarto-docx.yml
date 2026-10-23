@@ -7,11 +7,11 @@ book:
   chapters:
     - index.qmd      # Capítulo 1: Introdução (era o introdução.qmd)
     - meta3.qmd      # Capítulo 2: Base Hidroclimática Nacional
-    - meta6.qmd      # Capítulo 3: Não Estacionariedade
+    - meta8.qmd      # Capítulo 3: Não Estacionariedade
     
 format:
   docx:
-    toc: true
+    toc: true 
     toc-title: "Sumário"
     number-sections: true
     fig-align: center
