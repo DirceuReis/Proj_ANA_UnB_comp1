@@ -164,11 +164,7 @@ A metodologia foi aplicada de maneira diferente considerando os dados de resolu�
 
 ### Séries Diárias
 
-<<<<<<< HEAD
-=======
 #### Análise de consistência
->>>>>>> 1a05c41640a5ca476f343fb9c512cdc0df150d3c
-
 O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações.
 
 Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo, por exemplo, verificou-se se a estação se mantém com as mesmas informações de descrição ao longo de todos os anos do inventário, como unidade da federação, latitude, longitude, altitude, discretização temporal, entre outras. Das 12.640 estações diárias, 211 (1,7%) apresentaram alteração em ao menos um metadado, sendo 210 dessas concentradas na rede Inmet diário. A discretização temporal manteve-se inalterada em todas as estações.
@@ -322,12 +318,7 @@ Aplicado o critério final, descritos como estações com, pelo menos, 30 anos d
 ![Figura 7. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura 7. Estacoes da serie diaria final.png){#fig-estacoes-QC-final width="100%"}
 
 ### Séries Sub-diárias
-
-<<<<<<< HEAD
 Conforme apresentado na @tbl-fontes-uniplu, 8.691 estações do UNIPLU-BR se tratam de estações de monitoramento de precipitação sub-diário. Inicialmente, o controle de qualidade dos dados sub-diários do UNIPLU-BR seriam provenientes da metodologia descrita no Relatório "Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias". Os autores realizaram um procedimento de avaliação qualitativa assistida, estruturado em 5 (cinco) etapas:
-
-=======
->>>>>>> 1a05c41640a5ca476f343fb9c512cdc0df150d3c
 
 Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção de séries diárias, tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros do IQ foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. Inicialmente, o controle de qualidade dos dados sub-diários do UNIPLU-BR seriam provenientes da metodologia descrita no Relatório "Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias", estruturado em 5 (cinco) etapas.
 
@@ -347,9 +338,7 @@ Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade de
 
 A seguir serão apresentadas as análises de consistência dos metadados e controle de qualidade. Tais análises serão apresentadas por tipo de fonte (rede), tendo em vista a variabilidade entre as informações por rede.
 
-<<<<<<< HEAD
 #### Análise de consistência dos metadados
-
 A consistência dos metadados foi verificada comparando-se cada estação-ano, em relação a cinco atributos do cadastro: coordenadas geográficas, altitude, discretização temporal, município e UF. Assumiu-se que mudanças em altitude, município e UF não seriam consideradam inconsistências desde que a coordenada geográfica se mantivesse constante ao longo dos anos de medição.
 
 Adotou-se como critério de exclusão a combinação de deslocamento superior a 10 km com menos de 8 anos de dados em uma mesma coordenada. A primeira condição explica a troca de local de monitoramento, enquanto a segunda preserva a estação que, apesar de deslocada, reúne em um único ponto histórico suficiente para compor série própria. O limiar de 8 anos acompanha o critério de série mínima adotado para a rede subdiária.
@@ -401,9 +390,6 @@ Não foi identificado nenhum par estação-instante repetido.
 Aplicando-se o filtro de disponibilidade, foram aprovados 2.258 dos 5.242 pares (43,1%), resultando em 60 estações e 16.947.187 registros.
 
 #### Controle de qualidade
-=======
->>>>>>> 1a05c41640a5ca476f343fb9c512cdc0df150d3c
-
 Esta etapa recebe, de cada rede, a série já selecionada por consistência de cadastro, duplicatas e disponibilidade, e aplica sobre ela um controle de qualidade em duas etapas: (i) a primeira chamada Controle Básico, remove registros que não podem representar uma medição; (ii) a segunda chamada de Controle de Suspeitos, registros que permanecem na série mas que são marcados como suspeitos. Vários desses indicadores também foram aplicados às séries diárias, bem como foram considerados por [@estevez2022] e [@Meira2022].
 
 ##### Controle Básico
