@@ -11,7 +11,7 @@ Esta meta reúne a aquisição, organização, padronização e controle de qual
 
 ### UNIPLU-BR
 
-Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) [https://doi.org/10.5281/zenodo.18883358], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
+Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) \[https://doi.org/10.5281/zenodo.18883358\], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
 
 - **CEMADEN**: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.
 - **INMET**: Instituto Nacional de Meteorologia.
@@ -186,7 +186,7 @@ Em se tratando de análise de eventos extremos, em que são necessárias séries
 
 Neste processo foram identificados e eliminados dados considerados "errôneos" ou "inadequados" para a análise das séries de precipitação. Envolveu a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo [@carmona2023]. Desse modo, considerou-se como limite superior 700 mm/dia.
 
-A aplicação deste controle de qualidade indicou como problemática: (i) sequência de dias consecutivos repetindo o mesmo valor diário   acima de 1.000 mm, padrão que caracteriza preenchimento automático e não medição. Por exemplo, a estação 2554001, em Foz do Iguaçu, repete 1.555,4 mm por dias seguidos a partir de 02 de abril de 2008; (ii) valores isolados, a exemplo de 6.401 mm em São Gabriel da Cachoeira e 24 de julho de 2013; e (iii) concencentração de ocorrências em poucas estações e poucos anos, uma vez que os registros excluídos se distribuem em apenas 39 estações.
+A aplicação deste controle de qualidade indicou como problemática: (i) sequência de dias consecutivos repetindo o mesmo valor diário acima de 1.000 mm, padrão que caracteriza preenchimento automático e não medição. Por exemplo, a estação 2554001, em Foz do Iguaçu, repete 1.555,4 mm por dias seguidos a partir de 02 de abril de 2008; (ii) valores isolados, a exemplo de 6.401 mm em São Gabriel da Cachoeira e 24 de julho de 2013; e (iii) concencentração de ocorrências em poucas estações e poucos anos, uma vez que os registros excluídos se distribuem em apenas 39 estações.
 
 Após aplicação do QC Básico, 247 registros (0,00025% do total) foram excluídos, todos por apresentarem precipitação superior a 700 mm/dia. Não foram identificados registros negativos. O menor valor excluído foi de 701,2 mm e a mediana dos excluídos, de 1.555,4 mm, o que indica não haver acúmulo de valores imediatamente acima do limiar adotado e reforça que o corte não eliminou chuva plausível. Assumiu-se que todos os dados excluídos eram errôneos, e não outliers.
 
@@ -336,11 +336,12 @@ Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade de
 
 A partir da definição desses critérios aos dados previamente avaliados foram identificados somente 122 estações de resolução sub-diária. Isso representa apenas 2% das estações. Dada a limitação de uso das séries avaliadas, definiu-se pela aplicação de critérios de consistência e qualidade a todo o inventário sub-diário.
 
-Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção anterior (aplicados às séries diárias), tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros de controle de qualidade apresentados foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. O controle de qualidade de dados sub-diários baseia-se em um conjunto de testes sequenciais organizados para detectar anomalias decorrentes de defeitos em sensores, entupimentos e erros de transmissão [@lewis2021;@villalobos2022].
+Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção anterior (aplicados às séries diárias), tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros de controle de qualidade apresentados foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. O controle de qualidade de dados sub-diários baseia-se em um conjunto de testes sequenciais organizados para detectar anomalias decorrentes de defeitos em sensores, entupimentos e erros de transmissão [@lewis2021; @villalobos2022].
 
 A seguir serão apresentadas as análises de consistência dos metadados e controle de qualidade. Tais análises serão apresentadas por tipo de fonte (rede), tendo em vista a variabilidade entre as informações por rede.
 
 #### Análise de consistência dos metadados
+
 A consistência dos metadados foi verificada comparando-se cada estação-ano, em relação a cinco atributos do cadastro: coordenadas geográficas, altitude, discretização temporal, município e UF. Assumiu-se que mudanças em altitude, município e UF não seriam consideradam inconsistências desde que a coordenada geográfica se mantivesse constante ao longo dos anos de medição.
 
 Adotou-se como critério de exclusão a combinação de deslocamento superior a 10 km com menos de 8 anos de dados em uma mesma coordenada. A primeira condição explica a troca de local de monitoramento, enquanto a segunda preserva a estação que, apesar de deslocada, reúne em um único ponto histórico suficiente para compor série própria. O limiar de 8 anos acompanha o critério de série mínima adotado para a rede subdiária.
@@ -348,6 +349,7 @@ Adotou-se como critério de exclusão a combinação de deslocamento superior a 
 A seguir são apresentados os resultados desta verificação, por fonte da informação (rede).
 
 ##### CEMADEN
+
 A rede reúne 5.061 estações, 58,2% das sub-diárias do UNIPLU-BR, e cobre o período de 2014 a 2025.
 
 A verificação abrangeu 40.470 pares estação-ano. Apresentaram alteração em ao menos um metadado 668 estações (13,2% da rede), sendo 401 em coordenada. Não houve alteração de timestep. As alterações de coordenada e de altitude ocorreram majoritariamente em conjunto. Em 199 das 401 estações o deslocamento não ultrapassa 1 km, o que sugere refinamento do registro e não mudança de local.
@@ -406,8 +408,6 @@ O controle básico foi aplicado de maneira análoga a todos os dados das redes. 
 
 - **CB2**: representa valores de precipitação não finitos.
 
-- **CB3**: representa valores de precipitação acima de um determinado teto.
-O teto do CB3 foi obtido de uma envoltória de precipitação máxima observável em função da duração da chuva. A partir dos recordes de precipitação máxima da Organização Mundial de Meteorologia [@bom_records], obteve-se a relação potência conforme a @eq-envoltoria:
 - **CB3**: representa valores de precipitação acima de um determinado teto. O teto do CB3 foi obtido de uma envoltória de precipitação máxima observável em função da duração da chuva. A partir dos recordes de precipitação máxima da Organização Mundial de Meteorologia [@bom_records], obteve-se a relação potência conforme a @eq-envoltoria:
 
 $$P_{d} = 41{,}879 \cdot\, d^{\,0{,}5245} $$ {#eq-envoltoria}
@@ -427,6 +427,7 @@ em que $T_{d}$ é o teto correspondente ao passo de tempo. O teto é, portanto, 
 Das quatro redes sub-diárias, duas indicaram valores de precipitação que ultrapassavam o teto aplicado (CB3), em 262 registros (115 no CEMADEN e 147 em Telemetria). Todos os demais indicadores não retornaram nenhuma reprovação.
 
 ##### Controle de Qualidade
+
 O controle de qualidade preserva o dado e o sinaliza como suspeito. Nesta etapa, foram aplicados 7 (sete) indicadores. São eles:
 
 - **QC1**: representa o mesmo valor não nulo repetido em 12 ou mais registros consecutivos.
@@ -441,8 +442,7 @@ $$P_{out,e} = Q_{3,e} + 3 \cdot IQR_e, \qquad IQR_e = Q_{3,e} - Q_{1,e} $$ {#eq-
 
 - **QC5**: representa o valor acima do limiar estatístico da própria estação, calculado conforme a @eq-limiar2.
 
-- **QC6**: representa o período seco mais longo que o limiar da própria estação, condição típica de sensor obstruído ou desligado cuja transmissão não cessa. Para o cálculo deste indicador, a série é agregada em totais diários. Um dia é classificado como seco quando a soma de seus registros é exatamente zero. Os períodos secos são sequências de dias secos consecutivos.
-Para cada estação, obteve-se o maior período seco de cada ano, e o limiar é obtido sobre a série desses máximos períodos, conforme a @eq-limiar-seco:
+- **QC6**: representa o período seco mais longo que o limiar da própria estação, condição típica de sensor obstruído ou desligado cuja transmissão não cessa. Para o cálculo deste indicador, a série é agregada em totais diários. Um dia é classificado como seco quando a soma de seus registros é exatamente zero. Os períodos secos são sequências de dias secos consecutivos. Para cada estação, obteve-se o maior período seco de cada ano, e o limiar é obtido sobre a série desses máximos períodos, conforme a @eq-limiar-seco:
 
 $$D_e = Q_{3,e} + 3 \cdot IQR_e, $$ {#eq-limiar-seco}
 
@@ -452,4 +452,4 @@ Os indicadores foram calculados de forma independente e podem incidir sobre o me
 
 O controle de qualidade sinalizou 3,71% dos registros no CEMADEN, 1,78% na Telemetria, 1,36% no INMET sub-diário e 0,82% no ICEA. Por fim, o controle de qualidade aplicado não reduziu o número de estações previamente estimado a partir da análise de consistência dos metadados, retornando as 2.570 estações, cuja distribuição é apresentada na @figura-8.
 
-![Figura 8. Estações de monitoramento de precipitação subdiária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura 8. Estações finais por rede.png){#figura-8 width="100%"}
+![Figura 8. Estações de monitoramento de precipitação subdiária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%208.%20Estações%20finais%20por%20rede.png){#figura-8 width="100%"}
