@@ -1,16 +1,23 @@
-## Controle de Qualidade (QC) - ANUAL - UNIPLU-BR
+## Controle de Qualidade Diárias (QC) - ANUAL - UNIPLU-BR
 ##
-## Insumos: "series_diarias.parquet" e "inventario_diario.csv"
+## Verifica, por estação-ano, a série que o 01a já selecionou por disponibilidade e número de anos.
+## Quatro índices - P, Q1, Q2 e Q3. Filtra por qualidade.
+##
+## Insumos: do 01a, "series_diarias_filtrada.parquet" e "inventario_diario.csv";
+##          do geobr, os contornos de UF e país de 2025, baixados da internet.
+## Saídas:  "series_diarias_QC.parquet" (anos de Alta Qualidade),
+##          "series_diarias_final.parquet" (estações com >= 30 anos bons),
+##          as Figuras 6 e 7 e as planilhas de resumo do QC.
 ##
 ##### instalar pacotes (rode só uma vez) #####
-#install.packages(c("dplyr","readr","arrow","lubridate","tidyr","data.table","ggplot2","patchwork","writexl"))
+#install.packages(c("dplyr","readr","arrow","lubridate","data.table","ggplot2",
+#                   "patchwork","writexl","sf","geobr","scales","ggspatial"))
 
 ##### 1. Library imports -------------------------------------------------------------------------------------
 library(dplyr)
 library(readr)
 library(arrow)
 library(lubridate)
-library(tidyr)
 library(data.table)
 library(ggplot2)
 library(patchwork)
@@ -18,38 +25,111 @@ library(writexl)
 library(sf)
 library(geobr)
 library(scales)
-library(stringr)
 library(ggspatial)
 
 ##### 2. Caminhos --------------------------------------------------------------
-entrada_diarias  <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/01a. Series_Diarias"
-saida         <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/02a. QC_diarios_anual"
+entrada_diarias <- "C:/UNB/UNIPLU/01a. Series_Diarias"
+saida           <- "C:/UNB/UNIPLU/02a. QC_diarios_anual"
 dir.create(saida, showWarnings = FALSE, recursive = TRUE)
 
-# série diária bruta (sem QC) e inventário (filtrado por Hidroweb diário e INMET diario)
-df_diario <- read_parquet(file.path(entrada_diarias, "series_diarias.parquet"))
 inventario_diario <- read_csv(
   file.path(entrada_diarias, "inventario_diario.csv"),
   col_types = cols(gauge_code = col_character(), .default = col_guess())
 )
 
-cat("Estações com series diarias   :", nrow(inventario_diario), "\n")
-cat("Registros diários", nrow(df_diario), "\n")
+cat("Estações no inventário diário :", nrow(inventario_diario), "\n")
 
-##### 3. Filtro de série mínima (>= 30 anos)  ----------------------------------
+datas_para_texto <- function(d)
+  dplyr::mutate(d, dplyr::across(
+    dplyr::where(~ inherits(.x, "Date") | inherits(.x, "POSIXct")), as.character))
+
+##### 3. Padrão gráfico --------------------------------------------------------
+font     <- "sans"
+fontsize <- 8
+textsize <- fontsize / .pt     
+epsg     <- 5880               
+
+LARG_MAPA <- 16                
+ALT_MAPA  <- 14.5
+LARG_GRAF <- 16
+ALT_GRAF  <- 10
+
+set_theme(
+  theme_bw() +
+    theme(
+      panel.grid = element_blank(),
+      axis.ticks = element_line(linewidth = 0.3),
+      legend.position = "inside",
+      legend.position.inside = c(0, 0),
+      legend.justification = c(0, 0),
+      legend.background = element_blank(),
+      legend.key.height = unit(fontsize, "pt"),
+      strip.background = element_blank(),
+      text = element_text(size = fontsize, family = font),
+      panel.spacing.y = unit(0.5, "pt")
+    )
+)
+
+escala_mapa <- annotation_scale(
+  location = "br", width_hint = 0.17, height = unit(1.5, "mm"),
+  text_family = font, text_cex = 0.6,
+  bar_cols = c("black", "aliceblue"), line_width = 0.4
+)
+
+norte_mapa <- annotation_north_arrow(
+  location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+  which_north = "true",
+  style = north_arrow_nautical(text_family = font, text_size = fontsize,
+                               fill = c("black", "white"))
+)
+
+tema_mapa <- theme(
+  plot.margin            = margin(t = 10, r = 1, l = 1),
+  panel.background       = element_rect(fill = "white"),
+  legend.key.spacing.y   = unit(0, "pt"),
+  legend.key.size        = unit(fontsize * 0.9, "pt"),
+  legend.margin          = margin(t = -5, l = -2),
+  legend.position        = "inside",
+  legend.position.inside = c(0.03, 0.02),
+  legend.justification   = c(0, 0)
+)
+
+## contorno territorial e enquadramento, comuns às Figuras 6 e 8
+uf.sf   <- geobr::read_state(year = 2025, showProgress = FALSE)
+br.sf   <- geobr::read_country(year = 2025, showProgress = FALSE)
+bbox.br <- sf::st_bbox(br.sf)
+
+enquadra <- coord_sf(crs = st_crs(epsg), default_crs = st_crs(4674),
+                     xlim = bbox.br[c(1, 3)], ylim = bbox.br[c(2, 4)])
+
+rede_cores <- c(
+  "Hidroweb diário" = "#2e7d32",
+  "INMET diário"    = "#6a1b9a")
+
+rede_formas <- c(
+  "Hidroweb diário" = 17,  # triângulo
+  "INMET diário"    = 18)  # losango
+
+##### 4. Filtro de série mínima (>= 30 anos)  ----------------------------------
 LIMIAR_ANOS <- 30
 
 estacoes_excluidas_anos <- inventario_diario %>%
-  filter(is.na(n_anos) | n_anos < LIMIAR_ANOS) %>%
-  arrange(desc(n_anos))
+  filter(is.na(n_anos_medido) | n_anos_medido < LIMIAR_ANOS) %>%
+  arrange(desc(n_anos_medido))
+
+## A série já selecionada pelo 01a
+df_diario <- open_dataset(file.path(entrada_diarias, "series_diarias_filtrada.parquet")) %>%
+  collect()
+setDT(df_diario)
 
 inventario_diario_final <- inventario_diario %>%
-  filter(!is.na(n_anos) & n_anos >= LIMIAR_ANOS)
+  filter(!is.na(n_anos_medido) & n_anos_medido >= LIMIAR_ANOS,
+         gauge_code %in% unique(df_diario$gauge_code))
 
-df_diario <- df_diario %>% filter(gauge_code %in% inventario_diario_final$gauge_code)
+cat("Registros diários lidos       :", format(nrow(df_diario), big.mark = "."), "\n")
 
 write_xlsx(
-  estacoes_excluidas_anos %>% mutate(across(where(is.Date), as.character)),
+  estacoes_excluidas_anos %>% datas_para_texto(),
   file.path(saida, "estacoes_excluidas_menos_30anos.xlsx")
 )
 
@@ -58,78 +138,22 @@ cat(sprintf(
   LIMIAR_ANOS, nrow(estacoes_excluidas_anos), nrow(inventario_diario),
   100 * nrow(estacoes_excluidas_anos) / nrow(inventario_diario)
 ))
+cat(sprintf("Estações na série selecionada pelo 01a                   : %d\n",
+            uniqueN(df_diario$gauge_code)))
+cat(sprintf("Estações avaliadas no QC (span >= %d anos e na série)     : %d\n",
+            LIMIAR_ANOS, nrow(inventario_diario_final)))
 
-cat("Estações remanescentes (span >=", LIMIAR_ANOS, "anos):", nrow(inventario_diario_final), "\n")
-
-## Mapa estações de séries diárias - para QC -----------------------------------
-brasil_sf <- geobr::read_state(year = 2020, showProgress = FALSE)
-brasil_sf$area_km2 <- as.numeric(sf::st_area(brasil_sf)) / 1e6
-mapa_dados <- inventario_diario_final %>% filter(!is.na(lat), !is.na(long))
-mapa_dados_sf <- st_as_sf(mapa_dados, coords = c("long", "lat"), crs = 4674)
-estados_sf    <- brasil_sf %>% filter(abbrev_state %in% unique(mapa_dados$state))
-
-rede_cores <- c(
-  "Hidroweb diário" = "#2e7d32",
-  "INMET diário"    = "#6a1b9a")
-
-rede_formas <- c(
-  "Hidroweb diário" = 17,  # triângulo
-  "INMET diário"    = 18)
-
-Figura6 <- ggplot() +
-  geom_sf(data = estados_sf, fill = "grey95", color = "grey50", linewidth = 0.4) +
-  geom_sf(data = mapa_dados_sf, aes(color = network, shape = network),
-          size = 2.2, alpha = 0.75) +
-  scale_color_manual(values = rede_cores, name = "Rede") +
-  scale_shape_manual(values = rede_formas, name = "Rede") +
-  guides(color = guide_legend(override.aes = list(size = 6))) +
-  labs(x = "Longitude", y = "Latitude") +
-  theme_bw() +
-  theme(
-    legend.position = "right",
-    legend.text     = element_text(size = 22),
-    legend.title    = element_text(size = 22, face = "bold"),
-    axis.text.x     = element_text(size = 22, color = "black"),
-    axis.text.y     = element_text(size = 22, color = "black"),
-    axis.title      = element_text(size = 22, color = "black")
-  ) +
-  annotation_scale(location = "bl", width_hint = 0.3,
-                   text_cex   = 1.7,
-                   height     = unit(0.35, "cm"),
-                   line_width = 1.2,
-                   text_pad   = unit(0.2, "cm")) +
-  annotation_north_arrow(
-    location = "bl",
-    pad_y  = unit(0.8, "cm"),
-    height = unit(2.0, "cm"),
-    width  = unit(2.0, "cm"),
-    style  = north_arrow_fancy_orienteering(
-      text_size  = 22,
-      line_width = 1.2,
-      text_face  = "bold")) +
-  coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
-           ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
-
-ggsave(file.path(saida, "Figura 6. Inventário Diário (30 anos ou mais).png"), Figura6,
-       width = 16, height = 12, units = "in", dpi = 300)
-
-cat("Figura 6. Inventário Diário (30 anos ou mais).png salvo.\n")
-
-##### 4. QC Básico -------------------------------------------------------------
-
+##### 5. QC Básico -------------------------------------------------------------
 LIMITE_SUPERIOR_MM <- 700
 
 n_antes <- nrow(df_diario)
 
-registros_excluidos_basico <- df_diario %>%
-  filter(rain_mm < 0 | rain_mm > LIMITE_SUPERIOR_MM) %>%
+registros_excluidos_basico <- df_diario[rain_mm < 0 | rain_mm > LIMITE_SUPERIOR_MM] %>%
   mutate(motivo = ifelse(rain_mm < 0, "negativo", paste0("> ", LIMITE_SUPERIOR_MM, " mm/dia"))) %>%
   left_join(inventario_diario_final %>% select(gauge_code, city, state), by = "gauge_code") %>%
   relocate(city, state, .after = gauge_code)
 
-df_diario <- df_diario %>%
-  mutate(rain_mm = ifelse(rain_mm < 0 | rain_mm > LIMITE_SUPERIOR_MM, NA_real_, rain_mm)) %>%
-  filter(!is.na(rain_mm))
+df_diario <- df_diario[!is.na(rain_mm) & rain_mm >= 0 & rain_mm <= LIMITE_SUPERIOR_MM]
 
 n_removido_basico <- nrow(registros_excluidos_basico)
 n_restante_basico  <- nrow(df_diario)
@@ -157,37 +181,32 @@ write_xlsx(resumo_basico, file.path(saida, "qc_basico_resumo.xlsx"))
 
 p_basico <- ggplot(resumo_basico, aes(x = categoria, y = pmax(n, 1))) +
   geom_col(fill = "grey50") +
-  geom_text(aes(label = scales::comma(n, big.mark = ".", decimal.mark = ",")), vjust = -0.4, size = 3.5) +
+  geom_text(aes(label = scales::comma(n, big.mark = ".", decimal.mark = ",")),
+            vjust = -0.4, size = fontsize * 0.9, size.unit = "pt", family = font) +
   scale_y_log10(labels = function(x) scales::comma(x, big.mark = ".", decimal.mark = ",")) +
   labs(
     title = "Controle de Qualidade Básico - Estações Diárias (QC Anual)",
     subtitle = paste0("Limite físico: ", LIMITE_SUPERIOR_MM, " mm/dia"),
     x = NULL, y = "Número de registros diários (escala log)"
-  ) +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank())
+  )
 
-ggsave(file.path(saida, "fig_qc_basico_resumo.png"), p_basico, width = 7, height = 5, dpi = 600)
+ggsave(file.path(saida, "fig_qc_basico_resumo.png"), p_basico,
+       width = LARG_GRAF, height = ALT_GRAF, units = "cm", dpi = 300, bg = "white")
 cat("Resumo do QC Básico (dados + gráfico) salvo em:", saida, "\n")
 
-##### 5. QC Absoluto --------------------------------------------------------------------
+##### 6. QC Absoluto --------------------------------------------------------------------
 
 ## P - Disponibilidade de dados ------------------------------------------------------
+dt <- df_diario
+rm(df_diario); invisible(gc())
 
-dt <- as.data.table(df_diario)[, .(gauge_code, date, rain_mm)] #organiza os dados
 dt[, ano := year(date)]
 
 n_dup <- anyDuplicated(dt, by = c("gauge_code", "date")) #confere se há dias repetidos
 if (n_dup > 0L) stop("Há estação-dia repetido na série diária", n_dup, ").")
 
-anos_esperados <- inventario_diario_final %>% #lista os anos esperados com dado
-  filter(!is.na(data_inicio), !is.na(data_fim)) %>%
-  rowwise() %>%
-  mutate(periodo = list(seq(year(as.Date(data_inicio)), year(as.Date(data_fim))))) %>%
-  ungroup() %>%
-  select(gauge_code, periodo) %>%
-  unnest(periodo) %>%
-  transmute(gauge_code, ano = periodo)
+## Grade de anos medidas pela série
+anos_esperados <- unique(dt[, .(gauge_code, ano)])
 
 dias_com_dado <- dt[, .(n_dias_com_dado = .N), by = .(gauge_code, ano)] #dias com dado em cada estação-ano
 
@@ -213,7 +232,6 @@ write_xlsx(resumo_P, file.path(saida, "qc_P_resumo.xlsx"))
 print(resumo_P)
 
 ## Q1 - Falhas --------------------------------------------------------------------------------
-
 dt[, doy := yday(date)]   # dia do ano (1 a 365/366)
 
 # maior sequência de dias sem dado, em cada estação-ano com algum dado
@@ -246,7 +264,6 @@ write_xlsx(resumo_Q1, file.path(saida, "qc_Q1_resumo.xlsx"))
 print(resumo_Q1)
 
 ## Q2 - Dia da semana --------------------------------------------------------------------------
-
 LIMIAR_DIA_CHUVOSO <- 0.2
 
 dt[, dow := wday(date)]
@@ -272,7 +289,6 @@ write_xlsx(resumo_Q2, file.path(saida, "qc_Q2_resumo.xlsx"))
 print(resumo_Q2)
 
 ## Q3 - Outliers -------------------------------------------------------------------------------
-
 dt[, mes := month(date)]
 
 limiar_outlier <- dt[rain_mm > 0,
@@ -300,7 +316,6 @@ write_xlsx(resumo_Q3, file.path(saida, "qc_Q3_resumo.xlsx"))
 print(resumo_Q3)
 
 ## Q - Índice de qualidade e classificação -----------------------------------------------------
-
 # dias com chuva > 0 em cada estação-ano (para identificar anos falhos)
 dias_chuva_positiva <- dt[, .(n_dias_chuva_positiva = sum(rain_mm > 0)), by = .(gauge_code, ano)]
 
@@ -349,8 +364,7 @@ qc_anual_medio <- qc_anual[, .(n_estacoes = uniqueN(gauge_code),
 
 write_xlsx(qc_anual_medio, file.path(saida, "qc_serie_anual_nacional.xlsx"))
 
-##### 6. Série diária (só anos de Alta Qualidade) --------------------------------------
-
+##### 7. Série diária (só anos de Alta Qualidade) --------------------------------------
 anos_HQ <- qc_anual[qualidade_absoluta == "Alta Qualidade", .(gauge_code, ano)]
 
 serie_QC <- dt[anos_HQ, on = .(gauge_code, ano), nomatch = NULL, .(gauge_code, date, rain_mm)]
@@ -365,8 +379,7 @@ cat(sprintf(
 cat(sprintf("Série filtrada: %d dias | %d estação-anos | %d estações com ao menos 1 ano aprovado\n",
             nrow(serie_QC), nrow(anos_HQ), uniqueN(serie_QC$gauge_code)))
 
-##### 7. Filtro final: estações com >= 30 anos de HQ -------------------------------
-
+##### 8. Filtro final: estações com >= 30 anos de HQ -------------------------------
 LIMIAR_ANOS_BONS <- 30
 
 anos_bons_por_estacao <- qc_anual[qualidade_absoluta == "Alta Qualidade",
@@ -377,7 +390,7 @@ anos_bons_por_estacao <- qc_anual[qualidade_absoluta == "Alta Qualidade",
 
 estacoes_avaliadas <- as.data.table(inventario_diario_final)[
   , .(gauge_code, city, state, lat, long, elevation, network, responsible,
-      data_inicio, data_fim, n_anos)]
+      data_inicio, data_fim, n_anos_medido)]
 
 estacoes_avaliadas <- merge(estacoes_avaliadas, anos_bons_por_estacao, by = "gauge_code", all.x = TRUE)
 estacoes_avaliadas[is.na(n_anos_bons), n_anos_bons := 0L]   # estação sem nenhum ano bom
@@ -385,9 +398,9 @@ estacoes_avaliadas[is.na(n_anos_bons), n_anos_bons := 0L]   # estação sem nenh
 estacoes_finais    <- estacoes_avaliadas[n_anos_bons >= LIMIAR_ANOS_BONS][order(-n_anos_bons)]
 estacoes_excluidas <- estacoes_avaliadas[n_anos_bons <  LIMIAR_ANOS_BONS][order(-n_anos_bons)]
 
-write_xlsx(estacoes_finais %>% mutate(across(where(is.Date), as.character)),
+write_xlsx(estacoes_finais %>% datas_para_texto(),
            file.path(saida, "estacoes_finais_30anos_altaqualidade.xlsx"))
-write_xlsx(estacoes_excluidas %>% mutate(across(where(is.Date), as.character)),
+write_xlsx(estacoes_excluidas %>% datas_para_texto(),
            file.path(saida, "estacoes_excluidas_menos_30anos_bons.xlsx"))
 
 cat(sprintf("\nEstações avaliadas no QC (span >= %d anos): %d\n", LIMIAR_ANOS, nrow(estacoes_avaliadas)))
@@ -396,8 +409,7 @@ cat(sprintf("ESTAÇÕES FINAIS (>= %d anos bons)           : %d\n", LIMIAR_ANOS_
 cat("\nDistribuição por UF:\n")
 print(estacoes_finais[, .N, by = state][order(-N)])
 
-##### 8. Série diária final: estações finais e anos de Alta Qualidade --------------------------
-
+##### 9. Série diária final: estações finais e anos de Alta Qualidade --------------------------
 serie_diaria_final <- serie_QC[gauge_code %in% estacoes_finais$gauge_code]
 
 serie_diaria_final <- merge(serie_diaria_final,
@@ -415,72 +427,43 @@ cat(sprintf("Série final: %d dias | %d estações | %d estação-anos\n",
             nrow(serie_diaria_final), uniqueN(serie_diaria_final$gauge_code),
             uniqueN(serie_diaria_final[, .(gauge_code, year(date))])))
 
-##### 9. Figuras - P, Q1, Q2 e Q3 ao longo do tempo --------------------------------------
-
-Figura7 <- function(v, rotulo) {
+##### 10. Figura 6. P, Q1, Q2 e Q3 ao longo do tempo --------------------------------------
+painel_indice <- function(v, rotulo) {
   ggplot(qc_anual_medio, aes(x = ano, y = .data[[v]])) +
     geom_line(color = "black", linewidth = 0.3) +
     geom_point(color = "black", shape = 4, size = 0.9) +
     scale_x_continuous(breaks = seq(1850, 2030, by = 10)) +
     coord_cartesian(ylim = c(NA, 100)) +            # teto em 100, piso livre
     labs(x = "Ano", y = paste0(v, " (%)"), title = rotulo) +
-    theme_bw(base_size = 14) +
-    theme(panel.grid.minor = element_blank(),
-          plot.title  = element_text(size = 14, face = "bold"),
-          axis.text.x = element_text(size = 14, color = "black", angle = 90, vjust = 0.5, hjust = 1),
-          axis.text.y = element_text(size = 14, color = "black"),
-          axis.title  = element_text(size = 14, color = "black"))
+    theme(plot.title  = element_text(face = "bold"),
+          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 }
 
-Figura7 <- (Figura7("P",  "(a)") |
-              Figura7("Q1", "(b)")) /
-  (Figura7("Q2", "(c)") |
-     Figura7("Q3", "(d)"))
+Figura6 <- (painel_indice("P",  "(a)") |
+              painel_indice("Q1", "(b)")) /
+  (painel_indice("Q2", "(c)") |
+     painel_indice("Q3", "(d)"))
 
-ggsave(file.path(saida, "Figura 7. Series anuais P Q1 Q2 Q3.png"), Figura7,
-       width = 14, height = 8, units = "in", dpi = 300)
+ggsave(file.path(saida, "Figura 6. Series anuais P Q1 Q2 Q3.png"), Figura6,
+       width = LARG_GRAF, height = 12, units = "cm", dpi = 300, bg = "white")
 
-##### 10. Figura final --------------------------------------
-
+##### 11. Figura 7. Estações da série diária final --------------------------------------
 mapa_finais    <- estacoes_finais %>% filter(!is.na(lat), !is.na(long))
 mapa_finais_sf <- st_as_sf(mapa_finais, coords = c("long", "lat"), crs = 4674)
-estados_finais_sf <- brasil_sf %>% filter(abbrev_state %in% unique(mapa_finais$state))
 
-Figura8 <- ggplot() +
-  geom_sf(data = estados_finais_sf, fill = "grey95", color = "grey50", linewidth = 0.4) +
+Figura7 <- ggplot() +
   geom_sf(data = mapa_finais_sf, aes(color = network, shape = network),
-          size = 2.2, alpha = 0.75) +
-  scale_color_manual(values = rede_cores, name = "Rede") +
+          size = 0.35, stroke = 0.08) +
+  geom_sf(data = uf.sf, color = "grey30", fill = NA, linewidth = 0.1) +
+  geom_sf(data = br.sf, color = "black",  fill = NA, linewidth = 0.4) +
+  scale_color_manual(values = rede_cores,  name = "Rede") +
   scale_shape_manual(values = rede_formas, name = "Rede") +
-  guides(color = guide_legend(override.aes = list(size = 6))) +
+  guides(color = guide_legend(override.aes = list(size = 1.5))) +
+  escala_mapa + norte_mapa + enquadra +
   labs(x = "Longitude", y = "Latitude") +
-  theme_bw() +
-  theme(
-    legend.position = "right",
-    legend.text     = element_text(size = 22),
-    legend.title    = element_text(size = 22, face = "bold"),
-    axis.text.x     = element_text(size = 22, color = "black"),
-    axis.text.y     = element_text(size = 22, color = "black"),
-    axis.title      = element_text(size = 22, color = "black")
-  ) +
-  annotation_scale(location = "bl", width_hint = 0.3,
-                   text_cex   = 1.7,
-                   height     = unit(0.35, "cm"),
-                   line_width = 1.2,
-                   text_pad   = unit(0.2, "cm")) +
-  annotation_north_arrow(
-    location = "bl",
-    pad_y  = unit(0.8, "cm"),
-    height = unit(2.0, "cm"),
-    width  = unit(2.0, "cm"),
-    style  = north_arrow_fancy_orienteering(
-      text_size  = 22,
-      line_width = 1.2,
-      text_face  = "bold")) +
-  coord_sf(xlim = c(min(mapa_finais$long) - 0.5, max(mapa_finais$long) + 0.5),
-           ylim = c(min(mapa_finais$lat)  - 0.5, max(mapa_finais$lat)  + 0.5))
+  tema_mapa
 
-ggsave(file.path(saida, "Figura 8. Estacoes da serie diaria final.png"), Figura8,
-       width = 16, height = 12, units = "in", dpi = 300)
+ggsave(file.path(saida, "Figura 7. Estacoes da serie diaria final.png"), Figura7,
+       width = LARG_MAPA, height = ALT_MAPA, units = "cm", dpi = 300, bg = "white")
 
-cat("Figura 8. Estacoes da serie diaria final.png salvo.\n")
+cat("Figura 7. Estacoes da serie diaria final.png salvo.\n")

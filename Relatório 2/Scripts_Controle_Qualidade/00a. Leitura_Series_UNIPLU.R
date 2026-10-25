@@ -14,10 +14,10 @@ library(stringr)
 
 ##### 2. Caminhos --------------------------------------------------------------------
 # Pasta onde estão os arquivos .zip do UNIPLU-BR
-dados <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/Dados/UNIPLU_BR"
+dados <- "C:/UNB/Dados/UNIPLU_BR"
 
 # Pasta de saída
-saida <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
+saida <- "C:/UNB/UNIPLU/00. Series"
 dir.create(saida, showWarnings = FALSE, recursive = TRUE)
 
 ##### 3. Função de leitura dos ZIPs -----------------------------------------------------------
@@ -62,7 +62,6 @@ read_UNIPLU_BR <- function(zip_path, table = "table_data") {
 }
 
 ##### 4. Detectar arquivos disponíveis na pasta -----------------------------------------------------------
-
 zip_files <- list.files(dados, pattern = "^[A-Za-z]{2}_[0-9]{4}\\.zip$")
 
 file_index <- tibble(
@@ -117,8 +116,8 @@ resumir_zip <- function(df_data, df_info, ano) {
 }
 
 ##### 6. Loop de leitura + resumo de todos os arquivos -----------------------------------------------------------
-
-resumos <- vector("list", nrow(file_index))
+resumos  <- vector("list", nrow(file_index))
+verificacao_zip <- vector("list", nrow(file_index))
 
 for (i in seq_len(nrow(file_index))) {
   
@@ -127,7 +126,18 @@ for (i in seq_len(nrow(file_index))) {
   df_info_i <- read_UNIPLU_BR(path_i, "table_info")
   df_data_i <- read_UNIPLU_BR(path_i, "table_data")
   
-  if (nrow(df_info_i) == 0 || nrow(df_data_i) == 0) next
+  ## registra o que havia em cada zip, inclusive nos que não rendem nada
+  situacao <- if (nrow(df_info_i) == 0 && nrow(df_data_i) == 0) "sem table_info nem table_data"
+  else if (nrow(df_info_i) == 0)                        "sem table_info"
+  else if (nrow(df_data_i) == 0)                        "sem table_data"
+  else                                                  "ok"
+  
+  verificacao_zip[[i]] <- tibble(arquivo  = file_index$file[i],
+                          estacoes = nrow(df_info_i),
+                          linhas   = nrow(df_data_i),
+                          situacao = situacao)
+  
+  if (situacao != "ok") next
   
   # o dado bruto não traz fuso; o instante é rotulado UTC, sem deslocamento
   df_data_i$datetime <- as.POSIXct(df_data_i$datetime, tz = "UTC")
@@ -138,33 +148,40 @@ for (i in seq_len(nrow(file_index))) {
     cat(sprintf("  %d/%d arquivos\n", i, nrow(file_index)))
 }
 
+verificacao_zip <- bind_rows(verificacao_zip)
+write_csv(verificacao_zip, file.path(saida, "verificacao_zip.csv"))
+
 resumo_por_ano <- bind_rows(resumos)
 write_csv(resumo_por_ano, file.path(saida, "resumo_estacao_ano.csv"))
 
+cat("\nArquivos lidos:", nrow(verificacao_zip), "\n")
+print(count(verificacao_zip, situacao, name = "arquivos"))
 cat("Resumo por estação e ano:", nrow(resumo_por_ano), "linhas\n")
 cat("Estação-anos sem nenhuma medição:", sum(resumo_por_ano$sem_dado_valido), "\n")
 
 ##### 7. Inventário das estações ----------------------------------------------------------------
-
 inventario <- resumo_por_ano %>%
   group_by(gauge_code) %>%
   summarise(
     n_registros    = sum(n_registros),
     n_na           = sum(n_na),
     n_dias         = sum(n_dias),
-    n_anos         = n_distinct(ano),                  # anos com algum registro
+    n_anos_medido       = n_distinct(ano[!sem_dado_valido]),   # anos com medição válida
+    n_anos_com_registro = n_distinct(ano),                     # anos com linha na série;
     ano_inicio     = min(ano),
     ano_fim        = max(ano),
     span_anos      = max(ano) - min(ano) + 1,
     data_inicio    = suppressWarnings(min(primeiro, na.rm = TRUE)),
     data_fim       = suppressWarnings(max(ultimo,   na.rm = TRUE)),
     chuva_total_mm = round(sum(chuva_total_mm, na.rm = TRUE), 1),
+    i_max          = if (all(is.na(chuva_max))) NA_integer_ else which.max(chuva_max),
     chuva_max      = suppressWarnings(max(chuva_max, na.rm = TRUE)),
-    data_chuva_max = if (all(is.na(chuva_max))) as.POSIXct(NA, tz = "UTC")
-    else data_chuva_max[which.max(chuva_max)],
+    data_chuva_max = if (is.na(i_max)) as.POSIXct(NA, tz = "UTC")
+    else data_chuva_max[i_max],
     n_reg_chuva    = sum(n_reg_chuva),
     .groups = "drop"
   ) %>%
+  select(-i_max) %>%
   mutate(
     chuva_max       = ifelse(is.finite(chuva_max), chuva_max, NA_real_),
     data_inicio     = as.POSIXct(ifelse(is.finite(data_inicio), data_inicio, NA), tz = "UTC"),
@@ -186,4 +203,3 @@ write_csv(inventario, file.path(saida, "inventario_estacoes.csv"))
 cat("Inventário salvo:", nrow(inventario), "estações\n")
 cat("Estações sem nenhuma medição:", sum(inventario$sem_dado_valido), "\n")
 print(inventario %>% count(network, name = "estacoes") %>% arrange(desc(estacoes)))
-
