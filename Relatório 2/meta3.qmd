@@ -154,7 +154,7 @@ Após os procedimentos de consistência foram obtidos por interpolação. A espa
 
 Junto às grades das variáveis, o BR-DWGD disponibiliza duas grades de controle diárias: (i) o número de estações ou pluviômetros existentes dentro da célula (Count); e (ii) a distância da célula à estação mais próxima com dado observado (dist_nearest). Esses controles permitem avaliar, célula a célula e dia a dia, o quanto o valor interpolado se apoia em observação próxima ou em extrapolação. Essa informação é relevante porque a densidade da rede é bastante desproporcional. Nas bacias do Atlântico Central e do Atlântico Sul há ao menos um pluviômetro a cada 50 km, o equivalente a um a cada 580 km². Já na bacia Amazônica, a densidade era de um pluviômetro a cada 150.000 km² entre 1961 e 1980, melhorando para um a cada 7.600 km² entre 1991 e 2020. O número máximo de pluviômetros com dado disponível simultaneamente foi de 5.972, entre as décadas de 1970 e 1980, o que corresponde a um a cada 1.425 km², ainda abaixo da densidade de um a cada 575 km² recomendada pela [@wmo2008] para planícies interiores.
 
-Toda a base do BR-DWGD pode ser obtida através do site [@brdwgd_github](https://github.com/AlexandreCandidoXavier/BR-DWGD).
+Toda a base do BR-DWGD pode ser obtida através do site [\@brdwgd_github](https://github.com/AlexandreCandidoXavier/BR-DWGD).
 
 ## Metodologia de Controle de Qualidade da base do UNIPLU-BR
 
@@ -165,6 +165,7 @@ A metodologia foi aplicada de maneira diferente considerando os dados de resolu�
 ### Séries Diárias
 
 #### Análise de consistência
+
 O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações.
 
 Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo, por exemplo, verificou-se se a estação se mantém com as mesmas informações de descrição ao longo de todos os anos do inventário, como unidade da federação, latitude, longitude, altitude, discretização temporal, entre outras. Das 12.640 estações diárias, 211 (1,7%) apresentaram alteração em ao menos um metadado, sendo 210 dessas concentradas na rede Inmet diário. A discretização temporal manteve-se inalterada em todas as estações.
@@ -270,7 +271,7 @@ O Q2 é o parâmetro com maior variabilidade e o único que discrimina de forma 
 
 O último ano (2025) apresenta queda em P e Q1 (86,2% e 59,5, respectivamente), decorrente de os registros estarem incompletos: as 305 estações com ano válido em 2025 possuem, em mediana, 304 dias registrados. Trata-se, portanto, de problemas de inventário.
 
-![Figura 6. Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura 6. Series anuais P Q1 Q2 Q3.png){#fig-series width="100%"}
+![Figura 6. Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Series%20anuais%20P%20Q1%20Q2%20Q3.png){#fig-series width="100%"}
 
 A @tbl-classificacao-resultado apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 266.969 séries estação-ano (97,7%) como de Alta Qualidade e 6.391 (2,3%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (85,1%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 6.003 (2,2% do total geral) foram classificados como Baixa e 388 (0,1%) como Muito Baixa, tratando-se de anos reprovados pela concentração das lacunas ou pela distribuição irregular dos dias chuvosos ao longo da semana.
 
@@ -315,9 +316,10 @@ resumo_classificacao |>
 
 Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.146 estações das 5.349 avaliadas (96,2%). A base final reúne 261.263 séries estação-ano e 94.793.233 registros diários, conforme indicado na @fig-estacoes-QC-final.
 
-![Figura 7. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura 7. Estacoes da serie diaria final.png){#fig-estacoes-QC-final width="100%"}
+![Figura 7. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%207.%20Estacoes%20da%20serie%20diaria%20final.png){#fig-estacoes-QC-final width="100%"}
 
 ### Séries Sub-diárias
+
 Conforme apresentado na @tbl-fontes-uniplu, 8.691 estações do UNIPLU-BR se tratam de estações de monitoramento de precipitação sub-diário. Inicialmente, o controle de qualidade dos dados sub-diários do UNIPLU-BR seriam provenientes da metodologia descrita no Relatório "Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias". Os autores realizaram um procedimento de avaliação qualitativa assistida, estruturado em 5 (cinco) etapas:
 
 Para as séries sub-diárias do UNIPLU não se aplicou o índice de qualidade descrito na seção de séries diárias, tendo em vista que: (i) trata-se de séries majoritariamente curtas, com início em 2014 nas redes CEMADEN e Telemetria, o que inviabiliza critérios baseados na distribuição histórica de cada estação; e (ii) os parâmetros do IQ foram concebidos para a escala diária, sem equivalente consolidado para resoluções de 10 a 60 minutos. Inicialmente, o controle de qualidade dos dados sub-diários do UNIPLU-BR seriam provenientes da metodologia descrita no Relatório "Criação de uma base de dados de pluviometria unificada para o Brasil e Qualificação das redes sub-diárias", estruturado em 5 (cinco) etapas.
@@ -357,6 +359,7 @@ Foram identificados 154.488 pares estação-instante repetidos em 3.150 estaçõ
 Aplicando-se o filtro de 80% de disponibilidade anual e mínimo de 8 anos, foram aprovados 22.773 dos 39.532 pares mensuráveis (57,6%), resultando em 1.255 estações.
 
 ##### Telemetria
+
 A rede reúne 2.819 estações, 32,4% das sub-diárias, e cobre o período de 2014 a 2025.
 
 A verificação abrangeu 18.682 pares estação-ano. Apresentaram alteração 458 estações (16,2% da rede), sendo 362 em timestep, 76 em altitude, 60 em coordenada e 7 em município. Não houve alteração de UF. O timestep é o atributo que mais variou nesta rede, isoladamente responsável por 355 das 458 alterações, sem sentido único de mudança.
@@ -370,6 +373,7 @@ Nas conflitantes observaram-se dois padrões: 96,1% situam-se em exatamente 10:0
 Aplicando-se o filtro de disponibilidade, foram aprovados 14.941 dos 18.642 pares mensuráveis (80,1%), resultando em 803 estações.
 
 ##### INMET SUBDIÁRIO
+
 A rede reúne 629 estações, 7,2% das sub-diárias, e cobre o período de 2000 a 2025.
 
 A verificação abrangeu 9.569 pares estação-ano. Apresentaram alteração 497 estações, sendo 481 em altitude e 28 em coordenada. Não houve alteração de timestep, município ou UF. As alterações de altitude ocorreram isoladamente em 469 estações, acompanhando mudança de coordenada em apenas 12. Nenhuma estação apresentou deslocamento superior a 10 km, de modo que o critério de exclusão não foi acionado e o inventário permaneceu com 629 estações.
@@ -379,6 +383,7 @@ Não foi identificado nenhum par estação-instante repetido.
 Aplicando-se o filtro de disponibilidade, foram aprovados 6.565 dos 9.569 pares (68,6%), resultando em 452 estações.
 
 ##### ICEA
+
 A rede reúne 182 estações, 2,1% das sub-diárias, e é a de maior alcance temporal da base, cobrindo o período de 1951 a 2025.
 
 A verificação abrangeu 6.192 pares estação-ano. Apresentaram alteração 152 estações (83,5% da rede), concentradas em altitude e timestep. Nenhuma estação apresentou deslocamento superior a 10 km.
@@ -390,9 +395,11 @@ Não foi identificado nenhum par estação-instante repetido.
 Aplicando-se o filtro de disponibilidade, foram aprovados 2.258 dos 5.242 pares (43,1%), resultando em 60 estações e 16.947.187 registros.
 
 #### Controle de qualidade
+
 Esta etapa recebe, de cada rede, a série já selecionada por consistência de cadastro, duplicatas e disponibilidade, e aplica sobre ela um controle de qualidade em duas etapas: (i) a primeira chamada Controle Básico, remove registros que não podem representar uma medição; (ii) a segunda chamada de Controle de Suspeitos, registros que permanecem na série mas que são marcados como suspeitos. Vários desses indicadores também foram aplicados às séries diárias, bem como foram considerados por [@estevez2022] e [@Meira2022].
 
 ##### Controle Básico
+
 O controle básico foi aplicado de maneira análoga a todos os dados das redes. Nele foram aplicados 5 (cinco) indicadores, individualmente. São eles:
 
 - **CB1**: representa valores de precipitação negativos.
@@ -401,6 +408,7 @@ O controle básico foi aplicado de maneira análoga a todos os dados das redes. 
 
 - **CB3**: representa valores de precipitação acima de um determinado teto.
 O teto do CB3 foi obtido de uma envoltória de precipitação máxima observável em função da duração da chuva. A partir dos recordes de precipitação máxima da Organização Mundial de Meteorologia [@bom_records], obteve-se a relação potência conforme a @eq-envoltoria:
+- **CB3**: representa valores de precipitação acima de um determinado teto. O teto do CB3 foi obtido de uma envoltória de precipitação máxima observável em função da duração da chuva. A partir dos recordes de precipitação máxima da Organização Mundial de Meteorologia [@bom_records], obteve-se a relação potência conforme a @eq-envoltoria:
 
 $$P_{d} = 41{,}879 \cdot\, d^{\,0{,}5245} $$ {#eq-envoltoria}
 
