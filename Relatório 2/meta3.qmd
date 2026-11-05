@@ -11,7 +11,7 @@ Esta meta reúne a aquisição, organização, padronização e controle de qual
 
 ### UNIPLU-BR
 
-Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR)[https://doi.org/10.5281/zenodo.18883358], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
+Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR)\[https://doi.org/10.5281/zenodo.18883358\], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
 
 - **CEMADEN**: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.
 - **INMET**: Instituto Nacional de Meteorologia.q

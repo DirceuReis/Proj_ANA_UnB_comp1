@@ -7,7 +7,7 @@ book:
   chapters:
     - index.qmd  
     - meta3.qmd      # Capítulo 2: Base Hidroclimática Nacional
-    - meta8.qmd    
+    - meta6.qmd    
     - cap_curvas_idf.qmd
     - meta8.qmd
     - ref.qmd
