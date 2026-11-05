@@ -1,0 +1,27 @@
+## Aplicação do modelo semi-Bayesiano às séries diárias
+
+Nessa aplicação, as intensidades de precipitação máxima anuais em escala diária foram ajustadas com o modelo d-GEV considerando a distribuição *a priori* de @martins2000, uma distribuição Beta com média 0,100 e variância 0,122².
+
+Conforme estabelecido na Meta 5, oito durações de precipitação foram selecionadas: 1, 2, 3, 4, 5, 6, 7 e 10 dias (24, 48, 72, 96, 120, 144, 168 e 240 horas, respectivamente). Somente séries com pelo menos 30 anos válidos de observações foram utilizadas, totalizando 5.258 estações. Os máximos anuais foram selecionados conforme o ano hidrológico definido estimados para cada estação individualmente.
+
+### Parâmetros do modelo d-GEV
+
+Novamente, o modelo d-GEV considera simultaneamente todas as durações em um ajuste único, totalizando 5 parâmetros estimados. O parâmetro de deslocamento $\theta$ foi mantido na otimização, porém seu efeito para intensidades diárias é negligenciável. Portanto, os resultados espacializados apresentados adiantes concernem somente às estimativas de $\xi$ e $H$.
+
+A distribuição espacial de $\xi$ [@fig-mapa-xi-dgev-diario] apresentou uma larga variabilidade espacial. Distribuições de cauda pesada, de cauda limitada e de cauda aproximadamente leve ($\hat\xi \approx 0$) foram observadas em diferentes regiões do Brasil. Caudas pesadas surgem com maior frequência nas regiões Sul, Sudeste (com estimativas entre 0,05 e 0,46); enquanto um comportamento de cauda limitada é visto a norte da região Nordeste e na região Norte (entre -0,05 e -0,37). Ainda assim, a vasta maioria é composta por estimativas $\hat\xi \in$ \[-0,05; 0,05\] --- possivelmente atenuada ainda pela interpolação.
+
+![Distribuição espacial interpolada das estimativas do parâmetro de forma $\xi$ do modelo d-GEV para a faixa de durações diárias.](Scripts_Ajuste_dGEV/figuras/mapa_dgev_par_xi_diario_br.png){#fig-mapa-xi-dgev-diario fig-align="center"}
+
+Assim como observado no estado do Rio Grande do Sul, a interpolação espacial do expoente de escala $H$ exibem padrões mais claros. A região Nordeste e a região Sul apresentaram valores superiores a 0,66, enquanto valores menores estão presentes na região Centro-Oeste e em partes da região Norte. No geral, percebe-se que uma faixa extensa do território está no intervalo de 0,58--0,66 para intensidades de duração diária.
+
+![Distribuição espacial interpolada das estimativas do expoente de escala $H$ do modelo d-GEV para a faixa de durações diárias.](Scripts_Ajuste_dGEV/figuras/mapa_dgev_par_H_diario_br.png){#fig-mapa-H-dgev-diario fig-align="center"}
+
+### Curvas intensidade-duração-frequência
+
+As curvas estimadas pelo modelo semi-Bayesiano foram examiandas em seis estações pluviométricas distintas, apresentadas na @fig-idf-diario-dgev1-br e na @fig-idf-diario-dgev2-br para os tempos de retorno de 2, 10, 50 e 100 anos (primeira figura) e 5, 25 e 200 anos (segunda figura). As estações foram escolhidas buscando ilustrar diferentes comportamentos do parâmetro de forma da GEV:  Ceará (739006), Minas Gerais (1842004), Pernambuco (735041), Paraná (2549006), Rio Grande do Norte (535011) e Santa Catarina (2849002). Essas estações apresentaram distribuições ajustadas de cauda limitadas (CE e MG), caudas pesadas (PE, RN e SC) e caudas com decaimento próximo a exponencial (leve, PR).
+
+A influência do parâmetro de forma ajustado se assemelha aos resultados apresentados na @sec-res-semi-bayesiano. Estimativas pontuais de distribuições de cauda pesada geral curvas com quantis extremos mais espaçados entre si (para uma menor frequência, mais extrema será a intensidade média da chuva estimada). Nesses casos, aumenta também a larguda dos intervalos de confiança de 95\% estimados com verossimilhança perfilada. Já estimativas de caudas limitadas (nos quadros da primeira fileira das Figuras [-@fig-idf-diario-dgev1-br] e [-@fig-idf-diario-dgev2-br]), exibem curvas estimadas próximas já a partir de 50 anos. Outro ponto observado é a presença majoritária de curvas aproximadamente lineares no espaço logarítmico, característica conferida pela ausência quase total de estimativas de $\theta>$ 0.
+
+![Curvas IDF e intervalos de confiança de 95% estimados com verossimilhança perfilada para os períodos de retorno de 2, 10, 50 e 200 anos, considerando as estações pluviométricas brasileiras de 1 a 10 dias. As linhas representam as estimativas pontuais obtidas com máxima verossimilhança incluindo informação a priori sobre o parâmetro de forma, e as faixas sombreadas indicam os respectivos intervalos de confiança](Scripts_Ajuste_dGEV/figuras/idf_diario_tr1.png){#fig-idf-diario-dgev1-br fig-align="center"}
+
+![Curvas IDF e intervalos de confiança de 95% estimados com verossimilhança perfilada para os períodos de retorno de 5, 25 e 100 anos, considerando as estações pluviométricas brasileiras de 1 a 10 dias. As linhas representam as estimativas pontuais obtidas com máxima verossimilhança incluindo informação a priori sobre o parâmetro de forma, e as faixas sombreadas indicam os respectivos intervalos de confiança](Scripts_Ajuste_dGEV/figuras/idf_diario_tr2.png){#fig-idf-diario-dgev2-br fig-align="center"}

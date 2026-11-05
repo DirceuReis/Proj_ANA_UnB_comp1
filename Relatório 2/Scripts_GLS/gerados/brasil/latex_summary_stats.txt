@@ -1,0 +1,22 @@
+% latex table generated in R 4.5.3 by xtable 1.8-8 package
+% Mon May  4 16:43:22 2026
+\begin{table}[ht]
+\centering
+\caption{Basic summary statistics of the set of 3790 daily rainfall AM series.} 
+\label{tab-summary-stats}
+\begin{tabular}{lcccccc}
+  \hline
+ & n\_years & mean & median & sd & t3 & t4 \\ 
+  \hline
+Min & 15 & 47.229 & 40.60 & 10.16 & -0.241 & -0.148 \\ 
+  $Q_5$ & 18 & 66.52 & 62.50 & 18.02 & -0.004 & 0.044 \\ 
+  $Q_{25}$ & 29 & 77.81 & 74.20 & 22.27 & 0.103 & 0.116 \\ 
+  $Q_{50}$ & 38 & 85.04 & 80.75 & 25.74 & 0.168 & 0.161 \\ 
+  $Q_{75}% & 50 & 93.92 & 89.00 & 30.40 & 0.236 & 0.215 \\ 
+  $Q_{95}$ & 74.55 & 108.70 & 103.56 & 41.82 & 0.352 & 0.319 \\ 
+  Max & 112 & 237.629 & 227.20 & 176.63 & 0.734 & 0.722 \\ 
+  Mean & 41.18 & 86.387 & 82.00 & 27.53 & 0.171 & 0.169 \\ 
+  Skewness & 0.916 & 1.745 & 1.213 & 4.779 & 0.253 & 0.825 \\ 
+   \hline
+\end{tabular}
+\end{table}

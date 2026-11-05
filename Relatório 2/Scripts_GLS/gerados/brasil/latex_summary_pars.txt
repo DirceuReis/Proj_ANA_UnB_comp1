@@ -1,0 +1,37 @@
+% latex table generated in R 4.6.1 by xtable 1.8-8 package
+% Tue Sep 22 13:35:10 2026
+\begin{table}[ht]
+\centering
+\caption{Average GEV parameter estimates for different estimators across Brazil's major Hydrological Regions.} 
+\label{tab-summary-pars}
+\begin{tabular}{ccccccc}
+  \hline
+bacia & n\_gauges & p0 & method & csi & alpha & kappa \\ 
+  \hline
+ &  &  & LMOM & 82.601 & 22.435 & 0.024 \\ 
+  AMZ &  328 & 0.00 (0) & MLE & 82.783 & 22.023 & 0.034 \\ 
+   &  &  & GMLE & 81.780 & 21.712 & -0.052 \\ 
+   &  &  & LMOM & 79.006 & 20.463 & 0.059 \\ 
+  TCN &  185 & 0.31 (1) & MLE & 79.361 & 20.322 & 0.075 \\ 
+   &  &  & GMLE & 78.153 & 19.769 & -0.030 \\ 
+   &  &  & LMOM & 67.954 & 21.680 & 0.031 \\ 
+  ANND &  809 & 0.21 (16) & MLE & 68.352 & 21.189 & 0.038 \\ 
+   &  &  & GMLE & 67.274 & 20.673 & -0.047 \\ 
+   &  &  & LMOM & 67.562 & 18.936 & -0.001 \\ 
+  SF &  252 & 0.00 (0) & MLE & 67.826 & 18.836 & 0.006 \\ 
+   &  &  & GMLE & 67.240 & 18.568 & -0.046 \\ 
+   &  &  & LMOM & 70.053 & 21.642 & 0.009 \\ 
+  AL &  447 & 0.00 (0) & MLE & 70.255 & 21.396 & 0.012 \\ 
+   &  &  & GMLE & 69.608 & 21.060 & -0.038 \\ 
+   &  &  & LMOM & 75.284 & 19.141 & -0.024 \\ 
+  PRN & 1370 & 0.06 (3) & MLE & 75.534 & 18.951 & -0.022 \\ 
+   &  &  & GMLE & 75.021 & 18.706 & -0.062 \\ 
+   &  &  & LMOM & 88.033 & 22.990 & 0.035 \\ 
+  URG &  130 & 0.00 (0) & MLE & 88.480 & 22.554 & 0.046 \\ 
+   &  &  & GMLE & 87.325 & 21.920 & -0.044 \\ 
+   &  &  & LMOM & 80.825 & 23.255 & -0.012 \\ 
+  ASD &  269 & 0.10 (5) & MLE & 81.067 & 22.871 & -0.010 \\ 
+   &  &  & GMLE & 80.464 & 22.562 & -0.060 \\ 
+   \hline
+\end{tabular}
+\end{table}

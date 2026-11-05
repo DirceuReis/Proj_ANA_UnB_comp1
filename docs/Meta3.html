@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Meta 3: Organização da Base de Dados – Proj. IDF Brasil ANA/UnB</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,15 +57,14 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7600ddd4616fb7b9baa2258c07466e60.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,8 +104,6 @@ div.csl-indent {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
@@ -172,7 +174,7 @@ div.csl-indent {
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
- <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
+ <span class="dropdown-text">Exemplos de estudos de caráter nacional</span></a>
   </li>  
     </ul>
   </li>
@@ -183,6 +185,10 @@ div.csl-indent {
   <li class="nav-item">
     <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./teste.html"> 
+<span class="menu-text">teste</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -304,12 +310,12 @@ div.csl-indent {
 <section id="banco-de-dados-consolidados" class="level2">
 <h2 class="anchored" data-anchor-id="banco-de-dados-consolidados">Banco de dados consolidados</h2>
 <p>Os dados consolidados, incluindo os de grade, serão organizados e armazenados no (Hierarchical Data Format), que é o formato utilizado por importantes agências internacionais como a NASA, para disponibilização de grandes bases de dados.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-Anselin.2024" class="csl-entry" role="listitem">
-Anselin, Luc. 2024. <em><span>An Introduction to Spatial Data Science with GeoDa</span></em>. Vol. Volume 1: Exploring Spatial Data. Boca Raton/FL: CRC Press.
+Anselin, Luc. 2024. <em><span>An Introduction to Spatial Data Science with GeoDa</span></em>. Volume 1: Exploring Spatial Data. CRC Press.
 </div>
 <div id="ref-Xavier.2022" class="csl-entry" role="listitem">
-Xavier, Alexandre C., Bridget R. Scanlon, Carey W. King, e Aline I. Alves. 2022. <span>«<span>New improved Brazilian daily weather gridded data (1961–2020)</span>»</span>. <em>International Journal of Climatology</em> 42 (16): 8390–8404. <a href="https://doi.org/10.1002/joc.7731">https://doi.org/10.1002/joc.7731</a>.
+Xavier, Alexandre C., Bridget R. Scanlon, Carey W. King, e Aline I. Alves. 2022. <span>«<span>New improved Brazilian daily weather gridded data (1961–2020)</span>»</span>. <em>International Journal of Climatology</em> 42 (16): 8390–404. <a href="https://doi.org/10.1002/joc.7731">https://doi.org/10.1002/joc.7731</a>.
 </div>
 </div>
 

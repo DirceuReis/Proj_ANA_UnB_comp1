@@ -26,26 +26,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -144,7 +125,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.qmd"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -258,17 +239,8 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Nesta página</h2>
-   
-  <ul>
-  <li><a href="#invariância-de-escala" id="toc-invariância-de-escala" class="nav-link active" data-scroll-target="#invariância-de-escala">Invariância de escala</a>
-  <ul class="collapse">
-  <li><a href="#verificação-da-hipótese-de-invariância-de-escala-simples" id="toc-verificação-da-hipótese-de-invariância-de-escala-simples" class="nav-link" data-scroll-target="#verificação-da-hipótese-de-invariância-de-escala-simples">Verificação da hipótese de invariância de escala simples</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -276,330 +248,82 @@ window.Quarto = {
 
 
 
-<section id="invariância-de-escala" class="level2">
-<h2 class="anchored" data-anchor-id="invariância-de-escala">Invariância de escala</h2>
-<p>A base de parte dos modelos desenvolvidos para aplicação local (<em>at site</em>) e daqueles que serão desenvolvidos para aplicação regional está no modelo geral para a relação de Intensidade-Duração-Frequência proposto por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis et al. (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>:</p>
-<p><span id="eq-idf-koutsoyiannis"><span class="math display">\[
-i(d,T) = \frac{a(T)}{(d+\theta)^H}.
-\tag{1}\]</span></span></p>
-<p>O modelo <a href="#eq-idf-koutsoyiannis" class="quarto-xref">Equação&nbsp;1</a> representa a dependência das intensidades <span class="math inline">\(i\)</span> com o tempo de retorno <span class="math inline">\(T\)</span> e com a duração <span class="math inline">\(d\)</span> de forma separável. O numerador <span class="math inline">\(a(T)\)</span> é a função quantílica de uma distribuição de probabilidades de uma variável aleatória <span class="math inline">\(Y = I(d + \theta)^H\)</span> que não possui relação com a duração <span class="math inline">\(d\)</span> em si, de modo que <span class="math inline">\(y_T = a(T) = F_Y^{-1}(1 - 1/T)\)</span>, sendo <span class="math inline">\(I\)</span> a variável aleatória para intensidade média de precipitação.</p>
-<p>A separabilidade da relação na <a href="#eq-idf-koutsoyiannis" class="quarto-xref">Equação&nbsp;1</a> implica, ainda que implicitamente, invariância de escala. <span class="citation" data-cites="menabde1999">Menabde et al. (<a href="#ref-menabde1999" role="doc-biblioref">1999</a>)</span> reescreve a formulação clássica da relação de invariância de escala simples para intensidades de precipitação como</p>
-<p><span id="eq-inv-menabde"><span class="math display">\[
-I_d \overset{d}{=} \left(\frac{d}{D}\right)^{-H} I_D.
-\tag{2}\]</span></span> A <a href="#eq-inv-menabde" class="quarto-xref">Equação&nbsp;2</a> estabelece simplesmente que as intensidades <span class="math inline">\(I\)</span> em escalas (durações) distintas <span class="math inline">\(d\)</span> e <span class="math inline">\(D\)</span> (com <span class="math inline">\(d&lt;D\)</span>) são iguais em distribuição (<span class="math inline">\(\overset{d}{=})\)</span>, à exceção de um fator de escala linear (<span class="math inline">\(\lambda^H\)</span>, sendo <span class="math inline">\(\lambda = D/d\)</span>).</p>
-<section id="verificação-da-hipótese-de-invariância-de-escala-simples" class="level3">
-<h3 class="anchored" data-anchor-id="verificação-da-hipótese-de-invariância-de-escala-simples">Verificação da hipótese de invariância de escala simples</h3>
-<p>Em teoria, essa propriedade é inerente somente a algumas distribuições de cauda pesada <span class="citation" data-cites="nair2022">(<a href="#ref-nair2022" role="doc-biblioref">Nair et al. 2022</a>)</span>, mas pode ser verificada de maneira empírica através do chamado sentido amplo <span class="citation" data-cites="menabde1999">(<a href="#ref-menabde1999" role="doc-biblioref">Menabde et al. 1999</a>)</span>. Utilizando a forma simplificada da <a href="#eq-idf-koutsoyiannis" class="quarto-xref">Equação&nbsp;1</a>, a relação entre <span class="math inline">\(d\)</span> e <span class="math inline">\(D\)</span> pode ser expandida para um momento de ordem <span class="math inline">\(q\)</span>. Calculando as esperanças de <span class="math inline">\(I_d^q\)</span>, tem-se que</p>
-<p><span id="eq-inv-sentido-amplo"><span class="math display">\[
-E[I_d^q] = \left(\frac{d}{D}\right)^{-qH}E[I_D^q].
-\tag{3}\]</span></span></p>
-<p>No caso das aplicações com as séries de precipitação subdiária, <span class="math inline">\(D\)</span> é definida como 24 h para o desenvolvimento dos modelos IDF locais (a duração limite para a validade da hipótese de invariância). É de interesse determinar tanto <span class="math inline">\(H\)</span> para diferentes ordens, como avaliar a linearidade dos momentos para diferentes durações. Para esses fins, toma-se os logaritmos dos valores esperados em ambos os lados da <a href="#eq-inv-sentido-amplo" class="quarto-xref">Equação&nbsp;3</a>:</p>
-<p><span id="eq-ln-momentos"><span class="math display">\[
-\ln(E[I_d^q]) = \ln(E[I_D^q]) + (-qH) \ln(d/D).
-\tag{4}\]</span></span></p>
-<p>Ajustando um modelo linear à relação na <a href="#eq-ln-momentos" class="quarto-xref">Equação&nbsp;4</a> entre <span class="math inline">\(\ln(E[I_d^q])\)</span> e <span class="math inline">\(\ln(d/D)\)</span>, é possível determinar <span class="math inline">\(H\)</span>.</p>
-<p>Esse procedimento foi aplicado para todas as estações no conjunto de postos pluviográficos, considerando novamente somente aqueles com no máximo 20% de falhas anuais e a menos 8 anos atendendo esse limiar de falhas. O expoente de escala <span class="math inline">\(H\)</span> foi estimado para as 1.973 estações remanescentes, cada qual com séries de intensidades máximas anuais para durações até 24 h extraídas levando em consideração os respectivos anos hidrológicos conforme [REFERÊNCIA SEÇÃO ANO HIDRO].</p>
-<p>Da <a href="#fig-inv-escala-ac" class="quarto-xref">Figura&nbsp;1</a> até a <a href="#fig-inv-escala-to" class="quarto-xref">Figura&nbsp;27</a> são apresentadas as retas de regressão ajustadas aos momentos não centrais até ordem 3, bem como os expoentes de escala <span class="math inline">\(H\)</span> estimados para cada ordem e o coeficiente de determinação <span class="math inline">\(R^2\)</span> para as estações mais longas de cada Unidade Federativa. Os histogramas ao lado ilustram como a linearidade dos modelos ajustados às demais estações do estado.</p>
-<p>Grande parte das estações mais longas são operadas pelo INMET e pelo ICEA. Como consequência, a maioria das retas de regressão compreende somente as durações a partir de <span class="math inline">\(d=\)</span> 1 h, à exceção das estações apresentadas para os estados do Acre (<a href="#fig-inv-escala-ac" class="quarto-xref">Figura&nbsp;1</a>), Amapá (<a href="#fig-inv-escala-ap" class="quarto-xref">Figura&nbsp;4</a>) e Roraima (<a href="#fig-inv-escala-rr" class="quarto-xref">Figura&nbsp;22</a>).</p>
-<p>No geral, pela disposição dos momentos calculados e pelo <span class="math inline">\(R^2\)</span>, observa que há uma estrutura aproximadamente linear em diferentes durações. Pelos histogramas, é possível dizer que esta linearidade também existe para as demais estações no estado. Ainda assim, é possível notar alguns comportamentos divergentes.</p>
-<div id="fig-inv-escala-ac" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_AC.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;1: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Acre).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-al" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-al-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_AL.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-al-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;2: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Alagoas).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-am" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-am-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_AM.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-am-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Amazonas).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ap" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_AP.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;4: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Amapá).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ba" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ba-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_BA.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ba-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Bahia).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ce" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_CE.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;6: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Ceará).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-df" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-df-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_DF.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-df-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;7: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Distrito Federal).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-es" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-es-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_ES.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-es-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;8: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Espírito Santo).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-go" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-go-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_GO.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-go-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;9: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Goiás).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ma" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_MA.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;10: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Maranhão).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-mg" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-mg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_MG.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-mg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;11: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Minas Gerais).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ms" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_MS.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;12: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Mato Grosso do Sul).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-mt" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-mt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_MT.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-mt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;13: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Mato Grosso).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-pa" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-pa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_PA.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;14: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Pará).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-pb" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-pb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_PB.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;15: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Paraíba).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-pe" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-pe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_PE.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;16: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Pernambuco).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-pi" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-pi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_PI.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;17: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Piauí).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-pr" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-pr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_PR.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;18: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Paraná).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-rj" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-rj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_RJ.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-rj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;19: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Rio de Janeiro).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-rn" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-rn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_RN.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-rn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;20: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Rio Grande do Norte).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-ro" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-ro-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_RO.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ro-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;21: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Rondônia).
-</figcaption>
-</figure>
-</div>
-<div id="fig-inv-escala-rr" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-rr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_RR.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-rr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;22: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Roraima).
-</figcaption>
-</figure>
-</div>
+<p>Da <a href="#fig-inv-escala-rs" class="quarto-xref">Figura&nbsp;1</a> até a <a href="#fig-inv-escala-sp" class="quarto-xref">Figura&nbsp;5</a> são apresentadas as retas de regressão ajustadas aos momentos não centrais até ordem 3, bem como os expoentes de escala <span class="math inline">\(H\)</span> estimados para cada ordem e o coeficiente de determinação <span class="math inline">\(R^2\)</span> para as estações mais longas de algumas Unidades Federativas. Os histogramas ao lado ilustram como a linearidade dos modelos ajustados às demais estações do estado. Grande parte das estações mais longas são operadas pelo INMET e pelo ICEA. Como consequência, a maioria das retas de regressão compreende somente as durações a partir de <span class="math inline">\(d=\)</span> 1 h.</p>
+<p>No geral, pela disposição dos momentos calculados e pelo <span class="math inline">\(R^2\)</span>, observa que há uma estrutura aproximadamente linear em diferentes durações. Pelos histogramas, é possível dizer que esta linearidade também existe para as demais estações no estado.</p>
+<p>Postos como o A801 no Rio Grande do Sul <a href="#fig-inv-escala-rs" class="quarto-xref">Figura&nbsp;1</a>, com 24 anos, são exemplos dessa estrutura empiricamente bem definida. Avaliando o modelo ajustado, é possível notar a estrutura aproximadamente linear entre os momentos não centrais ao longo da durações na faixa 1–24 h. Nesse caso, nota-se não somente a estrutura de invariância, como também uma possível conformidade com a invariância de escala simples, visto que há pouca variabilidade entre os expoentes de escala <span class="math inline">\(H\approx 0.63\)</span> ao longo das diferentes ordens <span class="math inline">\(q\)</span>.</p>
 <div id="fig-inv-escala-rs" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-inv-escala-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_RS.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_RS.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-rs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;23: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Rio Grande do Sul).
+Figura&nbsp;1: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Rio Grande do Sul).
 </figcaption>
 </figure>
 </div>
-<div id="fig-inv-escala-sc" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<p>Essa proximidade entre <span class="math inline">\(H\)</span>s também pode ser observada na Paraíba, no posto SBJP apresentado na <a href="#fig-inv-escala-pb" class="quarto-xref">Figura&nbsp;2</a>, com 34 anos.</p>
+<div id="fig-inv-escala-pb" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_SC.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+<div aria-describedby="fig-inv-escala-pb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_PB.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-sc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;24: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Santa Catarina).
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-pb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Paraíba).
 </figcaption>
 </figure>
 </div>
-<div id="fig-inv-escala-se" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<p>Em outros locais, apesar da aparente linearidade entre os momentos, há uma certa distorção entre os momentos. Esse é o caso do posto SBCF, em Minas Gerais, ilustrado pela <a href="#fig-inv-escala-mg" class="quarto-xref">Figura&nbsp;3</a>. O modelo linear e os valores pontuais dos momentos apontam para uma boa conformidade com o regime de invariância. As estimativas de <span class="math inline">\(H\)</span>, entretanto, apresentam maior distinção entre si: <span class="math inline">\(H_{q=1} =\)</span> 0,7909, <span class="math inline">\(H_{q=2}=\)</span> 0,8131 e <span class="math inline">\(H_{q=3}=\)</span> 0,8445; sugerindo que o regime de invariância simples poderia não representar a estrutura de invariância de forma adequada.</p>
+<div id="fig-inv-escala-mg" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_SE.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+<div aria-describedby="fig-inv-escala-mg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_MG.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;25: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Sergipe).
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-mg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Minas Gerais).
 </figcaption>
 </figure>
 </div>
+<p>Outros padrões de divergência desse comportamento são observados. Notavelmente, muitos postos em diferentes regiões exibem aparentes “quebras de regime” próximas às extremidades do intervalo de durações considerado. O posto A305 <a href="#fig-inv-escala-ce" class="quarto-xref">Figura&nbsp;4</a>, no estado do Ceará, exibe uma estrutura comum a outros no conjunto caracterizada por um padrão convexo nos momentos empíricos: segmentos para <span class="math inline">\(d&lt;1\)</span> h com inclinação inferior à do modelo ajustado, mas inclinação superior ao se aproximar de <span class="math inline">\(d =24\)</span> h. O mesmo padrão é observado na <a href="#fig-inv-escala-pb" class="quarto-xref">Figura&nbsp;2</a>, porém mais atenuado.</p>
+<div id="fig-inv-escala-ce" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inv-escala-ce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_CE.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-ce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Ceará).
+</figcaption>
+</figure>
+</div>
+<p>O posto SBSJ <a href="#fig-inv-escala-sp" class="quarto-xref">Figura&nbsp;5</a>, em São Paulo, exibe, por outro lado, um padrão contrário com inclinação inferior à do modelo ao se aproximar de durações diárias — sugerindo, novamente, um possível regime de escala alternativo. Por outro lado, as estimativas de <span class="math inline">\(H\)</span> entre as diferentes ordens são similares.</p>
 <div id="fig-inv-escala-sp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-inv-escala-sp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_SP.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_SP.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-sp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;26: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (São Paulo).
+Figura&nbsp;5: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (São Paulo).
 </figcaption>
 </figure>
 </div>
-<div id="fig-inv-escala-to" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-inv-escala-to-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_invariancia_escala_momentos_TO.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inv-escala-to-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;27: Retas de regressão linear entre momentos não centrais de ordem <span class="math inline">\(q=\)</span> 1, 2 e 3 e histogramas de <span class="math inline">\(R^2\)</span> do ajuste representando a linearidade dos modelos (Tocantins).
-</figcaption>
-</figure>
-</div>
-<p>A <a href="#fig-mapa-expoente-escala" class="quarto-xref">Figura&nbsp;28</a> apresenta o comportamento do expoente de escala <span class="math inline">\(H\)</span> para os três primeiros momentos espacializado a partir das estimativas pontuais por meio de interpolação por ponderação pelo inverso da distância (IDW).</p>
+<p>Grande parte das divergências — tanto entre estimativas de <span class="math inline">\(H\)</span> para <span class="math inline">\(q=1,2\)</span> e 3, como desvios do modelo linear — também está sujeita à variabilidade amostral. Ainda que alguns dos exemplos incluídos neste relatório disponham de séries com extensões superiores a 30 anos, essa não é a realidade do restante do conjunto de postos pluviográficos.</p>
+<p>Finalmente, a <a href="#fig-mapa-expoente-escala" class="quarto-xref">Figura&nbsp;6</a> apresenta o comportamento do expoente de escala <span class="math inline">\(H\)</span> para os três primeiros momentos espacializado a partir das estimativas pontuais por meio de interpolação por ponderação pelo inverso da distância (IDW). Cinco classes foram utilizadas, buscando incluir quantidades equivalentes de postos em cada uma: com quebras em 0,326 (menor valor identificado); 0,658; 0,713; 0,752; 0,794; e 1 (o limite superior do suporte de <span class="math inline">\(H\)</span>). Pontos espalhados na imagem representam os postos pluviográficos utilizados.</p>
+<p>No geral, observa-se um padrão de estimativas de <span class="math inline">\(H\)</span> menores, ou seja, até a segunda classe (até 0,713) ao sul e em estados no litoral brasileiro. Ao centro do brasil e em parte da região Norte, nota-se valores de <span class="math inline">\(H\)</span> mais elevados. Em termos práticos, quanto maior o valor do expoente, mais próximas serão as intensidades ao longo do intervalo de durações utilizado, e vice-versa. Logo, os padrões identificados com a metodologia apresentada na <strong>?@sec-met-inv-escala</strong> mostram que as intensidades em diferentesd durações nas regiões próximas ao litoral e na região Sul se diferenciam a uma taxa menor qunado comparado ao centro e norte do país.</p>
+<!-- seria interessante incluir as médias por duração espacialmente também de alguma forma (talvez so p/ 24 h e p/ menor duração, p/ analisar qual o peso que o H tem na "desagregação") -->
 <div id="fig-mapa-expoente-escala" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mapa-expoente-escala-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figuras/plot_scale_q_subdiario.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
+<img src="../Scripts_Invariancia_Escala/figuras/plot_scale_q_subdiario.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mapa-expoente-escala-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;28: Expoente de escala <span class="math inline">\(H\)</span> espacializado estimado no procedimento de validação da hipótese de invariância de escala em sentido amplo para as estações subdiárias no Brasil.
+Figura&nbsp;6: Expoente de escala <span class="math inline">\(H\)</span> espacializado estimado no procedimento de validação da hipótese de invariância de escala em sentido amplo para as estações subdiárias no Brasil.
 </figcaption>
 </figure>
 </div>
+<p>Mas também há de ser considerada a escassez espacial das estações na região Norte, bem como a extensão média das séries disponíveis, na interpretação da interpolação apresentada.</p>
 
 
 
-</section>
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-koutsoyiannis1998" class="csl-entry" role="listitem">
-Koutsoyiannis, Demetris, Demosthenes Kozonis, e Alexandros Manetas. 1998. <span>«A Mathematical Framework for Studying Rainfall Intensity-Duration-Frequency Relationships»</span>. <em>Journal of Hydrology</em> 206 (1-2): 118–35. <a href="https://doi.org/10.1016/S0022-1694(98)00097-3">https://doi.org/10.1016/S0022-1694(98)00097-3</a>.
-</div>
-<div id="ref-menabde1999" class="csl-entry" role="listitem">
-Menabde, Merab, Alan Seed, e Geoff Pegram. 1999. <span>«A Simple Scaling Model for Extreme Rainfall»</span>. <em>Water Resources Research</em> 35 (1): 335–39. <a href="https://doi.org/10.1029/1998WR900012">https://doi.org/10.1029/1998WR900012</a>.
-</div>
-<div id="ref-nair2022" class="csl-entry" role="listitem">
-Nair, Jayakrishnan, Adam Wierman, e Bert Zwart. 2022. <em>The Fundamentals of Heavy Tails: Properties, Emergence, and Estimation</em>. Cambridge University Press. <a href="https://doi.org/10.1017/9781009053730">https://doi.org/10.1017/9781009053730</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

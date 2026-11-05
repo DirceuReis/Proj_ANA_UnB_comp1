@@ -2,7 +2,7 @@
 title: "Base Hidroclimática Nacional"
 execute:
   echo: false    # não renderizar os blocos de código
-  include: false # não incluir qualquer mensagem da execução dos códigos
+  warning: false # não incluir qualquer mensagem da execução dos códigos
 ---
 
 Esta meta reúne a aquisição, organização, padronização e controle de qualidade das bases de precipitação observadas e em grade utilizadas na Componente 1. O objetivo é consolidar uma base nacional de qualidade e consistente, com destaque para dados observados obtidos da base do UNIPLU-BR [@DasNevesAlmeida2025], de responsabilidade da ANA/Hidroweb, Telemetria ANA, INMET, CEMADEN, ICEA, entre outros; e dados em grade obtidos pelo BR-DWGD [@xavier2022] e NEX-GDDP-CMIP6 (NASA) [@thrasher2022].
@@ -11,10 +11,10 @@ Esta meta reúne a aquisição, organização, padronização e controle de qual
 
 ### UNIPLU-BR
 
-Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR) \[https://doi.org/10.5281/zenodo.18883358\], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
+Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR)[https://doi.org/10.5281/zenodo.18883358], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
 
 - **CEMADEN**: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.
-- **INMET**: Instituto Nacional de Meteorologia.
+- **INMET**: Instituto Nacional de Meteorologia.q
 - **ANA (Hidroweb)**: Agência Nacional de Águas e Saneamento Básico.
 - **ANA (Telemetria)**: Agência Nacional de Águas e Saneamento Básico.
 - **ICEA**: Instituto de Controle do Espaço Aéreo.

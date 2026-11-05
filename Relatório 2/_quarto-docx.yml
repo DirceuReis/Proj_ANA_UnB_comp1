@@ -1,0 +1,39 @@
+project:
+  type: book
+  output-dir: output_docx
+  
+book:
+  title: ""
+  chapters:
+    - index.qmd  
+    - meta3.qmd      # Capítulo 2: Base Hidroclimática Nacional
+    - meta8.qmd    
+    - cap_curvas_idf.qmd
+    - meta8.qmd
+    - ref.qmd
+    - documentacao_scripts_R.qmd
+    
+format:
+  docx:
+    toc: true 
+    toc-title: "Sumário"
+    number-sections: true
+    fig-align: center
+    reference-doc: .template.docx
+    link-citations: true
+    link-bibliography: true
+    lang: pt
+    
+bibliography:
+  - ref_base_meta3.bib
+  - ref_tendencia.bib
+  - ref_metodologia_unificada.bib
+  - Scripts_Invariancia_Escala/ref_invariancia_escala.bib
+  - Scripts_Modelo_Bayesiano/referencias_subdiaria.bib
+  - ref_correcao_vies.bib
+    
+# Sobre a nomeação dos arquivos: o padrão para o nome dos "profiles" dos arquivos yml
+# são _quarto-{nome do perfil}.yml, especificamento o nome após o hífen (obrigatório)
+# como "_quarto-docx.yml". Nesse caso, o nome do perfil seria "docx".
+
+# Na hora de renderizar: `quarto render --profile docx`

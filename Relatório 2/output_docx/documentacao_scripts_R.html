@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="">
+
+<title>7&nbsp; Documentação dos scripts em R</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ref.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./documentacao_scripts_R.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Documentação dos scripts em R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introdução</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cap_curvas_idf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Curvas Intensidade-Duração-Frequência</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./meta8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ref.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Referências Bibliográficas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./documentacao_scripts_R.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Documentação dos scripts em R</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#apresentação" id="toc-apresentação" class="nav-link active" data-scroll-target="#apresentação"><span class="header-section-number">8</span> Apresentação</a></li>
+  <li><a href="#scripts---ano-hidrológico" id="toc-scripts---ano-hidrológico" class="nav-link" data-scroll-target="#scripts---ano-hidrológico"><span class="header-section-number">9</span> Scripts - Ano Hidrológico</a>
+  <ul class="collapse">
+  <li><a href="#script-01-2_uniplu_processamento" id="toc-script-01-2_uniplu_processamento" class="nav-link" data-scroll-target="#script-01-2_uniplu_processamento"><span class="header-section-number">9.1</span> Script 01 — 2_uniplu_processamento</a>
+  <ul class="collapse">
+  <li><a href="#finalidade" id="toc-finalidade" class="nav-link" data-scroll-target="#finalidade"><span class="header-section-number">9.1.1</span> Finalidade</a></li>
+  <li><a href="#função-principal" id="toc-função-principal" class="nav-link" data-scroll-target="#função-principal"><span class="header-section-number">9.1.2</span> Função principal</a></li>
+  <li><a href="#fluxo-geral-de-processamento" id="toc-fluxo-geral-de-processamento" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento"><span class="header-section-number">9.1.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados" id="toc-arquivos-gerados" class="nav-link" data-scroll-target="#arquivos-gerados"><span class="header-section-number">9.1.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-02-3_uniplu_hydro_year_def" id="toc-script-02-3_uniplu_hydro_year_def" class="nav-link" data-scroll-target="#script-02-3_uniplu_hydro_year_def"><span class="header-section-number">9.2</span> Script 02 — 3_uniplu_hydro_year_def</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-1" id="toc-finalidade-1" class="nav-link" data-scroll-target="#finalidade-1"><span class="header-section-number">9.2.1</span> Finalidade</a></li>
+  <li><a href="#função-principal-1" id="toc-função-principal-1" class="nav-link" data-scroll-target="#função-principal-1"><span class="header-section-number">9.2.2</span> Função principal</a></li>
+  <li><a href="#fluxo-geral-de-processamento-1" id="toc-fluxo-geral-de-processamento-1" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-1"><span class="header-section-number">9.2.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivo-gerado" id="toc-arquivo-gerado" class="nav-link" data-scroll-target="#arquivo-gerado"><span class="header-section-number">9.2.4</span> Arquivo gerado</a></li>
+  </ul></li>
+  <li><a href="#script-03-4_uniplu_mapas" id="toc-script-03-4_uniplu_mapas" class="nav-link" data-scroll-target="#script-03-4_uniplu_mapas"><span class="header-section-number">9.3</span> Script 03 — 4_uniplu_mapas</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-2" id="toc-finalidade-2" class="nav-link" data-scroll-target="#finalidade-2"><span class="header-section-number">9.3.1</span> Finalidade</a></li>
+  <li><a href="#rotinas-principais" id="toc-rotinas-principais" class="nav-link" data-scroll-target="#rotinas-principais"><span class="header-section-number">9.3.2</span> Rotinas principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-2" id="toc-fluxo-geral-de-processamento-2" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-2"><span class="header-section-number">9.3.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-1" id="toc-arquivos-gerados-1" class="nav-link" data-scroll-target="#arquivos-gerados-1"><span class="header-section-number">9.3.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-04-5_uniplu_fig3_postos" id="toc-script-04-5_uniplu_fig3_postos" class="nav-link" data-scroll-target="#script-04-5_uniplu_fig3_postos"><span class="header-section-number">9.4</span> Script 04 — 5_uniplu_fig3_postos</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-3" id="toc-finalidade-3" class="nav-link" data-scroll-target="#finalidade-3"><span class="header-section-number">9.4.1</span> Finalidade</a></li>
+  <li><a href="#funções-principais" id="toc-funções-principais" class="nav-link" data-scroll-target="#funções-principais"><span class="header-section-number">9.4.2</span> Funções principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-3" id="toc-fluxo-geral-de-processamento-3" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-3"><span class="header-section-number">9.4.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-2" id="toc-arquivos-gerados-2" class="nav-link" data-scroll-target="#arquivos-gerados-2"><span class="header-section-number">9.4.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-05-6_uniplu_hydro_year_escolhido" id="toc-script-05-6_uniplu_hydro_year_escolhido" class="nav-link" data-scroll-target="#script-05-6_uniplu_hydro_year_escolhido"><span class="header-section-number">9.5</span> Script 05 — 6_uniplu_hydro_year_escolhido</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-4" id="toc-finalidade-4" class="nav-link" data-scroll-target="#finalidade-4"><span class="header-section-number">9.5.1</span> Finalidade</a></li>
+  <li><a href="#funções-principais-1" id="toc-funções-principais-1" class="nav-link" data-scroll-target="#funções-principais-1"><span class="header-section-number">9.5.2</span> Funções principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-4" id="toc-fluxo-geral-de-processamento-4" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-4"><span class="header-section-number">9.5.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-3" id="toc-arquivos-gerados-3" class="nav-link" data-scroll-target="#arquivos-gerados-3"><span class="header-section-number">9.5.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-06-9_subdiario_ano_hidro_uniplu" id="toc-script-06-9_subdiario_ano_hidro_uniplu" class="nav-link" data-scroll-target="#script-06-9_subdiario_ano_hidro_uniplu"><span class="header-section-number">9.6</span> Script 06 — 9_subdiario_ano_hidro_uniplu</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-5" id="toc-finalidade-5" class="nav-link" data-scroll-target="#finalidade-5"><span class="header-section-number">9.6.1</span> Finalidade</a></li>
+  <li><a href="#funções-principais-2" id="toc-funções-principais-2" class="nav-link" data-scroll-target="#funções-principais-2"><span class="header-section-number">9.6.2</span> Funções principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-5" id="toc-fluxo-geral-de-processamento-5" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-5"><span class="header-section-number">9.6.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-4" id="toc-arquivos-gerados-4" class="nav-link" data-scroll-target="#arquivos-gerados-4"><span class="header-section-number">9.6.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#scripts---geração-das-máximas" id="toc-scripts---geração-das-máximas" class="nav-link" data-scroll-target="#scripts---geração-das-máximas"><span class="header-section-number">10</span> Scripts - Geração das Máximas</a>
+  <ul class="collapse">
+  <li><a href="#script-01-12_subdiario_imax" id="toc-script-01-12_subdiario_imax" class="nav-link" data-scroll-target="#script-01-12_subdiario_imax"><span class="header-section-number">10.1</span> Script 01 — 12_subdiario_imax</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-6" id="toc-finalidade-6" class="nav-link" data-scroll-target="#finalidade-6"><span class="header-section-number">10.1.1</span> Finalidade</a></li>
+  </ul></li>
+  <li><a href="#funções-principais-3" id="toc-funções-principais-3" class="nav-link" data-scroll-target="#funções-principais-3"><span class="header-section-number">10.2</span> Funções principais</a>
+  <ul class="collapse">
+  <li><a href="#fluxo-geral-de-processamento-6" id="toc-fluxo-geral-de-processamento-6" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-6"><span class="header-section-number">10.2.1</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-5" id="toc-arquivos-gerados-5" class="nav-link" data-scroll-target="#arquivos-gerados-5"><span class="header-section-number">10.2.2</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-02-13_uniplu_imax_hidro" id="toc-script-02-13_uniplu_imax_hidro" class="nav-link" data-scroll-target="#script-02-13_uniplu_imax_hidro"><span class="header-section-number">10.3</span> Script 02 — 13_uniplu_imax_hidro</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-7" id="toc-finalidade-7" class="nav-link" data-scroll-target="#finalidade-7"><span class="header-section-number">10.3.1</span> Finalidade</a></li>
+  <li><a href="#função-principal-2" id="toc-função-principal-2" class="nav-link" data-scroll-target="#função-principal-2"><span class="header-section-number">10.3.2</span> Função principal</a></li>
+  <li><a href="#fluxo-geral-de-processamento-7" id="toc-fluxo-geral-de-processamento-7" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-7"><span class="header-section-number">10.3.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-6" id="toc-arquivos-gerados-6" class="nav-link" data-scroll-target="#arquivos-gerados-6"><span class="header-section-number">10.3.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#script---modelos-bayesianos" id="toc-script---modelos-bayesianos" class="nav-link" data-scroll-target="#script---modelos-bayesianos"><span class="header-section-number">11</span> Script - Modelos Bayesianos</a>
+  <ul class="collapse">
+  <li><a href="#script-01-gev_nonpooled_uniplu_diario_por_uf" id="toc-script-01-gev_nonpooled_uniplu_diario_por_uf" class="nav-link" data-scroll-target="#script-01-gev_nonpooled_uniplu_diario_por_uf"><span class="header-section-number">11.1</span> Script 01 — GEV_nonpooled_uniplu_diario_por_uf</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-8" id="toc-finalidade-8" class="nav-link" data-scroll-target="#finalidade-8"><span class="header-section-number">11.1.1</span> Finalidade</a></li>
+  <li><a href="#funções-principais-4" id="toc-funções-principais-4" class="nav-link" data-scroll-target="#funções-principais-4"><span class="header-section-number">11.1.2</span> Funções principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-8" id="toc-fluxo-geral-de-processamento-8" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-8"><span class="header-section-number">11.1.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-7" id="toc-arquivos-gerados-7" class="nav-link" data-scroll-target="#arquivos-gerados-7"><span class="header-section-number">11.1.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-02-codigos_bayesiano_comparação_rs" id="toc-script-02-codigos_bayesiano_comparação_rs" class="nav-link" data-scroll-target="#script-02-codigos_bayesiano_comparação_rs"><span class="header-section-number">11.2</span> Script 02 — codigos_bayesiano_comparação_RS</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-9" id="toc-finalidade-9" class="nav-link" data-scroll-target="#finalidade-9"><span class="header-section-number">11.2.1</span> Finalidade</a></li>
+  <li><a href="#funções-e-modelos-principais" id="toc-funções-e-modelos-principais" class="nav-link" data-scroll-target="#funções-e-modelos-principais"><span class="header-section-number">11.2.2</span> Funções e modelos principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-9" id="toc-fluxo-geral-de-processamento-9" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-9"><span class="header-section-number">11.2.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#objetos-gerados" id="toc-objetos-gerados" class="nav-link" data-scroll-target="#objetos-gerados"><span class="header-section-number">11.2.4</span> Objetos gerados</a></li>
+  </ul></li>
+  <li><a href="#script-03-gev_nonpooled_uniplu_subdiario_cj" id="toc-script-03-gev_nonpooled_uniplu_subdiario_cj" class="nav-link" data-scroll-target="#script-03-gev_nonpooled_uniplu_subdiario_cj"><span class="header-section-number">11.3</span> Script 03 — GEV_nonpooled_uniplu_subdiario_cj</a>
+  <ul class="collapse">
+  <li><a href="#finalidade-10" id="toc-finalidade-10" class="nav-link" data-scroll-target="#finalidade-10"><span class="header-section-number">11.3.1</span> Finalidade</a></li>
+  <li><a href="#funções-principais-5" id="toc-funções-principais-5" class="nav-link" data-scroll-target="#funções-principais-5"><span class="header-section-number">11.3.2</span> Funções principais</a></li>
+  <li><a href="#fluxo-geral-de-processamento-10" id="toc-fluxo-geral-de-processamento-10" class="nav-link" data-scroll-target="#fluxo-geral-de-processamento-10"><span class="header-section-number">11.3.3</span> Fluxo geral de processamento</a></li>
+  <li><a href="#arquivos-gerados-8" id="toc-arquivos-gerados-8" class="nav-link" data-scroll-target="#arquivos-gerados-8"><span class="header-section-number">11.3.4</span> Arquivos gerados</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#scripts-visualização" id="toc-scripts-visualização" class="nav-link" data-scroll-target="#scripts-visualização"><span class="header-section-number">12</span> Scripts — Visualização</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Documentação dos scripts em R</span></h1>
+<p class="subtitle lead">Processamento e controle de qualidade de dados pluviométricos</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">21 de outubro de 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="apresentação" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Apresentação</h1>
+<p>Este documento reúne a descrição dos scripts em R utilizados no processamento de dados pluviométricos. Cada seção apresenta a finalidade de um script, seus dados de entrada, as principais operações executadas, os critérios de seleção e controle de qualidade, os arquivos produzidos e os cuidados necessários para interpretar seus resultados.</p>
+<p>A documentação descreve <strong>o comportamento implementado no código</strong>, sem pressupor operações realizadas em etapas externas. Novos scripts poderão ser acrescentados em sequência, mantendo a mesma estrutura.</p>
+</section>
+<section id="scripts---ano-hidrológico" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Scripts - Ano Hidrológico</h1>
+<section id="script-01-2_uniplu_processamento" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="script-01-2_uniplu_processamento"><span class="header-section-number">9.1</span> Script 01 — 2_uniplu_processamento</h2>
+<section id="finalidade" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="finalidade"><span class="header-section-number">9.1.1</span> Finalidade</h3>
+<p>O script realiza a extração e o controle de qualidade das séries de precipitação diária da base Uniplu, considerando exclusivamente registros com resolução de 1.440 minutos. Seu objetivo é selecionar estações com pelo menos 30 anos de dados considerados válidos, além de organizar as séries para as análises posteriores.</p>
+</section>
+<section id="função-principal" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="função-principal"><span class="header-section-number">9.1.2</span> Função principal</h3>
+<p><strong><code>analyse_station_uniplu(sta)</code></strong></p>
+<p><strong>Dados de entrada:</strong> objeto <code>sta</code>, contendo a série diária de uma estação, com as colunas:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>codigo</code></td>
+<td>Código identificador da estação.</td>
+</tr>
+<tr class="even">
+<td><code>dt</code></td>
+<td>Data da observação.</td>
+</tr>
+<tr class="odd">
+<td><code>p</code></td>
+<td>Precipitação diária (mm).</td>
+</tr>
+</tbody>
+</table>
+<p>A função padroniza os registros, consolida datas duplicadas, completa a sequência diária e aplica verificações de qualidade. Valores superiores a 700 mm são sinalizados, enquanto aqueles superiores a 1.500 mm são substituídos por <code>NA</code>. Também são calculados acumulados móveis para 3, 5, 7, 15 e 30 dias.</p>
+<p>São sinalizadas como inadequadas as séries com menos de 365 registros diários após a consolidação, menos de 15 valores distintos de precipitação ou proporção de dias com precipitação inferior a 0,5 mm igual ou superior a 99,5%.</p>
+<p><strong>Dados de saída:</strong> a função retorna uma lista contendo:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Objeto</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>is.null</code></td>
+<td>Indicador lógico de inadequação da estação.</td>
+</tr>
+<tr class="even">
+<td><code>sta</code></td>
+<td>Série diária processada, incluindo os acumulados móveis e a sinalização de precipitações elevadas.</td>
+</tr>
+<tr class="odd">
+<td><code>err</code></td>
+<td>Diagnóstico contendo o último ano da série, o número de valores distintos e a proporção de dias com precipitação inferior a 0,5 mm.</td>
+</tr>
+</tbody>
+</table>
+<p>O objeto <code>err</code> não é retornado quando a série é rejeitada antecipadamente por possuir menos de 365 registros.</p>
+</section>
+<section id="fluxo-geral-de-processamento" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento"><span class="header-section-number">9.1.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script percorre os arquivos ZIP da Uniplu e identifica as estações diárias presentes em pelo menos 30 anos distintos. Em seguida, extrai suas observações e aplica a função <code>analyse_station_uniplu()</code> individualmente.</p>
+<p>Após o tratamento, a disponibilidade é avaliada por ano civil, considerando válido aquele com até 73 dias sem dados. São selecionadas as estações que apresentam pelo menos 30 anos válidos, não necessariamente consecutivos.</p>
+<p>As séries processadas são salvas individualmente, enquanto as informações das estações selecionadas são consolidadas em uma tabela de metadados.</p>
+</section>
+<section id="arquivos-gerados" class="level3" data-number="9.1.4">
+<h3 data-number="9.1.4" class="anchored" data-anchor-id="arquivos-gerados"><span class="header-section-number">9.1.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>uniplu_daily_inventory.rds</code></td>
+<td>Inventário dos registros diários identificados na Uniplu.</td>
+</tr>
+<tr class="even">
+<td><code>uniplu_daily_sta_years.rds</code></td>
+<td>Resumo da cobertura temporal de cada estação.</td>
+</tr>
+<tr class="odd">
+<td><code>uniplu_daily_keep30.rds</code></td>
+<td>Estações com pelo menos 30 anos identificados nos arquivos ZIP.</td>
+</tr>
+<tr class="even">
+<td><code>stations/uniplu_daily_year/*.parquet</code></td>
+<td>Registros diários extraídos, organizados por arquivo de origem.</td>
+</tr>
+<tr class="odd">
+<td><code>stations_analyzed/&lt;codigo&gt;_analyzed.rds</code></td>
+<td>Série diária processada de cada estação aprovada.</td>
+</tr>
+<tr class="even">
+<td><code>out_analise_uniplu.rds</code></td>
+<td>Inventário final das estações selecionadas, incluindo localização e período de observação.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observação:</strong> a seleção utiliza a quantidade de anos válidos, mas os arquivos individuais preservam toda a série processada, inclusive os anos que não satisfizeram o critério de disponibilidade.</p>
+</section>
+</section>
+<section id="script-02-3_uniplu_hydro_year_def" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="script-02-3_uniplu_hydro_year_def"><span class="header-section-number">9.2</span> Script 02 — 3_uniplu_hydro_year_def</h2>
+<section id="finalidade-1" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="finalidade-1"><span class="header-section-number">9.2.1</span> Finalidade</h3>
+<p>O script caracteriza a <strong>sazonalidade dos eventos extremos de precipitação diária</strong> das estações selecionadas no Script 01. Para isso, utiliza a abordagem <em>Peaks Over Threshold</em> (POT) para identificar eventos extremos e aplica estatística circular às suas datas de ocorrência.</p>
+<p>O objetivo é determinar a época predominante dos extremos (<code>theta</code>) e seu grau de concentração sazonal (<code>rbar</code>), fornecendo informações para a posterior definição do início do ano hidrológico.</p>
+</section>
+<section id="função-principal-1" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="função-principal-1"><span class="header-section-number">9.2.2</span> Função principal</h3>
+<p><strong><code>pot_station(sta, serie, r = 1)</code></strong></p>
+<p><strong>Dados de entrada:</strong> a função recebe os seguintes argumentos:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argumento</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sta</code></td>
+<td>Série temporal de precipitação de uma estação, contendo <code>codigo</code>, <code>dt</code> e a variável de precipitação.</td>
+</tr>
+<tr class="even">
+<td><code>serie</code></td>
+<td>Nome da coluna de precipitação a ser analisada (<code>"p"</code>).</td>
+</tr>
+<tr class="odd">
+<td><code>r</code></td>
+<td>Parâmetro de agrupamento das excedências POT, definido como 1.</td>
+</tr>
+</tbody>
+</table>
+<p>A função estima um limiar adaptativo de precipitação extrema por meio de <code>hill.adapt()</code>, utilizando o percentil 99 como alternativa quando o limiar estimado é <code>NA</code> ou <code>NaN</code>. Em seguida, identifica agrupamentos de excedências com <code>evd::clusters()</code> e seleciona o máximo de precipitação de cada agrupamento.</p>
+<p>As datas desses máximos são convertidas em ângulos no ciclo anual, considerando 365 dias. A partir desses ângulos, calculam-se as componentes médias do vetor circular, sua direção preliminar e seu comprimento, que representa a concentração sazonal dos extremos.</p>
+<p><strong>Dados de saída:</strong> a função retorna um <code>tibble</code> contendo:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>codigo</code></td>
+<td>Código identificador da estação.</td>
+</tr>
+<tr class="even">
+<td><code>xbar</code></td>
+<td>Média dos cossenos dos ângulos dos eventos extremos.</td>
+</tr>
+<tr class="odd">
+<td><code>ybar</code></td>
+<td>Média dos senos dos ângulos dos eventos extremos.</td>
+</tr>
+<tr class="even">
+<td><code>thetabar</code></td>
+<td>Direção angular preliminar do vetor médio, em radianos.</td>
+</tr>
+<tr class="odd">
+<td><code>thetavar</code></td>
+<td>Variância linear dos ângulos dos eventos extremos.</td>
+</tr>
+<tr class="even">
+<td><code>rbar</code></td>
+<td>Comprimento do vetor médio, indicando a concentração sazonal dos eventos.</td>
+</tr>
+</tbody>
+</table>
+<p>O parâmetro <code>rbar</code> varia entre 0 e 1, com valores próximos de 1 indicando maior concentração dos extremos em determinada época do ano.</p>
+</section>
+<section id="fluxo-geral-de-processamento-1" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-1"><span class="header-section-number">9.2.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê <code>out_analise_uniplu.rds</code> e seleciona as estações com pelo menos 30 anos considerados válidos no Script 01. Para cada estação, a série diária processada é carregada e submetida à função <code>pot_station()</code>.</p>
+<p>Os resultados individuais são consolidados em uma única tabela. Posteriormente, a direção angular preliminar (<code>thetabar</code>) é ajustada conforme o quadrante definido pelas componentes <code>xbar</code> e <code>ybar</code>, originando a variável <code>theta</code>, que representa a direção circular média dos eventos extremos.</p>
+<p>Por fim, são incorporados os metadados das estações, incluindo localização geográfica, rede de monitoramento e período de observação.</p>
+<p>A análise utiliza as séries completas das estações selecionadas, sem remover individualmente os anos que não atenderam ao critério de disponibilidade anual.</p>
+</section>
+<section id="arquivo-gerado" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="arquivo-gerado"><span class="header-section-number">9.2.4</span> Arquivo gerado</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_hydroyear_uniplu.rds</code></td>
+<td>Base consolidada com os indicadores de sazonalidade (<code>xbar</code>, <code>ybar</code>, <code>thetabar</code>, <code>thetavar</code>, <code>rbar</code> e <code>theta</code>), quadrante e metadados das estações.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observação:</strong> o script caracteriza a sazonalidade dos eventos extremos, mas ainda não define diretamente o mês de início do ano hidrológico. Essa definição é realizada em uma etapa posterior, utilizando os indicadores calculados aqui.</p>
+</section>
+</section>
+<section id="script-03-4_uniplu_mapas" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="script-03-4_uniplu_mapas"><span class="header-section-number">9.3</span> Script 03 — 4_uniplu_mapas</h2>
+<section id="finalidade-2" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="finalidade-2"><span class="header-section-number">9.3.1</span> Finalidade</h3>
+<p>O script produz mapas da <strong>sazonalidade dos eventos extremos de precipitação diária</strong>, utilizando os indicadores de estatística circular calculados no Script 02. As estações são representadas por setas cuja orientação indica a época predominante dos extremos (<code>theta</code>), enquanto o comprimento representa a concentração sazonal relativa (<code>rbar</code>).</p>
+<p>São gerados um mapa nacional, mapas individuais por unidade da federação e um painel reunindo os mapas estaduais.</p>
+</section>
+<section id="rotinas-principais" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="rotinas-principais"><span class="header-section-number">9.3.2</span> Rotinas principais</h3>
+<p>O script não define funções próprias, utilizando principalmente funções dos pacotes <code>ggplot2</code>, <code>sf</code>, <code>geobr</code> e <code>patchwork</code> para construir os mapas.</p>
+<p><strong>Dados de entrada:</strong> o arquivo <code>df_hydroyear_uniplu.rds</code>, contendo:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>codigo</code></td>
+<td>Código identificador da estação.</td>
+</tr>
+<tr class="even">
+<td><code>lat</code>, <code>long</code></td>
+<td>Coordenadas geográficas da estação.</td>
+</tr>
+<tr class="odd">
+<td><code>estado</code></td>
+<td>Unidade da federação.</td>
+</tr>
+<tr class="even">
+<td><code>theta</code></td>
+<td>Direção circular média dos eventos extremos, em radianos.</td>
+</tr>
+<tr class="odd">
+<td><code>rbar</code></td>
+<td>Concentração sazonal dos eventos extremos.</td>
+</tr>
+</tbody>
+</table>
+<p>Também são utilizadas as malhas territoriais do Brasil e das unidades da federação, obtidas pelo pacote <code>geobr</code>.</p>
+<p>As principais rotinas de visualização são:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rotina</th>
+<th>Processamento</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>geom_spoke()</code></td>
+<td>Representa cada estação por uma seta orientada por <code>theta</code>, com comprimento associado a <code>rbar</code> e cor referente ao mês típico dos extremos.</td>
+<td>Camada gráfica de setas.</td>
+</tr>
+<tr class="even">
+<td><code>g_brasil</code></td>
+<td>Combina as setas com os limites territoriais brasileiros.</td>
+<td>Mapa nacional.</td>
+</tr>
+<tr class="odd">
+<td><code>g_one</code></td>
+<td>Constrói mapas individuais para cada UF, utilizando as estações e os respectivos limites estaduais.</td>
+<td>Mapa estadual.</td>
+</tr>
+<tr class="even">
+<td><code>wrap_plots()</code></td>
+<td>Organiza os mapas individuais em um painel.</td>
+<td>Painel com os mapas estaduais.</td>
+</tr>
+<tr class="odd">
+<td><code>ggsave()</code></td>
+<td>Exporta as figuras produzidas.</td>
+<td>Arquivos PNG.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fluxo-geral-de-processamento-2" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-2"><span class="header-section-number">9.3.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê <code>df_hydroyear_uniplu.rds</code> e seleciona as estações com coordenadas geográficas e indicadores <code>theta</code> e <code>rbar</code> disponíveis. Opcionalmente, o processamento pode ser restrito a uma unidade da federação por meio de <code>TEST_UF</code>.</p>
+<p>Em seguida, o parâmetro <code>rbar</code> é reescalonado para definir o comprimento gráfico das setas, enquanto <code>theta</code> determina sua orientação e é convertido em um mês do calendário para atribuição das cores.</p>
+<p>O mapa nacional é construído com os limites territoriais do Brasil e as setas das estações. Posteriormente, o script gera mapas individuais por UF, que são reunidos em um painel utilizando <code>patchwork</code>.</p>
+</section>
+<section id="arquivos-gerados-1" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="arquivos-gerados-1"><span class="header-section-number">9.3.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fig3_uniplu.png</code></td>
+<td>Mapa nacional com setas representando a sazonalidade dos eventos extremos.</td>
+</tr>
+<tr class="even">
+<td><code>fig3_uniplu_estados.png</code></td>
+<td>Painel com os mapas individuais das unidades da federação.</td>
+</tr>
+<tr class="odd">
+<td><code>fig3_setas_uf/&lt;UF&gt;.png</code></td>
+<td>Mapa individual de cada UF com as setas das estações.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="script-04-5_uniplu_fig3_postos" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="script-04-5_uniplu_fig3_postos"><span class="header-section-number">9.4</span> Script 04 — 5_uniplu_fig3_postos</h2>
+<section id="finalidade-3" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="finalidade-3"><span class="header-section-number">9.4.1</span> Finalidade</h3>
+<p>O script produz diagramas circulares para representar a <strong>sazonalidade dos eventos extremos de precipitação</strong> das estações analisadas no Script 02. Cada estação é representada por um ponto cujas coordenadas (<code>xbar</code>, <code>ybar</code>) indicam a direção média dos eventos extremos, enquanto a distância ao centro corresponde à concentração sazonal (<code>rbar</code>).</p>
+<p>São geradas uma figura para o conjunto de estações analisadas e figuras individuais por unidade da federação.</p>
+</section>
+<section id="funções-principais" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="funções-principais"><span class="header-section-number">9.4.2</span> Funções principais</h3>
+<p><strong>Dados de entrada:</strong> arquivo <code>df_hydroyear_uniplu.rds</code>, contendo <code>codigo</code>, <code>estado</code>, <code>xbar</code>, <code>ybar</code> e <code>rbar</code>.</p>
+<p>O script utiliza quatro funções próprias:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Dados de entrada</th>
+<th>Processamento e saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>get_scale_month()</code></td>
+<td>Não recebe argumentos.</td>
+<td>Calcula as coordenadas circulares dos 12 meses, retornando <code>xscale</code> e <code>yscale</code> para posicionamento das divisões mensais.</td>
+</tr>
+<tr class="even">
+<td><code>get_scale_text_month(r)</code></td>
+<td>Raio <code>r</code> para posicionamento dos rótulos.</td>
+<td>Retorna as coordenadas circulares dos nomes dos meses, utilizando o raio informado.</td>
+</tr>
+<tr class="odd">
+<td><code>plot_fig3_postos(df, titulo)</code></td>
+<td>Tabela de estações com <code>xbar</code> e <code>ybar</code>, e título da figura.</td>
+<td>Retorna um objeto <code>ggplot</code> com os pontos das estações, círculos de referência e identificação dos meses. Para conjuntos com pelo menos oito estações, adiciona curvas de densidade bidimensional.</td>
+</tr>
+<tr class="even">
+<td><code>salvar_fig3(g, caminho)</code></td>
+<td>Objeto gráfico <code>g</code> e caminho do arquivo.</td>
+<td>Salva a figura em PNG, com dimensões de 15 × 15 cm e resolução de 300 dpi.</td>
+</tr>
+</tbody>
+</table>
+<p>Os círculos de referência possuem raios de 0,25, 0,50, 0,75 e 1,00, permitindo avaliar visualmente a concentração sazonal das estações.</p>
+</section>
+<section id="fluxo-geral-de-processamento-3" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-3"><span class="header-section-number">9.4.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê <code>df_hydroyear_uniplu.rds</code> e seleciona as estações com valores válidos de <code>xbar</code>, <code>ybar</code>, <code>rbar</code> e identificação estadual. Opcionalmente, os dados podem ser restritos a uma UF por meio de <code>TEST_UF</code>.</p>
+<p>Em seguida, as funções auxiliares definem as posições dos meses e dos círculos de referência. A função <code>plot_fig3_postos()</code> é utilizada para construir a figura geral e, posteriormente, as figuras individuais de cada estado.</p>
+<p>Todas as figuras são exportadas pela função <code>salvar_fig3()</code>, mantendo a mesma escala e configuração gráfica.</p>
+</section>
+<section id="arquivos-gerados-2" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="arquivos-gerados-2"><span class="header-section-number">9.4.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fig3_postos_uniplu.png</code></td>
+<td>Diagrama circular com todas as estações do domínio analisado.</td>
+</tr>
+<tr class="even">
+<td><code>fig3_postos_uf/&lt;UF&gt;.png</code></td>
+<td>Diagrama circular individual das estações de cada UF.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="script-05-6_uniplu_hydro_year_escolhido" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="script-05-6_uniplu_hydro_year_escolhido"><span class="header-section-number">9.5</span> Script 05 — 6_uniplu_hydro_year_escolhido</h2>
+<section id="finalidade-4" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="finalidade-4"><span class="header-section-number">9.5.1</span> Finalidade</h3>
+<p>O script determina o <strong>mês de início do ano hidrológico de cada estação diária da Uniplu</strong>, combinando a sazonalidade dos eventos extremos com a climatologia mensal da precipitação.</p>
+<p>A definição utiliza um critério híbrido baseado em <code>rbar</code>: para estações com concentração sazonal igual ou superior a 0,30, adota-se o mês oposto à época predominante dos extremos (<code>theta + π</code>). Para as demais estações, utiliza-se o último mês do maior período seco consecutivo.</p>
+<p>Além da classificação, o script produz tabelas de resultados, resumos estatísticos e mapas de distribuição espacial.</p>
+</section>
+<section id="funções-principais-1" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="funções-principais-1"><span class="header-section-number">9.5.2</span> Funções principais</h3>
+<p><strong>Dados de entrada:</strong> são utilizados dois arquivos produzidos anteriormente:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_hydroyear_uniplu.rds</code></td>
+<td>Indicadores <code>theta</code> e <code>rbar</code>, identificação e coordenadas das estações (Script 02).</td>
+</tr>
+<tr class="even">
+<td><code>stations_analyzed/&lt;codigo&gt;_analyzed.rds</code></td>
+<td>Séries diárias de precipitação (<code>dt</code>, <code>p</code>) processadas no Script 01.</td>
+</tr>
+</tbody>
+</table>
+<p>As principais funções próprias são:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Dados de entrada</th>
+<th>Processamento e saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>climatologia_mensal(sta, frac_na)</code></td>
+<td>Série diária com <code>dt</code> e <code>p</code>; fração máxima de falhas, definida como 0,20.</td>
+<td>Calcula os totais mensais dos meses-ano válidos e suas medianas climatológicas. Retorna as 12 medianas (<code>p_med</code>), o mês de menor mediana (<code>mes_mais_seco</code>) e <code>n_anos_clima</code>.</td>
+</tr>
+<tr class="even">
+<td><code>maior_vao_circular(quiet)</code></td>
+<td>Vetor lógico de 12 posições, identificando os meses secos.</td>
+<td>Identifica a maior sequência consecutiva de meses secos, considerando a continuidade entre dezembro e janeiro. Retorna início, fim e comprimento da sequência.</td>
+</tr>
+<tr class="odd">
+<td><code>ultimo_mes_seco(p_med, seco_frac)</code></td>
+<td>Vetor das 12 medianas mensais e fração de 0,15 da amplitude anual.</td>
+<td>Classifica os meses secos, identifica o maior bloco consecutivo e retorna seu último mês (<code>mes</code>) e o número total de meses secos (<code>n_secos</code>).</td>
+</tr>
+<tr class="even">
+<td><code>mes_oposto_de_theta(theta, mes_inicio_oposto)</code></td>
+<td>Direção circular média <code>theta</code> e, opcionalmente, um mês oposto previamente calculado.</td>
+<td>Retorna o mês correspondente à direção <code>theta + π</code>, utilizando prioritariamente o mês preexistente quando válido.</td>
+</tr>
+<tr class="odd">
+<td><code>mapa_mes(df, col_mes, bbox, pt_size)</code></td>
+<td>Tabela de estações, coluna do mês, recorte espacial opcional e tamanho dos pontos.</td>
+<td>Retorna um objeto <code>ggplot</code> com a distribuição espacial dos meses atribuídos.</td>
+</tr>
+</tbody>
+</table>
+<p>As funções auxiliares <code>achar_rds()</code> e <code>dir_analyzed()</code> verificam a existência dos arquivos e diretórios de entrada. O script também define <code>legenda_circular()</code>, mas essa função não é utilizada nas figuras geradas.</p>
+<p>A função <code>climatologia_mensal()</code> considera válidos os meses-ano com até 20% de falhas. Para cada mês do calendário, calcula a mediana dos totais mensais disponíveis.</p>
+</section>
+<section id="fluxo-geral-de-processamento-4" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-4"><span class="header-section-number">9.5.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê os indicadores de sazonalidade calculados no Script 02 e recupera as séries diárias das estações correspondentes. Para cada série, calcula a climatologia mensal e identifica o último mês do maior período seco consecutivo.</p>
+<p>Posteriormente, os resultados são associados aos valores de <code>theta</code> e <code>rbar</code>. O mês de início do ano hidrológico é definido conforme a regra:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Condição</th>
+<th>Mês de início</th>
+<th>Identificação da fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rbar &gt;= 0.30</code></td>
+<td>Mês oposto à direção dos extremos (<code>theta + π</code>).</td>
+<td><code>theta_pi</code></td>
+</tr>
+<tr class="even">
+<td><code>rbar &lt; 0.30</code></td>
+<td>Último mês do maior período seco consecutivo.</td>
+<td><code>ultimo_mes_seco</code></td>
+</tr>
+</tbody>
+</table>
+<p>O resultado é armazenado em <code>mes_hibrido_rbar</code>, enquanto <code>fonte_hibrido_rbar</code> registra o critério utilizado. Também são produzidos resumos para o conjunto analisado, a Região Sul e as unidades da federação.</p>
+<p>Por fim, o script gera mapas dos meses atribuídos, da regra utilizada por estação e da distribuição de <code>rbar</code>, além de histogramas de concentração sazonal.</p>
+</section>
+<section id="arquivos-gerados-3" class="level3" data-number="9.5.4">
+<h3 data-number="9.5.4" class="anchored" data-anchor-id="arquivos-gerados-3"><span class="header-section-number">9.5.4</span> Arquivos gerados</h3>
+<p><strong>Tabelas:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_hidro_rbar_hibrido.rds</code></td>
+<td>Base completa com os indicadores, medianas climatológicas, meses calculados e resultado híbrido por estação.</td>
+</tr>
+<tr class="even">
+<td><code>df_hidro_rbar_hibrido.csv</code></td>
+<td>Tabela simplificada dos meses atribuídos e dos critérios utilizados.</td>
+</tr>
+<tr class="odd">
+<td><code>df_hidro_rbar_hibrido_resumo.csv</code></td>
+<td>Resumo estatístico do conjunto analisado e da Região Sul.</td>
+</tr>
+<tr class="even">
+<td><code>df_hidro_rbar_hibrido_uf.csv</code></td>
+<td>Resumo dos resultados por unidade da federação.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Figuras — pasta <code>pictures/ano_hidro_rbar_hibrido/</code>:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fig_brasil_hibrido_rbar.png</code></td>
+<td>Distribuição espacial nacional dos meses de início.</td>
+</tr>
+<tr class="even">
+<td><code>fig_sul_hibrido_rbar.png</code></td>
+<td>Distribuição dos meses de início na Região Sul.</td>
+</tr>
+<tr class="odd">
+<td><code>fig_brasil_fonte_hibrido.png</code></td>
+<td>Distribuição espacial da regra utilizada em cada estação.</td>
+</tr>
+<tr class="even">
+<td><code>fig_sul_fonte_hibrido.png</code></td>
+<td>Regra utilizada nas estações da Região Sul.</td>
+</tr>
+<tr class="odd">
+<td><code>fig_rbar_brasil.png</code></td>
+<td>Distribuição espacial da concentração sazonal <code>rbar</code>.</td>
+</tr>
+<tr class="even">
+<td><code>fig_hist_rbar.png</code></td>
+<td>Histogramas de <code>rbar</code> para o Sul e o restante do Brasil.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="script-06-9_subdiario_ano_hidro_uniplu" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="script-06-9_subdiario_ano_hidro_uniplu"><span class="header-section-number">9.6</span> Script 06 — 9_subdiario_ano_hidro_uniplu</h2>
+<section id="finalidade-5" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="finalidade-5"><span class="header-section-number">9.6.1</span> Finalidade</h3>
+<p>O script atribui o <strong>mês de início do ano hidrológico às estações subdiárias da Uniplu</strong>, utilizando como referência os meses previamente definidos para as estações diárias no Script 05.</p>
+<p>A atribuição considera as dez estações de referência mais próximas de cada posto subdiário, classificando sua vizinhança como mancha ou transição.</p>
+<p>O código possui dois blocos de processamento, diferenciados pela origem dos inventários subdiários utilizados.</p>
+</section>
+<section id="funções-principais-2" class="level3" data-number="9.6.2">
+<h3 data-number="9.6.2" class="anchored" data-anchor-id="funções-principais-2"><span class="header-section-number">9.6.2</span> Funções principais</h3>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo ou fonte</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_hidro_rbar_hibrido.rds</code></td>
+<td>Meses de início, coordenadas e indicadores das estações diárias de referência.</td>
+</tr>
+<tr class="even">
+<td><code>df_subdiario_inventario.rds</code> ou arquivos Parquet</td>
+<td>Inventário subdiário utilizado no primeiro bloco.</td>
+</tr>
+<tr class="odd">
+<td><code>Dados_Uniplu/*.zip</code></td>
+<td>Arquivos utilizados para construir o inventário subdiário no segundo bloco.</td>
+</tr>
+</tbody>
+</table>
+<p>As principais funções utilizadas são:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mes_para_ang(m)</code></td>
+<td>Mês numérico.</td>
+<td>Ângulo correspondente em radianos.</td>
+</tr>
+<tr class="even">
+<td><code>ang_para_mes(th)</code></td>
+<td>Ângulo em radianos.</td>
+<td>Mês correspondente, entre 1 e 12.</td>
+</tr>
+<tr class="odd">
+<td><code>rbar_meses(meses)</code></td>
+<td>Meses das estações vizinhas.</td>
+<td>Concentração circular dos meses (<code>rbar_local</code>).</td>
+</tr>
+<tr class="even">
+<td><code>media_circ_mes(meses, pesos)</code></td>
+<td>Meses e pesos das estações vizinhas.</td>
+<td>Mês obtido pela média circular ponderada.</td>
+</tr>
+<tr class="odd">
+<td><code>FNN::get.knnx()</code></td>
+<td>Coordenadas das estações diárias e subdiárias.</td>
+<td>Índices e distâncias dos vizinhos mais próximos.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fluxo-geral-de-processamento-5" class="level3" data-number="9.6.3">
+<h3 data-number="9.6.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-5"><span class="header-section-number">9.6.3</span> Fluxo geral de processamento</h3>
+<p>O primeiro bloco utiliza um inventário subdiário existente ou o constrói a partir de arquivos Parquet. O segundo bloco realiza essa etapa diretamente a partir dos arquivos ZIP originais da Uniplu. Em ambos os casos, são selecionadas estações presentes em pelo menos oito anos dos arquivos.</p>
+<p>Para cada estação subdiária, o script identifica dez estações diárias vizinhas e utiliza seus meses de início para classificar a vizinhança como <strong>mancha ou transição</strong>. Nas regiões de mancha, adota a moda dos meses dos vizinhos; nas regiões de transição, utiliza a média circular ponderada.</p>
+<p>Os resultados são consolidados em tabelas contendo o mês atribuído (<code>mes_inicio</code>), a classificação espacial (<code>classe_espacial</code>) e o procedimento utilizado (<code>fonte_inicio</code>). Por fim, são produzidos mapas dos meses de início e das classes espaciais.</p>
+</section>
+<section id="arquivos-gerados-4" class="level3" data-number="9.6.4">
+<h3 data-number="9.6.4" class="anchored" data-anchor-id="arquivos-gerados-4"><span class="header-section-number">9.6.4</span> Arquivos gerados</h3>
+<p><strong>Bloco A — Inventário existente ou Parquet</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_subdiario_inventario.rds</code> e <code>.csv</code></td>
+<td>Inventário criado quando necessário.</td>
+</tr>
+<tr class="even">
+<td><code>df_subdiario_ano_hidro_uniplu.rds</code> e <code>.csv</code></td>
+<td>Resultados da atribuição do mês de início.</td>
+</tr>
+<tr class="odd">
+<td><code>df_subdiario_ano_hidro_uniplu_uf.csv</code></td>
+<td>Resumo por UF.</td>
+</tr>
+<tr class="even">
+<td><code>subdiario_uniplu/fig_subdiario_mes_inicio_uniplu.png</code></td>
+<td>Mapa dos meses atribuídos.</td>
+</tr>
+<tr class="odd">
+<td><code>subdiario_uniplu/fig_subdiario_mancha_transicao.png</code></td>
+<td>Mapa das classes espaciais.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bloco B — Inventário dos ZIPs da Uniplu</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>uniplu_subdiario_inventory.rds</code></td>
+<td>Inventário dos registros subdiários.</td>
+</tr>
+<tr class="even">
+<td><code>uniplu_subdiario_sta_years.rds</code></td>
+<td>Cobertura temporal por estação.</td>
+</tr>
+<tr class="odd">
+<td><code>uniplu_subdiario_keep8.rds</code></td>
+<td>Estações presentes em pelo menos oito anos.</td>
+</tr>
+<tr class="even">
+<td><code>uniplu_subdiario_inventory_keep8.rds</code></td>
+<td>Inventário das estações pré-selecionadas.</td>
+</tr>
+<tr class="odd">
+<td><code>df_uniplu_subdiario_ano_hidro.rds</code></td>
+<td>Resultados da atribuição do mês de início.</td>
+</tr>
+<tr class="even">
+<td><code>df_uniplu_subdiario_ano_hidro_uf.csv</code></td>
+<td>Resumo por UF.</td>
+</tr>
+<tr class="odd">
+<td><code>uniplu_subdiario/fig_uniplu_subdiario_mes_inicio.png</code></td>
+<td>Mapa dos meses atribuídos.</td>
+</tr>
+<tr class="even">
+<td><code>uniplu_subdiario/fig_uniplu_subdiario_mancha_transicao.png</code></td>
+<td>Mapa das classes espaciais.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="scripts---geração-das-máximas" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Scripts - Geração das Máximas</h1>
+<section id="script-01-12_subdiario_imax" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="script-01-12_subdiario_imax"><span class="header-section-number">10.1</span> Script 01 — 12_subdiario_imax</h2>
+<section id="finalidade-6" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="finalidade-6"><span class="header-section-number">10.1.1</span> Finalidade</h3>
+<p>O script realiza a <strong>extração das intensidades máximas anuais de precipitação subdiária (IMAX)</strong>, considerando o ano hidrológico específico de cada estação, previamente definido por vizinhança espacial no Script 06.</p>
+<p>São analisadas durações de 10 a 50 minutos e de 1 a 24 horas, conforme a resolução temporal disponível. O processamento aplica controle de qualidade com tolerância máxima de 20% de falhas por ano hidrológico e identifica estações com pelo menos oito anos válidos em todas as 24 durações horárias.</p>
+</section>
+</section>
+<section id="funções-principais-3" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="funções-principais-3"><span class="header-section-number">10.2</span> Funções principais</h2>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo ou fonte</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_subdiario_ano_hidro_uniplu.rds</code></td>
+<td>Mês de início do ano hidrológico de cada estação, calculado no Script 06.</td>
+</tr>
+<tr class="even">
+<td><code>df_subdiario_inventario.rds</code></td>
+<td>Inventário e metadados das estações subdiárias. O script aceita <code>df_subdiario_mes_oposto_nearest.rds</code> como alternativa.</td>
+</tr>
+<tr class="odd">
+<td><code>subdiario_br/&lt;UF&gt;/*_data.parquet</code></td>
+<td>Séries de precipitação subdiária utilizadas na extração das máximas.</td>
+</tr>
+</tbody>
+</table>
+<p>As funções auxiliares são carregadas de três arquivos R:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fun_filter_set()</code></td>
+<td>Tabela de precipitação com estação, data, chuva, resolução e responsável.</td>
+<td>Série temporal com grade regularizada e datas ausentes preenchidas. Quando solicitado, também pode aplicar filtros de disponibilidade.</td>
+</tr>
+<tr class="even">
+<td><code>fun_group_ts()</code></td>
+<td>Lista de séries por estação e nome da variável de resolução temporal.</td>
+<td>Listas de estações agrupadas por resolução temporal.</td>
+</tr>
+<tr class="odd">
+<td><code>imax.wateryear()</code></td>
+<td>Séries temporais, durações, mês inicial por estação e parâmetros de controle de qualidade.</td>
+<td>Tabela com as máximas anuais (<code>imax</code>) por estação, duração e ano hidrológico, acompanhadas dos diagnósticos de disponibilidade.</td>
+</tr>
+</tbody>
+</table>
+<p>No processamento subdiário, <code>fun_filter_set()</code> é utilizada com <code>filter = FALSE</code>, preservando o controle de qualidade para a etapa de extração das máximas. A função também possui tratamento específico para registros do CEMADEN.</p>
+<p>A função <code>imax.wateryear()</code> retorna, entre outras, as variáveis:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gauge_code</code></td>
+<td>Código da estação.</td>
+</tr>
+<tr class="even">
+<td><code>d</code></td>
+<td>Duração analisada, em horas.</td>
+</tr>
+<tr class="odd">
+<td><code>imax</code></td>
+<td>Intensidade máxima anual, em mm/h.</td>
+</tr>
+<tr class="even">
+<td><code>date</code></td>
+<td>Data de ocorrência da máxima.</td>
+</tr>
+<tr class="odd">
+<td><code>wateryear</code></td>
+<td>Ano hidrológico correspondente.</td>
+</tr>
+<tr class="even">
+<td><code>start_month</code></td>
+<td>Mês de início do ano hidrológico.</td>
+</tr>
+<tr class="odd">
+<td><code>na_prct_yr</code></td>
+<td>Proporção de falhas no ano hidrológico.</td>
+</tr>
+<tr class="even">
+<td><code>qc_year</code></td>
+<td>Indicador de aprovação no controle de qualidade anual.</td>
+</tr>
+</tbody>
+</table>
+<section id="fluxo-geral-de-processamento-6" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="fluxo-geral-de-processamento-6"><span class="header-section-number">10.2.1</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script associa os meses de início do ano hidrológico aos metadados das estações subdiárias. Em seguida, realiza o processamento por unidade da federação, lendo os arquivos Parquet de precipitação.</p>
+<p>As séries são regularizadas por <code>fun_filter_set()</code> e agrupadas conforme a resolução temporal por <code>fun_group_ts()</code>. Posteriormente, <code>imax.wateryear()</code> extrai as máximas para as durações compatíveis com cada resolução, aplicando o controle de qualidade ao ano hidrológico completo.</p>
+<p>Os resultados são armazenados temporariamente por UF e depois consolidados em uma base nacional. Por fim, o script identifica as estações com pelo menos oito anos válidos em todas as 24 durações de 1 a 24 horas, produzindo tabelas de seleção e diagnóstico.</p>
+</section>
+<section id="arquivos-gerados-5" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="arquivos-gerados-5"><span class="header-section-number">10.2.2</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_subdiario_mes_inicio_imax.rds</code> e <code>.csv</code></td>
+<td>Inventário das estações com o mês de início utilizado na extração.</td>
+</tr>
+<tr class="even">
+<td><code>subdiario_cache/imax_by_uf_hidro_qc20/&lt;UF&gt;_imax.rds</code></td>
+<td>Resultados intermediários das máximas por UF.</td>
+</tr>
+<tr class="odd">
+<td><code>df_imax_subdiario.rds</code></td>
+<td>Base nacional consolidada de máximas subdiárias.</td>
+</tr>
+<tr class="even">
+<td><code>df_imax_subdiario.parquet</code> e <code>.csv</code></td>
+<td>Versões da base consolidada para armazenamento e consulta.</td>
+</tr>
+<tr class="odd">
+<td><code>selecao_estacoes_hidro_qc20.csv</code></td>
+<td>Diagnóstico de aprovação das estações nas 24 durações horárias, considerando pelo menos oito anos válidos em cada duração.</td>
+</tr>
+<tr class="even">
+<td><code>resumo_selecao_por_uf.csv</code></td>
+<td>Quantidade de estações avaliadas e aprovadas por UF.</td>
+</tr>
+<tr class="odd">
+<td><code>auditoria_cemaden_hidro_qc20.csv</code></td>
+<td>Diagnóstico de disponibilidade anual das estações do CEMADEN.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="script-02-13_uniplu_imax_hidro" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="script-02-13_uniplu_imax_hidro"><span class="header-section-number">10.3</span> Script 02 — 13_uniplu_imax_hidro</h2>
+<section id="finalidade-7" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="finalidade-7"><span class="header-section-number">10.3.1</span> Finalidade</h3>
+<p>O script realiza a <strong>extração das intensidades máximas anuais de precipitação diária</strong>, considerando o mês de início do ano hidrológico definido para cada estação da Uniplu pelo método híbrido do Script 05.</p>
+<p>São analisadas as durações de 1, 2, 3, 4, 5, 6, 7 e 10 dias. O processamento aplica controle de qualidade com tolerância máxima de 20% de falhas por ano hidrológico e identifica estações com pelo menos 30 anos válidos em todas as oito durações.</p>
+</section>
+<section id="função-principal-2" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="função-principal-2"><span class="header-section-number">10.3.2</span> Função principal</h3>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_hidro_rbar_hibrido.rds</code></td>
+<td>Meses de início do ano hidrológico e metadados das estações diárias, obtidos no Script 05.</td>
+</tr>
+<tr class="even">
+<td><code>stations_analyzed/&lt;codigo&gt;_analyzed.rds</code></td>
+<td>Séries diárias de precipitação processadas no Script 01.</td>
+</tr>
+</tbody>
+</table>
+<p>A função principal utilizada é:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>imax.wateryear()</code></td>
+<td>Lista de séries diárias, durações em horas, mês inicial de cada estação e parâmetros de controle de qualidade.</td>
+<td>Tabela de intensidades máximas anuais para cada estação, duração e ano hidrológico, incluindo indicadores de disponibilidade.</td>
+</tr>
+</tbody>
+</table>
+<p>A função é carregada do arquivo auxiliar <code>fun_imax_wateryear.R</code>, utilizado também pelo Script 07.</p>
+<p>As principais variáveis retornadas são <code>gauge_code</code>, <code>d</code>, <code>imax</code>, <code>date</code>, <code>wateryear</code>, <code>start_month</code>, <code>na_prct_yr</code> e <code>qc_year</code>. O script também acrescenta <code>d_days</code>, correspondente à duração em dias.</p>
+</section>
+<section id="fluxo-geral-de-processamento-7" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-7"><span class="header-section-number">10.3.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê <code>df_hidro_rbar_hibrido.rds</code> e identifica as estações com mês de início do ano hidrológico válido.</p>
+<p>O processamento é realizado por UF. Para cada estação, a série diária é carregada, organizada cronologicamente e regularizada entre a primeira e a última data observada.</p>
+<p>Em seguida, a função <code>imax.wateryear()</code> calcula as máximas anuais das oito durações, aplicando o controle de qualidade de 20% de falhas ao ano hidrológico completo. Os resultados são salvos por UF e posteriormente consolidados em uma base nacional.</p>
+<p>Por fim, o script identifica as estações com pelo menos 30 anos válidos em todas as durações analisadas, produzindo tabelas de seleção e resumos estatísticos.</p>
+</section>
+<section id="arquivos-gerados-6" class="level3" data-number="10.3.4">
+<h3 data-number="10.3.4" class="anchored" data-anchor-id="arquivos-gerados-6"><span class="header-section-number">10.3.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>uniplu_cache/imax_by_uf_hidro_qc20/&lt;UF&gt;_imax.rds</code></td>
+<td>Resultados intermediários das máximas diárias por UF.</td>
+</tr>
+<tr class="even">
+<td><code>df_imax_uniplu_hidro.rds</code></td>
+<td>Base nacional consolidada das máximas diárias por ano hidrológico.</td>
+</tr>
+<tr class="odd">
+<td><code>df_imax_uniplu_hidro.parquet</code> e <code>.csv</code></td>
+<td>Versões da base consolidada para armazenamento e consulta.</td>
+</tr>
+<tr class="even">
+<td><code>df_imax_uniplu_hidro_resumo.csv</code></td>
+<td>Resumo das máximas por duração, incluindo quantidade de observações, número de estações, mediana e percentil 95.</td>
+</tr>
+<tr class="odd">
+<td><code>selecao_estacoes_diario_hidro_qc20_mais30anos.csv</code></td>
+<td>Diagnóstico de aprovação das estações nas oito durações, considerando pelo menos 30 anos válidos em cada uma.</td>
+</tr>
+<tr class="even">
+<td><code>resumo_selecao_diario_por_uf_mais30anos.csv</code></td>
+<td>Quantidade de estações avaliadas e aprovadas por UF.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="script---modelos-bayesianos" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Script - Modelos Bayesianos</h1>
+<section id="script-01-gev_nonpooled_uniplu_diario_por_uf" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="script-01-gev_nonpooled_uniplu_diario_por_uf"><span class="header-section-number">11.1</span> Script 01 — GEV_nonpooled_uniplu_diario_por_uf</h2>
+<section id="finalidade-8" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="finalidade-8"><span class="header-section-number">11.1.1</span> Finalidade</h3>
+<p>O script realiza o <strong>ajuste bayesiano da distribuição generalizada de valores extremos (GEV)</strong> às séries de intensidades máximas anuais de precipitação diária da Uniplu, considerando as durações de 1, 2, 3, 4, 5, 6, 7 e 10 dias.</p>
+<p>Os modelos são ajustados individualmente por estação (<em>non-pooled</em>), com uma estrutura de invariância de escala entre durações. O processamento é organizado por unidade da federação e permite retomar ajustes anteriores.</p>
+</section>
+<section id="funções-principais-4" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="funções-principais-4"><span class="header-section-number">11.1.2</span> Funções principais</h3>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_imax_uniplu_hidro.rds</code></td>
+<td>Intensidades máximas anuais por estação, duração e ano hidrológico, produzidas no Script 08.</td>
+</tr>
+</tbody>
+</table>
+<p>As principais funções são:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>prepare_uf(uf)</code></td>
+<td>Sigla da UF.</td>
+<td>Lista com os dados das estações, identificadores e estatísticas auxiliares por duração.</td>
+</tr>
+<tr class="even">
+<td><code>get_station_data(gauge_code, dados_stan)</code></td>
+<td>Código da estação e base preparada.</td>
+<td>Série de máximas anuais da estação selecionada.</td>
+</tr>
+<tr class="odd">
+<td><code>make_stan_data_station(gauge_code, dados_stan)</code></td>
+<td>Código da estação e base preparada.</td>
+<td>Lista de dados para o Stan, incluindo máximas observadas, índices e durações.</td>
+</tr>
+<tr class="even">
+<td><code>make_nonpooled_diario_init(gauge_code, ctx)</code></td>
+<td>Código da estação e contexto de processamento.</td>
+<td>Valores iniciais dos parâmetros para a amostragem MCMC.</td>
+</tr>
+<tr class="odd">
+<td><code>fit_nonpooled_diario_station(gauge_code, ctx, seed)</code></td>
+<td>Código da estação, contexto e semente aleatória.</td>
+<td>Objeto <code>stanfit</code> com o ajuste bayesiano da estação.</td>
+</tr>
+</tbody>
+</table>
+<p>O modelo Stan, armazenado em <code>modelo_nonpooled_diario_stan</code>, estima os parâmetros estruturais <code>alpha</code>, <code>beta</code>, <code>H</code> e <code>theta</code>, os parâmetros GEV por duração (<code>mu</code>, <code>sigma</code>, <code>xi_d</code>) e parâmetros auxiliares de variabilidade. Também calcula a log-verossimilhança por observação (<code>log_lik</code>).</p>
+</section>
+<section id="fluxo-geral-de-processamento-8" class="level3" data-number="11.1.3">
+<h3 data-number="11.1.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-8"><span class="header-section-number">11.1.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê as máximas anuais e seleciona as estações com <strong>pelo menos 30 anos válidos em todas as oito durações</strong>. Registros duplicados por estação, duração e ano são consolidados, mantendo o maior valor.</p>
+<p>Em seguida, prepara os dados para o Stan e compila o modelo GEV. Para cada UF, as estações são ajustadas individualmente por MCMC, utilizando cinco cadeias e 20.000 iterações por cadeia, das quais 10.000 são destinadas ao aquecimento.</p>
+<p>O script verifica ajustes previamente salvos e processa somente as estações pendentes ou com erro. Os resultados e o resumo de execução são atualizados por UF.</p>
+</section>
+<section id="arquivos-gerados-7" class="level3" data-number="11.1.4">
+<h3 data-number="11.1.4" class="anchored" data-anchor-id="arquivos-gerados-7"><span class="header-section-number">11.1.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gev_nonpooled_by_uf/&lt;UF&gt;_fits.rds</code></td>
+<td>Lista dos ajustes Stan das estações da UF, incluindo eventuais erros registrados.</td>
+</tr>
+<tr class="even">
+<td><code>gev_nonpooled_by_uf/&lt;UF&gt;_meta.rds</code></td>
+<td>Metadados das durações, identificação das estações e situação dos ajustes (concluído, erro ou pendente).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observação:</strong> o código está configurado com <code>TEST_UF = "MG"</code> e <code>OUT_TAG = "BR"</code>. O caminho de <code>DIR_FLUXO</code> também precisa ser conferido, pois não contém uma pasta de saída explicitamente definida na atribuição apresentada. O script salva os ajustes, mas não produz diretamente tabelas consolidadas de parâmetros posteriores nem curvas IDF.</p>
+</section>
+</section>
+<section id="script-02-codigos_bayesiano_comparação_rs" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="script-02-codigos_bayesiano_comparação_rs"><span class="header-section-number">11.2</span> Script 02 — codigos_bayesiano_comparação_RS</h2>
+<section id="finalidade-9" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="finalidade-9"><span class="header-section-number">11.2.1</span> Finalidade</h3>
+<p>O documento organiza os dados e apresenta <strong>cinco modelos bayesianos GEV com invariância de escala</strong>, destinados à análise das intensidades máximas anuais de precipitação subdiária.</p>
+<p>Os modelos consideram durações de 1 a 24 horas e diferem principalmente na representação do parâmetro de forma da GEV (<code>xi</code>), permitindo avaliar estruturas locais e regionais.</p>
+</section>
+<section id="funções-e-modelos-principais" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="funções-e-modelos-principais"><span class="header-section-number">11.2.2</span> Funções e modelos principais</h3>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>df_imax_fellipe.pqt</code></td>
+<td>Base de máximas anuais de intensidade, contendo código da estação, duração, ano e valor máximo (<code>imax</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>A principal função própria é:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>make_stan_data_station(gauge_sel, dados, D0)</code></td>
+<td>Código da estação, tabela de máximas indexada e duração de referência.</td>
+<td>Lista de observações, durações e índices necessários para ajustar o modelo Stan individual da estação.</td>
+</tr>
+</tbody>
+</table>
+<p>O documento também define cinco modelos Stan:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Objeto no código</th>
+<th>Característica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Non-pooled</td>
+<td><code>modelo_nonpooled_total_por_estacao_stan</code></td>
+<td>Ajuste independente por estação, com parâmetros GEV específicos por duração.</td>
+</tr>
+<tr class="even">
+<td>Regional com <code>xi</code> comum</td>
+<td><code>modelo_bhm_xi_common_stan</code></td>
+<td>Um único parâmetro de forma compartilhado entre estações e durações.</td>
+</tr>
+<tr class="odd">
+<td>Regional com <code>xi</code> por duração</td>
+<td><code>modelo_bhm_xi_d_stan</code></td>
+<td>Parâmetro de forma específico de cada duração.</td>
+</tr>
+<tr class="even">
+<td>Regional com <code>xi</code> por estação</td>
+<td><code>modelo_bhm_xi_j_stan</code></td>
+<td>Parâmetro de forma específico de cada estação.</td>
+</tr>
+<tr class="odd">
+<td>Regional com <code>xi</code> por estação e duração</td>
+<td><code>modelo_bhm_xi_jd_stan</code></td>
+<td>Parâmetro de forma específico de cada combinação estação–duração.</td>
+</tr>
+</tbody>
+</table>
+<p>Todos os modelos utilizam a duração de referência de 24 horas e geram a variável <code>log_lik</code>, destinada a avaliações posteriores de ajuste e comparação.</p>
+</section>
+<section id="fluxo-geral-de-processamento-9" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-9"><span class="header-section-number">11.2.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o código lê a base de máximas anuais, consolida registros duplicados e seleciona estações com pelo menos oito anos válidos em todas as 24 durações.</p>
+<p>Em seguida, são construídos os identificadores numéricos das estações e durações, a base <code>dados_stan</code> e a lista <code>stan_data_regional</code>, utilizada pelos modelos regionais.</p>
+<p>Por fim, o documento define os cinco programas Stan, com diferentes estruturas para o parâmetro de forma da distribuição GEV.</p>
+</section>
+<section id="objetos-gerados" class="level3" data-number="11.2.4">
+<h3 data-number="11.2.4" class="anchored" data-anchor-id="objetos-gerados"><span class="header-section-number">11.2.4</span> Objetos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Objeto</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dados_modelo</code></td>
+<td>Base de máximas anuais após os filtros de seleção.</td>
+</tr>
+<tr class="even">
+<td><code>dados_stan</code></td>
+<td>Base com os índices numéricos utilizados pelo Stan.</td>
+</tr>
+<tr class="odd">
+<td><code>gauge_lookup</code></td>
+<td>Correspondência entre códigos e identificadores das estações.</td>
+</tr>
+<tr class="even">
+<td><code>duration_lookup</code></td>
+<td>Correspondência entre durações e seus índices.</td>
+</tr>
+<tr class="odd">
+<td><code>stan_data_regional</code></td>
+<td>Lista de dados para os modelos bayesianos regionais.</td>
+</tr>
+<tr class="even">
+<td><code>modelo_nonpooled_total_por_estacao_stan</code> e <code>modelo_bhm_xi_*_stan</code></td>
+<td>Códigos Stan dos cinco modelos definidos.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observação:</strong> este arquivo organiza os dados e define os modelos, mas não executa a amostragem MCMC nem salva ajustes ou resultados de comparação.</p>
+</section>
+</section>
+<section id="script-03-gev_nonpooled_uniplu_subdiario_cj" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="script-03-gev_nonpooled_uniplu_subdiario_cj"><span class="header-section-number">11.3</span> Script 03 — GEV_nonpooled_uniplu_subdiario_cj</h2>
+<section id="finalidade-10" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="finalidade-10"><span class="header-section-number">11.3.1</span> Finalidade</h3>
+<p>O script realiza o <strong>ajuste bayesiano GEV às intensidades máximas anuais subdiárias</strong>, utilizando um modelo <em>non-pooled</em> por estação, com invariância de escala definida separadamente para durações inferiores a uma hora e durações de 1 a 24 horas.</p>
+<p>O processamento utiliza uma base previamente submetida a controle de qualidade e permite executar os ajustes em lotes de estações, com salvamento individual e retomada automática.</p>
+</section>
+<section id="funções-principais-5" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="funções-principais-5"><span class="header-section-number">11.3.2</span> Funções principais</h3>
+<p><strong>Dados de entrada:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>imax_sem_iqr_subdiario_Uniplu.rds</code></td>
+<td>Base de máximas anuais subdiárias, com durações, anos hidrológicos, intensidades máximas e indicadores de controle de qualidade e elegibilidade.</td>
+</tr>
+</tbody>
+</table>
+<p>As principais funções são:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Função</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>make_station_context(gauge_code, bloco)</code></td>
+<td>Código da estação e base preparada para a modelagem.</td>
+<td>Lista contendo as observações, durações, identificadores e estatísticas auxiliares da estação.</td>
+</tr>
+<tr class="even">
+<td><code>make_stan_data(ctx)</code></td>
+<td>Contexto da estação.</td>
+<td>Lista de dados compatível com o modelo Stan.</td>
+</tr>
+<tr class="odd">
+<td><code>make_nonpooled_conjunto_init(ctx)</code></td>
+<td>Contexto da estação.</td>
+<td>Valores iniciais dos parâmetros bayesianos.</td>
+</tr>
+<tr class="even">
+<td><code>fit_station(gauge_code, bloco, seed)</code></td>
+<td>Código da estação, base e semente aleatória.</td>
+<td>Objeto <code>stanfit</code> com o ajuste GEV da estação.</td>
+</tr>
+<tr class="odd">
+<td><code>save_fit_atomic(obj, arquivo)</code></td>
+<td>Objeto de ajuste e caminho de destino.</td>
+<td>Salva o ajuste em RDS, utilizando um arquivo temporário antes da substituição.</td>
+</tr>
+<tr class="even">
+<td><code>run_model(bloco, dir_fit, inicio, fim)</code></td>
+<td>Base de modelagem, diretório e intervalo de estações.</td>
+<td>Executa os ajustes do lote, grava resultados individuais e atualiza a tabela de status.</td>
+</tr>
+</tbody>
+</table>
+<p>O modelo Stan (<code>modelo_nonpooled_conjunto_stan</code>) estima os parâmetros GEV por duração e os parâmetros estruturais da relação de escala, distinguindo os ramos sub-horário e horário. A transição entre os dois ocorre em 1 hora, com duração de referência de 24 horas.</p>
+</section>
+<section id="fluxo-geral-de-processamento-10" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="fluxo-geral-de-processamento-10"><span class="header-section-number">11.3.3</span> Fluxo geral de processamento</h3>
+<p>Inicialmente, o script lê a base de máximas subdiárias e verifica os indicadores de controle de qualidade e elegibilidade. São mantidas estações com pelo menos oito anos válidos nas 24 durações de 1 a 24 horas e em pelo menos duas durações inferiores a uma hora.</p>
+<p>Em seguida, os dados são organizados por estação e o modelo Stan é compilado. Os ajustes são realizados individualmente por MCMC, utilizando cinco cadeias e 20.000 iterações por cadeia, com 10.000 destinadas ao aquecimento.</p>
+<p>O processamento ocorre em lotes configuráveis. Na execução apresentada, são selecionadas as posições de 101 a 200 da lista de estações. Cada ajuste concluído é salvo individualmente, enquanto um arquivo de status permite identificar estações concluídas, pendentes ou com erro e retomar a execução.</p>
+</section>
+<section id="arquivos-gerados-8" class="level3" data-number="11.3.4">
+<h3 data-number="11.3.4" class="anchored" data-anchor-id="arquivos-gerados-8"><span class="header-section-number">11.3.4</span> Arquivos gerados</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>selecao/filtro_nonpooled_subdiario_10min_24h_conjunto.csv</code></td>
+<td>Tabela das estações avaliadas e selecionadas para o modelo conjunto.</td>
+</tr>
+<tr class="even">
+<td><code>10min_24h_conjunto/lote_101_200/&lt;codigo&gt;_fit.rds</code></td>
+<td>Objeto <code>stanfit</code> correspondente ao ajuste de cada estação.</td>
+</tr>
+<tr class="odd">
+<td><code>10min_24h_conjunto/lote_101_200/&lt;codigo&gt;_fit.ok</code></td>
+<td>Marcador de conclusão utilizado na retomada do processamento.</td>
+</tr>
+<tr class="even">
+<td><code>10min_24h_conjunto/lote_101_200/status.csv</code></td>
+<td>Registro da situação dos ajustes, incluindo erros e data de execução.</td>
+</tr>
+<tr class="odd">
+<td><code>10min_24h_conjunto/lote_101_200/estacoes_do_lote.csv</code></td>
+<td>Identificação das estações incluídas no lote.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="scripts-visualização" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Scripts — Visualização</h1>
+<p>Os três scripts complementam os ajustes bayesianos realizados anteriormente, realizando a extração e organização dos resultados, a elaboração de tabelas e figuras e a geração de produtos espaciais para análise e apresentação.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Script</th>
+<th>Finalidade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>Visualização_Resultados_Modelos_Bayesianos_Diários_BR.R</code></strong></td>
+<td>Consolida os diagnósticos MCMC e os parâmetros dos modelos diários ajustados para o Brasil, produzindo resumos estatísticos, mapas de distribuição espacial, curvas IDF e arquivos GeoPackage.</td>
+</tr>
+<tr class="even">
+<td><strong><code>Visualização_Resultados_Modelos_Bayesianos_Regionais_RS.R</code></strong></td>
+<td>Compara os cinco modelos bayesianos aplicados ao Rio Grande do Sul, incluindo diagnósticos MCMC, avaliação preditiva por PSIS-LOO, comparação de parâmetros, níveis de retorno, curvas IDF e produtos cartográficos.</td>
+</tr>
+<tr class="odd">
+<td><strong><code>Visualização_Resultados_Modelos_Bayesianos_Subdiarios_BR.R</code></strong></td>
+<td>Consolida os ajustes bayesianos subdiários para o Brasil, extraindo diagnósticos, parâmetros estruturais e GEV, níveis de retorno e produzindo distribuições estatísticas, mapas, curvas IDF e arquivos GeoPackage.</td>
+</tr>
+</tbody>
+</table>
+<p>Esses scripts utilizam os resultados dos modelos previamente ajustados, sem realizar novos ajustes bayesianos. Seus produtos são destinados à avaliação dos resultados e à elaboração das figuras e tabelas apresentadas no relatório.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ref.html" class="pagination-link" aria-label="Referências Bibliográficas">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Referências Bibliográficas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

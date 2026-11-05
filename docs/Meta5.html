@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Meta 5: IDFs para precipitação diária – Proj. IDF Brasil ANA/UnB</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,15 +57,14 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7600ddd4616fb7b9baa2258c07466e60.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -90,7 +94,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -129,8 +133,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
@@ -201,7 +203,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
- <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
+ <span class="dropdown-text">Exemplos de estudos de caráter nacional</span></a>
   </li>  
     </ul>
   </li>
@@ -212,6 +214,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./teste.html"> 
+<span class="menu-text">teste</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -254,25 +260,25 @@ window.Quarto = {
 <p>Esta seção inclui as seguintes atividades: (i) construção de um modelo de distribuição <em>a priori</em> regional para o parâmetro de forma da distribuição GEV (<span class="math inline">\(\xi\)</span>) a partir dos dados de precipitação diária utilizando regressão linear GLS Bayesiana; (ii) utilizar a informação <em>a priori</em> em um procedimento Bayesiano completo para construir curvas de IDF para precipitações diárias.</p>
 <section id="sec-priori-regional" class="level2">
 <h2 class="anchored" data-anchor-id="sec-priori-regional">Modelo <em>a priori</em> para <span class="math inline">\(\xi\)</span></h2>
-<p>É comum, em diferentes trabalhos, dada a incerteza em torno da estimação do parâmetro de forma (<span class="math inline">\(\xi\)</span>) da GEV, assumir um valor constante ao longo de <span class="math inline">\(d\)</span> durações diferentes, ou seja, <span class="math inline">\(\xi_d = \xi\)</span> <span class="citation" data-cites="blanchet2016 lima2018">(<a href="#ref-blanchet2016" role="doc-biblioref">Blanchet et al. 2016</a>; <a href="#ref-lima2018" role="doc-biblioref">Lima, Kwon, e Kim 2018</a>)</span>. Uma vez testada a hipótese de invariância de escala na Meta 4, considerando a necessidade de séries longas para obter estimativas mais precisas <span class="citation" data-cites="papalexiou2013">(<a href="#ref-papalexiou2013" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span>, nesta meta pretende-se desenvolver um modelo regional para o parâmetro de forma utilizando regressão linear por Mínimos Quadrados Generalizado (GLS).</p>
-<p>A abordagem é utilizada para obter estimativas mais precisas incorporando informação de outras estações na região e pode ser vista (não restrita a <span class="math inline">\(\xi\)</span> da GEV) em diferentes trabalhos <span class="citation" data-cites="martins2008 ball2019 reis2020">(<a href="#ref-martins2008" role="doc-biblioref">E. Martins et al. 2008</a>; <a href="#ref-ball2019" role="doc-biblioref">Ball et al. 2019</a>; <a href="#ref-reis2020" role="doc-biblioref">Dirceu S. Reis et al. 2020</a>)</span>. São estabelecidas relações entre uma variável de interesse (<span class="math inline">\(\xi\)</span>) e covariáveis (<span class="math inline">\(X\)</span>), relacionadas às características fisiográficas (coordenadas geográgicas, altitude, direção da face do relevo, distância da costa, entre outros); características da precipitação (chuva média anual). citar <span class="citation" data-cites="haddad2011 haddad2015">(<a href="#ref-haddad2011" role="doc-biblioref">K. Haddad, Rahman, e Green 2011</a>; @haddad2012 <a href="#ref-haddad2015" role="doc-biblioref">Khaled Haddad et al. 2015</a>)</span></p>
-<p>O objetivo final desta primeira parte é construir uma distribuição <em>a priori</em> para <span class="math inline">\(\xi\)</span> a partir das estimativas de média <span class="math inline">\(\hat\mu_{\xi_i}\)</span> e variância <span class="math inline">\(\sigma^2_{\xi_i}\)</span> obtidas pelo modelo GLS utilizando um estimador Bayesiano proposto por <span class="citation" data-cites="reis2005">D. S. Reis, Stedinger, e Martins (<a href="#ref-reis2005" role="doc-biblioref">2005</a>)</span>. O conjunto de média e variância para cada estação serão utilizados para estimar os parâmetros de uma distribuição Beta, definida entre <span class="math inline">\(-0.50\)</span> e <span class="math inline">\(+0.50\)</span> como definido em <span class="citation" data-cites="martins2000">E. S. Martins e Stedinger (<a href="#ref-martins2000" role="doc-biblioref">2000</a>)</span>.</p>
+<p>É comum, em diferentes trabalhos, dada a incerteza em torno da estimação do parâmetro de forma (<span class="math inline">\(\xi\)</span>) da GEV, assumir um valor constante ao longo de <span class="math inline">\(d\)</span> durações diferentes, ou seja, <span class="math inline">\(\xi_d = \xi\)</span> <span class="citation" data-cites="blanchet2016 lima2018">(<a href="#ref-blanchet2016" role="doc-biblioref">Blanchet et al. 2016</a>; <a href="#ref-lima2018" role="doc-biblioref">Lima et al. 2018</a>)</span>. Uma vez testada a hipótese de invariância de escala na Meta 4, considerando a necessidade de séries longas para obter estimativas mais precisas <span class="citation" data-cites="papalexiou2013">(<a href="#ref-papalexiou2013" role="doc-biblioref">Papalexiou e Koutsoyiannis 2013</a>)</span>, nesta meta pretende-se desenvolver um modelo regional para o parâmetro de forma utilizando regressão linear por Mínimos Quadrados Generalizado (GLS).</p>
+<p>A abordagem é utilizada para obter estimativas mais precisas incorporando informação de outras estações na região e pode ser vista (não restrita a <span class="math inline">\(\xi\)</span> da GEV) em diferentes trabalhos <span class="citation" data-cites="martins2008 ball2019 reis2020">(<a href="#ref-martins2008" role="doc-biblioref">Martins et al. 2008</a>; <a href="#ref-ball2019" role="doc-biblioref">Ball et al. 2019</a>; <a href="#ref-reis2020" role="doc-biblioref">Reis et al. 2020</a>)</span>. São estabelecidas relações entre uma variável de interesse (<span class="math inline">\(\xi\)</span>) e covariáveis (<span class="math inline">\(X\)</span>), relacionadas às características fisiográficas (coordenadas geográgicas, altitude, direção da face do relevo, distância da costa, entre outros); características da precipitação (chuva média anual). citar <span class="citation" data-cites="haddad2011 haddad2015">(<a href="#ref-haddad2011" role="doc-biblioref">Haddad et al. 2011</a>; @haddad2012 <a href="#ref-haddad2015" role="doc-biblioref">Haddad et al. 2015</a>)</span></p>
+<p>O objetivo final desta primeira parte é construir uma distribuição <em>a priori</em> para <span class="math inline">\(\xi\)</span> a partir das estimativas de média <span class="math inline">\(\hat\mu_{\xi_i}\)</span> e variância <span class="math inline">\(\sigma^2_{\xi_i}\)</span> obtidas pelo modelo GLS utilizando um estimador Bayesiano proposto por <span class="citation" data-cites="reis2005">Reis et al. (<a href="#ref-reis2005" role="doc-biblioref">2005</a>)</span>. O conjunto de média e variância para cada estação serão utilizados para estimar os parâmetros de uma distribuição Beta, definida entre <span class="math inline">\(-0.50\)</span> e <span class="math inline">\(+0.50\)</span> como definido em <span class="citation" data-cites="martins2000">Martins e Stedinger (<a href="#ref-martins2000" role="doc-biblioref">2000</a>)</span>.</p>
 </section>
 <section id="idf-regionais-diárias" class="level2">
 <h2 class="anchored" data-anchor-id="idf-regionais-diárias">IDF regionais diárias</h2>
-<p>A relação intensidade-duração-frequência será estipulada a partir do modelo proposto por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis, Kozonis, e Manetas (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>, o qual separa a componende de duração <span class="math inline">\(b(d)\)</span> da distribuição de probabildade das precipitações extremas <span class="math inline">\(a(T)\)</span>. A intensidade é obtida por:</p>
+<p>A relação intensidade-duração-frequência será estipulada a partir do modelo proposto por <span class="citation" data-cites="koutsoyiannis1998">Koutsoyiannis et al. (<a href="#ref-koutsoyiannis1998" role="doc-biblioref">1998</a>)</span>, o qual separa a componende de duração <span class="math inline">\(b(d)\)</span> da distribuição de probabildade das precipitações extremas <span class="math inline">\(a(T)\)</span>. A intensidade é obtida por:</p>
 <p><span id="eq-idf-koutsoyianni"><span class="math display">\[
 I(d,T) = \frac{a(T)}{b(d)}
 \tag{1}\]</span></span></p>
 <p>Este modelo será utilizado para derivar as IDFs para as bases de precipitação localmente nas estações pluviométricas.</p>
 <section id="modelo-bayesiano" class="level3">
 <h3 class="anchored" data-anchor-id="modelo-bayesiano">Modelo Bayesiano</h3>
-<p>A construção do modelo Bayesiano para as IDF baseia-se na metodologia apresentada por <span class="citation" data-cites="lima2018">Lima, Kwon, e Kim (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span> para a Coréia do Sul, uma vez que este permite uma descrição completa das incertezas nas estimativas através da distribuição <em>a posteriori</em>. Neste procedimento, a hipótese de invariância de escala (que será detalhada na Meta 7) é utilizada para construir distribuições <em>a priori</em> normais para os parâmetros de posição (<span class="math inline">\(\mu\)</span>) e de escala (<span class="math inline">\(\sigma\)</span>) da GEV. O parâmetro de forma, como especificado anteriormente, é considerado invariante com a duração e sua distribuição <em>a priori</em> considera um hiperparâmetro <span class="math inline">\(\bar\xi\)</span> descrito pela distribuição <em>a priori</em> definida na <a href="#sec-priori-regional" class="quarto-xref">Seção&nbsp;1</a>. Ademais, o conhecimento prévio sobre os parâmetros da invariância de escala <span class="math inline">\(\theta\)</span> e <span class="math inline">\(\eta\)</span> são modelados conforme seu domínio: <span class="math inline">\(\theta \ge 0\)</span> e <span class="math inline">\(0 &lt; \eta \le 1\)</span>.</p>
+<p>A construção do modelo Bayesiano para as IDF baseia-se na metodologia apresentada por <span class="citation" data-cites="lima2018">Lima et al. (<a href="#ref-lima2018" role="doc-biblioref">2018</a>)</span> para a Coréia do Sul, uma vez que este permite uma descrição completa das incertezas nas estimativas através da distribuição <em>a posteriori</em>. Neste procedimento, a hipótese de invariância de escala (que será detalhada na Meta 7) é utilizada para construir distribuições <em>a priori</em> normais para os parâmetros de posição (<span class="math inline">\(\mu\)</span>) e de escala (<span class="math inline">\(\sigma\)</span>) da GEV. O parâmetro de forma, como especificado anteriormente, é considerado invariante com a duração e sua distribuição <em>a priori</em> considera um hiperparâmetro <span class="math inline">\(\bar\xi\)</span> descrito pela distribuição <em>a priori</em> definida na <a href="#sec-priori-regional" class="quarto-xref">Seção&nbsp;1</a>. Ademais, o conhecimento prévio sobre os parâmetros da invariância de escala <span class="math inline">\(\theta\)</span> e <span class="math inline">\(\eta\)</span> são modelados conforme seu domínio: <span class="math inline">\(\theta \ge 0\)</span> e <span class="math inline">\(0 &lt; \eta \le 1\)</span>.</p>
 <p>Sendo <span class="math inline">\(\Theta\)</span> o espaço paramétrico, de maneira simplificada, a distribuição <em>a posteriori</em> será proporcional ao produto entre verossimilhança da GEV em cada estação ou pixeis (<span class="math inline">\(i\)</span>, de 1 a <span class="math inline">\(m\)</span>), observação (<span class="math inline">\(j\)</span>, de 1 a <span class="math inline">\(n_i\)</span>) e duração (<span class="math inline">\(d\)</span>, de <span class="math inline">\(d_0 =\)</span> 24 h a 10 dias) e o conjunto de <em>prioris</em> e <em>hiperprioris</em> representadas por <span class="math inline">\(\pi(\Theta)\)</span></p>
 <p><span id="eq-posteriori"><span class="math display">\[
 p(\Theta|I) \propto \prod_i\prod_j\prod_d GEV(I_{d,j,i}|\mu_{d,i},\sigma_{d,i},\xi_i) \times \pi(\Theta).
 \tag{2}\]</span></span></p>
-<p>A solução da <a href="#eq-posteriori" class="quarto-xref">Equação&nbsp;2</a> envolve a soluções de integrais complexas das distribuições marginais, portanto a distribuição <em>a posteriori</em> será amostrada utilizando simulações Monte Carlo por Cadeias de Markov (MCMC) através de pacotes como <code>R2WinBUGS</code> <span class="citation" data-cites="sturtz2005">(<a href="#ref-sturtz2005" role="doc-biblioref">Sturtz, Ligges, e Gelman 2005</a>)</span> e <code>Stan</code> <span class="citation" data-cites="gelman2013 carpenter2017">(<a href="#ref-gelman2013" role="doc-biblioref">Gelman et al. 2013</a>; <a href="#ref-carpenter2017" role="doc-biblioref">Carpenter et al. 2017</a>)</span>. A convergência da simulação será verificada por meio do coeficiente de redução potencial de escala <span class="math inline">\(\hat R\)</span> <span class="citation" data-cites="gelman2013">(<a href="#ref-gelman2013" role="doc-biblioref">Gelman et al. 2013</a>)</span>. A amostragem de <span class="math inline">\(p(\Theta|I)\)</span> permite a amostragem da <em>posteriori</em> de quantidades calculadas a partir dela, como as intensidades <span class="math inline">\(I(d,T)\)</span> calculadas como:</p>
+<p>A solução da <a href="#eq-posteriori" class="quarto-xref">Equação&nbsp;2</a> envolve a soluções de integrais complexas das distribuições marginais, portanto a distribuição <em>a posteriori</em> será amostrada utilizando simulações Monte Carlo por Cadeias de Markov (MCMC) através de pacotes como <code>R2WinBUGS</code> <span class="citation" data-cites="sturtz2005">(<a href="#ref-sturtz2005" role="doc-biblioref">Sturtz et al. 2005</a>)</span> e <code>Stan</code> <span class="citation" data-cites="gelman2013 carpenter2017">(<a href="#ref-gelman2013" role="doc-biblioref">Gelman et al. 2013</a>; <a href="#ref-carpenter2017" role="doc-biblioref">Carpenter et al. 2017</a>)</span>. A convergência da simulação será verificada por meio do coeficiente de redução potencial de escala <span class="math inline">\(\hat R\)</span> <span class="citation" data-cites="gelman2013">(<a href="#ref-gelman2013" role="doc-biblioref">Gelman et al. 2013</a>)</span>. A amostragem de <span class="math inline">\(p(\Theta|I)\)</span> permite a amostragem da <em>posteriori</em> de quantidades calculadas a partir dela, como as intensidades <span class="math inline">\(I(d,T)\)</span> calculadas como:</p>
 <p><span id="eq-idf-bayesiano"><span class="math display">\[
 I(d,T) = \left( \frac{d + \theta}{d_0 + \theta} \right)^{-\eta} \left\{ \mu_{d_0}  - \frac{\sigma_{d_0}}{\xi}\left[1 - (-\ln p)\right]^{-\xi} \right\},
 \tag{3}\]</span></span> permitindo facilmente a avaliação das incertezas nas estimativas, simplesmente avaliando os quantis empíricos de 2,5% e 97,5% por exemplo.</p>
@@ -285,21 +291,21 @@ I(d,T) = \left( \frac{d + \theta}{d_0 + \theta} \right)^{-\eta} \left\{ \mu_{d_0
 <section id="produtos-esperados" class="level2">
 <h2 class="anchored" data-anchor-id="produtos-esperados">Produtos esperados</h2>
 <p>Ao final desta meta, espera-se entregar as estimativas obtidas em cada estação para as durações e tempos de retorno específicados; bem como os scripts em linguagem R utilizados no procedimento.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-ball2019" class="csl-entry" role="listitem">
-Ball, J, M Babister, R Nathan, W Weeks, E Weinman, M Retallick, e I Testoni. 2019. <em>Australian Rainfall &amp; Runoff: A Guide to Flood Estimation</em>. ISBN 978-1-925848-36-6. Australia: Commonwealth of Australia (Geoscience Australia).
+Ball, J, M Babister, R Nathan, et al. 2019. <em>Australian Rainfall &amp; Runoff: A Guide to Flood Estimation</em>. ISBN 978-1-925848-36-6. Commonwealth of Australia (Geoscience Australia).
 </div>
 <div id="ref-blanchet2016" class="csl-entry" role="listitem">
 Blanchet, J., D. Ceresetti, G. Molinié, e J.-D. Creutin. 2016. <span>«A Regional GEV Scale-Invariant Framework for Intensity<span></span>Duration<span></span>Frequency Analysis»</span>. <em>Journal of Hydrology</em> 540 (setembro): 82–95. <a href="https://doi.org/10.1016/j.jhydrol.2016.06.007">https://doi.org/10.1016/j.jhydrol.2016.06.007</a>.
 </div>
 <div id="ref-carpenter2017" class="csl-entry" role="listitem">
-Carpenter, Bob, Andrew Gelman, Matthew D. Hoffman, Daniel Lee, Ben Goodrich, Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li, e Allen Riddell. 2017. <span>«<span><em>Stan</em></span> : A Probabilistic Programming Language»</span>. <em>Journal of Statistical Software</em> 76 (1). <a href="https://doi.org/10.18637/jss.v076.i01">https://doi.org/10.18637/jss.v076.i01</a>.
+Carpenter, Bob, Andrew Gelman, Matthew D. Hoffman, et al. 2017. <span>«<span><em>Stan</em></span> : A Probabilistic Programming Language»</span>. <em>Journal of Statistical Software</em> 76 (1). <a href="https://doi.org/10.18637/jss.v076.i01">https://doi.org/10.18637/jss.v076.i01</a>.
 </div>
 <div id="ref-Duarte.2025" class="csl-entry" role="listitem">
-Duarte, Luíza Virgínia, Alan de Gois Barbosa, Priscilla M Moura, e Veber Costa. 2025. <span>«<span>A Bayesian approach to model IDF curves employing max-stable processes</span>»</span>. <em>Hydrological Sciences Journal</em>. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
+Duarte, Luíza Virgínia, Alan de Gois Barbosa, Priscilla M Moura, e Veber Costa. 2025. <span>«<span>A Bayesian approach to model IDF curves employing max-stable processes</span>»</span>. <em>Hydrological Sciences Journal</em>, advance online publication. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
 </div>
 <div id="ref-gelman2013" class="csl-entry" role="listitem">
-Gelman, Andrew, John B Carlin, Hal S Stern, David B Dunson, Aki Vehtari, e Donald B Rubin. 2013. <span>«Bayesian Data Analysis Third Edition (with Errors <span>Fi</span>xed as of 20 February 2025)»</span>.
+Gelman, Andrew, John B Carlin, Hal S Stern, David B Dunson, Aki Vehtari, e Donald B Rubin. 2013. <em>Bayesian Data Analysis Third Edition (with Errors <span>Fi</span>xed as of 20 February 2025)</em>.
 </div>
 <div id="ref-haddad2015" class="csl-entry" role="listitem">
 Haddad, Khaled, Fiona Johnson, Ataur Rahman, Janice Green, e George Kuczera. 2015. <span>«Comparing Three Methods to Form Regions for Design Rainfall Statistics: Two Case Studies in Australia»</span>. <em>Journal of Hydrology</em> 527 (agosto): 62–76. <a href="https://doi.org/10.1016/j.jhydrol.2015.04.043">https://doi.org/10.1016/j.jhydrol.2015.04.043</a>.

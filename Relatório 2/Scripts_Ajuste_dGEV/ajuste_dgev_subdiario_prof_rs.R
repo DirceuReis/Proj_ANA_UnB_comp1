@@ -78,7 +78,7 @@ lltol <- 0.005          # tolerancia p/ diferenca entre maximas log-verossimilha
 # Ajustar d-GEV, estimar quantis e intervalos de confiança com verossimilhança perfilada
 imax.ls <- split(imax.df, imax.df$gauge_code); invisible(gc())
 
-prior.idx <- 3
+prior.idx <- 2
 fit.ls <- fitprof.dgev(
   data = imax.ls,
   prior.info = which.prior[[prior.idx]],
@@ -92,13 +92,13 @@ fit.ls <- fitprof.dgev(
 # Extrair e salvar resultados
 if(!dir.exists(path.fit.ls)) dir.create(path.fit.ls)
 
-# saveRDS(fit.ls, file.path(path.fit.ls, "ls_dgev_fit_subdiario.rds"))
+# saveRDS(fit.ls, file.path(path.fit.ls, "ls_dgev_fit_subdiario_rs.rds"))
+# ls <- lapply(list.files(path.fit.ls, full.names = TRUE, pattern = "*.rds"), readRDS)
 
-ls <- lapply(list.files(path.fit.ls, full.names = TRUE, pattern = "*.rds"), readRDS)
-par.df <- bind_rows(lapply(ls, `[[`, "par"))
-idf.df <- bind_rows(lapply(ls, `[[`, "idf"))
-profile.par <- bind_rows(lapply(ls, `[[`, "prof.par"))
-profile.idf <- bind_rows(lapply(ls, `[[`, "prof.q"))
+par.df <- fit.ls$par
+idf.df <- fit.ls$idf
+profile.par <- fit.ls$prof.par
+profile.idf <- fit.ls$prof.q
 
 prefix <- "df_subdiario_dgev_rs"
 prior.name <- names(which.prior)[prior.idx]
