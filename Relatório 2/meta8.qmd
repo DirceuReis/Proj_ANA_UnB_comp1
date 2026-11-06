@@ -91,13 +91,13 @@ $$ A direção da tendência foi determinada pelo sinal da estatística (Z). Val
 
 O teste MK foi aplicado individualmente às séries correspondentes às células da grade @Xavier.2022 e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
 
-- finalidade do teste;
-- hipótese nula;
-- estatística Z;
-- p-valor;
-- nível de significância;
-- classificação da tendência em crescente, decrescente ou não significativa.
-- equações
+-   finalidade do teste;
+-   hipótese nula;
+-   estatística Z;
+-   p-valor;
+-   nível de significância;
+-   classificação da tendência em crescente, decrescente ou não significativa.
+-   equações
 
 ### Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
 
@@ -385,7 +385,7 @@ Após a correção pelo procedimento FDR no período anterior à quebra, foram i
 
 Na Figura 8 pode-se observar as diferenças na distribuição das categorias de tendência entre os dois períodos. Antes da quebra, figura superior, foram identificadas 19 séries com tendência crescente e 798 com tendência decrescente. Após a quebra, figura inferior, o número de séries com tendência crescente aumentou para 275, ao passo que apenas uma série apresentou tendência decrescente.
 
-![tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_depois_quebra.png) Figura 8. Distribuição espacial das tendências da precipitação máxima diária antes (painéis superiores) e após (painéis inferiores) a identificação de quebras nas séries temporais.
+![tendência antes e depois da quebra](Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_quebra_quebra.png) Figura 8. Distribuição espacial das tendências da precipitação máxima diária antes (painéis superiores) e após (painéis inferiores) a identificação de quebras nas séries temporais.
 
 Esses resultados apresentam uma mudança na distribuição das tendências entre os períodos analisados, caracterizada pelo predomínio de tendências decrescentes antes da quebra e de tendências crescentes após a quebra. Entretanto, a maior parte das séries permaneceu sem tendência estatisticamente significativa em ambos os períodos.
 
