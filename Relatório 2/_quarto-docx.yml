@@ -16,6 +16,8 @@ book:
 format:
   docx:
     toc: true 
+    # lof: true
+    # lot: true
     toc-title: "Sumário"
     number-sections: true
     fig-align: center

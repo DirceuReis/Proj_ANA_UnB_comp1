@@ -86,7 +86,7 @@ Seguindo essa linha, o modelo de melhor desempenho seria aquele que engloba o as
 
 <!-- Precisa alterar a tabela p/ inverter o valor das covariáveis -->
 
-```{r tabela parametros modelos GLS}
+```{r}
 #| echo: false
 #| warning: false
 #| freeze: false
@@ -152,7 +152,7 @@ A comparação preditiva dos cinco modelos bayesianos foi realizada por meio do 
 | $\xi_{j,d}$ — Estação–duração |     −26.687,1 |       −322,0 ± 20,7 |
 | Local (*non-pooled*)          |     −26.767,5 |       −402,5 ± 12,1 |
 
-: Comparação preditiva dos cinco modelos bayesianos no Rio Grande do Sul pelo critério PSIS-LOO. Os valores de $\Delta$ELPD foram calculados em relação ao modelo com maior ELPD-LOO; EP corresponde ao erro-padrão da diferença. Valores mais elevados de ELPD-LOO indicam melhor desempenho preditivo. {#tbl-comparacao-loo tbl-align="center"}
+: Comparação preditiva dos cinco modelos bayesianos no Rio Grande do Sul pelo critério PSIS-LOO. Os valores de $\Delta$ELPD foram calculados em relação ao modelo com maior ELPD-LOO; EP corresponde ao erro-padrão da diferença. Valores mais elevados de ELPD-LOO indicam melhor desempenho preditivo. {#tbl-comparacao-loo}
 
 Os resultados favoreceram a representação de $\xi$ variável entre estações, mas constante entre durações dentro de cada estação, com compartilhamento hierárquico regional. A maior flexibilidade do parâmetro de forma entre durações não proporcionou melhoria preditiva, enquanto o modelo local (*non-pooled*) apresentou o desempenho menos favorável. Esses resultados referem-se às séries de máximos anuais organizadas segundo o ano civil e à avaliação preditiva pontual adotada.
 
@@ -206,30 +206,30 @@ Em conjunto, os resultados mostram que diferentes hipóteses de compartilhamento
 
 A hipótese da invariância de escala dos dados utilizados foi analisada e validada conforme apresentado na @sec-res-inv-escala desse relatório. Após as 4 fases de análises dos coeficientes de regressão das covariáveis, isoladamente e em conjunto, para cada um dos parâmetros, os resultados indicaram como importantes as covariáveis elevação para parâmetro de posição, elevação e distância para parâmetro de escala, e elevação para expoente de escala. Para todos os pares citados, todo o intervalo de credibilidade de 95% dos coeficientes apresentou-se acima de zero ou abaixo de zero (@tbl-res-diagnostico-maxstable). Para estimativa do parâmetro de posição, a incorporação de informações sobre elevação apresentou um coeficiente de regressão positivo (`loc.b1`, @tbl-res-diagnostico-maxstable), o que indica que, neste modelo, estações de maior altitude tendem a apresentar valores maiores desse parâmetro. Assim, analisando-se exclusivamente o parâmetro de posição, seria possível inferir que, para estações de maior altitude mais elevadas, seriam observadas maiores estimativas de chuvas extremas, e curvas IDF com maiores intensidades. No entanto, ressalta-se que, como os parâmetros são avaliados conjuntamente, esses resultados podem ser ‘compensados’ pelas variações dos outros parâmetros. Comparando-se os conjuntos de parâmetros obtidos para cada um dos modelos, com e sem covariáveis, observa-se que a o modelo MS-COV apresenta uma mediana do parâmetro de posição ligeiramente maior do que a observada em MS (μMS = 3.34 e μMS-COV = 3.43), com valores ligeiramente mais dispersos entre as 80 estações analisadas (@fig-met-cov-maxstable). Em linhas gerais, isso poderia se traduzir em um conjunto de estimativas maiores de chuva extrema e em curvas IDF de maiores intensidades, no conjunto total das estações da modelo com covariáveis. No entanto, ressalta-se que os parâmetros se relacionam entre si, e que variações em um determinado parâmetro podem induzir alterações nos outros.
 
-| Parâmetro  | MS: 2,5% |  MS: 50% | MS: 97,5% | MS-COV: 2,5% | MS-COV: 50% | MS-COV: 97,5% |
+| Parâmetro | MS: 2,5% | MS: 50% | MS: 97,5% | MS-COV: 2,5% | MS-COV: 50% | MS-COV: 97,5% |
 |:----------|----------:|----------:|----------:|----------:|----------:|----------:|
-| `loc.b0`     |    3,191 |    3,344 |     3,510 |        2,844 |       3,206 |         3,561 |
-| `loc.b1`     |        — |        — |         — |        0,412 |       0,826 |         1,281 |
-| `loc.tau`    |    3,192 |    4,936 |     7,580 |        3,086 |       5,215 |         9,048 |
-| `loc.lam`    |    5,068 |   11,071 |    21,912 |        4,735 |      11,564 |        25,048 |
-| `lscale.b0`  |    2,473 |    2,547 |     2,614 |        2,368 |       2,511 |         2,654 |
-| `lscale.b1`  |        — |        — |         — |       -0,718 |      -0,525 |        -0,349 |
-| `lscale.b2`  |        — |        — |         — |        0,227 |       0,328 |         0,437 |
-| `lscale.tau` |   24,575 |   38,391 |    59,445 |       29,282 |      54,434 |        89,370 |
-| `lscale.lam` |   10,301 |   26,741 |    47,246 |        6,219 |      16,865 |        36,762 |
-| `shape.b0`   |    0,167 |    0,214 |     0,262 |        0,155 |       0,203 |         0,254 |
-| `shape.tau`  |   24,769 |   38,086 |    58,297 |       26,202 |      39,530 |        60,812 |
-| `shape.lam`  |    3,267 |    8,626 |    19,331 |        3,359 |       9,248 |        18,566 |
-| `lkap.b0`    |   -1,739 |   -1,517 |    -1,309 |       -1,787 |      -1,547 |        -1,327 |
-| `lkap.tau`   |    0,898 |    1,318 |     1,882 |        0,718 |       1,031 |         1,444 |
-| `lkap.lam`   |    1,641 |    4,345 |     8,434 |        1,922 |       4,004 |         8,211 |
-| `lteta.b0`   |    0,996 |    1,053 |     1,123 |        1,013 |       1,154 |         1,303 |
-| `lteta.b1`   |        — |        — |         — |       -0,547 |      -0,396 |        -0,260 |
-| `lteta.tau`  |   19,975 |   30,627 |    47,108 |       19,430 |      31,826 |        49,686 |
-| `lteta.lam`  |    8,406 |   22,839 |    43,281 |        5,301 |      12,936 |        27,636 |
-| `alpha`      |    0,510 |    0,527 |     0,549 |        0,515 |       0,539 |         0,557 |
-| `logbw`      |    1,590 |    1,609 |     1,628 |        1,590 |       1,609 |         1,628 |
-| `logpost`    | -26923,9 | -26864,8 |  -26813,4 |     -26923,1 |    -26862,0 |      -26807,8 |
+| `loc.b0` | 3,191 | 3,344 | 3,510 | 2,844 | 3,206 | 3,561 |
+| `loc.b1` | — | — | — | 0,412 | 0,826 | 1,281 |
+| `loc.tau` | 3,192 | 4,936 | 7,580 | 3,086 | 5,215 | 9,048 |
+| `loc.lam` | 5,068 | 11,071 | 21,912 | 4,735 | 11,564 | 25,048 |
+| `lscale.b0` | 2,473 | 2,547 | 2,614 | 2,368 | 2,511 | 2,654 |
+| `lscale.b1` | — | — | — | -0,718 | -0,525 | -0,349 |
+| `lscale.b2` | — | — | — | 0,227 | 0,328 | 0,437 |
+| `lscale.tau` | 24,575 | 38,391 | 59,445 | 29,282 | 54,434 | 89,370 |
+| `lscale.lam` | 10,301 | 26,741 | 47,246 | 6,219 | 16,865 | 36,762 |
+| `shape.b0` | 0,167 | 0,214 | 0,262 | 0,155 | 0,203 | 0,254 |
+| `shape.tau` | 24,769 | 38,086 | 58,297 | 26,202 | 39,530 | 60,812 |
+| `shape.lam` | 3,267 | 8,626 | 19,331 | 3,359 | 9,248 | 18,566 |
+| `lkap.b0` | -1,739 | -1,517 | -1,309 | -1,787 | -1,547 | -1,327 |
+| `lkap.tau` | 0,898 | 1,318 | 1,882 | 0,718 | 1,031 | 1,444 |
+| `lkap.lam` | 1,641 | 4,345 | 8,434 | 1,922 | 4,004 | 8,211 |
+| `lteta.b0` | 0,996 | 1,053 | 1,123 | 1,013 | 1,154 | 1,303 |
+| `lteta.b1` | — | — | — | -0,547 | -0,396 | -0,260 |
+| `lteta.tau` | 19,975 | 30,627 | 47,108 | 19,430 | 31,826 | 49,686 |
+| `lteta.lam` | 8,406 | 22,839 | 43,281 | 5,301 | 12,936 | 27,636 |
+| `alpha` | 0,510 | 0,527 | 0,549 | 0,515 | 0,539 | 0,557 |
+| `logbw` | 1,590 | 1,609 | 1,628 | 1,590 | 1,609 | 1,628 |
+| `logpost` | -26923,9 | -26864,8 | -26813,4 | -26923,1 | -26862,0 | -26807,8 |
 
 : Quantis posteriores de 2,5%, 50% e 97,5% dos parâmetros e do logpost dos modelos MS e MS-COV. {#tbl-res-diagnostico-maxstable}
 

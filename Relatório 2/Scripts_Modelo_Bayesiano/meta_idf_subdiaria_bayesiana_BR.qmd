@@ -2,7 +2,7 @@
 # title: "meta_idf_subdiaria_bayesiana_BR"
 ---
 
-### Aplicação nacional do modelo bayesiano às séries subdiárias
+## Aplicação nacional do modelo bayesiano às séries subdiárias
 
 A modelagem das precipitações extremas em escala subdiária foi realizada por meio da abordagem hierárquica bayesiana local (*non-pooled*), apresentada anteriormente no estudo de caso do Rio Grande do Sul. A formulação manteve a distribuição GEV, as distribuições a priori e a regularização hierárquica dos parâmetros entre durações de uma mesma estação, sem compartilhamento espacial de informações. Nesta etapa, entretanto, a relação de invariância de escala foi adaptada para representar separadamente o comportamento das precipitações em durações sub-horárias e horárias.
 
@@ -30,11 +30,11 @@ A inferência foi realizada individualmente por estação, utilizando o algoritm
 
 A formulação por partes preservou a estrutura probabilística utilizada nas análises anteriores, introduzindo maior flexibilidade na representação da relação entre intensidade e duração. Essa adaptação permitiu considerar diferentes comportamentos de escala abaixo e acima de 1 hora, mantendo a continuidade da função e a estimação conjunta dos parâmetros GEV para todas as durações disponíveis em cada estação.
 
-#### Aplicação nacional do modelo bayesiano às séries subdiárias
+### Aplicação nacional do modelo bayesiano às séries subdiárias
 
 <!-- ##### Diagnósticos de convergência -->
 
-##### Diagnósticos de convergência
+#### Diagnósticos de convergência
 
 A aplicação nacional do modelo hierárquico bayesiano às séries subdiárias compreendeu 1.973 estações pluviométricas. Os diagnósticos de convergência apresentaram valores satisfatórios de $\widehat R$, com mediana de 1,01, percentil de 95% também de 1,01 e valor máximo de 1,02. Nenhuma estação apresentou $\widehat R_{\max}>1{,}05$.
 
@@ -44,7 +44,7 @@ Quanto às transições divergentes durante a amostragem MCMC, 1.586 estações 
 
 Embora os valores de $\widehat R$ indiquem concordância entre as cadeias, a presença de divergências em 19,6% das estações aponta possíveis dificuldades na exploração de determinadas regiões das distribuições posteriores.
 
-##### Parâmetros estruturais e comportamento da invariância de escala
+#### Parâmetros estruturais e comportamento da invariância de escala
 
 A aplicação nacional do modelo hierárquico bayesiano permitiu estimar os parâmetros estruturais das relações de escala considerando separadamente as durações sub-horárias ($d<1$ h) e as durações iguais ou superiores a 1 hora ($d\geq1$ h). Os parâmetros do intervalo horário foram estimados em 1.973 estações, enquanto os parâmetros sub-horários estavam disponíveis para 1.294 estações. A distribuição das medianas posteriores dos expoentes de escala $H$ evidenciou diferenças entre os dois intervalos temporais (@fig-distribuicao-h-subdiario). Para as durações horárias, $H_L$ apresentou mediana de 0,857, enquanto nas durações sub-horárias $H_C$ apresentou mediana de 0,818.
 
@@ -56,7 +56,7 @@ O parâmetro de deslocamento temporal $\theta$ também apresentou diferenças en
 
 ![Distribuição das medianas posteriores do parâmetro de deslocamento temporal $\theta$, em horas, estimado pelo modelo hierárquico bayesiano nacional para durações iguais ou superiores a 1 hora e para durações sub-horárias. Os histogramas representam a distribuição entre estações, e as linhas contínuas correspondem às estimativas de densidade.](Scripts_Modelo_Bayesiano/figuras/distribuicao_theta_subdiario.png){#fig-distribuicao-theta-subdiario width="95%" fig-align="center"}
 
-##### Distribuição espacial dos parâmetros estruturais
+#### Distribuição espacial dos parâmetros estruturais
 
 A distribuição espacial das medianas posteriores dos expoentes de escala apresentou diferenças entre os dois intervalos temporais (@fig-mapa-h-curto e @fig-mapa-h-longo). Para as durações sub-horárias, predominaram valores de $H$ entre aproximadamente 0,75 e 0,86 em grande parte do território nacional. Estimativas relativamente mais elevadas concentraram-se na Região Sul e em áreas localizadas do Sudeste, enquanto valores menores foram identificados em porções da Região Norte e em alguns setores do Nordeste e do Centro-Oeste.
 
@@ -76,7 +76,7 @@ Nas durações iguais ou superiores a 1 hora, a distribuição de $\theta$ apres
 
 ![Distribuição espacial das medianas posteriores do parâmetro de deslocamento temporal $\theta$, em horas, para durações iguais ou superiores a 1 hora ($d\geq1$ h), obtida por interpolação IDW das estimativas das estações brasileiras.](Scripts_Modelo_Bayesiano/figuras/mapa_IDW_theta_longo.png){#fig-mapa-theta-longo width="95%" fig-align="center"}
 
-#### Parâmetro de forma da distribuição GEV
+### Parâmetro de forma da distribuição GEV
 
 A distribuição das medianas posteriores do parâmetro central de forma $\bar{\xi}$ apresentou estimativas positivas e negativas, com concentração predominante em torno de zero (@fig-distribuicao-xi-bar-subdiario). Entre as 1.973 estações analisadas, 788 (39,9%) apresentaram medianas inferiores a −0,05, 828 (42,0%) superiores a 0,05 e 357 (18,1%) foram classificadas como próximas de zero, considerando o intervalo de −0,05 a 0,05. As distribuições dos conjuntos identificados como 10 min–24 h e 1–24 h apresentaram ampla dispersão, evidenciando heterogeneidade nas estimativas do parâmetro central de forma entre as estações.
 
@@ -86,11 +86,11 @@ A análise dos intervalos de credibilidade de 95% reforçou essa heterogeneidade
 
 A distribuição espacial das estimativas de $\bar{\xi}$ também evidenciou heterogeneidade regional (@fig-mapa-xi-bar-subdiario). Valores próximos de zero predominaram em extensas áreas do território brasileiro, enquanto estimativas positivas e negativas ocorreram de maneira descontínua. Valores positivos relativamente elevados foram identificados em setores da Região Norte e em localidades dispersas das regiões Nordeste e Centro-Oeste, ao passo que estimativas negativas foram observadas em diferentes porções do país. Diferentemente dos padrões mais amplos identificados para os parâmetros estruturais, a distribuição de $\bar{\xi}$ apresentou maior fragmentação espacial, com alternância de sinais entre localidades relativamente próximas.
 
-![Distribuição espacial das medianas posteriores do parâmetro central de forma $\bar{\xi}$ da distribuição GEV, obtida por interpolação IDW das estimativas das estações brasileiras. Os intervalos da legenda distinguem estimativas negativas, próximas de zero e positivas.](figuras/mapa_IDW_xi_bar.png){#fig-mapa-xi-bar-subdiario width="95%" fig-align="center"}
+![Distribuição espacial das medianas posteriores do parâmetro central de forma $\bar{\xi}$ da distribuição GEV, obtida por interpolação IDW das estimativas das estações brasileiras. Os intervalos da legenda distinguem estimativas negativas, próximas de zero e positivas.](Scripts_Modelo_Bayesiano/figuras/mapa_IDW_xi_bar.png){#fig-mapa-xi-bar-subdiario width="95%" fig-align="center"}
 
 A heterogeneidade de $\bar{\xi}$ é relevante para a estimação dos quantis associados a períodos de retorno elevados, uma vez que o parâmetro de forma influencia o comportamento da cauda superior da distribuição GEV. Entretanto, $\bar{\xi}$ representa o parâmetro central da regularização hierárquica, enquanto os quantis de retorno são calculados a partir dos parâmetros específicos de cada duração, $\xi_{j,d}$. Além disso, os padrões espaciais apresentados resultam da interpolação das medianas posteriores, sem incorporar explicitamente suas incertezas ou a dependência espacial entre estações. Dessa forma, os resultados evidenciam heterogeneidade nas estimativas do comportamento das caudas, mas não demonstram, isoladamente, diferenças estatisticamente sustentadas entre regiões.
 
-##### Comportamento dos parâmetros GEV em estações selecionadas
+#### Comportamento dos parâmetros GEV em estações selecionadas
 
 A variação dos parâmetros de localização ($\mu$), escala ($\sigma$) e forma ($\xi$) da distribuição GEV em função da duração foi examinada em seis estações das regiões Nordeste, Sudeste e Sul do Brasil: SBAR (SE), SBCF (MG), SBRP (SP), 420800501A (SC), 293330704A (BA) e 314610703A (MG). Em todas as estações, os parâmetros $\mu$ e $\sigma$ apresentaram redução com o aumento da duração, com valores mais elevados nas menores durações e diminuição progressiva em direção a 24 horas (@fig-parametros-gev-subdiario). As magnitudes e as taxas de redução variaram entre os postos, destacando-se valores relativamente elevados na estação de Santa Catarina e diferenças na intensidade da redução entre as demais estações.
 
@@ -100,7 +100,7 @@ O parâmetro de forma $\xi$ apresentou comportamentos distintos entre as estaç�
 
 Os intervalos de credibilidade de 95% também evidenciaram diferenças entre os postos. Nas estações SBCF (MG) e SBRP (SP), os intervalos permaneceram, respectivamente, acima e abaixo de zero, indicando maior sustentação posterior para os sinais estimados do parâmetro de forma. Nas estações SBAR (SE), 420800501A (SC) e 314610703A (MG), os intervalos abrangeram zero em diferentes durações, evidenciando maior incerteza quanto ao sinal de $\xi$. Assim, embora a regularização hierárquica tenha permitido relacionar as estimativas entre durações de uma mesma estação, os resultados mostram que o comportamento do parâmetro de forma não foi uniforme entre os postos, tanto em suas estimativas centrais quanto na incerteza posterior associada.
 
-##### Curvas intensidade–duração–frequência (IDF)
+#### Curvas intensidade–duração–frequência (IDF)
 
 As curvas intensidade–duração–frequência (IDF) estimadas pelo modelo hierárquico bayesiano nacional foram examinadas em seis estações brasileiras: SBAR (SE), SBCF (MG), SBRP (SP), 420800501A (SC), 293330704A (BA) e 314610703A (MG). As estações apresentam séries de máximos anuais com comprimentos entre 11 e 42 anos e diferentes características dos parâmetros estruturais e de forma da distribuição GEV. Nas estações SBAR (SE), SBCF (MG) e SBRP (SP), as curvas apresentadas compreendem durações de 1 a 24 horas, enquanto nas demais incluem durações sub-horárias, permitindo observar a transição entre as duas relações de escala adotadas na modelagem.
 

@@ -14,7 +14,7 @@ Esta meta reúne a aquisição, organização, padronização e controle de qual
 Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR)\[https://doi.org/10.5281/zenodo.18883358\], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:
 
 - **CEMADEN**: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.
-- **INMET**: Instituto Nacional de Meteorologia.q
+- **INMET**: Instituto Nacional de Meteorologia.
 - **ANA (Hidroweb)**: Agência Nacional de Águas e Saneamento Básico.
 - **ANA (Telemetria)**: Agência Nacional de Águas e Saneamento Básico.
 - **ICEA**: Instituto de Controle do Espaço Aéreo.
@@ -25,7 +25,7 @@ Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do
 
 ```{r}
 #| label: tbl-fontes-uniplu
-#| tbl-cap: "Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR."
+#| tbl-cap: "Sumário das estações abrangidas pelo UNIPLU-BR."
 
 library(gt)
 library(dplyr)
@@ -78,25 +78,25 @@ tabela_fontes |>
 
 A @fig-mapa-estacoes apresenta a distribuição espacial das estações de precipitação por fonte da informação inserida na base do UNIPLU-BR, cuja densidade geral é apresentada na @fig-densidade. Observa-se uma maior densidade de estações no Estado do Rio de Janeiro e Distrito Federal, seguido de São Paulo, Santa Catarina e Espírito Santo. De maneira geral, as regiões Sul e Sudeste possuem densidade de estações de monitoramento similares. Na região Nordeste, destacam-se os estados do Ceará, Pernambuco e Alagoas. Regiões Centro-Oeste e Norte brasileiro são as mais desproporcionais em número de estações.
 
-![Figura 1. Distribuição espacial das estações de monitoramento do UNIPLU-BR.](Scripts_Controle_Qualidade/Figuras/Figura%201.%20Inventário.png){#fig-mapa-estacoes width="100%"}
+![Distribuição espacial das estações de monitoramento do UNIPLU-BR.](Scripts_Controle_Qualidade/Figuras/Figura%201.%20Inventário.png){#fig-mapa-estacoes width="100%"}
 
-![Figura 2. Densidade das estações de monitoramento de chuva por Estado, em km², por estação.](Scripts_Controle_Qualidade/Figuras/Figura%202.%20Densidade%20de%20estações.png){#fig-densidade width="100%"}
+![Densidade das estações de monitoramento de chuva por Estado, em km², por estação.](Scripts_Controle_Qualidade/Figuras/Figura%202.%20Densidade%20de%20estações.png){#fig-densidade width="100%"}
 
 Na @fig-anos-atividade é apresentado o número de anos em atividade com dados das estações de monitoramento. Observa-se longas séries de dados especialmente nos estados de São Paulo, Paraná e Ceará. No tocante ao número de estações por agência ou instituição responsável, o CEMADEN, Telemetria e SGB-CPRM se destacam com o maior número de estações em operação (@fig-estacoes-instituicao). Essas 3 (três) instituições são de nível federal. CEMADEN e Telemetria, especialmente, tiveram fortes investimentos em número de estações desde o início do monitoramento de precipitação em razão dos desastres de origem natural, em 2014. O DAEE-SP em São Paulo (atualmente SP Águas), é uma instituição estadual e, portanto, possui toda sua rede inserida no território paulista, assim como o IAT (Instituto Água e Terra), no Paraná, e a FUNCEME (Fundação Cearense de Meteorologia e Recursos Hídricos), no Ceará.
 
-![Figura 3. Distribuição das estações por anos de atividade entre 1855 e 2025.](Scripts_Controle_Qualidade/Figuras/Figura%203.%20Mapa%20anos_atividade.png){#fig-anos-atividade width="100%"}
+![Distribuição das estações por anos de atividade entre 1855 e 2025.](Scripts_Controle_Qualidade/Figuras/Figura%203.%20Mapa%20anos_atividade.png){#fig-anos-atividade width="100%"}
 
-![Figura 4. Número de estações de monitoramento da precipitação por instituição responsável (acima de 250 estações).](Scripts_Controle_Qualidade/Figuras/Figura%204.%20Estações%20por%20instituição.png){#fig-estacoes-instituicao width="100%"}
+![Número de estações de monitoramento da precipitação por instituição responsável (acima de 250 estações).](Scripts_Controle_Qualidade/Figuras/Figura%204.%20Estações%20por%20instituição.png){#fig-estacoes-instituicao width="100%"}
 
 A base de dados do UNIPLU-BR possui estações cuja resolução temporal é diária e sub-diária. Na @fig-estacoes-resolucao apresenta-se o número de estações por ano e resolução temporal, a partir da qual se observa densificação da base de dados diária ocorreu em meados da década de 1960, atingindo seu pico em meados de 1983; por outro lado, a atividade das estações de resolução sub-diária se iniciou em 1951, por estações do ICEA, intensificando-se apenas a partir de 2014, com a criação do CEMADEN.
 
-![Figura 5. Número de estações de monitoramento da precipitação por ano e resolução temporal.](Scripts_Controle_Qualidade/Figuras/Figura%205.%20Estações%20por%20ano%20por%20resolução.png){#fig-estacoes-resolucao width="100%"}
+![Número de estações de monitoramento da precipitação por ano e resolução temporal.](Scripts_Controle_Qualidade/Figuras/Figura%205.%20Estações%20por%20ano%20por%20resolução.png){#fig-estacoes-resolucao width="100%"}
 
 A estrutura dos dados brutos do UNIPLU-BR consiste em 2 (dois) metadados: (i) informação de estações de chuva, incluindo colunas com dados de código da estação, cidade, coordenadas geográficas, elevação topográfica da estação, discretização temporal, rede fonte da informação, agência ou instituição responsável pela operação das estações, e UTC (Tempo Universal Coordenado); e (ii) série de dados, contendo código da estação, data e tempo da leitura e precipitação em mm.
 
 ```{r}
 #| label: tbl-inventario-uniplu
-#| tbl-cap: "Tabela 2. Síntese das informações contidas nos arquivos do inventário do UNIPLU-BR"
+#| tbl-cap: "Síntese das informações contidas nos arquivos do inventário do UNIPLU-BR"
 
 library(gt)
 library(dplyr)
@@ -230,7 +230,7 @@ Obtidas as variáveis, o IQ de cada estação por ano foi dado pela média das v
 
 ```{r}
 #| label: tbl-classificacao
-#| tbl-cap: "Tabela 3. Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (adaptado de [@vidalbarbosa2024])."
+#| tbl-cap: "Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (adaptado de [@vidalbarbosa2024])."
 
 library(gt)
 library(dplyr)
@@ -271,13 +271,13 @@ O Q2 é o parâmetro com maior variabilidade e o único que discrimina de forma 
 
 O último ano (2025) apresenta queda em P e Q1 (86,2% e 59,5, respectivamente), decorrente de os registros estarem incompletos: as 305 estações com ano válido em 2025 possuem, em mediana, 304 dias registrados. Trata-se, portanto, de problemas de inventário.
 
-![Figura 6. Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Series%20anuais%20P%20Q1%20Q2%20Q3.png){#fig-series width="100%"}
+![Série temporal das variáveis médias do QC Absoluto por ano.](Scripts_Controle_Qualidade/Figuras/Figura%206.%20Series%20anuais%20P%20Q1%20Q2%20Q3.png){#fig-series width="100%"}
 
 A @tbl-classificacao-resultado apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 266.969 séries estação-ano (97,7%) como de Alta Qualidade e 6.391 (2,3%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (85,1%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 6.003 (2,2% do total geral) foram classificados como Baixa e 388 (0,1%) como Muito Baixa, tratando-se de anos reprovados pela concentração das lacunas ou pela distribuição irregular dos dias chuvosos ao longo da semana.
 
 ```{r}
 #| label: tbl-classificacao-resultado
-#| tbl-cap: "Tabela 4. Classificação de qualidade dos anos-estação das séries diárias."
+#| tbl-cap: "Classificação de qualidade dos anos-estação das séries diárias."
 
 library(gt)
 library(dplyr)
@@ -316,7 +316,7 @@ resumo_classificacao |>
 
 Aplicado o critério final, descritos como estações com, pelo menos, 30 anos de Alta Qualidade, resultaram em 5.146 estações das 5.349 avaliadas (96,2%). A base final reúne 261.263 séries estação-ano e 94.793.233 registros diários, conforme indicado na @fig-estacoes-QC-final.
 
-![Figura 7. Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%207.%20Estacoes%20da%20serie%20diaria%20final.png){#fig-estacoes-QC-final width="100%"}
+![Estações de monitoramento de precipitação diária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%207.%20Estacoes%20da%20serie%20diaria%20final.png){#fig-estacoes-QC-final width="100%"}
 
 ### Séries Sub-diárias
 
@@ -450,6 +450,6 @@ onde: $D_e$ é a duração, em dias, do maior período seco da estação.
 
 Os indicadores foram calculados de forma independente e podem incidir sobre o mesmo registro.
 
-O controle de qualidade sinalizou 3,71% dos registros no CEMADEN, 1,78% na Telemetria, 1,36% no INMET sub-diário e 0,82% no ICEA. Por fim, o controle de qualidade aplicado não reduziu o número de estações previamente estimado a partir da análise de consistência dos metadados, retornando as 2.570 estações, cuja distribuição é apresentada na @figura-8.
+O controle de qualidade sinalizou 3,71% dos registros no CEMADEN, 1,78% na Telemetria, 1,36% no INMET sub-diário e 0,82% no ICEA. Por fim, o controle de qualidade aplicado não reduziu o número de estações previamente estimado a partir da análise de consistência dos metadados, retornando as 2.570 estações, cuja distribuição é apresentada na @fig-figura-8.
 
-![Figura 8. Estações de monitoramento de precipitação subdiária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%208.%20Estações%20finais%20por%20rede.png){#figura-8 width="100%"}
+![Estações de monitoramento de precipitação subdiária após Controle de Qualidade QC.](Scripts_Controle_Qualidade/Figuras/Figura%208.%20Estações%20finais%20por%20rede.png){#fig-figura-8 width="100%"}
