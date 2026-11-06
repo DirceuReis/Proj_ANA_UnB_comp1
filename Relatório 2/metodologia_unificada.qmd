@@ -244,10 +244,16 @@ $$ {#eq-par-priori_beta} Com isso, essa informação pode finalmente ser incorpo
 
 Nessa aplicação, foram avaliadas nove variáveis preditoras para compor $X$: 1) aspecto do terreno; 2) distância das estações até a costa leste brasileira; 3) elevação das estações; 4) longitude; 5) latitude; 6) média máxima anual de um dia; 7) média máxima anual de três dias; 8) temperatura média no local da estação; e 9) uma covariável binária $Z$ que subdivide o Rio Grande do Sul em duas macrorregiões: $Z=1$ quando a estação pertence à região do estado que faz parte da bacia do Rio Uruguai, e $Z = 0$ quando pertence à região combinada das regiões hidrográficas Litorânea e do Guaíba.
 
-O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos ($AVP_{old}$, @reis2020). Essa métrica considera a correlação na própria estação $j$, além da variância do estimador: $$
-AVP_{old} = \sigma_\delta^2 + \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
-2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\},
-$$ {#eq-avp-old} sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
+O desempenho das diferentes combinaçõe dessas variáveis foi avaliado principalmente pela variância média de predição quando se utiliza a informação adicional para estimar a variável de interesse nos próprios postos ($AVP_{old}$, @reis2020). Essa métrica considera a correlação na própria estação $j$, além da variância do estimador:
+
+$$
+\begin{gather}
+AVP_{old} = \sigma_\delta^2 + \\ \frac{1}{m} \sum_{j = 1}^m\{x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}x_j^T -
+2\sigma_\delta^2x_j[X^T\Lambda(\sigma_\delta^2)^{-1}X]^{-1}X^T\Lambda(\sigma_\delta^2)^{-1}e_j\}
+\end{gather},
+$$ {#eq-avp-old}
+
+sendo $e_j$ um vetor contendo 1 na linha $j$ e 0 nas demais.
 
 ### Modelos hierárquicos bayesianos (BHM)
 
@@ -346,7 +352,7 @@ As hipóteses de comparação podem ser expressas pelas restrições e relaçõe
 | Globalmente comum | $\xi_{j,d}=\xi$ | Igualdade entre estações e durações |
 | *Partial pooling* espacial | $\xi_j$ associado a parâmetros regionais | Regularização entre estações, sem igualdade obrigatória |
 
-: Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados.
+: Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados. {#tbl-estruturas-xi}
 
 Os modelos avaliados no Rio Grande do Sul mantiveram a mesma estrutura hierárquica de invariância de escala para os parâmetros de localização e escala da distribuição GEV, fundamentada em Lima et al. (2018). Os parâmetros $\alpha_j$, $\beta_j$, $H_j$ e $\theta_j$ foram estimados individualmente para cada estação, sem compartilhamento espacial. As diferentes especificações distinguiram-se exclusivamente pela estrutura atribuída ao parâmetro de forma $\xi$, permitindo avaliar as consequências de diferentes hipóteses de constância, heterogeneidade e compartilhamento de informação sobre o comportamento das caudas da distribuição e as estimativas de precipitações extremas.
 
@@ -377,11 +383,11 @@ A modelagem foi baseada na metodologia proposta por @Stephenson2016Durations, po
 
 #### Área de estudo e dados utilizados
 
-O estado do Rio Grande do Sul foi selecionado como área de estudo para a aplicação das metodologias propostas, utilizando dados de precipitação do projeto UNIPLU-BR [@Lemos2026UNIPLUBR; @Almeida2025BRSDR]. Complementarmente, foram incorporadas informações de 75 estações com registros sub-horários disponibilizadas pelo Serviço Geológico do Brasil. Após a aplicação dos critérios de no máximo 20% de falhas anuais e pelo menos oito anos válidos, foram selecionadas 45 dessas estações, que, somadas às 56 provenientes da UNIPLU-BR, totalizaram 101 estações utilizadas no estudo [@fig-met-gg-maxstable].
+O estado do Rio Grande do Sul foi selecionado como área de estudo para a aplicação das metodologias propostas, utilizando dados de precipitação do projeto UNIPLU-BR [@Lemos2026UNIPLUBR; @Almeida2025BRSDR]. Complementarmente, foram incorporadas informações de 75 estações com registros sub-horários disponibilizadas pelo Serviço Geológico do Brasil. Após a aplicação dos critérios de no máximo 20% de falhas anuais e pelo menos oito anos válidos, foram selecionadas 45 dessas estações, que, somadas às 56 provenientes da UNIPLU-BR, totalizaram 101 estações utilizadas no estudo (@fig-met-gg-maxstable).
 
 As estações foram divididas aleatoriamente em dois conjuntos, sendo 80% destinadas à calibração dos parâmetros e 20% à validação dos modelos. Para a organização das séries de máximos anuais, foi adotado o ano civil, compreendido entre janeiro e dezembro.
 
-![Estações de monitoramento de precipitação subdiária utilizadas no estudo.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura1.jpeg) {#fig-met-gg-maxstable fig-align="center"}
+![Estações de monitoramento de precipitação subdiária utilizadas no estudo.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura1.jpeg){#fig-met-gg-maxstable fig-align="center"}
 
 <!-- \[INSERIR FIGURA 1 — Estações de monitoramento de precipitação subdiária utilizadas no estudo.\] -->
 
@@ -424,19 +430,19 @@ A definição das informações iniciais utilizadas como entrada do modelo, entr
 | `prilama = c(rep(5,5))` | Parâmetros de forma das distribuições gama |
 | `prilamb = c(rep(0.4,5))` | Parâmetros de escala das distribuições gama |
 
-: Configuração dos parâmetros de entrada utilizada nos modelos MS e MS-COV.
+: Configuração dos parâmetros de entrada utilizada nos modelos MS e MS-COV. {#tbl-parametros-ms}
 
 #### Incorporação de covariáveis espaciais
 
-Considerando os padrões de precipitação observados no Rio Grande do Sul, que incorporam ao longo do ano chuvas convectivas e de larga escala, foram escolhidas como potenciais covariáveis fisiográficas a elevação e distância em relação à costa leste, de onde vem grande parte da umidade que chega ao estado. Além disso, foram testadas também informações obtidas de dados de satélite, a partir do produto de reanálise ERA5 disponibilizado pelo Copernicus Climate Change Service (C3S) por meio do Climate Data Store: precipitação total anual, precipitação convectiva anual e precipitação em larga escala anual [@Copernicus2018ERA5]. Para utilização dos dados do ERA5, foram calculadas as médias das chuvas observadas nos meses mais chuvosos – setembro, outubro e novembro – obtidos com base em todo o estado conjuntamente. Cada uma das 5 covariáveis foram testadas para estimativa dos parâmetros de escala, posição e expoente de escala [@fig-met-cov-maxstable].
+Considerando os padrões de precipitação observados no Rio Grande do Sul, que incorporam ao longo do ano chuvas convectivas e de larga escala, foram escolhidas como potenciais covariáveis fisiográficas a elevação e distância em relação à costa leste, de onde vem grande parte da umidade que chega ao estado. Além disso, foram testadas também informações obtidas de dados de satélite, a partir do produto de reanálise ERA5 disponibilizado pelo Copernicus Climate Change Service (C3S) por meio do Climate Data Store: precipitação total anual, precipitação convectiva anual e precipitação em larga escala anual [@Copernicus2018ERA5]. Para utilização dos dados do ERA5, foram calculadas as médias das chuvas observadas nos meses mais chuvosos – setembro, outubro e novembro – obtidos com base em todo o estado conjuntamente. Cada uma das 5 covariáveis foram testadas para estimativa dos parâmetros de escala, posição e expoente de escala (@fig-met-cov-maxstable).
 
-![Covariáveis utilizadas: (A) elevação, (B) distância à costa leste, (C) precipitação total média anual, (D) precipitação convectiva média anual e (E) precipitação de larga escala média anual.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura2.jpeg) {#fig-met-cov-maxstable}
+![Covariáveis utilizadas: (A) elevação, (B) distância à costa leste, (C) precipitação total média anual, (D) precipitação convectiva média anual e (E) precipitação de larga escala média anual.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura2.jpeg){#fig-met-cov-maxstable}
 
 <!-- \[INSERIR FIGURA 2 — Covariáveis utilizadas: (A) elevação, (B) distância à costa leste, (C) precipitação total média anual, (D) precipitação convectiva média anual e (E) precipitação de larga escala média anual.\] -->
 
-A metodologia para análise das covariáveis foi realizada com base no procedimento descrito a seguir [@fig-met-fluxograma-selecao]. Na Fase 1, as 5 covariáveis foram testadas separadamente para cada parâmetro. A partir da observação dos coeficientes de regressão obtidos para cada par covariável-parâmetro, foram consideradas ‘importantes’ aquelas covariáveis cujos coeficientes apresentavam-se integralmente (2,5 a 97,5% dos seus valores) acima ou abaixo de zero, deixando claro o sinal da correlação. Na Fase 2, foi identificado um modelo para cada parâmetro, incluindo todas as covariáveis consideradas importantes na fase anterior. Na Fase 3, foram testadas juntas essas covariáveis, unindo os parâmetros de escala e posição e suas covariáveis, todos em um mesmo modelo. Na Fase 4, o modelo reuniu todas as covariáveis consideradas importantes nas fases anteriores, reunindo incorporando, além do parâmetro de escala e de posição, o expoente de escala. As covariáveis consideradas importantes nessa fase foram incorporadas a um modelo único final de covariáveis, chamado de MS-COV. Na avaliação, esse modelo foi comparado ao modelo original, chamado de MS.
+A metodologia para análise das covariáveis foi realizada com base no procedimento descrito a seguir (@fig-met-fluxograma-selecao). Na Fase 1, as 5 covariáveis foram testadas separadamente para cada parâmetro. A partir da observação dos coeficientes de regressão obtidos para cada par covariável-parâmetro, foram consideradas ‘importantes’ aquelas covariáveis cujos coeficientes apresentavam-se integralmente (2,5 a 97,5% dos seus valores) acima ou abaixo de zero, deixando claro o sinal da correlação. Na Fase 2, foi identificado um modelo para cada parâmetro, incluindo todas as covariáveis consideradas importantes na fase anterior. Na Fase 3, foram testadas juntas essas covariáveis, unindo os parâmetros de escala e posição e suas covariáveis, todos em um mesmo modelo. Na Fase 4, o modelo reuniu todas as covariáveis consideradas importantes nas fases anteriores, reunindo incorporando, além do parâmetro de escala e de posição, o expoente de escala. As covariáveis consideradas importantes nessa fase foram incorporadas a um modelo único final de covariáveis, chamado de MS-COV. Na avaliação, esse modelo foi comparado ao modelo original, chamado de MS.
 
-![Fluxograma das quatro fases de seleção e incorporação das covariáveis.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura3.jpg) {#fig-met-fluxograma-selecao}
+![Fluxograma das quatro fases de seleção e incorporação das covariáveis.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura3.jpg){#fig-met-fluxograma-selecao}
 
 <!-- \[INSERIR FIGURA 3 — Fluxograma das quatro fases de seleção e incorporação das covariáveis.\] -->
 

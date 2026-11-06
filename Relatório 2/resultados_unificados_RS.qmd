@@ -64,7 +64,7 @@ A distribuição por unidade federativa (@fig-estacoes-uf-qc) evidenciou maior n
 Número de estações pluviométricas subdiárias aprovadas após o controle de qualidade por unidade federativa, considerando o limite máximo de 20% de falhas anuais e o mínimo de oito anos válidos.
 :::
 
-### Verificação da invariância de escala {#seq-res-inv-escala}
+### Verificação da invariância de escala {#sec-res-inv-escala}
 
 {{< include Scripts_Invariancia_Escala/secao_invariancia_escala.qmd >}}
 
@@ -92,13 +92,18 @@ Seguindo essa linha, o modelo de melhor desempenho seria aquele que engloba o as
 #| freeze: false
 #| label: tbl-par-gls
 #| tbl-cap: Parâmetros estimados do modelo GLS para o parâmetro de forma com métricas de desempenho.
+#| tbl-colwidths: [12.5,12.5,12.5,12.5,12.5,12.5,12.5,12.5,12.5]
 
 if(!require(arrow)) install.packages("arrow")
 if(!require(dplyr)) install.packages("dplyr")
 library(dplyr)
 arrow::read_parquet("Scripts_GLS/gerados/regression_results/center/latex_table_pars.pqt") |>
   mutate(across(1:4, .fns = ~.*(-1))) |> 
-  knitr::kable(format = "pipe")
+  knitr::kable(
+    format = "pipe", digits = 4, 
+    longtable = TRUE, 
+    format.args = list(decimal.mark = ",", big.mark = ".")
+  )
 ```
 
 Entretanto, analisando os AVPs obtidos, percebe-se que seus valores são próximos (entre 0,00389 e 0,00359), de forma que a diferença entre os modelos, em termos de variância de predição, é apenas marginal. Dessa forma, optando pelo pragmatismo, decidiu-se adotar o modelo de uma única média regional, composto por uma média regional $\hat\mu_\xi =$ -0,0178 e variância igual a $\hat\sigma^2_\xi=$ 0,0627.
@@ -147,7 +152,7 @@ A comparação preditiva dos cinco modelos bayesianos foi realizada por meio do 
 | $\xi_{j,d}$ — Estação–duração |     −26.687,1 |       −322,0 ± 20,7 |
 | Local (*non-pooled*)          |     −26.767,5 |       −402,5 ± 12,1 |
 
-: Comparação preditiva dos cinco modelos bayesianos no Rio Grande do Sul pelo critério PSIS-LOO. Os valores de $\Delta$ELPD foram calculados em relação ao modelo com maior ELPD-LOO; EP corresponde ao erro-padrão da diferença. Valores mais elevados de ELPD-LOO indicam melhor desempenho preditivo.
+: Comparação preditiva dos cinco modelos bayesianos no Rio Grande do Sul pelo critério PSIS-LOO. Os valores de $\Delta$ELPD foram calculados em relação ao modelo com maior ELPD-LOO; EP corresponde ao erro-padrão da diferença. Valores mais elevados de ELPD-LOO indicam melhor desempenho preditivo. {#tbl-comparacao-loo tbl-align="center"}
 
 Os resultados favoreceram a representação de $\xi$ variável entre estações, mas constante entre durações dentro de cada estação, com compartilhamento hierárquico regional. A maior flexibilidade do parâmetro de forma entre durações não proporcionou melhoria preditiva, enquanto o modelo local (*non-pooled*) apresentou o desempenho menos favorável. Esses resultados referem-se às séries de máximos anuais organizadas segundo o ano civil e à avaliação preditiva pontual adotada.
 
@@ -199,52 +204,52 @@ Em conjunto, os resultados mostram que diferentes hipóteses de compartilhamento
 
 #### Modelos espaciais max-stable
 
-A hipótese da invariância de escala dos dados utilizados foi analisada e validada conforme apresentado no item X desse relatório Após as 4 fases de análises dos coeficientes de regressão das covariáveis, isoladamente e em conjunto, para cada um dos parâmetros, os resultados indicaram como importantes as covariáveis elevação para parâmetro de posição, elevação e distância para parâmetro de escala, e elevação para expoente de escala. Para todos os pares citados, todo o intervalo de credibilidade de 95% dos coeficientes apresentou-se acima de zero ou abaixo de zero (Tabela 1). Para estimativa do parâmetro de posição, a incorporação de informações sobre elevação apresentou um coeficiente de regressão positivo (loc.b1, Tabela 1), o que indica que, neste modelo, estações de maior altitude tendem a apresentar valores maiores desse parâmetro. Assim, analisando-se exclusivamente o parâmetro de posição, seria possível inferir que, para estações de maior altitude mais elevadas, seriam observadas maiores estimativas de chuvas extremas, e curvas IDF com maiores intensidades. No entanto, ressalta-se que, como os parâmetros são avaliados conjuntamente, esses resultados podem ser ‘compensados’ pelas variações dos outros parâmetros. Comparando-se os conjuntos de parâmetros obtidos para cada um dos modelos, com e sem covariáveis, observa-se que a o modelo MS-COV apresenta uma mediana do parâmetro de posição ligeiramente maior do que a observada em MS (μMS = 3.34 e μMS-COV = 3.43), com valores ligeiramente mais dispersos entre as 80 estações analisadas (Figura 2). Em linhas gerais, isso poderia se traduzir em um conjunto de estimativas maiores de chuva extrema e em curvas IDF de maiores intensidades, no conjunto total das estações da modelo com covariáveis. No entanto, ressalta-se que os parâmetros se relacionam entre si, e que variações em um determinado parâmetro podem induzir alterações nos outros.
+A hipótese da invariância de escala dos dados utilizados foi analisada e validada conforme apresentado na @sec-res-inv-escala desse relatório. Após as 4 fases de análises dos coeficientes de regressão das covariáveis, isoladamente e em conjunto, para cada um dos parâmetros, os resultados indicaram como importantes as covariáveis elevação para parâmetro de posição, elevação e distância para parâmetro de escala, e elevação para expoente de escala. Para todos os pares citados, todo o intervalo de credibilidade de 95% dos coeficientes apresentou-se acima de zero ou abaixo de zero (@tbl-res-diagnostico-maxstable). Para estimativa do parâmetro de posição, a incorporação de informações sobre elevação apresentou um coeficiente de regressão positivo (`loc.b1`, @tbl-res-diagnostico-maxstable), o que indica que, neste modelo, estações de maior altitude tendem a apresentar valores maiores desse parâmetro. Assim, analisando-se exclusivamente o parâmetro de posição, seria possível inferir que, para estações de maior altitude mais elevadas, seriam observadas maiores estimativas de chuvas extremas, e curvas IDF com maiores intensidades. No entanto, ressalta-se que, como os parâmetros são avaliados conjuntamente, esses resultados podem ser ‘compensados’ pelas variações dos outros parâmetros. Comparando-se os conjuntos de parâmetros obtidos para cada um dos modelos, com e sem covariáveis, observa-se que a o modelo MS-COV apresenta uma mediana do parâmetro de posição ligeiramente maior do que a observada em MS (μMS = 3.34 e μMS-COV = 3.43), com valores ligeiramente mais dispersos entre as 80 estações analisadas (@fig-met-cov-maxstable). Em linhas gerais, isso poderia se traduzir em um conjunto de estimativas maiores de chuva extrema e em curvas IDF de maiores intensidades, no conjunto total das estações da modelo com covariáveis. No entanto, ressalta-se que os parâmetros se relacionam entre si, e que variações em um determinado parâmetro podem induzir alterações nos outros.
 
 | Parâmetro  | MS: 2,5% |  MS: 50% | MS: 97,5% | MS-COV: 2,5% | MS-COV: 50% | MS-COV: 97,5% |
 |:----------|----------:|----------:|----------:|----------:|----------:|----------:|
-| loc.b0     |    3,191 |    3,344 |     3,510 |        2,844 |       3,206 |         3,561 |
-| loc.b1     |        — |        — |         — |        0,412 |       0,826 |         1,281 |
-| loc.tau    |    3,192 |    4,936 |     7,580 |        3,086 |       5,215 |         9,048 |
-| loc.lam    |    5,068 |   11,071 |    21,912 |        4,735 |      11,564 |        25,048 |
-| lscale.b0  |    2,473 |    2,547 |     2,614 |        2,368 |       2,511 |         2,654 |
-| lscale.b1  |        — |        — |         — |       -0,718 |      -0,525 |        -0,349 |
-| lscale.b2  |        — |        — |         — |        0,227 |       0,328 |         0,437 |
-| lscale.tau |   24,575 |   38,391 |    59,445 |       29,282 |      54,434 |        89,370 |
-| lscale.lam |   10,301 |   26,741 |    47,246 |        6,219 |      16,865 |        36,762 |
-| shape.b0   |    0,167 |    0,214 |     0,262 |        0,155 |       0,203 |         0,254 |
-| shape.tau  |   24,769 |   38,086 |    58,297 |       26,202 |      39,530 |        60,812 |
-| shape.lam  |    3,267 |    8,626 |    19,331 |        3,359 |       9,248 |        18,566 |
-| lkap.b0    |   -1,739 |   -1,517 |    -1,309 |       -1,787 |      -1,547 |        -1,327 |
-| lkap.tau   |    0,898 |    1,318 |     1,882 |        0,718 |       1,031 |         1,444 |
-| lkap.lam   |    1,641 |    4,345 |     8,434 |        1,922 |       4,004 |         8,211 |
-| lteta.b0   |    0,996 |    1,053 |     1,123 |        1,013 |       1,154 |         1,303 |
-| lteta.b1   |        — |        — |         — |       -0,547 |      -0,396 |        -0,260 |
-| lteta.tau  |   19,975 |   30,627 |    47,108 |       19,430 |      31,826 |        49,686 |
-| lteta.lam  |    8,406 |   22,839 |    43,281 |        5,301 |      12,936 |        27,636 |
-| alpha      |    0,510 |    0,527 |     0,549 |        0,515 |       0,539 |         0,557 |
-| logbw      |    1,590 |    1,609 |     1,628 |        1,590 |       1,609 |         1,628 |
-| logpost    | -26923,9 | -26864,8 |  -26813,4 |     -26923,1 |    -26862,0 |      -26807,8 |
+| `loc.b0`     |    3,191 |    3,344 |     3,510 |        2,844 |       3,206 |         3,561 |
+| `loc.b1`     |        — |        — |         — |        0,412 |       0,826 |         1,281 |
+| `loc.tau`    |    3,192 |    4,936 |     7,580 |        3,086 |       5,215 |         9,048 |
+| `loc.lam`    |    5,068 |   11,071 |    21,912 |        4,735 |      11,564 |        25,048 |
+| `lscale.b0`  |    2,473 |    2,547 |     2,614 |        2,368 |       2,511 |         2,654 |
+| `lscale.b1`  |        — |        — |         — |       -0,718 |      -0,525 |        -0,349 |
+| `lscale.b2`  |        — |        — |         — |        0,227 |       0,328 |         0,437 |
+| `lscale.tau` |   24,575 |   38,391 |    59,445 |       29,282 |      54,434 |        89,370 |
+| `lscale.lam` |   10,301 |   26,741 |    47,246 |        6,219 |      16,865 |        36,762 |
+| `shape.b0`   |    0,167 |    0,214 |     0,262 |        0,155 |       0,203 |         0,254 |
+| `shape.tau`  |   24,769 |   38,086 |    58,297 |       26,202 |      39,530 |        60,812 |
+| `shape.lam`  |    3,267 |    8,626 |    19,331 |        3,359 |       9,248 |        18,566 |
+| `lkap.b0`    |   -1,739 |   -1,517 |    -1,309 |       -1,787 |      -1,547 |        -1,327 |
+| `lkap.tau`   |    0,898 |    1,318 |     1,882 |        0,718 |       1,031 |         1,444 |
+| `lkap.lam`   |    1,641 |    4,345 |     8,434 |        1,922 |       4,004 |         8,211 |
+| `lteta.b0`   |    0,996 |    1,053 |     1,123 |        1,013 |       1,154 |         1,303 |
+| `lteta.b1`   |        — |        — |         — |       -0,547 |      -0,396 |        -0,260 |
+| `lteta.tau`  |   19,975 |   30,627 |    47,108 |       19,430 |      31,826 |        49,686 |
+| `lteta.lam`  |    8,406 |   22,839 |    43,281 |        5,301 |      12,936 |        27,636 |
+| `alpha`      |    0,510 |    0,527 |     0,549 |        0,515 |       0,539 |         0,557 |
+| `logbw`      |    1,590 |    1,609 |     1,628 |        1,590 |       1,609 |         1,628 |
+| `logpost`    | -26923,9 | -26864,8 |  -26813,4 |     -26923,1 |    -26862,0 |      -26807,8 |
 
-: Quantis posteriores de 2,5%, 50% e 97,5% dos parâmetros e do logpost dos modelos MS e MS-COV.
+: Quantis posteriores de 2,5%, 50% e 97,5% dos parâmetros e do logpost dos modelos MS e MS-COV. {#tbl-res-diagnostico-maxstable}
 
 Legenda: loc: parâmetro de posição, lscale: log parâmetro de escala, shape: parâmetro de forma, lkpa: log de kappa, lteta: logit do expoente de escala, alpha: coef. de dependência espacial, logbw: largura da banda, logpost: logaritmo da distribuição posterior conjunta de todos os parâmetros do modelo
 
 Para o parâmetro de escala, as evidências indicaram associações negativas para elevação (lscale.b1) e positivas para distância em relação à costa (lscale.b2) [@tbl-parametros-ms]. Ou seja, quanto menor a altitude de uma estação e quanto maior a sua distância em relação à costa leste do país, maior o parâmetro de escala. Analisando apenas tais relações, observa-se que as curvas de IDF dessas estações, mais a oeste e de menor altitude, poderiam apresentar uma maior dispersão dos máximos de chuva, em relação à sua mediana, com caimento menos abrupto, indicando uma probabilidade maior de ocorrência de valores mais distantes da mediana. Ressalta-se, no entanto, as possíveis correlações com os outros parâmetros da GEV que podem constrastar esses efeitos.
 
-Quando analisadas todas as estações conjuntamente, comparando-se o modelo com e sem a inclusão de covariáveis, observa-se que o conjunto total de valores obtidos para o parâmetro de escala é aproximadamente semelhante para ambos os modelos, em termos medianos, com o pico de valores do modelo MS-COV apresentando-se ligeiramente mais à esquerda (σ~MS~ = 12.86 e σ~MS-COV~ = 12.53) [@fig-met-cov-maxstable]
+Quando analisadas todas as estações conjuntamente, comparando-se o modelo com e sem a inclusão de covariáveis, observa-se que o conjunto total de valores obtidos para o parâmetro de escala é aproximadamente semelhante para ambos os modelos, em termos medianos, com o pico de valores do modelo MS-COV apresentando-se ligeiramente mais à esquerda (σ~MS~ = 12.86 e σ~MS-COV~ = 12.53) (@fig-met-cov-maxstable).
 
 Para os parâmetros de forma, não foi testada a inclusão de covariáveis. No entanto, como a modelagem conjunta da estrutura de dependência espacial afeta as estimativas locais dos parâmetros da GEV, observa-se que o modelo MS-COV apresentou uma distribuição de valores ligeiramente menor do que a observada para MS (medianas ξ ~MS~ = 0,200 e ξ ~MS-COV~ = 0,211). Como a diferença é pequena, considera-se que, em ambos os modelos, o comportamento assintótico da cauda da distribuição dos eventos extremos seja semelhante. Como ambos apresentaram valores positivos, associados a caudas pesadas, os resultados indicam distribuições com maior probabilidade de eventos mais severos.
 
-Para o expoente de escala, a covariável obtida como importante para sua estimativa foi a elevação, para a qual o coeficiente de regressão apresentou-se negativo (lteta.b1) [@tbl-parametros-ms], o que indica que estações localizadas em maiores altitudes tendem a apresentar uma redução proporcional mais lenta da intensidade da chuva à medida que a duração aumenta, obtendo-se curvas IDF menos inclinadas, caso o efeito do expoente seja considerado isoladamente. Assim, para um mesmo período de retorno, seria observado nessas estações mais elevadas um menor contraste proporcional entre intensidades de curta e longa duração.
+Para o expoente de escala, a covariável obtida como importante para sua estimativa foi a elevação, para a qual o coeficiente de regressão apresentou-se negativo (lteta.b1) (@tbl-parametros-ms), o que indica que estações localizadas em maiores altitudes tendem a apresentar uma redução proporcional mais lenta da intensidade da chuva à medida que a duração aumenta, obtendo-se curvas IDF menos inclinadas, caso o efeito do expoente seja considerado isoladamente. Assim, para um mesmo período de retorno, seria observado nessas estações mais elevadas um menor contraste proporcional entre intensidades de curta e longa duração.
 
-Comparando-se o conjunto total de dados gerados para a modelagem completa com e sem covariáveis, o expoente de escala apresentou-se praticamente idêntico entre os modelos MS e MS-COV, indicando um padrão semelhante em seu comportamento geral (medianas η ~MS~ = 0,737 e η ~MS-COV~ = 0,738) (Figura 2).
+Comparando-se o conjunto total de dados gerados para a modelagem completa com e sem covariáveis, o expoente de escala apresentou-se praticamente idêntico entre os modelos MS e MS-COV, indicando um padrão semelhante em seu comportamento geral (medianas η ~MS~ = 0,737 e η ~MS-COV~ = 0,738) (@fig-res-dep-espacial).
 
-Para o coeficiente de dependência espacial 𝛼 cabe ressaltar que esse é um parâmetro único para cada modelo, não sendo especializado como os demais apresentados. Os resultados do coeficiente 𝛼 apresentaram valores medianos α ~MS~ = 0,52 e α ~MS-COV~ = 0,54 [@fig-res-dep-espacial]. Tais valores indicam um grau de dependência espacial intermediário na camada de dados de ambos os modelos. Embora a diferença entre as medianas seja relativamente pequena, a observação das distribuições empíricas das amostras indica uma clara separação entre os conjuntos de dados, indicando valores de menor magnitude de $\alpha$ – o que representa maior grau de dependência espacial – no modelo que inclui covariáveis.
+Para o coeficiente de dependência espacial 𝛼 cabe ressaltar que esse é um parâmetro único para cada modelo, não sendo especializado como os demais apresentados. Os resultados do coeficiente 𝛼 apresentaram valores medianos α ~MS~ = 0,52 e α ~MS-COV~ = 0,54 (@fig-res-dep-espacial). Tais valores indicam um grau de dependência espacial intermediário na camada de dados de ambos os modelos. Embora a diferença entre as medianas seja relativamente pequena, a observação das distribuições empíricas das amostras indica uma clara separação entre os conjuntos de dados, indicando valores de menor magnitude de $\alpha$ – o que representa maior grau de dependência espacial – no modelo que inclui covariáveis.
 
 O resultado indica a possibilidade de que, no modelo MS-COV, a dependência espacial esteja sendo explicada em partes pelos outros parâmetros, que se relacionam aos fatores físicos que foram considerados - como elevação e distância para a costa. Embora as covariáveis não tenham sido testadas especificamente para esse parâmetro, já que no método aplicado $\alpha$ é um valor único, as interações que ocorrem durante os procedimentos da modelagem podem ser suficientes para resultar em conjuntos diferentes de valores de $\alpha$, o que, de certa forma, dificulta a interpretabilidade dos modelos. Resultados análogos, em que a inclusão de covariáveis para estimativa dos parâmetros da IDF resultou uma redução discreta nos valores de 𝛼 encontrados foram observadas por [@Duarte2025IDF].
 
-![Distribuição posterior do parâmetro de dependência espacial α nos modelos MS e MS-COV](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura4.jpeg) {#fig-res-dep-espacial fig-align="center"}
+![Distribuição posterior do parâmetro de dependência espacial α nos modelos MS e MS-COV](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura4.jpeg){#fig-res-dep-espacial fig-align="center"}
 
 <!-- Figura 4 -->
 
@@ -260,7 +265,7 @@ A @fig-res-metricas-maxstable apresenta os resultados da aplicação das métric
 
 A @fig-res-idf-maxstable apresenta as curvas IDF geradas para estações de monitoramento diário (24h) que apresentaram mais de 30 anos de dados. É possível observar que as curvas geradas por ambos os modelos são semelhantes, tanto em sua mediana, quanto nos intervalos de credibilidade, sendo visível uma pequena tendência a apresentação de maiores intensidades por parte do modelo MS-COV. Em todas as estações, observa-se uma tendência das curvas a superestimarem os dados observados, por ambos os modelos.
 
-![Curvas de intensidade em relação ao tempo de retorno para as estações de monitoramento diários de chuvas, considerando uma duração de 24h.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura6.jpeg) {#fig-res-idf-maxstable fig-align="center"}
+![Curvas de intensidade em relação ao tempo de retorno para as estações de monitoramento diários de chuvas, considerando uma duração de 24h.](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura6.jpeg){#fig-res-idf-maxstable fig-align="center"}
 
 <!-- Figura 6 -->
 
@@ -268,7 +273,7 @@ A @fig-res-idf-maxstable apresenta as curvas IDF geradas para estações de moni
 
 A @fig-res-medianas-maxstable apresenta a diferença proporcional observada entre a intensidade mediana calculado para o modelo MS-COV em relação ao modelo MS, para diferentes períodos de retorno (colunas) e diferentes durações (linhas).
 
-![Diferenças entre as intensidades medianas de precipitação calculadas pelo modelo MS-COV em relação ao modelo MS para diferentes durações (linhas) e períodos de retorno (colunas).](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura7.jpeg) {#fig-res-medianas-maxstable fig-align="center"}
+![Diferenças entre as intensidades medianas de precipitação calculadas pelo modelo MS-COV em relação ao modelo MS para diferentes durações (linhas) e períodos de retorno (colunas).](Scripts_Modelo_Bayesiano/figuras/max_stable/Figura7.jpeg){#fig-res-medianas-maxstable fig-align="center"}
 
 <!-- Figura 7 -->
 

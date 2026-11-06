@@ -11,7 +11,7 @@ book:
     - cap_curvas_idf.qmd
     - meta8.qmd
     - ref.qmd
-    - documentacao_scripts_R.qmd
+    # - documentacao_scripts_R.qmd # fazer um relatório separado
     
 format:
   docx:

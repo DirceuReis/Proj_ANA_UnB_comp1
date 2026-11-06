@@ -193,12 +193,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Referências Bibliográficas</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./documentacao_scripts_R.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Documentação dos scripts em R</span></span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>
@@ -260,20 +254,6 @@ window.Quarto = {
 <p>Toda a base do UNIPLU-BR pode ser obtida através do site <span class="citation" data-cites="uniplubr_github">(<a href="ref.html#ref-uniplubr_github" role="doc-biblioref">LARHENA 2025</a>)</span> (https://github.com/LARHENA/UNIPLU-BR). Os dados são armazenados em arquivos tipo .zip. Cada arquivo .zip contém dois arquivos em formato .parquet: (i) table_info.parquet (metadados das estações); e (ii) table_data.parquet (séries de dados).</p>
 <p>Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do UNIPLU-BR cobre o período de 1855 a 2025, consolidando aproximadamente 1 bilhão de registros de precipitação em 21.331 estações. As informações obtidas possuem resolução temporal variada, entre intervalos de 10 minutos até 24 horas e discretização diária. A distribuição desses registros, por fonte é detalhada na <a href="#tbl-fontes-uniplu" class="quarto-xref">Tabela&nbsp;<span>2.1</span></a> e <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a>.</p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Anexando pacote: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Os seguintes objetos são mascarados por 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Os seguintes objetos são mascarados por 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
 <div id="tbl-fontes-uniplu" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fontes-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -281,23 +261,23 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
 </figcaption>
 <div aria-describedby="tbl-fontes-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="splsjtzwjc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#splsjtzwjc table {
+<div id="mjclpuzfao" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mjclpuzfao table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#splsjtzwjc thead, #splsjtzwjc tbody, #splsjtzwjc tfoot, #splsjtzwjc tr, #splsjtzwjc td, #splsjtzwjc th {
+#mjclpuzfao thead, #mjclpuzfao tbody, #mjclpuzfao tfoot, #mjclpuzfao tr, #mjclpuzfao td, #mjclpuzfao th {
   border-style: none;
 }
 
-#splsjtzwjc p {
+#mjclpuzfao p {
   margin: 0;
   padding: 0;
 }
 
-#splsjtzwjc .gt_table {
+#mjclpuzfao .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -323,12 +303,12 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-left-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_caption {
+#mjclpuzfao .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#splsjtzwjc .gt_title {
+#mjclpuzfao .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -340,7 +320,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-width: 0;
 }
 
-#splsjtzwjc .gt_subtitle {
+#mjclpuzfao .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -352,7 +332,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-top-width: 0;
 }
 
-#splsjtzwjc .gt_heading {
+#mjclpuzfao .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -364,13 +344,13 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_bottom_border {
+#mjclpuzfao .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_col_headings {
+#mjclpuzfao .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -385,7 +365,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_col_heading {
+#mjclpuzfao .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -405,7 +385,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   overflow-x: hidden;
 }
 
-#splsjtzwjc .gt_column_spanner_outer {
+#mjclpuzfao .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -417,15 +397,15 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 4px;
 }
 
-#splsjtzwjc .gt_column_spanner_outer:first-child {
+#mjclpuzfao .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#splsjtzwjc .gt_column_spanner_outer:last-child {
+#mjclpuzfao .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#splsjtzwjc .gt_column_spanner {
+#mjclpuzfao .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -437,11 +417,11 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   width: 100%;
 }
 
-#splsjtzwjc .gt_spanner_row {
+#mjclpuzfao .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#splsjtzwjc .gt_group_heading {
+#mjclpuzfao .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -467,7 +447,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   text-align: left;
 }
 
-#splsjtzwjc .gt_empty_group_heading {
+#mjclpuzfao .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -482,15 +462,15 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   vertical-align: middle;
 }
 
-#splsjtzwjc .gt_from_md > :first-child {
+#mjclpuzfao .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#splsjtzwjc .gt_from_md > :last-child {
+#mjclpuzfao .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#splsjtzwjc .gt_row {
+#mjclpuzfao .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -509,7 +489,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   overflow-x: hidden;
 }
 
-#splsjtzwjc .gt_stub {
+#mjclpuzfao .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -522,7 +502,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#splsjtzwjc .gt_stub_row_group {
+#mjclpuzfao .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -536,15 +516,15 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   vertical-align: top;
 }
 
-#splsjtzwjc .gt_row_group_first td {
+#mjclpuzfao .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#splsjtzwjc .gt_row_group_first th {
+#mjclpuzfao .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#splsjtzwjc .gt_summary_row {
+#mjclpuzfao .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -554,16 +534,16 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#splsjtzwjc .gt_first_summary_row {
+#mjclpuzfao .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_first_summary_row.thick {
+#mjclpuzfao .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#splsjtzwjc .gt_last_summary_row {
+#mjclpuzfao .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -573,7 +553,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_grand_summary_row {
+#mjclpuzfao .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -583,7 +563,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#splsjtzwjc .gt_first_grand_summary_row {
+#mjclpuzfao .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -593,7 +573,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-top-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_last_grand_summary_row_top {
+#mjclpuzfao .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -603,11 +583,11 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_striped {
+#mjclpuzfao .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#splsjtzwjc .gt_table_body {
+#mjclpuzfao .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -616,7 +596,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_footnotes {
+#mjclpuzfao .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -630,7 +610,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_footnote {
+#mjclpuzfao .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -639,7 +619,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#splsjtzwjc .gt_sourcenotes {
+#mjclpuzfao .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -653,7 +633,7 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#splsjtzwjc .gt_sourcenote {
+#mjclpuzfao .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -661,72 +641,72 @@ Tabela&nbsp;2.1: Tabela 1. Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#splsjtzwjc .gt_left {
+#mjclpuzfao .gt_left {
   text-align: left;
 }
 
-#splsjtzwjc .gt_center {
+#mjclpuzfao .gt_center {
   text-align: center;
 }
 
-#splsjtzwjc .gt_right {
+#mjclpuzfao .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#splsjtzwjc .gt_font_normal {
+#mjclpuzfao .gt_font_normal {
   font-weight: normal;
 }
 
-#splsjtzwjc .gt_font_bold {
+#mjclpuzfao .gt_font_bold {
   font-weight: bold;
 }
 
-#splsjtzwjc .gt_font_italic {
+#mjclpuzfao .gt_font_italic {
   font-style: italic;
 }
 
-#splsjtzwjc .gt_super {
+#mjclpuzfao .gt_super {
   font-size: 65%;
 }
 
-#splsjtzwjc .gt_footnote_marks {
+#mjclpuzfao .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#splsjtzwjc .gt_asterisk {
+#mjclpuzfao .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#splsjtzwjc .gt_indent_1 {
+#mjclpuzfao .gt_indent_1 {
   text-indent: 5px;
 }
 
-#splsjtzwjc .gt_indent_2 {
+#mjclpuzfao .gt_indent_2 {
   text-indent: 10px;
 }
 
-#splsjtzwjc .gt_indent_3 {
+#mjclpuzfao .gt_indent_3 {
   text-indent: 15px;
 }
 
-#splsjtzwjc .gt_indent_4 {
+#mjclpuzfao .gt_indent_4 {
   text-indent: 20px;
 }
 
-#splsjtzwjc .gt_indent_5 {
+#mjclpuzfao .gt_indent_5 {
   text-indent: 25px;
 }
 
-#splsjtzwjc .katex-display {
+#mjclpuzfao .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#splsjtzwjc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mjclpuzfao div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -862,23 +842,23 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
 </figcaption>
 <div aria-describedby="tbl-inventario-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="mclmrjqdjf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mclmrjqdjf table {
+<div id="yznkmwhqdz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yznkmwhqdz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mclmrjqdjf thead, #mclmrjqdjf tbody, #mclmrjqdjf tfoot, #mclmrjqdjf tr, #mclmrjqdjf td, #mclmrjqdjf th {
+#yznkmwhqdz thead, #yznkmwhqdz tbody, #yznkmwhqdz tfoot, #yznkmwhqdz tr, #yznkmwhqdz td, #yznkmwhqdz th {
   border-style: none;
 }
 
-#mclmrjqdjf p {
+#yznkmwhqdz p {
   margin: 0;
   padding: 0;
 }
 
-#mclmrjqdjf .gt_table {
+#yznkmwhqdz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -904,12 +884,12 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-left-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_caption {
+#yznkmwhqdz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mclmrjqdjf .gt_title {
+#yznkmwhqdz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -921,7 +901,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-bottom-width: 0;
 }
 
-#mclmrjqdjf .gt_subtitle {
+#yznkmwhqdz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -933,7 +913,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-top-width: 0;
 }
 
-#mclmrjqdjf .gt_heading {
+#yznkmwhqdz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -945,13 +925,13 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-right-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_bottom_border {
+#yznkmwhqdz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_col_headings {
+#yznkmwhqdz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -966,7 +946,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-right-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_col_heading {
+#yznkmwhqdz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -986,7 +966,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   overflow-x: hidden;
 }
 
-#mclmrjqdjf .gt_column_spanner_outer {
+#yznkmwhqdz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -998,15 +978,15 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 4px;
 }
 
-#mclmrjqdjf .gt_column_spanner_outer:first-child {
+#yznkmwhqdz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mclmrjqdjf .gt_column_spanner_outer:last-child {
+#yznkmwhqdz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mclmrjqdjf .gt_column_spanner {
+#yznkmwhqdz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1018,11 +998,11 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   width: 100%;
 }
 
-#mclmrjqdjf .gt_spanner_row {
+#yznkmwhqdz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mclmrjqdjf .gt_group_heading {
+#yznkmwhqdz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1048,7 +1028,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   text-align: left;
 }
 
-#mclmrjqdjf .gt_empty_group_heading {
+#yznkmwhqdz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1063,15 +1043,15 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   vertical-align: middle;
 }
 
-#mclmrjqdjf .gt_from_md > :first-child {
+#yznkmwhqdz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mclmrjqdjf .gt_from_md > :last-child {
+#yznkmwhqdz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mclmrjqdjf .gt_row {
+#yznkmwhqdz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1090,7 +1070,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   overflow-x: hidden;
 }
 
-#mclmrjqdjf .gt_stub {
+#yznkmwhqdz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1103,7 +1083,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 5px;
 }
 
-#mclmrjqdjf .gt_stub_row_group {
+#yznkmwhqdz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1117,15 +1097,15 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   vertical-align: top;
 }
 
-#mclmrjqdjf .gt_row_group_first td {
+#yznkmwhqdz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mclmrjqdjf .gt_row_group_first th {
+#yznkmwhqdz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mclmrjqdjf .gt_summary_row {
+#yznkmwhqdz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1135,16 +1115,16 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 5px;
 }
 
-#mclmrjqdjf .gt_first_summary_row {
+#yznkmwhqdz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_first_summary_row.thick {
+#yznkmwhqdz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mclmrjqdjf .gt_last_summary_row {
+#yznkmwhqdz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1154,7 +1134,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-bottom-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_grand_summary_row {
+#yznkmwhqdz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1164,7 +1144,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 5px;
 }
 
-#mclmrjqdjf .gt_first_grand_summary_row {
+#yznkmwhqdz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1174,7 +1154,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-top-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_last_grand_summary_row_top {
+#yznkmwhqdz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1184,11 +1164,11 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-bottom-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_striped {
+#yznkmwhqdz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mclmrjqdjf .gt_table_body {
+#yznkmwhqdz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1197,7 +1177,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-bottom-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_footnotes {
+#yznkmwhqdz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1211,7 +1191,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-right-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_footnote {
+#yznkmwhqdz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1220,7 +1200,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 5px;
 }
 
-#mclmrjqdjf .gt_sourcenotes {
+#yznkmwhqdz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1234,7 +1214,7 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   border-right-color: #D3D3D3;
 }
 
-#mclmrjqdjf .gt_sourcenote {
+#yznkmwhqdz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1242,72 +1222,72 @@ Tabela&nbsp;2.2: Tabela 2. Síntese das informações contidas nos arquivos do i
   padding-right: 5px;
 }
 
-#mclmrjqdjf .gt_left {
+#yznkmwhqdz .gt_left {
   text-align: left;
 }
 
-#mclmrjqdjf .gt_center {
+#yznkmwhqdz .gt_center {
   text-align: center;
 }
 
-#mclmrjqdjf .gt_right {
+#yznkmwhqdz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mclmrjqdjf .gt_font_normal {
+#yznkmwhqdz .gt_font_normal {
   font-weight: normal;
 }
 
-#mclmrjqdjf .gt_font_bold {
+#yznkmwhqdz .gt_font_bold {
   font-weight: bold;
 }
 
-#mclmrjqdjf .gt_font_italic {
+#yznkmwhqdz .gt_font_italic {
   font-style: italic;
 }
 
-#mclmrjqdjf .gt_super {
+#yznkmwhqdz .gt_super {
   font-size: 65%;
 }
 
-#mclmrjqdjf .gt_footnote_marks {
+#yznkmwhqdz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mclmrjqdjf .gt_asterisk {
+#yznkmwhqdz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mclmrjqdjf .gt_indent_1 {
+#yznkmwhqdz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mclmrjqdjf .gt_indent_2 {
+#yznkmwhqdz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mclmrjqdjf .gt_indent_3 {
+#yznkmwhqdz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mclmrjqdjf .gt_indent_4 {
+#yznkmwhqdz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mclmrjqdjf .gt_indent_5 {
+#yznkmwhqdz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mclmrjqdjf .katex-display {
+#yznkmwhqdz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mclmrjqdjf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#yznkmwhqdz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1449,23 +1429,23 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
 </figcaption>
 <div aria-describedby="tbl-classificacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="moakczambf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#moakczambf table {
+<div id="bcoxlxkuja" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#bcoxlxkuja table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#moakczambf thead, #moakczambf tbody, #moakczambf tfoot, #moakczambf tr, #moakczambf td, #moakczambf th {
+#bcoxlxkuja thead, #bcoxlxkuja tbody, #bcoxlxkuja tfoot, #bcoxlxkuja tr, #bcoxlxkuja td, #bcoxlxkuja th {
   border-style: none;
 }
 
-#moakczambf p {
+#bcoxlxkuja p {
   margin: 0;
   padding: 0;
 }
 
-#moakczambf .gt_table {
+#bcoxlxkuja .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1491,12 +1471,12 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-left-color: #D3D3D3;
 }
 
-#moakczambf .gt_caption {
+#bcoxlxkuja .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#moakczambf .gt_title {
+#bcoxlxkuja .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1508,7 +1488,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-bottom-width: 0;
 }
 
-#moakczambf .gt_subtitle {
+#bcoxlxkuja .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1520,7 +1500,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-top-width: 0;
 }
 
-#moakczambf .gt_heading {
+#bcoxlxkuja .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1532,13 +1512,13 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-right-color: #D3D3D3;
 }
 
-#moakczambf .gt_bottom_border {
+#bcoxlxkuja .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#moakczambf .gt_col_headings {
+#bcoxlxkuja .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1553,7 +1533,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-right-color: #D3D3D3;
 }
 
-#moakczambf .gt_col_heading {
+#bcoxlxkuja .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1573,7 +1553,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   overflow-x: hidden;
 }
 
-#moakczambf .gt_column_spanner_outer {
+#bcoxlxkuja .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1585,15 +1565,15 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 4px;
 }
 
-#moakczambf .gt_column_spanner_outer:first-child {
+#bcoxlxkuja .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#moakczambf .gt_column_spanner_outer:last-child {
+#bcoxlxkuja .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#moakczambf .gt_column_spanner {
+#bcoxlxkuja .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1605,11 +1585,11 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   width: 100%;
 }
 
-#moakczambf .gt_spanner_row {
+#bcoxlxkuja .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#moakczambf .gt_group_heading {
+#bcoxlxkuja .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1635,7 +1615,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   text-align: left;
 }
 
-#moakczambf .gt_empty_group_heading {
+#bcoxlxkuja .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1650,15 +1630,15 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   vertical-align: middle;
 }
 
-#moakczambf .gt_from_md > :first-child {
+#bcoxlxkuja .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#moakczambf .gt_from_md > :last-child {
+#bcoxlxkuja .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#moakczambf .gt_row {
+#bcoxlxkuja .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1677,7 +1657,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   overflow-x: hidden;
 }
 
-#moakczambf .gt_stub {
+#bcoxlxkuja .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1690,7 +1670,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 5px;
 }
 
-#moakczambf .gt_stub_row_group {
+#bcoxlxkuja .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1704,15 +1684,15 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   vertical-align: top;
 }
 
-#moakczambf .gt_row_group_first td {
+#bcoxlxkuja .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#moakczambf .gt_row_group_first th {
+#bcoxlxkuja .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#moakczambf .gt_summary_row {
+#bcoxlxkuja .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1722,16 +1702,16 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 5px;
 }
 
-#moakczambf .gt_first_summary_row {
+#bcoxlxkuja .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#moakczambf .gt_first_summary_row.thick {
+#bcoxlxkuja .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#moakczambf .gt_last_summary_row {
+#bcoxlxkuja .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1741,7 +1721,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-bottom-color: #D3D3D3;
 }
 
-#moakczambf .gt_grand_summary_row {
+#bcoxlxkuja .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1751,7 +1731,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 5px;
 }
 
-#moakczambf .gt_first_grand_summary_row {
+#bcoxlxkuja .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1761,7 +1741,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-top-color: #D3D3D3;
 }
 
-#moakczambf .gt_last_grand_summary_row_top {
+#bcoxlxkuja .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1771,11 +1751,11 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-bottom-color: #D3D3D3;
 }
 
-#moakczambf .gt_striped {
+#bcoxlxkuja .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#moakczambf .gt_table_body {
+#bcoxlxkuja .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1784,7 +1764,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-bottom-color: #D3D3D3;
 }
 
-#moakczambf .gt_footnotes {
+#bcoxlxkuja .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1798,7 +1778,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-right-color: #D3D3D3;
 }
 
-#moakczambf .gt_footnote {
+#bcoxlxkuja .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1807,7 +1787,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 5px;
 }
 
-#moakczambf .gt_sourcenotes {
+#bcoxlxkuja .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1821,7 +1801,7 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   border-right-color: #D3D3D3;
 }
 
-#moakczambf .gt_sourcenote {
+#bcoxlxkuja .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1829,72 +1809,72 @@ Tabela&nbsp;2.3: Tabela 3. Regras de classificação qualitativa com base em P (
   padding-right: 5px;
 }
 
-#moakczambf .gt_left {
+#bcoxlxkuja .gt_left {
   text-align: left;
 }
 
-#moakczambf .gt_center {
+#bcoxlxkuja .gt_center {
   text-align: center;
 }
 
-#moakczambf .gt_right {
+#bcoxlxkuja .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#moakczambf .gt_font_normal {
+#bcoxlxkuja .gt_font_normal {
   font-weight: normal;
 }
 
-#moakczambf .gt_font_bold {
+#bcoxlxkuja .gt_font_bold {
   font-weight: bold;
 }
 
-#moakczambf .gt_font_italic {
+#bcoxlxkuja .gt_font_italic {
   font-style: italic;
 }
 
-#moakczambf .gt_super {
+#bcoxlxkuja .gt_super {
   font-size: 65%;
 }
 
-#moakczambf .gt_footnote_marks {
+#bcoxlxkuja .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#moakczambf .gt_asterisk {
+#bcoxlxkuja .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#moakczambf .gt_indent_1 {
+#bcoxlxkuja .gt_indent_1 {
   text-indent: 5px;
 }
 
-#moakczambf .gt_indent_2 {
+#bcoxlxkuja .gt_indent_2 {
   text-indent: 10px;
 }
 
-#moakczambf .gt_indent_3 {
+#bcoxlxkuja .gt_indent_3 {
   text-indent: 15px;
 }
 
-#moakczambf .gt_indent_4 {
+#bcoxlxkuja .gt_indent_4 {
   text-indent: 20px;
 }
 
-#moakczambf .gt_indent_5 {
+#bcoxlxkuja .gt_indent_5 {
   text-indent: 25px;
 }
 
-#moakczambf .katex-display {
+#bcoxlxkuja .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#moakczambf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#bcoxlxkuja div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1971,23 +1951,23 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
 </figcaption>
 <div aria-describedby="tbl-classificacao-resultado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="ttcndwlmqz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ttcndwlmqz table {
+<div id="dwaxjmlylt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dwaxjmlylt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ttcndwlmqz thead, #ttcndwlmqz tbody, #ttcndwlmqz tfoot, #ttcndwlmqz tr, #ttcndwlmqz td, #ttcndwlmqz th {
+#dwaxjmlylt thead, #dwaxjmlylt tbody, #dwaxjmlylt tfoot, #dwaxjmlylt tr, #dwaxjmlylt td, #dwaxjmlylt th {
   border-style: none;
 }
 
-#ttcndwlmqz p {
+#dwaxjmlylt p {
   margin: 0;
   padding: 0;
 }
 
-#ttcndwlmqz .gt_table {
+#dwaxjmlylt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2013,12 +1993,12 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-left-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_caption {
+#dwaxjmlylt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ttcndwlmqz .gt_title {
+#dwaxjmlylt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2030,7 +2010,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-bottom-width: 0;
 }
 
-#ttcndwlmqz .gt_subtitle {
+#dwaxjmlylt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2042,7 +2022,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-top-width: 0;
 }
 
-#ttcndwlmqz .gt_heading {
+#dwaxjmlylt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2054,13 +2034,13 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-right-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_bottom_border {
+#dwaxjmlylt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_col_headings {
+#dwaxjmlylt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2075,7 +2055,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-right-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_col_heading {
+#dwaxjmlylt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2095,7 +2075,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   overflow-x: hidden;
 }
 
-#ttcndwlmqz .gt_column_spanner_outer {
+#dwaxjmlylt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2107,15 +2087,15 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 4px;
 }
 
-#ttcndwlmqz .gt_column_spanner_outer:first-child {
+#dwaxjmlylt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ttcndwlmqz .gt_column_spanner_outer:last-child {
+#dwaxjmlylt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ttcndwlmqz .gt_column_spanner {
+#dwaxjmlylt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2127,11 +2107,11 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   width: 100%;
 }
 
-#ttcndwlmqz .gt_spanner_row {
+#dwaxjmlylt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ttcndwlmqz .gt_group_heading {
+#dwaxjmlylt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2157,7 +2137,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   text-align: left;
 }
 
-#ttcndwlmqz .gt_empty_group_heading {
+#dwaxjmlylt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2172,15 +2152,15 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   vertical-align: middle;
 }
 
-#ttcndwlmqz .gt_from_md > :first-child {
+#dwaxjmlylt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ttcndwlmqz .gt_from_md > :last-child {
+#dwaxjmlylt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ttcndwlmqz .gt_row {
+#dwaxjmlylt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2199,7 +2179,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   overflow-x: hidden;
 }
 
-#ttcndwlmqz .gt_stub {
+#dwaxjmlylt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2212,7 +2192,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 5px;
 }
 
-#ttcndwlmqz .gt_stub_row_group {
+#dwaxjmlylt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2226,15 +2206,15 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   vertical-align: top;
 }
 
-#ttcndwlmqz .gt_row_group_first td {
+#dwaxjmlylt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ttcndwlmqz .gt_row_group_first th {
+#dwaxjmlylt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ttcndwlmqz .gt_summary_row {
+#dwaxjmlylt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2244,16 +2224,16 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 5px;
 }
 
-#ttcndwlmqz .gt_first_summary_row {
+#dwaxjmlylt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_first_summary_row.thick {
+#dwaxjmlylt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ttcndwlmqz .gt_last_summary_row {
+#dwaxjmlylt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2263,7 +2243,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-bottom-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_grand_summary_row {
+#dwaxjmlylt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2273,7 +2253,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 5px;
 }
 
-#ttcndwlmqz .gt_first_grand_summary_row {
+#dwaxjmlylt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2283,7 +2263,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-top-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_last_grand_summary_row_top {
+#dwaxjmlylt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2293,11 +2273,11 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-bottom-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_striped {
+#dwaxjmlylt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ttcndwlmqz .gt_table_body {
+#dwaxjmlylt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2306,7 +2286,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-bottom-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_footnotes {
+#dwaxjmlylt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2320,7 +2300,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-right-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_footnote {
+#dwaxjmlylt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2329,7 +2309,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 5px;
 }
 
-#ttcndwlmqz .gt_sourcenotes {
+#dwaxjmlylt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2343,7 +2323,7 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   border-right-color: #D3D3D3;
 }
 
-#ttcndwlmqz .gt_sourcenote {
+#dwaxjmlylt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2351,72 +2331,72 @@ Tabela&nbsp;2.4: Tabela 4. Classificação de qualidade dos anos-estação das s
   padding-right: 5px;
 }
 
-#ttcndwlmqz .gt_left {
+#dwaxjmlylt .gt_left {
   text-align: left;
 }
 
-#ttcndwlmqz .gt_center {
+#dwaxjmlylt .gt_center {
   text-align: center;
 }
 
-#ttcndwlmqz .gt_right {
+#dwaxjmlylt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ttcndwlmqz .gt_font_normal {
+#dwaxjmlylt .gt_font_normal {
   font-weight: normal;
 }
 
-#ttcndwlmqz .gt_font_bold {
+#dwaxjmlylt .gt_font_bold {
   font-weight: bold;
 }
 
-#ttcndwlmqz .gt_font_italic {
+#dwaxjmlylt .gt_font_italic {
   font-style: italic;
 }
 
-#ttcndwlmqz .gt_super {
+#dwaxjmlylt .gt_super {
   font-size: 65%;
 }
 
-#ttcndwlmqz .gt_footnote_marks {
+#dwaxjmlylt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ttcndwlmqz .gt_asterisk {
+#dwaxjmlylt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ttcndwlmqz .gt_indent_1 {
+#dwaxjmlylt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ttcndwlmqz .gt_indent_2 {
+#dwaxjmlylt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ttcndwlmqz .gt_indent_3 {
+#dwaxjmlylt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ttcndwlmqz .gt_indent_4 {
+#dwaxjmlylt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ttcndwlmqz .gt_indent_5 {
+#dwaxjmlylt .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ttcndwlmqz .katex-display {
+#dwaxjmlylt .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ttcndwlmqz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dwaxjmlylt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
