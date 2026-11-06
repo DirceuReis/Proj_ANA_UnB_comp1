@@ -1,6 +1,8 @@
 ## FIGURAS DO INVENTÁRIO - UNIPLU-BR
 ##
-##
+## Padrão dos mapas: fonte 8 pt, traços finos, legenda dentro do painel,
+## enquadramento fixo pela bbox do país e CRS único em `epsg`.
+## Insumos: 00a. inventario_estacoes.csv e resumo_estacao_ano.csv
 
 ##### 1. Library imports --------------------------------------------------------------------------------------------------
 library(dplyr)
@@ -14,9 +16,72 @@ library(ggspatial)
 library(scales)
 
 ##### 2. Caminhos  ----------------------------------------------------------------------------------------------------------
-dados <- "C:/Users/daniele.silva/OneDrive - RHAMA CONSULTORIA AMBIENTAL LTDA EPP/Área de Trabalho/UNB/R/UNIPLU/00. Series"
+dados <- "C:/UNB/UNIPLU/00. Series"
 
-##### 3. Inventário e contorno dos estados  ------------------------------------------------------------------------
+##### 3. Padrão gráfico  ----------------------------------------------------------------------------------------------------
+font     <- "sans"
+fontsize <- 8
+textsize <- fontsize / .pt     # pt -> mm, para geom_text/geom_sf_text/annotate
+epsg     <- 5880               # SIRGAS 2000 / Policônica do Brasil (métrico)
+
+## bbox do país projetada em 5880 tem razão largura/altura de 1,115
+LARG_MAPA <- 16                # cm
+ALT_MAPA  <- 14.5
+LARG_GRAF <- 16
+ALT_GRAF  <- 10
+
+set_theme(
+  theme_bw() +
+    theme(
+      panel.grid = element_blank(),
+      axis.ticks = element_line(linewidth = 0.3),
+      legend.position = "inside",
+      legend.position.inside = c(0, 0),
+      legend.justification = c(0, 0),
+      legend.background = element_blank(),
+      legend.key.height = unit(fontsize, "pt"),
+      strip.background = element_blank(),
+      text = element_text(size = fontsize, family = font),
+      panel.spacing.y = unit(0.5, "pt")
+    )
+)
+
+escala_mapa <- annotation_scale(
+  location = "br", width_hint = 0.17, height = unit(1.5, "mm"),
+  text_family = font, text_cex = 0.6,
+  bar_cols = c("black", "aliceblue"), line_width = 0.4
+)
+
+norte_mapa <- annotation_north_arrow(
+  location = "tr", width = unit(1, "cm"), height = unit(1, "cm"),
+  which_north = "true",
+  style = north_arrow_nautical(text_family = font, text_size = fontsize,
+                               fill = c("black", "white"))
+)
+
+tema_mapa <- theme(
+  plot.margin            = margin(t = 10, r = 1, l = 1),
+  panel.background       = element_rect(fill = "white"),
+  legend.key.spacing.y   = unit(0, "pt"),
+  legend.key.size        = unit(fontsize * 0.9, "pt"),
+  legend.margin          = margin(t = -5, l = -2),
+  legend.position        = "inside",
+  legend.position.inside = c(0.03, 0.02),
+  legend.justification   = c(0, 0)
+)
+
+## barra de cor vertical, usada nas Figuras 2 e 3
+barra_cor <- function() {
+  guide_colourbar(
+    theme = theme(
+      legend.key.height = unit(25, "mm"),
+      legend.key.width  = unit(2.5, "mm"),
+      legend.ticks      = element_line(color = "white", linewidth = 0.3),
+      legend.frame      = element_rect(color = "grey30", linewidth = 0.2)),
+    title.position = "top")
+}
+
+##### 4. Inventário e contorno dos estados  ------------------------------------------------------------------------
 inventario <- read_csv(file.path(dados, "inventario_estacoes.csv"),
                        col_types = cols(gauge_code = col_character(),
                                         time_step  = col_character(),
@@ -27,16 +92,23 @@ resumo_por_ano <- read_csv(file.path(dados, "resumo_estacao_ano.csv"),
                                             time_step  = col_character(),
                                             .default   = col_guess()))
 
-mapa_dados <- inventario %>% filter(!is.na(lat), !is.na(long))
+mapa_dados    <- inventario %>% filter(!is.na(lat), !is.na(long))
+mapa_dados_sf <- st_as_sf(mapa_dados, coords = c("long", "lat"), crs = 4674)
 
-brasil_sf <- geobr::read_state(year = 2020, showProgress = FALSE)
-brasil_sf$area_km2 <- as.numeric(sf::st_area(brasil_sf)) / 1e6   # área geodésica (m² -> km²)
+uf.sf   <- geobr::read_state(year = 2025, showProgress = FALSE)
+br.sf   <- geobr::read_country(year = 2025, showProgress = FALSE)
+bbox.br <- sf::st_bbox(br.sf)
+
+uf.sf$area_km2 <- as.numeric(sf::st_area(uf.sf)) / 1e6   # área geodésica (m² -> km²)
 mil <- label_number(big.mark = ".", decimal.mark = ",", accuracy = 1)
+
+enquadra <- coord_sf(crs = st_crs(epsg), default_crs = st_crs(4674),
+                     xlim = bbox.br[c(1, 3)], ylim = bbox.br[c(2, 4)])
 
 cat("inventário:", nrow(inventario), "estações |", nrow(mapa_dados), "com coordenada\n")
 cat("resumo por ano:", nrow(resumo_por_ano), "linhas estação-ano\n")
 
-##### 4. Figura 1. Mapa das estações por rede  ------------------------------------------------------------------------
+##### 5. Figura 1. Mapa das estações por rede  ------------------------------------------------------------------------
 
 rede_cores <- c(
   "CEMADEN"         = "#1565c0",
@@ -55,150 +127,72 @@ rede_formas <- c(
   "Telemetria"      = 25   # triângulo invertido
 )
 
-mapa_dados_sf <- st_as_sf(mapa_dados, coords = c("long", "lat"), crs = 4674)
-estados_sf    <- brasil_sf %>% filter(abbrev_state %in% unique(mapa_dados$state))
-
 Figura1 <- ggplot() +
-  geom_sf(data = estados_sf, fill = "grey95", color = "grey50", linewidth = 0.4) +
   geom_sf(data = mapa_dados_sf, aes(color = network, shape = network),
-          size = 2.2, alpha = 0.75) +
-  scale_color_manual(values = rede_cores, name = "Rede") +
+          size = 0.35, stroke = 0.08) +
+  geom_sf(data = uf.sf, color = "grey30", fill = NA, linewidth = 0.1) +
+  geom_sf(data = br.sf, color = "black",  fill = NA, linewidth = 0.4) +
+  scale_color_manual(values = rede_cores,  name = "Rede") +
   scale_shape_manual(values = rede_formas, name = "Rede") +
-  guides(color = guide_legend(override.aes = list(size = 6))) +
+  guides(color = guide_legend(override.aes = list(size = 1.5))) +
+  escala_mapa + norte_mapa + enquadra +
   labs(x = "Longitude", y = "Latitude") +
-  theme_bw() +
-  theme(
-    legend.position = "right",
-    legend.text     = element_text(size = 22),
-    legend.title    = element_text(size = 22, face = "bold"),
-    axis.text.x     = element_text(size = 22, color = "black"),
-    axis.text.y     = element_text(size = 22, color = "black"),
-    axis.title      = element_text(size = 22, color = "black")
-  ) +
-  annotation_scale(location = "bl", width_hint = 0.3,
-                   text_cex   = 1.7,                  
-                   height     = unit(0.35, "cm"),  
-                   line_width = 1.2,                
-                   text_pad   = unit(0.2, "cm"))+
-  annotation_north_arrow(
-    location = "bl",
-    pad_y  = unit(0.8, "cm"),
-    height = unit(2.0, "cm"),    
-    width  = unit(2.0, "cm"),
-    style  = north_arrow_fancy_orienteering(
-      text_size  = 22,           
-      line_width = 1.2,         
-      text_face  = "bold"))+
-  coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
-           ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
+  tema_mapa
 
-ggsave(file.path(dados, "Figura 1. Inventário.png"), Figura1, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 1. Inventário.png"), Figura1,
+       width = LARG_MAPA, height = ALT_MAPA, units = "cm", dpi = 300, bg = "white")
 cat("Figura 1. Inventário.png salvo.\n")
 
-##### 5. Figura 2. Densidade de estações por UF ------------------------------------------------------
+##### 6. Figura 2. Densidade de estações por UF ------------------------------------------------------
 uf_numero <- inventario %>% filter(!is.na(state)) %>% count(state, name = "n_estacoes")
 
-uf_sf <- brasil_sf %>%
+uf_sf <- uf.sf %>%
   left_join(uf_numero, by = c("abbrev_state" = "state")) %>%
-  mutate(n_estacoes      = ifelse(is.na(n_estacoes), 0, n_estacoes),
-         km2_por_estacao = round(area_km2 / n_estacoes))
+  mutate(km2_por_estacao = round(area_km2 / n_estacoes))
 
 Figura2 <- ggplot(uf_sf) +
-  geom_sf(aes(fill = km2_por_estacao), color = "white", linewidth = 0.2) +
-  geom_sf_text(aes(label = mil(km2_por_estacao)), size = 20, size.unit = "pt") +
+  geom_sf(aes(fill = km2_por_estacao), color = "grey30", linewidth = 0.1) +
+  geom_sf(data = br.sf, color = "black", fill = NA, linewidth = 0.4) +
+  geom_sf_text(aes(label = mil(km2_por_estacao)),
+               size = fontsize * 0.85, size.unit = "pt", family = font) +
   scale_fill_gradient2(
     low = "blue", mid = "grey90", high = "red",
     midpoint = mean(range(uf_sf$km2_por_estacao, na.rm = TRUE, finite = TRUE)),
     labels = mil,
     name = "Área (km²)\npor estação",
-    guide = guide_colourbar(
-      theme = theme(
-        legend.key.height = unit(20, "cm"),
-        legend.key.width = unit(0.7,"cm"),
-        legend.ticks = element_line(color = "white",linewidth = 0.4),
-        legend.frame = element_rect(color = "grey30", linewidth = 0.3)),
-      title.position = "top"))+
+    guide = barra_cor()) +
+  escala_mapa + norte_mapa + enquadra +
   labs(x = "Longitude", y = "Latitude") +
-  theme_bw() +
-  theme(
-    legend.position = "right",
-    legend.text     = element_text(size = 22),
-    legend.title    = element_text(size = 22, face = "bold"),
-    axis.text.x     = element_text(size = 22, color = "black"),
-    axis.text.y     = element_text(size = 22, color = "black"),
-    axis.title      = element_text(size = 22, color = "black")
-  ) +
-  annotation_scale(location = "bl", width_hint = 0.3,
-                   text_cex   = 1.7,                  
-                   height     = unit(0.35, "cm"),  
-                   line_width = 1.2,                
-                   text_pad   = unit(0.2, "cm"))+
-  annotation_north_arrow(
-    location = "bl",
-    pad_y  = unit(0.8, "cm"),
-    height = unit(2.0, "cm"),    
-    width  = unit(2.0, "cm"),
-    style  = north_arrow_fancy_orienteering(
-      text_size  = 22,           
-      line_width = 1.2,         
-      text_face  = "bold"))+
-  coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
-           ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
+  tema_mapa
 
-ggsave(file.path(dados, "Figura 2. Densidade de estações.png"), Figura2, width = 16, height = 12, dpi = 300)
-cat("Figura 2. Densidade de estações.png.\n")
+ggsave(file.path(dados, "Figura 2. Densidade de estações.png"), Figura2,
+       width = LARG_MAPA, height = ALT_MAPA, units = "cm", dpi = 300, bg = "white")
+cat("Figura 2. Densidade de estações.png salvo.\n")
 
-##### 6. Figura 3. Mapa de pontos: nº de anos em atividade  ---------------------------------------------------
+##### 7. Figura 3. Mapa de pontos: nº de anos em atividade  ---------------------------------------------------
 
 TETO_ANOS <- 70
 
 Figura3 <- ggplot() +
-  geom_sf(data = brasil_sf, fill = "grey97", color = "grey40", linewidth = 0.3) +
-  geom_point(data = mapa_dados, aes(x = long, y = lat, color = n_anos),
-             size = 1, alpha = 0.7) +
+  geom_sf(data = mapa_dados_sf, aes(color = n_anos_com_registro),
+          shape = 3, size = 0.3, stroke = 0.08) +
+  geom_sf(data = uf.sf, color = "grey30", fill = NA, linewidth = 0.1) +
+  geom_sf(data = br.sf, color = "black",  fill = NA, linewidth = 0.4) +
   scale_color_gradient2(
     low = "red", mid = "grey85", high = "blue",
     midpoint = TETO_ANOS / 2, limits = c(0, TETO_ANOS), oob = scales::squish,
     breaks = seq(0, TETO_ANOS, by = 10),
     name = "Número de\nanos em atividade",
-    guide = guide_colourbar(
-      theme = theme(
-        legend.key.height = unit(20, "cm"),
-        legend.key.width = unit(0.7,"cm"),
-        legend.ticks = element_line(color = "white",linewidth = 0.4),
-        legend.frame = element_rect(color = "grey30", linewidth = 0.3)),
-      title.position = "top"))+
+    guide = barra_cor()) +
+  escala_mapa + norte_mapa + enquadra +
   labs(x = "Longitude", y = "Latitude") +
-  theme_bw() +
-  theme(
-    legend.position = "right",
-    legend.text     = element_text(size = 22),
-    legend.title    = element_text(size = 22, face = "bold"),
-    axis.text.x     = element_text(size = 22, color = "black"),
-    axis.text.y     = element_text(size = 22, color = "black"),
-    axis.title      = element_text(size = 22, color = "black")
-  ) +
-  annotation_scale(location = "bl", width_hint = 0.3,
-                   text_cex   = 1.7,                  
-                   height     = unit(0.35, "cm"),  
-                   line_width = 1.2,                
-                   text_pad   = unit(0.2, "cm"))+
-  annotation_north_arrow(
-    location = "bl",
-    pad_y  = unit(0.8, "cm"),
-    height = unit(2.0, "cm"),    
-    width  = unit(2.0, "cm"),
-    style  = north_arrow_fancy_orienteering(
-      text_size  = 22,           
-      line_width = 1.2,         
-      text_face  = "bold"))+
-  coord_sf(xlim = c(min(mapa_dados$long) - 0.5, max(mapa_dados$long) + 0.5),
-           ylim = c(min(mapa_dados$lat)  - 0.5, max(mapa_dados$lat)  + 0.5))
+  tema_mapa
 
-ggsave(file.path(dados, "Figura 3. Mapa anos_atividade.png"), Figura3, width = 16, height = 12, dpi = 300)
+ggsave(file.path(dados, "Figura 3. Mapa anos_atividade.png"), Figura3,
+       width = LARG_MAPA, height = ALT_MAPA, units = "cm", dpi = 300, bg = "white")
 cat("Figura 3. Mapa anos_atividade.png salvo \n")
 
-##### 7. Figura 4. Estações por instituição responsável  ------------------------------------------------------------------------
+##### 8. Figura 4. Estações por instituição responsável  ------------------------------------------------------------------------
 LIMIAR_AGENCIA <- 200
 
 responsavel_numero <- inventario %>%
@@ -209,18 +203,17 @@ responsavel_numero <- inventario %>%
 
 Figura4 <- ggplot(responsavel_numero, aes(x = reorder(responsible, -n), y = n)) +
   geom_col(fill = "grey50") +
-  geom_text(aes(label = mil(n)), vjust = -0.4, size = 22, size.unit = "pt") +
-  labs(x = "Operadora", y = "Número de estações com dado") +
+  geom_text(aes(label = mil(n)), vjust = -0.4,
+            size = fontsize * 0.9, size.unit = "pt", family = font) +
+  labs(x = "Operadora", y = "Número de estações no inventário") +
   scale_y_continuous(labels = mil, expand = expansion(mult = c(0, 0.15))) +
-  theme_bw() +
-  theme(axis.text.x = element_text(size = 18, color = "black"),
-        axis.text.y = element_text(size = 22, color = "black"),
-        axis.title  = element_text(size = 22, color = "black"))
-    
-ggsave(file.path(dados, "Figura 4. Estações por instituição.png"), Figura4, width = 16, height = 12, dpi = 300)
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+ggsave(file.path(dados, "Figura 4. Estações por instituição.png"), Figura4,
+       width = LARG_GRAF, height = ALT_GRAF, units = "cm", dpi = 300, bg = "white")
 cat("Figura 4. Estações por instituição salva. Agências acima do limiar:", nrow(responsavel_numero), "\n")
 
-##### 8. Figura 5. Estações por ano, por resolução  ------------------------------------------------------------------------
+##### 9. Figura 5. Estações por ano, por resolução  ------------------------------------------------------------------------
 
 ANO_MIN  <- 1855
 ANO_MAX  <- 2025
@@ -246,7 +239,6 @@ soma_estacoes_ano <- resumo_por_ano %>%
 
 write_csv(soma_estacoes_ano, file.path(dados, "estacoes_por_ano.csv"))
 
-# grade completa de anos: anos sem estação aparecem como zero
 soma_estacoes_ano <- soma_estacoes_ano %>%
   filter(ano >= ANO_MIN, ano <= ANO_MAX) %>%
   complete(ano = ANO_MIN:ANO_MAX, resolucao = c("Diária", "Sub-diária"),
@@ -265,14 +257,9 @@ Figura5 <- ggplot(soma_estacoes_ano, aes(ano, estacoes, fill = resolucao)) +
   scale_x_continuous(breaks = seq(ANO_MIN, ANO_MAX, by = PASSO_X), expand = expansion(mult = 0.01)) +
   scale_y_continuous(labels = mil, expand = expansion(mult = c(0, 0.05))) +
   labs(x = "Ano", y = "Número de estações") +
-  theme_bw(base_size = 22) +
-  theme(panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank(),
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 22, color = "black"),
-        axis.text.y = element_text(color = "black", size = 22),
-        strip.background = element_rect(fill = "grey92", color = NA),
-        strip.text = element_text(face = 2, hjust = 0, size = 22))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        strip.text  = element_text(face = 2, hjust = 0))
 
 ggsave(file.path(dados, "Figura 5. Estações por ano por resolução.png"), Figura5,
-       width = 16, height = 12, units = "in", dpi = 300, bg = "white")
+       width = LARG_GRAF, height = 12, units = "cm", dpi = 300, bg = "white")
 cat("Figura 5. Estações por ano por resolução salva.\n")

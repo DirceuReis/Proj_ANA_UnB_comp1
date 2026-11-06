@@ -54,7 +54,7 @@ set_theme(
 
 # Tempos de retorno
 tr.todos <- c(2, 5, 10, 25, 50, 100, 200)
-tr1 <- c(10, 50, 100)
+tr1 <- c(2, 10, 50, 100)
 tr2 <- c(5, 25, 200)
 
 # Cores

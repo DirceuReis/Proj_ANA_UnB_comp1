@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Meta 1.4 - Espacialização dos Dados de Chuva em Grade – Proj. IDF Brasil ANA/UnB</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,15 +57,14 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7600ddd4616fb7b9baa2258c07466e60.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -90,7 +94,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -129,8 +133,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
@@ -201,7 +203,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
- <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
+ <span class="dropdown-text">Exemplos de estudos de caráter nacional</span></a>
   </li>  
     </ul>
   </li>
@@ -212,6 +214,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./teste.html"> 
+<span class="menu-text">teste</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -265,7 +271,7 @@ window.Quarto = {
 <section id="método-de-desagregação-temporal-de-dados-de-chuva-e-construção-de-um-modelo-regional" class="level2">
 <h2 class="anchored" data-anchor-id="método-de-desagregação-temporal-de-dados-de-chuva-e-construção-de-um-modelo-regional">Método de desagregação temporal de dados de chuva e construção de um modelo regional</h2>
 <p>O objetivo desta subseção é estabelecer um procedimento estatístico consistente para obter intensidades de chuva em durações sub-diárias (por exemplo, 1 h, 3 h, 6 h) mesmo em locais onde apenas existem registros diários. Isso é essencial para a geração e atualização de curvas IDF (Intensidade–Duração–Frequência) em escala regional e local, considerando que, no Brasil, dados de chuva diária são relativamente abundantes, mas séries de alta resolução temporal (sub-diária) são espacialmente escassas, frequentemente curtas e com muitas falhas <span class="citation" data-cites="Basso.2016">(<a href="#ref-Basso.2016" role="doc-biblioref">Basso et al. 2016</a>)</span>. A abordagem proposta combina duas linhas complementares de modelagem Bayesiana de extremos.</p>
-<p>A primeira linha é um modelo Bayesiano hierárquico de escala, formulado para ligar, de forma coerente, os máximos anuais de precipitação em múltiplas durações. Para cada posto e para cada duração (por exemplo, 1 h, 2 h, 3 h, 6 h, 12 h e 24 h), os máximos anuais são assumidos como provenientes de uma distribuição de valores extremos generalizada (GEV). Em vez de ajustar cada duração de forma independente, as durações são conectadas por uma relação de escala do tipo lei de potência com curvatura, em linha com a literatura de curvas IDF escaláveis <span class="citation" data-cites="KOUTSOYIANNIS1998118">Lima, Kwon, e Kim (<a href="#ref-Lima.2018" role="doc-biblioref">2018</a>)</span>. Essa relação garante consistência física entre durações curtas e longas e evita resultados incoerentes entre, por exemplo, 1 h e 24 h.</p>
+<p>A primeira linha é um modelo Bayesiano hierárquico de escala, formulado para ligar, de forma coerente, os máximos anuais de precipitação em múltiplas durações. Para cada posto e para cada duração (por exemplo, 1 h, 2 h, 3 h, 6 h, 12 h e 24 h), os máximos anuais são assumidos como provenientes de uma distribuição de valores extremos generalizada (GEV). Em vez de ajustar cada duração de forma independente, as durações são conectadas por uma relação de escala do tipo lei de potência com curvatura, em linha com a literatura de curvas IDF escaláveis <span class="citation" data-cites="KOUTSOYIANNIS1998118">Lima et al. (<a href="#ref-Lima.2018" role="doc-biblioref">2018</a>)</span>. Essa relação garante consistência física entre durações curtas e longas e evita resultados incoerentes entre, por exemplo, 1 h e 24 h.</p>
 <p>O modelo é hierárquico no sentido Bayesiano: os parâmetros da GEV (localização, escala e forma) são descritos em dois níveis, um nível local (específico de cada posto pluviométrico) e um nível regional (hiperparâmetros compartilhados entre postos). Esse arranjo produz “pooling parcial”: estações com séries incompletas ou curtas “herdam” informação estatística das estações mais bem monitoradas, sem perder totalmente suas particularidades. A estimação é realizada por amostragem MCMC (cadeias de Markov via Monte Carlo), implementada em R/RStan, com verificação explícita de convergência (por exemplo, <span class="math inline">\(R≤1,1\)</span>).</p>
 <p>Essa abordagem também resolve o caso de postos parcialmente monitorados, onde só há máximos anuais diários (24 h) (como é o caso dos produtos em grade) mas não há registros sub-horários confiáveis. Nesses locais, estima-se primeiro a máxima anual equivalente em 24 h (por exemplo, via fator de correção de Hershfield) e, em seguida, utiliza-se a estrutura hierárquica para propagar essa informação e inferir parâmetros GEV nas durações menores. Assim, é possível gerar curvas IDF completas em regiões onde só existem pluviômetros de leitura diária. O resultado final dessa primeira linha é, para cada posto e cada duração de interesse, uma distribuição a posteriori dos quantis de precipitação associados a diferentes períodos de retorno, já com incerteza quantificada, o que permite derivar fatores de desagregação temporal.</p>
 <p>A segunda linha é um modelo espacial Bayesiano baseado em processos max-estáveis. Nesta formulação, a precipitação extrema é tratada como um campo espacialmente dependente: os máximos anuais observados em diferentes postos dentro de uma mesma região não são considerados independentes, mas refletem a possibilidade de ocorrência conjunta de eventos convectivos severos que afetam simultaneamente múltiplos locais. Esse tipo de abordagem tem sido proposto recentemente para produzir curvas IDF regionais que sejam espacialmente consistentes, representando de forma mais realista a cauda conjunta de eventos intensos de curta duração. Essa linha de modelagem segue a formulação Bayesiana com processo máximo-estável discutida em aplicações recentes de modelagem espacial de extremos de precipitação (por exemplo, Stephenson et al. <span class="citation" data-cites="Stephenson.2016">(<a href="#ref-Stephenson.2016" role="doc-biblioref">2016</a>)</span> e Duarte et al. <span class="citation" data-cites="Duarte.2025">(<a href="#ref-Duarte.2025" role="doc-biblioref">2025</a>)</span>).</p>
@@ -274,12 +280,12 @@ window.Quarto = {
 <p>A inferência é feita por MCMC, amostrando simultaneamente parâmetros marginais e parâmetros espaciais, e após o ajuste é possível prever, para cada célula da grade (0,25° ou 0,1°), os quantis de chuva associados a determinados períodos de retorno e durações. Esses quantis podem então ser organizados em mapas contínuos de intensidades de projeto hidrológico, espacialmente coerentes, que podem ser diretamente incorporados em planejamento urbano, drenagem pluvial e gestão de risco de cheias repentinas.</p>
 <p>As duas abordagens serão avaliadas comparativamente e, para isso, serão empregados procedimentos propostos na literatura <span class="citation" data-cites="Mascaro.2020">(<a href="#ref-Mascaro.2020" role="doc-biblioref">Mascaro 2020</a>)</span>. Em linhas gerais, essa avaliação consiste em comparar, para cada posto de validação, as intensidades projetadas por cada modelo (para uma dada duração e um dado período de retorno) com uma intensidade de referência. A partir dessa comparação, são calculadas medidas de viés relativo médio (para verificar se o modelo tende a superestimar ou subestimar as intensidades de projeto) e de erro quadrático médio relativo (para avaliar a magnitude típica do erro em relação ao valor de referência). A aplicação inicial será feita no estado do Rio Grande do Sul. Com base nesses diagnósticos quantitativos, decidirá-se qual metodologia adotar.</p>
 <p>Ao final da Meta 1.4.5, serão entregues: (i) um relatório metodológico descrevendo as duas abordagens bayesianas utilizadas (modelo hierárquico de escala e modelo espacial max-estável), incluindo critérios de diagnóstico, convergência e validação. Esses produtos serão gerados em linguagem R e/ou Python.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-Basso.2016" class="csl-entry" role="listitem">
 Basso, Raviel Eurico, Daniel Gustavo Allasia, Rutinéia Tassi, e Karine Pickbrenner. 2016. <span>«<span>Review of the high intensity rainfall zones of Brazil</span>»</span>. <em>Engenharia Sanitaria e Ambiental</em> 21 (04): 635–41. <a href="https://doi.org/10.1590/s1413-41522016133691">https://doi.org/10.1590/s1413-41522016133691</a>.
 </div>
 <div id="ref-Duarte.2025" class="csl-entry" role="listitem">
-Duarte, Luíza Virgínia, Alan de Gois Barbosa, Priscilla M Moura, e Veber Costa. 2025. <span>«<span>A Bayesian approach to model IDF curves employing max-stable processes</span>»</span>. <em>Hydrological Sciences Journal</em>. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
+Duarte, Luíza Virgínia, Alan de Gois Barbosa, Priscilla M Moura, e Veber Costa. 2025. <span>«<span>A Bayesian approach to model IDF curves employing max-stable processes</span>»</span>. <em>Hydrological Sciences Journal</em>, advance online publication. <a href="https://doi.org/10.1080/02626667.2025.2579874">https://doi.org/10.1080/02626667.2025.2579874</a>.
 </div>
 <div id="ref-KOUTSOYIANNIS1998118" class="csl-entry" role="listitem">
 Koutsoyiannis, Demetris, Demosthenes Kozonis, e Alexandros Manetas. 1998. <span>«A mathematical framework for studying rainfall intensity-duration-frequency relationships»</span>. <em>Journal of Hydrology</em> 206 (1): 118–35. https://doi.org/<a href="https://doi.org/10.1016/S0022-1694(98)00097-3">https://doi.org/10.1016/S0022-1694(98)00097-3</a>.

@@ -1,101 +1,40 @@
 ---
-bibliography: ref_desagregacao.bib
+# title: "Curvas Intensidade-Duração-Frequência"
+# bibliography: ref_invariancia_escala.bib
 ---
 
-## Invariância de escala
+Da @fig-inv-escala-rs até a @fig-inv-escala-sp são apresentadas as retas de regressão ajustadas aos momentos não centrais até ordem 3, bem como os expoentes de escala $H$ estimados para cada ordem e o coeficiente de determinação $R^2$ para as estações mais longas de algumas Unidades Federativas. Os histogramas ao lado ilustram como a linearidade dos modelos ajustados às demais estações do estado. Grande parte das estações mais longas são operadas pelo INMET e pelo ICEA. Como consequência, a maioria das retas de regressão compreende somente as durações a partir de $d=$ 1 h.
 
-A base de parte dos modelos desenvolvidos para aplicação local (*at site*) e daqueles que serão desenvolvidos para aplicação regional está no modelo geral para a relação de Intensidade-Duração-Frequência proposto por @koutsoyiannis1998:
+No geral, pela disposição dos momentos calculados e pelo $R^2$, observa que há uma estrutura aproximadamente linear em diferentes durações. Pelos histogramas, é possível dizer que esta linearidade também existe para as demais estações no estado.
 
-$$
-i(d,T) = \frac{a(T)}{(d+\theta)^H}.
-$$ {#eq-idf-koutsoyiannis}
+Postos como o A801 no Rio Grande do Sul [@fig-inv-escala-rs], com 24 anos, são exemplos dessa estrutura empiricamente bem definida. Avaliando o modelo ajustado, é possível notar a estrutura aproximadamente linear entre os momentos não centrais ao longo da durações na faixa 1--24 h. Nesse caso, nota-se não somente a estrutura de invariância, como também uma possível conformidade com a invariância de escala simples, visto que há pouca variabilidade entre os expoentes de escala $H\approx 0.63$ ao longo das diferentes ordens $q$.
 
-O modelo [@eq-idf-koutsoyiannis] representa a dependência das intensidades $i$ com o tempo de retorno $T$ e com a duração $d$ de forma separável. O numerador $a(T)$ é a função quantílica de uma distribuição de probabilidades de uma variável aleatória $Y = I(d + \theta)^H$ que não possui relação com a duração $d$ em si, de modo que $y_T = a(T) = F_Y^{-1}(1 - 1/T)$, sendo $I$ a variável aleatória para intensidade média de precipitação.
+![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Rio Grande do Sul).](/Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_RS.png){#fig-inv-escala-rs fig-align="center" width="15cm"}
 
-A separabilidade da relação na @eq-idf-koutsoyiannis implica, ainda que implicitamente, invariância de escala. @menabde1999 reescreve a formulação clássica da relação de invariância de escala simples para intensidades de precipitação como
+Essa proximidade entre $H$s também pode ser observada na Paraíba, no posto SBJP apresentado na @fig-inv-escala-pb, com 34 anos.
 
-$$
-I_d \overset{d}{=} \left(\frac{d}{D}\right)^{-H} I_D.
-$$ {#eq-inv-menabde} A @eq-inv-menabde estabelece simplesmente que as intensidades $I$ em escalas (durações) distintas $d$ e $D$ (com $d<D$) são iguais em distribuição ($\overset{d}{=})$, à exceção de um fator de escala linear ($\lambda^H$, sendo $\lambda = D/d$).
+![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Paraíba).](/Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_PB.png){#fig-inv-escala-pb fig-align="center" width="15cm"}
 
-### Verificação da hipótese de invariância de escala simples
+Em outros locais, apesar da aparente linearidade entre os momentos, há uma certa distorção entre os momentos. Esse é o caso do posto SBCF, em Minas Gerais, ilustrado pela @fig-inv-escala-mg. O modelo linear e os valores pontuais dos momentos apontam para uma boa conformidade com o regime de invariância. As estimativas de $H$, entretanto, apresentam maior distinção entre si: $H_{q=1} =$ 0,7909, $H_{q=2}=$ 0,8131 e $H_{q=3}=$ 0,8445; sugerindo que o regime de invariância simples poderia não representar a estrutura de invariância de forma adequada.
 
-Em teoria, essa propriedade é inerente somente a algumas distribuições de cauda pesada [@nair2022], mas pode ser verificada de maneira empírica através do chamado sentido amplo [@menabde1999]. Utilizando a forma simplificada da @eq-idf-koutsoyiannis, a relação entre $d$ e $D$ pode ser expandida para um momento de ordem $q$. Calculando as esperanças de $I_d^q$, tem-se que
+![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Minas Gerais).](/Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_MG.png){#fig-inv-escala-mg fig-align="center" width="15cm"}
 
-$$
-E[I_d^q] = \left(\frac{d}{D}\right)^{-qH}E[I_D^q].
-$$ {#eq-inv-sentido-amplo}
+Outros padrões de divergência desse comportamento são observados. Notavelmente, muitos postos em diferentes regiões exibem aparentes "quebras de regime" próximas às extremidades do intervalo de durações considerado. O posto A305 [@fig-inv-escala-ce], no estado do Ceará, exibe uma estrutura comum a outros no conjunto caracterizada por um padrão convexo nos momentos empíricos: segmentos para $d<1$ h com inclinação inferior à do modelo ajustado, mas inclinação superior ao se aproximar de $d =24$ h. O mesmo padrão é observado na @fig-inv-escala-pb, porém mais atenuado.
 
-No caso das aplicações com as séries de precipitação subdiária, $D$ é definida como 24 h para o desenvolvimento dos modelos IDF locais (a duração limite para a validade da hipótese de invariância). É de interesse determinar tanto $H$ para diferentes ordens, como avaliar a linearidade dos momentos para diferentes durações. Para esses fins, toma-se os logaritmos dos valores esperados em ambos os lados da @eq-inv-sentido-amplo:
+![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Ceará).](/Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_CE.png){#fig-inv-escala-ce fig-align="center" width="15cm"}
 
-$$
-\ln(E[I_d^q]) = \ln(E[I_D^q]) + (-qH) \ln(d/D).
-$$ {#eq-ln-momentos}
+O posto SBSJ [@fig-inv-escala-sp], em São Paulo, exibe, por outro lado, um padrão contrário com inclinação inferior à do modelo ao se aproximar de durações diárias --- sugerindo, novamente, um possível regime de escala alternativo. Por outro lado, as estimativas de $H$ entre as diferentes ordens são similares.
 
-Ajustando um modelo linear à relação na @eq-ln-momentos entre $\ln(E[I_d^q])$ e $\ln(d/D)$, é possível determinar $H$.
+![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (São Paulo).](/Scripts_Invariancia_Escala/figuras/plot_invariancia_escala_momentos_SP.png){#fig-inv-escala-sp fig-align="center" width="15cm"}
 
-Esse procedimento foi aplicado para todas as estações no conjunto de postos pluviográficos, considerando novamente somente aqueles com no máximo 20% de falhas anuais e a menos 8 anos atendendo esse limiar de falhas. O expoente de escala $H$ foi estimado para as 1.973 estações remanescentes, cada qual com séries de intensidades máximas anuais para durações até 24 h extraídas levando em consideração os respectivos anos hidrológicos conforme \[REFERÊNCIA SEÇÃO ANO HIDRO\].
+Grande parte das divergências --- tanto entre estimativas de $H$ para $q=1,2$ e 3, como desvios do modelo linear --- também está sujeita à variabilidade amostral. Ainda que alguns dos exemplos incluídos neste relatório disponham de séries com extensões superiores a 30 anos, essa não é a realidade do restante do conjunto de postos pluviográficos.
 
-Da @fig-inv-escala-ac até a @fig-inv-escala-to são apresentadas as retas de regressão ajustadas aos momentos não centrais até ordem 3, bem como os expoentes de escala $H$ estimados para cada ordem e o coeficiente de determinação $R^2$ para as estações mais longas de cada Unidade Federativa. Os histogramas ao lado ilustram como a linearidade dos modelos ajustados às demais estações do estado.
+Finalmente, a @fig-mapa-expoente-escala apresenta o comportamento do expoente de escala $H$ para os três primeiros momentos espacializado a partir das estimativas pontuais por meio de interpolação por ponderação pelo inverso da distância (IDW). Cinco classes foram utilizadas, buscando incluir quantidades equivalentes de postos em cada uma: com quebras em 0,326 (menor valor identificado); 0,658; 0,713; 0,752; 0,794; e 1 (o limite superior do suporte de $H$). Pontos espalhados na imagem representam os postos pluviográficos utilizados.
 
-Grande parte das estações mais longas são operadas pelo INMET e pelo ICEA. Como consequência, a maioria das retas de regressão compreende somente as durações a partir de $d=$ 1 h, à exceção das estações apresentadas para os estados do Acre (@fig-inv-escala-ac), Amapá (@fig-inv-escala-ap) e Roraima (@fig-inv-escala-rr).
+No geral, observa-se um padrão de estimativas de $H$ menores, ou seja, até a segunda classe (até 0,713) ao sul e em estados no litoral brasileiro. Ao centro do brasil e em parte da região Norte, nota-se valores de $H$ mais elevados. Em termos práticos, quanto maior o valor do expoente, mais próximas serão as intensidades ao longo do intervalo de durações utilizado, e vice-versa. Logo, os padrões identificados com a metodologia apresentada na @sec-met-inv-escala mostram que as intensidades em diferentesd durações nas regiões próximas ao litoral e na região Sul se diferenciam a uma taxa menor qunado comparado ao centro e norte do país.
 
-No geral, pela disposição dos momentos calculados e pelo $R^2$, observa que há uma estrutura aproximadamente linear em diferentes durações. Pelos histogramas, é possível dizer que esta linearidade também existe para as demais estações no estado. Ainda assim, é possível notar alguns comportamentos divergentes.
+<!-- seria interessante incluir as médias por duração espacialmente também de alguma forma (talvez so p/ 24 h e p/ menor duração, p/ analisar qual o peso que o H tem na "desagregação") -->
 
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Acre).](figuras/plot_invariancia_escala_momentos_AC.png){#fig-inv-escala-ac fig-align="center" width="15cm"}
+![Expoente de escala $H$ espacializado estimado no procedimento de validação da hipótese de invariância de escala em sentido amplo para as estações subdiárias no Brasil.](/Scripts_Invariancia_Escala/figuras/plot_scale_q_subdiario.png){#fig-mapa-expoente-escala fig-align="center" width="15cm"}
 
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Alagoas).](figuras/plot_invariancia_escala_momentos_AL.png){#fig-inv-escala-al fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Amazonas).](figuras/plot_invariancia_escala_momentos_AM.png){#fig-inv-escala-am fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Amapá).](figuras/plot_invariancia_escala_momentos_AP.png){#fig-inv-escala-ap fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Bahia).](figuras/plot_invariancia_escala_momentos_BA.png){#fig-inv-escala-ba fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Ceará).](figuras/plot_invariancia_escala_momentos_CE.png){#fig-inv-escala-ce fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Distrito Federal).](figuras/plot_invariancia_escala_momentos_DF.png){#fig-inv-escala-df fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Espírito Santo).](figuras/plot_invariancia_escala_momentos_ES.png){#fig-inv-escala-es fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Goiás).](figuras/plot_invariancia_escala_momentos_GO.png){#fig-inv-escala-go fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Maranhão).](figuras/plot_invariancia_escala_momentos_MA.png){#fig-inv-escala-ma fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Minas Gerais).](figuras/plot_invariancia_escala_momentos_MG.png){#fig-inv-escala-mg fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Mato Grosso do Sul).](figuras/plot_invariancia_escala_momentos_MS.png){#fig-inv-escala-ms fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Mato Grosso).](figuras/plot_invariancia_escala_momentos_MT.png){#fig-inv-escala-mt fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Pará).](figuras/plot_invariancia_escala_momentos_PA.png){#fig-inv-escala-pa fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Paraíba).](figuras/plot_invariancia_escala_momentos_PB.png){#fig-inv-escala-pb fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Pernambuco).](figuras/plot_invariancia_escala_momentos_PE.png){#fig-inv-escala-pe fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Piauí).](figuras/plot_invariancia_escala_momentos_PI.png){#fig-inv-escala-pi fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Paraná).](figuras/plot_invariancia_escala_momentos_PR.png){#fig-inv-escala-pr fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Rio de Janeiro).](figuras/plot_invariancia_escala_momentos_RJ.png){#fig-inv-escala-rj fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Rio Grande do Norte).](figuras/plot_invariancia_escala_momentos_RN.png){#fig-inv-escala-rn fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Rondônia).](figuras/plot_invariancia_escala_momentos_RO.png){#fig-inv-escala-ro fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Roraima).](figuras/plot_invariancia_escala_momentos_RR.png){#fig-inv-escala-rr fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Rio Grande do Sul).](figuras/plot_invariancia_escala_momentos_RS.png){#fig-inv-escala-rs fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Santa Catarina).](figuras/plot_invariancia_escala_momentos_SC.png){#fig-inv-escala-sc fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Sergipe).](figuras/plot_invariancia_escala_momentos_SE.png){#fig-inv-escala-se fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (São Paulo).](figuras/plot_invariancia_escala_momentos_SP.png){#fig-inv-escala-sp fig-align="center" width="15cm"}
-
-![Retas de regressão linear entre momentos não centrais de ordem $q=$ 1, 2 e 3 e histogramas de $R^2$ do ajuste representando a linearidade dos modelos (Tocantins).](figuras/plot_invariancia_escala_momentos_TO.png){#fig-inv-escala-to fig-align="center" width="15cm"}
-
-A @fig-mapa-expoente-escala apresenta o comportamento do expoente de escala $H$ para os três primeiros momentos espacializado a partir das estimativas pontuais por meio de interpolação por ponderação pelo inverso da distância (IDW).
-
-![Expoente de escala $H$ espacializado estimado no procedimento de validação da hipótese de invariância de escala em sentido amplo para as estações subdiárias no Brasil.](figuras/plot_scale_q_subdiario.png){#fig-mapa-expoente-escala fig-align="center" width="15cm"}
+Mas também há de ser considerada a escassez espacial das estações na região Norte, bem como a extensão média das séries disponíveis, na interpretação da interpolação apresentada.

@@ -1,9 +1,12 @@
 ---
-title: "Meta 6 — Correção de Viés Climático"
-bibliography: ref_correcao_vies.bib
+title: "Correção de Viés Climático"
+execute:
+  echo: false
+  include: false
+# bibliography: ref_correcao_vies.bib
 ---
 
-Esta meta avalia metodologias de correção de viés aplicáveis aos dados climáticos do NEX-GDDP-CMIP6 e define o procedimento a ser utilizado nas etapas posteriores do projeto. A análise deve comparar as alternativas metodológicas, discutir vantagens e limitações e verificar sua capacidade de representar adequadamente a precipitação observada e os extremos.
+Esta meta corresponde à Meta 6 e avalia metodologias de correção de viés aplicáveis aos dados climáticos do NEX-GDDP-CMIP6 e define o procedimento a ser utilizado nas etapas posteriores do projeto. A análise deve comparar as alternativas metodológicas, discutir vantagens e limitações e verificar sua capacidade de representar adequadamente a precipitação observada e os extremos.
 
 ## Metodologias para Correção de Viés dos Dados Climáticos
 
@@ -11,7 +14,7 @@ Para a etapa de remoção de viés, a metodologia de mapeamento de quantil-quant
 
 Entretanto, existem outras possibilidades metodológicas para a correção de viés, as quais vêm sendo amplamente discutidas e aprimoradas na literatura. Entre as abordagens estatísticas destaca-se o *Delta Change*, que constitui, junto com o QM, a base conceitual de muitos procedimentos modernos de *downscaling* e ajuste de viés.
 
-### *Delta Change*
+### Delta Change
 
 O método *Delta Change* aplica fatores de variação obtidos a partir da diferença ou razão entre o clima futuro e o histórico do modelo, transferindo essas alterações às séries observadas para gerar projeções ajustadas:
 
@@ -29,7 +32,7 @@ $$ {#eq-x}
 
 É um método simples e útil quando há pouca necessidade de corrigir a forma da distribuição. Entretanto, o método não corrige o viés absoluto dos modelos climáticos. Como consequência, qualquer erro sistemático do modelo permanece e é transferido para o cenário corrigido.
 
-### *Equidistant Quantile Matching* (EQM)
+### Equidistant Quantile Matching (EQM)
 
 Baseado no QM, o método EQM [@Srivastav.2014; @Simonovic.2016; @Simonovic.2017] é um método de correção de viés que ajusta projeções climáticas preservando o sinal de mudança previsto pelo modelo. O EQM aplica a diferença entre os quantis simulados futuros e históricos à distribuição observada histórica. Desta forma, ele corrige o viés mantendo as tendências e variações projetadas pelo modelo.
 
@@ -47,7 +50,7 @@ x_{3,\max}^{STN,5\min} & x_{3,\max}^{STN,10\min} & \cdots & x_{3,\max}^{STN,24hr
 x_{N,\max}^{STN,5\min} & x_{N,\max}^{STN,10\min} & \cdots & x_{N,\max}^{STN,24hr}
 \end{bmatrix}
 \tag{3}
-$${#eq-maxsub}
+$$ {#eq-maxsub}
 
 Onde, $x_{i,\max}^{STN,j}$ é a precipitação máxima subdiária em uma estação (STN)para a j-ésima duração no i-ésimo ano; e $N$ é o número total de anos.
 
@@ -79,7 +82,7 @@ X^{GCM,RCP26}_{3,\text{max}} & X^{GCM,RCP45}_{3,\text{max}} & X^{GCM,RCP85}_{3,\
 X^{GCM,RCP26}_{N_F,\text{max}} & X^{GCM,RCP45}_{N_F,\text{max}} & X^{GCM,RCP85}_{N_F,\text{max}}
 \end{bmatrix}
 \tag{5}
-$${#eq-maxdRCP}
+$$ {#eq-maxdRCP}
 
 Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os cenários futuros considerados; e $N_F$ é o número total de anos considerados para o período futuro.
 
@@ -88,7 +91,7 @@ Onde, $X_{\max}^{GCM,Fut}$ representa a precipitação diária máxima para os c
 $$
 PDF^{GCM} = f(\theta^{GCM}/X_{max}^{GCM})
 \tag{6}
-$${#eq-pdfGCM}
+$$ {#eq-pdfGCM}
 
 $$
 PDF_{j}^{STN} = f(\theta^{STN_,j}/X_{max}^{STN_,j})
@@ -98,7 +101,7 @@ $$ {#eq-pdfSTN}
 $$
 PDF^{GCM_,Fut} = f(\theta^{GCM}/X_{max}^{GCM_,Fut})
 \tag{8}
-$${#eq-pdfGCMfut}
+$$ {#eq-pdfGCMfut}
 
 Onde, $PDF$ representa a função de distribuição de probabilidade, \$f()% é a função, $\theta$ é o parâmetro da distribuição ajustada.
 
@@ -119,30 +122,30 @@ Y_{max}^{GCM,Fut} = CDF((invCDF(X_{max}^{GCM}/\theta^{GCM}))/\theta^{GCM,Fut})
 $$ {#eq-ymaxGCMfut}
 
 Onde, $Y_{max}^{GCM,Fut}$ é a correspondência quantílica entre o período de referência e o período de projeção.
- 
+
 (vii) Encontrar uma função apropriada para relacionar $Y_{max,j}^{STN}$ e $X_{max}^{GCM}$. A literatura sugere que, na maioria dos casos, a relação observada é linear. É evidente a partir da CDF de Gumbel que isso resulta em uma equação linear quando se igualam as duas CDFs. É importante observar que não há garantia de que o uso de outras funções de distribuição resultaria em equações lineares de primeira ordem semelhantes:
 
 $$
 Y_{max,j}^{STN} = f(X_{max}^{GCM})
 \tag{11}
-$${#eq-ymaxSTN1}
+$$ {#eq-ymaxSTN1}
 
 $$
 Y_{max,j}^{STN} = a_{1} \times X_{max}^{GCM} +b_{1}
 \tag{12}
-$${#eq-ymaxSTN2}
+$$ {#eq-ymaxSTN2}
 
 (viii) Encontrar uma função apropriada para relacionar $Y_{max}^{GCM,Fut}$ e $X_{max}^{GCM}$:
 
 $$
 Y_{max}^{GCM,Fut} = f(X_{max}^{GCM})
 \tag{13}
-$${#eq-ymaxGCMfut1}
+$$ {#eq-ymaxGCMfut1}
 
 $$
 Y_{max}^{GCM,Fut} = a_{2} \times X_{max}^{GCM} +b_{2}
 \tag{14}
-$${#eq-ymaxGCMfut2}
+$$ {#eq-ymaxGCMfut2}
 
 (ix) Para gerar dados subdiários máximos futuros, combinar as equações acima em:
 
@@ -154,32 +157,32 @@ X^{STN, future}_{\max,j}
 \right] 
 + b_{1} 
 \tag{15}
-$${#eq-xSTNfut}
+$$ {#eq-xSTNfut}
 
 (x) Gerar curvas IDF para os dados subdiários futuros e comparar as mesmas com as curvas IDF observadas historicamente para obter a variação nas intensidades.
 
-### *Equidistant Quantile Matching non-stationary*
+### Equidistant Quantile Matching non-stationary
 
 O EQM também possui uma versão não estacionária que integra modelagem estatística, correção de viés e reavaliação da não estacionariedade para o período projetado [@Silva.2021; @Silva.2021b]. Para a GEV não estacionária, os parâmetros variantes ($\mu$ e $\sigma$ - localização e escala) no tempo são derivados calculando o percentil 95 do valor do parâmetro de tendência pelas Equações $\hat{\mu}_{95} = Q_{95}(\hat{\mu}_1, \hat{\mu}_2, \ldots, \hat{\mu}_n)$ e $\hat{\sigma}_{95} = Q_{95}(\hat{\sigma}_1, \hat{\sigma}_2, \ldots, \hat{\sigma}_n)$. Os parâmetros do modelo calculados são então substituídos na Equação (16) e a intensidade ou profundidade da precipitação não estacionária é estimada.
 
 $$
 z_p = \mu - \frac{\sigma}{\xi} \left[\, 1 - \left\{ -\ln\!\left(1 - \frac{1}{T}\right)^{-\xi} \right\} \right]
 \tag{16}
-$${#eq-zp}
+$$ {#eq-zp}
 
 No EQM original, a função de mapeamento de quantis realiza o *donwscaling* espacial transferindo o quantil da distribuição historicamente observada para a distribuição historicamente modelada [@Silva.2021]. Utilizando o princípio do mapeamento de quantis, a distribuição de probabilidade cumulativa do GCM ($F_{m,h}$) e a série subdiária ($x_{j,o,h}$) são igualadas para estabelecer uma relação estatística entre elas e para obter valores subdiários modelados pelo GCM ($\hat{x}_{j,o,h}$), conforme mostrado na Equação (17):
 
 $$
 \hat{x}_{j,o,h} = F_{j,o,h}^{-1}\left[ F_{m,h}(x_{m,h}) \right]
 \tag{17}
-$${#eq-quantmaxanual}
+$$ {#eq-quantmaxanual}
 
 Onde $\hat{x}$ é o quantil máximo anual na escala da estação, $F$ é a função de distribuição cumulativa e $F^{-1}$ é sua inversa. $j,o,h$ correspondem a cada dado de precipitação observado subdiário ($‘j’$) ($‘o’$) no período histórico-base ($‘h’$), enquanto $‘m’$ permanece como os dados modelados. Os quantis extraídos de cada par \hat{x}\_{j,o,h} e $x_{m,h}$ são igualados para estabelecer uma relação funcional na forma da Equação (18):
 
 $$
 \hat{x}_{j,o,h} = \frac{a_j + x_{m,h}}{b_j + c_j x_{m,h}} + \frac{d_j}{x_{m,h}}
 \tag{18}
-$${#eq-coefajustados}
+$$ {#eq-coefajustados}
 
 Onde $a_j$, $b_j$, $c_j$ e $d_j$ são os coeficientes ajustados. Um algoritmo de otimização por Evolução Diferencial é usado para ajustar os coeficientes. O método dos Mínimos Quadrados Ordinários é usado como função objetivo a ser otimizada (minimizada) para obter o conjunto ótimo de coeficientes. Ao contrário do EQM original, no qual o *downscaling* espacial é aplicado assumindo que não há padrão de tendência nos parâmetros de distribuição GEV do período histórico, o $EQM_{NS}$ introduz os efeitos da não estacionariedade nas séries temporais históricas de AMPs, adotando os valores do percentil 95 dos parâmetros variáveis, como explicado anteriormente. Esta etapa garante que a não estacionariedade presente mesmo no período histórico seja considerada gerando IDFs para condições futuras.
 
@@ -188,21 +191,21 @@ Semelhante ao EQM, o $EQM_{NS}$ utiliza o mapeamento delta de quantis, uma vez q
 $$
 \hat{x}_{m,h} = F_{m,h}^{-1}\left[ F_{m,f}(x_{m,f}) \right]
 \tag{19}
-$${#eq-igualgcmfutpr}
+$$ {#eq-igualgcmfutpr}
 
 $$
 \Delta_m = \frac{x_{m,f}}{\hat{x}_{m,h}}
 \tag{20}
-$${#eq-deltarelativo}
+$$ {#eq-deltarelativo}
 
 Onde $m,f$ corresponde aos dados modelados ($‘m’$) no período de projeção futuro ($‘f’$), e $\Delta_m$ é a mudança relativa. A série subdiária máxima futura projetada ($X_j,f$ )) na escala da estação é então gerada usando a Equação (18) substituindo $x_{m,h}$ por $\hat{x}_{m,h}$ e multiplicando-a pela mudança relativa Dm da Equação (20), conforme dado pela Equação (21):
 
 $$
 x_{j,f} = \Delta_m \cdot \hat{x}_{j,o,h}
 \tag{21}
-$${#eq-subdiariafutprojet}
+$$ {#eq-subdiariafutprojet}
 
-### *Quantile–Quantile Downscaling*
+### Quantile–Quantile Downscaling
 
 Outro método baseado no QM é o *Quantile–Quantile Downscaling* (QQD) [@Hassanzadeh.2014; @Hassanzadeh.2019] que é um método estatístico que combina *downscaling* e correção de viés ao ajustar quantil a quantil a distribuição simulada por modelos climáticos para coincidir com a distribuição observada em uma escala local. Em vez de apenas reduzir a escala espacial, o QQD também corrige sistematicamente as diferenças entre o clima simulado e o real, garantindo que a série resultante apresente características estatísticas (como média, variabilidade e extremos) mais próximas das observações históricas.
 
@@ -213,18 +216,18 @@ O GP cria equações que relacionam o quantil do GCM $(Q_{GCM}(X))$ com o quanti
 $$
 Q_{Local}(x) = aQ_{GCM}(x) + f[Q_{GCM}(x)]
 \tag{22}
-$${#eq-qlocal}
+$$ {#eq-qlocal}
 
 Onde $aQ_{GCM}(x)$ pode ser considerado a parte principal das relações extraídas que descrevem a maior parte da variância. O termo $a$ em cada relação é um coeficiente numérico; $f[Q_{GCM}(x)]$ é uma função não linear gerada automaticamente pelo algoritmo GP.
 
-### *Bias Correction Quantile Mapping* (BCQM)
+### Bias Correction Quantile Mapping (BCQM)
 
 O método BCQM corrige diretamente as funções de distribuição cumulativa (CDFs) [@Lanzante.2018; @Lanzante.2021]. Ele é calculado como:
 
 $$
 F_{DF}(x) = F_{Oh}[F^{-1}_{Mh}(x)]
 \tag{23}
-$${#eq-fdf}
+$$ {#eq-fdf}
 
 Onde $F$ é a função de distribuição cumulativa; $F^{−1}$ sua inversa; $x$ o valor de $M_f$ (Modelo futuro) a ser reduzido e $M_h$ refere-se ao Modelo histórico;$O_h$ são as observações históricas e $D_f$ refere-se a saída futura em escala reduzida.
 
@@ -236,7 +239,7 @@ Lanzante et al. [-@Lanzante.2018] afirmam que se referem ao BCQM inspirados pelo
 
 Onde $X_o$ são as variáveis observadas no presente; $X_m$ são as variáveis modeladas no presente; $X^{′}_o$ são as variáveis projetadas para o futuro e $X^{′}_m$ são as variáveis modeladas no futuro.
 
-### *Kernel Density Distribution Mapping* (KDDM)
+### Kernel Density Distribution Mapping (KDDM)
 
 O método *Kernel Density Distribution Mapping* utiliza densidades suavizadas por meio de funções kernel[@Lanzante.2021].
 
@@ -392,7 +395,7 @@ biascorrect <- function(bcdata, norm="zscore", minobs=250, dmap=FALSE, ...){
 ```
 :::
 
-### *Quantile Delta Mapping* (QDM)
+### Quantile Delta Mapping (QDM)
 
 Por sua vez, o QDM preserva o sinal de mudança climática aplicando ajustes aditivos ou multiplicativos às distribuições [@Lanzante.2021].
 
@@ -531,11 +534,11 @@ O método PresRat estende o QDM incluindo um fator de correção médio [@Lanzan
 $$
 K=(\bar M_f/ \bar M_h)(\bar D_f/ \bar O_h)
 \tag{26}
-$${#eq-kcorrecao}
+$$ {#eq-kcorrecao}
 
 Onde as barras indicam as médias climatológicas ao longo de um mês.
 
-### *Quantile Perturbation Downscaling* (QPD)
+### Quantile Perturbation Downscaling (QPD)
 
 O método aplica fatores de perturbação específicos por quantil e duração às projeções dos modelos regionais (RCMs), preservando a estrutura de variabilidade dos extremos. Os fatores de correção são estimados para cada célula de grade reamostrada, usualmente por interpolação bilinear, garantindo consistência espacial e coerência estatística entre as projeções ajustadas [@Willems.2013; @Hosseinzadehtalaei.2020].
 
@@ -544,7 +547,7 @@ Willems [-@Willems.2013] afirma que o fator de perturbação é calculado nos qu
 $$
 \varphi({p}) = \frac{I_s({p})}{I_c({p})}
 \tag{27}
-$${#eq-varphi}
+$$ {#eq-varphi}
 
 Onde $\varphi({p})$ é o fator de perturbação quantílica; $I_c({p})$ o quantil de precipitação da simulação de controle; $I_s({p})$ o quantil de precipitação da simulação de cenário. Eles podem ser calculados com base nos valores empíricos de intensidade e período de retorno da precipitação. Dados os extremos empíricos de precipitação classificados, $I(1)\geq I(2)\geq...\geq I(n_g)$, a probabilidade de excedência $p$ de qualquer intensidade de precipitação diária $I(k_g)$ é calculada empiricamente como a razão $(\frac{kg} {ng})$ do número de classificação $k_g$ sobre o número total de dias $n_g$ do período completo da série temporal do qual os extremos foram extraídos. Se o número de dias chuvosos for diferente nas simulações de controle e de cenário, o conjunto de valores empíricos de período de retorno pode diferir. Nesse caso, interpolações são necessárias ou o período de retorno empírico mais próximo é selecionado.
 
@@ -555,9 +558,10 @@ Essas distribuições são calibradas aos dados empíricos e aplicadas, conforme
 $$
 \varphi({p}) = \frac{G^{-1}_s({p})}{G^{-1}_c({p})}
 \tag{28}
-$${#eq-varphicalibrado}
+$$ {#eq-varphicalibrado}
 
 Onde $G_s_$ é a função de sobrevivência da distribuição exponencial de dois componentes valores extremos calibrada para as intensidades de precipitação da simulação de cenário; $G_c$ calibrada para as intensidades de precipitação da simulação de controle. Para quantis acima do limiar da distribuição de valores extremos, os fatores de perturbação quantílica foram baseados na distribuição de valores extremos, Eq. (28), enquanto para quantis abaixo desse limiar, eles foram baseados nos dados empíricos, Eq. (27).
 
-::: {#refs}
-:::
+<!-- ::: {#refs} -->
+
+<!-- ::: -->

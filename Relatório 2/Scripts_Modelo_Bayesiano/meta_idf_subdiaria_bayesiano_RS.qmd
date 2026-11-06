@@ -1,6 +1,6 @@
 ---
 title: "Metodologia para a análise subdiária de precipitações extremas"
-bibliography: referencias_subdiaria.bib
+# bibliography: referencias_subdiaria.bib
 ---
 
 # Metodologia para a análise subdiária de precipitações extremas

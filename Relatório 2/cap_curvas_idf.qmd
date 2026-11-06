@@ -1,0 +1,25 @@
+---
+title: "Curvas Intensidade-Duração-Frequência"
+---
+
+<!-- Metodologia aplicada ao RS: d-GEV + GLS; BHM; Max-Stable -->
+
+{{< include metodologia_unificada.qmd >}}
+
+<!-- {{< include Scripts_Invariancia_Escala/secao_invariancia_escala.qmd >}} -->
+
+<!-- Resultados p/ análise do RS -->
+
+{{< include resultados_unificados_RS.qmd >}}
+
+<!-- Resultados p/ análise a nível de Brasil -->
+
+<!-- fazer um p/ diário e um p/ subdiário -->
+
+{{< include Scripts_Ajuste_dGEV/secao_resultados_dgev_diario_BR.qmd >}}
+
+{{< include Scripts_Modelo_Bayesiano/meta_idf_diaria_bayesiano.qmd >}}
+
+{{< include Scripts_Ajuste_dGEV/secao_resultados_dgev_subdiario_BR.qmd >}}
+
+{{< include Scripts_Modelo_Bayesiano/meta_idf_subdiaria_bayesiana_BR.qmd >}}

@@ -1,13 +1,14 @@
 ---
-title: "Meta 8 — Não Estacionariedade dos Extremos"
-bibliography: ref_tendencia.bib
+title: "Não Estacionariedade dos Extremos"
+# bibliography: ref_tendencia.bib
+execute:
+  echo: false
+  include: false
 ---
 
 Esta meta avalia a existência de mudanças temporais nas séries de precipitação extrema, incluindo tendências graduais. As análises abrangem pluviômetros e pluviógrafos.
 
-# 8. Não Estacionariedade dos Extremos
-
-## 8.1 Dados utilizados
+## Dados utilizados
 
 Para o realização da análise de tendência, foram utilizadas diferentes fontes de dados de precipitação, contemplando informações provenientes de postos pluviométricos e pluviógrafos, bem como dados espacialmente distribuídos em grade.
 
@@ -21,11 +22,11 @@ Após essa classificação espacial, os dados foram organizados de acordo com as
 
 Após a construção das séries, foi realizada a análise de tendência em três etapas: (i) teste de Mann–Kendall (MK); (ii) teste de Mann–Kendall associado ao *Modified Trend-Free Pre-Whitening* (MK + MTFPW); e (iii) aplicação da correção para múltiplos testes pelo método *False Discovery Rate* (MK + MTFPW + FDR). A análise de tendência foi aplicada individualmente a cada base de dados.
 
-## 8.2 Metodologia
+## Metodologia
 
 A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de @Xavier.2022. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.
 
-### 8.2.1 Teste de Mann-Kendall
+### Teste de Mann-Kendall
 
 Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.
 
@@ -47,7 +48,7 @@ $$
 0, & R_j-R_i=0\\
 -1, & R_j-R_i<0
 \end{cases}
-$${#eq-sgn}
+$$ {#eq-sgn}
 
 Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.
 
@@ -80,7 +81,7 @@ O *p-value* bilateral foi obtido por:
 
 $$
 p=2\left[1-\Phi(|Z|)\right]
-$${#eq-pvalor}
+$$ {#eq-pvalor}
 
 em que (\Phi) representa a função de distribuição acumulada da distribuição normal padrão.
 
@@ -90,15 +91,15 @@ $$ A direção da tendência foi determinada pelo sinal da estatística (Z). Val
 
 O teste MK foi aplicado individualmente às séries correspondentes às células da grade @Xavier.2022 e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), *p-value* e classificação da direção da tendência.
 
--   finalidade do teste;
--   hipótese nula;
--   estatística Z;
--   p-valor;
--   nível de significância;
--   classificação da tendência em crescente, decrescente ou não significativa.
--   equações
+- finalidade do teste;
+- hipótese nula;
+- estatística Z;
+- p-valor;
+- nível de significância;
+- classificação da tendência em crescente, decrescente ou não significativa.
+- equações
 
-### 8.2.2 Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
+### Mann-Kendall (MK) + *Modified Trend-Free Pre-Whitening* (MTFPW)
 
 A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW [@Onoz.2012], conforme o procedimento descrito por [@Souza.2022].
 
@@ -124,7 +125,7 @@ $$
 \beta_{ij} =
 \frac{X_j-X_i}{j-i},
 \qquad j>i
-$${#eq-sen-inclinacoes}
+$$ {#eq-sen-inclinacoes}
 
 em que (X_i) e (X_j) representam os valores da série nos instantes (i) e (j), respectivamente. A inclinação de Sen ((\beta)) foi obtida pela mediana de todas as inclinações (\beta\_{ij}):
 
@@ -144,7 +145,7 @@ Após a estimativa da inclinação de Sen, a tendência foi removida da série o
 
 $$
 X_t^{d}=X_t-\beta t
-$${#eq-removertendencia}
+$$ {#eq-removertendencia}
 
 em que (X_t\^{d}) representa o valor da série sem tendência no instante (t), (X_t) corresponde ao valor original da série, (\beta) é a inclinação de Sen e (t) representa a posição temporal da observação.
 
@@ -159,7 +160,7 @@ $$
 =
 \frac{1}{n}
 \sum_{t=1}^{n}X_t^d
-$${#eq-media-detrendida}
+$$ {#eq-media-detrendida}
 
 Em seguida, o coeficiente de autocorrelação de primeira ordem foi obtido por:
 
@@ -173,7 +174,7 @@ r_1=
 \displaystyle\sum_{t=1}^{n}
 \left(X_t^d-\overline{X^d}\right)^2
 }
-$${#eq-autocorr1}
+$$ {#eq-autocorr1}
 
 em que (r_1) representa a correlação entre observações consecutivas da série sem tendência.
 
@@ -185,7 +186,7 @@ $$
 r_1^{*}
 =
 \frac{nr_1+2}{n-4}
-$${#eq-autocorrigida}
+$$ {#eq-autocorrigida}
 
 em que (r_1\^{\*}) representa a autocorrelação de primeira ordem corrigida e (n) corresponde ao número de observações da série.
 
@@ -197,7 +198,7 @@ $$
 \rho_{1,\mathrm{inf}}
 =
 \frac{-1-1,96\sqrt{n-2}}{n-1}
-$${#eq-limiteinferior}
+$$ {#eq-limiteinferior}
 
 e
 
@@ -205,7 +206,7 @@ $$
 \rho_{1,\mathrm{sup}}
 =
 \frac{-1+1,96\sqrt{n-2}}{n-1}
-$${#eq-limitesuperior}
+$$ {#eq-limitesuperior}
 
 A série foi considerada sem autocorrelação significativa quando o valor de (r_1) permaneceu dentro desse intervalo:
 
@@ -236,7 +237,7 @@ $$
 Y_t=
 X_t-r_1^{*}X_{t-1},
 \qquad t=2,\ldots,n
-$${#eq-pw}
+$$ {#eq-pw}
 
 em que (Y_t) representa a série após a aplicação do *pre-whitening*, (X_t) corresponde à série original e (r_1\^{\*}) representa a estimativa corrigida da autocorrelação de primeira ordem.
 
@@ -244,7 +245,7 @@ Dessa forma, a série sem tendência foi utilizada para estimar e avaliar a auto
 
 Após a aplicação do procedimento MTFPW, quando necessário, o teste de Mann–Kendall foi aplicado à série resultante. Assim, para cada unidade espacial de análise, foram obtidos a estimativa da inclinação de Sen, o coeficiente de autocorrelação de primeira ordem, o coeficiente corrigido, a indicação da presença ou ausência de autocorrelação significativa e a série utilizada na etapa subsequente do teste de tendência.
 
-### 8.2.3 Controle da *False Discovery Rate* – FDR
+### Controle da *False Discovery Rate* – FDR
 
 Considerando que a análise de tendência foi realizada simultaneamente para diversas séries temporais, correspondentes aos postos pluviométricos e pluviógrafos e às células da grade de @Xavier.2022 foi aplicado o procedimento de Benjamini–Hochberg [@Benjamini.1995] para o controle da *False Discovery Rate* . A aplicação desse procedimento teve como objetivo controlar a proporção esperada de resultados falsamente significativos entre as hipóteses rejeitadas, reduzindo a ocorrência de falsos positivos decorrentes da realização simultânea de múltiplos testes estatísticos.
 
@@ -252,7 +253,7 @@ O procedimento foi aplicado ao conjunto de *p-values* obtidos nas análises de t
 
 $$
 p_{(1)} \leq p_{(2)} \leq \ldots \leq p_{(m)}
-$${#eq-fdrordenar}
+$$ {#eq-fdrordenar}
 
 em que (p\_{(j)}) representa o (j)-ésimo menor *p-value* e (m) corresponde ao número total de *p-values* válidos considerados na análise.
 
@@ -261,7 +262,7 @@ Para cada posição (j), foi calculado um valor crítico de acordo com:
 $$
 d_{(j)} =
 \frac{j\alpha}{m}
-$${#eq-fdrcritico}
+$$ {#eq-fdrcritico}
 
 em que (j) representa a posição do *p-value* ordenado, (\alpha) corresponde ao nível de significância adotado e (m) representa o número total de testes considerados.
 
@@ -269,7 +270,7 @@ Foi então identificado o maior valor de (j) que satisfazia a condição:
 
 $$
 p_{(j)} < \frac{j\alpha}{m}
-$${#eq-fdrcriterio}
+$$ {#eq-fdrcriterio}
 
 O maior índice que atende a essa condição foi denominado (j\^*). Quando não houve nenhum* p-value\* que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando (j\^*) foi identificado, todas as hipóteses correspondentes aos* p-values\* ordenados de (p\_{(1)}) até (p\_{(j\^\*)}) foram consideradas estatisticamente significativas.
 
@@ -286,7 +287,7 @@ Foi adotado nível de significância de 5% ((\alpha=0,05)). Após a identificaç
 
 Dessa forma, o procedimento permitiu obter a significância estatística final das tendências considerando simultaneamente os múltiplos testes realizados. Para cada unidade espacial, o resultado após o controle da FDR foi classificado como significativo ou não significativo, permitindo a representação e a avaliação da distribuição espacial das tendências.
 
-### 8.2.4 Teste de Pettit
+### Teste de Pettit
 
 A identificação de possíveis mudanças nas séries temporais de precipitação máxima diária, provenientes dos dados em grade de @Xavier.2022, foi realizada por meio do teste não paramétrico de Pettitt. Esse procedimento permite identificar um ponto de mudança na distribuição de uma série temporal, dividindo-a em dois períodos com possíveis comportamentos distintos. A análise foi conduzida individualmente para cada célula da grade.
 
@@ -310,9 +311,9 @@ Para as células com quebras significativas após o procedimento FDR, realizou-s
 
 Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descrita nos itens 8.2.1; 8.2.2 e 8.2.3.
 
-## 8.3 Resultados
+## Resultados
 
-### 8.3.1 Resultados Pluviómetros e pluviógrafos
+### Resultados Pluviómetros e pluviógrafos
 
 Para os dados provenientes dos pluviógrafos, foram identificados seis postos com séries históricas de pelo menos 30 anos para os períodos de duração de 1, 3, 6, 12 e 24 horas. Assim, as análises de tendência foram realizadas com base nas séries históricas desses postos.
 
@@ -334,7 +335,7 @@ A análise por Região Hidrográfica (RH) evidencia que a Região Hidrográfica 
 
 Por outro lado, a RH do Atlântico Nordeste Ocidental (ANC) apresenta a menor concentração, com 100 postos pluviométricos, dos quais apenas 2 possuem séries históricas com duração igual ou superior a 60 anos.
 
-### 8.3.2 MK; MK+MTFPW; MK+MTFPW+FDR
+### MK; MK+MTFPW; MK+MTFPW+FDR
 
 A aplicação do teste de Mann-Kendall identificou 973 postos com tendências estatisticamente significativas. Após a correção da autocorrelação temporal pelo método MTFPW, seguida da reaplicação do teste MK, esse número foi reduzido para 925 postos, indicando uma diminuição no total de séries com tendências significativas. Posteriormente, com a aplicação da correção para múltiplos testes pelo procedimento de FDR, foram identificados 213 postos com tendências estatisticamente significativas. Esse resultado evidencia uma redução expressiva no número de tendências consideradas significativas após o controle da multiplicidade dos testes. Além disso, 4.777 postos não apresentaram autocorrelação temporal estatisticamente significativa, indicando ausência de evidências de dependência temporal significativa nessas séries, segundo o critério adotado.
 
@@ -346,7 +347,7 @@ Dos postos que mantiveram tendências estatisticamente significativas após a ap
 
 Em relação à direção das tendências, observou-se predominância de tendências crescentes na maioria das RHs. Esse padrão foi particularmente evidente no ATS, onde 39 das 42 estações significativas apresentaram tendência crescente, e no ANO, com 23 das 26 estações. No PRN, foram identificadas 36 tendências crescentes e 7 decrescentes, enquanto no ASD foram registradas 25 crescentes e 5 decrescentes. A região AMZ apresentou 11 tendências crescentes e 5 decrescentes, e o SFR, 14 crescentes e 5 decrescentes. Também predominaram tendências crescentes no Atlântico Leste (ALE), no Parnaíba (PNB) e no Tocantins-Araguaia (TOA). Em contraste, na Região Hidrográfica do PRG, as quatro estações significativas apresentaram tendências decrescentes, enquanto no URU todas as quatro apresentaram tendências crescentes.
 
-### 8.3.3 Resultados Xavier
+### Resultados Xavier
 
 A análise das séries de precipitação máximas diária dos dados em grade do @Xavier.2022, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver Figura 5.
 
@@ -366,7 +367,7 @@ Nas regiões do ANC e do ANO, as tendências crescentes também predominaram, co
 
 Em contraste, a Região Hidrográfica do SFR apresentou uma distribuição relativamente mais equilibrada entre as direções das tendências, com 124 células crescentes e 78 decrescentes. Embora as tendências crescentes ainda predominem, a proporção de tendências decrescentes nessa região foi superior à observada na maioria das demais regiões analisadas.
 
-### 8.3.4 Teste de Pettit nos dados de Xavier
+### Teste de Pettit nos dados de Xavier
 
 Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de @Xavier.2022, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.
 
@@ -396,7 +397,7 @@ Entre as séries que apresentaram mudanças na direção das tendências, destac
 
 De modo geral, os resultados evidenciam que a principal mudança após os pontos de quebra foi a ausência de significância estatística das tendências, especialmente em séries que anteriormente apresentavam tendência decrescente. Também foram observadas transições para tendências crescentes, embora em menor quantidade
 
-#8.4 Considerações Finais
+## Considerações Finais
 
 A análise das tendênciasda precipitação máxima diária, realizada com dados de postos pluviométricos do UNIPLU e com dados em grade de @Xavier.2022 permitiu identificar diferenças espaciais no comportamento das precipitações extremas nas Regiões Hidrográficas do Brasil. A aplicação sequencial dos testes de Mann–Kendall, MTFPW e da correção para múltiplos testes pelo procedimento FDR demonstrou a importância de considerar tanto a autocorrelação temporal quanto a multiplicidade das análises na identificação de tendências estatisticamente significativas. Nos dados observacionais, foram identificados 213 postos com tendências significativas após a aplicação do FDR, com predominância de tendências crescentes. Nos dados em grade, embora tenham sido observadas diferenças entre as regiões, também predominou a ocorrência de tendências crescentes entre as células que permaneceram significativas após as correções estatísticas. Destacaram-se, nesse contexto, as regiões do Atlântico Sul, Uruguai e do Atlântico Leste que apresentaram elevadas proporções de células com tendências significativas.
 

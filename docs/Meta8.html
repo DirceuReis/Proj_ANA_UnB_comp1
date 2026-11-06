@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Análise Não Estacionária – Proj. IDF Brasil ANA/UnB</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,15 +57,14 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5c49dcdaa1dd0040e71953adad602abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7600ddd4616fb7b9baa2258c07466e60.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,8 +104,6 @@ div.csl-indent {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Proj. IDF Brasil ANA/UnB</span>
     </a>
@@ -172,7 +174,7 @@ div.csl-indent {
   </li>  
         <li>
     <a class="dropdown-item" href="./guidelines.html">
- <span class="dropdown-text">Exemplos de esudos de caráter nacional</span></a>
+ <span class="dropdown-text">Exemplos de estudos de caráter nacional</span></a>
   </li>  
     </ul>
   </li>
@@ -183,6 +185,10 @@ div.csl-indent {
   <li class="nav-item">
     <a class="nav-link" href="./links.html"> 
 <span class="menu-text">links</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./teste.html"> 
+<span class="menu-text">teste</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -224,7 +230,7 @@ div.csl-indent {
 <p>As mudanças nas séries hidrometeorológicas podem ocorrer de diferentes maneiras: abruptamente (saltos na série), gradualmente (tendências) ou de forma mais complexa. Estas mudanças podem afetar algumas características estatísticas das séries como média, mediana, variância, autocorrelação, entre outras. A partir do diagnóstico da forma como essas mudanças se apresentam, os testes estatísticos para a detecção e quantificação das tendências podem ser melhor selecionados.</p>
 <p>A análise de não estacionariedade será baseada no trabalho recente apresentado por <span class="citation" data-cites="m6a">(<a href="#ref-m6a" role="doc-biblioref">Souza 2022</a>)</span>. Serão avaliadas mudanças em salto e graduais em todos as séries de máximos advindas dos dados de pluviômetros, pluviógrafos e aqueles presentes nos pontos de grade das bases Xavier e NEX-GDDP-CMIP6. O objetivo das análises para as séries dos pluviômetros/pluviógrafos é de verificar de forma regionalizada se existem evidências de mudanças nas séries de máximos dos postos de medição de chuva existentes. De maneira análoga os testes nas bases Xavier e NEX-GDDP-CMIP6 serão conduzidos e comparados com as tendências observadas nos registros históricos das estações para verificar como as tendências regionais evidenciadas nos dados são reproduzidas nas bases geradas para os dados em grade. Os testes conduzidos na base NEX-GDDP-CMIP6 serão aplicados tanto na série original como naquela advinda da correção de viés para avaliar se a metodologia de correção de viés impacta o comportamento das tendências. Complementarmente, os testes nessa base permitirão analisar a coerência e significância estatística dos resultados das projeções dos modelos, com base nas tendências efetivamente verificadas nas séries históricas geradas por eles.</p>
 <p>Os produtos desta etapa consistirão no relatório de análise de não estacionariedade para os dados dos pluviômetros/pluviógrafos, e um relatório de análise de não estacionariedade para os dados em grade.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-m6a" class="csl-entry" role="listitem">
 Souza, Saulo Aires de. 2022. <span>«<span>Incertezas em Testes de Tendências Hidrometeorológicas na Tomada de Decisão em Medidas de Adaptação</span>»</span>. Tese de doutorado, Programa de Pós-Graduação em Tecnologia Ambiental e Recursos Hídricos da Universidade de Brasília - PTARH/UnB.
 </div>
