@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -63,7 +63,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-7b70b6449d90b0912b3f848c5cf55d7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -221,7 +221,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></h1>
+<h1 class="title"><span id="sec-cap2" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Base Hidroclimática Nacional</span></span></h1>
 </div>
 
 
@@ -243,7 +243,7 @@ window.Quarto = {
 <h2 data-number="2.1" class="anchored" data-anchor-id="bases-de-dados"><span class="header-section-number">2.1</span> Bases de Dados</h2>
 <section id="uniplu-br" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="uniplu-br"><span class="header-section-number">2.1.1</span> UNIPLU-BR</h3>
-<p>Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset (UNIPLU-BR)[https://doi.org/10.5281/zenodo.18883358], que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:</p>
+<p>Séries de precipitação observadas por estações de monitoramento foram obtidas junto ao Unified Brazilian Rainfall Dataset <a href="https://doi.org/10.5281/zenodo.18883358">UNIPLU-BR</a>, que unificou e padronizou uma base de dados nacional a partir de dados brutos provenientes de cinco fontes primárias:</p>
 <ul>
 <li><strong>CEMADEN</strong>: Centro Nacional de Monitoramento e Alertas de Desastres Naturais.</li>
 <li><strong>INMET</strong>: Instituto Nacional de Meteorologia.</li>
@@ -252,32 +252,32 @@ window.Quarto = {
 <li><strong>ICEA</strong>: Instituto de Controle do Espaço Aéreo.</li>
 </ul>
 <p>Toda a base do UNIPLU-BR pode ser obtida através do site <span class="citation" data-cites="uniplubr_github">(<a href="ref.html#ref-uniplubr_github" role="doc-biblioref">LARHENA 2025</a>)</span> (https://github.com/LARHENA/UNIPLU-BR). Os dados são armazenados em arquivos tipo .zip. Cada arquivo .zip contém dois arquivos em formato .parquet: (i) table_info.parquet (metadados das estações); e (ii) table_data.parquet (séries de dados).</p>
-<p>Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do UNIPLU-BR cobre o período de 1855 a 2025, consolidando aproximadamente 1 bilhão de registros de precipitação em 21.331 estações. As informações obtidas possuem resolução temporal variada, entre intervalos de 10 minutos até 24 horas e discretização diária. A distribuição desses registros, por fonte é detalhada na <a href="#tbl-fontes-uniplu" class="quarto-xref">Tabela&nbsp;<span>2.1</span></a> e <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a>.</p>
-<div class="cell">
-<div id="tbl-fontes-uniplu" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<p>Toda a leitura e manuseio dos dados foi realizada usando o software R. A base do UNIPLU-BR cobre o período de 1855 a 2025, consolidando aproximadamente 1 bilhão de registros de precipitação em 21.331 estações. As informações obtidas possuem resolução temporal variada, entre intervalos de 10 minutos até 24 horas e discretização diária. A distribuição desses registros, por fonte é detalhada na <a href="#tbl-fontes-uniplu" class="quarto-xref">Tabela&nbsp;<span>2.1</span></a> e na <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a>.</p>
+<div class="cell" data-freeze="false">
+<div id="tbl-fontes-uniplu" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-freeze="false">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fontes-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
 </figcaption>
 <div aria-describedby="tbl-fontes-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="aoqkokjibm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#aoqkokjibm table {
+<div id="dhqjqyjpbz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dhqjqyjpbz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#aoqkokjibm thead, #aoqkokjibm tbody, #aoqkokjibm tfoot, #aoqkokjibm tr, #aoqkokjibm td, #aoqkokjibm th {
+#dhqjqyjpbz thead, #dhqjqyjpbz tbody, #dhqjqyjpbz tfoot, #dhqjqyjpbz tr, #dhqjqyjpbz td, #dhqjqyjpbz th {
   border-style: none;
 }
 
-#aoqkokjibm p {
+#dhqjqyjpbz p {
   margin: 0;
   padding: 0;
 }
 
-#aoqkokjibm .gt_table {
+#dhqjqyjpbz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -303,12 +303,12 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-left-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_caption {
+#dhqjqyjpbz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#aoqkokjibm .gt_title {
+#dhqjqyjpbz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -320,7 +320,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-width: 0;
 }
 
-#aoqkokjibm .gt_subtitle {
+#dhqjqyjpbz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -332,7 +332,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-top-width: 0;
 }
 
-#aoqkokjibm .gt_heading {
+#dhqjqyjpbz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -344,13 +344,13 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_bottom_border {
+#dhqjqyjpbz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_col_headings {
+#dhqjqyjpbz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -365,7 +365,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_col_heading {
+#dhqjqyjpbz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -385,7 +385,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   overflow-x: hidden;
 }
 
-#aoqkokjibm .gt_column_spanner_outer {
+#dhqjqyjpbz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -397,15 +397,15 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 4px;
 }
 
-#aoqkokjibm .gt_column_spanner_outer:first-child {
+#dhqjqyjpbz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aoqkokjibm .gt_column_spanner_outer:last-child {
+#dhqjqyjpbz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aoqkokjibm .gt_column_spanner {
+#dhqjqyjpbz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -417,11 +417,11 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   width: 100%;
 }
 
-#aoqkokjibm .gt_spanner_row {
+#dhqjqyjpbz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#aoqkokjibm .gt_group_heading {
+#dhqjqyjpbz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -447,7 +447,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   text-align: left;
 }
 
-#aoqkokjibm .gt_empty_group_heading {
+#dhqjqyjpbz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -462,15 +462,15 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   vertical-align: middle;
 }
 
-#aoqkokjibm .gt_from_md > :first-child {
+#dhqjqyjpbz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aoqkokjibm .gt_from_md > :last-child {
+#dhqjqyjpbz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aoqkokjibm .gt_row {
+#dhqjqyjpbz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -489,7 +489,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   overflow-x: hidden;
 }
 
-#aoqkokjibm .gt_stub {
+#dhqjqyjpbz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -502,7 +502,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#aoqkokjibm .gt_stub_row_group {
+#dhqjqyjpbz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -516,15 +516,15 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   vertical-align: top;
 }
 
-#aoqkokjibm .gt_row_group_first td {
+#dhqjqyjpbz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#aoqkokjibm .gt_row_group_first th {
+#dhqjqyjpbz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#aoqkokjibm .gt_summary_row {
+#dhqjqyjpbz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -534,16 +534,16 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#aoqkokjibm .gt_first_summary_row {
+#dhqjqyjpbz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_first_summary_row.thick {
+#dhqjqyjpbz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#aoqkokjibm .gt_last_summary_row {
+#dhqjqyjpbz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -553,7 +553,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_grand_summary_row {
+#dhqjqyjpbz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -563,7 +563,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#aoqkokjibm .gt_first_grand_summary_row {
+#dhqjqyjpbz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -573,7 +573,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-top-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_last_grand_summary_row_top {
+#dhqjqyjpbz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -583,11 +583,11 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_striped {
+#dhqjqyjpbz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aoqkokjibm .gt_table_body {
+#dhqjqyjpbz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -596,7 +596,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-bottom-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_footnotes {
+#dhqjqyjpbz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -610,7 +610,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_footnote {
+#dhqjqyjpbz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -619,7 +619,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#aoqkokjibm .gt_sourcenotes {
+#dhqjqyjpbz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -633,7 +633,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   border-right-color: #D3D3D3;
 }
 
-#aoqkokjibm .gt_sourcenote {
+#dhqjqyjpbz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -641,72 +641,72 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
   padding-right: 5px;
 }
 
-#aoqkokjibm .gt_left {
+#dhqjqyjpbz .gt_left {
   text-align: left;
 }
 
-#aoqkokjibm .gt_center {
+#dhqjqyjpbz .gt_center {
   text-align: center;
 }
 
-#aoqkokjibm .gt_right {
+#dhqjqyjpbz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aoqkokjibm .gt_font_normal {
+#dhqjqyjpbz .gt_font_normal {
   font-weight: normal;
 }
 
-#aoqkokjibm .gt_font_bold {
+#dhqjqyjpbz .gt_font_bold {
   font-weight: bold;
 }
 
-#aoqkokjibm .gt_font_italic {
+#dhqjqyjpbz .gt_font_italic {
   font-style: italic;
 }
 
-#aoqkokjibm .gt_super {
+#dhqjqyjpbz .gt_super {
   font-size: 65%;
 }
 
-#aoqkokjibm .gt_footnote_marks {
+#dhqjqyjpbz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#aoqkokjibm .gt_asterisk {
+#dhqjqyjpbz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#aoqkokjibm .gt_indent_1 {
+#dhqjqyjpbz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#aoqkokjibm .gt_indent_2 {
+#dhqjqyjpbz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#aoqkokjibm .gt_indent_3 {
+#dhqjqyjpbz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#aoqkokjibm .gt_indent_4 {
+#dhqjqyjpbz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#aoqkokjibm .gt_indent_5 {
+#dhqjqyjpbz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#aoqkokjibm .katex-display {
+#dhqjqyjpbz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#aoqkokjibm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dhqjqyjpbz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -780,7 +780,7 @@ Tabela&nbsp;2.1: Sumário das estações abrangidas pelo UNIPLU-BR.
 </figure>
 </div>
 </div>
-<p>A <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> apresenta a distribuição espacial das estações de precipitação por fonte da informação inserida na base do UNIPLU-BR, cuja densidade geral é apresentada na <a href="#fig-densidade" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>. Observa-se uma maior densidade de estações no Estado do Rio de Janeiro e Distrito Federal, seguido de São Paulo, Santa Catarina e Espírito Santo. De maneira geral, as regiões Sul e Sudeste possuem densidade de estações de monitoramento similares. Na região Nordeste, destacam-se os estados do Ceará, Pernambuco e Alagoas. Regiões Centro-Oeste e Norte brasileiro são as mais desproporcionais em número de estações.</p>
+<p>A <a href="#fig-mapa-estacoes" class="quarto-xref">Figura&nbsp;<span>2.1</span></a> apresenta a distribuição espacial das estações de precipitação por fonte da informação na base do UNIPLU-BR, cuja densidade geral é apresentada na <a href="#fig-densidade" class="quarto-xref">Figura&nbsp;<span>2.2</span></a>. Observa-se uma maior densidade de estações no Estado do Rio de Janeiro e Distrito Federal, seguido de São Paulo, Santa Catarina e Espírito Santo. De maneira geral, as regiões Sul e Sudeste possuem densidade de estações de monitoramento similares. Na região Nordeste, destacam-se os estados do Ceará, Pernambuco e Alagoas. Regiões Centro-Oeste e Norte brasileiro são as mais desproporcionais em número de estações.</p>
 <div id="fig-mapa-estacoes" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mapa-estacoes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -833,43 +833,43 @@ Figura&nbsp;2.5: Número de estações de monitoramento da precipitação por an
 </figcaption>
 </figure>
 </div>
-<p>A estrutura dos dados brutos do UNIPLU-BR consiste em 2 (dois) metadados: (i) informação de estações de chuva, incluindo colunas com dados de código da estação, cidade, coordenadas geográficas, elevação topográfica da estação, discretização temporal, rede fonte da informação, agência ou instituição responsável pela operação das estações, e UTC (Tempo Universal Coordenado); e (ii) série de dados, contendo código da estação, data e tempo da leitura e precipitação em mm.</p>
-<div class="cell">
-<div id="tbl-inventario-uniplu" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<p>A estrutura dos dados brutos do UNIPLU-BR consiste em 2 (dois) metadados, conforme a <a href="#tbl-inventario-uniplu" class="quarto-xref">Tabela&nbsp;<span>2.2</span></a>: (i) informação de estações de chuva, incluindo colunas com dados de código da estação, cidade, coordenadas geográficas, elevação topográfica da estação, discretização temporal, rede fonte da informação, agência ou instituição responsável pela operação das estações, e UTC (Tempo Universal Coordenado); e (ii) série de dados, contendo código da estação, data e tempo da leitura e precipitação em mm.</p>
+<div class="cell" data-freeze="false">
+<div id="tbl-inventario-uniplu" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-freeze="false">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-inventario-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário do UNIPLU-BR
+Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário do UNIPLU-BR.
 </figcaption>
 <div aria-describedby="tbl-inventario-uniplu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="vwdtksazdd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vwdtksazdd table {
+<div id="wkblnlfvjc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wkblnlfvjc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vwdtksazdd thead, #vwdtksazdd tbody, #vwdtksazdd tfoot, #vwdtksazdd tr, #vwdtksazdd td, #vwdtksazdd th {
+#wkblnlfvjc thead, #wkblnlfvjc tbody, #wkblnlfvjc tfoot, #wkblnlfvjc tr, #wkblnlfvjc td, #wkblnlfvjc th {
   border-style: none;
 }
 
-#vwdtksazdd p {
+#wkblnlfvjc p {
   margin: 0;
   padding: 0;
 }
 
-#vwdtksazdd .gt_table {
+#wkblnlfvjc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
-  width: auto;
+  width: 100%;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
@@ -884,12 +884,12 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-left-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_caption {
+#wkblnlfvjc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vwdtksazdd .gt_title {
+#wkblnlfvjc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -901,7 +901,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-bottom-width: 0;
 }
 
-#vwdtksazdd .gt_subtitle {
+#wkblnlfvjc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -913,7 +913,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-top-width: 0;
 }
 
-#vwdtksazdd .gt_heading {
+#wkblnlfvjc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -925,13 +925,13 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-right-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_bottom_border {
+#wkblnlfvjc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_col_headings {
+#wkblnlfvjc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -946,7 +946,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-right-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_col_heading {
+#wkblnlfvjc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -966,7 +966,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   overflow-x: hidden;
 }
 
-#vwdtksazdd .gt_column_spanner_outer {
+#wkblnlfvjc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -978,15 +978,15 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 4px;
 }
 
-#vwdtksazdd .gt_column_spanner_outer:first-child {
+#wkblnlfvjc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vwdtksazdd .gt_column_spanner_outer:last-child {
+#wkblnlfvjc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vwdtksazdd .gt_column_spanner {
+#wkblnlfvjc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -998,11 +998,11 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   width: 100%;
 }
 
-#vwdtksazdd .gt_spanner_row {
+#wkblnlfvjc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vwdtksazdd .gt_group_heading {
+#wkblnlfvjc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1028,7 +1028,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   text-align: left;
 }
 
-#vwdtksazdd .gt_empty_group_heading {
+#wkblnlfvjc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1043,17 +1043,17 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   vertical-align: middle;
 }
 
-#vwdtksazdd .gt_from_md > :first-child {
+#wkblnlfvjc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vwdtksazdd .gt_from_md > :last-child {
+#wkblnlfvjc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vwdtksazdd .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#wkblnlfvjc .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
@@ -1070,7 +1070,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   overflow-x: hidden;
 }
 
-#vwdtksazdd .gt_stub {
+#wkblnlfvjc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1083,7 +1083,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 5px;
 }
 
-#vwdtksazdd .gt_stub_row_group {
+#wkblnlfvjc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1097,15 +1097,15 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   vertical-align: top;
 }
 
-#vwdtksazdd .gt_row_group_first td {
+#wkblnlfvjc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vwdtksazdd .gt_row_group_first th {
+#wkblnlfvjc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vwdtksazdd .gt_summary_row {
+#wkblnlfvjc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1115,16 +1115,16 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 5px;
 }
 
-#vwdtksazdd .gt_first_summary_row {
+#wkblnlfvjc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_first_summary_row.thick {
+#wkblnlfvjc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vwdtksazdd .gt_last_summary_row {
+#wkblnlfvjc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1134,7 +1134,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-bottom-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_grand_summary_row {
+#wkblnlfvjc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1144,7 +1144,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 5px;
 }
 
-#vwdtksazdd .gt_first_grand_summary_row {
+#wkblnlfvjc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1154,7 +1154,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-top-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_last_grand_summary_row_top {
+#wkblnlfvjc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1164,11 +1164,11 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-bottom-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_striped {
+#wkblnlfvjc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vwdtksazdd .gt_table_body {
+#wkblnlfvjc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1177,7 +1177,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-bottom-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_footnotes {
+#wkblnlfvjc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1191,7 +1191,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-right-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_footnote {
+#wkblnlfvjc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1200,7 +1200,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 5px;
 }
 
-#vwdtksazdd .gt_sourcenotes {
+#wkblnlfvjc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1214,7 +1214,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   border-right-color: #D3D3D3;
 }
 
-#vwdtksazdd .gt_sourcenote {
+#wkblnlfvjc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1222,81 +1222,85 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
   padding-right: 5px;
 }
 
-#vwdtksazdd .gt_left {
+#wkblnlfvjc .gt_left {
   text-align: left;
 }
 
-#vwdtksazdd .gt_center {
+#wkblnlfvjc .gt_center {
   text-align: center;
 }
 
-#vwdtksazdd .gt_right {
+#wkblnlfvjc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vwdtksazdd .gt_font_normal {
+#wkblnlfvjc .gt_font_normal {
   font-weight: normal;
 }
 
-#vwdtksazdd .gt_font_bold {
+#wkblnlfvjc .gt_font_bold {
   font-weight: bold;
 }
 
-#vwdtksazdd .gt_font_italic {
+#wkblnlfvjc .gt_font_italic {
   font-style: italic;
 }
 
-#vwdtksazdd .gt_super {
+#wkblnlfvjc .gt_super {
   font-size: 65%;
 }
 
-#vwdtksazdd .gt_footnote_marks {
+#wkblnlfvjc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vwdtksazdd .gt_asterisk {
+#wkblnlfvjc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vwdtksazdd .gt_indent_1 {
+#wkblnlfvjc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vwdtksazdd .gt_indent_2 {
+#wkblnlfvjc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vwdtksazdd .gt_indent_3 {
+#wkblnlfvjc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vwdtksazdd .gt_indent_4 {
+#wkblnlfvjc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vwdtksazdd .gt_indent_5 {
+#wkblnlfvjc .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vwdtksazdd .katex-display {
+#wkblnlfvjc .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vwdtksazdd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#wkblnlfvjc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 75%">
+</colgroup>
 <thead>
 <tr class="gt_col_headings header">
 <th id="Coluna" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="text-align: center; color: #000000; font-weight: bold;" scope="col">Coluna</th>
-<th id="Descricao" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="text-align: center; color: #000000; font-weight: bold;" scope="col">Descrição</th>
+<th id="Descricao" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="text-align: center; color: #000000; font-weight: bold;" scope="col">Descrição</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -1305,50 +1309,50 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
 </tr>
 <tr class="gt_row_group_first even">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">gauge_code</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Identificador da estação (ID)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Identificador da estação (ID)</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">city / state</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Localização da estação</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Localização da estação</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">lat / long</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Coordenadas geográficas, em graus decimais</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Coordenadas geográficas, em graus decimais</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">elevation</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Altitude em que a estação se localiza, acima do nível do mar (metros)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Altitude em que a estação se localiza, acima do nível do mar (metros)</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">time_step</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Resolução temporal estimada do dado (1.440 minutos = 24 horas/diária)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Resolução temporal estimada do dado (1.440 minutos = 24 horas/diária)</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">network</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Fonte da informação (e.g., Hidroweb)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Fonte da informação (e.g., Hidroweb)</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">responsible</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Agência responsável pela operação da estação de monitoramento (e.g., ANA ou SGB-CPRM)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Agência responsável pela operação da estação de monitoramento (e.g., ANA ou SGB-CPRM)</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Coluna" style="text-align: center; color: #000000;">utc</td>
-<td class="gt_row gt_center" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Horário local relativo ao Meridiano de Greenwich (-3 para o horário de Brasília)</td>
+<td class="gt_row gt_left" headers="Informação-das-estações-de-chuva-(Rainfall-gauge-information,-table_info.parquet)  Descricao" style="text-align: center; color: #000000;">Horário local relativo ao Meridiano de Greenwich (-3 para o horário de Brasília)</td>
 </tr>
 <tr class="gt_group_heading_row even">
 <th colspan="2" id="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)" class="gt_group_heading" data-quarto-table-cell-role="th" style="text-align: center; color: #000000; font-weight: bold;" scope="colgroup">Informação da série temporal de dados de precipitação (Time Series, table_data.parquet)</th>
 </tr>
 <tr class="gt_row_group_first odd">
 <td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Coluna" style="text-align: center; color: #000000;">gauge_code</td>
-<td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Identificador da estação (ID)</td>
+<td class="gt_row gt_left" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Identificador da estação (ID)</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Coluna" style="text-align: center; color: #000000;">datetime</td>
-<td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Dia e hora da leitura</td>
+<td class="gt_row gt_left" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Dia e hora da leitura</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Coluna" style="text-align: center; color: #000000;">rain_mm</td>
-<td class="gt_row gt_center" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Volume de precipitação registrado durante o tempo, em milímetros</td>
+<td class="gt_row gt_left" headers="Informação-da-série-temporal-de-dados-de-precipitação-(Time-Series,-table_data.parquet)  Descricao" style="text-align: center; color: #000000;">Volume de precipitação registrado durante o tempo, em milímetros</td>
 </tr>
 </tbody>
 </table>
@@ -1362,7 +1366,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
 </section>
 <section id="br-dwgd" class="level3" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="br-dwgd"><span class="header-section-number">2.1.2</span> BR-DWGD</h3>
-<p>Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) (Xavier et al., 2022), que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.</p>
+<p>Séries de precipitação em grade foram obtidas junto à Brazilian Daily Weather Gridded Data (BR-DWGD) <span class="citation" data-cites="xavier2022">(<a href="ref.html#ref-xavier2022" role="doc-biblioref">Xavier et al. 2022</a>)</span> , que organizou uma base de dados em grade de resolução 0,1° x 0,1° com diferentes variáveis climatológicas, incluindo precipitação, entre 1 de janeiro de 1961 a 31 de julho de 2020.</p>
 <p>Os dados de grade foram provenientes de interpolação dos dados observados das estações da ANA e do INMET. Para a precipitação, foram utilizados 11.473 pluviômetros. Os autores aplicaram dois procedimentos de consistência: (i) O primeiro descartou valores fora de limiares pré-estabelecidos, sendo 0 mm &lt; pr &lt; 450 mm para a precipitação <span class="citation" data-cites="liebmann2005">(<a href="ref.html#ref-liebmann2005" role="doc-biblioref">Liebmann e Allured 2005</a>)</span>; e (ii) o segundo consistiu em teste visual de homogeneidade, comparando cada série às das estações vizinhas, conforme <span class="citation" data-cites="xavier2016">(<a href="ref.html#ref-xavier2016" role="doc-biblioref">Xavier et al. 2016</a>)</span>.</p>
 <p>Após os procedimentos de consistência foram obtidos por interpolação. A espacialização foi feita por bacia hidrográfica, a partir do uso do método do inverso da distância (IDW), dada sua performance na validação cruzada pela aplicação de métricas de desempenho.</p>
 <p>Junto às grades das variáveis, o BR-DWGD disponibiliza duas grades de controle diárias: (i) o número de estações ou pluviômetros existentes dentro da célula (Count); e (ii) a distância da célula à estação mais próxima com dado observado (dist_nearest). Esses controles permitem avaliar, célula a célula e dia a dia, o quanto o valor interpolado se apoia em observação próxima ou em extrapolação. Essa informação é relevante porque a densidade da rede é bastante desproporcional. Nas bacias do Atlântico Central e do Atlântico Sul há ao menos um pluviômetro a cada 50 km, o equivalente a um a cada 580 km². Já na bacia Amazônica, a densidade era de um pluviômetro a cada 150.000 km² entre 1961 e 1980, melhorando para um a cada 7.600 km² entre 1991 e 2020. O número máximo de pluviômetros com dado disponível simultaneamente foi de 5.972, entre as décadas de 1970 e 1980, o que corresponde a um a cada 1.425 km², ainda abaixo da densidade de um a cada 575 km² recomendada pela <span class="citation" data-cites="wmo2008">(<a href="ref.html#ref-wmo2008" role="doc-biblioref">World Meteorological Organization 2008</a>)</span> para planícies interiores.</p>
@@ -1371,15 +1375,15 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
 </section>
 <section id="metodologia-de-controle-de-qualidade-da-base-do-uniplu-br" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="metodologia-de-controle-de-qualidade-da-base-do-uniplu-br"><span class="header-section-number">2.2</span> Metodologia de Controle de Qualidade da base do UNIPLU-BR</h2>
-<p>Os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de outlier, seguindo originalmente conforme reportados pelas agências. Desta forma, aplicou-se metodologia de controle de qualidade.</p>
+<p>Os dados disponibilizados via UNIPLU-BR buscaram organizar a base de dados nacional em uma estrutura única, apropriada para diversas análises. No entanto, não possuem qualquer controle de qualidade, consistência física ou filtro de <em>outlier</em>, seguindo originalmente conforme reportados pelas agências. Desta forma, um procedimento de controle de qualidade foi aplicado.</p>
 <p>A metodologia foi aplicada de maneira diferente considerando os dados de resolução temporal diária e sub-diária.</p>
 <section id="séries-diárias" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="séries-diárias"><span class="header-section-number">2.2.1</span> Séries Diárias</h3>
 <section id="análise-de-consistência" class="level4" data-number="2.2.1.1">
 <h4 data-number="2.2.1.1" class="anchored" data-anchor-id="análise-de-consistência"><span class="header-section-number">2.2.1.1</span> Análise de consistência</h4>
-<p>O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o Inmet diário. Esses filtros resultaram em 12.640 estações.</p>
+<p>O inventário das estações de monitoramento diário foi verificado em termos de mudanças em sua descrição. Inicialmente o inventário completo do UNIPLU-BR foi filtrado para compor somente as estações diárias, cuja fonte de dados seria o Hidroweb diário e o INMET diário. Esses filtros resultaram em 12.640 estações.</p>
 <p>Ao inventário foram aplicadas verificações de consistência dos metadados das estações ao longo do tempo, por exemplo, verificou-se se a estação se mantém com as mesmas informações de descrição ao longo de todos os anos do inventário, como unidade da federação, latitude, longitude, altitude, discretização temporal, entre outras. Das 12.640 estações diárias, 211 (1,7%) apresentaram alteração em ao menos um metadado, sendo 210 dessas concentradas na rede Inmet diário. A discretização temporal manteve-se inalterada em todas as estações.</p>
-<p>As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais: 156 das 211 estações tiveram redução de precisão, sendo o padrão predominante a passagem de oito para duas casas decimais. Isso resultou em diferenças de até 1 km de distância em 159 das 162 estações com mudança de coordenada. Outras divergências observadas eram no nome do município (123 estações), em razão do uso ou não de acentos, na altitude (5 estações) ou no estado a que a estação pertence (1 estação).</p>
+<p>As alterações observadas referem-se predominantemente às coordenadas geográficas, em termos de número de casas decimais: 156 das 211 estações tiveram redução de precisão, sendo o padrão predominante a passagem de oito para duas casas decimais. Isso resultou em diferenças de até 1 km de distância em 159 das 162 estações com mudança de coordenada. Outras divergências foram observadas no nome do município (123 estações), em razão do uso ou não de acentos, na altitude (5 estações) ou no estado a que a estação pertence (1 estação).</p>
 <p>Dentre as 211 estações, apenas uma indicou a necessidade de ajuste. A estação 863011, em Porto Velho, apresentou deslocamento de 742 km entre coordenadas registradas em anos distintos, reunindo no máximo nove anos de dados em uma mesma coordenada. Adotou-se como critério de exclusão o deslocamento superior a 10 km combinado a menos de 30 anos de dados em uma única coordenada, de modo que a estação foi removida da base, resultando em 12.639 estações.</p>
 <p>Por fim, aplicou-se a verificação de duplicatas sobre essa série, de modo a identificar pares estação e data repetidos. A análise não indicou duplicatas.</p>
 </section>
@@ -1391,7 +1395,7 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
 <h5 data-number="2.2.1.2.1" class="anchored" data-anchor-id="qc-básico"><span class="header-section-number">2.2.1.2.1</span> QC Básico</h5>
 <p>Neste processo foram identificados e eliminados dados considerados “errôneos” ou “inadequados” para a análise das séries de precipitação. Envolveu a verificação de dias em que foram identificados: (i) valores negativos; (ii) registros inválidos; e (iii) eventos muito superiores aos valores comumente ocorridos no Brasil. Bases como a do BR-DWGD adotaram um limiar superior igual a 450 mm/dia. Contudo, nos últimos anos, chuvas na ordem de 600 mm em um dia foram registradas no interior de São Paulo <span class="citation" data-cites="carmona2023">(<a href="ref.html#ref-carmona2023" role="doc-biblioref">Arango Carmona et al. 2023</a>)</span>. Desse modo, considerou-se como limite superior 700 mm/dia.</p>
 <p>A aplicação deste controle de qualidade indicou como problemática: (i) sequência de dias consecutivos repetindo o mesmo valor diário acima de 1.000 mm, padrão que caracteriza preenchimento automático e não medição. Por exemplo, a estação 2554001, em Foz do Iguaçu, repete 1.555,4 mm por dias seguidos a partir de 02 de abril de 2008; (ii) valores isolados, a exemplo de 6.401 mm em São Gabriel da Cachoeira e 24 de julho de 2013; e (iii) concencentração de ocorrências em poucas estações e poucos anos, uma vez que os registros excluídos se distribuem em apenas 39 estações.</p>
-<p>Após aplicação do QC Básico, 247 registros (0,00025% do total) foram excluídos, todos por apresentarem precipitação superior a 700 mm/dia. Não foram identificados registros negativos. O menor valor excluído foi de 701,2 mm e a mediana dos excluídos, de 1.555,4 mm, o que indica não haver acúmulo de valores imediatamente acima do limiar adotado e reforça que o corte não eliminou chuva plausível. Assumiu-se que todos os dados excluídos eram errôneos, e não outliers.</p>
+<p>Após aplicação do QC Básico, 247 registros (0,00025% do total) foram excluídos, todos por apresentarem precipitação superior a 700 mm/dia. Não foram identificados registros negativos. O menor valor excluído foi de 701,2 mm e a mediana dos excluídos, de 1.555,4 mm, o que indica não haver acúmulo de valores imediatamente acima do limiar adotado e reforça que o corte não eliminou chuva plausível. Assumiu-se que todos os dados excluídos eram errôneos, e não <em>outliers</em>.</p>
 </section>
 <section id="qc-absoluto" class="level5" data-number="2.2.1.2.2">
 <h5 data-number="2.2.1.2.2" class="anchored" data-anchor-id="qc-absoluto"><span class="header-section-number">2.2.1.2.2</span> QC Absoluto</h5>
@@ -1421,42 +1425,42 @@ Tabela&nbsp;2.2: Síntese das informações contidas nos arquivos do inventário
 <p><span id="eq-limiar"><span class="math display">\[P_{out,m} = Q_{3,m} + 1{,}5 \cdot IQR_m, \qquad IQR_m = Q_{3,m} - Q_{1,m} \tag{2.6}\]</span></span></p>
 <p>em que <span class="math inline">\(P_{out,m}\)</span> é o limiar de valor atípico do mês <span class="math inline">\(m\)</span>; <span class="math inline">\(Q_{1,m}\)</span> e <span class="math inline">\(Q_{3,m}\)</span> são, respectivamente, o primeiro e o terceiro quartis das precipitações diárias maiores que 0 mm registradas no mês <span class="math inline">\(m\)</span>; e <span class="math inline">\(IQR_m\)</span> é a amplitude interquartil desse mesmo conjunto. Os quartis são calculados sobre todos os anos da série histórica da estação, e não apenas sobre o ano avaliado.</p>
 <p>Obtidas as variáveis, o IQ de cada estação por ano foi dado pela média das variáveis. Os resultados de IQ e P foram então classificados de acordo com as regras da <a href="#tbl-classificacao" class="quarto-xref">Tabela&nbsp;<span>2.3</span></a>.</p>
-<div class="cell">
-<div id="tbl-classificacao" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div class="cell" data-freeze="false">
+<div id="tbl-classificacao" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-freeze="false">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-classificacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibilidade) e Q (índice de qualidade) (adaptado de <span class="citation" data-cites="vidalbarbosa2024">(<a href="ref.html#ref-vidalbarbosa2024" role="doc-biblioref">Vidal-Barbosa 2024</a>)</span>).
 </figcaption>
 <div aria-describedby="tbl-classificacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="bwffuxbbrr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#bwffuxbbrr table {
+<div id="ulkludpest" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ulkludpest table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#bwffuxbbrr thead, #bwffuxbbrr tbody, #bwffuxbbrr tfoot, #bwffuxbbrr tr, #bwffuxbbrr td, #bwffuxbbrr th {
+#ulkludpest thead, #ulkludpest tbody, #ulkludpest tfoot, #ulkludpest tr, #ulkludpest td, #ulkludpest th {
   border-style: none;
 }
 
-#bwffuxbbrr p {
+#ulkludpest p {
   margin: 0;
   padding: 0;
 }
 
-#bwffuxbbrr .gt_table {
+#ulkludpest .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
-  width: auto;
+  width: 100%;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
@@ -1471,12 +1475,12 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-left-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_caption {
+#ulkludpest .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#bwffuxbbrr .gt_title {
+#ulkludpest .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1488,7 +1492,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-bottom-width: 0;
 }
 
-#bwffuxbbrr .gt_subtitle {
+#ulkludpest .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1500,7 +1504,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-top-width: 0;
 }
 
-#bwffuxbbrr .gt_heading {
+#ulkludpest .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1512,13 +1516,13 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-right-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_bottom_border {
+#ulkludpest .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_col_headings {
+#ulkludpest .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1533,7 +1537,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-right-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_col_heading {
+#ulkludpest .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1553,7 +1557,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   overflow-x: hidden;
 }
 
-#bwffuxbbrr .gt_column_spanner_outer {
+#ulkludpest .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1565,15 +1569,15 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 4px;
 }
 
-#bwffuxbbrr .gt_column_spanner_outer:first-child {
+#ulkludpest .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bwffuxbbrr .gt_column_spanner_outer:last-child {
+#ulkludpest .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bwffuxbbrr .gt_column_spanner {
+#ulkludpest .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1585,11 +1589,11 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   width: 100%;
 }
 
-#bwffuxbbrr .gt_spanner_row {
+#ulkludpest .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#bwffuxbbrr .gt_group_heading {
+#ulkludpest .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1615,7 +1619,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   text-align: left;
 }
 
-#bwffuxbbrr .gt_empty_group_heading {
+#ulkludpest .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1630,17 +1634,17 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   vertical-align: middle;
 }
 
-#bwffuxbbrr .gt_from_md > :first-child {
+#ulkludpest .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bwffuxbbrr .gt_from_md > :last-child {
+#ulkludpest .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bwffuxbbrr .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#ulkludpest .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
@@ -1657,7 +1661,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   overflow-x: hidden;
 }
 
-#bwffuxbbrr .gt_stub {
+#ulkludpest .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1670,7 +1674,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 5px;
 }
 
-#bwffuxbbrr .gt_stub_row_group {
+#ulkludpest .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1684,15 +1688,15 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   vertical-align: top;
 }
 
-#bwffuxbbrr .gt_row_group_first td {
+#ulkludpest .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#bwffuxbbrr .gt_row_group_first th {
+#ulkludpest .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#bwffuxbbrr .gt_summary_row {
+#ulkludpest .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1702,16 +1706,16 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 5px;
 }
 
-#bwffuxbbrr .gt_first_summary_row {
+#ulkludpest .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_first_summary_row.thick {
+#ulkludpest .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#bwffuxbbrr .gt_last_summary_row {
+#ulkludpest .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1721,7 +1725,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-bottom-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_grand_summary_row {
+#ulkludpest .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1731,7 +1735,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 5px;
 }
 
-#bwffuxbbrr .gt_first_grand_summary_row {
+#ulkludpest .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1741,7 +1745,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-top-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_last_grand_summary_row_top {
+#ulkludpest .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1751,11 +1755,11 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-bottom-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_striped {
+#ulkludpest .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bwffuxbbrr .gt_table_body {
+#ulkludpest .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1764,7 +1768,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-bottom-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_footnotes {
+#ulkludpest .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1778,7 +1782,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-right-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_footnote {
+#ulkludpest .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1787,7 +1791,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 5px;
 }
 
-#bwffuxbbrr .gt_sourcenotes {
+#ulkludpest .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1801,7 +1805,7 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   border-right-color: #D3D3D3;
 }
 
-#bwffuxbbrr .gt_sourcenote {
+#ulkludpest .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1809,77 +1813,83 @@ Tabela&nbsp;2.3: Regras de classificação qualitativa com base em P (disponibil
   padding-right: 5px;
 }
 
-#bwffuxbbrr .gt_left {
+#ulkludpest .gt_left {
   text-align: left;
 }
 
-#bwffuxbbrr .gt_center {
+#ulkludpest .gt_center {
   text-align: center;
 }
 
-#bwffuxbbrr .gt_right {
+#ulkludpest .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bwffuxbbrr .gt_font_normal {
+#ulkludpest .gt_font_normal {
   font-weight: normal;
 }
 
-#bwffuxbbrr .gt_font_bold {
+#ulkludpest .gt_font_bold {
   font-weight: bold;
 }
 
-#bwffuxbbrr .gt_font_italic {
+#ulkludpest .gt_font_italic {
   font-style: italic;
 }
 
-#bwffuxbbrr .gt_super {
+#ulkludpest .gt_super {
   font-size: 65%;
 }
 
-#bwffuxbbrr .gt_footnote_marks {
+#ulkludpest .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#bwffuxbbrr .gt_asterisk {
+#ulkludpest .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#bwffuxbbrr .gt_indent_1 {
+#ulkludpest .gt_indent_1 {
   text-indent: 5px;
 }
 
-#bwffuxbbrr .gt_indent_2 {
+#ulkludpest .gt_indent_2 {
   text-indent: 10px;
 }
 
-#bwffuxbbrr .gt_indent_3 {
+#ulkludpest .gt_indent_3 {
   text-indent: 15px;
 }
 
-#bwffuxbbrr .gt_indent_4 {
+#ulkludpest .gt_indent_4 {
   text-indent: 20px;
 }
 
-#bwffuxbbrr .gt_indent_5 {
+#ulkludpest .gt_indent_5 {
   text-indent: 25px;
 }
 
-#bwffuxbbrr .katex-display {
+#ulkludpest .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#bwffuxbbrr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ulkludpest div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 28%">
+<col style="width: 26%">
+</colgroup>
 <thead>
 <tr class="gt_col_headings header">
 <th id="Classe" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="color: #000000; font-weight: bold" scope="col">Classe</th>
@@ -1943,42 +1953,42 @@ Figura&nbsp;2.6: Série temporal das variáveis médias do QC Absoluto por ano.
 </figure>
 </div>
 <p>A <a href="#tbl-classificacao-resultado" class="quarto-xref">Tabela&nbsp;<span>2.4</span></a> apresenta os resultados gerais do controle de qualidade absoluto. A aplicação do Controle de Qualidade Absoluto classificou 266.969 séries estação-ano (97,7%) como de Alta Qualidade e 6.391 (2,3%) como de Baixa Qualidade. A classe Excelente concentra a maior parte dos casos (85,1%), o que indica que a maioria dos anos-estação apresenta cobertura praticamente integral. Entre os anos de Baixa Qualidade, 6.003 (2,2% do total geral) foram classificados como Baixa e 388 (0,1%) como Muito Baixa, tratando-se de anos reprovados pela concentração das lacunas ou pela distribuição irregular dos dias chuvosos ao longo da semana.</p>
-<div class="cell">
-<div id="tbl-classificacao-resultado" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div class="cell" data-freeze="false">
+<div id="tbl-classificacao-resultado" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-freeze="false">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-classificacao-resultado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries diárias.
 </figcaption>
 <div aria-describedby="tbl-classificacao-resultado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="qmpjzqjvqs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#qmpjzqjvqs table {
+<div id="oslapalfan" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oslapalfan table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qmpjzqjvqs thead, #qmpjzqjvqs tbody, #qmpjzqjvqs tfoot, #qmpjzqjvqs tr, #qmpjzqjvqs td, #qmpjzqjvqs th {
+#oslapalfan thead, #oslapalfan tbody, #oslapalfan tfoot, #oslapalfan tr, #oslapalfan td, #oslapalfan th {
   border-style: none;
 }
 
-#qmpjzqjvqs p {
+#oslapalfan p {
   margin: 0;
   padding: 0;
 }
 
-#qmpjzqjvqs .gt_table {
+#oslapalfan .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
-  width: auto;
+  width: 100%;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
@@ -1993,12 +2003,12 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-left-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_caption {
+#oslapalfan .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qmpjzqjvqs .gt_title {
+#oslapalfan .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2010,7 +2020,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-bottom-width: 0;
 }
 
-#qmpjzqjvqs .gt_subtitle {
+#oslapalfan .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2022,7 +2032,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-top-width: 0;
 }
 
-#qmpjzqjvqs .gt_heading {
+#oslapalfan .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2034,13 +2044,13 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-right-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_bottom_border {
+#oslapalfan .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_col_headings {
+#oslapalfan .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2055,7 +2065,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-right-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_col_heading {
+#oslapalfan .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2075,7 +2085,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   overflow-x: hidden;
 }
 
-#qmpjzqjvqs .gt_column_spanner_outer {
+#oslapalfan .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2087,15 +2097,15 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 4px;
 }
 
-#qmpjzqjvqs .gt_column_spanner_outer:first-child {
+#oslapalfan .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qmpjzqjvqs .gt_column_spanner_outer:last-child {
+#oslapalfan .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qmpjzqjvqs .gt_column_spanner {
+#oslapalfan .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2107,11 +2117,11 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   width: 100%;
 }
 
-#qmpjzqjvqs .gt_spanner_row {
+#oslapalfan .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qmpjzqjvqs .gt_group_heading {
+#oslapalfan .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2137,7 +2147,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   text-align: left;
 }
 
-#qmpjzqjvqs .gt_empty_group_heading {
+#oslapalfan .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2152,17 +2162,17 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   vertical-align: middle;
 }
 
-#qmpjzqjvqs .gt_from_md > :first-child {
+#oslapalfan .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qmpjzqjvqs .gt_from_md > :last-child {
+#oslapalfan .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qmpjzqjvqs .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
+#oslapalfan .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
@@ -2179,7 +2189,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   overflow-x: hidden;
 }
 
-#qmpjzqjvqs .gt_stub {
+#oslapalfan .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2192,7 +2202,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 5px;
 }
 
-#qmpjzqjvqs .gt_stub_row_group {
+#oslapalfan .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2206,15 +2216,15 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   vertical-align: top;
 }
 
-#qmpjzqjvqs .gt_row_group_first td {
+#oslapalfan .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qmpjzqjvqs .gt_row_group_first th {
+#oslapalfan .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qmpjzqjvqs .gt_summary_row {
+#oslapalfan .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2224,16 +2234,16 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 5px;
 }
 
-#qmpjzqjvqs .gt_first_summary_row {
+#oslapalfan .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_first_summary_row.thick {
+#oslapalfan .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qmpjzqjvqs .gt_last_summary_row {
+#oslapalfan .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2243,7 +2253,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-bottom-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_grand_summary_row {
+#oslapalfan .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2253,7 +2263,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 5px;
 }
 
-#qmpjzqjvqs .gt_first_grand_summary_row {
+#oslapalfan .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2263,7 +2273,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-top-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_last_grand_summary_row_top {
+#oslapalfan .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2273,11 +2283,11 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-bottom-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_striped {
+#oslapalfan .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qmpjzqjvqs .gt_table_body {
+#oslapalfan .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2286,7 +2296,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-bottom-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_footnotes {
+#oslapalfan .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2300,7 +2310,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-right-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_footnote {
+#oslapalfan .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2309,7 +2319,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 5px;
 }
 
-#qmpjzqjvqs .gt_sourcenotes {
+#oslapalfan .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2323,7 +2333,7 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   border-right-color: #D3D3D3;
 }
 
-#qmpjzqjvqs .gt_sourcenote {
+#oslapalfan .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2331,77 +2341,83 @@ Tabela&nbsp;2.4: Classificação de qualidade dos anos-estação das séries di�
   padding-right: 5px;
 }
 
-#qmpjzqjvqs .gt_left {
+#oslapalfan .gt_left {
   text-align: left;
 }
 
-#qmpjzqjvqs .gt_center {
+#oslapalfan .gt_center {
   text-align: center;
 }
 
-#qmpjzqjvqs .gt_right {
+#oslapalfan .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qmpjzqjvqs .gt_font_normal {
+#oslapalfan .gt_font_normal {
   font-weight: normal;
 }
 
-#qmpjzqjvqs .gt_font_bold {
+#oslapalfan .gt_font_bold {
   font-weight: bold;
 }
 
-#qmpjzqjvqs .gt_font_italic {
+#oslapalfan .gt_font_italic {
   font-style: italic;
 }
 
-#qmpjzqjvqs .gt_super {
+#oslapalfan .gt_super {
   font-size: 65%;
 }
 
-#qmpjzqjvqs .gt_footnote_marks {
+#oslapalfan .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qmpjzqjvqs .gt_asterisk {
+#oslapalfan .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qmpjzqjvqs .gt_indent_1 {
+#oslapalfan .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qmpjzqjvqs .gt_indent_2 {
+#oslapalfan .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qmpjzqjvqs .gt_indent_3 {
+#oslapalfan .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qmpjzqjvqs .gt_indent_4 {
+#oslapalfan .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qmpjzqjvqs .gt_indent_5 {
+#oslapalfan .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qmpjzqjvqs .katex-display {
+#oslapalfan .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qmpjzqjvqs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#oslapalfan div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 31%">
+<col style="width: 24%">
+<col style="width: 24%">
+</colgroup>
 <thead>
 <tr class="gt_col_headings header">
 <th id="Classe" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="color: #000000; font-weight: bold" scope="col">Classe</th>

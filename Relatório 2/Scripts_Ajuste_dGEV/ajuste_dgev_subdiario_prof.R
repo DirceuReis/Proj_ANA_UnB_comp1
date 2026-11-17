@@ -19,6 +19,7 @@ library(tidyr)
 library(pbapply)
 library(lmom)
 library(arrow)
+library(sf)
 
 
 # CAMINHOS ---------------------------------------------------------------
@@ -101,25 +102,28 @@ arrow::write_parquet(idf.df, file.path(path.fit.ls, "df_subdiario_dgev_idf_.pqt"
 arrow::write_parquet(profile.par, file.path(path.fit.ls, "df_subdiario_dgev_profpar.pqt")) # verossimilhanca parametros
 arrow::write_parquet(profile.idf, file.path(path.fit.ls, "df_subdiario_dgev_profidf.pqt")) # verossimilhanca quantis
 
+
 # GPKG --------------------------------------------------------------------
 
 # Ler resultados
-par.df <- arrow::read_parquet(file.path(path.fit.ls, "df_diario_dgev_par.pqt"))
-idf.df <- arrow::read_parquet(file.path(path.fit.ls, "df_diario_dgev_idf.pqt"))
-
-imax.df <- imax.df |> 
-  filter(na_prct_yr <= 0.20) |> 
-  group_by(gauge_code) |> 
-  mutate(n_years = n_distinct(wateryear)) |> 
-  filter(n_years >= 30) |> 
-  ungroup()
+par.df <- arrow::read_parquet(file.path(path.fit.ls, "df_subdiario_dgev_par.pqt"))
+idf.df <- arrow::read_parquet(file.path(path.fit.ls, "df_subdiario_dgev_idf.pqt"))
 
 gauges <- unique(imax.df$gauge_code)
 
-info.df <- imax.df |> 
-  slice_head(n = 1, by = gauge_code) |> 
-  select(gauge_code, na_prct_yr, n_years, estado, long, lat) |> 
-  rename(UF = estado)
+imax.df <- imax.preqc.df |> 
+  filter(na_prct_yr <= na.accept) |> 
+  group_by(gauge_code) |> 
+  mutate(n_years = n_distinct(wateryear), .after = wateryear) |> 
+  filter(
+    n_distinct(d) >= min.durations,
+    n_distinct(wateryear) >= min.years
+  ) |> 
+  ungroup()
+
+# Informações sobre as estações subdiárias do RS
+info.df <- readRDS("Relatório 2/Scripts_Maximas/resultados/BR/dataframes/metadados_estacoes_subdiario_Uniplu.rds") |> 
+  filter(gauge_code %in% gauges)
 
 par.sf <- par.df |> 
   filter(gauge_code %in% gauges) |> 
@@ -134,5 +138,5 @@ idf.sf <- idf.df |>
   st_as_sf(coords = c("long", "lat"), crs = st_crs(4674))
 
 path.gpkg <- "Relatório 2/Entregas/gpkg/semi_bayesiano"
-st_write(par.df, file.path(path.gpkg, "BR_parametros_dgev_diario.gpkg"))
-st_write(idf.df, file.path(path.gpkg, "BR_periodos_retorno_dgev_diario.gpkg"))
+st_write(par.df, file.path(path.gpkg, "BR_parametros_dgev_subdiario.gpkg"))
+st_write(idf.df, file.path(path.gpkg, "BR_periodos_retorno_dgev_subdiario.gpkg"))

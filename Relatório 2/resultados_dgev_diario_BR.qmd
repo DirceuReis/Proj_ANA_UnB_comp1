@@ -1,10 +1,10 @@
-## Aplicação do modelo semi-Bayesiano às séries diárias
+### Aplicação do modelo semi-bayesiano às séries diárias
 
 Nessa aplicação, as intensidades de precipitação máxima anuais em escala diária foram ajustadas com o modelo d-GEV considerando a distribuição *a priori* de @martins2000, uma distribuição Beta com média 0,100 e variância 0,122².
 
 Conforme estabelecido na Meta 5, oito durações de precipitação foram selecionadas: 1, 2, 3, 4, 5, 6, 7 e 10 dias (24, 48, 72, 96, 120, 144, 168 e 240 horas, respectivamente). Somente séries com pelo menos 30 anos válidos de observações foram utilizadas, totalizando 5.258 estações. Os máximos anuais foram selecionados conforme o ano hidrológico definido estimados para cada estação individualmente.
 
-### Parâmetros do modelo d-GEV
+#### Parâmetros do modelo d-GEV
 
 Novamente, o modelo d-GEV considera simultaneamente todas as durações em um ajuste único, totalizando 5 parâmetros estimados. O parâmetro de deslocamento $\theta$ foi mantido na otimização, porém seu efeito para intensidades diárias é negligenciável. Portanto, os resultados espacializados apresentados adiantes concernem somente às estimativas de $\xi$ e $H$.
 
@@ -16,7 +16,7 @@ Assim como observado no estado do Rio Grande do Sul, a interpolação espacial d
 
 ![Distribuição espacial interpolada das estimativas do expoente de escala $H$ do modelo d-GEV para a faixa de durações diárias.](Scripts_Ajuste_dGEV/figuras/mapa_dgev_par_H_diario_br.png){#fig-mapa-H-dgev-diario fig-align="center"}
 
-### Curvas intensidade-duração-frequência
+#### Curvas intensidade-duração-frequência
 
 As curvas estimadas pelo modelo semi-Bayesiano foram examiandas em seis estações pluviométricas distintas, apresentadas na @fig-idf-diario-dgev1-br e na @fig-idf-diario-dgev2-br para os tempos de retorno de 2, 10, 50 e 100 anos (primeira figura) e 5, 25 e 200 anos (segunda figura). As estações foram escolhidas buscando ilustrar diferentes comportamentos do parâmetro de forma da GEV: Ceará (739006), Minas Gerais (1842004), Pernambuco (735041), Paraná (2549006), Rio Grande do Norte (535011) e Santa Catarina (2849002). Essas estações apresentaram distribuições ajustadas de cauda limitadas (CE e MG), caudas pesadas (PE, RN e SC) e caudas com decaimento próximo a exponencial (leve, PR).
 

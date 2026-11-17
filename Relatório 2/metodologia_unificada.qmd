@@ -1,4 +1,4 @@
-Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries <!--subdiárias--> de precipitação, previamente organizadas e descritas na Meta 3. <!--Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas. Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos *max-stable*, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados-->.
+Este capítulo apresenta os estudos desenvolvidos para a estimativa de relações intensidade–duração–frequência (IDF) a partir das séries <!--subdiárias--> de precipitação, previamente organizadas e descritas na Meta 3. <!--Foram investigadas três abordagens estatísticas, com diferentes formulações e objetivos complementares, desenvolvidas para incorporar informações regionais à estimativa das relações intensidade–duração–frequência (IDF) de precipitações extremas. Inicialmente, apresenta-se a metodologia baseada em mínimos quadrados generalizados (GLS), voltada ao ajuste de relações IDF e à consideração da estrutura de variabilidade dos dados no processo de estimação. Em seguida, são apresentados os modelos hierárquicos bayesianos (BHM), que combinam a distribuição Generalizada de Valores Extremos (GEV) com relações de invariância de escala, permitindo estimar conjuntamente os parâmetros associados às diferentes durações, quantificar suas incertezas e investigar alternativas de compartilhamento de informações entre estações. Por fim, são abordados os modelos bayesianos espaciais baseados em processos *max-stable*, cuja principal característica é representar explicitamente a dependência espacial entre eventos extremos, além da variabilidade espacial dos parâmetros das distribuições marginais. Nessa última abordagem, também é avaliada a incorporação de covariáveis fisiográficas e pluviométricas para auxiliar na explicação dos padrões espaciais e na estimativa de curvas IDF em locais não monitorados.-->
 
 ## Preparação das séries de precipitação e construção dos máximos anuais
 
@@ -344,6 +344,7 @@ O RS foi utilizado para investigar estruturas alternativas para o parâmetro de 
 
 As hipóteses de comparação podem ser expressas pelas restrições e relações apresentadas na @tbl-estruturas-xi, que diferenciam os níveis de compartilhamento de informações entre estações e durações.
 
+::: {#tbl-estruturas-xi}
 | Estrutura | Representação | Compartilhamento |
 |:-----------------------|:-----------------------|:-----------------------|
 | Local (*non-pooled*) | $\xi_{j,d}$ regularizado em torno de $\bar\xi_j$ | Entre durações da mesma estação |
@@ -352,7 +353,8 @@ As hipóteses de comparação podem ser expressas pelas restrições e relaçõe
 | Globalmente comum | $\xi_{j,d}=\xi$ | Igualdade entre estações e durações |
 | *Partial pooling* espacial | $\xi_j$ associado a parâmetros regionais | Regularização entre estações, sem igualdade obrigatória |
 
-: Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados. {#tbl-estruturas-xi}
+Estruturas de parametrização do parâmetro de forma ($\xi$) da distribuição GEV e respectivos níveis de compartilhamento de informações entre estações e durações nos modelos bayesianos avaliados.
+:::
 
 Os modelos avaliados no Rio Grande do Sul mantiveram a mesma estrutura hierárquica de invariância de escala para os parâmetros de localização e escala da distribuição GEV, fundamentada em Lima et al. (2018). Os parâmetros $\alpha_j$, $\beta_j$, $H_j$ e $\theta_j$ foram estimados individualmente para cada estação, sem compartilhamento espacial. As diferentes especificações distinguiram-se exclusivamente pela estrutura atribuída ao parâmetro de forma $\xi$, permitindo avaliar as consequências de diferentes hipóteses de constância, heterogeneidade e compartilhamento de informação sobre o comportamento das caudas da distribuição e as estimativas de precipitações extremas.
 
@@ -411,6 +413,7 @@ As estimativas dos parâmetros das curvas IDFs foram realizadas via cadeias MCMC
 
 A definição das informações iniciais utilizadas como entrada do modelo, entre elas os valores iniciais dos parâmetros da GEV, dos semivariogramas, e das diversas distribuições de referência foram baseadas na proposta de @Stephenson2016Durations. A partir dessa proposta inicial, foram testadas diversas combinações de valores, de forma a obter resultados mais estáveis, com a convergência dos parâmetros. As investigações envolveram variações nos valores de inicias dos parâmetros de dependência espacial 𝛼 e largura de banda (logbw), os desvios padrão das distribuições de referência para tais parâmetros, a distribuição *a priori* de logwb, e tamanho das células. Ao todo, foram realizados mais de 50 testes, da ordem de 6 a 8 horas de processamento para cada um deles. O conjunto de valores que gerou o resultado mais consistente foi então adotado como modelo “*baseline*” para incorporação do procedimento com as covariáveis. Os parâmetros utilizados são apresentados na @tbl-parametros-ms.
 
+::: {#tbl-parametros-ms}
 | Parâmetro | Descrição |
 |:-----------------------------------|:-----------------------------------|
 | `Cell size = 0.25` | Tamanho das células |
@@ -430,7 +433,8 @@ A definição das informações iniciais utilizadas como entrada do modelo, entr
 | `prilama = c(rep(5,5))` | Parâmetros de forma das distribuições gama |
 | `prilamb = c(rep(0.4,5))` | Parâmetros de escala das distribuições gama |
 
-: Configuração dos parâmetros de entrada utilizada nos modelos MS e MS-COV. {#tbl-parametros-ms}
+Configuração dos parâmetros de entrada utilizada nos modelos MS e MS-COV.
+:::
 
 #### Incorporação de covariáveis espaciais
 

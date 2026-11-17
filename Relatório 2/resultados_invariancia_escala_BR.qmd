@@ -1,7 +1,4 @@
----
-# title: "Curvas Intensidade-Duração-Frequência"
-# bibliography: ref_invariancia_escala.bib
----
+### Verificação da invariância de escala {#sec-res-inv-escala}
 
 Da @fig-inv-escala-rs até a @fig-inv-escala-sp são apresentadas as retas de regressão ajustadas aos momentos não centrais até ordem 3, bem como os expoentes de escala $H$ estimados para cada ordem e o coeficiente de determinação $R^2$ para as estações mais longas de algumas Unidades Federativas. Os histogramas ao lado ilustram como a linearidade dos modelos ajustados às demais estações do estado. Grande parte das estações mais longas são operadas pelo INMET e pelo ICEA. Como consequência, a maioria das retas de regressão compreende somente as durações a partir de $d=$ 1 h.
 

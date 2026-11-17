@@ -1,10 +1,10 @@
-## Aplicação do modelo semi-bayesiano às séries subdiárias
+### Aplicação do modelo semi-bayesiano às séries subdiárias
 
 Nessa abordagem semi-bayesiana, as intensidades de precipitação máxima anuais, agora em escala subdiária, foram ajustadas com o modelo d-GEV, novamente considerando a distribuição *a priori* de @martins2000. O conjunto, obtido após um tratamento de qualidade (8 anos e 20% de falhas anuais) aplicado à base UNIPLU-BR, reúne 1.973 postos pluviográficos distribuídos ao longo do território nacional.
 
 Conforme estabelecido na Meta 7, pelo menos 24 durações de precipitação foram selecionadas: de 10 minutos até 24 h. Essa faixa completa, porém, não está presente em todos os postos, visto que a duração "base" de registro das estações difere. As lâminas de registro disponíveis são de 10, 15, 30 e 60 minutos, portanto os totais agregados são função desses valores. Porém, a partir de 1 h, todas as estações possuem a mesma quantidade de durações agregadas. Os máximos anuais foram selecionados, novamente, conforme o ano hidrológico definido estimados para cada estação individualmente.
 
-### Parâmetros do modelo d-GEV
+#### Parâmetros do modelo d-GEV
 
 O ajuste se dá da mesma maneira como nas aplicações anteriores da abordagem semi-bayesiana com o modelo d-GEV. As Figuras [-@fig-mapa-xi-dgev-subdiario], [-@fig-mapa-H-dgev-subdiario] e [-@fig-mapa-theta-dgev-subdiario] apresentam os resultados espacializados a partir das estimativas locais de $\xi$, $H$ e $\theta$.
 
@@ -20,7 +20,7 @@ Apesar da possível deficiência na representação de durações sub-horárias,
 
 ![Distribuição espacial interpolada das estimativas do parâmetro de forma $\theta$ do modelo d-GEV para a faixa de durações subdiárias.](Scripts_Ajuste_dGEV/figuras/mapa_dgev_par_theta_subdiario_br.png){#fig-mapa-theta-dgev-subdiario fig-align="center"}
 
-### Curvas intensidade-duração-frequência (IDF)
+#### Curvas intensidade-duração-frequência (IDF)
 
 Para avaliação dos quantis estimados, foram selecionados seis pluviógrafos: SBAR (SE), SBCF (MG), SBRP (SP), 420800501A (SC), 293330704A (BA) e 314610703A (MG). Assim como na avaliação das curvas para durações diárias, essas estações representam diferentes comportamentos da cauda superior das distribuições ajustadas e apresentam séries de comprimentos entre 11 e 42 anos.
 

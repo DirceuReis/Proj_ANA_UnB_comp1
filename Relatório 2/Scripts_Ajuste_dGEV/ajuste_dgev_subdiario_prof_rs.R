@@ -107,3 +107,32 @@ arrow::write_parquet(par.df, file.path(path.fit.ls, sprintf("%s_par_%s.pqt", pre
 arrow::write_parquet(idf.df, file.path(path.fit.ls, sprintf("%s_idf_%s.pqt", prefix, prior.name))) # quantis
 arrow::write_parquet(profile.par, file.path(path.fit.ls, sprintf("%s_profpar_%s.pqt", prefix, prior.name))) # verossimilhanca parametros
 arrow::write_parquet(profile.idf, file.path(path.fit.ls, sprintf("%s_profidf_%s.pqt", prefix, prior.name))) # verossimilhanca quantis
+
+
+# GPGK -------------------------------------------------------------------
+
+# Ler resultados
+par.df <- arrow::read_parquet(file.path(path.fit.ls, "df_subdiario_dgev_rs_par_rgmle.pqt"))
+idf.df <- arrow::read_parquet(file.path(path.fit.ls, "df_subdiario_dgev_rs_idf_rgmle.pqt"))
+
+gauges <- unique(imax.df$gauge_code)
+
+# Informações sobre as estações subdiárias do RS
+info.df <- arrow::read_parquet("Relatório 2/Scripts_Ajuste_dGEV/resultados/subdiarios/dataframes/df_subdiario_info.pqt") |> 
+  filter(gauge_code %in% gauges)
+
+par.sf <- par.df |> 
+  filter(gauge_code %in% gauges) |> 
+  select(-c(ci_type, rel_width, n_profile, max_ll, lim, found_max)) |> 
+  left_join(info.df, by = "gauge_code") |> 
+  st_as_sf(coords = c("long", "lat"), crs = st_crs(4674))
+
+idf.sf <- idf.df |> 
+  filter(gauge_code %in% gauges) |> 
+  select(-c(n_profile, max, lim)) |> 
+  left_join(info.df, by = "gauge_code") |> 
+  st_as_sf(coords = c("long", "lat"), crs = st_crs(4674))
+
+path.gpkg <- "Relatório 2/Entregas/gpkg/semi_bayesiano"
+st_write(par.df, file.path(path.gpkg, "RS_parametros_dgev_subdiario.gpkg"))
+st_write(idf.df, file.path(path.gpkg, "RS_periodos_retorno_dgev_subdiario.gpkg"))

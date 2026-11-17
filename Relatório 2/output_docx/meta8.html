@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -63,7 +63,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-7b70b6449d90b0912b3f848c5cf55d7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -206,9 +206,9 @@ window.Quarto = {
   <li><a href="#dados-utilizados" id="toc-dados-utilizados" class="nav-link active" data-scroll-target="#dados-utilizados"><span class="header-section-number">5.1</span> Dados utilizados</a></li>
   <li><a href="#metodologia" id="toc-metodologia" class="nav-link" data-scroll-target="#metodologia"><span class="header-section-number">5.2</span> Metodologia</a>
   <ul class="collapse">
-  <li><a href="#teste-de-mann-kendall" id="toc-teste-de-mann-kendall" class="nav-link" data-scroll-target="#teste-de-mann-kendall"><span class="header-section-number">5.2.1</span> Teste de Mann-Kendall</a></li>
-  <li><a href="#mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" id="toc-mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" class="nav-link" data-scroll-target="#mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw"><span class="header-section-number">5.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</a></li>
-  <li><a href="#estimativa-da-tendência" id="toc-estimativa-da-tendência" class="nav-link" data-scroll-target="#estimativa-da-tendência"><span class="header-section-number">5.2.3</span> Estimativa da tendência</a></li>
+  <li><a href="#sec-mk" id="toc-sec-mk" class="nav-link" data-scroll-target="#sec-mk"><span class="header-section-number">5.2.1</span> Teste de Mann-Kendall</a></li>
+  <li><a href="#sec-mk-mtfpw" id="toc-sec-mk-mtfpw" class="nav-link" data-scroll-target="#sec-mk-mtfpw"><span class="header-section-number">5.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</a></li>
+  <li><a href="#sec-trend" id="toc-sec-trend" class="nav-link" data-scroll-target="#sec-trend"><span class="header-section-number">5.2.3</span> Estimativa da tendência</a></li>
   <li><a href="#remoção-da-tendência" id="toc-remoção-da-tendência" class="nav-link" data-scroll-target="#remoção-da-tendência"><span class="header-section-number">5.2.4</span> Remoção da tendência</a></li>
   <li><a href="#estimativa-da-autocorrelação-de-primeira-ordem" id="toc-estimativa-da-autocorrelação-de-primeira-ordem" class="nav-link" data-scroll-target="#estimativa-da-autocorrelação-de-primeira-ordem"><span class="header-section-number">5.2.5</span> Estimativa da autocorrelação de primeira ordem</a></li>
   <li><a href="#correção-do-viés-da-autocorrelação" id="toc-correção-do-viés-da-autocorrelação" class="nav-link" data-scroll-target="#correção-do-viés-da-autocorrelação"><span class="header-section-number">5.2.6</span> Correção do viés da autocorrelação</a></li>
@@ -233,7 +233,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></h1>
+<h1 class="title"><span id="sec-cap5" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Não Estacionariedade dos Extremos</span></span></h1>
 </div>
 
 
@@ -263,17 +263,17 @@ window.Quarto = {
 <section id="metodologia" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="metodologia"><span class="header-section-number">5.2</span> Metodologia</h2>
 <p>A metodologia foi estruturada em etapas sucessivas, com o objetivo de identificar as tendências nas séries temporais, considerando tanto os dados provenientes dos postos pluviométricos e pluviógrafos do UNIPLU quanto os dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>. Inicialmente, foi aplicado o teste não paramétrico de MK para verificar a existência de tendências monotônicas estatisticamente significativas nas séries analisadas. Em seguida, foi avaliada a presença de autocorrelação nas séries temporais e aplicada a técnica MTFPW, com o objetivo de reduzir a influência da autocorrelação sobre a identificação das tendências. Posteriormente, o teste de Mann–Kendall foi aplicado às séries corrigidas pelo procedimento de MTFPW, KM+MTFPW. Por fim, considerando a realização simultânea de testes para diferentes postos e células da grade, foi aplicado o procedimento de controle de FDR, visando controlar a proporção esperada de resultados falsamente significativos.</p>
-<section id="teste-de-mann-kendall" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="teste-de-mann-kendall"><span class="header-section-number">5.2.1</span> Teste de Mann-Kendall</h3>
+<section id="sec-mk" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="sec-mk"><span class="header-section-number">5.2.1</span> Teste de Mann-Kendall</h3>
 <p>Inicialmente, foi aplicado o teste não paramétrico de MK às séries anuais de Rx1day e subdiárias. O objetivo foi verificar a existência de uma tendência monotônica estatisticamente significativa ao longo do período analisado.</p>
-<p>Para cada série temporal ((X_1,X_2,,X_n)), as observações foram inicialmente transformadas em postos, considerando os valores empatados pelo método do menor posto. Em seguida, a estatística (S) foi calculada pela comparação entre todos os pares de observações:</p>
+<p>Para cada série temporal <span class="math inline">\(X_1,X_2,\ldots,X_n\)</span>, as observações foram inicialmente transformadas em postos, considerando os valores empatados pelo método do menor posto. Em seguida, a estatística (S) foi calculada pela comparação entre todos os pares de observações:</p>
 <p><span id="eq-mk-s"><span class="math display">\[
 S =
 \sum_{i=1}^{n-1}
 \sum_{j=i+1}^{n}
 \operatorname{sgn}(R_j-R_i)
 \tag{5.1}\]</span></span></p>
-<p>em que (R_i) e (R_j) representam os postos das observações (X_i) e (X_j), respectivamente, e:</p>
+<p>em que <span class="math inline">\(R_i\)</span> e <span class="math inline">\(R_j\)</span> representam os postos das observações <span class="math inline">\(X_i\)</span> e <span class="math inline">\(X_j\)</span>, respectivamente, e:</p>
 <p><span id="eq-sgn"><span class="math display">\[
 \operatorname{sgn}(R_j-R_i)=
 \begin{cases}
@@ -282,8 +282,8 @@ S =
 -1, &amp; R_j-R_i&lt;0
 \end{cases}
 \tag{5.2}\]</span></span></p>
-<p>Valores positivos de (S) indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.</p>
-<p>Os empates entre observações foram considerados no cálculo da variância de (S). A variância foi calculada por:</p>
+<p>Valores positivos de <span class="math inline">\(S\)</span> indicam predominância de aumentos da variável ao longo do tempo, enquanto valores negativos indicam predominância de reduções.</p>
+<p>Os empates entre observações foram considerados no cálculo da variância de <span class="math inline">\(S\)</span>. A variância foi calculada por:</p>
 <p><span id="eq-km-variavancia"><span class="math display">\[
 \operatorname{Var}(S)=
 \frac{
@@ -293,8 +293,8 @@ n(n-1)(2n+5)
 t_p(t_p-1)(2t_p+5)
 }{18}
 \tag{5.3}\]</span></span></p>
-<p>em que (t_p) representa o número de observações pertencentes ao (p)-ésimo grupo de valores empatados e (g) corresponde ao número de grupos de valores empatados.</p>
-<p>A estatística padronizada (Z) foi calculada por:</p>
+<p>em que <span class="math inline">\(t_p\)</span> representa o número de observações pertencentes ao <span class="math inline">\(p\)</span>-ésimo grupo de valores empatados e <span class="math inline">\(g\)</span> corresponde ao número de grupos de valores empatados.</p>
+<p>A estatística padronizada <span class="math inline">\(Z\)</span> foi calculada por:</p>
 <p><span id="eq-mk-z"><span class="math display">\[
 Z=
 \begin{cases}
@@ -307,43 +307,43 @@ Z=
 <p><span id="eq-pvalor"><span class="math display">\[
 p=2\left[1-\Phi(|Z|)\right]
 \tag{5.5}\]</span></span></p>
-<p>em que () representa a função de distribuição acumulada da distribuição normal padrão.</p>
-<p>Foi adotado nível de significância de 5% ((,05)). Assim, uma série foi considerada estatisticamente significativa quando: <span class="math display">\[
+<p>em que <span class="math inline">\(\Phi\)</span> representa a função de distribuição acumulada da distribuição normal padrão.</p>
+<p>Foi adotado nível de significância de 5% (<span class="math inline">\(\alpha=\)</span> 0,05). Assim, uma série foi considerada estatisticamente significativa quando: <span class="math display">\[
 p&lt;0,05
-\]</span> A direção da tendência foi determinada pelo sinal da estatística (Z). Valores positivos de (Z) foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.</p>
-<p>O teste MK foi aplicado individualmente às séries correspondentes às células da grade <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de (Z), <em>p-value</em> e classificação da direção da tendência.</p>
+\]</span> A direção da tendência foi determinada pelo sinal da estatística <span class="math inline">\(Z\)</span>. Valores positivos de <span class="math inline">\(Z\)</span> foram classificados como tendência crescente e os valores negativos foram classificados como tendência decrescente.</p>
+<p>O teste MK foi aplicado individualmente às séries correspondentes às células da grade <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span> e às séries correspondentes aos postos pluviométricos e pluviográficos do UNIPLU. Dessa forma, cada unidade espacial de análise apresentou seu próprio valor de <span class="math inline">\(Z\)</span>, <em>p-value</em> e classificação da direção da tendência.</p>
 <ul>
 <li>finalidade do teste;</li>
 <li>hipótese nula;</li>
-<li>estatística Z;</li>
+<li>estatística <span class="math inline">\(Z\)</span>;</li>
 <li>p-valor;</li>
 <li>nível de significância;</li>
 <li>classificação da tendência em crescente, decrescente ou não significativa.</li>
 <li>equações</li>
 </ul>
 </section>
-<section id="mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="mann-kendall-mk-modified-trend-free-pre-whitening-mtfpw"><span class="header-section-number">5.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</h3>
+<section id="sec-mk-mtfpw" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="sec-mk-mtfpw"><span class="header-section-number">5.2.2</span> Mann-Kendall (MK) + <em>Modified Trend-Free Pre-Whitening</em> (MTFPW)</h3>
 <p>A presença de autocorrelação serial em séries temporais pode influenciar a avaliação de tendências, uma vez que a dependência entre observações sucessivas pode aumentar a probabilidade de identificação de uma tendência como estatisticamente significativa quando, na realidade, ela não existe. Para reduzir esse efeito, foi aplicado o procedimento MTFPW <span class="citation" data-cites="Onoz.2012">(<a href="ref.html#ref-Onoz.2012" role="doc-biblioref">Önöz e Bayazit 2012</a>)</span>, conforme o procedimento descrito por <span class="citation" data-cites="Souza.2022">(<a href="ref.html#ref-Souza.2022" role="doc-biblioref">Souza e Reis 2022</a>)</span>.</p>
 <p>O método foi aplicado individualmente a cada série temporal e estruturado em etapas sucessivas:</p>
 <ol type="i">
 <li><p>estimativa da tendência por meio da inclinação de Sen;</p></li>
 <li><p>remoção da tendência da série;</p></li>
-<li><p>estimativa da autocorrelação de primeira ordem ((r_1));</p></li>
-<li><p>correção do viés da estimativa de (r_1);</p></li>
+<li><p>estimativa da autocorrelação de primeira ordem (<span class="math inline">\(r_1\)</span>);</p></li>
+<li><p>correção do viés da estimativa de <span class="math inline">\(r_1\)</span>;</p></li>
 <li><p>verificação da significância da autocorrelação; e</p></li>
 <li><p>aplicação do procedimento de <em>pre-whitening</em> quando a autocorrelação foi considerada estatisticamente significativa.</p></li>
 </ol>
 </section>
-<section id="estimativa-da-tendência" class="level3" data-number="5.2.3">
-<h3 data-number="5.2.3" class="anchored" data-anchor-id="estimativa-da-tendência"><span class="header-section-number">5.2.3</span> Estimativa da tendência</h3>
-<p>Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen <span class="citation" data-cites="Sen.1968">(<a href="ref.html#ref-Sen.1968" role="doc-biblioref">Sen 1968</a>)</span>. Para uma série temporal com (n) observações, foram calculadas as inclinações entre todos os pares de observações:</p>
+<section id="sec-trend" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="sec-trend"><span class="header-section-number">5.2.3</span> Estimativa da tendência</h3>
+<p>Inicialmente, foi estimada a magnitude da tendência da série por meio da inclinação de Sen <span class="citation" data-cites="Sen.1968">(<a href="ref.html#ref-Sen.1968" role="doc-biblioref">Sen 1968</a>)</span>. Para uma série temporal com <span class="math inline">\(n\)</span> observações, foram calculadas as inclinações entre todos os pares de observações:</p>
 <p><span id="eq-sen-inclinacoes"><span class="math display">\[
 \beta_{ij} =
 \frac{X_j-X_i}{j-i},
 \qquad j&gt;i
 \tag{5.6}\]</span></span></p>
-<p>em que (X_i) e (X_j) representam os valores da série nos instantes (i) e (j), respectivamente. A inclinação de Sen (()) foi obtida pela mediana de todas as inclinações (_{ij}):</p>
+<p>em que <span class="math inline">\(X_i\)</span> e <span class="math inline">\(X_j\)</span> representam os valores da série nos instantes <span class="math inline">\(i\)</span> e <span class="math inline">\(j\)</span>, respectivamente. A inclinação de Sen (<span class="math inline">\(\beta\)</span>) foi obtida pela mediana de todas as inclinações <span class="math inline">\(\beta_{ij}\)</span>:</p>
 <p><span id="eq-sen-mediana"><span class="math display">\[
 \beta =
 \operatorname{mediana}
@@ -359,12 +359,12 @@ p&lt;0,05
 <p><span id="eq-removertendencia"><span class="math display">\[
 X_t^{d}=X_t-\beta t
 \tag{5.8}\]</span></span></p>
-<p>em que (X_t^{d}) representa o valor da série sem tendência no instante (t), (X_t) corresponde ao valor original da série, () é a inclinação de Sen e (t) representa a posição temporal da observação.</p>
+<p>em que <span class="math inline">\(X_t^{d}\)</span> representa o valor da série sem tendência no instante <span class="math inline">\(t\)</span>, <span class="math inline">\(X_t\)</span> corresponde ao valor original da série, <span class="math inline">\(\beta\)</span> é a inclinação de Sen e <span class="math inline">\(t\)</span> representa a posição temporal da observação.</p>
 <p>A série sem tendência foi utilizada exclusivamente para a estimativa da autocorrelação de primeira ordem. A aplicação posterior do procedimento de <em>pre-whitening</em>, quando necessária, foi realizada sobre a série original.</p>
 </section>
 <section id="estimativa-da-autocorrelação-de-primeira-ordem" class="level3" data-number="5.2.5">
 <h3 data-number="5.2.5" class="anchored" data-anchor-id="estimativa-da-autocorrelação-de-primeira-ordem"><span class="header-section-number">5.2.5</span> Estimativa da autocorrelação de primeira ordem</h3>
-<p>A autocorrelação de primeira ordem ((r_1)) foi estimada a partir da série sem tendência. Inicialmente, foi calculada a média da série por:</p>
+<p>A autocorrelação de primeira ordem <span class="math inline">\(r_1\)</span> foi estimada a partir da série sem tendência. Inicialmente, foi calculada a média da série por:</p>
 <p><span id="eq-media-detrendida"><span class="math display">\[
 \overline{X^d}
 =
@@ -383,17 +383,17 @@ r_1=
 \left(X_t^d-\overline{X^d}\right)^2
 }
 \tag{5.10}\]</span></span></p>
-<p>em que (r_1) representa a correlação entre observações consecutivas da série sem tendência.</p>
+<p>em que <span class="math inline">\(r_1\)</span> representa a correlação entre observações consecutivas da série sem tendência.</p>
 </section>
 <section id="correção-do-viés-da-autocorrelação" class="level3" data-number="5.2.6">
 <h3 data-number="5.2.6" class="anchored" data-anchor-id="correção-do-viés-da-autocorrelação"><span class="header-section-number">5.2.6</span> Correção do viés da autocorrelação</h3>
-<p>A estimativa de (r_1) foi posteriormente corrigida para reduzir o viés associado à estimativa da autocorrelação em séries finitas. A autocorrelação corrigida foi calculada por:</p>
+<p>A estimativa de <span class="math inline">\(r_1\)</span> foi posteriormente corrigida para reduzir o viés associado à estimativa da autocorrelação em séries finitas. A autocorrelação corrigida foi calculada por:</p>
 <p><span id="eq-autocorrigida"><span class="math display">\[
 r_1^{*}
 =
 \frac{nr_1+2}{n-4}
 \tag{5.11}\]</span></span></p>
-<p>em que (r_1^{*}) representa a autocorrelação de primeira ordem corrigida e (n) corresponde ao número de observações da série.</p>
+<p>em que <span class="math inline">\(r_1^{*}\)</span> representa a autocorrelação de primeira ordem corrigida e <span class="math inline">\(n\)</span> corresponde ao número de observações da série.</p>
 </section>
 <section id="identificação-da-autocorrelação-significativa" class="level3" data-number="5.2.7">
 <h3 data-number="5.2.7" class="anchored" data-anchor-id="identificação-da-autocorrelação-significativa"><span class="header-section-number">5.2.7</span> Identificação da autocorrelação significativa</h3>
@@ -409,15 +409,15 @@ r_1^{*}
 =
 \frac{-1+1,96\sqrt{n-2}}{n-1}
 \tag{5.13}\]</span></span></p>
-<p>A série foi considerada sem autocorrelação significativa quando o valor de (r_1) permaneceu dentro desse intervalo:</p>
+<p>A série foi considerada sem autocorrelação significativa quando o valor de <span class="math inline">\(r_1\)</span> permaneceu dentro desse intervalo:</p>
 <p><span id="eq-intervalosemgig"><span class="math display">\[
 \rho_{1,\mathrm{inf}}
 \leq r_1
 \leq
 \rho_{1,\mathrm{sup}}
 \tag{5.14}\]</span></span></p>
-<p>Quando (r_1) permaneceu dentro dos limites estabelecidos, a série foi considerada independente para fins da análise de tendência, não sendo aplicado o procedimento de <em>pre-whitening</em>. Nesse caso, a série original foi mantida para a aplicação do teste de Mann–Kendall.</p>
-<p>Por outro lado, quando (r_1) apresentou valor inferior ao limite inferior ou superior ao limite superior, a autocorrelação foi considerada significativa:</p>
+<p>Quando <span class="math inline">\(r_1\)</span> permaneceu dentro dos limites estabelecidos, a série foi considerada independente para fins da análise de tendência, não sendo aplicado o procedimento de <em>pre-whitening</em>. Nesse caso, a série original foi mantida para a aplicação do teste de Mann–Kendall.</p>
+<p>Por outro lado, quando <span class="math inline">\(r_1\)</span> apresentou valor inferior ao limite inferior ou superior ao limite superior, a autocorrelação foi considerada significativa:</p>
 <p><span id="eq-intervalocomsig"><span class="math display">\[
 r_1 &lt; \rho_{1,\mathrm{inf}}
 \quad\text{ou}\quad
@@ -427,13 +427,13 @@ r_1 &gt; \rho_{1,\mathrm{sup}}
 </section>
 <section id="aplicação-do-pre-whitening" class="level3" data-number="5.2.8">
 <h3 data-number="5.2.8" class="anchored" data-anchor-id="aplicação-do-pre-whitening"><span class="header-section-number">5.2.8</span> Aplicação do <em>pre-whitening</em></h3>
-<p>Quando identificada autocorrelação significativa, o procedimento de <em>pre-whitening</em> foi aplicado à série temporal original, utilizando a autocorrelação corrigida (r_1^{*}). A série corrigida foi obtida por:</p>
+<p>Quando identificada autocorrelação significativa, o procedimento de <em>pre-whitening</em> foi aplicado à série temporal original, utilizando a autocorrelação corrigida <span class="math inline">\(r_1^{*}\)</span>. A série corrigida foi obtida por:</p>
 <p><span id="eq-pw"><span class="math display">\[
 Y_t=
 X_t-r_1^{*}X_{t-1},
 \qquad t=2,\ldots,n
 \tag{5.16}\]</span></span></p>
-<p>em que (Y_t) representa a série após a aplicação do <em>pre-whitening</em>, (X_t) corresponde à série original e (r_1^{*}) representa a estimativa corrigida da autocorrelação de primeira ordem.</p>
+<p>em que <span class="math inline">\(Y_t\)</span> representa a série após a aplicação do <em>pre-whitening</em>, <span class="math inline">\(X_t\)</span> corresponde à série original e <span class="math inline">\(r_1^{*}\)</span> representa a estimativa corrigida da autocorrelação de primeira ordem.</p>
 <p>Dessa forma, a série sem tendência foi utilizada para estimar e avaliar a autocorrelação, enquanto o <em>pre-whitening</em> foi aplicado diretamente à série original. Quando a autocorrelação não foi significativa, nenhuma transformação foi aplicada e a série original foi mantida.</p>
 <p>Após a aplicação do procedimento MTFPW, quando necessário, o teste de Mann–Kendall foi aplicado à série resultante. Assim, para cada unidade espacial de análise, foram obtidos a estimativa da inclinação de Sen, o coeficiente de autocorrelação de primeira ordem, o coeficiente corrigido, a indicação da presença ou ausência de autocorrelação significativa e a série utilizada na etapa subsequente do teste de tendência.</p>
 </section>
@@ -444,25 +444,25 @@ X_t-r_1^{*}X_{t-1},
 <p><span id="eq-fdrordenar"><span class="math display">\[
 p_{(1)} \leq p_{(2)} \leq \ldots \leq p_{(m)}
 \tag{5.17}\]</span></span></p>
-<p>em que (p_{(j)}) representa o (j)-ésimo menor <em>p-value</em> e (m) corresponde ao número total de <em>p-values</em> válidos considerados na análise.</p>
-<p>Para cada posição (j), foi calculado um valor crítico de acordo com:</p>
+<p>em que <span class="math inline">\(p_{(j)}\)</span> representa o <span class="math inline">\(j\)</span>-ésimo menor <em>p-value</em> e <span class="math inline">\(m\)</span> corresponde ao número total de <em>p-values</em> válidos considerados na análise.</p>
+<p>Para cada posição <span class="math inline">\(j\)</span>, foi calculado um valor crítico de acordo com:</p>
 <p><span id="eq-fdrcritico"><span class="math display">\[
 d_{(j)} =
 \frac{j\alpha}{m}
 \tag{5.18}\]</span></span></p>
-<p>em que (j) representa a posição do <em>p-value</em> ordenado, () corresponde ao nível de significância adotado e (m) representa o número total de testes considerados.</p>
-<p>Foi então identificado o maior valor de (j) que satisfazia a condição:</p>
+<p>em que <span class="math inline">\(j\)</span> representa a posição do <em>p-value</em> ordenado, <span class="math inline">\(\alpha\)</span> corresponde ao nível de significância adotado e <span class="math inline">\(m\)</span> representa o número total de testes considerados.</p>
+<p>Foi então identificado o maior valor de <span class="math inline">\(j\)</span> que satisfazia a condição:</p>
 <p><span id="eq-fdrcriterio"><span class="math display">\[
 p_{(j)} &lt; \frac{j\alpha}{m}
 \tag{5.19}\]</span></span></p>
-<p>O maior índice que atende a essa condição foi denominado (j^<em>). Quando não houve nenhum</em> p-value* que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando (j^<em>) foi identificado, todas as hipóteses correspondentes aos</em> p-values* ordenados de (p_{(1)}) até (p_{(j^*)}) foram consideradas estatisticamente significativas.</p>
+<p>O maior índice que atende a essa condição foi denominado <span class="math inline">\(j^*\)</span>. Quando não houve nenhum <em>p-value</em> que satisfizesse a condição estabelecida, nenhuma hipótese foi considerada significativa após o controle da FDR. Quando <span class="math inline">\(j^*\)</span> foi identificado, todas as hipóteses correspondentes aos <em>p-values</em> ordenados de <span class="math inline">\(p_{(1)}\)</span> até <span class="math inline">\(p_{(j^*)}\)</span> foram consideradas estatisticamente significativas.</p>
 <p>Assim, a regra de decisão do procedimento pode ser expressa por:</p>
 <p><span id="eq-fdrdecisão"><span class="math display">\[
 p_{(j)} &lt; \frac{j\alpha}{m},
 \qquad j=j^*
 \tag{5.20}\]</span></span></p>
-<p>sendo (j^*) o maior índice que satisfaz essa condição.</p>
-<p>Foi adotado nível de significância de 5% ((,05)). Após a identificação das hipóteses significativas na ordem crescente dos <em>p-values</em>, os resultados foram novamente associados às respectivas unidades espaciais, preservando a correspondência original entre cada <em>p-value</em> e sua estação ou célula da grade.</p>
+<p>sendo <span class="math inline">\(j^*\)</span> o maior índice que satisfaz essa condição.</p>
+<p>Foi adotado nível de significância de 5% (<span class="math inline">\(\alpha=\)</span> 0,05). Após a identificação das hipóteses significativas na ordem crescente dos <em>p-values</em>, os resultados foram novamente associados às respectivas unidades espaciais, preservando a correspondência original entre cada <em>p-value</em> e sua estação ou célula da grade.</p>
 <p>Dessa forma, o procedimento permitiu obter a significância estatística final das tendências considerando simultaneamente os múltiplos testes realizados. Para cada unidade espacial, o resultado após o controle da FDR foi classificado como significativo ou não significativo, permitindo a representação e a avaliação da distribuição espacial das tendências.</p>
 </section>
 <section id="teste-de-pettit" class="level3" data-number="5.2.10">
@@ -479,7 +479,7 @@ p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
 \tag{5.22}\]</span></span></p>
 <p>com os valores limitados ao intervalo máximo de 1. Nessa etapa, adotou-se o nível de significância de 5%, considerando-se evidência de quebra quando <span class="math inline">\((p &lt; 0{,}05)\)</span>. Entretanto, como o procedimento foi aplicado simultaneamente a milhares de células da grade, os valores-p foram submetidos posteriormente à correção para múltiplos testes pelo método FDR, com nível de significância de 5%. Assim, foram classificadas como células com quebra estatisticamente significativa aquelas que permaneceram significativas após a correção FDR e apresentaram um ano de quebra identificado. As demais células foram classificadas como sem quebra significativa.</p>
 <p>Para as células com quebras significativas após o procedimento FDR, realizou-se uma análise complementar das tendências temporais, com o objetivo de investigar possíveis diferenças no comportamento da precipitação entre os períodos anterior e posterior à quebra. O período anterior foi definido pelas observações com ano menor ou igual ao ano estimado da quebra, enquanto o período posterior compreendeu as observações com ano estritamente maior que esse ano. Dessa forma, o ano da quebra foi incluído no segmento anterior, e os dois períodos foram analisados separadamente.</p>
-<p>Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descrita nos itens 8.2.1; 8.2.2 e 8.2.3.</p>
+<p>Em cada segmento, aplicou-se a mesma metodologia da análise de tendência descrita nos itens <a href="#sec-mk" class="quarto-xref"><span>5.2.1</span></a>, <a href="#sec-mk-mtfpw" class="quarto-xref"><span>5.2.2</span></a> e <a href="#sec-trend" class="quarto-xref"><span>5.2.3</span></a>.</p>
 </section>
 </section>
 <section id="resultados" class="level2" data-number="5.3">
@@ -491,27 +491,81 @@ p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
 <p>Para a duração de 12 horas, o teste MK identificou tendências significativas nos postos SBAR e SBSJ. Entretanto, após a aplicação do procedimento MTFPW + MK e da correção FDR, apenas o posto SBAR permaneceu estatisticamente significativo, mantendo a tendência decrescente.</p>
 <p>Já nas séries de 24 horas, os dois postos que apresentaram tendências significativas no teste MK (SBAR e SBSJ) também permaneceram significativos após a aplicação do procedimento MTFPW + MK e da correção FDR. Ambos apresentaram tendências decrescentes. Esses seis postos estão distribuídos em cinco Regiões Hidrográficas: Atlântico Leste, São Francisco, Atlântico Nordeste Oriental, Atlântico Sudeste e Paraná.</p>
 <p>De modo geral, o posto SBAR apresentou tendência decrescente estatisticamente significativa nas quatro durações de 1, 3, 6 e 12 horas, enquanto o posto SBSJ apresentou tendência significativa apenas na duração de 24 horas, considerando os resultados após a correção FDR.</p>
-<p>A análise de tendência foi aplicada a 5.258 postos pluviométricos distribuídos pelo território brasileiro, conforme apresentado na Figura 1. Quanto à extensão das séries históricas, 1.308 postos (24,9%) possuem registros com duração igual ou superior a 60 anos; 1.829 (34,8%) apresentam séries entre 45 e 59 anos; e 2.121 (40,3%) possuem séries entre 30 e 44 anos</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png" class="img-fluid" alt="Espacialização das estações pluviométricas por número de anos disponíveis"> Figura 1. Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas</p>
-<p>A análise por Região Hidrográfica (RH) evidencia que a Região Hidrográfica do Paraná (PRN) concentra o maior número de postos pluviométricos, totalizando 1.728 estações, o que corresponde a 32,9% do total analisado. Desse conjunto, 761 postos possuem séries históricas entre 45 e 59 anos, enquanto 412 apresentam registros com duração igual ou superior a 60 anos.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges_AH.png" class="img-fluid" alt="Base de dados das estações pluviométricas por RH"> Figura 2. Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica</p>
+<p>A análise de tendência foi aplicada a 5.258 postos pluviométricos distribuídos pelo território brasileiro, conforme apresentado na <a href="#fig-1-estacoes-pluv" class="quarto-xref">Figura&nbsp;<span>5.1</span></a>. Quanto à extensão das séries históricas, 1.308 postos (24,9%) possuem registros com duração igual ou superior a 60 anos; 1.829 (34,8%) apresentam séries entre 45 e 59 anos; e 2.121 (40,3%) possuem séries entre 30 e 44 anos</p>
+<div id="fig-1-estacoes-pluv" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-1-estacoes-pluv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_anos.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-1-estacoes-pluv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.1: Distribuição espacial das estações pluviométricas no território brasileiro segundo a extensão das séries históricas.
+</figcaption>
+</figure>
+</div>
+<p>A análise por Região Hidrográfica (RH) evidencia que a Região Hidrográfica do Paraná (PRN) concentra o maior número de postos pluviométricos, totalizando 1.728 estações, o que corresponde a 32,9% do total analisado (<a href="#fig-2-estacoes-rh" class="quarto-xref">Figura&nbsp;<span>5.2</span></a>). Desse conjunto, 761 postos possuem séries históricas entre 45 e 59 anos, enquanto 412 apresentam registros com duração igual ou superior a 60 anos.</p>
+<div id="fig-2-estacoes-rh" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-2-estacoes-rh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_gauges_AH.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2-estacoes-rh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.2: Distribuição percentual das estações pluviométricas segundo a extensão das séries históricas, por região hidrográfica.
+</figcaption>
+</figure>
+</div>
 <p>Por outro lado, a RH do Atlântico Nordeste Ocidental (ANC) apresenta a menor concentração, com 100 postos pluviométricos, dos quais apenas 2 possuem séries históricas com duração igual ou superior a 60 anos.</p>
 </section>
 <section id="mk-mkmtfpw-mkmtfpwfdr" class="level3" data-number="5.3.2">
 <h3 data-number="5.3.2" class="anchored" data-anchor-id="mk-mkmtfpw-mkmtfpwfdr"><span class="header-section-number">5.3.2</span> MK; MK+MTFPW; MK+MTFPW+FDR</h3>
-<p>A aplicação do teste de Mann-Kendall identificou 973 postos com tendências estatisticamente significativas. Após a correção da autocorrelação temporal pelo método MTFPW, seguida da reaplicação do teste MK, esse número foi reduzido para 925 postos, indicando uma diminuição no total de séries com tendências significativas. Posteriormente, com a aplicação da correção para múltiplos testes pelo procedimento de FDR, foram identificados 213 postos com tendências estatisticamente significativas. Esse resultado evidencia uma redução expressiva no número de tendências consideradas significativas após o controle da multiplicidade dos testes. Além disso, 4.777 postos não apresentaram autocorrelação temporal estatisticamente significativa, indicando ausência de evidências de dependência temporal significativa nessas séries, segundo o critério adotado.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_imax_AH_RH.png" class="img-fluid" alt="Resultado para chuva máxima diária anual"> Figura 3. Distribuição espacial das tendências de Imax (mm/h) no Brasil, identificadas pelos testes de MK, MK + MTFPW e MK + MTFPW + FDR.</p>
-<p>Dos postos que mantiveram tendências estatisticamente significativas após a aplicação do procedimento FDR, 174 apresentaram tendência crescente, enquanto 39 apresentaram tendência decrescente, distribuídas entre 11 RH. A Região Hidrográfica do Paraná (PRN) concentrou o maior número de estações significativas, com 43 (20,2%), seguida pelas regiões do Atlântico Sul (ATS), com 42 (19,7%), e do Atlântico Sudeste (ASD), com 30 (14,1%). Em conjunto, essas três regiões reuniram 54,0% das estações com tendências significativas. Na sequência, destacaram-se o Atlântico Nordeste Oriental (ANO), com 26 estações (12,2%), e o São Francisco (SFR), com 19 (8,9%). As demais regiões apresentaram menores proporções, variando de 1,9% no Paraguai (PRG) e no Uruguai (URU) a 7,5% na região Amazônica (AMZ). Por outro lado, não houve posto com tendência significativa na Região do Atlântico Nordeste Ocidental (ANC).</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs_1d_AH.png" class="img-fluid" alt="Porporção de sing por RH para máxima anual"> Figura 4. Proporção de estações pluviométricas por Região Hidrográfica com tendências crescentes, decrescentes e não significativas.</p>
+<p>A aplicação do teste de Mann-Kendall identificou 973 postos com tendências estatisticamente significativas (<a href="#fig-3-mapa-trend" class="quarto-xref">Figura&nbsp;<span>5.3</span></a>). Após a correção da autocorrelação temporal pelo método MTFPW, seguida da reaplicação do teste MK, esse número foi reduzido para 925 postos, indicando uma diminuição no total de séries com tendências significativas. Posteriormente, com a aplicação da correção para múltiplos testes pelo procedimento de FDR, foram identificados 213 postos com tendências estatisticamente significativas. Esse resultado evidencia uma redução expressiva no número de tendências consideradas significativas após o controle da multiplicidade dos testes. Além disso, 4.777 postos não apresentaram autocorrelação temporal estatisticamente significativa, indicando ausência de evidências de dependência temporal significativa nessas séries, segundo o critério adotado.</p>
+<div id="fig-3-mapa-trend" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-3-mapa-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/mapa_imax_AH_RH.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-3-mapa-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.3: Distribuição espacial das tendências de Imax (mm/h) no Brasil, identificadas pelos testes de MK, MK + MTFPW e MK + MTFPW + FDR.
+</figcaption>
+</figure>
+</div>
+<p>Dos postos que mantiveram tendências estatisticamente significativas após a aplicação do procedimento FDR, 174 apresentaram tendência crescente, enquanto 39 apresentaram tendência decrescente, distribuídas entre 11 RH (<a href="#fig-4-propto-trend" class="quarto-xref">Figura&nbsp;<span>5.4</span></a>). A Região Hidrográfica do Paraná (PRN) concentrou o maior número de estações significativas, com 43 (20,2%), seguida pelas regiões do Atlântico Sul (ATS), com 42 (19,7%), e do Atlântico Sudeste (ASD), com 30 (14,1%). Em conjunto, essas três regiões reuniram 54,0% das estações com tendências significativas. Na sequência, destacaram-se o Atlântico Nordeste Oriental (ANO), com 26 estações (12,2%), e o São Francisco (SFR), com 19 (8,9%). As demais regiões apresentaram menores proporções, variando de 1,9% no Paraguai (PRG) e no Uruguai (URU) a 7,5% na região Amazônica (AMZ). Por outro lado, não houve posto com tendência significativa na Região do Atlântico Nordeste Ocidental (ANC).</p>
+<div id="fig-4-propto-trend" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-4-propto-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/proporção_sigs_1d_AH.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-4-propto-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.4: Proporção de estações pluviométricas por Região Hidrográfica com tendências crescentes, decrescentes e não significativas.
+</figcaption>
+</figure>
+</div>
 <p>Em relação à direção das tendências, observou-se predominância de tendências crescentes na maioria das RHs. Esse padrão foi particularmente evidente no ATS, onde 39 das 42 estações significativas apresentaram tendência crescente, e no ANO, com 23 das 26 estações. No PRN, foram identificadas 36 tendências crescentes e 7 decrescentes, enquanto no ASD foram registradas 25 crescentes e 5 decrescentes. A região AMZ apresentou 11 tendências crescentes e 5 decrescentes, e o SFR, 14 crescentes e 5 decrescentes. Também predominaram tendências crescentes no Atlântico Leste (ALE), no Parnaíba (PNB) e no Tocantins-Araguaia (TOA). Em contraste, na Região Hidrográfica do PRG, as quatro estações significativas apresentaram tendências decrescentes, enquanto no URU todas as quatro apresentaram tendências crescentes.</p>
 </section>
 <section id="resultados-xavier" class="level3" data-number="5.3.3">
 <h3 data-number="5.3.3" class="anchored" data-anchor-id="resultados-xavier"><span class="header-section-number">5.3.3</span> Resultados Xavier</h3>
-<p>A análise das séries de precipitação máximas diária dos dados em grade do <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver Figura 5.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png" class="img-fluid" alt="resutlados das sigs por método com base no Xavier"> Figura 5. Distribuição espacial das tendências da precipitação máxima diária a partir dos dados em grade do Xavier no Brasil.</p>
-<p>A RH Amazônica apresentou o maior número de células analisadas, com 31.304 pontos, dos quais 10.114 apresentaram tendências significativas pelo teste MK. Após a aplicação do MTFPW, esse número foi reduzido para 8.079 células e, após o FDR, para 3.547. Apesar de concentrar o maior número absoluto de células com tendências significativas após a correção, a proporção correspondente foi de aproximadamente 11,3% das células analisadas na região. A Região Hidrográfica do Paraná também apresentou quantidade expressiva de células significativas após o FDR, totalizando 1.272, seguida pelas regiões Tocantins-Araguaia, com 1.318 células, e Atlântico Sul, com 947 células. Considerando a proporção em relação ao número de células analisadas em cada região, o Atlântico Sul destacou-se, com aproximadamente 54,9% de células significativas após o FDR, seguido pelo Uruguai, com 38,8%. Esses resultados indicam que a distribuição das tendências significativas não depende apenas da extensão espacial representada pela grade, mas também da proporção de células que apresentam tendências estatisticamente significativas em cada região.</p>
+<p>A análise das séries de precipitação máximas diária dos dados em grade do <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, abrangendo 70.815 pontos, permitiu avaliar a distribuição espacial das tendências estatisticamente significativas nas 12 RHs. Inicialmente, a aplicação do teste de Mann-Kendall identificou tendências significativas em diferentes proporções de células entre as regiões. Após a correção da autocorrelação temporal pelo método MTFPW, observou-se, de modo geral, uma redução no número de células com tendências significativas, embora tenham ocorrido pequenas variações em algumas regiões, como no Parnaíba e no São Francisco. Posteriormente, a aplicação do procedimento de controle da taxa de falsas descobertas (FDR) reduziu ainda mais o número de células consideradas significativas, evidenciando a influência da correção para múltiplos testes na identificação das tendências, ver <a href="#fig-5-trend-xavier" class="quarto-xref">Figura&nbsp;<span>5.5</span></a>.</p>
+<div id="fig-5-trend-xavier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-5-trend-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_xavier_metodos_diario.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-5-trend-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.5: Distribuição espacial das tendências da precipitação máxima diária a partir dos dados em grade do Xavier no Brasil.
+</figcaption>
+</figure>
+</div>
+<p>A RH Amazônica apresentou o maior número de células analisadas, com 31.304 pontos, dos quais 10.114 apresentaram tendências significativas pelo teste MK. Após a aplicação do MTFPW, esse número foi reduzido para 8.079 células e, após o FDR, para 3.547. Apesar de concentrar o maior número absoluto de células com tendências significativas após a correção, a proporção correspondente foi de aproximadamente 11,3% das células analisadas na região (<a href="#fig-6-propto-trend-xavier" class="quarto-xref">Figura&nbsp;<span>5.6</span></a>). A Região Hidrográfica do Paraná também apresentou quantidade expressiva de células significativas após o FDR, totalizando 1.272, seguida pelas regiões Tocantins-Araguaia, com 1.318 células, e Atlântico Sul, com 947 células. Considerando a proporção em relação ao número de células analisadas em cada região, o Atlântico Sul destacou-se, com aproximadamente 54,9% de células significativas após o FDR, seguido pelo Uruguai, com 38,8%. Esses resultados indicam que a distribuição das tendências significativas não depende apenas da extensão espacial representada pela grade, mas também da proporção de células que apresentam tendências estatisticamente significativas em cada região.</p>
 <p>Por outro lado, as regiões do Paraguai e do Parnaíba não apresentaram células com tendências significativas após a aplicação do FDR, embora tenham sido identificadas, respectivamente, 422 e 388 células significativas após a correção pelo MTFPW. No São Francisco, o número de células significativas passou de 990 após o MTFPW para 202 após o FDR. O Atlântico Nordeste Ocidental apresentou 278 células significativas, enquanto o Atlântico Nordeste Oriental contabilizou 368. Nas regiões do Atlântico Leste e do Atlântico Sudeste, foram identificadas, respectivamente, 385 e 241 células significativas após a correção para múltiplos testes.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png" class="img-fluid" alt="proporção de sigs com dados do Xavier"> Figura 6. Proporção de células da grade do conjunto de dados Xavier por Região Hidrográfica, classificadas de acordo com as tendências da precipitação máxima diária.</p>
+<div id="fig-6-propto-trend-xavier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-6-propto-trend-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/prop_sig_xavier_Rx1day.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-6-propto-trend-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.6: Proporção de células da grade do conjunto de dados Xavier por Região Hidrográfica, classificadas de acordo com as tendências da precipitação máxima diária.
+</figcaption>
+</figure>
+</div>
 <p>A análise da direção das tendências nas séries, considerando as células que permaneceram estatisticamente significativas após a aplicação do procedimento FDR, revelou o predomínio de tendências crescentes na maioria das RHs. A Região Hidrográfica AMZ apresentou 2.471 células com tendências crescentes e 1.076 com tendências decrescentes, correspondendo a aproximadamente 69,7% e 30,3% das células significativas da região, respectivamente. Esse resultado evidencia que, embora predominem tendências positivas, há uma parcela expressiva de células com tendências negativas na região.</p>
 <p>O predomínio de tendências crescentes foi ainda mais evidente nas regiões do ATS e do ALE. No ATS, das 947 células significativas após o FDR, 937 apresentaram tendências crescentes e apenas 10 apresentaram tendências decrescentes. No ALE, todas as 385 células significativas apresentaram tendência crescente. Padrão semelhante foi observado nas regiões do PRN e TOA, que registraram, respectivamente, 1.226 e 1.302 células com tendências crescentes, em comparação com 46 e 16 células com tendências decrescentes. No URU, todas as 623 células significativas também apresentaram tendências crescentes.</p>
 <p>Nas regiões do ANC e do ANO, as tendências crescentes também predominaram, com 270 e 356 células, respectivamente, enquanto as tendências decrescentes foram identificadas em apenas 8 e 12 células. No ASD, foram registradas 219 células com tendências crescentes e 22 com tendências decrescentes. Esses resultados indicam uma predominância espacial de tendências positivas nessas regiões, considerando exclusivamente as células que mantiveram significância estatística após a correção para múltiplos testes.</p>
@@ -520,17 +574,44 @@ p \approx 2\exp\left(-\frac{6K^2}{n^3+n^2}\right)
 <section id="teste-de-pettit-nos-dados-de-xavier" class="level3" data-number="5.3.4">
 <h3 data-number="5.3.4" class="anchored" data-anchor-id="teste-de-pettit-nos-dados-de-xavier"><span class="header-section-number">5.3.4</span> Teste de Pettit nos dados de Xavier</h3>
 <p>Além da análise de tendências temporais, aplicou-se o teste de Pettitt às séries de precipitação máxima diária dos dados em grade de <span class="citation" data-cites="Xavier.2022">Xavier et al. (<a href="ref.html#ref-Xavier.2022" role="doc-biblioref">2022</a>)</span>, com o objetivo de identificar possíveis pontos de mudança abrupta na distribuição temporal. Esse teste permite detectar mudanças estatisticamente significativas no comportamento da série, indicando o momento em que pode ter ocorrido uma alteração em seu regime. Dessa forma, sua aplicação complementa os resultados obtidos pelos testes de tendência.</p>
-<p>A aplicação do teste de Pettitt às 71.007 séries de precipitação identificou 9.330 pontos com quebra estatisticamente significativa, enquanto 61.677 séries não apresentaram quebras significativas. Esses valores correspondem, respectivamente, a aproximadamente 13,1% e 86,9% do total analisado. Os resultados indicam que a maioria das séries não apresentou evidências estatísticas de mudanças abruptas ao longo do período analisado. Entretanto, a identificação de quebras significativas em cerca de 13,2% das séries evidencia a ocorrência de possíveis alterações no comportamento temporal da precipitação em parte da área de estudo. A figura abaixo mostra as células onde foram identificadas quebras significativa.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png" class="img-fluid" alt="mapa anos de quebra"> Figura 7. Distribuição espacial do ano de ocorrência de quebra (ponto de mudança) nas séries temporais de precipitação máxima diária no Brasil</p>
+<p>A aplicação do teste de Pettitt às 71.007 séries de precipitação identificou 9.330 pontos com quebra estatisticamente significativa, enquanto 61.677 séries não apresentaram quebras significativas. Esses valores correspondem, respectivamente, a aproximadamente 13,1% e 86,9% do total analisado. Os resultados indicam que a maioria das séries não apresentou evidências estatísticas de mudanças abruptas ao longo do período analisado. Entretanto, a identificação de quebras significativas em cerca de 13,2% das séries evidencia a ocorrência de possíveis alterações no comportamento temporal da precipitação em parte da área de estudo. A <a href="#fig-7-pettit-xavier" class="quarto-xref">Figura&nbsp;<span>5.7</span></a> abaixo mostra as células onde foram identificadas quebras significativa.</p>
+<div id="fig-7-pettit-xavier" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-7-pettit-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_ano_quebra.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-7-pettit-xavier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.7: Distribuição espacial do ano de ocorrência de quebra (ponto de mudança) nas séries temporais de precipitação máxima diária no Brasil.
+</figcaption>
+</figure>
+</div>
 <p>Posteriormente, nas séries com quebra significativa identificada pelo teste de Pettitt, o teste de tendência foi reaplicado separadamente aos períodos anterior e posterior à quebra, a fim de avaliar possíveis diferenças na direção e na significância das tendências de precipitação entre esses dois intervalos.</p>
 <p>O teste de Pettitt evidenciou uma redução no número de séries com significância estatística após a quebra, tanto para o teste de MK quanto para o método MTFPW. Antes da quebra, o teste MK identificou 1.904 séries com tendências significativas, enquanto 7.426 não apresentaram significância. Após a quebra, o número de séries significativas diminuiu para 1.498, ao passo que 7.832 séries não apresentaram tendências estatisticamente significativas, correspondendo a uma redução de aproximadamente 21,3% no número de resultados significativos.</p>
 <p>Considerando a correção da autocorrelação temporal pelo método MTFPW, foram identificadas 1.779 séries significativas antes da quebra e 7.551 não significativas. Após a quebra, esses números passaram para 1.415 e 7.915, respectivamente, representando uma redução de aproximadamente 20,5% no número de séries significativas. A diminuição observada em ambos os procedimentos indica que as tendências estatisticamente significativas foram menos frequentes no período posterior à quebra.</p>
 <p>Após a correção pelo procedimento FDR no período anterior à quebra, foram identificadas 817 séries com tendências estatisticamente significativas, enquanto 8.513 não apresentaram significância. Após a quebra, o número de séries significativas foi reduzido para 276, ao passo que 9.054 séries permaneceram sem tendências significativas. Esses resultados correspondem a uma redução de aproximadamente 66,2% no número de séries com tendências significativas entre os dois períodos. Essa diminuição sugere que, nas séries analisadas, as tendências identificadas antes dos pontos de quebra foram menos frequentes após a ruptura.</p>
-<p>Na Figura 8 pode-se observar as diferenças na distribuição das categorias de tendência entre os dois períodos. Antes da quebra, figura superior, foram identificadas 19 séries com tendência crescente e 798 com tendência decrescente. Após a quebra, figura inferior, o número de séries com tendência crescente aumentou para 275, ao passo que apenas uma série apresentou tendência decrescente.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_quebra_quebra.png" class="img-fluid" alt="tendência antes e depois da quebra"> Figura 8. Distribuição espacial das tendências da precipitação máxima diária antes (painéis superiores) e após (painéis inferiores) a identificação de quebras nas séries temporais.</p>
+<p>Na <a href="#fig-8-trend" class="quarto-xref">Figura&nbsp;<span>5.8</span></a> pode-se observar as diferenças na distribuição das categorias de tendência entre os dois períodos. Antes da quebra, figura superior, foram identificadas 19 séries com tendência crescente e 798 com tendência decrescente. Após a quebra, figura inferior, o número de séries com tendência crescente aumentou para 275, ao passo que apenas uma série apresentou tendência decrescente.</p>
+<div id="fig-8-trend" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-8-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapas_antes_quebra_quebra.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-8-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.8: Distribuição espacial das tendências da precipitação máxima diária antes (painéis superiores) e após (painéis inferiores) a identificação de quebras nas séries temporais.
+</figcaption>
+</figure>
+</div>
 <p>Esses resultados apresentam uma mudança na distribuição das tendências entre os períodos analisados, caracterizada pelo predomínio de tendências decrescentes antes da quebra e de tendências crescentes após a quebra. Entretanto, a maior parte das séries permaneceu sem tendência estatisticamente significativa em ambos os períodos.</p>
-<p>Ainda pós a aplicação do FDR observou-se as mudanças na direção da tendência antes e depois da quebra. A transição mais frequente foi a manutenção da condição de ausência de tendência estatisticamente significativa (NS → NS), observada em 8.362 séries. Esse resultado indica que, para a maioria das séries analisadas, não foram identificadas tendências significativas em nenhum dos dois períodos, considerando o critério estatístico adotado.</p>
-<p><img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png" class="img-fluid" alt="mudança de tendência antes e depois da quebra"> Figura 9. Distribuição espacial das mudanças na classificação das tendências da precipitação máxima diária, considerando a comparação entre os resultados obtidos antes e após os pontos de quebra nas séries temporais.</p>
+<p>Ainda pós a aplicação do FDR observou-se as mudanças na direção da tendência antes e depois da quebra (<a href="#fig-9-change" class="quarto-xref">Figura&nbsp;<span>5.9</span></a>). A transição mais frequente foi a manutenção da condição de ausência de tendência estatisticamente significativa (NS → NS), observada em 8.362 séries. Esse resultado indica que, para a maioria das séries analisadas, não foram identificadas tendências significativas em nenhum dos dois períodos, considerando o critério estatístico adotado.</p>
+<div id="fig-9-change" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-9-change-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Scripts_Análise_Tendência/resultados/figuras_tendencia/Xavier_BR/mapa_mudanca_xavier.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-9-change-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.9: Distribuição espacial das mudanças na classificação das tendências da precipitação máxima diária, considerando a comparação entre os resultados obtidos antes e após os pontos de quebra nas séries temporais.
+</figcaption>
+</figure>
+</div>
 <p>Entre as séries que apresentaram mudanças na direção das tendências, destacou-se a transição de decrescente para não significativa (Decrescente → NS), registrada em 673 casos. Esse resultado foi seguido pelas transições de não significativa para crescente (NS → Crescente), observada em 150 séries, e de decrescente para crescente (Decrescente → Crescente), identificada em 125 séries. Em menor número, 19 séries passaram de uma tendência crescente para não significativa (Crescente → NS), enquanto apenas uma apresentou transição de não significativa para decrescente (NS → Decrescente).</p>
 <p>De modo geral, os resultados evidenciam que a principal mudança após os pontos de quebra foi a ausência de significância estatística das tendências, especialmente em séries que anteriormente apresentavam tendência decrescente. Também foram observadas transições para tendências crescentes, embora em menor quantidade</p>
 </section>
