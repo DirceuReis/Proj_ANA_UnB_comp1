@@ -119,5 +119,5 @@ idf.sf <- idf.df |>
   st_as_sf(coords = c("long", "lat"), crs = st_crs(4674))
 
 path.gpkg <- "Relatório 2/Entregas/gpkg/semi_bayesiano"
-st_write(par.df, file.path(path.gpkg, "BR_parametros_dgev_diario.gpkg"))
-st_write(idf.df, file.path(path.gpkg, "BR_periodos_retorno_dgev_diario.gpkg"))
+st_write(par.sf, file.path(path.gpkg, "BR_parametros_dgev_diario.gpkg"))
+st_write(idf.sf, file.path(path.gpkg, "BR_periodos_retorno_dgev_diario.gpkg"))
